@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by yion on 2015. 2. 1..
@@ -16,33 +17,33 @@ import java.util.Date;
 @EqualsAndHashCode
 public class Space {
     @Id
-    @Column(name = "spaceId", nullable = false)
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer spaceId;
 
-    @Column(name = "description", nullable = false, columnDefinition="Text")
+    @Column(nullable = false, columnDefinition = "Text")
     private String description;
 
-    @Column(name = "descriptionMarkup", nullable = false, columnDefinition="Text")
+    @Column(nullable = false, columnDefinition = "Text")
     private String descriptionMarkup;
 
-    @Column(name = "title", length = 80, nullable = false)
+    @Column(length = 80, nullable = false)
     private String title;
 
-    @Column(name = "titleImage", length = 40)
+    @Column(length = 40)
     private String titleImage;
 
-    @Column(name = "titleImagePath", length = 50)
+    @Column(length = 50)
     private String titleImagePath;
 
-    @Column(name = "isPrivate", columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isPrivate;
 
-    @Column(name = "isDeleted", columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "layoutType", length = 20)
+    @Column(length = 20)
     private SpaceLayoutType layoutType;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -51,9 +52,13 @@ public class Space {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
-    @Column(name = "insertUserId", nullable = false)
+    @Column(nullable = false)
     private Integer insertUserId;
 
-    @Column(name = "updateUserId")
+    @Column(nullable = true)
     private Integer updateUserId;
+
+    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
+    private List<SpaceAccessUser> spaceAccessUserList;
 }
+
