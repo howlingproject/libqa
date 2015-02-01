@@ -7,63 +7,65 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Data
-@Entity(name = "feed")
+@Entity
 public class Feed {
-
     @Id
-    @Column(name = "feedId", nullable = false)
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer feedId;
 
-    @Column(name = "userId", nullable = false)
-    private Integer userId;
-
-    @Column(name = "userNick", nullable = false)
-    private String userNick;
-
-    @Column(name = "sharedResponseId")
+    @Column
     private Integer sharedResponseId;
 
+    @Column
     @Enumerated(EnumType.STRING)
-    @Column(name = "sharedContentsType")
     private SharedContentsTypeEnum sharedContentsType;
 
-    @Column(name = "feedContent")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String feedContent;
 
-    @Column(name = "feedUrl", length = 40)
+    @Column(length = 80)
     private String feedUrl;
 
-    @Column(name = "likeCount")
+    @Column
     private Integer likeCount;
 
-    @Column(name = "claimCount")
+    @Column
     private Integer claimCount;
 
-    @Column(name = "isShared", columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isShared;
 
-    @Column(name = "isPrivate", columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isPrivate;
 
-    @Column(name = "isSharedFb", columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isSharedFb;
 
-    @Column(name = "isSharedTw", columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isSharedTw;
 
-    @Column(name = "isSharedGp", columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isSharedGp;
+    
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    private boolean isDeleted;
 
     @Temporal(TemporalType.DATE)
     private Date insertDate;
 
     @Temporal(TemporalType.DATE)
     private Date updateDate;
+                                        
+    @Column(nullable = false)
+    private Integer userId;
 
-    @Column(name = "insertUserId", nullable = false)
+    @Column(nullable = false)
+    private String userNick;
+    
+    @Column(nullable = false)
     private Integer insertUserId;
 
-    @Column(name = "updateUserId")
+    @Column(length = 40)
     private Integer updateUserId;
 }
