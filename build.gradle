@@ -32,6 +32,7 @@ dependencies {
     compile("com.h2database:h2")
     compile("org.apache.tomcat.embed:tomcat-embed-jasper")
     compile("javax.servlet:jstl")
+    compile("org.projectlombok:lombok:1.16.0")
 }
 
 task wrapper(type: Wrapper) {
