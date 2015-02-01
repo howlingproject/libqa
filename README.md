@@ -1,7 +1,5 @@
-# libqa™ Project
-=======
-Keyword based Social Q&amp;A Community 
-
+# libqa™ Project  
+Keyword based Social Q&A Community 
 
 ### Social Q&A & Knowledge sharing platform based GLiDER Wiki. created by GLiDER Wiki Team(http://www.gliderwiki.org)
 
