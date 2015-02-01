@@ -16,7 +16,7 @@ public class Feed {
     private Integer feedId;
 
     @Column
-    private Integer sharedResponseId;
+    private String sharedResponseId;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -25,7 +25,7 @@ public class Feed {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String feedContent;
 
-    @Column(length = 80)
+    @Column(length = 255)
     private String feedUrl;
 
     @Column
@@ -61,13 +61,13 @@ public class Feed {
     @Column(nullable = false)
     private Integer userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String userNick;
 
     @Column(nullable = false)
     private Integer insertUserId;
 
-    @Column(length = 40)
+    @Column
     private Integer updateUserId;
 
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)

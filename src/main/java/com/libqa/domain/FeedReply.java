@@ -33,13 +33,13 @@ public class FeedReply {
     @Column(nullable = false)
     private Integer userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String userNick;
 
     @Column(nullable = false)
     private Integer insertUserId;
 
-    @Column(length = 40)
+    @Column
     private Integer updateUserId;
 
     @ManyToOne
