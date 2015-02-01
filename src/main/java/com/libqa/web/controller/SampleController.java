@@ -2,6 +2,7 @@ package com.libqa.web.controller;
 
 import com.libqa.domain.User;
 import com.libqa.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/")
+@Slf4j
 public class SampleController {
 
     @Autowired
@@ -29,7 +31,9 @@ public class SampleController {
     @RequestMapping("users")
     @ResponseBody
     public List<User> getUsers() {
+
         return userRepository.findAll();
+
     }
 }
 

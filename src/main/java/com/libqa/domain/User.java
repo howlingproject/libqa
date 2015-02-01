@@ -1,6 +1,7 @@
 package com.libqa.domain;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @Data
+@Slf4j
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,5 +21,6 @@ public class User {
 
     @Column(name = "age", nullable = false)
     private Integer age;
+
 
 }
