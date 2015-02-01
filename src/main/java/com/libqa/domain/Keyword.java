@@ -2,9 +2,8 @@ package com.libqa.domain;
 
 import com.libqa.application.enums.KeywordTypeEnum;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by yong on 15. 2. 1..
@@ -13,8 +12,8 @@ import javax.persistence.*;
 @Data
 public class Keyword {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer keywordId;
 
     @Column(nullable = false)
@@ -37,9 +36,9 @@ public class Keyword {
     private boolean isDeleted;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Data insertDate;
+    private Date insertDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Data updateDate;
+    private Date updateDate;
 
 }

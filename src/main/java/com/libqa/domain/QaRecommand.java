@@ -1,10 +1,9 @@
 package com.libqa.domain;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by yong on 15. 2. 1..
@@ -12,9 +11,10 @@ import java.sql.Date;
 @Entity
 @Data
 public class QaRecommand {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer qaId;
 
     @Column(nullable = false)

@@ -2,7 +2,6 @@ package com.libqa.domain;
 
 import com.libqa.application.enums.KeywordTypeEnum;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 
@@ -12,9 +11,10 @@ import javax.persistence.*;
 @Entity
 @Data
 public class KeywordList {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer keywordListId;
 
     @Column(nullable = false)

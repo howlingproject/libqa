@@ -1,6 +1,6 @@
 package com.libqa.domain;
 
-import com.libqa.application.enums.SpaceLayoutType;
+import com.libqa.application.enums.SpaceLayoutTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +13,6 @@ import java.util.List;
  */
 @Data
 @Entity
-@Table(name = "space")
 @EqualsAndHashCode
 public class Space {
     @Id
@@ -44,7 +43,7 @@ public class Space {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private SpaceLayoutType layoutType;
+    private SpaceLayoutTypeEnum layoutType;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
@@ -59,6 +58,6 @@ public class Space {
     private Integer updateUserId;
 
     @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
-    private List<SpaceAccessUser> spaceAccessUserList;
+    private List<SpaceAccessUser> spaceAccessUsers;
 }
 

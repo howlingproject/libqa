@@ -1,13 +1,8 @@
 package com.libqa.domain;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-
+import javax.persistence.*;
 /**
  * Created by yong on 15. 2. 1..
  */
@@ -15,8 +10,8 @@ import javax.persistence.GenerationType;
 @Data
 public class QaFile {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer fileId;
 
     @Column(nullable = false)

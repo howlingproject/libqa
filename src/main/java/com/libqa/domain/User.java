@@ -1,7 +1,6 @@
 package com.libqa.domain;
 
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,7 +10,6 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(name = "user")
 public class User {
 
     @Id
@@ -49,7 +47,8 @@ public class User {
     @Column(length = 255, nullable = false)
     private String userPass;
 
-    @Column(length = 4, nullable = false)
+
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer visiteCount;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -61,7 +60,7 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer userPoint;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")

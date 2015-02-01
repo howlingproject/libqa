@@ -17,3 +17,6 @@ GRANT ALL PRIVILEGES  on howling.* to 'howling'@'localhost' identified by 'libqa
 GRANT ALL PRIVILEGES  on howling.* to 'howling'@'%' identified by 'libqa2014';
 
 flush privileges;
+
+CREATE SCHEMA `howling` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+
