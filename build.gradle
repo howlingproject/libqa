@@ -15,7 +15,7 @@ apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'groovy'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 version = '1.0'
 
 repositories {
