@@ -1,6 +1,5 @@
 package com.libqa.domain;
 
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -40,10 +39,6 @@ public class Space {
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
-
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private SpaceLayoutTypeEnum layoutType;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;

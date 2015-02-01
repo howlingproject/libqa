@@ -1,15 +1,18 @@
 package com.libqa.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by yion on 2015. 1. 25..
  */
 @Data
 @Entity
+@EqualsAndHashCode
 public class User {
 
     @Id
@@ -68,6 +71,11 @@ public class User {
 
     @Column(length = 255, nullable = false)
     private String certificationKey;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserKeyword> userKeywords;
+
+
 
 
 }
