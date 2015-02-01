@@ -1,6 +1,6 @@
 package com.libqa.domain;
 
-import com.libqa.application.enums.SpaceLayoutTypeEnum;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
