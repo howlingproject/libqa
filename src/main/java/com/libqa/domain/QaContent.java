@@ -14,58 +14,61 @@ import java.util.Date;
 public class QaContent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="qaId", nullable = false)
+    @Column(nullable = false)
     private Integer qaId;
 
-    @Column(name="wikiId", nullable = true)
+    @Column(nullable = true)
     private Integer wikiId;
 
-    @Column(name="title", nullable = false)
+    @Column(nullable = false)
     private String title;
 
-    @Column(name="contents", nullable = false)
+    @Column(nullable = false, columnDefinition="Text")
     private String contents;
 
-    @Column(name="contentsMarkup", nullable = false)
+    @Column(nullable = false, columnDefinition="Text")
     private String contentsMarkup;
 
-    @Column(name="userId", nullable = false)
+    @Column(nullable = false)
     private Integer userId;
 
-    @Column(name="userNick", nullable = false)
+    @Column(nullable = false)
     private String userNick;
 
-    @Column(name="viewCount", nullable = false)
+    @Column(nullable = false)
     private Integer viewCount;
 
-    @Column(name="recommandCount", nullable = false)
+    @Column(nullable = false)
     private Integer recommandCount;
 
-    @Column(name="isDeleted", nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
-    @Column(name="isShared", nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
     private boolean isShared;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "sharedContentsType", length = 20)
+    @Column(length = 20)
     private SharedContentsTypeEnum sharedContentsType;
 
-    @Column(name="sharedResponseId", nullable = true)
+    @Column(nullable = true)
     private Integer sharedResponseId;
 
-    @Column(name="isReplyed", nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
     private boolean isReplyed;
 
-    @Column(name="insertDate", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
 
-    @Column(name="updateDate", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
-    @Column(name="insertUserId", nullable = false)
+    @Column(nullable = false)
     private Integer insertUserId;
 
-    @Column(name="updateUserId", nullable = false)
+    @Column(nullable = false)
     private Integer updateUserId;
+
+//    @OneToMany(mappedBy = "qaReply", fetch = FetchType.LAZY)
+//    private List<SpaceAccessUser> spaceAccessUserList;
 }
