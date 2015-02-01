@@ -14,24 +14,21 @@ import java.util.Date;
 @Data
 @Entity
 public class FeedLikeUser {
-                                
+
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long feedLikeUserId;
-    
-    @Column(nullable = false)
-    private Long feedId;
-    
+
     @Column(nullable = false)
     private Long replyId;
-    
+
     @Enumerated(EnumType.STRING)
     private FeedLikeTypeEnum feedLikeType;
-    
+
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isCanceled;
-    
+
     @Temporal(TemporalType.DATE)
     private Date insertDate;
 
@@ -49,4 +46,8 @@ public class FeedLikeUser {
 
     @Column(length = 40)
     private Integer updateUserId;
+    
+    @ManyToOne
+    @JoinColumn(name = "feedId", referencedColumnName = "feedId", nullable = false)
+    private Feed feed;    
 }

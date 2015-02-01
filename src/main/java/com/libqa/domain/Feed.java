@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -47,7 +48,7 @@ public class Feed {
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isSharedGp;
-    
+
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
@@ -56,16 +57,25 @@ public class Feed {
 
     @Temporal(TemporalType.DATE)
     private Date updateDate;
-                                        
+
     @Column(nullable = false)
     private Integer userId;
 
     @Column(nullable = false)
     private String userNick;
-    
+
     @Column(nullable = false)
     private Integer insertUserId;
 
     @Column(length = 40)
     private Integer updateUserId;
+
+    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
+    private List<FeedReply> feedReplies;
+
+    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
+    private List<FeedFile> feedFiles;
+
+    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
+    private List<FeedLikeUser> feedLikeUsers;
 }
