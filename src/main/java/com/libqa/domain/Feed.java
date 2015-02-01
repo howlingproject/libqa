@@ -1,6 +1,6 @@
 package com.libqa.domain;
 
-import com.libqa.application.enums.SharedContentsTypeEnum;
+import com.libqa.application.enums.ContentsTypeEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,7 +20,7 @@ public class Feed {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private SharedContentsTypeEnum sharedContentsType;
+    private ContentsTypeEnum sharedContentsType;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String feedContent;

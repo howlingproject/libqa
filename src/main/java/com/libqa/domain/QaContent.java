@@ -1,6 +1,6 @@
 package com.libqa.domain;
 
-import com.libqa.application.enums.SharedContentsTypeEnum;
+import com.libqa.application.enums.ContentsTypeEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -49,7 +49,7 @@ public class QaContent {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private SharedContentsTypeEnum sharedContentsType;
+    private ContentsTypeEnum sharedContentsType;
 
     @Column(nullable = true)
     private Integer sharedResponseId;

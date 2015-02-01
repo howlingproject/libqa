@@ -1,8 +1,5 @@
 package com.libqa.domain;
 
-
-
-import com.libqa.application.enums.UserPointEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,26 +10,31 @@ import java.util.Date;
  */
 @Data
 @Entity
-public class UserPoint {
-
+public class UserFavorite {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer userPointId;
+    private Integer favoriteId;
 
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId", nullable = false)
     private User user;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
-    private Integer userPoint;
+    @Column(nullable = true)
+    private Integer spaceId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private UserPointEnum pointType;
+    @Column(nullable = true)
+    private Integer wikiId;
 
+    @Column(nullable = true)
+    private Integer qaId;
+
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    private boolean isDeleted;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updateDate;
 }

@@ -78,6 +78,9 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserPoint> userPoints;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserFavorite> userFavorites;
+
 
 
 
