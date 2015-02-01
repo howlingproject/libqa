@@ -75,6 +75,9 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserKeyword> userKeywords;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserPoint> userPoints;
+
 
 
 

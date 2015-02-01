@@ -1,5 +1,6 @@
 package com.libqa.domain;
 
+import com.libqa.application.enums.SpaceViewEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -33,6 +34,10 @@ public class Space {
 
     @Column(length = 50)
     private String titleImagePath;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private SpaceViewEnum layoutType;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isPrivate;

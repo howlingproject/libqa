@@ -1,6 +1,9 @@
 package com.libqa.domain;
 
 
+
+import com.libqa.application.enums.UserPointEnum;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -20,6 +23,10 @@ public class UserPoint {
 
     @Column(nullable = false)
     private Integer userPoint;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private UserPointEnum pointType;
 
 
     @Temporal(TemporalType.TIMESTAMP)
