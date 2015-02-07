@@ -32,7 +32,7 @@ public class Keyword {
     @Column(length = 20)
     private KeywordTypeEnum keywordType;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
     @Temporal(TemporalType.TIMESTAMP)

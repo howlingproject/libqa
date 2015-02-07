@@ -15,7 +15,11 @@ public class QaRecommand {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer qaId;
+    private Integer qaRecommandId;
+
+    @ManyToOne
+    @JoinColumn(name="qaId", referencedColumnName = "qaId", nullable=false)
+    private QaContent qaContent;
 
     @Column(nullable = false)
     private Integer userId;

@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by yong on 15. 2. 1..
@@ -35,10 +36,10 @@ public class QaContent {
     @Column(nullable = false)
     private String userNick;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer viewCount;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer recommandCount;
 
     @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
@@ -69,6 +70,9 @@ public class QaContent {
     @Column(nullable = false)
     private Integer updateUserId;
 
-//    @OneToMany(mappedBy = "qaReply", fetch = FetchType.LAZY)
-//    private List<SpaceAccessUser> spaceAccessUserList;
+    @OneToMany(mappedBy = "qaContent", fetch = FetchType.LAZY)
+    private List<QaReply> qaReplys;
+
+    @OneToMany(mappedBy = "qaContent", fetch = FetchType.LAZY)
+    private List<QaRecommand> qaRecommands;
 }

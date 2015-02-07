@@ -20,7 +20,7 @@ public class KeywordList {
     @Column(nullable = false)
     private String keywordName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer keywordCount;
 
     @Enumerated(EnumType.STRING)

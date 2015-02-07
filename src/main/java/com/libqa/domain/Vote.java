@@ -14,7 +14,11 @@ public class Vote {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer replyId;
+    private Integer voteId;
+
+    @ManyToOne
+    @JoinColumn(name = "replyId", referencedColumnName = "replyId", nullable = false)
+    private QaReply qaReply;
 
     @Column(nullable = false)
     private Integer userId;
