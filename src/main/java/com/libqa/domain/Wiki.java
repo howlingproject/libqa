@@ -11,10 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+/**
+ * Created by songanji on 2015. 2. 8..
+ */
 @Entity
 @Data
 @Slf4j
