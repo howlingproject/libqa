@@ -2,15 +2,25 @@ package com.libqa.domain;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 import java.util.Set;
 
+/**
+ * Created by songanji on 2015. 2. 8..
+ */
 @Entity
 @Data
 @Slf4j
-public class Wiki{
+public class Wiki {
 
     @Column(nullable = false)
     private Integer spaceId;

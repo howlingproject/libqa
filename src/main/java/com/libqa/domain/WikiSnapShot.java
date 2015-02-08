@@ -7,6 +7,9 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
+/**
+ * Created by songanji on 2015. 2. 8..
+ */
 @Entity
 @Data
 public class WikiSnapShot{
