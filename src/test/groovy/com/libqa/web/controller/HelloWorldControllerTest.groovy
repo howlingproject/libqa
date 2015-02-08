@@ -19,7 +19,7 @@ class HelloWorldControllerTest extends Specification {
                 .setViewResolvers(new ApplicationConfigurerAdapter().viewResolver()).build()
     }
 
-    def '/hello 를 호출하면 world.jsp와 매핑된다.'() {
+    def '/hello 를 호출하면 world view과 매핑된다.'() {
         when:
         def response = mockMvc.perform(get('/hello'))
 
@@ -28,7 +28,7 @@ class HelloWorldControllerTest extends Specification {
                 .andExpect(view().name("world"))
     }
 
-    def '/hello/{message} 를 호출하면 message 속성에 {message}을 세팅해서 JSON으로 응답한다.'() {
+    def '/hello/{message} 를 호출하면 JSON 의 message 속성에 {message}을 세팅하여 응답한다.'() {
         when:
         def response = mockMvc.perform(get('/hello/world'))
 
