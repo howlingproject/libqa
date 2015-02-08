@@ -1,0 +1,172 @@
+/* -------------------------------------------------- */
+/* Custom page CSS
+/* -------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+/**
+*  layout
+**/
+html {position: relative; min-height: 100%; min-width: 480px;}
+body { font-family: 'verdana', 'tohoma', 'nanumgothic', '나눔고딕'; font-size:14px; margin-bottom: 100px; }
+img { vertical-align: middle; border: 0 none; }
+.wrap { margin-left:0; margin-right:0; }
+.login_member_form {padding:15px;width:470px;}
+.top-buffer { margin-top:20px; }
+.container .text-muted { margin: 20px 0; }
+.contents-container { padding:0;}
+
+/*header */
+#header .navi-menu li {width:90px; text-align: center; }
+#header .navi-info li a {padding: 10px 10px 12px 10px}
+#header ul.nav li.messenger i {color:#333433;}
+/**
+* Sticky footer styles
+**/
+#footer { position: absolute; bottom: 0; width: 100%; margin-top: 20px; border-top: 1px solid #eee; padding-top:20px; margin-top:20px; background-color: #F8F8F8; border-color: #E7E7E7;}
+
+/**
+* Common
+**/
+form.form-horizontal .control-label {font-size: 14px;}
+
+button.btn-sm-fixed { width: 65px !important;}
+button.btn-fixed { width: 88px !important;}
+button.btn-lg-fixed { width: 102px !important;}
+
+.btn-info, .btn-info:hover, .btn-info.active { border-color: #46b8da; color: #fff; background: #46b8da none;}
+
+div.user-profile, div.user-profile-sm, div.user-profile-xs { margin:1px; display: inline;}
+img.profile-image {border: 1px solid #ddd; border-radius: 4px; background-color: #fff;}
+
+div.user-profile img.profile-image {width:64px; height: 64px;  }
+div.user-profile-sm img.profile-image {width:32px; height: 32px; }
+div.user-profile-xs img.profile-image {width:16px; height: 16px; }
+
+span.nickname {font-weight: bold;}
+div.user-profile-sm span.nickname { font-size: 14px;}
+div.user-profile-xs span.nickname { font-size: 12px;}
+label.error-label {color: #EC6459;}
+label.error-label.hide {display: none;}
+
+/**
+* Components
+**/
+@media screen and (min-width: 992px) { .components .the-icons li { width: 12.5%; } }
+.components ul li { list-style: none;}
+.components .user-profiles {display: inline; text-align: center;}
+.components .user-profiles li{float: left; padding:10px; margin:5px;}
+.components .the-buttons > li {float: left; height: 80px; padding: 10px; border: 1px solid #ddd; font-size: 12px; line-height: 1.25; text-align: center; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; margin: 0 -1px -1px 0;}
+.components .the-icons li { float: left; width: 100px; height: 110px;padding: 10px; border: 1px solid #ddd; font-size: 12px; line-height: 1.25; text-align: center; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; margin: 0 auto;}
+
+/**
+* Feed
+**/
+.feed-write {margin-bottom: 20px;}
+.feed-write .write-box { height:150px;}
+.feed-write .feed-write-top {margin-bottom:10px;}
+.feed-write .feed-write-top, .feed-write .feed-write-bottom {margin-right:50px;}
+
+.feed ul { list-style: none outside none; margin: 0; padding: 0; }
+.feed ul li { background: none repeat scroll 0 0 white; border: 1px solid #dbdee0; margin: 0 40px 20px 80px; padding: 10px; position: relative; }
+.feed ul li:before { background: url("http://bootstrapmaster.com/live/genius/assets/img/disc-arrow.png") no-repeat scroll 0 0 / 20px 20px rgba(0, 0, 0, 0); content: ""; height: 20px; left: -20px; position: absolute; top: 15px; width: 20px; }
+.feed ul li .author { float: left; left: -80px; position: absolute; top: 0; width: 60px; z-index: 1; }
+.feed ul li .action-buttons { margin-bottom: 3px; padding-right: 15px; text-align: right; }
+.feed ul li .action-buttons i { padding: 3px; cursor: pointer; }
+.feed ul li .action-buttons span.like-count, .feed ul li .action-buttons span.claim-count{ padding-left:3px; color: #2682C4; font-weight: bold;}
+.feed ul li .threaad-message-box {margin-bottom: 10px}
+.feed ul li .message { margin: 20px -10px 0; padding: 20px; }
+.feed ul li .message .feed-url { padding-top:50px; height:150px; }
+.feed ul li .message .feed-url .feed-url-title { font-weight: bold; font-size: 14px; }
+.feed ul li .message .feed-url .feed-url-contents { border: 1px solid #e9ebec; box-shadow: none; height: 110px; padding: 10px; width: 100%; }
+.feed ul li .config { background: none repeat scroll 0 0 #ced1d4; cursor: pointer; display: inline-block; padding: 5px 10px; position: absolute; top: 10px; right: -31px; }
+.feed ul li .name { background: none repeat scroll 0 0 #e9ebec; left: 10px; padding: 5px 10px; position: absolute; top: 10px; width: 100%; font-weight: bold; }
+.feed ul li .date { background: none repeat scroll 0 0 #dbdee0; padding: 5px 20px 5px 10px; position: absolute; right: -1px; top: 10px; z-index: 1; }
+.feed ul li ul { overflow: hidden; }
+.feed ul li ul li { -moz-border-bottom-colors: none; -moz-border-left-colors: none; -moz-border-right-colors: none; -moz-border-top-colors: none; border-image: none; border: 0 none -moz-use-text-color; border-top: 1px solid #e9ebec; box-shadow: none; margin: 0 -10px; padding-left: 70px; }
+.feed ul li ul li .author { left: 10px; top: 10px; text-align: center;}
+.feed ul li ul li .name { left: 70px; font-weight: bold; }
+.feed ul li ul li .date { background: none repeat scroll 0 0 transparent; right: 30px; }
+.feed ul li ul li .message { border-bottom: 0 none; }
+.feed ul li ul li .config { background: none repeat scroll 0 0 transparent; right: 10px; }
+.feed ul li .feed-comment button{ margin-left:-15px;}
+
+.best-feed { max-height: 600px; overflow-y:scroll;}
+.best-feed .media-body {cursor: pointer;}
+.popover-content a, .popover-feed-image-content a { padding: 3px; }
+
+#bestFeedModal {z-index: 999999;}
+#bestFeedModal .modal-dialog {width:900px;}
+#bestFeedModal .modal-body {max-height: 580px; overflow-y:scroll;}
+
+#fileUploadModal .image-options {display:none;}
+#fileUploadModal .modal-dialog { width: 550px;}
+#fileUploadModal .image-preview {height:100px;}
+
+#right-panel-indicator { position: absolute; right: 2%; top: 10%; }
+.indicator-panel { display: none; width: 230px; padding: 20px; background-color: #F5F5F5;    box-shadow: inset 0 0 1px 1px #DDDDDD;}
+
+#right-panel-container { position: absolute; right: -5%; top: 0; }
+.right-panel { display: none; width: 230px; padding: 20px; background-color: #F5F5F5;    box-shadow: inset 0 0 1px 1px #DDDDDD;}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 999px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+/**
+*  Q&A
+**/
+div.nav-tabs-header {border-bottom: 1px solid #eee; font-weight: bold; font-size: 16px; padding-bottom: 8px;}
+span.section-category {margin-top: -7px; font-size: 12px}
+
+div.my-qna-item {border-bottom: 1px solid #eee; padding-bottom: 15px; padding-top: 15px;}
+div.qna-item {border-bottom: 1px solid #eee; padding-bottom:10px}
+
+div.best-qna-item {border-bottom: 1px solid #eee; padding-top: 15px; padding-bottom: 15px; }
+div.best-qna-item .media{}
+
+div.qna-rating-info {width:30px; padding:0px; margin-left:5px;}
+div.best-qna-bottom {font-size: 14px; margin: 5px 0 0 10px; padding-left: 10px;}
+div.best-qna-bottom span {padding:5px}
+div.qna-top-search{padding-left: 0}
+div.qna-main-top {padding-right: 0px;}
+div.qna-title span {font-weight: bold;}
+div.alert-info span.qna-alert-title{font-size: 16px; color:#555;}
+span.qna-alert-info {font-size: 16px;}
+span.my-qna-writer {margin-left:20px;}
+.my-qna-rating button {margin:5px;}
+
+.cat-keyword{font-size: 13px; text-align: right}
+.cat-keyword li{line-height: 0.7;}
+
+.readCnt{margin-left: 30px}
+
+.form-group .readCnt{margin-left: 10px}
+
+
+/**
+*   Wiki
+**/
+.wiki-main .panel-info > .panel-heading { background-color: #F8F8F8;}
+.wiki-main .panel-info > .panel-heading .panel-title {color:#000000; }
+
+/**
+*   indicator
+**/
+.indicator-panel .panel-body-group {height: 110px; overflow-y: auto}
+.indicator-panel .panel-body {font-size: 11px; padding: 5px;}
