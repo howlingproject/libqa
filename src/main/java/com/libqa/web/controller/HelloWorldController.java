@@ -16,6 +16,12 @@ public class HelloWorldController {
     @Value("${howling.hello.message}")
 	private String message;
 
+    @RequestMapping("/")
+    public String test(Model model) {
+        model.addAttribute("message", message);
+        return "test";
+    }
+
     @RequestMapping("/hello")
     public String index(Model model) {
         model.addAttribute("message", message);

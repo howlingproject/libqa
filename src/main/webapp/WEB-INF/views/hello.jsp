@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html;charset=ISO-8859-1"%>
 
-static/js/handlebars-v2.0.0.js
 <html>
 <head>
     <title>howling project</title>
