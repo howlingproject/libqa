@@ -4,13 +4,12 @@ import com.libqa.application.enums.WikiRevisionActionTypeEnum;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Data
-public class WikiSnapShot implements Serializable {
+public class WikiSnapShot{
 
     @Id
     @Column(nullable = false)
