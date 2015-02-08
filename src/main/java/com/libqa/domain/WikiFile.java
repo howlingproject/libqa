@@ -7,26 +7,11 @@ package com.libqa.domain;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
-
-import lombok.Data;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Data
-@Table(name = "wikiFile")
-class WikiFile implements Serializable {
+public class WikiFile{
 
     @Id
     @Column(name = "fileId", nullable = false)
@@ -65,6 +50,5 @@ class WikiFile implements Serializable {
 
     @Column(name = "userId", nullable = false)
     Integer userId;
-
 
 }
