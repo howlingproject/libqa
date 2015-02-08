@@ -21,4 +21,9 @@ public class HelloWorldController {
         model.addAttribute("message", message);
         return "hello";
     }
+
+    @RequestMapping("/handlebars")
+    public String handlebars(Model model) {
+        return "handlebars";
+    }
 }

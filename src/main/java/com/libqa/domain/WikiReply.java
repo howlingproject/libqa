@@ -3,7 +3,6 @@ package com.libqa.domain;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +10,7 @@ import java.util.Date;
  */
 @Entity
 @Data
-public class WikiReply implements Serializable {
+public class WikiReply{
 
     @Id
     @Column(nullable = false)
