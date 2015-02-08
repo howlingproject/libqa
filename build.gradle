@@ -1,11 +1,11 @@
 buildscript {
     repositories {
-        maven { url "https://repo.spring.io/libs-release" }
+        maven { url 'https://repo.spring.io/libs-release' }
         mavenLocal()
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.10.RELEASE")
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.1.10.RELEASE')
     }
 }
 
@@ -21,20 +21,25 @@ version = '1.0'
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url "https://repo.spring.io/libs-release" }
-    maven { url "https://repository.jboss.org/nexus/content/repositories/releases" }
+    maven { url 'https://repo.spring.io/libs-release' }
+    maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-    compile("org.springframework.boot:spring-boot-starter-web:1.1.8.RELEASE")
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("mysql:mysql-connector-java:5.1.28")
-    compile("com.h2database:h2")
-    compile("org.apache.tomcat.embed:tomcat-embed-jasper")
-    compile("javax.servlet:jstl")
-    compile("org.projectlombok:lombok:1.16.0")
-    compile("org.codehaus.groovy:groovy-all:2.3.6")
+    compile('org.springframework.boot:spring-boot-starter-web:1.1.8.RELEASE')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('mysql:mysql-connector-java:5.1.28')
+    compile('com.h2database:h2')
+    compile('org.apache.tomcat.embed:tomcat-embed-jasper')
+    compile('javax.servlet:jstl')
+    compile('org.projectlombok:lombok:1.16.0')
+    compile('org.codehaus.groovy:groovy-all:2.3.6')
+    
+    testCompile('junit:junit:4.11')
+    testCompile('com.jayway.restassured:spring-mock-mvc:2.4.0')
+    testCompile('org.spockframework:spock-core:0.7-groovy-2.0')
+    testCompile('com.jayway.jsonpath:json-path:0.8.1')
+    testCompile('com.jayway.jsonpath:json-path-assert:0.8.1')
 }
 
 task wrapper(type: Wrapper) {
