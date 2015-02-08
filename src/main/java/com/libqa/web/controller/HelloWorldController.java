@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by sjune on 2015-01-31.
@@ -21,15 +21,15 @@ public class HelloWorldController {
     private String message;
 
     @RequestMapping("/")
-    public String test(Model model) {
-        model.addAttribute("message", message);
+    public String test() {
         return "test";
     }
 
     @RequestMapping("/hello")
-    public String helloJsp(Model model) {
-        model.addAttribute("message", message);
-        return "world";
+    public ModelAndView helloJsp() {
+        ModelAndView mav = new ModelAndView("world");
+        mav.addObject("greeting", message);
+        return mav;
     }
 
     @RequestMapping("/hello/{message}")
@@ -38,14 +38,9 @@ public class HelloWorldController {
         return new HelloWorld(message);
     }
 
-    @RequestMapping("/handlebars")
-    public String handlebars(Model model) {
-        return "handlebars";
-    }
-
     @Data
     @AllArgsConstructor
     public class HelloWorld {
-        private String message;
+        private String greeting;
     }
 }

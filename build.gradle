@@ -34,12 +34,11 @@ dependencies {
     compile('javax.servlet:jstl')
     compile('org.projectlombok:lombok:1.16.0')
     compile('org.codehaus.groovy:groovy-all:2.3.6')
-    
+    compile('com.github.jknack:handlebars-springmvc:2.0.0')
+
     testCompile('junit:junit:4.11')
     testCompile('com.jayway.restassured:spring-mock-mvc:2.4.0')
     testCompile('org.spockframework:spock-core:0.7-groovy-2.0')
-    testCompile('com.jayway.jsonpath:json-path:0.8.1')
-    testCompile('com.jayway.jsonpath:json-path-assert:0.8.1')
 }
 
 task wrapper(type: Wrapper) {
