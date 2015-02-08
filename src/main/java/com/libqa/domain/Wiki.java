@@ -18,7 +18,7 @@ import java.util.Set;
 @Entity
 @Data
 @Slf4j
-class Wiki implements Serializable {
+public class Wiki {
 
     @Column(nullable = false)
     private Integer spaceId;
