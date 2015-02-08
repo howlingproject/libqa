@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Created by songanji on 2015. 2. 8..
+ */
 @Entity
 @Data
 public class WikiReply implements Serializable {

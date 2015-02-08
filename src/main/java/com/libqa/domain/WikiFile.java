@@ -15,9 +15,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ * Created by songanji on 2015. 2. 8..
+ */
 @Entity
 @Data
-class WikiFile implements Serializable {
+public class WikiFile implements Serializable {
 
     @Id
     @Column(nullable = false)

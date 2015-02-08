@@ -15,10 +15,13 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+/**
+ * Created by songanji on 2015. 2. 8..
+ */
 @Entity
 @Data
 @Slf4j
-class Wiki implements Serializable {
+public class Wiki implements Serializable {
 
     @Column(nullable = false)
     private Integer spaceId;
