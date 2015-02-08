@@ -1,31 +1,26 @@
 package com.libqa.domain;
 
+import com.libqa.application.enums.WikiRevisionActionTypeEnum;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Data
-@Slf4j
-class Wiki implements Serializable {
-
-    @Column(nullable = false)
-    private Integer spaceId;
+public class WikiSnapShot implements Serializable {
 
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer wikiBackId;
+
+    @Column(nullable = false)
+    private Integer spaceId;
+
+    @Column(nullable = false)
     private Integer wikiId;
 
     @Column
@@ -93,4 +88,8 @@ class Wiki implements Serializable {
 
     @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)
     private Set<WikiFile> wikiFileList;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private WikiRevisionActionTypeEnum revisionActionType;
 }

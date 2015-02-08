@@ -1,16 +1,9 @@
 package com.libqa.domain;
 
-/**
- * Created by songanji on 2015. 2. 1..
- */
-
 import lombok.Data;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-
-import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,52 +12,48 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
 @Data
-@Table(name = "wikiFile")
 class WikiFile implements Serializable {
 
     @Id
-    @Column(name = "fileId", nullable = false)
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer fileId;
+    private Integer fileId;
 
     @ManyToOne
-    @JoinColumn(name = "wikiId", referencedColumnName="wikiId",  nullable = false)
+    @JoinColumn(referencedColumnName="wikiId",  nullable = false)
     private Wiki wiki;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date insertDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    Date insertDate;
+    private Date updateDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    Date updateDate;
+    @Column(nullable = false, length = 100)
+    private String realName;
 
+    @Column(nullable = false, length = 100)
+    private String saveName;
 
-    @Column(name = "realName", nullable = false, length = 100)
-    String realName;
+    @Column(nullable = false)
+    private String path;
 
-    @Column(name = "saveName", nullable = false, length = 100)
-    String saveName;
+    @Column(length = 50)
+    private Integer fileSize;
 
-    @Column(name = "path", nullable = false)
-    String path;
+    @Column
+    private String fileType;
 
-    @Column(name = "fileSize", length = 50)
-    Integer fileSize;
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    private boolean isDeleted;
 
-    @Column(name = "fileType")
-    String fileType;
-
-    @Column(name = "isDeleted", columnDefinition = "TINYINT(1) DEFAULT 0")
-    boolean isDeleted;
-
-    @Column(name = "userId", nullable = false)
-    Integer userId;
+    @Column(nullable = false)
+    private Integer userId;
 
 
 }
