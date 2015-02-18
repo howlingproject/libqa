@@ -1,5 +1,8 @@
 package com.libqa.application.enums;
 
+/**
+ * Created by songanji on 2015. 2. 8..
+ */
 public enum WikiRevisionActionTypeEnum {
     UPDATE_WIKI("위키 글쓰기"),
     UPDATE_TITLE("QA 답변"),
