@@ -1,3 +1,5 @@
+{{# partial "title" }}Feed{{/partial}}
+    
 {{# partial "content" }}
 <div class="container">
     <div class="col-md-12 col-xs-12" id="feed-area">
@@ -609,30 +611,30 @@
     <div class="web_link"><a href="#">웹 링크</a></div>
 </div>
 <!-- popover-config end -->
+{{/partial}}
 
+{{# partial "script-body" }}
 <script type="text/javascript">
+    $(function(){
+        $('.popover-config').popover({
+            trigger: 'click',
+            html: true,
+            content: function () {
+                return $('#popover-config-content').html();
+            }
+        });
 
-    $('.popover-config').popover({
-        trigger: 'click',
-        html: true,
-        content: function () {
-            return $('#popover-config-content').html();
-        }
+        $('.popover-feed-image').popover({
+            trigger: 'click',
+            html: true,
+            content: function () {
+                return $('#popover-feed-image-content').html();
+            }
+        });
+        $('#right-panel-link').panelslider({side: 'right', clickClose: true, duration: 200 });
     });
-
-    $('.popover-feed-image').popover({
-        trigger: 'click',
-        html: true,
-        content: function () {
-            return $('#popover-feed-image-content').html();
-        }
-    })
 </script>
-
-<script src="http://eduardomb.github.io/jquery-panelslider/jquery.panelslider.min.js"></script>
-<script type="text/javascript">
-    $('#right-panel-link').panelslider({side: 'right', clickClose: true, duration: 200 });
-</script>
+<script src="/resource/public/js/jquery/plugin/jquery-panelslider/jquery.panelslider.min.js"></script>
 {{/partial}}
 
 {{> template/base}}
