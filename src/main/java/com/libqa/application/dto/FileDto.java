@@ -1,7 +1,6 @@
 package com.libqa.application.dto;
 
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * File Upload 속성 정의
@@ -9,8 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Data
 public class FileDto {
-
-    private MultipartFile multipartFile;
 
     private String realName;
 
@@ -20,7 +17,9 @@ public class FileDto {
 
     private String filePath;
 
-    private Integer fileSize;
+    private double fileSize;
 
-    private String fileType;
+    private String fileExtendType;
+
+    private String uploadType;
 }

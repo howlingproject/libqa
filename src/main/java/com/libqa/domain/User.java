@@ -30,10 +30,16 @@ public class User {
     private String userSite;
 
     @Column(length = 40, nullable = false)
-    private String userImage;
+    private String userImageName;
 
     @Column(length = 80)
     private String userImagePath;
+
+    @Column(length = 40, nullable = false)
+    private String userThumbnailImageName;
+
+    @Column(length = 80)
+    private String userThumbnailImagePath;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;  // (Y : 탈퇴, N: 활성)

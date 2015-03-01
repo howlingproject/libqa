@@ -11,33 +11,33 @@ import lombok.Data;
 @Data
 public class ResponseData<T> {
 
-    private StatusCodeEnum StatusCode;
+    private int resultCode;
     private String comment;
     private T data;
 
-    public ResponseData(StatusCodeEnum code, String comment, T data) {
+    public ResponseData(int code, String comment, T data) {
         init(code, comment, data);
     }
 
     public ResponseData() {
     }
 
-    private void init(StatusCodeEnum code, String comment, T data) {
-        this.StatusCode = code;
+    private void init(int code, String comment, T data) {
+        this.resultCode = code;
         this.comment = comment;
         this.data = data;
     }
 
-    public static <T> ResponseData<T> createResult(StatusCodeEnum code, String comment, T data) {
+    public static <T> ResponseData<T> createResult(int code, String comment, T data) {
         return new ResponseData<>(code, comment, data);
     }
 
     public static <T> ResponseData<T> createSuccessResult(T data) {
-        return new ResponseData<>(StatusCodeEnum.SUCCESS, StatusCodeEnum.SUCCESS.getComment(), data);
+        return new ResponseData<>(StatusCodeEnum.SUCCESS.getCode(), StatusCodeEnum.SUCCESS.getComment(), data);
     }
 
-    public ResponseData<T> setStatusCodeEnum(StatusCodeEnum code) {
-        this.StatusCode = code;
+    public ResponseData<T> setResultCode(int code) {
+        this.resultCode = code;
         return this;
     }
 

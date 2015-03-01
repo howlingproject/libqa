@@ -20,7 +20,10 @@ To change this template use File | Settings | File Templates.
 <form id="upload-file-form">
     <label for="upload-file-input">Upload your file:</label>
     <input id="upload-file-input" type="file" name="uploadfile" accept="*" />
+    <input type="hidden" name="viewType" value="Space" />
 </form>
+
+<div id="imgArea"></div>
 
 {{/partial}}
 
@@ -37,7 +40,7 @@ $(document).ready(function() {
  */
 function uploadFile() {
     $.ajax({
-        url: "/uploadFile",
+        url: "/common/uploadFile",
         type: "POST",
         data: new FormData($("#upload-file-form")[0]),
         enctype: 'multipart/form-data',
@@ -45,18 +48,21 @@ function uploadFile() {
         contentType: false,
         cache: false,
         success: function (req) {
-            if(!req.success) {
-                alert(req.message);
-                return;
+            alert(req.resultCode);
+            alert(req.data.uploadType);
+            alert(req.data.filePath);
+            alert(req.data.savedName);
+            if(req.resultCode == 1) {
+                alert(req.comment);
             }
-            if (req.uploadType == 'image') {
-                $("#imgArea").html("<img src='" + req.contextPath + req.filePath + req.savedName + "' id=\"uploadPreviewImg\" width=\"200\">");
-            } else {
-                $("#fileArea").html("<a href="+ req.contextPath + req.filePath + req.savedName+ " target='_blank'>"+ req.realName +"</a>");
+            if (req.data.uploadType === 'image') {
+                $("#imgArea").html("<img src='" + req.data.filePath +"/"+ req.data.savedName + "' id=\"uploadPreviewImg\" width=\"200\">");
             }
         },
-        error: function () {
+        error: function (req) {
             // Handle upload error
+            alert('파일 업로드중 에러가 발생하였습니다.');
+            alert('req.resultCode : ' + req.resultCode);
             // ...
         }
     });
