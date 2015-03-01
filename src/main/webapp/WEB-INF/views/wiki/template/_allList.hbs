@@ -1,0 +1,31 @@
+<div class="nav-tabs-header">전체 위키</div>
+{{#each allList}}
+    <div class="media qna-item">
+        <a class="pull-left" href="#">
+            <div class="user-profile">
+                <img src="../images/avatar.png" class="profile-image" alt="avatar">
+            </div>
+        </a>
+        <div class="row">
+            <div class="col-xs-6 col-sm-8 col-md-8">
+                <div class="media-body">
+                    <div class="media-heading">
+                        <span>{{insertDate}}</span>
+                        <div class="pull-right">
+                            <span class="label label-primary">Spring</span>
+                            <span class="label label-primary">Spring</span>
+                            <span class="label label-primary">Spring</span>
+                            <span class="label label-primary">Spring</span>
+                        </div>
+                    </div>
+                    {{contets}}
+                </div>
+            </div>
+            <div class="col-md-2 my-qna-rating">
+                <button class="btn btn-sm btn-default btn-sm-fixed">답변 999</button>
+                <button class="btn btn-sm btn-default btn-sm-fixed">추천 0</button>
+            </div>
+        </div>
+    </div>
+{{/each}}
+<div class="top-buffer">&nbsp;</div>
