@@ -1,63 +1,67 @@
-<%--
+{{!--
 Created by IntelliJ IDEA.
 User: yion
 Date: 2014. 12. 7.
 Time: 16:20
 To change this template use File | Settings | File Templates.
---%>
-<h2>image upload</h2>
-<g:form enctype="multipart/form-data" class="upload" name="imageForm">
-    <label>File Name </label><input name="fileTextField" type="text">
-    <input name="uploadField" type="file">
-    <input name="userId" value="1" type="hidden">
-    <input name="viewType" value="Space" type="hidden">
-    <input name="uploadType" value="image" type="hidden">
-    <input id="imageSubmit" value="submit" type="button">
+--}}
+{{#partial "style"}}
+    {{!-- 여기에 사용자 css 정의 --}}
+{{/partial}}
 
-    <div id="imgArea"></div>
-</g:form>
+{{#partial "plugin-style"}}
+    {{!-- 여기에 .css 파일 경로 --}}
+{{/partial}}
 
-<br />
-<h2>file uplaod</h2>
-<g:form enctype="multipart/form-data" class="upload" name="fileForm">
-    <label>File Name </label><input name="fileTextField" type="text">
-    <input name="uploadField" type="file">
-    <input name="userId" value="1" type="hidden">
-    <input name="viewType" value="Space" type="hidden">
-    <input name="uploadType" value="file" type="hidden">
+{{#partial "title"}}LibQA~{{/partial}}
 
-    <input id="fileSubmit" value="submit" type="button">
-    <div id="fileArea"></div>
-</g:form>
+{{# partial "content" }}
 
-<script type="text/javascript">
-    $('#imageSubmit').click(function(){
-        doUpload(new FormData(document.forms.namedItem("imageForm")));
-    });
+<form id="upload-file-form">
+    <label for="upload-file-input">Upload your file:</label>
+    <input id="upload-file-input" type="file" name="uploadfile" accept="*" />
+</form>
 
-    $('#fileSubmit').click(function(){
-        doUpload(new FormData(document.forms.namedItem("fileForm")));
-    });
+{{/partial}}
 
-    function doUpload(oData) {
-        var url = "${createLink(controller:'uploadAjax',action:'upload')}";
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: oData,
-            processData: false,  // tell jQuery not to process the data
-            contentType: false,
-            success: function (req) {
-                if(!req.success) {
-                    alert(req.message);
-                    return;
-                }
-                if (req.uploadType == 'image') {
-                    $("#imgArea").html("<img src='" + req.contextPath + req.filePath + req.savedName + "' id=\"uploadPreviewImg\" width=\"200\">");
-                } else {
-                    $("#fileArea").html("<a href="+ req.contextPath + req.filePath + req.savedName+ " target='_blank'>"+ req.realName +"</a>");
-                }
+
+{{#partial "script-body"}}
+<script>
+// bind the on-change event
+$(document).ready(function() {
+    $("#upload-file-input").on("change", uploadFile);
+});
+
+/**
+ * Upload the file sending it via Ajax at the Spring Boot server.
+ */
+function uploadFile() {
+    $.ajax({
+        url: "/uploadFile",
+        type: "POST",
+        data: new FormData($("#upload-file-form")[0]),
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (req) {
+            if(!req.success) {
+                alert(req.message);
+                return;
             }
-        });
-    }
+            if (req.uploadType == 'image') {
+                $("#imgArea").html("<img src='" + req.contextPath + req.filePath + req.savedName + "' id=\"uploadPreviewImg\" width=\"200\">");
+            } else {
+                $("#fileArea").html("<a href="+ req.contextPath + req.filePath + req.savedName+ " target='_blank'>"+ req.realName +"</a>");
+            }
+        },
+        error: function () {
+            // Handle upload error
+            // ...
+        }
+    });
+} // function uploadFile
 </script>
+{{/partial}}
+
+{{> template/base}}

@@ -1,0 +1,26 @@
+
+
+{{#each bestList}}
+    <div class="row" style="padding-bottom: 10px;">
+        <div class="col-md-1">
+            <div class="user-profile">
+                <img alt="avatar" class="profile-image" src="../images/avatar.png" />
+            </div>
+        </div>
+        <div class="col-md-11">
+            <div class="row">
+                <div class="col-md-8">
+                    {{userNick}} {{insertDate}} 사람 {{likeCount}}명 리플 0개
+                </div>
+                <div class="col-md-4 text-right">
+                    페이시북 구플 트위트
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{contets}}
+                </div>
+            </div>
+        </div>
+    </div>
+{{/each}}

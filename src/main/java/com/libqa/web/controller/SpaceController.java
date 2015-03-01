@@ -1,8 +1,5 @@
 package com.libqa.web.controller;
 
-/**
- * Created by yion on 2015. 2. 8..
- */
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -24,13 +21,19 @@ public class SpaceController {
     @RequestMapping("/space/form")
     public ModelAndView index(Model model) {
         log.debug("##############################");
-        log.debug("# message : {}", message);
-        log.debug("# SpaceViewEnum : {}", SpaceViewEnum.values());
+        log.info("# message : {}", message);
 
         ModelAndView mav = new ModelAndView("/space/form");
-        mav.addObject("SpaceViewEnum", SpaceViewEnum.values());
         mav.addObject("message", message);
+
+        return mav;
+    }
+
+    @RequestMapping("/space/fileUpload")
+    public ModelAndView fileUpload(Model model) {
+        ModelAndView mav = new ModelAndView("/space/ajaxUpload");
         return mav;
     }
 
 }
+

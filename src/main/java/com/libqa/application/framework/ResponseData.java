@@ -19,6 +19,9 @@ public class ResponseData<T> {
         init(code, comment, data);
     }
 
+    public ResponseData() {
+    }
+
     private void init(StatusCodeEnum code, String comment, T data) {
         this.StatusCode = code;
         this.comment = comment;
