@@ -20,11 +20,6 @@ public class HelloWorldController {
     @Value("${howling.hello.message}")
     private String message;
 
-    @RequestMapping("/")
-    public String test() {
-        return "test";
-    }
-
     @RequestMapping("/hello")
     public ModelAndView helloJsp() {
         ModelAndView mav = new ModelAndView("world");

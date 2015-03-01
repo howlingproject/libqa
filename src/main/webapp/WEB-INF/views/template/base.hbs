@@ -5,18 +5,22 @@
 <!doctype html>
 <html lang="ko">
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>{{#block "title"}}{{/block}}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>    
+    <title>{{#block "title"}}{{/block}}</title>                                    
 
     {{!-- favicon
     <link rel="shortcut icon" href="경로/favicon.ico" type="image/x-icon">
      --}}
-    <meta name="description" content=""/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 
-    {{!--공통 스타일 영역--}}
-    <link rel="stylesheet" href="/경로/bootstrap.min.css">
+    {{!--공통 스타일 영역--}}           
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://bootswatch.com/cerulean/bootstrap.min.css" rel="stylesheet">
+    <link href="/resource/public/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/resource/app/css/common.css" rel="stylesheet">
 
     <!-- page specific plugin styles -->
     {{#block "plugin-style"}}{{/block}}
@@ -25,7 +29,12 @@
     {{#block "style"}}{{/block}}
 
     {{!--공통 스크립트 영역--}}
-    <script type="text/javascript" src="/경로/jquery-1.11.0.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
     {{#block "script-header"}}{{/block}}
 </head>
@@ -40,28 +49,28 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="../">LibQA</a>
+            <a class="navbar-brand" href="/">LibQA</a>
         </div>
 
         <nav role="navigation" class="navbar-collapse bs-navbar-collapse collapse">
             <ul class="nav navbar-nav navi-menu">
                 <li class="active">
-                    <a href="">Feeds</a>
+                    <a href="/feed/main">Feeds</a>
                 </li>
                 <li>
-                    <a href="">Q&amp;A</a>
+                    <a href="/qa/main">Q&amp;A</a>
                 </li>
                 <li>
-                    <a href="">Space</a>
+                    <a href="/space/main">Space</a>
                 </li>
                 <li>
-                    <a href="">Wiki</a>
+                    <a href="/wiki/main">Wiki</a>
                 </li>
                 <li>
-                    <a href="#">My Info</a>
+                    <a href="/myInfo">My Info</a>
                 </li>
                 <li>
-                    <a href="#">Admin</a>
+                    <a href="/admin">Admin</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right navi-info">
