@@ -1,4 +1,4 @@
-package com.libqa.web.space;
+package com.libqa.web.controller;
 
 /**
  * Created by yion on 2015. 2. 8..

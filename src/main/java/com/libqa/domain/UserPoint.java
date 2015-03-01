@@ -32,7 +32,7 @@ public class UserPoint {
     private UserPointEnum pointType;
 
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date insertDate;
 
 }

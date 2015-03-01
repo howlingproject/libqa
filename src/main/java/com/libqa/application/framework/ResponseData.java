@@ -1,4 +1,4 @@
-package com.libqa.application;
+package com.libqa.application.framework;
 
 import com.libqa.application.enums.StatusCodeEnum;
 

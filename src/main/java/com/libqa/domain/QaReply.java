@@ -23,25 +23,28 @@ public class QaReply {
     @JoinColumn(name="qaId", referencedColumnName="qaId", nullable=false)
     private QaContent qaContent;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Integer parentsId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer orderIdx;
 
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition = "int default 0")
     private Integer depthIdx;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition="Text")
     private String contents;
+
+    @Column(nullable = false, columnDefinition="Text")
+    private String contentsMarkup;
 
     @Column(nullable = false)
     private Integer userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String userNick;
 
     @Column(nullable = false, columnDefinition = "int default 0")
@@ -57,6 +60,7 @@ public class QaReply {
     private boolean isDeleted;
 
     @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 
     @Temporal(TemporalType.DATE)

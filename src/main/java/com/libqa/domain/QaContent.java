@@ -21,7 +21,7 @@ public class QaContent {
     @Column(nullable = true)
     private Integer wikiId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String title;
 
     @Column(nullable = false, columnDefinition="Text")
@@ -33,7 +33,7 @@ public class QaContent {
     @Column(nullable = false)
     private Integer userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String userNick;
 
     @Column(nullable = false, columnDefinition = "int default 0")
@@ -58,16 +58,17 @@ public class QaContent {
     @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
     private boolean isReplyed;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date updateDate;
 
     @Column(nullable = false)
     private Integer insertUserId;
 
-    @Column(nullable = false)
+    @Column
     private Integer updateUserId;
 
     @OneToMany(mappedBy = "qaContent", fetch = FetchType.LAZY)

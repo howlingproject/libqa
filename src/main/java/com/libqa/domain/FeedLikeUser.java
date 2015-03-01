@@ -24,12 +24,14 @@ public class FeedLikeUser {
     private Long replyId;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
     private FeedLikeTypeEnum feedLikeType;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isCanceled;
 
     @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 
     @Temporal(TemporalType.DATE)

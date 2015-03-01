@@ -25,16 +25,16 @@ public class WikiSnapShot{
     @Column(nullable = false)
     private Integer wikiId;
 
-    @Column
+    @Column(nullable = false)
     private Integer parentsId;
 
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer orderIdx;
 
-    @Column
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer depthIdx;
 
     @Column(columnDefinition = "Text", nullable = false)
@@ -82,10 +82,10 @@ public class WikiSnapShot{
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     boolean isDeleted = false;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date insertDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date updateDate;
 
     @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)

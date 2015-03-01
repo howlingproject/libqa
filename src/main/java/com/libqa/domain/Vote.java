@@ -33,6 +33,7 @@ public class Vote {
     private boolean isCancel;
 
     @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 
     @Temporal(TemporalType.DATE)

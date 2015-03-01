@@ -25,7 +25,7 @@ public class Keyword {
     @Column(nullable = false)
     private Integer spaceId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String keywordName;
 
     @Enumerated(EnumType.STRING)
@@ -35,10 +35,11 @@ public class Keyword {
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date updateDate;
 
 }

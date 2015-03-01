@@ -18,17 +18,20 @@ public class FeedFile {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer feedFileId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String realName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 80)
     private String savedName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 80)
     private String filePath;
 
     @Column(nullable = false)
     private Integer fileSize;
+
+    @Column(nullable = true, length = 10)
+    private String fileType;
 
     @Column
     private Integer downloadCount;
@@ -37,6 +40,7 @@ public class FeedFile {
     private boolean isDeleted;
 
     @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 
     @Temporal(TemporalType.DATE)

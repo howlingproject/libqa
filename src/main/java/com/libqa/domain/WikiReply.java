@@ -21,7 +21,7 @@ public class WikiReply{
     @JoinColumn(referencedColumnName="wikiId",  nullable = false)
     private Wiki wiki;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String title;
 
     @Column(columnDefinition = "Text", nullable = false)
@@ -36,10 +36,10 @@ public class WikiReply{
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date insertDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date updateDate;
 
 

@@ -15,11 +15,11 @@ public class Feed {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer feedId;
 
-    @Column
+    @Column(nullable = true, length = 80)
     private String sharedResponseId;
 
-    @Column
     @Enumerated(EnumType.STRING)
+    @Column(nullable = true, length = 20)
     private ContentsTypeEnum sharedContentsType;
 
     @Column(columnDefinition = "TEXT", nullable = false)
@@ -53,6 +53,7 @@ public class Feed {
     private boolean isDeleted;
 
     @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 
     @Temporal(TemporalType.DATE)

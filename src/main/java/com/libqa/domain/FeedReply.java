@@ -25,6 +25,7 @@ public class FeedReply {
     private boolean isDeleted;
 
     @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 
     @Temporal(TemporalType.DATE)

@@ -22,36 +22,36 @@ import java.util.Set;
 @Slf4j
 public class Wiki {
 
-    @Column(nullable = false)
-    private Integer spaceId;
-
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer wikiId;
 
-    @Column
+    @Column(nullable = false)
+    private Integer spaceId;
+
+    @Column(nullable = false)
     private Integer parentsId;
 
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer orderIdx;
 
-    @Column
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer depthIdx;
-
-    @Column(columnDefinition = "Text", nullable = false)
-    private String contentsMarkup;
 
     @Column(columnDefinition = "Text", nullable = false)
     private String contents;
 
+    @Column(columnDefinition = "Text", nullable = false)
+    private String contentsMarkup;
+
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isLock = false;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 20)
     private String passwd;
 
     @Column(nullable = false, length = 40)
@@ -87,10 +87,10 @@ public class Wiki {
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     boolean isDeleted = false;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date insertDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date updateDate;
 
     @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)

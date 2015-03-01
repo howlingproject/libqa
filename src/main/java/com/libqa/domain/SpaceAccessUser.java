@@ -31,10 +31,11 @@ public class SpaceAccessUser {
     @Column(columnDefinition="TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date updateDate;
 
 

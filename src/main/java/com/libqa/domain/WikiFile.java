@@ -21,25 +21,26 @@ public class WikiFile{
     @JoinColumn(referencedColumnName="wikiId",  nullable = false)
     private Wiki wiki;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date updateDate;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 40)
     private String realName;
 
-    @Column(nullable = false, length = 100)
-    private String saveName;
+    @Column(nullable = false, length = 80)
+    private String savedName;
+
+    @Column(nullable = false, length = 80)
+    private String filePath;
 
     @Column(nullable = false)
-    private String path;
-
-    @Column(length = 50)
     private Integer fileSize;
 
-    @Column
+    @Column(nullable = true, length = 10)
     private String fileType;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")

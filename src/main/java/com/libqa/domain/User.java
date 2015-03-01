@@ -23,7 +23,7 @@ public class User {
     @Column(length = 80, nullable = false)
     private String userEmail;
 
-    @Column(length = 80, nullable = false)
+    @Column(length = 40, nullable = false)
     private String userNick;
 
     @Column(length = 100, nullable = false)
@@ -32,19 +32,19 @@ public class User {
     @Column(length = 40, nullable = false)
     private String userImage;
 
-    @Column(length = 50)
+    @Column(length = 80)
     private String userImagePath;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;  // (Y : 탈퇴, N: 활성)
 
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = true)
     private String faceBookKey;
 
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = true)
     private String googleKey;
 
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = true)
     private String tweeterKey;
 
     @Column(length = 255, nullable = false)
@@ -54,19 +54,21 @@ public class User {
     @Column(nullable = false, columnDefinition = "int default 0")
     private Integer visiteCount;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date lastVisiteDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date updateDate;
 
     @Column(nullable = false, columnDefinition = "int default 0")
     private Integer userPoint;
 
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isCertification;
 
     @Column(length = 255, nullable = false)
@@ -80,8 +82,5 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserFavorite> userFavorites;
-
-
-
 
 }

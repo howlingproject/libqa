@@ -24,12 +24,13 @@ public class QaRecommand {
     @Column(nullable = false)
     private Integer userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String userNick;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isCommand;
 
     @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 }

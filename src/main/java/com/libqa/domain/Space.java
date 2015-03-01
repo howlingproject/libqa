@@ -36,25 +36,26 @@ public class Space {
     private String titleImagePath;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private SpaceViewEnum layoutType;
 
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isPrivate;
 
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isDeleted;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
     private Date insertDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date updateDate;
 
     @Column(nullable = false)
     private Integer insertUserId;
 
-    @Column(nullable = true)
+    @Column
     private Integer updateUserId;
 
     @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)

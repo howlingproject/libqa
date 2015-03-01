@@ -17,7 +17,7 @@ public class KeywordList {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer keywordListId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String keywordName;
 
     @Column(nullable = false, columnDefinition = "int default 0")

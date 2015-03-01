@@ -17,19 +17,19 @@ public class QaFile {
     @Column(nullable = false)
     private Integer qaId;
 
-    @Column(nullable = true)
+    @Column(nullable = false, length = 40)
     private String realName;
 
-    @Column(nullable = true)
-    private String saveName;
+    @Column(nullable = false, length = 80)
+    private String savedName;
 
-    @Column(nullable = true)
-    private String path;
+    @Column(nullable = false, length = 80)
+    private String filePath;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Integer fileSize;
 
-    @Column(nullable = true)
+    @Column(nullable = true, length = 10)
     private String fileType;
 
     @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
