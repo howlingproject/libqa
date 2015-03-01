@@ -5,6 +5,7 @@ import com.libqa.application.dto.FileDto;
 import com.libqa.application.enums.StatusCodeEnum;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.DateUtil;
+import com.libqa.application.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -31,8 +32,8 @@ import java.util.List;
 public class CommonController {
 
 
-    @Value("${file.maxsize}")
-    String uploadMaxSize;
+//    @Value("${file.maxsize}")
+//    String uploadMaxSize;
 
 
     private static String SEPARATOR = "/";
@@ -49,31 +50,27 @@ public class CommonController {
 
         String serverPath = request.getServletContext().getRealPath(SEPARATOR);
 
-        // viewType 이 Space, Editor, Feed 인 경우 이미지만 허용한다.
-        boolean isAllowedFile = checkAllowedImageFormat(uploadfile.getContentType(), viewType);
-
-        if (!isAllowedFile) {
-            data.setComment("이미지만 허용됩니다.");
-            data.setResultCode(StatusCodeEnum.INVALID_PARAMETER.getCode());
-            data.setData(viewType);
-            return data;
+        // viewType 이 Image인 경우 (Space, Wiki의 에디터인 경우) 이미지 파일만 허용한다.
+        boolean isAllowedFile = false;
+        if (StringUtil.defaultString(viewType).equals("Image")) { // viewType 이 Image인 경우 (Space, Wiki의 에디터인 경우) 이미지 파일만 허용한다.
+            isAllowedFile = checkAllowedImageFormat(uploadfile.getContentType(), viewType);
+            if (!isAllowedFile) {
+                data.setComment("이미지만 허용됩니다.");
+                data.setResultCode(StatusCodeEnum.INVALID_PARAMETER.getCode());
+                data.setData(viewType);
+                return data;
+            }
         }
 
         log.info("#### request ####");
         log.info("# request getServletContext().getRealPath = {}", request.getServletContext().getRealPath(SEPARATOR));
         log.info("# request getServletPath = {} ", request.getServletPath());
-        log.info("# request viewType = {} ", viewType);
 
         try {
             // temp/userId/yyyyMMdd/ 에 일단 저장 후 차후 userId/yyyyMMdd/파일명 으로 이동 후 삭제해야 한다.
-            Integer userId = 1;
+            Integer userId = 1; // 추후 사용자 순번
+
             String today = DateUtil.getToday();
-            double maxSize = Double.parseDouble(uploadMaxSize);
-
-            if (uploadfile.getSize() > (maxSize * 1024 * 1024)) {
-                throw new FilePermitMsgException("파일 크기가 " + maxSize + "MB를 초과합니다.");
-            }
-
 
             log.info("## uploadfile : {}", uploadfile.getContentType());
             log.info("## uploadfile : {}", uploadfile.getName());
@@ -137,6 +134,12 @@ public class CommonController {
 
     }
 
+    /**
+     * Image 타입만 허용해야 하는 경우
+     * @param fileFormat
+     * @param viewType
+     * @return
+     */
     private boolean checkAllowedImageFormat(String fileFormat, String viewType) {
         List allowedFileFormat = new ArrayList<>();
         allowedFileFormat.add("image/png");
@@ -148,14 +151,12 @@ public class CommonController {
         log.debug("# viewType : " + viewType);
 
         // 공간 생성 혹은 에디터일 경우 이미지만 허용된다.
-        if (viewType.equals("Space") || viewType.equals("Editor") || viewType.equals("Feed")) {
-            if (allowedFileFormat.contains(fileFormat)) {
-                return true;
-            } else {
-                return false;
-            }
+
+        if (allowedFileFormat.contains(fileFormat)) {
+            return true;
+        } else {
+            return false;
         }
-        return true;
     }
 
 
