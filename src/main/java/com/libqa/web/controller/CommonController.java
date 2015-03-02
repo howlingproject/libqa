@@ -1,14 +1,12 @@
 package com.libqa.web.controller;
 
-import com.libqa.application.Exception.FilePermitMsgException;
 import com.libqa.application.dto.FileDto;
 import com.libqa.application.enums.StatusCodeEnum;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.DateUtil;
+import com.libqa.application.util.FileUtil;
 import com.libqa.application.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,8 +19,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by yion on 2015. 3. 1..
@@ -31,29 +27,23 @@ import java.util.List;
 @Slf4j
 public class CommonController {
 
-
-//    @Value("${file.maxsize}")
-//    String uploadMaxSize;
-
-
     private static String SEPARATOR = "/";
     private static String UPLOAD_TYPE_IMAGE = "image";
-
 
     @RequestMapping(value = "/common/uploadFile", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<?> fileUpload(@RequestParam("uploadfile") MultipartFile uploadfile,
                                       HttpServletRequest request) {
+        // 허용 파일 인지를 체크
+        FileUtil.notAllowedFile(uploadfile);
+
         String viewType = request.getParameter("viewType");
         FileDto fileDto = new FileDto();
         ResponseData data = new ResponseData();
-
         String serverPath = request.getServletContext().getRealPath(SEPARATOR);
 
-        // viewType 이 Image인 경우 (Space, Wiki의 에디터인 경우) 이미지 파일만 허용한다.
-        boolean isAllowedFile = false;
         if (StringUtil.defaultString(viewType).equals("Image")) { // viewType 이 Image인 경우 (Space, Wiki의 에디터인 경우) 이미지 파일만 허용한다.
-            isAllowedFile = checkAllowedImageFormat(uploadfile.getContentType(), viewType);
+            boolean isAllowedFile = FileUtil.checkImageFile(uploadfile);
             if (!isAllowedFile) {
                 data.setComment("이미지만 허용됩니다.");
                 data.setResultCode(StatusCodeEnum.INVALID_PARAMETER.getCode());
@@ -84,10 +74,10 @@ public class CommonController {
             String extendName = fileOriginalName.substring(dotIndex + 1);
             String temp = String.valueOf(System.nanoTime());
             //저장 파일명
-            String saveFileName = today+temp+"."+extendName.toLowerCase();
+            String saveFileName = today + temp + "." + extendName.toLowerCase();
 
 
-            String localDir = "/resource/temp/"+userId;
+            String localDir = "/resource/temp/" + userId;
             String directory = serverPath + localDir;
 
             // 폴더 생성
@@ -132,31 +122,6 @@ public class CommonController {
 
         return data;
 
-    }
-
-    /**
-     * Image 타입만 허용해야 하는 경우
-     * @param fileFormat
-     * @param viewType
-     * @return
-     */
-    private boolean checkAllowedImageFormat(String fileFormat, String viewType) {
-        List allowedFileFormat = new ArrayList<>();
-        allowedFileFormat.add("image/png");
-        allowedFileFormat.add("image/jpeg");
-        allowedFileFormat.add("image/jpg");
-        allowedFileFormat.add("image/gif");
-
-        log.debug("# fileFormat : " + fileFormat);
-        log.debug("# viewType : " + viewType);
-
-        // 공간 생성 혹은 에디터일 경우 이미지만 허용된다.
-
-        if (allowedFileFormat.contains(fileFormat)) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
 
