@@ -42,15 +42,7 @@ public class CommonController {
         ResponseData data = new ResponseData();
         String serverPath = request.getServletContext().getRealPath(SEPARATOR);
 
-        if (StringUtil.defaultString(viewType).equals("Image")) { // viewType 이 Image인 경우 (Space, Wiki의 에디터인 경우) 이미지 파일만 허용한다.
-            boolean isAllowedFile = FileUtil.checkImageFile(uploadfile);
-            if (!isAllowedFile) {
-                data.setComment("이미지만 허용됩니다.");
-                data.setResultCode(StatusCodeEnum.INVALID_PARAMETER.getCode());
-                data.setData(viewType);
-                return data;
-            }
-        }
+        if (checkImageUpload(uploadfile, viewType, data)) return data;
 
         log.info("#### request ####");
         log.info("# request getServletContext().getRealPath = {}", request.getServletContext().getRealPath(SEPARATOR));
@@ -122,6 +114,19 @@ public class CommonController {
 
         return data;
 
+    }
+
+    private boolean checkImageUpload(MultipartFile uploadfile, String viewType, ResponseData data) {
+        if (StringUtil.defaultString(viewType).equals("Image")) { // viewType 이 Image인 경우 (Space, Wiki의 에디터인 경우) 이미지 파일만 허용한다.
+            boolean isAllowedFile = FileUtil.checkImageFile(uploadfile);
+            if (!isAllowedFile) {
+                data.setComment("이미지만 허용됩니다.");
+                data.setResultCode(StatusCodeEnum.INVALID_PARAMETER.getCode());
+                data.setData(viewType);
+                return true;
+            }
+        }
+        return false;
     }
 
 
