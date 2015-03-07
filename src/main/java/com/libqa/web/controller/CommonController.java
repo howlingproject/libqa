@@ -107,7 +107,7 @@ public class CommonController {
             data.setData(fileDto);
         } catch (Exception e) {
             log.error("# File Upload Error : {}", e);
-            data.setComment("FAIL");
+            data.setComment(StatusCodeEnum.FAIL.getComment());
             data.setResultCode(StatusCodeEnum.FAIL.getCode());
             data.setData(fileDto);
         }
