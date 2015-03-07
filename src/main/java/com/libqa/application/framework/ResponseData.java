@@ -36,6 +36,10 @@ public class ResponseData<T> {
         return new ResponseData<>(StatusCodeEnum.SUCCESS.getCode(), StatusCodeEnum.SUCCESS.getComment(), data);
     }
 
+    public static <T> ResponseData<T> createFailResult(T data) {
+        return new ResponseData<>(StatusCodeEnum.FAIL.getCode(), StatusCodeEnum.FAIL.getComment(), data);
+    }
+
     public ResponseData<T> setResultCode(int code) {
         this.resultCode = code;
         return this;

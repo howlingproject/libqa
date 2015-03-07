@@ -102,17 +102,11 @@ public class CommonController {
 
             log.info("####### FILE SAVE INFO ########");
             log.info("fileDto = {}", fileDto);
-            data.setComment(StatusCodeEnum.SUCCESS.getComment());
-            data.setResultCode(StatusCodeEnum.SUCCESS.getCode());
-            data.setData(fileDto);
+            return ResponseData.createSuccessResult(fileDto);
         } catch (Exception e) {
             log.error("# File Upload Error : {}", e);
-            data.setComment(StatusCodeEnum.FAIL.getComment());
-            data.setResultCode(StatusCodeEnum.FAIL.getCode());
-            data.setData(fileDto);
+            return ResponseData.createFailResult(fileDto);
         }
-
-        return data;
 
     }
 
