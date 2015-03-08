@@ -1,12 +1,17 @@
 package com.libqa.web.controller;
 
+import com.libqa.application.framework.ResponseData;
+import com.libqa.domain.Space;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.libqa.application.enums.SpaceViewEnum;
+
+import javax.validation.Valid;
 
 /**
  * Created by yion on 2015. 2. 8..
@@ -33,6 +38,13 @@ public class SpaceController {
     public ModelAndView fileUpload(Model model) {
         ModelAndView mav = new ModelAndView("/space/ajaxUpload");
         return mav;
+    }
+
+    @RequestMapping(value = "/space/addSpace", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<?> addSpace(@RequestBody Space space) {
+        log.info("## space : {}", space);
+        return null;
     }
 
 }

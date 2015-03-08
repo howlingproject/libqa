@@ -39,7 +39,7 @@ public class CommonController {
         FileDto fileDto = new FileDto();
         String serverPath = StringUtil.defaultString(request.getServletContext().getRealPath(FileUtil.SEPARATOR));
 
-        // 허용 파일 인지를 체크
+        // 허용 파일 여부 체크
         FileUtil.allowedFile(uploadfile);
         // 이미지 파일일 경우 ContentType 검사
         FileUtil.checkImageUpload(uploadfile, viewType);
