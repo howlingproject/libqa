@@ -77,12 +77,17 @@ public class FileUtil {
     public static void allowedFile(MultipartFile file) {
         int dotIndex = file.getOriginalFilename().lastIndexOf('.');
         String ext = file.getOriginalFilename().substring(dotIndex + 1);
-
+        boolean result = false;
         for (int i = 0; i < PERMITTED_EXTS.length; i++) {
-            if (!ext.equalsIgnoreCase(PERMITTED_EXTS[i])) {
-                log.error("#Error File Extension = {}, Contents Type : {}", ext, file.getContentType());
-                throw new IllegalStateException("허용된 파일 확장자가 아닙니다.");
+            if (ext.equalsIgnoreCase(PERMITTED_EXTS[i])) {
+                result = true;
+                break;
             }
+        }
+
+        if (!result) {
+            log.error("#Error File Extension = {}, Contents Type : {}", ext, file.getContentType());
+            throw new IllegalStateException("허용된 파일 확장자가 아닙니다.");
         }
     }
 

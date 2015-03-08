@@ -1,4 +1,5 @@
 
+{{#partial "content" }}
 <!-- contents -->
 <div class="container">
     <section id="forms">
@@ -9,9 +10,7 @@
 
         <div class="row" style="width:100%">
             <div style="padding-left:30px">
-                <!-- <h3>Form Horizontal</h3> -->
-
-                <form name="spaceCreateForm" class="form-horizontal well" enctype="multipart/form-data">
+                <form name="spaceCreateForm" id="spaceCreateForm" class="form-horizontal well" enctype="multipart/form-data">
                     <fieldset>
                         <legend>공간 제목</legend>
                         <div class="control-group">
@@ -29,23 +28,14 @@
                                     <input name="userId" id="userId" value="1" type="hidden">
                                     <input name="uploadType" value="Space" type="hidden">
                                     <input name="titleImagePath" id="titleImagePath" type="hidden">
-                                    <input id="file-attachment" name="uploadField" type="file" style="display:none">
-                                    <input id="fileAttachmentInput" class="form-control" type="text"
-                                           placeholder="공간을 표현할 수 있는 대표 이미지를 등록하세요." name="titleImage">
-                                    <p class="help-block" id="spaceImage">(*) 업로드한 이미지를 미리볼 수 있습니다.</p>
-                                </div>
-
-                                <div>
-                                    <button class="btn btn-info btn-default" type="button"
-                                            onclick="$('input[id=file-attachment]').click();">파일선택
-                                    </button>
-                                    <button class="btn btn-info btn-default" id="preUpload" type="button">업로드 및 미리보기</button>
-                                    <p class="help-block"></p>
+                                    <input type="hidden" name="viewType" id="viewType" value="Image" />
+                                    <input id="file-attachment" type="file" name="uploadfile" accept="*" />
+                                    <p class="help-block" id="spaceImage">(*) 공간을 표현할 수 있는 대표 이미지를 등록하세요.</p>
                                 </div>
                             </div>
 
                             <div class="col-lg-4 text-right" id="imagePreviewArea">
-                                <img src="../images/icons/pictures.png" width="200" alt="이미지 미리보기" class="img-thumbnail image-preview" id="image-preview">
+                                <img src="/resource/public/images/icons/pictures.png" width="200" alt="이미지 미리보기" class="img-thumbnail image-preview" id="image-preview">
                             </div>
                         </div>
                         <p style="padding-top:20px"></p>
@@ -55,6 +45,7 @@
                                 <div id="editorArea" name="editorArea" class="form-group"></div>
                                 <input type="hidden" value="" id="description" name="description">
                                 <input type="hidden" value="" id="descriptionMarkup" name="descriptionMarkup" value="description_markup">
+                                <textarea id="spaceDesc"  ></textarea>
                                 <p class="help-block">(*) 공간 메인 화면에 입력한 설명이 display 됩니다. (markdown 지원)</p>
                             </div>
                         </div>
@@ -156,8 +147,7 @@
 
                         <div class="control-group">
                             <div class="col-sm-4 col-md-4">
-
-                                <div id="tag-info" class="form-inline" style="padding-bottom: 10px">
+                                <div id="tag-info" class="form-inline" style="padding-bottom: 10px;width:400px;">
                                     <input type="text" class="form-control" size="29" id="interesting" placeholder="Keyword">
                                     <button class="btn btn-primary" type="button" id="keywordAdd">Add <i class="glyphicon glyphicon-plus"></i></button>
 
@@ -165,14 +155,14 @@
                             </div>
                             <input type="hidden" name="keywordList" />
                             <div class="col-sm-4 col-md-4">
-                                <ul id="tag-cloud" style="padding-left: 0px; width:100%; " ></ul>
+                                <ul id="tag-cloud" style="padding-left: 0px; width:100%; "></ul>
                             </div>
                         </div>
                     </fieldset>
 
                     <div class="form-actions text-center">
-                        <button type="submit" class="btn btn-primary">저장</button>
-                        <button type="reset" class="btn" id="btnCancel">취소</button>
+                        <button type="button" class="btn btn-primary" id="btnSave" name="btnSave">저장</button>
+                        <button type="button" class="btn" id="btnCancel" name="btnCancel" onclick="javascript:alert(111);">취소</button>
                     </div>
                 </form>
             </div>
@@ -180,151 +170,185 @@
 
     </section>
 </div>
+{{/partial}}
 
 
-<!--// contents -->
-<link href="../css/bootstrap-tag-cloud/bootstrap-tag-cloud.css" rel="stylesheet">
-<script type='text/javascript' src="../js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
-
-<script type="text/javascript">
-    var keywordData = [];
-
-    $('input[id="file-attachment"]').change(function () {
-        $('#fileAttachmentInput').val($(this).val().replace('C:\\fakepath\\', ''));
-    });
-
-    /**
-     * 키워드 추가
-     * 키워드가 3건 이상 등록 될 경우 폼을 disabled 한다.
-     */
-    $('#keywordAdd').click(function(){
-        var keyword = $('#interesting').val();
-        if (keyword == '' || keyword.length < 2) {
-            alert('키워드를 입력하세요.');
-            return;
-        }
-        if (keywordData.length == 3) {
-            alert('키워드는 최대 3건만 등록할 수 있습니다.');
-            return;
-        }
-
-        keywordData.push(keyword);
-
-        var taskArray = new Array();
-        $("input[name=keywordList]").each(function() {
-            taskArray.push(keyword);
+{{#partial "script-body" }}
+    <script>
+        $(document).ready(function() {
+            $("#file-attachment").on("change", uploadFile);
         });
 
+        var keywordData = [];
 
-        if (keywordData.length > 2) {
-            $("#interesting").attr("readonly",true);
-            $("#keywordAdd").attr("disabled",true);
-        }
-    });
+        /**
+         * 키워드 추가
+         * 키워드가 3건 이상 등록 될 경우 폼을 disabled 한다.
+         */
+        $('#keywordAdd').click(function () {
+            var keyword = $('#interesting').val();
+            if (keyword == '' || keyword.length < 2) {
+                alert('키워드를 입력하세요.');
+                return;
+            }
+            if (keywordData.length == 3) {
+                alert('키워드는 최대 3건만 등록할 수 있습니다.');
+                return;
+            }
 
-    /**
-     * 키워드 삭제
-     * 키워드가 삭제되면 폼을 enabled 한다.
-     */
-    $('#tag-cloud').on('click', 'li', function (event) {
-        var keyword = $(event.target).text();
-        var index = keywordData.indexOf(keyword);
+            keywordData.push(keyword);
 
-        if (index > -1) {
-            keywordData.splice(index, 1);
-            $('input[name=keywordList]').val(keywordData);
-            $("#interesting").attr("readonly",false);
-            $("#keywordAdd").attr("disabled",false);
-        }
-    });
+            var taskArray = new Array();
+            $("input[name=keywordList]").each(function () {
+                taskArray.push(keyword);
+            });
 
 
-    /**
-     * 이미지 업로드 및 미리보기
-     */
-    $('#preUpload').click(function(){
-        var oData = new FormData(document.forms.namedItem("spaceCreateForm"));
-        var url="${createLink(controller:'uploadAjax',action:'upload')}";
-        $.ajax({
-            url:url,
-            type:'POST',
-            data:oData,
-            processData: false,  // tell jQuery not to process the data
-            contentType: false ,
-            success:function (req) {
-                if (req.success) {
-                    alert(req.contextPath+req.filePath+req.savedName);
-                    var titleImagePath = req.contextPath+req.filePath;
-                    var imagePath = titleImagePath+req.savedName;
-                    $("#image-preview").remove();
-                    $("#imagePreviewArea").html("<img src='"+imagePath+"' width=\"200\" alt=\"이미지 미리보기\" class=\"img-thumbnail image-preview\" id=\"image-preview\">");
-                    $("#titleImagePath").val(titleImagePath);
-                } else {
-                    alert(req.message);
-                    return;
-                }
+            if (keywordData.length > 2) {
+                $("#interesting").attr("readonly", true);
+                $("#keywordAdd").attr("disabled", true);
             }
         });
-    });
 
-    $('#btnCancel').click(function(){
-        if(confirm('공간 생성을 취소하겠습니까?')) {
-            $(location).attr('href', "main");
+        $('#btnCancel').click(function () {
+            alert("테스트");
+        });
+
+        /**
+         * 키워드 삭제
+         * 키워드가 삭제되면 폼을 enabled 한다.
+         */
+        $('#tag-cloud').on('click', 'li', function (event) {
+            var keyword = $(event.target).text();
+            var index = keywordData.indexOf(keyword);
+
+            if (index > -1) {
+                keywordData.splice(index, 1);
+                $('input[name=keywordList]').val(keywordData);
+                $("#interesting").attr("readonly", false);
+                $("#keywordAdd").attr("disabled", false);
+            }
+        });
+
+        /**
+         * Save the Space
+         */
+        $('#btnSave').click(function(){
+            if(confirm('공간을 생성 하겠습니까?')) {
+                checkValidation();
+                $.ajax({
+                    url: "/space/addSpace",
+                    type: "POST",
+                    data: new FormData($("#spaceCreateForm")[0]),
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (req) {
+                        alert(req.resultCode);
+                        if(req.resultCode == 1) {
+                            alert(req.comment);
+                            //$(location).attr('href', "main");
+                        }
+                    },
+                    error: function (req) {
+                        // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
+
+                        if (req.status == 500) {
+                            alert('공간 정보 저장중 에러가 발생했습니다.');
+                        } else {
+                            alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                        }
+                    }
+                });
+            }
+        });
+
+        /**
+         * Upload the file sending it via Ajax at the Spring Boot server.
+         */
+        function uploadFile() {
+            var field = $("#file-attachment").val();
+            if (field != '') {
+                $.ajax({
+                    url: "/common/uploadFile",
+                    type: "POST",
+                    data: new FormData($("#spaceCreateForm")[0]),
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (req) {
+                        console.log('req : ' + req);
+                        console.log('req.data.uploadType : ' + req.data.uploadType);
+                        alert(req.resultCode);
+                        if (req.resultCode == 1) {
+                            alert(req.comment);
+                            if (req.data.uploadType === 'image') {
+                                $("#image-preview").remove();
+                                $("#titleImagePath").val("");
+                                $("#imagePreviewArea").html("<img src='" + req.data.filePath + "/" + req.data.savedName + "' id=\"uploadPreviewImg\" width=\"200\" class=\"img-thumbnail image-preview\" id=\"image-preview\">");
+                                $("#titleImagePath").val(titleImagePath);
+                            }
+                        }
+
+
+                    },
+                    error: function (req) {
+                    // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
+
+                        if (req.status == 500) {
+                            alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
+                        } else {
+                            alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                        }
+
+                    }
+                });
+            }
+        } // function uploadFile
+
+        /**
+         * Form value 검증
+         */
+        function checkValidation() {
+            // 에러가 발생할 경우 false 를 리턴한다.
+            var userId = $("#userId").val();
+            var title = $("#title").val();
+            var imagePath = $("#titleImagePath").val();
+            var wikiMarkUp = $("#wikiEditor").val();
+            // editor tag 세팅
+            $("#description").val(wikiMarkUp);
+            var description = $("#description").val();
+
+            if (userId == null || userId.length == 0) {
+                alert('로그인 정보가 존재 하지 않습니다.')
+                return false;
+            }
+            if (title == null || title.length == 0) {
+                alert('제목을 입력하세요.')
+                return false;
+            }
+            if (imagePath == null || imagePath.length == 0) {
+                alert('이미지 업로드 정보는 필수값입니다.')
+                return false;
+            }
+            if (description == null || description.length == 0) {
+                alert('공간 설명은 필수값입니다.')
+                return false;
+            }
+
+            return true;
         }
-    });
+    </script>
+    <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
+    <link href="/resource/public/css/bootstrap-tag-cloud/bootstrap-tag-cloud.css" rel="stylesheet">
+{{/partial}}
 
-
-    /**
-     * Form value 검증
-     */
-    function checkValidation() {
-        // 에러가 발생할 경우 false 를 리턴한다.
-        var userId = $("#userId").val();
-        var title = $("#title").val();
-        var titleImage= $("#fileAttachmentInput").val();
-        var imagePath = $("#titleImagePath").val();
-        var wikiMarkUp = $("#wikiEditor").val();
-        // editor tag 세팅
-        $("#description").val(wikiMarkUp);
-        var description = $("#description").val();
-
-
-
-        if (userId == null || userId.length == 0) {
-            alert('로그인 정보가 존재 하지 않습니다.')
-            return false;
-        }
-        if (title == null || title.length == 0) {
-            alert('제목을 입력하세요.')
-            return false;
-        }
-        if (titleImage == null || titleImage.length == 0) {
-            alert('공간 이미지를 업로드 하세요.')
-            return false;
-        }
-        if (imagePath == null || imagePath.length == 0) {
-            alert('이미지 업로드 정보는 필수값입니다.')
-            return false;
-        }
-        if (description == null || description.length == 0) {
-            alert('공간 설명은 필수값입니다.')
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * 공간 저장 완료 콜백
-     * @param data
-     */
-    function saveComplete(data) {
-        if (data.success) {
-            alert('공간이 생성되었습니다.');
-            $(location).attr('href', "main");
-        } else {
-            alert(data.message);
-        }
-    }
-</script>
-
+{{> template/base}}
