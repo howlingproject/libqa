@@ -1,0 +1,156 @@
+<%@ page import="com.libqa.qa.QaContent" %>
+
+
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'wikiId', 'error')} ">
+	<label for="wikiId">
+		<g:message code="qaContent.wikiId.label" default="Wiki Id" />
+		
+	</label>
+	<g:textField name="wikiId" value="${qaContentInstance?.wikiId}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'contents', 'error')} ">
+	<label for="contents">
+		<g:message code="qaContent.contents.label" default="Contents" />
+		
+	</label>
+	<g:textField name="contents" value="${qaContentInstance?.contents}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'userId', 'error')} required">
+	<label for="userId">
+		<g:message code="qaContent.userId.label" default="User Id" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="userId" type="number" value="${qaContentInstance.userId}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'userNick', 'error')} ">
+	<label for="userNick">
+		<g:message code="qaContent.userNick.label" default="User Nick" />
+		
+	</label>
+	<g:textField name="userNick" value="${qaContentInstance?.userNick}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'viewCount', 'error')} required">
+	<label for="viewCount">
+		<g:message code="qaContent.viewCount.label" default="View Count" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="viewCount" type="number" value="${qaContentInstance.viewCount}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'recommandCount', 'error')} required">
+	<label for="recommandCount">
+		<g:message code="qaContent.recommandCount.label" default="Recommand Count" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="recommandCount" type="number" value="${qaContentInstance.recommandCount}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'likeCount', 'error')} required">
+	<label for="likeCount">
+		<g:message code="qaContent.likeCount.label" default="Like Count" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="likeCount" type="number" value="${qaContentInstance.likeCount}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'isDeleted', 'error')} ">
+	<label for="isDeleted">
+		<g:message code="qaContent.isDeleted.label" default="Is Deleted" />
+		
+	</label>
+	<g:textField name="isDeleted" value="${qaContentInstance?.isDeleted}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'isShared', 'error')} ">
+	<label for="isShared">
+		<g:message code="qaContent.isShared.label" default="Is Shared" />
+		
+	</label>
+	<g:textField name="isShared" value="${qaContentInstance?.isShared}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'sharedResponseId', 'error')} ">
+	<label for="sharedResponseId">
+		<g:message code="qaContent.sharedResponseId.label" default="Shared Response Id" />
+		
+	</label>
+	<g:textField name="sharedResponseId" value="${qaContentInstance?.sharedResponseId}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'isReplyed', 'error')} ">
+	<label for="isReplyed">
+		<g:message code="qaContent.isReplyed.label" default="Is Replyed" />
+		
+	</label>
+	<g:textField name="isReplyed" value="${qaContentInstance?.isReplyed}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'insertDate', 'error')} required">
+	<label for="insertDate">
+		<g:message code="qaContent.insertDate.label" default="Insert Date" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:datePicker name="insertDate" precision="day"  value="${qaContentInstance?.insertDate}"  />
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'updateDate', 'error')} required">
+	<label for="updateDate">
+		<g:message code="qaContent.updateDate.label" default="Update Date" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:datePicker name="updateDate" precision="day"  value="${qaContentInstance?.updateDate}"  />
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'insertUserId', 'error')} required">
+	<label for="insertUserId">
+		<g:message code="qaContent.insertUserId.label" default="Insert User Id" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="insertUserId" type="number" value="${qaContentInstance.insertUserId}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'updateUserId', 'error')} required">
+	<label for="updateUserId">
+		<g:message code="qaContent.updateUserId.label" default="Update User Id" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="updateUserId" type="number" value="${qaContentInstance.updateUserId}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'qaId', 'error')} required">
+	<label for="qaId">
+		<g:message code="qaContent.qaId.label" default="Qa Id" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="qaId" type="number" value="${qaContentInstance.qaId}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'qaRecomands', 'error')} ">
+	<label for="qaRecomands">
+		<g:message code="qaContent.qaRecomands.label" default="Qa Recomands" />
+		
+	</label>
+	<g:select name="qaRecomands" from="${com.libqa.qa.QaRecommand.list()}" multiple="multiple" optionKey="id" size="5" value="${qaContentInstance?.qaRecomands*.id}" class="many-to-many"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'qaReplys', 'error')} ">
+	<label for="qaReplys">
+		<g:message code="qaContent.qaReplys.label" default="Qa Replys" />
+		
+	</label>
+	<g:select name="qaReplys" from="${com.libqa.qa.QaReply.list()}" multiple="multiple" optionKey="id" size="5" value="${qaContentInstance?.qaReplys*.id}" class="many-to-many"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: qaContentInstance, field: 'title', 'error')} ">
+	<label for="title">
+		<g:message code="qaContent.title.label" default="Title" />
+		
+	</label>
+	<g:textField name="title" value="${qaContentInstance?.title}"/>
+</div>
+

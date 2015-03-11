@@ -76,4 +76,7 @@ public class QaContent {
 
     @OneToMany(mappedBy = "qaContent", fetch = FetchType.LAZY)
     private List<QaRecommand> qaRecommands;
+
+    @Transient
+    private List<Keyword> keywords;
 }
