@@ -30,16 +30,16 @@ public class Wiki {
     @Column(nullable = false)
     private Integer spaceId;
 
-    @Column(nullable = false)
+    @Column
     private Integer parentsId;
 
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
+    @Column(columnDefinition = "int default 0")
     private Integer orderIdx;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
+    @Column(columnDefinition = "int default 0")
     private Integer depthIdx;
 
     @Column(columnDefinition = "Text", nullable = false)

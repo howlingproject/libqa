@@ -4,16 +4,17 @@ import com.libqa.application.enums.ContentsTypeEnum;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Data
 @Entity
-public class Feed {
+public class Feed implements Serializable {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer feedId;
+    private Long feedId;
 
     @Column(nullable = true, length = 80)
     private String sharedResponseId;

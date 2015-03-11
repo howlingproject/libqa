@@ -1,10 +1,12 @@
 package com.libqa.web.controller;
 
+import com.libqa.application.framework.ResponseData;
 import com.libqa.domain.Wiki;
+import com.libqa.web.service.WikiService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -19,6 +21,9 @@ import java.util.List;
 @Slf4j
 public class WikiController {
 
+    @Autowired
+    WikiService wikiService;
+
     @RequestMapping("wiki/main")
     public ModelAndView main(Model model){
         ModelAndView mav = new ModelAndView("wiki/main");
@@ -28,7 +33,38 @@ public class WikiController {
     @RequestMapping("wiki/write")
     public ModelAndView write(Model model){
         ModelAndView mav = new ModelAndView("wiki/write");
+
         return mav;
+    }
+
+    @RequestMapping(value = "wiki/save", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<?> save(@ModelAttribute Wiki wiki){
+
+        try{
+
+            log.info("####### WIKI SAVE Begin INFO ########");
+            log.info("wiki = {}", wiki);
+            wiki.setSpaceId(1);
+            wiki.setPasswd("1234");
+            wiki.setUserNick("하이");
+            wiki.setUserId(0);
+
+
+            Wiki result = wikiService.save(wiki);
+
+            Wiki ww = wikiService.findById(result.getWikiId());
+            log.info("####### WIKI SAVE After INFO ########");
+            log.info("result = {}", result);
+
+            log.info("@@@ ww : {}", ww);
+            return ResponseData.createSuccessResult(wiki);
+        }catch(Exception e){
+            e.printStackTrace();
+            log.error(e.toString());
+            return ResponseData.createFailResult(wiki);
+        }
+
     }
 
     @RequestMapping("wiki/bestList")
