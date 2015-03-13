@@ -4,6 +4,7 @@ import com.libqa.application.enums.KeywordTypeEnum;
 import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by yong on 15. 2. 1..
@@ -41,5 +42,8 @@ public class Keyword {
 
     @Temporal(TemporalType.DATE)
     private Date updateDate;
+
+    @Transient
+    private List<Keyword> keywords;
 
 }
