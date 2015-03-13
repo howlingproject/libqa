@@ -1,5 +1,27 @@
+{{!--
+Created by IntelliJ IDEA.
+User: yion
+Date: 2014. 12. 7.
+Time: 16:20
+To change this template use File | Settings | File Templates.
+--}}
+{{#partial "style"}}
+{{!-- 여기에 사용자 css 정의 --}}
+    <link href="/resource/app/js/DualEditor/css/DualEditor.css" rel="stylesheet">
+{{/partial}}
 
-{{#partial "content" }}
+{{#partial "plugin-style"}}
+{{!-- 여기에 .css 파일 경로 --}}
+    <link href="/resource/public/css/bootstrap-tag-cloud/bootstrap-tag-cloud.css" rel="stylesheet">
+{{/partial}}
+{{#partial "script-header"}}
+    <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
+    <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
+{{/partial}}
+
+{{#partial "title"}}LibQA~{{/partial}}
+
+{{# partial "content" }}
 <!-- contents -->
 <div class="container">
     <section id="forms">
@@ -41,11 +63,12 @@
                         <p style="padding-top:20px"></p>
                         <legend style="margin-bottom: 0px">공간 설명</legend>
                         <div class="control-group">
-                            <div class="modal-body" id="askEdit">
+                            <div class="modal-body">
                                 <div id="editorArea" name="editorArea" class="form-group"></div>
-                                <input type="hidden" value="" id="description" name="description">
-                                <input type="hidden" value="" id="descriptionMarkup" name="descriptionMarkup" value="description_markup">
-                                <textarea id="spaceDesc"  ></textarea>
+                                <input type="hidden" id="description" name="description"></textarea>
+                                <input type="hidden" value="" id="descriptionMarkup" name="descriptionMarkup" value="">
+                                <div id="editor" class="form-group"></div>
+
                                 <p class="help-block">(*) 공간 메인 화면에 입력한 설명이 display 됩니다. (markdown 지원)</p>
                             </div>
                         </div>
@@ -153,7 +176,7 @@
 
                                 </div>
                             </div>
-                            <input type="hidden" name="keywordList" />
+                            <input type="hidden" name="keywords" id="keywords" />
                             <div class="col-sm-4 col-md-4">
                                 <ul id="tag-cloud" style="padding-left: 0px; width:100%; "></ul>
                             </div>
@@ -162,7 +185,7 @@
 
                     <div class="form-actions text-center">
                         <button type="button" class="btn btn-primary" id="btnSave" name="btnSave">저장</button>
-                        <button type="button" class="btn" id="btnCancel" name="btnCancel" onclick="javascript:alert(111);">취소</button>
+                        <button type="button" class="btn" id="btnCancel" name="btnCancel">취소</button>
                     </div>
                 </form>
             </div>
@@ -173,9 +196,11 @@
 {{/partial}}
 
 
-{{#partial "script-body" }}
-    <script>
+{{# partial "script-body" }}
+    <script type="text/javascript">
+        // bind the on-change event
         $(document).ready(function() {
+            DualEditor.setting('/resource/app',$("#editor"),'mini','100%');
             $("#file-attachment").on("change", uploadFile);
         });
 
@@ -199,7 +224,7 @@
             keywordData.push(keyword);
 
             var taskArray = new Array();
-            $("input[name=keywordList]").each(function () {
+            $("input[name=keywords]").each(function () {
                 taskArray.push(keyword);
             });
 
@@ -211,7 +236,9 @@
         });
 
         $('#btnCancel').click(function () {
-            alert("테스트");
+            if (confirm("공간 생성을 취소하겠습니까?")) {
+                $(location).attr('href', "main");
+            }
         });
 
         /**
@@ -224,7 +251,7 @@
 
             if (index > -1) {
                 keywordData.splice(index, 1);
-                $('input[name=keywordList]').val(keywordData);
+                $('input[name=keywords]').val(keywordData);
                 $("#interesting").attr("readonly", false);
                 $("#keywordAdd").attr("disabled", false);
             }
@@ -234,36 +261,39 @@
          * Save the Space
          */
         $('#btnSave').click(function(){
+            console.log("keywordData : " + keywordData);
+            $("#keywords").val(keywordData);
             if(confirm('공간을 생성 하겠습니까?')) {
-                checkValidation();
-                $.ajax({
-                    url: "/space/addSpace",
-                    type: "POST",
-                    data: new FormData($("#spaceCreateForm")[0]),
-                    enctype: 'multipart/form-data',
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function (req) {
-                        alert(req.resultCode);
-                        if(req.resultCode == 1) {
-                            alert(req.comment);
-                            //$(location).attr('href', "main");
-                        }
-                    },
-                    error: function (req) {
-                        // Handle upload error
-                        alert('req : ' + req);
-                        console.log('req : ' + req.status);
-                        console.log('req : ' + req.readyState);
+                if (checkValidation()) {
+                    $.ajax({
+                        url: "/space/addSpace",
+                        type: "POST",
+                        data: new FormData($("#spaceCreateForm")[0]),
+                        enctype: 'multipart/form-data',
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        success: function (req) {
+                            alert(req.resultCode);
+                            if(req.resultCode == 1) {
+                                alert(req.comment);
+                                //$(location).attr('href', "main");
+                            }
+                        },
+                        error: function (req) {
+                            // Handle upload error
+                            alert('req : ' + req);
+                            console.log('req : ' + req.status);
+                            console.log('req : ' + req.readyState);
 
-                        if (req.status == 500) {
-                            alert('공간 정보 저장중 에러가 발생했습니다.');
-                        } else {
-                            alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                            if (req.status == 500) {
+                                alert('공간 정보 저장중 에러가 발생했습니다.');
+                            } else {
+                                alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
 
@@ -284,9 +314,7 @@
                     success: function (req) {
                         console.log('req : ' + req);
                         console.log('req.data.uploadType : ' + req.data.uploadType);
-                        alert(req.resultCode);
                         if (req.resultCode == 1) {
-                            alert(req.comment);
                             if (req.data.uploadType === 'image') {
                                 $("#image-preview").remove();
                                 $("#titleImagePath").val("");
@@ -294,8 +322,6 @@
                                 $("#titleImagePath").val(titleImagePath);
                             }
                         }
-
-
                     },
                     error: function (req) {
                     // Handle upload error
@@ -312,7 +338,7 @@
                     }
                 });
             }
-        } // function uploadFile
+        }; // function uploadFile
 
         /**
          * Form value 검증
@@ -324,7 +350,6 @@
             var imagePath = $("#titleImagePath").val();
             var wikiMarkUp = $("#wikiEditor").val();
             // editor tag 세팅
-            $("#description").val(wikiMarkUp);
             var description = $("#description").val();
 
             if (userId == null || userId.length == 0) {
@@ -347,8 +372,6 @@
             return true;
         }
     </script>
-    <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
-    <link href="/resource/public/css/bootstrap-tag-cloud/bootstrap-tag-cloud.css" rel="stylesheet">
 {{/partial}}
 
 {{> template/base}}

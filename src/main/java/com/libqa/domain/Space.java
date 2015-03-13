@@ -60,5 +60,8 @@ public class Space {
 
     @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
     private List<SpaceAccessUser> spaceAccessUsers;
+
+    @Transient
+    private String keywords;
 }
 
