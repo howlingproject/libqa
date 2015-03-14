@@ -9,5 +9,5 @@ import com.libqa.application.enums.KeywordTypeEnum;
  */
 public interface KeywordService {
 
-    boolean saveKeywordListAndKeyword(Object obj, KeywordTypeEnum keywordType);
+    boolean saveKeywordAndList(String[] keywordNames, KeywordTypeEnum keywordType, Integer entityId);
 }

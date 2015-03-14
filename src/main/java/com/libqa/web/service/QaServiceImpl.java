@@ -26,21 +26,20 @@ public class QaServiceImpl implements QaService {
 
     @Override
     public QaContent saveQaContentAndKeyword(QaContent qaContentInstance) {
-//        QaContent qaContentInstance = modelMapper.map(qaCreateForm, QaContent.class);
         try {
-            saveQa(qaContentInstance);
-            keywordService.saveKeywordListAndKeyword(qaContentInstance, KeywordTypeEnum.QA);
+            qaContentInstance.setInsertDate(new Date());
+            qaContentInstance.setUpdateDate(new Date());
+            QaContent qaContent = qaRepository.save(qaContentInstance);
+
+            String [] keywordArrays = qaContentInstance.getKeywords().split(",");
+            if (keywordArrays.length > 0) {
+                keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.QA, qaContent.getQaId());
+            }
         }catch(Exception e){
             log.info(e.toString());
             throw new RuntimeException("제발제발!!!!!");
         }
         return qaContentInstance;
-    }
-
-    private void saveQa(QaContent qaContentInstance) {
-        qaContentInstance.setInsertDate(new Date());
-        qaContentInstance.setUpdateDate(new Date());
-        qaRepository.save(qaContentInstance);
     }
 
 }

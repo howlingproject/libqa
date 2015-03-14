@@ -29,4 +29,10 @@ public class KeywordList {
 
     @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
+
+    public KeywordList(String keywordName, KeywordTypeEnum keywordType, Integer keywordCount) {
+        this.keywordName = keywordName;
+        this.keywordType = keywordType;
+        this.keywordCount = keywordCount;
+    }
 }

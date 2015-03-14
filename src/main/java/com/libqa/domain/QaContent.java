@@ -78,5 +78,5 @@ public class QaContent {
     private List<QaRecommand> qaRecommands;
 
     @Transient
-    private List<Keyword> keywords;
+    private String keywords;
 }

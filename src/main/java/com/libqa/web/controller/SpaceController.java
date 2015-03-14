@@ -1,7 +1,9 @@
 package com.libqa.web.controller;
 
+import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.domain.Space;
+import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.SpaceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Date;
 
 /**
  * Created by yion on 2015. 2. 8..
@@ -25,6 +29,20 @@ public class SpaceController {
 
 	@Autowired
 	private SpaceService spaceService;
+
+	@Autowired
+	private KeywordService keywordService;
+
+	@RequestMapping("/space")
+	public String space() {
+		return "redirect:/space/main";
+	}
+
+	@RequestMapping("/space/main")
+	public ModelAndView spaceMain(Model model) {
+		ModelAndView mav = new ModelAndView("/space/main");
+		return mav;
+	}
 
 	@RequestMapping("/space/form")
 	public ModelAndView index(Model model) {
@@ -47,11 +65,16 @@ public class SpaceController {
 	@ResponseBody
 	public ResponseData<?> addSpace(Space space) {
 		log.info("## space : {}", space);
-
+		// 여기서 request 에 대한 사용자 정보 조회함 (권한관리에 이미 필요)
+		space.setInsertDate(new Date());
+		space.setInsertUserId(1);
 		Space result = spaceService.save(space);
 
+		String [] keywordArrays = space.getKeywords().split(",");
+		if (keywordArrays.length > 0) {
+			keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.SPACE, result.getSpaceId());
+		}
 		log.debug("#result : [{}]", result);
-
 		return ResponseData.createSuccessResult(result);
 	}
 

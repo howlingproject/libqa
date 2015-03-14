@@ -16,7 +16,7 @@ import java.util.List;
 @EqualsAndHashCode
 public class Space {
     @Id
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer spaceId;
 
@@ -63,5 +63,6 @@ public class Space {
 
     @Transient
     private String keywords;
+
 }
 

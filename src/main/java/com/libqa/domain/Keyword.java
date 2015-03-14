@@ -43,7 +43,4 @@ public class Keyword {
     @Temporal(TemporalType.DATE)
     private Date updateDate;
 
-    @Transient
-    private List<Keyword> keywords;
-
 }

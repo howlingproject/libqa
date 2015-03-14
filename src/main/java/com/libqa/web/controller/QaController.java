@@ -38,9 +38,7 @@ public class QaController {
 
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     public ResponseData<?> save(QaContent qaContent){
-        HashMap map = new HashMap();
-
         QaContent newQaContent = service.saveQaContentAndKeyword(qaContent);
-        return ResponseData.createSuccessResult(map);
+        return ResponseData.createSuccessResult(newQaContent);
     }
 }
