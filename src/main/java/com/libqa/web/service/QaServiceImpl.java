@@ -4,7 +4,6 @@ import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.domain.QaContent;
 import com.libqa.repository.QaContentRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +23,6 @@ public class QaServiceImpl implements QaService {
 
     @Autowired
     KeywordService keywordService;
-
-    @Autowired
-    ModelMapper modelMapper;
 
     @Override
     public QaContent saveQaContentAndKeyword(QaContent qaContentInstance) {

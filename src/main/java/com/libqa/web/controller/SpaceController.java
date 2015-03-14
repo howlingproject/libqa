@@ -8,15 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import com.libqa.application.enums.SpaceViewEnum;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by yion on 2015. 2. 8..
@@ -25,39 +20,40 @@ import java.util.List;
 @Slf4j
 public class SpaceController {
 
-    @Value("${howling.hello.message}")
-    private String message;
+	@Value("${howling.hello.message}")
+	private String message;
 
-    @Autowired
-    private SpaceService spaceService;
+	@Autowired
+	private SpaceService spaceService;
 
+	@RequestMapping("/space/form")
+	public ModelAndView index(Model model) {
+		log.debug("##############################");
+		log.info("# message : {}", message);
 
-    @RequestMapping("/space/form")
-    public ModelAndView index(Model model) {
-        log.debug("##############################");
-        log.info("# message : {}", message);
+		ModelAndView mav = new ModelAndView("/space/form");
+		mav.addObject("message", message);
 
-        ModelAndView mav = new ModelAndView("/space/form");
-        mav.addObject("message", message);
+		return mav;
+	}
 
-        return mav;
-    }
+	@RequestMapping("/space/fileUpload")
+	public ModelAndView fileUpload(Model model) {
+		ModelAndView mav = new ModelAndView("/space/ajaxUpload");
+		return mav;
+	}
 
-    @RequestMapping("/space/fileUpload")
-    public ModelAndView fileUpload(Model model) {
-        ModelAndView mav = new ModelAndView("/space/ajaxUpload");
-        return mav;
-    }
+	@RequestMapping(value = "/space/addSpace", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseData<?> addSpace(Space space) {
+		log.info("## space : {}", space);
 
-    @RequestMapping(value = "/space/addSpace", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseData<?> addSpace(Space space) {
-        log.info("## space : {}", space);
+		Space result = spaceService.save(space);
 
-        Space result = spaceService.save(space);
+		log.debug("#result : [{}]", result);
 
-        return null;
-    }
+		return ResponseData.createSuccessResult(result);
+	}
 
 }
 

@@ -43,7 +43,7 @@ dependencies {
     compile('org.apache.tomcat.embed:tomcat-embed-jasper')
     compile('javax.servlet:jstl')
     compile('org.projectlombok:lombok:1.16.0')
-    compile('org.codehaus.groovy:groovy-all:2.3.6')
+    compile('org.codehaus.groovy:groovy-all:2.3.7')
     compile('com.github.jknack:handlebars-springmvc:2.0.0')
 
     testCompile('junit:junit:4.11')

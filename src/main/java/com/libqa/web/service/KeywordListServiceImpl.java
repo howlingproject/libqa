@@ -1,7 +1,6 @@
 package com.libqa.web.service;
 
 import com.libqa.application.enums.KeywordTypeEnum;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class KeywordListServiceImpl implements KeywordListService {
 
-    @Autowired
-    ModelMapper modelMapper;
 
     @Override
     public boolean saveKeywordList(Object obj, KeywordTypeEnum keywordType) {
