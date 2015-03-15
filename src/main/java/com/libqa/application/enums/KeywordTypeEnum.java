@@ -1,20 +1,20 @@
 package com.libqa.application.enums;
 
+import lombok.Getter;
+
 /**
  * Created by yong on 15. 2. 1..
  */
 public enum KeywordTypeEnum {
-    WIKI("위키"),
-    SPACE("공간"),
-    QA("QA");
+    WIKI("WIKI"),  // 위키
+    SPACE("SPACE"), // 공간
+    QA("QA");  // QA
 
-    private String type;
+    @Getter
+    private String code;
 
-    private KeywordTypeEnum(String type) {
-        this.type = type;
+    private KeywordTypeEnum(final String code) {
+        this.code = code;
     }
 
-    public String toString() {
-        return this.type;
-    }
 }

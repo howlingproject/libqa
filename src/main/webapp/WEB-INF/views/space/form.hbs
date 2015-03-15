@@ -270,6 +270,7 @@ To change this template use File | Settings | File Templates.
 		console.log("wikiEditor : " + wikiEditor);
 
 
+
         if(confirm('공간을 생성 하겠습니까?')) {
             if (checkValidation()) {
                 $.ajax({
@@ -284,7 +285,7 @@ To change this template use File | Settings | File Templates.
                         alert(req.resultCode);
                         if(req.resultCode == 1) {
                             alert(req.comment);
-                            //$(location).attr('href', "main");
+                            $(location).attr('href', "main");
                         }
                     },
                     error: function (req) {

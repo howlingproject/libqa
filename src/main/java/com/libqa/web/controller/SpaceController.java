@@ -35,17 +35,19 @@ public class SpaceController {
 
 	@RequestMapping("/space")
 	public String space() {
+		log.debug("##############################");
 		return "redirect:/space/main";
 	}
 
 	@RequestMapping("/space/main")
 	public ModelAndView spaceMain(Model model) {
+		log.debug("##############################");
 		ModelAndView mav = new ModelAndView("/space/main");
 		return mav;
 	}
 
 	@RequestMapping("/space/form")
-	public ModelAndView index(Model model) {
+	public ModelAndView form(Model model) {
 		log.debug("##############################");
 		log.info("# message : {}", message);
 

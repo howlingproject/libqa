@@ -17,20 +17,20 @@ public class Keyword {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer keywordId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer qaId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer wikiId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer spaceId;
 
     @Column(nullable = false, length = 40)
     private String keywordName;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
+    @Column(nullable = false, length = 20)
     private KeywordTypeEnum keywordType;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
