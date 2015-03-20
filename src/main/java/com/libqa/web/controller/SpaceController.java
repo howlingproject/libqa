@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by yion on 2015. 2. 8..
@@ -35,16 +36,25 @@ public class SpaceController {
 	@Autowired
 	private KeywordService keywordService;
 
+
+	@RequestMapping("/space/fileUpload")
+	public ModelAndView fileUpload(Model model) {
+		ModelAndView mav = new ModelAndView("/space/ajaxUpload");
+		return mav;
+	}
+
 	@RequestMapping("/space")
 	public String space() {
-		log.debug("##############################");
 		return "redirect:/space/main";
 	}
 
 	@RequestMapping("/space/main")
 	public ModelAndView spaceMain(Model model) {
-		log.debug("##############################");
+		log.info("## /main");
+		List<Space> spaceList = spaceService.findAll();
+		log.info("# spaceList.size = {}", spaceList.size());
 		ModelAndView mav = new ModelAndView("/space/main");
+		mav.addObject("spaceList", spaceList);
 		return mav;
 	}
 
@@ -59,19 +69,10 @@ public class SpaceController {
 		return mav;
 	}
 
-	@RequestMapping("/space/fileUpload")
-	public ModelAndView fileUpload(Model model) {
-		ModelAndView mav = new ModelAndView("/space/ajaxUpload");
-		return mav;
-	}
 
-	@RequestMapping(value = "/space/addSpace", method=RequestMethod.POST)
+	@RequestMapping(value = "/space/add", method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseData<Space> save(@ModelAttribute Space space) {
-
-		//HttpServletRequest request, HttpServletResponse response) {
-
-		log.info("## space : {}", space);
+	public ResponseData<Space> saveSpace(@ModelAttribute Space space) {
 		// 여기서 request 에 대한 사용자 정보 조회함 (권한관리에 이미 필요)
 		space.setInsertDate(new Date());
 		space.setInsertUserId(1);

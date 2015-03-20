@@ -20,8 +20,8 @@ import java.util.Date;
  *
  * @author yong
  */
-@Service
 @Slf4j
+@Service
 public class KeywordServiceImpl implements KeywordService {
 
 	@Autowired
@@ -45,7 +45,7 @@ public class KeywordServiceImpl implements KeywordService {
 		boolean result = false;
 
 		try {
-			for (int i = 0; i < keywordParams.length; i++) {
+			for (int i = 0; i <= keywordParams.length; i++) {
 				log.info("@ param : {}", keywordParams[i]);
 				saveKeyword(keywordParams[i], keywordType, entityId);
 				saveKeywordList(keywordParams[i], keywordType);

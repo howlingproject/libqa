@@ -2,6 +2,7 @@ package com.libqa;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,9 +19,11 @@ import java.util.Arrays;
 /**
  * Created by yion on 2015. 1. 25..
  */
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan
+//@Configuration
+//@EnableAutoConfiguration
+//@ComponentScan
+
+@SpringBootApplication
 @EnableTransactionManagement
 public class Application {
 

@@ -45,7 +45,7 @@ dependencies {
     compile('org.projectlombok:lombok:1.16.0')
     compile('org.codehaus.groovy:groovy-all:2.3.7')
     compile('com.github.jknack:handlebars-springmvc:2.0.0')
-
+    compile('org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc3:1.16')
     testCompile('junit:junit:4.11')
     testCompile('com.jayway.restassured:spring-mock-mvc:2.4.0')
     testCompile('org.spockframework:spock-core:0.7-groovy-2.0')
