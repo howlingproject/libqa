@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by yong on 2015-03-08.
@@ -32,7 +33,7 @@ public class KeywordServiceImpl implements KeywordService {
 
 	/**
 	 * 키워드를 저장한 후 통계 데이터를 생성한다.
-	 * 키워드 리스트는 객체 (Space, Wiki, QaContent의 List 타입으로 넘어온다)
+	 * 키워드 리스트는 객체 (Space, Wiki, QaContent)의 List 타입으로 넘어온다)
 	 * @param keywordParams
 	 * @param keywordType
 	 * @return
@@ -42,17 +43,19 @@ public class KeywordServiceImpl implements KeywordService {
 	public boolean saveKeywordAndList(String[] keywordParams, KeywordTypeEnum keywordType, Integer entityId) {
 		Assert.notNull(keywordParams, "키워드가 존재하지 않습니다.");
 		Assert.notNull(keywordType, "키워드 타입이 존재하지 않습니다.");
+		Assert.notNull(entityId, "키 값이 존재하지 않습니다.");
 		boolean result = false;
 
 		try {
-			for (int i = 0; i <= keywordParams.length; i++) {
+			for (int i = 0; i < keywordParams.length; i++) {
 				log.info("@ param : {}", keywordParams[i]);
 				saveKeyword(keywordParams[i], keywordType, entityId);
 				saveKeywordList(keywordParams[i], keywordType);
 			}
 			result = true;
 		} catch (Exception e) {
-			log.error("키워드 저장시 에러가 발생했습니다.", e.getMessage());
+			log.error("키워드 저장시 에러가 발생했습니다.");
+			e.printStackTrace();
 			result = false;
 		}
 		return result;
@@ -67,10 +70,6 @@ public class KeywordServiceImpl implements KeywordService {
 	@Transactional
 	public void saveKeyword(String param, KeywordTypeEnum keywordType, Integer entityId) {
 		Assert.notNull(StringUtil.defaultString(param, null), "키워드 값이 존재하지 않습니다.");
-		log.info("# param : {}", param);
-		log.info("# keywordType : {}", keywordType);
-		log.info("# KeywordTypeEnum.SPACE : {}", KeywordTypeEnum.SPACE);
-
 		try {
 			Keyword keyword = new Keyword();
 
@@ -89,9 +88,7 @@ public class KeywordServiceImpl implements KeywordService {
 		} catch (Exception e) {
 			log.error("값 세팅 중 에러발생 ");
 			e.printStackTrace();
-
 		}
-
 	}
 
 	/**
@@ -103,22 +100,23 @@ public class KeywordServiceImpl implements KeywordService {
 	@Transactional
 	public void saveKeywordList(String param, KeywordTypeEnum keywordType) {
 		Assert.notNull(StringUtil.defaultString(param, null), "키워드 값이 존재하지 않습니다.");
-
-		log.info("@KeywordList keywordType : {}", keywordType);
-		log.info("@KeywordList param : {}", param);
 		try {
-			KeywordList keywordList = keywordListRepository.findByKeywordNameAndKeywordType(param, keywordType);
-			log.info("### keywordList : {}", keywordList);
-			if (keywordList != null) {
-				log.info("## 값이 존재");
-				keywordList.setKeywordCount(keywordList.getKeywordCount() + 1);
+			List<KeywordList> keywordList = keywordListRepository.findByKeywordNameAndKeywordType(param, keywordType);
+
+			if (keywordList.isEmpty()) {
+				KeywordList keyword = new KeywordList(param, keywordType, new Integer(1));
+				// insert
+				keywordListRepository.save(keyword);
 			} else {
-				log.info("## 값을 생성 ");
-				keywordList = new KeywordList(param, keywordType, new Integer(1));
+				for (KeywordList keys : keywordList) {
+					int count = keys.getKeywordCount() + 1;
+					keys.setKeywordCount(count);
+					// update
+					keywordListRepository.save(keywordList);
+				}
 			}
-			keywordListRepository.saveAndFlush(keywordList);
 		} catch (Exception e) {
-			log.error("## 키워드 통계 생성중 에러 발생 ", e.getMessage());
+			log.error("## 키워드 통계 생성중 에러 발생 ");
 			e.printStackTrace();
 		}
 

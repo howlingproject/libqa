@@ -209,6 +209,7 @@ To change this template use File | Settings | File Templates.
     /**
      * 키워드 추가
      * 키워드가 3건 이상 등록 될 경우 폼을 disabled 한다.
+     * 대소문자 중복 허용하지 않는다.
      */
     $('#keywordAdd').click(function () {
         var keyword = $('#interesting').val();
@@ -264,10 +265,11 @@ To change this template use File | Settings | File Templates.
         $("#keywords").val(keywordData);
         $("#description").val($("#wikimaincol").html());
         $("#descriptionMarkup").val($("#wikiEditor").val());
-        if ($(':radio[name="isPrivateYn"]:checked').val()) {
-            $("#private").val(1);
+        console.log("## 체크 :" + $(':radio[name="isPrivateYn"]:checked').val());
+        if ($(':radio[name="isPrivateYn"]:checked').val() == 'true') {
+            $("#private").val(0);   // 공개
         } else {
-            $("#private").val(0);
+            $("#private").val(1);   // 비공개
         }
         var data = $("#spaceCreateForm").serialize();
         if(confirm('공간을 생성 하겠습니까?')) {
