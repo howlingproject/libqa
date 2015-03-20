@@ -47,11 +47,11 @@ To change this template use File | Settings | File Templates.
 
                             <div class="col-lg-8">
                                 <div class="col-xs-8 col-md-8">
-                                    <input name="userId" id="userId" value="1" type="hidden">
-                                    <input name="uploadType" value="Space" type="hidden">
+                                    <input id="userId" value="1" type="hidden">
+                                    <input id="uploadType" value="Space" type="hidden">
                                     <input name="titleImagePath" id="titleImagePath" type="hidden">
                                     <input name="titleImage" id="titleImage" type="hidden">
-                                    <input type="hidden" name="viewType" id="viewType" value="Image" />
+                                    <input id="viewType" name="viewType" value="Image" type="hidden" />
                                     <input id="file-attachment" type="file" name="uploadfile" accept="*" />
                                     <p class="help-block" id="spaceImage">(*) 공간을 표현할 수 있는 대표 이미지를 등록하세요.</p>
                                 </div>
@@ -92,7 +92,7 @@ To change this template use File | Settings | File Templates.
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="panel panel-info">
-                                        <div class="panel-heading"><input type="radio" name="layoutType" id="layoutTypeDefault" value="DEFAULT" checked> 기본형</div>
+                                        <div class="panel-heading"><input type="radio" name="layoutType" id="layoutTypeDefault" value="CENTER" checked> 기본형</div>
                                         <div class="panel-body">
                                             <table class="table table-bordered">
                                                 <thead>
@@ -260,50 +260,50 @@ To change this template use File | Settings | File Templates.
     /**
      * Save the Space
      */
-    $('#btnSave').click(function(){
+    $('#btnSave').click(function() {
+        Space.save();
+    });
 
-		var wikiEditor = $("#wikiEditor").val();
-		$("#keywords").val(keywordData);
-		$("#description").val(description);
-		$("#descriptionMarkup").val(descriptionMarkup);
-		console.log("keywordData : " + keywordData);
-		console.log("wikiEditor : " + wikiEditor);
-
-
-
-        if(confirm('공간을 생성 하겠습니까?')) {
-            if (checkValidation()) {
-                $.ajax({
-                    url: "/space/addSpace",
-                    type: "POST",
-                    data: new FormData($("#spaceCreateForm")[0]),
-                    enctype: 'multipart/form-data',
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function (req) {
-                        alert(req.resultCode);
-                        if(req.resultCode == 1) {
-                            alert(req.comment);
-                            $(location).attr('href', "main");
+    var Space = {
+        save:function() {
+            if(confirm('공간을 생성 하겠습니까?')) {
+                if (checkValidation()) {
+                    $("#keywords").val(keywordData);
+                    var data = $("#spaceCreateForm").serialize();
+                    console.log("## data : " + data);
+                    jQuery.ajax({
+                        type:"post",
+                        dataType: "json",
+                        data : data,
+                        url : "/space/addSpace",
+                        success : function(data, status) {
+                            console.log("status : " + status);
+                            console.log("data : " + data);
+                            Space.saveComplete(data);
+                        },
+                        error : function(XMLHttpRequest,status,errorThrown){
+                            console.log("space save error!");
+                            alert('status : ' + status);
+                            if (status == 500) {
+                                alert('공간 정보 저장중 에러가 발생했습니다.');
+                            } else {
+                                alert('에러가 발생하였습니다. 에러코드 [' + status + ']');
+                            }
                         }
-                    },
-                    error: function (req) {
-                        // Handle upload error
-                        alert('req : ' + req);
-                        console.log('req : ' + req.status);
-                        console.log('req : ' + req.readyState);
+                    });
+                    return false;
+                }
+            }
+        },
 
-                        if (req.status == 500) {
-                            alert('공간 정보 저장중 에러가 발생했습니다.');
-                        } else {
-                            alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
-                        }
-                    }
-                });
+        saveComplete : function(data) {
+            alert(data.resultCode);
+            if(data.resultCode == 1) {
+                alert(data.comment);
+                $(location).attr('href', "main");
             }
         }
-    });
+    };
 
     /**
      * Upload the file sending it via Ajax at the Spring Boot server.

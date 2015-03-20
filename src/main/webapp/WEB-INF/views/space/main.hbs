@@ -1,3 +1,20 @@
+{{#partial "style"}}
+{{!-- 여기에 사용자 css 정의 --}}
+    <link href="/resource/app/js/DualEditor/css/DualEditor.css" rel="stylesheet">
+{{/partial}}
+
+{{#partial "plugin-style"}}
+{{!-- 여기에 .css 파일 경로 --}}
+    <link href="/resource/public/css/bootstrap-tag-cloud/bootstrap-tag-cloud.css" rel="stylesheet">
+{{/partial}}
+{{#partial "script-header"}}
+    <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
+    <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
+{{/partial}}
+
+{{#partial "title"}}LibQA~{{/partial}}
+
+{{# partial "content" }}
 <!-- contents -->
 <div class="container qna-top-search">
     <form class="navbar-form navbar-left" role="search">
@@ -9,8 +26,8 @@
     <div class="btn-group pull-right">
         <a href="#" class="btn btn-primary">개설된 공간수(200)</a>
         <a href="#" class="btn btn-primary">생성된 위키수(3000)</a>
-        <a href="/howling/space/form" class="btn btn-primary">등록된 키워드수(11200)</a>
-        <g:link controller="space" action="form" class="btn btn-primary">공간 생성</g:link>
+        <a href="/space/form" class="btn btn-primary">등록된 키워드수(11200)</a>
+        <a href="/space/form" class="btn btn-primary">공간 생성</a>
     </div>
 </div>
 
@@ -61,11 +78,13 @@
             <div class="media">
                 <a class="pull-left" href="#">
                     <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...<span class="badge">291</span></div>
-                <div class="pull-left">오너 : sjune</div>
+                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
+                    <div class="pull-right"><span class="badge">291</span></div>
+                </div>
+                <div class="pull-left">공간오너 : sjune</div>
                 <div class="pull-right">2014-04-05 12:12</div>
             </div>
         </div>
@@ -82,33 +101,12 @@
             <div class="media">
                 <a class="pull-left" href="#">
                     <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...<span class="badge">291</span></div>
-                <div class="pull-left">오너 : sjune</div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-
-
-        <div class="best-qna-item">
-            <div>
-                <strong> 공간 명이 출력됩니다.</strong>
-                <div class="pull-right">
-                    <span class="label label-primary">Spring</span>
-                    <span class="label label-success">JAVA</span>
-                    <span class="label label-warning">JavaScript</span>
+                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
+                    <div class="pull-right"><span class="badge">291</span></div>
                 </div>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...<span class="badge">291</span></div>
                 <div class="pull-left">오너 : sjune</div>
                 <div class="pull-right">2014-04-05 12:12</div>
             </div>
@@ -128,10 +126,12 @@
             <div class="media">
                 <a class="pull-left" href="#">
                     <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...<span class="badge">291</span></div>
+                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
+                    <div class="pull-right"><span class="badge">291</span></div>
+                </div>
                 <div class="pull-left">오너 : sjune</div>
                 <div class="pull-right">2014-04-05 12:12</div>
             </div>
@@ -151,10 +151,37 @@
             <div class="media">
                 <a class="pull-left" href="#">
                     <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...<span class="badge">291</span></div>
+                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
+                    <div class="pull-right"><span class="badge">291</span></div>
+                </div>
+                <div class="pull-left">오너 : sjune</div>
+                <div class="pull-right">2014-04-05 12:12</div>
+            </div>
+        </div>
+
+
+
+        <div class="best-qna-item">
+            <div>
+                <strong> 공간 명이 출력됩니다.</strong>
+                <div class="pull-right">
+                    <span class="label label-primary">Spring</span>
+                    <span class="label label-success">JAVA</span>
+                    <span class="label label-warning">JavaScript</span>
+                </div>
+            </div>
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <div class="user-profile">
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                    </div>
+                </a>
+                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
+                    <div class="pull-right"><span class="badge">291</span></div>
+                </div>
                 <div class="pull-left">오너 : sjune</div>
                 <div class="pull-right">2014-04-05 12:12</div>
             </div>
@@ -176,7 +203,7 @@
             <div class="media">
                 <a class="pull-left" href="#">
                     <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
                 <div class="media-body">
@@ -197,7 +224,7 @@
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
                 <div class="media-body">
@@ -219,7 +246,7 @@
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
                 <div class="media-body">
@@ -241,7 +268,7 @@
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
                 <div class="media-body">
@@ -263,7 +290,7 @@
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
                 <div class="media-body">
@@ -291,7 +318,7 @@
             <div class="media">
                 <a class="pull-left" href="#">
                     <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
                 <div class="media-body">
@@ -312,7 +339,7 @@
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
                 <div class="media-body">
@@ -334,7 +361,7 @@
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
                 <div class="media-body">
@@ -356,7 +383,7 @@
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
                 <div class="media-body">
@@ -378,7 +405,7 @@
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                     </div>
                 </a>
                 <div class="media-body">
@@ -398,3 +425,6 @@
     </div>
 </div>
 <!--// contents -->
+{{/partial}}
+
+{{> template/base}}

@@ -19,8 +19,8 @@ import java.nio.file.Paths;
 /**
  * Created by yion on 2015. 3. 1..
  */
-@Controller
 @Slf4j
+@Controller
 public class CommonController {
 
 

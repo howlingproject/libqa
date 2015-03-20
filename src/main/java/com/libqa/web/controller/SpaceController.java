@@ -10,18 +10,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 /**
  * Created by yion on 2015. 2. 8..
  */
-@Controller
 @Slf4j
+@Controller
 public class SpaceController {
 
 	@Value("${howling.hello.message}")
@@ -63,9 +65,12 @@ public class SpaceController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/space/addSpace", method = RequestMethod.POST)
+	@RequestMapping(value = "/space/addSpace", method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseData<?> addSpace(Space space) {
+	public ResponseData<Space> save(@ModelAttribute Space space) {
+
+		//HttpServletRequest request, HttpServletResponse response) {
+
 		log.info("## space : {}", space);
 		// 여기서 request 에 대한 사용자 정보 조회함 (권한관리에 이미 필요)
 		space.setInsertDate(new Date());
