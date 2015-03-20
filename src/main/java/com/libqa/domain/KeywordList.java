@@ -11,6 +11,9 @@ import javax.persistence.*;
 @Entity
 @Data
 public class KeywordList {
+    public KeywordList(){
+
+    }
 
     @Id
     @Column(nullable = false)

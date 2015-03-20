@@ -78,6 +78,7 @@ public class SpaceController {
 		Space result = spaceService.save(space);
 
 		String [] keywordArrays = space.getKeywords().split(",");
+		log.info(" keywordArrays : {}", keywordArrays.length);
 		if (keywordArrays.length > 0) {
 			keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.SPACE, result.getSpaceId());
 		}

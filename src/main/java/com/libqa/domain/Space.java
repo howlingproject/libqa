@@ -20,10 +20,10 @@ public class Space {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer spaceId;
 
-    @Column(nullable = false, columnDefinition = "Text")
+    @Column(nullable = false, columnDefinition = "Text")    // html
     private String description;
 
-    @Column(nullable = false, columnDefinition = "Text")
+    @Column(nullable = false, columnDefinition = "Text")    // markup
     private String descriptionMarkup;
 
     @Column(length = 80, nullable = false)

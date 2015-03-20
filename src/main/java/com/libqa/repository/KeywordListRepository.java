@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Created by yong on 15. 2. 8..
  */
 public interface KeywordListRepository extends JpaRepository<KeywordList, Long> {
-	KeywordList findByKeywordNameAndKeywordType(String keywordName, KeywordTypeEnum keywordTypeEnum);
+	KeywordList findByKeywordNameAndKeywordType(String keywordName, KeywordTypeEnum keywordType);
 }

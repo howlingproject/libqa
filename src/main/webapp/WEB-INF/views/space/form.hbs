@@ -77,12 +77,12 @@ To change this template use File | Settings | File Templates.
                         <div class="control-group">
                             <div class="controls">
                                 <label class="checkbox-inline">
-                                    <input type="radio" name="isPrivate" id="inlineCheckbox1" value="Y" checked> 공개
+                                    <input type="radio" name="isPrivateYn" id="inlineCheckbox1" value="true" checked> 공개
                                 </label>
                                 <label class="checkbox-inline">
-                                    <input type="radio" name="isPrivate" id="inlineCheckbox2" value="N"> 비공개
+                                    <input type="radio" name="isPrivateYn" id="inlineCheckbox2" value="false"> 비공개
                                 </label>
-
+                                <input type="hidden" id="private" name="private" value=""/>
                             </div>
                         </div>
                         <p style="padding-top:20px"></p>
@@ -261,49 +261,46 @@ To change this template use File | Settings | File Templates.
      * Save the Space
      */
     $('#btnSave').click(function() {
-        Space.save();
-    });
-
-    var Space = {
-        save:function() {
-            if(confirm('공간을 생성 하겠습니까?')) {
-                if (checkValidation()) {
-                    $("#keywords").val(keywordData);
-                    var data = $("#spaceCreateForm").serialize();
-                    console.log("## data : " + data);
-                    jQuery.ajax({
-                        type:"post",
-                        dataType: "json",
-                        data : data,
-                        url : "/space/addSpace",
-                        success : function(data, status) {
-                            console.log("status : " + status);
-                            console.log("data : " + data);
-                            Space.saveComplete(data);
-                        },
-                        error : function(XMLHttpRequest,status,errorThrown){
-                            console.log("space save error!");
-                            alert('status : ' + status);
-                            if (status == 500) {
-                                alert('공간 정보 저장중 에러가 발생했습니다.');
-                            } else {
-                                alert('에러가 발생하였습니다. 에러코드 [' + status + ']');
-                            }
+        $("#keywords").val(keywordData);
+        $("#description").val($("#wikimaincol").html());
+        $("#descriptionMarkup").val($("#wikiEditor").val());
+        if ($(':radio[name="isPrivateYn"]:checked').val()) {
+            $("#private").val(1);
+        } else {
+            $("#private").val(0);
+        }
+        var data = $("#spaceCreateForm").serialize();
+        if(confirm('공간을 생성 하겠습니까?')) {
+            if (checkValidation()) {
+                $.ajax({
+                    type:"post",
+                    dataType: "json",
+                    data : data,
+                    url : "/space/addSpace",
+                    cache: false,
+                    success: function (req) {
+                        alert(req.resultCode);
+                        if(req.resultCode == 1) {
+                            alert(req.comment);
+                            $(location).attr('href', "main");
                         }
-                    });
-                    return false;
-                }
-            }
-        },
+                    },
+                    error: function (req) {
+                        // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
 
-        saveComplete : function(data) {
-            alert(data.resultCode);
-            if(data.resultCode == 1) {
-                alert(data.comment);
-                $(location).attr('href', "main");
+                        if (req.status == 500) {
+                            alert('공간 정보 저장중 에러가 발생했습니다.');
+                        } else {
+                            alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                        }
+                    }
+                });
             }
         }
-    };
+    });
 
     /**
      * Upload the file sending it via Ajax at the Spring Boot server.
@@ -327,7 +324,7 @@ To change this template use File | Settings | File Templates.
                             $("#image-preview").remove();
                             $("#titleImagePath").val("");
                             $("#imagePreviewArea").html("<img src='" + req.data.filePath + "/" + req.data.savedName + "' id=\"uploadPreviewImg\" width=\"200\" class=\"img-thumbnail image-preview\" id=\"image-preview\">");
-                            $("#titleImagePath").val(titleImagePath);
+                            $("#titleImagePath").val(req.data.filePath);
                             $("#titleImage").val(req.data.savedName);
                         }
                     }
@@ -358,6 +355,7 @@ To change this template use File | Settings | File Templates.
         var title = $("#title").val();
         var imagePath = $("#titleImagePath").val();
         var description = $("#wikiEditor").val();
+
 
         if (userId == null || userId.length == 0) {
             alert('로그인 정보가 존재 하지 않습니다.')
