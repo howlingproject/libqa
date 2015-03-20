@@ -2,14 +2,13 @@ package com.libqa.web.service;
 
 import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.application.util.StringUtil;
-import com.libqa.domain.Keyword;
-import com.libqa.domain.KeywordList;
-import com.libqa.repository.KeywordListRepository;
-import com.libqa.repository.KeywordRepository;
+import com.libqa.web.domain.Keyword;
+import com.libqa.web.domain.KeywordList;
+import com.libqa.web.repository.KeywordListRepository;
+import com.libqa.web.repository.KeywordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;

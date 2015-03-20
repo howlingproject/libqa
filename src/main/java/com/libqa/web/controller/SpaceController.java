@@ -2,7 +2,7 @@ package com.libqa.web.controller;
 
 import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.application.framework.ResponseData;
-import com.libqa.domain.Space;
+import com.libqa.web.domain.Space;
 import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.SpaceService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,13 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +47,8 @@ public class SpaceController {
 	@RequestMapping("/space/main")
 	public ModelAndView spaceMain(Model model) {
 		log.info("## /main");
-		List<Space> spaceList = spaceService.findAll();
+		boolean isDeleted = false; 	// 삭제 하지 않은 것
+		List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
 		log.info("# spaceList.size = {}", spaceList.size());
 		ModelAndView mav = new ModelAndView("/space/main");
 		mav.addObject("spaceList", spaceList);

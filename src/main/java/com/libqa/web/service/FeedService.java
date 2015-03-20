@@ -1,7 +1,6 @@
 package com.libqa.web.service;
 
-import com.libqa.domain.Feed;
-import org.springframework.data.domain.Page;
+import com.libqa.web.domain.Feed;
 
 import java.util.List;
 

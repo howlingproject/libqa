@@ -1,6 +1,6 @@
 package com.libqa.web.controller;
 
-import com.libqa.domain.Feed;
+import com.libqa.web.domain.Feed;
 import com.libqa.web.service.FeedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

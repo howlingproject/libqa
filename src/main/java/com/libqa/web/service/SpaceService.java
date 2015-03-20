@@ -1,6 +1,6 @@
 package com.libqa.web.service;
 
-import com.libqa.domain.Space;
+import com.libqa.web.domain.Space;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ public interface SpaceService {
 
 	Space save(Space space);
 
-	List<Space> findAll();
+	List<Space> findAllByCondition(boolean isDeleted);
 }

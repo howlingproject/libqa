@@ -1,8 +1,8 @@
 package com.libqa.web.service;
 
 import com.libqa.application.util.PageUtil;
-import com.libqa.domain.Feed;
-import com.libqa.repository.FeedRepository;
+import com.libqa.web.domain.Feed;
+import com.libqa.web.repository.FeedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;

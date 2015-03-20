@@ -1,7 +1,7 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.framework.ResponseData;
-import com.libqa.domain.QaContent;
+import com.libqa.web.domain.QaContent;
 import com.libqa.web.service.QaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.HashMap;
 
 /**
  * Created by yong on 2015-02-08.

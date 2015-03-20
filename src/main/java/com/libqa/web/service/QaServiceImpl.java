@@ -1,8 +1,8 @@
 package com.libqa.web.service;
 
 import com.libqa.application.enums.KeywordTypeEnum;
-import com.libqa.domain.QaContent;
-import com.libqa.repository.QaContentRepository;
+import com.libqa.web.domain.QaContent;
+import com.libqa.web.repository.QaContentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
