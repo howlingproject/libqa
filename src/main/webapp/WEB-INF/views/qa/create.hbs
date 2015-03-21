@@ -5,6 +5,21 @@
   Time: 오후 10:57
 -->
 
+{{#partial "style"}}
+{{!-- 여기에 사용자 css 정의 --}}
+    <link href="/resource/app/js/DualEditor/css/DualEditor.css" rel="stylesheet">
+{{/partial}}
+
+{{#partial "plugin-style"}}
+{{!-- 여기에 .css 파일 경로 --}}
+    <link href="/resource/public/css/bootstrap-tag-cloud/bootstrap-tag-cloud.css" rel="stylesheet">
+{{/partial}}
+
+{{#partial "script-header"}}
+    <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
+    <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
+{{/partial}}
+
 {{# partial "content" }}
 <div class="container">
     <form id="form">
@@ -16,7 +31,10 @@
 		</div>
 
 		<!-- 에디터 -->
-		<div id="editor" class="form-group"></div>
+		<div id="editor" class="form-group">
+            <input type="hidden" id="contents" name="contents" />
+            <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
+        </div>
 		<!--// 에디터 -->
 		<div class="form-group">
 			<div class="col-md-pull-4">
@@ -30,25 +48,25 @@
 			</div>
 		</div>
 		<input type="hidden" id="keywordArray" name="keywordList" />
-		<div class="form-inline">
-			<label for="keyword" class="sr-only">키워드</label>
-			<input type="text" class="form-control" id="keyword" style="width: 30%;" placeholder="키워드를 입력하세요. (최대 5개)">
-			<button type="button" class="btn btn-primary btn-sm">키워드추가</button>
+		<!--<div class="form-inline">-->
+			<!--<label for="keyword" class="sr-only">키워드</label>-->
+			<!--<input type="text" class="form-control" id="keyword" style="width: 30%;" placeholder="키워드를 입력하세요. (최대 5개)">-->
+			<!--<button type="button" class="btn btn-primary btn-sm">키워드추가</button>-->
 
-			<button type="button" class="btn btn-default btn-sm">
-				JAVA <a href="#"><i class="fa fa-times"></i></a>
-				<input type="hidden" name="keywords[0].keywordName" value="JAVA">
-			</button>
-			<button type="button" class="btn btn-default btn-sm">
-				Spring <a href="#"><i class="fa fa-times"></i></a>
-				<input type="hidden" name="keywords[1].keywordName" value="Spring">
-			</button>
-			<button type="button" class="btn btn-default btn-sm">
-				Ubuntu <a href="#"><i class="fa fa-times"></i></a>
-				<input type="hidden" name="keywords[2].keywordName" value="Ubuntu">
-			</button>
+			<!--<button type="button" class="btn btn-default btn-sm">-->
+				<!--JAVA <a href="#"><i class="fa fa-times"></i></a>-->
+				<!--<input type="hidden" name="keywords[0].keywordName" value="JAVA">-->
+			<!--</button>-->
+			<!--<button type="button" class="btn btn-default btn-sm">-->
+				<!--Spring <a href="#"><i class="fa fa-times"></i></a>-->
+				<!--<input type="hidden" name="keywords[1].keywordName" value="Spring">-->
+			<!--</button>-->
+			<!--<button type="button" class="btn btn-default btn-sm">-->
+				<!--Ubuntu <a href="#"><i class="fa fa-times"></i></a>-->
+				<!--<input type="hidden" name="keywords[2].keywordName" value="Ubuntu">-->
+			<!--</button>-->
 
-		</div>
+		<!--</div>-->
 		<br>
 		<div class="form-group">
 			<div class="form-inline col-md-pull-10">
@@ -63,24 +81,14 @@
         <input type="hidden" name="keywords" id="keywords" />
 		<input type="hidden" name="qaId">
 		<input type="hidden" name="wikiId">
+        </fieldset>
+    </form>
 	<div class="col-md12 text-center">
-		<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+		<button id="cancelButton" type="button" class="btn btn-default" data-dismiss="modal">취소</button>
 		<button id="saveButton" class="btn btn-primary">저장</button>
 	</div>
-	</fieldset>
-	</form>
 </div>
 
-{{/partial}}
-
-
-{{#partial "plugin-style"}}
-    <link href="/resource/public/css/bootstrap-tag-cloud/bootstrap-tag-cloud.css" rel="stylesheet">
-{{/partial}}
-
-
-{{#partial "script-header"}}
-    <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
 {{/partial}}
 
 {{#partial "script-body"}}
@@ -96,20 +104,22 @@
 	 * @param data
 	 */
 	function setParam(){
-		$('#form').append('<textarea name="contents" style="display:none">'+$('#wikiEditor').val()+'</textarea>');
-		$('#form').append('<textarea name="contentsMarkup" style="display:none">'+$('#wikimaincol').html()+'</textarea>');
+//		$('#form').append('<textarea name="contents" style="display:none">'+$('#wikiEditor').val()+'</textarea>');
+//		$('#form').append('<textarea name="contentsMarkup" style="display:none">'+$('#wikimaincol').html()+'</textarea>');
+		$('#contents').val($('#wikiEditor').val());
+		$('#contentsMarkup').val($('#wikimaincol').html());
 	}
 
     var Qa = {
         makeEditor : function(){
-            SONJS.setting('${request.contextPath}',$("#editor"));
+            DualEditor.setting('/resource/app',$("#editor"),'','100%');
         },
         bindEvent : function(){
             Qa.fileAttachmentEvent();
             Qa.keywordAddEvent();
             Qa.preUploadEvent();
             Qa.tagCloudEvent();
-            Qa.saveContents();
+            Qa.formEvent();
         },
         fileAttachmentEvent : function(){
             $('input[id="file-attachment"]').change(function () {
@@ -183,13 +193,14 @@
             });
         },
         formEvent : function(){
+            $("#cancelButton").on("click", Qa.cancelContents);
             $("#saveButton").on("click", Qa.saveContents);
         },
         saveContents : function(){
             setParam();
             $.ajax({
                 type : 'POST',
-                data : $(this).serialize(),
+                data : $('#form').serialize(),
                 url : '/qa/save',
                 success : function(data,textStatus){
                     if(data.success) {
@@ -201,8 +212,15 @@
                 error : function(XMLHttpRequest,textStatus,errorThrown){
                 }
             });
+        },
+        cancelContents : function(){
+            location.href = '/qa/main';
         }
     }
+
+//    function addTag(id){
+//        alert(id);
+//    }
 </script>
 {{/partial}}
 

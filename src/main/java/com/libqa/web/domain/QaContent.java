@@ -36,10 +36,10 @@ public class QaContent {
     @Column(nullable = false, length = 40)
     private String userNick;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
+    @Column(nullable = false, columnDefinition = "Int DEFAULT 0", insertable = false)
     private Integer viewCount;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
+    @Column(nullable = false, columnDefinition = "Int DEFAULT 0", insertable = false)
     private Integer recommandCount;
 
     @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
