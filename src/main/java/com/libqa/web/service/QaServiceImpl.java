@@ -27,6 +27,9 @@ public class QaServiceImpl implements QaService {
     @Override
     public QaContent saveQaContentAndKeyword(QaContent qaContentInstance) {
         try {
+            qaContentInstance.setUserId(1);
+            qaContentInstance.setUserNick("용퓌");
+            qaContentInstance.setInsertUserId(1);
             qaContentInstance.setInsertDate(new Date());
             qaContentInstance.setUpdateDate(new Date());
             QaContent qaContent = qaRepository.save(qaContentInstance);

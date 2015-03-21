@@ -22,6 +22,11 @@ public class QaController {
     @Autowired
     QaService service;
 
+    @RequestMapping("/qa")
+    public String qa() {
+        return "redirect:/qa/main";
+    }
+
     @RequestMapping("/qa/main")
     public ModelAndView main(Model model){
         ModelAndView mav = new ModelAndView("qa/main");
