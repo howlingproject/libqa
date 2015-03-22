@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.libqa.application.enums.SpaceViewEnum;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.Space;
 import com.libqa.web.repository.SpaceRepository;
@@ -35,5 +36,11 @@ public class SpaceServiceImpl implements SpaceService {
 		}
 		return spaceList;
 	}
+
+	@Override
+	public Space findOne(Integer spaceId) {
+		return spaceRepository.findOne(spaceId);
+	}
+
 
 }

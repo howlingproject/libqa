@@ -12,4 +12,7 @@ public interface SpaceService {
 	Space save(Space space);
 
 	List<Space> findAllByCondition(boolean isDeleted);
+
+	Space findOne(Integer spaceId);
+
 }

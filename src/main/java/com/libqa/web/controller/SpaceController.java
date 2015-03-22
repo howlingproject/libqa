@@ -1,7 +1,9 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.SpaceViewEnum;
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.Space;
 import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.SpaceService;
@@ -47,7 +49,7 @@ public class SpaceController {
 	@RequestMapping("/space/main")
 	public ModelAndView spaceMain(Model model) {
 		log.info("## /main");
-		boolean isDeleted = false; 	// 삭제 하지 않은 것
+		boolean isDeleted = false;    // 삭제 하지 않은 것
 		List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
 		log.info("# spaceList.size = {}", spaceList.size());
 		ModelAndView mav = new ModelAndView("/space/main");
@@ -67,7 +69,7 @@ public class SpaceController {
 	}
 
 
-	@RequestMapping(value = "/space/add", method=RequestMethod.POST)
+	@RequestMapping(value = "/space/add", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseData<Space> saveSpace(@ModelAttribute Space space) {
 		// 여기서 request 에 대한 사용자 정보 조회함 (권한관리에 이미 필요)
@@ -75,7 +77,7 @@ public class SpaceController {
 		space.setInsertUserId(1);
 		Space result = spaceService.save(space);
 
-		String [] keywordArrays = space.getKeywords().split(",");
+		String[] keywordArrays = space.getKeywords().split(",");
 		log.info(" keywordArrays : {}", keywordArrays.length);
 		if (keywordArrays.length > 0) {
 			keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.SPACE, result.getSpaceId());
@@ -84,5 +86,20 @@ public class SpaceController {
 		return ResponseData.createSuccessResult(result);
 	}
 
+	@RequestMapping(value = "/space/{spaceId}", method = RequestMethod.GET)
+	public ModelAndView spaceDetail(@PathVariable Integer spaceId) {
+		Space space = spaceService.findOne(spaceId);
+
+
+		String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
+
+		log.info("# view : {}", view);
+		ModelAndView mav = new ModelAndView(view);
+
+		mav.addObject("space", space);
+		return mav;
+	}
+
 }
+
 

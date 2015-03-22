@@ -202,13 +202,13 @@ To change this template use File | Settings | File Templates.
 <script type="text/javascript">
     // bind the on-change event
     $(document).ready(function() {
-        //DualEditor.setting('/resource/app',$("#editor"),'mini','100%');
+
         DualEditor.setting({
-            src : '/resource/app'
-            ,tarketId : 'editor'
-            ,type : 'mini'
-            ,width : '100%'
-            ,height : '400px;'
+                              src : '/resource/app'
+                            , tarketId : 'editor'
+                            , type : 'mini'
+                            , width : '100%'
+                            , height : '400px;'
         });
         $("#file-attachment").on("change", uploadFile);
     });
@@ -224,8 +224,17 @@ To change this template use File | Settings | File Templates.
         var keyword = $('#interesting').val();
 
         if (keywordData.length == 3) {
-            alert('키워드는 최대 3건만 등록할 수 있습니다.');
-            return;
+            $.alert({
+                title: '확인',
+                content: '키워드는 최대 3건만 등록할 수 있습니다.',
+                confirmButton: 'OK',
+                confirmButtonClass: 'btn-primary',
+                icon: 'fa fa-info',
+                animation: 'zoom',
+                confirm: function () {
+                    return;
+                }
+            });
         }
 
         keywordData.push(keyword);
@@ -234,7 +243,6 @@ To change this template use File | Settings | File Templates.
         $("input[name=keywords]").each(function () {
             taskArray.push(keyword);
         });
-
 
         if (keywordData.length > 2) {
             $("#interesting").attr("readonly", true);
@@ -257,7 +265,6 @@ To change this template use File | Settings | File Templates.
             }
         });
     });
-
 
     $('#btnCancel').on(function () {
         $.confirm({
@@ -318,7 +325,7 @@ To change this template use File | Settings | File Templates.
                             icon: 'fa fa-question-circle',
                             animation: 'top',
                             confirm: function () {
-                                $(location).attr('href', "main");
+                                $(location).attr('href', req.data.spaceId);
                             }
                         });
 
@@ -326,20 +333,41 @@ To change this template use File | Settings | File Templates.
                 },
                 error: function (req) {
                     // Handle upload error
-                    alert('req : ' + req);
-                    console.log('req : ' + req.status);
-                    console.log('req : ' + req.readyState);
-
                     if (req.status == 500) {
-                        alert('공간 정보 저장중 에러가 발생했습니다.');
+                        error500(true, '');
                     } else {
-                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                        error500(false, req.status);
                     }
                 }
             });
         }
     }
 
+    function error500(condition, status) {
+        if (condition) {
+            $.alert({
+                title: '확인',
+                content: '공간 정보 저장중 에러가 발생했습니다.',
+                confirmButton: 'OK',
+                confirmButtonClass: 'btn-primary',
+                icon: 'fa fa-info',
+                animation: 'zoom',
+                confirm: function () {
+                }
+            });
+        } else {
+            $.alert({
+                title: '확인',
+                content: '공간 정보 저장중 에러가 발생했습니다. 에러코드 [' + status + ']',
+                confirmButton: 'OK',
+                confirmButtonClass: 'btn-primary',
+                icon: 'fa fa-info',
+                animation: 'zoom',
+                confirm: function () {
+                }
+            });
+        }
+    }
     /**
      * Upload the file sending it via Ajax at the Spring Boot server.
      */
