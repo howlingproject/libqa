@@ -67,7 +67,7 @@ public class SpaceController {
 	}
 
 
-	@RequestMapping(value = "/space/{", method=RequestMethod.POST)
+	@RequestMapping(value = "/space/add", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseData<Space> saveSpace(@ModelAttribute Space space) {
 		// 여기서 request 에 대한 사용자 정보 조회함 (권한관리에 이미 필요)
