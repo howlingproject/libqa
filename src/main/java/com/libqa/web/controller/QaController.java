@@ -36,11 +36,12 @@ public class QaController {
     }
 
     @RequestMapping("/qa/{qaId}")
-    @ResponseBody
-    public ResponseData<QaContent> view(@PathVariable Integer qaId, Model model) {
+    public ModelAndView view(@PathVariable Integer qaId, Model model) {
         QaContent qaContent =  qaService.findById(qaId);
 
-        return ResponseData.createSuccessResult(qaContent);
+        ModelAndView mav = new ModelAndView("qa/view");
+        mav.addObject("qaContent", qaContent);
+        return mav;
     }
 
     @RequestMapping("/qa/create")

@@ -22,133 +22,146 @@
 
 {{# partial "content" }}
 <div class="container">
-    <form id="form">
-    <!--<form onsubmit="setParam();jQuery.ajax({type:'POST',data:jQuery(this).serialize(), url:'/howling/qa/save',success:function(data,textStatus){saveComplete(data);},error:function(XMLHttpRequest,textStatus,errorThrown){}});return false" method="post" action="/howling/qa/save" enctype="multipart/form-data" id="form">-->
+    <section id="forms">
+
 		<fieldset>
-		<div class="form-group">
-			<label for="title">질문하기</label>
-			<input type="text" class="form-control" id="title" name="title" placeholder="">
-		</div>
+            <div class="page-header">
+                <h2>질문하기</h2>
+            </div>
+            <div class="row" style="width:100%">
+                <div style="padding-left:30px">
+                    <form id="qaForm" name="qaForm" class="form-horizontal well" enctype="multipart/form-data">
+                        <legend>제목</legend>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="">
 
-		<!-- 에디터 -->
-		<div id="editor" class="form-group">
-            <input type="hidden" id="contents" name="contents" />
-            <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
+                        <div style="padding: 8px 12px;">
+                            <!-- 에디터 -->
+                            <div id="editor" class="form-group">
+                                <input type="hidden" id="contents" name="contents" />
+                                <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
+                            </div>
+                            <!--// 에디터 -->
+                            <div class="form-group">
+                                <div class="col-md-pull-4">
+                                    <div class="form-inline" id="tag-info">
+                                        <input type="text" class="form-control" size="29" id="interesting" placeholder="Keyword">
+                                        <button type="button" class="btn btn-primary" id="keywordAdd">Add <i class="glyphicon glyphicon-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <ul id="tag-cloud" style="padding-left: 0px; width:100%;"></ul>
+                                </div>
+                            </div>
+                            <input type="hidden" id="keywordArray" name="keywordList" />
+                            <br>
+                            <div class="form-group">
+                                <div class="form-inline col-md-pull-10">
+                                    <input name="uploadType" value="Qa" type="hidden">
+                                    <input name="uploadFilePath" id="uploadFilePath" type="hidden">
+                                    <input id="viewType" name="viewType" value="Image" type="hidden" />
+                                    <input id="file-attachment" name="uploadfile" type="file" style="display:none">
+                                    <input id="fileAttachmentInput" class="form-control" type="text" style="width: 50%;" placeholder="파일 첨부 (최대 3개)" disabled="true">
+                                    <button class="btn btn-info btn-default" type="button" onclick="$('#file-attachment').click();">파일선택</button>
+                                    <p class="help-block"></p>
+                                </div>
+
+                                <div id="imagePreviewArea">
+                                    <img src="/resource/public/images/icons/pictures.png" width="200" alt="이미지 미리보기" class="img-thumbnail image-preview" id="image-preview">
+                                </div>
+
+                            </div>
+                            <input type="hidden" name="keywords" id="keywords" />
+                            <input type="hidden" name="qaId">
+                            <input type="hidden" name="wikiId">
+                        </div>
+                    </form>
+            </div>
         </div>
-		<!--// 에디터 -->
-		<div class="form-group">
-			<div class="col-md-pull-4">
-				<div class="form-inline" id="tag-info">
-					<input type="text" class="form-control" size="29" id="interesting" placeholder="Keyword">
-					<button type="button" class="btn btn-primary" id="keywordAdd">Add <i class="glyphicon glyphicon-plus"></i></button>
-				</div>
-			</div>
-			<div class="col-md-8">
-				<ul id="tag-cloud" style="padding-left: 0px; width:100%;"></ul>
-			</div>
-		</div>
-		<input type="hidden" id="keywordArray" name="keywordList" />
-		<!--<div class="form-inline">-->
-			<!--<label for="keyword" class="sr-only">키워드</label>-->
-			<!--<input type="text" class="form-control" id="keyword" style="width: 30%;" placeholder="키워드를 입력하세요. (최대 5개)">-->
-			<!--<button type="button" class="btn btn-primary btn-sm">키워드추가</button>-->
-
-			<!--<button type="button" class="btn btn-default btn-sm">-->
-				<!--JAVA <a href="#"><i class="fa fa-times"></i></a>-->
-				<!--<input type="hidden" name="keywords[0].keywordName" value="JAVA">-->
-			<!--</button>-->
-			<!--<button type="button" class="btn btn-default btn-sm">-->
-				<!--Spring <a href="#"><i class="fa fa-times"></i></a>-->
-				<!--<input type="hidden" name="keywords[1].keywordName" value="Spring">-->
-			<!--</button>-->
-			<!--<button type="button" class="btn btn-default btn-sm">-->
-				<!--Ubuntu <a href="#"><i class="fa fa-times"></i></a>-->
-				<!--<input type="hidden" name="keywords[2].keywordName" value="Ubuntu">-->
-			<!--</button>-->
-
-		<!--</div>-->
-		<br>
-		<div class="form-group">
-			<div class="form-inline col-md-pull-10">
-				<input name="uploadType" value="Qa" type="hidden">
-				<input id="file-attachment" name="uploadField" type="file" style="display:none">
-				<input id="fileAttachmentInput" class="form-control" type="text" style="width: 50%;" placeholder="파일 첨부 (최대 3개)">
-				<button class="btn btn-info btn-default" type="button" onclick="$('input[id=file-attachment]').click();">파일선택</button>
-				<button class="btn btn-info btn-default" id="preUpload" type="button">업로드 및 미리보기</button>
-				<p class="help-block"></p>
-			</div>
-		</div>
-        <input type="hidden" name="keywords" id="keywords" />
-		<input type="hidden" name="qaId">
-		<input type="hidden" name="wikiId">
         </fieldset>
-    </form>
 	<div class="col-md12 text-center">
 		<button id="cancelButton" type="button" class="btn btn-default" data-dismiss="modal">취소</button>
 		<button id="saveButton" class="btn btn-primary">저장</button>
 	</div>
+    </section>
 </div>
 
 {{/partial}}
 
 {{#partial "script-body"}}
 <script>
-	var keywordData = [];
     $(document).ready(function(){
         Qa.makeEditor();
         Qa.bindEvent();
     });
 
-	/**
-	 * 에디터 파라미터명 이슈로 인한 임시 파라미터 세팅
-	 * @param data
-	 */
 	function setParam(){
-//		$('#form').append('<textarea name="contents" style="display:none">'+$('#wikiEditor').val()+'</textarea>');
-//		$('#form').append('<textarea name="contentsMarkup" style="display:none">'+$('#wikimaincol').html()+'</textarea>');
 		$('#contents').val($('#wikiEditor').val());
 		$('#contentsMarkup').val($('#wikimaincol').html());
+        $('#tag-cloud').find('li').each(function(){
+            Qa.keywordData.push(this.innerHTML);
+        });
+        $("#keywords").val(Qa.keywordData);
 	}
 
     var Qa = {
+        keywordData : [],
         makeEditor : function(){
-            DualEditor.setting('/resource/app',$("#editor"),'','100%');
+            //DualEditor.setting('/resource/app',$("#editor"),'','100%');
+            DualEditor.setting({
+                src : '/resource/app'
+                ,tarketId : 'editor'
+                //,type : 'mini'
+                ,width : '100%'
+                //,height : '100%'
+            });
         },
         bindEvent : function(){
             Qa.fileAttachmentEvent();
             Qa.keywordAddEvent();
-            Qa.preUploadEvent();
             Qa.tagCloudEvent();
             Qa.formEvent();
         },
         fileAttachmentEvent : function(){
-            $('input[id="file-attachment"]').change(function () {
-                $('#fileAttachmentInput').val($(this).val().replace('C:\\fakepath\\', ''));
-            });
+            $("#file-attachment").on("change", Qa.uploadFile);
         },
-        preUploadEvent : function(){
-            $('#preUpload').click(function(){
-                var oData = new FormData(document.forms.namedItem("form"));
-                var url="${createLink(controller:'uploadAjax',action:'upload')}";
+        uploadFile : function(){
+            var field = $("#file-attachment").val();
+            if (field != '') {
                 $.ajax({
-                    url:url,
-                    type:'POST',
-                    data:oData,
-                    processData: false,  // tell jQuery not to process the data
-                    contentType: false ,
-                    success:function (req) {
-                        if (req.success) {
-                            alert(req.contextPath+req.imagePath+req.docName);
-                            var imagePath = req.contextPath+req.imagePath+req.docName;
-                            $("#image-preview").remove();
-                            $("#imagePreviewArea").html("<img src='"+imagePath+"' width=\"200\" alt=\"이미지 미리보기\" class=\"img-thumbnail image-preview\" id=\"image-preview\">");
+                    url: "/common/uploadFile",
+                    type: "POST",
+                    data: new FormData($("#qaForm")[0]),
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (req) {
+                        console.log('req : ' + req);
+                        console.log('req.data.uploadType : ' + req.data.uploadType);
+                        if (req.resultCode == 1) {
+                            if (req.data.uploadType === 'image') {
+                                $("#image-preview").remove();
+                                $("#uploadFilePath").val("");
+                                $("#imagePreviewArea").html("<img src='" + req.data.filePath + "/" + req.data.savedName + "' id=\"uploadPreviewImg\" width=\"200\" class=\"img-thumbnail image-preview\" id=\"image-preview\">");
+                                $("#uploadFilePath").val(req.data.filePath);
+                                $("#uploadFile").val(req.data.savedName);
+                            }
+                        }
+                    },
+                    error: function (req) {
+                        // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
+
+                        if (req.status == 500) {
+                            alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
                         } else {
-                            alert(req.message);
-                            return;
+                            alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
                         }
                     }
                 });
-            });
+            }
         },
         /**
          * 키워드 추가
@@ -156,37 +169,23 @@
          */
         keywordAddEvent : function(){
             $('#keywordAdd').click(function(){
-                var keyword = $('#interesting').val();
-                if (keyword == '' || keyword.length < 2) {
-                    alert('키워드를 입력하세요.');
-                    return;
-                }
-                if (keywordData.length == 3) {
+                if ($('#tag-cloud').find('li').length > 3) {
                     alert('키워드는 최대 3건만 등록할 수 있습니다.');
-                    return;
-                }
-
-                keywordData.push(keyword);
-                $('input[id=keywordArray]').val(keywordData.join(","));
-
-                if (keywordData.length > 2) {
+                    $('#tag-cloud').find('li')[3].remove();
                     $("#interesting").attr("readonly",true);
                     $("#keywordAdd").attr("disabled",true);
+                    return;
                 }
             });
         },
+
         /**
          * 키워드 삭제
          * 키워드가 삭제되면 폼을 enabled 한다.
          */
         tagCloudEvent : function(){
             $('#tag-cloud').on('click', 'li', function (event) {
-                var keyword = $(event.target).text();
-                var index = keywordData.indexOf(keyword);
-
-                if (index > -1) {
-                    keywordData.splice(index, 1);
-                    $('input[id=keywordArray]').val(keywordData);
+                if ($('#tag-cloud').find('li').length < 4) {
                     $("#interesting").attr("readonly",false);
                     $("#keywordAdd").attr("disabled",false);
                 }
@@ -200,14 +199,12 @@
             setParam();
             $.ajax({
                 type : 'POST',
-                data : $('#form').serialize(),
+                data : $('#qaForm').serialize(),
                 url : '/qa/save',
                 success : function(data){
-                    alert(data.resultCode);
                     if(data.resultCode == 1) {
                         alert(data.comment);
-                        location.href = "/qa/view?qaId=" + data.data.qaId;
-//                        $(location).attr('href', "main");
+                        location.href = "/qa/" + data.data.qaId;
                     }
                 },
                 error : function(XMLHttpRequest,textStatus,errorThrown){
