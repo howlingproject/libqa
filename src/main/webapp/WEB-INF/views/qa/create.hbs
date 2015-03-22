@@ -106,7 +106,14 @@
     var Qa = {
         keywordData : [],
         makeEditor : function(){
-            DualEditor.setting('/resource/app',$("#editor"),'','100%');
+            //DualEditor.setting('/resource/app',$("#editor"),'','100%');
+            DualEditor.setting({
+                src : '/resource/app'
+                ,tarketId : 'editor'
+                //,type : 'mini'
+                ,width : '100%'
+                //,height : '100%'
+            });
         },
         bindEvent : function(){
             Qa.fileAttachmentEvent();
