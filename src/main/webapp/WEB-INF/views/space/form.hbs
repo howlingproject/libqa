@@ -238,34 +238,30 @@ To change this template use File | Settings | File Templates.
     $('#btnSave').on('click', function () {
         $.confirm({
             title: '확인',
-            content: '공간을 생성 하겠습니까?',
+            content: '공간을 생성 하겠습니까?<BR>11',
             confirmButton: '공간생성',
             cancelButton: '취소',
+            confirmButtonClass: 'btn-info',
             confirm: function () {
-
+                create();
             },
-            cancel: function () {
+            cancel: function(){
 
             }
         });
     });
 
 
-
-
-    /*
-    $('#spaceCancel').click(function () {
-        $("#messageBody").text("");
-    });
-    $('#spaceClose').click(function () {
-        $("#messageBody").text("");
-    });
-    */
-
-    $('#btnCancel').click(function () {
-        if (confirm("공간 생성을 취소하겠습니까?")) {
-            $(location).attr('href', "main");
-        }
+    $('#btnCancel').on(function () {
+        $.confirm({
+            title: '확인',
+            content: '공간 생성을 취소하겠습니까?',
+            confirmButton: '확인',
+            cancelButton: '취소',
+            confirm: function () {
+                $(location).attr('href', "main");
+            }
+        });
     });
 
     /**
@@ -287,7 +283,7 @@ To change this template use File | Settings | File Templates.
     /**
      * Save the Space
      */
-    $('#spaceCreate').click(function() {
+    function create() {
         $("#keywords").val(keywordData);
         $("#description").val($("#wikimaincol").html());
         $("#descriptionMarkup").val($("#wikiEditor").val());
@@ -298,18 +294,27 @@ To change this template use File | Settings | File Templates.
             $("#private").val(1);   // 비공개
         }
         var data = $("#spaceCreateForm").serialize();
-
         if (checkValidation()) {
-            $('#messageBoxModal').modal('hide');
             $.ajax({
-                type:"post",
+                type: "post",
                 dataType: "json",
-                data : data,
-                url : "/space/add",
+                data: data,
+                url: "/space/add",
                 cache: false,
                 success: function (req) {
-                    if(req.resultCode == 1) {
-                        goMain(req.comment);
+                    if (req.resultCode == 1) {
+                        $.confirm({
+                            title: '완료',
+                            content: '공간 정보를 저장하였습니다. 공간 메인 화면으로 이동하겠습니까?',
+                            confirmButton: '이동',
+                            confirmButtonClass: 'btn-info',
+                            icon: 'fa fa-question-circle',
+                            animation: 'top',
+                            confirm: function () {
+                                $(location).attr('href', "main");
+                            }
+                        });
+
                     }
                 },
                 error: function (req) {
@@ -326,7 +331,7 @@ To change this template use File | Settings | File Templates.
                 }
             });
         }
-    });
+    }
 
     /**
      * Upload the file sending it via Ajax at the Spring Boot server.
@@ -384,22 +389,40 @@ To change this template use File | Settings | File Templates.
 
 
         if (userId == null || userId.length == 0) {
-            $("#messageBody").append("<label class=\"control-label error-label\">로그인 정보가 존재 하지 않습니다.</label>" );
+            $.alert({
+                title: '정보',
+                confirmButton: '확인',
+                content: '로그인 정보가 존재 하지 않습니다.'
+            });
             return false;
         }
         if (title == null || title.length == 0) {
-            $("#messageBody").append("<label class=\"control-label error-label\">제목을 입력하세요.</label>");
+            $.alert({
+                title: '정보',
+                confirmButton: '확인',
+                icon: 'fa fa-info',
+                content: '공간 제목을 입력하세요.'
+            });
             return false;
         }
         if (imagePath == null || imagePath.length == 0) {
-            $("#messageBody").append("<label class=\"control-label error-label\">이미지 업로드 정보는 필수값입니다.</label>");
+            $.alert({
+                title: '정보',
+                confirmButton: '확인',
+                icon: 'fa fa-info',
+                content: '공간의 이미지 정보는 필수값입니다.'
+            });
             return false;
         }
         if (description == null || description.length == 0) {
-            $("#messageBody").append("<label class=\"control-label error-label\">공간 설명은 필수값입니다.</label>");
+            $.alert({
+                title: '정보',
+                confirmButton: '확인',
+                icon: 'fa fa-info',
+                content: '공간 설명은 필수값입니다.'
+            });
             return false;
         }
-
         return true;
     }
 </script>
