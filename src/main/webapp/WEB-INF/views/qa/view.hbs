@@ -34,18 +34,18 @@
                 <div class="alert alert-info">
                     <div class="row">
                         <div class="col-md-8">
-                            <span class="qna-alert-title">${qaContent.title}</span>
+                            <span class="qna-alert-title">{{qaContent.title}}</span>
                             <span class="badge">1927</span>
                         </div>
                         <div class="col-md-4 text-right">
-                            <span class="qna-alert-title">${qaContent.insertDate}</span>
-                            <span class="readCnt qna-alert-title">조회수 : ${qaContent.viewCount}</span>
+                            <span class="qna-alert-title">{{qaContent.insertDate}}</span>
+                            <span class="readCnt qna-alert-title">조회수 : {{qaContent.viewCount}}</span>
                         </div>
                     </div>
                 </div>
                 <div>
                     <p>
-                        <!--${qaContent.contents}-->
+                        {{{qaContent.contentsMarkup}}}
                     </p>
                 </div>
                 <!--// 본문 제목, 내용 -->
