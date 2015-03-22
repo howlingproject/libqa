@@ -46,4 +46,9 @@ public class QaServiceImpl implements QaService {
         return qaContent;
     }
 
+    @Override
+    public QaContent findById(Integer qaId) {
+        return qaRepository.findOne(qaId);
+    }
+
 }
