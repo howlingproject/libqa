@@ -5,6 +5,7 @@ var DualEditor = (function(){
     DualEditor.markup = function(contents){
         contents = DualEditor.markup.H1( contents );
         contents = DualEditor.markup.HR( contents );
+        contents = DualEditor.markup.LAYOUT( contents );
         contents = contents.replace(/(^\s*)|(\s*$)/g, "" ).replace(/\n/ig, "<br>");
         contents = DualEditor.markup.FONT( contents );
         contents = DualEditor.markup.FONTSIZE( contents );
@@ -14,10 +15,7 @@ var DualEditor = (function(){
         contents = DualEditor.markup.ITALIC( contents );
         contents = DualEditor.markup.DEL( contents );
         contents = DualEditor.markup.UNDERLINING( contents );
-        contents = DualEditor.markup.SUPERSCRIPT( contents );
-        contents = DualEditor.markup.SUBERSCRIPT( contents );
 
-        contents = DualEditor.markup.LAYOUT( contents );
         contents = DualEditor.markup.FIELD( contents );
         contents = DualEditor.markup.ALERT( contents );
         contents = DualEditor.markup.INFO( contents );
@@ -76,7 +74,7 @@ var DualEditor = (function(){
         $divs.on( 'scroll', sync);
 
         //prettyPrint();
-        $("#wikiEditor").append("마크업 테스트\r\n***\r\n**굵게**\r\n__굵게__\r\n*기울임*\r\n_기울임_\r\n//밑줄//\r\n[d]취소선[d]\r\n[field|필드셋 타이틀]필드셋[field]\r\n[alert]경고[alert]\r\n[info]안내[info]\r\n[sp]아래첨자[sp]\r\n[sb]위첨자[sb]\r\n\r\n||셀제목1||셀제목2||셀제목3||셀제목4||\r\n|컬럼1|컬럼2|컬럼1|컬럼2|\r\n|컬럼3|컬럼4|컬럼3|컬럼4| \r\n\r\n[layout1] [field|필드셋 타이틀]필드셋[field] [layout1]\n[layout2] [alert]경고[alert] [layout2]\n[layout3] [info]안내[info] [layout3]\n[layout4] [info]4444[info] [layout4]\n[layout5] paddig5 [layout5]\n[layout1] paddig2-1 [layout1][layout2] paddig2-2 [layout2]");
+        $("#wikiEditor").append("마크업 테스트\r\n***\r\n**굵게**\r\n__굵게__\r\n*기울임*\r\n_기울임_\r\n//밑줄//\r\n[d]취소선[d]\r\n[field|필드셋 타이틀]필드셋[field]\r\n[alert]경고[alert]\r\n[info]안내[info]\r\n[sp]아래첨자[sp]\r\n[sb]위첨자[sb]\r\n\r\n||셀제목1||셀제목2||셀제목3||셀제목4||\r\n|컬럼1|컬럼2|컬럼1|컬럼2|\r\n|컬럼3|컬럼4|컬럼3|컬럼4| \r\n\r\n[layout] [field|필드셋 타이틀]필드셋[field] [layout]\n[layout] [alert]경고[alert] [layout]\n[layout] [info]안내[info] [layout]\n[layout] [info]4444[info] [layout]\n[layout] paddig5 [layout]\n[layout] paddig2-1 [layout]\n[layout] paddig2-2 [layout] \r\n\r\n [alert]중간[alert]  \r\n\r\n[layout] [field|필드셋 타이틀]필드셋[field] [layout]\n[layout] [alert]경고[alert] [layout]\n[layout] [info]안내[info] [layout]");
         var editor = document.getElementById("wikiEditor");		// [object HTMLTextAreaElement]
 
         // 각 에디터 버튼 클릭시 액션 처리
