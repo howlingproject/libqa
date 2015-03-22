@@ -7,8 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -20,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class QaController {
     @Autowired
-    QaService service;
+    QaService qaService;
 
     @RequestMapping("/qa")
     public String qa() {
@@ -33,6 +35,14 @@ public class QaController {
         return mav;
     }
 
+    @RequestMapping("/qa/{qaId}")
+    @ResponseBody
+    public ResponseData<QaContent> view(@PathVariable Integer qaId, Model model) {
+        QaContent qaContent =  qaService.findById(qaId);
+
+        return ResponseData.createSuccessResult(qaContent);
+    }
+
     @RequestMapping("/qa/create")
     public ModelAndView create(Model model){
         ModelAndView mav = new ModelAndView("qa/create");
@@ -40,8 +50,9 @@ public class QaController {
     }
 
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
-    public ResponseData<?> save(QaContent qaContent){
-        QaContent newQaContent = service.saveQaContentAndKeyword(qaContent);
+    @ResponseBody
+    public ResponseData<QaContent> save(QaContent qaContent){
+        QaContent newQaContent = qaService.saveQaContentAndKeyword(qaContent);
         return ResponseData.createSuccessResult(newQaContent);
     }
 }

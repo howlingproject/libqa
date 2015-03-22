@@ -26,13 +26,14 @@ public class QaServiceImpl implements QaService {
 
     @Override
     public QaContent saveQaContentAndKeyword(QaContent qaContentInstance) {
+        QaContent qaContent;
         try {
             qaContentInstance.setUserId(1);
             qaContentInstance.setUserNick("용퓌");
             qaContentInstance.setInsertUserId(1);
             qaContentInstance.setInsertDate(new Date());
             qaContentInstance.setUpdateDate(new Date());
-            QaContent qaContent = qaRepository.save(qaContentInstance);
+            qaContent = qaRepository.save(qaContentInstance);
 
             String [] keywordArrays = qaContentInstance.getKeywords().split(",");
             if (keywordArrays.length > 0) {
@@ -42,7 +43,12 @@ public class QaServiceImpl implements QaService {
             log.info(e.toString());
             throw new RuntimeException("제발제발!!!!!");
         }
-        return qaContentInstance;
+        return qaContent;
+    }
+
+    @Override
+    public QaContent findById(Integer qaId) {
+        return qaRepository.findOne(qaId);
     }
 
 }

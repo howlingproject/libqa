@@ -63,6 +63,12 @@ function addTagBindings(id) {
 function addTag(id) {
 	
 	var Tag = $(id + ' > input').val();
+	var tagLen = Tag.length;
+
+	if (tagLen < 2) {
+		alert('키워드는 두자리 이상 입력하세요');
+		return;
+	}
 	
 	var tagClass = '';
 

@@ -184,15 +184,37 @@ To change this template use File | Settings | File Templates.
                     </fieldset>
 
                     <div class="form-actions text-center">
-                        <button type="button" class="btn btn-primary" id="btnSave" name="btnSave">저장</button>
+                        <button type="button" class="btn btn-primary" id="btnSave" name="btnSave" data-toggle="modal" data-target="#messageBoxModal">저장</button>
                         <button type="button" class="btn" id="btnCancel" name="btnCancel">취소</button>
                     </div>
+
                 </form>
             </div>
         </div>
 
     </section>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="messageBoxModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="spaceClose"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">공간생성</h4>
+            </div>
+            <div class="modal-body">
+                <p>공간을 생성 하겠습니까?</p>
+                <p id="messageBody"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="spaceCancel" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="spaceCreate">Save</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 {{/partial}}
 
 
@@ -213,10 +235,7 @@ To change this template use File | Settings | File Templates.
      */
     $('#keywordAdd').click(function () {
         var keyword = $('#interesting').val();
-        if (keyword == '' || keyword.length < 2) {
-            alert('키워드를 입력하세요.');
-            return;
-        }
+
         if (keywordData.length == 3) {
             alert('키워드는 최대 3건만 등록할 수 있습니다.');
             return;
@@ -234,6 +253,13 @@ To change this template use File | Settings | File Templates.
             $("#interesting").attr("readonly", true);
             $("#keywordAdd").attr("disabled", true);
         }
+    });
+
+    $('#spaceCancel').click(function () {
+        $("#messageBody").text("");
+    });
+    $('#spaceClose').click(function () {
+        $("#messageBody").text("");
     });
 
     $('#btnCancel').click(function () {
@@ -261,46 +287,46 @@ To change this template use File | Settings | File Templates.
     /**
      * Save the Space
      */
-    $('#btnSave').click(function() {
+    $('#spaceCreate').click(function() {
         $("#keywords").val(keywordData);
         $("#description").val($("#wikimaincol").html());
         $("#descriptionMarkup").val($("#wikiEditor").val());
-        console.log("## 체크 :" + $(':radio[name="isPrivateYn"]:checked').val());
+
         if ($(':radio[name="isPrivateYn"]:checked').val() == 'true') {
             $("#private").val(0);   // 공개
         } else {
             $("#private").val(1);   // 비공개
         }
         var data = $("#spaceCreateForm").serialize();
-        if(confirm('공간을 생성 하겠습니까?')) {
-            if (checkValidation()) {
-                $.ajax({
-                    type:"post",
-                    dataType: "json",
-                    data : data,
-                    url : "/space/add",
-                    cache: false,
-                    success: function (req) {
-                        alert(req.resultCode);
-                        if(req.resultCode == 1) {
-                            alert(req.comment);
-                            $(location).attr('href', "main");
-                        }
-                    },
-                    error: function (req) {
-                        // Handle upload error
-                        alert('req : ' + req);
-                        console.log('req : ' + req.status);
-                        console.log('req : ' + req.readyState);
 
-                        if (req.status == 500) {
-                            alert('공간 정보 저장중 에러가 발생했습니다.');
-                        } else {
-                            alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
-                        }
+        if (checkValidation()) {
+            $('#messageBoxModal').modal('hide');
+            $.ajax({
+                type:"post",
+                dataType: "json",
+                data : data,
+                url : "/space/add",
+                cache: false,
+                success: function (req) {
+                    alert(req.resultCode);
+                    if(req.resultCode == 1) {
+                        alert(req.comment);
+                        $(location).attr('href', "main");
                     }
-                });
-            }
+                },
+                error: function (req) {
+                    // Handle upload error
+                    alert('req : ' + req);
+                    console.log('req : ' + req.status);
+                    console.log('req : ' + req.readyState);
+
+                    if (req.status == 500) {
+                        alert('공간 정보 저장중 에러가 발생했습니다.');
+                    } else {
+                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                    }
+                }
+            });
         }
     });
 
@@ -360,19 +386,19 @@ To change this template use File | Settings | File Templates.
 
 
         if (userId == null || userId.length == 0) {
-            alert('로그인 정보가 존재 하지 않습니다.')
+            $("#messageBody").append("<label class=\"control-label error-label\">로그인 정보가 존재 하지 않습니다.</label>" );
             return false;
         }
         if (title == null || title.length == 0) {
-            alert('제목을 입력하세요.')
+            $("#messageBody").append("<label class=\"control-label error-label\">제목을 입력하세요.</label>");
             return false;
         }
         if (imagePath == null || imagePath.length == 0) {
-            alert('이미지 업로드 정보는 필수값입니다.')
+            $("#messageBody").append("<label class=\"control-label error-label\">이미지 업로드 정보는 필수값입니다.</label>");
             return false;
         }
         if (description == null || description.length == 0) {
-            alert('공간 설명은 필수값입니다.')
+            $("#messageBody").append("<label class=\"control-label error-label\">공간 설명은 필수값입니다.</label>");
             return false;
         }
 
