@@ -202,11 +202,12 @@
                 type : 'POST',
                 data : $('#form').serialize(),
                 url : '/qa/save',
-                success : function(data,textStatus){
-                    if(data.success) {
-                        location.href = "/qa/view?qaId=" + data.qaId;
-                    } else {
-                        alert(data.message)
+                success : function(data){
+                    alert(data.resultCode);
+                    if(data.resultCode == 1) {
+                        alert(data.comment);
+                        location.href = "/qa/view?qaId=" + data.data.qaId;
+//                        $(location).attr('href', "main");
                     }
                 },
                 error : function(XMLHttpRequest,textStatus,errorThrown){
