@@ -184,7 +184,7 @@ To change this template use File | Settings | File Templates.
                     </fieldset>
 
                     <div class="form-actions text-center">
-                        <button type="button" class="btn btn-primary" id="btnSave" name="btnSave" data-toggle="modal" data-target="#messageBoxModal">저장</button>
+                        <button type="button" class="btn btn-primary" id="btnSave" name="btnSave">저장</button>
                         <button type="button" class="btn" id="btnCancel" name="btnCancel">취소</button>
                     </div>
 
@@ -195,26 +195,6 @@ To change this template use File | Settings | File Templates.
     </section>
 </div>
 
-
-<!-- Modal -->
-<div class="modal fade" id="messageBoxModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="spaceClose"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">공간생성</h4>
-            </div>
-            <div class="modal-body">
-                <p>공간을 생성 하겠습니까?</p>
-                <p id="messageBody"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" id="spaceCancel" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="spaceCreate">Save</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 {{/partial}}
 
 
@@ -255,12 +235,32 @@ To change this template use File | Settings | File Templates.
         }
     });
 
+    $('#btnSave').on('click', function () {
+        $.confirm({
+            title: '확인',
+            content: '공간을 생성 하겠습니까?',
+            confirmButton: '공간생성',
+            cancelButton: '취소',
+            confirm: function () {
+
+            },
+            cancel: function () {
+
+            }
+        });
+    });
+
+
+
+
+    /*
     $('#spaceCancel').click(function () {
         $("#messageBody").text("");
     });
     $('#spaceClose').click(function () {
         $("#messageBody").text("");
     });
+    */
 
     $('#btnCancel').click(function () {
         if (confirm("공간 생성을 취소하겠습니까?")) {
@@ -308,10 +308,8 @@ To change this template use File | Settings | File Templates.
                 url : "/space/add",
                 cache: false,
                 success: function (req) {
-                    alert(req.resultCode);
                     if(req.resultCode == 1) {
-                        alert(req.comment);
-                        $(location).attr('href', "main");
+                        goMain(req.comment);
                     }
                 },
                 error: function (req) {
