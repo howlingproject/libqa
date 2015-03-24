@@ -52,6 +52,7 @@ public class SpaceController {
 		boolean isDeleted = false;    // 삭제 하지 않은 것
 		List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
 		log.info("# spaceList.size = {}", spaceList.size());
+
 		ModelAndView mav = new ModelAndView("/space/main");
 		mav.addObject("spaceList", spaceList);
 		return mav;
@@ -63,7 +64,6 @@ public class SpaceController {
 
 		ModelAndView mav = new ModelAndView("/space/form");
 		mav.addObject("message", message);
-
 		return mav;
 	}
 
@@ -71,9 +71,10 @@ public class SpaceController {
 	@RequestMapping(value = "/space/add", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseData<Space> saveSpace(@ModelAttribute Space space) {
-		// 여기서 request 에 대한 사용자 정보 조회함 (권한관리에 이미 필요)
+		// TODO List 차후 로그인으로 변경
 		space.setInsertDate(new Date());
 		space.setInsertUserId(1);
+
 		Space result = spaceService.saveWithKeyword(space);
 		log.debug("#result : [{}]", result);
 		return ResponseData.createSuccessResult(result);
@@ -82,8 +83,7 @@ public class SpaceController {
 	@RequestMapping(value = "/space/{spaceId}", method = RequestMethod.GET)
 	public ModelAndView spaceDetail(@PathVariable Integer spaceId) {
 		Space space = spaceService.findOne(spaceId);
-
-
+		// Space 생성시 선택한 Layout 옵션의 View를 보여준다.
 		String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
 
 		log.info("# view : {}", view);
