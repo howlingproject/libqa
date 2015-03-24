@@ -53,8 +53,7 @@ public class KeywordServiceImpl implements KeywordService {
 			}
 			result = true;
 		} catch (Exception e) {
-			log.error("키워드 저장시 에러가 발생했습니다.");
-			e.printStackTrace();
+			log.error("키워드 저장시 에러가 발생했습니다.", e);
 			result = false;
 		}
 		return result;
@@ -69,25 +68,20 @@ public class KeywordServiceImpl implements KeywordService {
 	@Transactional
 	public void saveKeyword(String param, KeywordTypeEnum keywordType, Integer entityId) {
 		Assert.notNull(StringUtil.defaultString(param, null), "키워드 값이 존재하지 않습니다.");
-		try {
-			Keyword keyword = new Keyword();
+		Keyword keyword = new Keyword();
 
-			if (keywordType.equals(KeywordTypeEnum.SPACE)) {
-				keyword.setSpaceId(entityId);
-			} else if (keywordType.equals(KeywordTypeEnum.WIKI)) {
-				keyword.setWikiId(entityId);
-			} else {
-				keyword.setQaId(entityId);
-			}
-
-			keyword.setKeywordName(param);
-			keyword.setKeywordType(keywordType);
-			keyword.setInsertDate(new Date());
-			keywordRepository.saveAndFlush(keyword);
-		} catch (Exception e) {
-			log.error("값 세팅 중 에러발생 ");
-			e.printStackTrace();
+		if (keywordType.equals(KeywordTypeEnum.SPACE)) {
+			keyword.setSpaceId(entityId);
+		} else if (keywordType.equals(KeywordTypeEnum.WIKI)) {
+			keyword.setWikiId(entityId);
+		} else {
+			keyword.setQaId(entityId);
 		}
+
+		keyword.setKeywordName(param);
+		keyword.setKeywordType(keywordType);
+		keyword.setInsertDate(new Date());
+		keywordRepository.saveAndFlush(keyword);
 	}
 
 	/**
@@ -99,26 +93,20 @@ public class KeywordServiceImpl implements KeywordService {
 	@Transactional
 	public void saveKeywordList(String param, KeywordTypeEnum keywordType) {
 		Assert.notNull(StringUtil.defaultString(param, null), "키워드 값이 존재하지 않습니다.");
-		try {
-			List<KeywordList> keywordList = keywordListRepository.findByKeywordNameAndKeywordType(param, keywordType);
+		List<KeywordList> keywordList = keywordListRepository.findByKeywordNameAndKeywordType(param, keywordType);
 
-			if (keywordList.isEmpty()) {
-				KeywordList keyword = new KeywordList(param, keywordType, new Integer(1));
-				// insert
-				keywordListRepository.save(keyword);
-			} else {
-				for (KeywordList keys : keywordList) {
-					int count = keys.getKeywordCount() + 1;
-					keys.setKeywordCount(count);
-					// update
-					keywordListRepository.save(keywordList);
-				}
+		if (keywordList.isEmpty()) {
+			KeywordList keyword = new KeywordList(param, keywordType, new Integer(1));
+			// insert
+			keywordListRepository.save(keyword);
+		} else {
+			for (KeywordList keys : keywordList) {
+				int count = keys.getKeywordCount() + 1;
+				keys.setKeywordCount(count);
+				// update
+				keywordListRepository.save(keywordList);
 			}
-		} catch (Exception e) {
-			log.error("## 키워드 통계 생성중 에러 발생 ");
-			e.printStackTrace();
 		}
-
 	}
 
 }

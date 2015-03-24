@@ -15,4 +15,5 @@ public interface SpaceService {
 
 	Space findOne(Integer spaceId);
 
+	Space saveWithKeyword(Space space);
 }

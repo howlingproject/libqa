@@ -59,7 +59,6 @@ public class SpaceController {
 
 	@RequestMapping("/space/form")
 	public ModelAndView form(Model model) {
-		log.debug("##############################");
 		log.info("# message : {}", message);
 
 		ModelAndView mav = new ModelAndView("/space/form");
@@ -75,13 +74,7 @@ public class SpaceController {
 		// 여기서 request 에 대한 사용자 정보 조회함 (권한관리에 이미 필요)
 		space.setInsertDate(new Date());
 		space.setInsertUserId(1);
-		Space result = spaceService.save(space);
-
-		String[] keywordArrays = space.getKeywords().split(",");
-		log.info(" keywordArrays : {}", keywordArrays.length);
-		if (keywordArrays.length > 0) {
-			keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.SPACE, result.getSpaceId());
-		}
+		Space result = spaceService.saveWithKeyword(space);
 		log.debug("#result : [{}]", result);
 		return ResponseData.createSuccessResult(result);
 	}
