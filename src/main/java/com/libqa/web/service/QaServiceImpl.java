@@ -25,7 +25,7 @@ public class QaServiceImpl implements QaService {
     KeywordService keywordService;
 
     @Override
-    public QaContent saveQaContentAndKeyword(QaContent qaContentInstance) {
+    public QaContent saveQaAndKeyword(QaContent qaContentInstance) {
         QaContent qaContent;
         try {
             qaContentInstance.setUserId(1);
