@@ -53,7 +53,7 @@ public class QaController {
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaContent> save(QaContent qaContent){
-        QaContent newQaContent = qaService.saveQaAndKeyword(qaContent);
+        QaContent newQaContent = qaService.saveWithKeyword(qaContent);
         return ResponseData.createSuccessResult(newQaContent);
     }
 }

@@ -25,14 +25,13 @@ public class QaServiceImpl implements QaService {
     KeywordService keywordService;
 
     @Override
-    public QaContent saveQaAndKeyword(QaContent qaContentInstance) {
+    public QaContent saveWithKeyword(QaContent qaContentInstance) {
         QaContent qaContent;
         try {
             qaContentInstance.setUserId(1);
             qaContentInstance.setUserNick("용퓌");
             qaContentInstance.setInsertUserId(1);
             qaContentInstance.setInsertDate(new Date());
-            qaContentInstance.setUpdateDate(new Date());
             qaContent = qaRepository.save(qaContentInstance);
 
             String [] keywordArrays = qaContentInstance.getKeywords().split(",");

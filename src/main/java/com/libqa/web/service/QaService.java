@@ -8,7 +8,7 @@ import com.libqa.web.domain.QaContent;
  * @author yong
  */
 public interface QaService {
-    QaContent saveQaAndKeyword(QaContent qaContent);
+    QaContent saveWithKeyword(QaContent qaContent);
 
     QaContent findById(Integer qaId);
 }
