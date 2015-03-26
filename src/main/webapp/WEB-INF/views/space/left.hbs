@@ -1,17 +1,22 @@
-<%--
+{{!--
 Created by IntelliJ IDEA.
 User: yion
-Date: 2014. 11. 16.
-Time: 15:05
-Desc: right 메뉴 화면
---%>
+Date: 2014. 12. 7.
+Time: 16:20
+To change this template use File | Settings | File Templates.
+--}}
+
+{{#partial "title"}}LibQA~{{/partial}}
+
+{{# partial "content" }}
 <!-- contents -->
+
 <div class="container">
     <div class="col-md" >
         <div style="padding-bottom: 45px;">
             <div class="btn-group" data-toggle="buttons" style="float: right">
-                <a href="#" class="btn btn-primary">공간 정보수정</a>
-                <a href="#" class="btn btn-primary">위키 생성</a>
+                <a href="/space/edit/{{space.spaceId}}" class="btn btn-primary">공간 정보수정</a>
+                <a href="/space/{{space.spaceId}}/wiki" class="btn btn-primary">위키 생성</a>
                 <a href="#" class="btn btn-primary">첨부파일 목록</a>
             </div>
         </div>
@@ -23,8 +28,30 @@ Desc: right 메뉴 화면
 
 
 <div class="container components">
-    <h1>공간의 제목이 여기에 들어가야 겠죠.</h1>
-    <hr>
+    <h1 class="page-header">{{space.title}}
+        <small class="pull-right">2014.12.31 Yion 생성 </small>
+    </h1>
+
+    <div class="row" style="padding-bottom: 20px">
+
+        <div class="col-md-4">
+            <img src="/resource/public/images/icons/cameras.png" width="300">
+        </div>
+
+        <div class="col-md-8">
+            <h3>Project Description</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+            <h3>Project Details</h3>
+            <ul>
+                <li>Lorem Ipsum</li>
+                <li>Dolor Sit Amet</li>
+                <li>Consectetur</li>
+                <li>Adipiscing Elit</li>
+            </ul>
+        </div>
+
+    </div>
+
     <div class="row row-offcanvas row-offcanvas-right">
 
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
@@ -53,180 +80,114 @@ Desc: right 메뉴 화면
 
 
         <div class="col-xs-12 col-sm-9">
-            <p class="pull-right visible-xs">
-                <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
-            </p>
-            <div class="jumbotron">
-                <h3>Hello, world! 공간 설명 샘플</h3>
-                <p>This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport sizes to see it in action.</p>
-            </div>
-
             <div class="row">
-
-
-                <h3>최근 이 공간의 활동 내역 10개 출력합시다. </h3>
+                <div style="padding-left:15px">
+                <h3>최근 수정된 위키 목록</h3>
+                <hr>
+                </div>
                 <blockquote class="pull-right">
 
                     <div class="media">
-                        <a href="#" class="pull-left">
-                            <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                            </div>
-                        </a>
-
-                        <div class="media-body" style="font-size:13px">
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                            purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                            fringilla. Donec lacinia congue felis in faucibus.
-                            <span class="badge">1927</span>
+                        <div class="media-body">
+                            <h4 class="media-heading" id="media-heading">Media heading<a class="anchorjs-link" href="#media-heading"><span class="anchorjs-icon"></span></a></h4>
+                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
+                        </div>
+                        <div class="media-right">
+                            <a href="#">
+                                <div class="user-profile">
+                                    <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png" />
+                                </div>
+                            </a>
                         </div>
                     </div>
 
                     <div class="media">
-                        <a href="#" class="pull-left">
-                            <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                            </div>
-                        </a>
-
-                        <div class="media-body" style="font-size:13px">
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                            purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                            fringilla. Donec lacinia congue felis in faucibus.
-                            <span class="badge">1927</span>
+                        <div class="media-body">
+                            <h4 class="media-heading" id="media-heading">Media heading<a class="anchorjs-link" href="#media-heading"><span class="anchorjs-icon"></span></a></h4>
+                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
+                        </div>
+                        <div class="media-right">
+                            <a href="#">
+                                <div class="user-profile">
+                                    <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png" />
+                                </div>
+                            </a>
                         </div>
                     </div>
-
                     <div class="media">
-                        <a href="#" class="pull-left">
-                            <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                            </div>
-                        </a>
-
-                        <div class="media-body" style="font-size:13px">
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                            purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                            fringilla. Donec lacinia congue felis in faucibus.
-                            <span class="badge">1927</span>
+                        <div class="media-body">
+                            <h4 class="media-heading" id="media-heading">Media heading<a class="anchorjs-link" href="#media-heading"><span class="anchorjs-icon"></span></a></h4>
+                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
+                        </div>
+                        <div class="media-right">
+                            <a href="#">
+                                <div class="user-profile">
+                                    <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png" />
+                                </div>
+                            </a>
                         </div>
                     </div>
 
-
-                    <div class="media">
-                        <a href="#" class="pull-left">
-                            <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                            </div>
-                        </a>
-
-                        <div class="media-body" style="font-size:13px">
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                            purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                            fringilla. Donec lacinia congue felis in faucibus.
-                            <span class="badge">1927</span>
-                        </div>
-                    </div>
-
-                    <div class="media">
-                        <a href="#" class="pull-left">
-                            <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                            </div>
-                        </a>
-
-                        <div class="media-body" style="font-size:13px">
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                            purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                            fringilla. Donec lacinia congue felis in faucibus.
-                            <span class="badge">1927</span>
-                        </div>
-                    </div>
 
                     <small><cite title="Source Title">더보기</cite></small>
 
                 </blockquote>
 
                 <hr>
+                <div style="padding-left:15px">
+                <h3>최근 이 공간의 활동 내역 목록 </h3>
+                <hr>
+                </div>
 
-
-                <h3>이 공간의 최근 댓글을 10개 출력합시다. </h3>
                 <blockquote class="pull-right">
-                    <div class="media">
+                    <div class="media" style="padding-left:15px">
                         <a href="#" class="pull-left">
                             <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                                <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png">
                             </div>
                         </a>
 
                         <div class="media-body" style="font-size:13px">
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                            purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                            fringilla. Donec lacinia congue felis in faucibus.
-
+                        <span class="pull-left">
+                        <u><i>01. Spring Boot 스터디 해보기 위키에 Yion 님이 댓글을 등록했습니다.</i></u>
+                        </span>
+                        <br>
+                        : 내용은 뭐냐하면 UI 구성하기가 너무 어려우니까 생각보다 깊게 고민해봐야 할거 같고 이것저것 할게 너무 많아~~~~ 어쩌지~~ 우리...
+                        <br><span clas="pull-right">2015.02.13 14:22:39</span>
                         </div>
                     </div>
-                    <div class="media">
+                    <div class="media" style="padding-left:15px">
                         <a href="#" class="pull-left">
                             <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                                <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png">
                             </div>
                         </a>
 
                         <div class="media-body" style="font-size:13px">
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                            purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                            fringilla. Donec lacinia congue felis in faucibus.
-
+                        <span class="pull-left">
+                        <u><i>01. Spring Boot 스터디 해보기 위키에 Yion 님이 댓글을 등록했습니다.</i></u>
+                        </span>
+                            <br>
+                            : 내용은 뭐냐하면 UI 구성하기가 너무 어려우니까 생각보다 깊게 고민해봐야 할거 같고 이것저것 할게 너무 많아~~~~ 어쩌지~~ 우리...
+                            <br><span clas="pull-right">2015.02.13 14:22:39</span>
                         </div>
                     </div>
-
-                    <div class="media">
+                    <div class="media" style="padding-left:15px">
                         <a href="#" class="pull-left">
                             <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                                <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png">
                             </div>
                         </a>
 
                         <div class="media-body" style="font-size:13px">
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                            purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                            fringilla. Donec lacinia congue felis in faucibus.
-
+                        <span class="pull-left">
+                        <u><i>01. Spring Boot 스터디 해보기 위키에 Yion 님이 댓글을 등록했습니다.</i></u>
+                        </span>
+                            <br>
+                            : 내용은 뭐냐하면 UI 구성하기가 너무 어려우니까 생각보다 깊게 고민해봐야 할거 같고 이것저것 할게 너무 많아~~~~ 어쩌지~~ 우리...
+                            <br><span clas="pull-right">2015.02.13 14:22:39</span>
                         </div>
                     </div>
-
-                    <div class="media">
-                        <a href="#" class="pull-left">
-                            <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                            </div>
-                        </a>
-
-                        <div class="media-body" style="font-size:13px">
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                            purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                            fringilla. Donec lacinia congue felis in faucibus.
-
-                        </div>
-                    </div>
-
-                    <div class="media">
-                        <a href="#" class="pull-left">
-                            <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                            </div>
-                        </a>
-
-                        <div class="media-body" style="font-size:13px">
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                            purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                            fringilla. Donec lacinia congue felis in faucibus.
-
-                        </div>
-                    </div>
-
-
                     <small><cite title="Source Title">더보기</cite></small>
                 </blockquote>
 
@@ -234,3 +195,16 @@ Desc: right 메뉴 화면
         </div><!--/span-->
     </div>
 </div>
+{{/partial}}
+
+
+{{# partial "script-body" }}
+    <script type="text/javascript">
+        // bind the on-change event
+        $(document).ready(function() {
+
+        });
+    </script>
+{{/partial}}
+
+{{> template/base}}
