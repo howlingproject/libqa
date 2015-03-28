@@ -137,20 +137,28 @@
                         console.log('req : ' + req);
                         console.log('req.data.uploadType : ' + req.data.uploadType);
                         if (req.resultCode == 1) {
-                            if (req.data.uploadType === 'image2') {
-                                $("#image-preview").remove();
-                                $("#uploadFilePath").val("");
-                                $("#imagePreviewArea").html("<img src='" + req.data.filePath + "/" + req.data.savedName + "' id=\"uploadPreviewImg\" width=\"200\" class=\"img-thumbnail image-preview\" id=\"image-preview\">");
-                                $("#uploadFilePath").val(req.data.filePath);
-                                $("#uploadFile").val(req.data.savedName);
-                            } else {
-//                                $('[name=realName]').val(req.data.realName);
-//                                $('[name=savedName]').val(req.data.savedName);
-//                                $('[name=filePath]').val(req.data.filePath);
-//                                $('[name=fileSize]').val(req.data.fileSize);
-//                                $('[name=fileType]').val(req.data.fileType);
-                                $('#uploadfileList').append('<div class="fileDiv" style="padding: 5px;"><a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a><a href="#fileDiv" onclick="$(this).parent().remove();"><span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span></a></div>');
-                            }
+//                                $("#image-preview").remove();
+//                                $("#uploadFilePath").val("");
+//                                $("#imagePreviewArea").html("<img src='" + req.data.filePath + "/" + req.data.savedName + "' id=\"uploadPreviewImg\" width=\"200\" class=\"img-thumbnail image-preview\" id=\"image-preview\">");
+//                                $("#uploadFilePath").val(req.data.filePath);
+//                                $("#uploadFile").val(req.data.savedName);
+                                $('[name=realName]').val(req.data.realName);
+                                $('[name=savedName]').val(req.data.savedName);
+                                $('[name=filePath]').val(req.data.filePath);
+                                $('[name=fileSize]').val(req.data.fileSize);
+                                $('[name=fileType]').val(req.data.fileExtendType);
+                                var fileDivTemplat = '<div class="fileDiv" style="padding: 5px;">' +
+                                                        '<input name="realName" type="hidden" value="'+req.data.realName+'">' +
+                                                        '<input name="savedName" type="hidden" value="'+req.data.savedName+'">' +
+                                                        '<input name="filePath" type="hidden" value="'+req.data.filePath+'">' +
+                                                        '<input name="fileSize" type="hidden" value="'+req.data.fileSize+'">' +
+                                                        '<input name="fileType" type="hidden" value="'+req.data.fileExtendType+'">' +
+                                                        '<a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
+                                                        '<a href="#fileDiv" onclick="$(this).parent().remove();">' +
+                                                            '<span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>' +
+                                                        '</a>' +
+                                                     '</div>';
+                                $('#uploadfileList').append(fileDivTemplat);
                         }
                     },
                     error: function (req) {
@@ -208,7 +216,6 @@
                 url : '/qa/save',
                 success : function(data){
                     if(data.resultCode == 1) {
-                        alert(data.comment);
                         location.href = "/qa/" + data.data.qaId;
                     }
                 },

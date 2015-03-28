@@ -21,8 +21,14 @@ public class QaServiceImpl implements QaService {
     @Autowired
     QaContentRepository qaRepository;
 
+//    @Autowired
+//    QaFileRepository qaFileRepository;
+
     @Autowired
     KeywordService keywordService;
+
+//    @Autowired
+//    QaFileService qaFileService;
 
     @Override
     public QaContent saveWithKeyword(QaContent qaContentInstance) {
@@ -33,6 +39,10 @@ public class QaServiceImpl implements QaService {
             qaContentInstance.setInsertUserId(1);
             qaContentInstance.setInsertDate(new Date());
             qaContent = qaRepository.save(qaContentInstance);
+
+//            qaFileService.saveQaFile(qaContentInstance.);
+//            QaFile qaFileInstance = new QaFile();
+//            qaFile = qaFileRepository.save(qaFileInstance);
 
             String [] keywordArrays = qaContentInstance.getKeywords().split(",");
             if (keywordArrays.length > 0) {
