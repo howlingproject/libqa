@@ -144,6 +144,11 @@
                                 $("#uploadFilePath").val(req.data.filePath);
                                 $("#uploadFile").val(req.data.savedName);
                             } else {
+//                                $('[name=realName]').val(req.data.realName);
+//                                $('[name=savedName]').val(req.data.savedName);
+//                                $('[name=filePath]').val(req.data.filePath);
+//                                $('[name=fileSize]').val(req.data.fileSize);
+//                                $('[name=fileType]').val(req.data.fileType);
                                 $('#uploadfileList').append('<div class="fileDiv" style="padding: 5px;"><a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a><a href="#fileDiv" onclick="$(this).parent().remove();"><span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span></a></div>');
                             }
                         }
@@ -216,9 +221,6 @@
         }
     }
 
-//    function addTag(id){
-//        alert(id);
-//    }
 </script>
 {{/partial}}
 
