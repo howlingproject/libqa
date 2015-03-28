@@ -1,6 +1,9 @@
 package com.libqa.web.service;
 
+import com.libqa.web.domain.QaFile;
+import com.libqa.web.repository.QaFileRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,5 +13,13 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class QaFileServiceImpl {
+public class QaFileServiceImpl implements QaFileService {
+
+    @Autowired
+    QaFileRepository qaFileRepository;
+
+    @Override
+    public void saveQaFile(QaFile qaFileInstance) {
+        qaFileRepository.save(qaFileInstance);
+    }
 }

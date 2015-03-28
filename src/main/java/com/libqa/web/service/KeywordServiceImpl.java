@@ -30,6 +30,11 @@ public class KeywordServiceImpl implements KeywordService {
 	@Autowired
 	KeywordListRepository keywordListRepository;
 
+	@Override
+	public List<Keyword> findByQaId(Integer qaId, boolean isDeleted) {
+		return keywordRepository.findAllByQaIdAndIsDeleted(qaId, isDeleted);
+	}
+
 	/**
 	 * 키워드를 저장한 후 통계 데이터를 생성한다.
 	 * 키워드 리스트는 객체 (Space, Wiki, QaContent)의 List 타입으로 넘어온다)
@@ -58,6 +63,7 @@ public class KeywordServiceImpl implements KeywordService {
 		}
 		return result;
 	}
+
 
 	/**
 	 * 키워드를 저장한다.

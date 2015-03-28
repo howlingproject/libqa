@@ -14,8 +14,9 @@ public class QaFile {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer fileId;
 
-    @Column(nullable = false)
-    private Integer qaId;
+    @ManyToOne
+    @JoinColumn(name="qaId", referencedColumnName = "qaId", nullable=false)
+    private QaContent qaContent;
 
     @Column(nullable = false, length = 40)
     private String realName;
@@ -33,7 +34,7 @@ public class QaFile {
     private String fileType;
 
     @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
-    private String isDeleted;
+    private boolean isDeleted;
 
     @Column(nullable = true)
     private Integer userId;

@@ -10,5 +10,5 @@ import com.libqa.web.domain.QaContent;
 public interface QaService {
     QaContent saveWithKeyword(QaContent qaContent);
 
-    QaContent findById(Integer qaId);
+    QaContent findByQaId(Integer qaId, boolean isDeleted);
 }

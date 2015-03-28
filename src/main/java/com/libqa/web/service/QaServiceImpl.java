@@ -2,6 +2,7 @@ package com.libqa.web.service;
 
 import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.web.domain.QaContent;
+import com.libqa.web.domain.QaFile;
 import com.libqa.web.repository.QaContentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,11 @@ public class QaServiceImpl implements QaService {
     @Autowired
     QaContentRepository qaRepository;
 
-//    @Autowired
-//    QaFileRepository qaFileRepository;
-
     @Autowired
     KeywordService keywordService;
 
-//    @Autowired
-//    QaFileService qaFileService;
+    @Autowired
+    QaFileService qaFileService;
 
     @Override
     public QaContent saveWithKeyword(QaContent qaContentInstance) {
@@ -40,11 +38,19 @@ public class QaServiceImpl implements QaService {
             qaContentInstance.setInsertDate(new Date());
             qaContent = qaRepository.save(qaContentInstance);
 
-//            qaFileService.saveQaFile(qaContentInstance.);
-//            QaFile qaFileInstance = new QaFile();
-//            qaFile = qaFileRepository.save(qaFileInstance);
+            for(int i=0; i < qaContentInstance.getRealName().size(); i++){
+                QaFile qaFileInstance = new QaFile();
+                qaFileInstance.setQaContent(qaContentInstance);
+                qaFileInstance.setRealName((String) qaContentInstance.getRealName().get(i));
+                qaFileInstance.setSavedName((String) qaContentInstance.getSavedName().get(i));
+                qaFileInstance.setFilePath((String) qaContentInstance.getFilePath().get(i));
+                qaFileInstance.setFileSize(Integer.parseInt((String) qaContentInstance.getFileSize().get(i)));
+                qaFileInstance.setFileType((String) qaContentInstance.getFileType().get(i));
+                qaFileInstance.setUserId(1);
+                qaFileService.saveQaFile(qaFileInstance);
+            }
 
-            String [] keywordArrays = qaContentInstance.getKeywords().split(",");
+            String [] keywordArrays = (String[]) qaContentInstance.getKeyword().toArray(new String[qaContentInstance.getKeyword().size()]);
             if (keywordArrays.length > 0) {
                 keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.QA, qaContent.getQaId());
             }
@@ -56,8 +62,8 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public QaContent findById(Integer qaId) {
-        return qaRepository.findOne(qaId);
+    public QaContent findByQaId(Integer qaId, boolean isDeleted) {
+        return qaRepository.findOneByQaIdAndIsDeleted(qaId, isDeleted);
     }
 
 }

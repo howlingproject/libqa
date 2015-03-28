@@ -77,6 +77,24 @@ public class QaContent {
     @OneToMany(mappedBy = "qaContent", fetch = FetchType.LAZY)
     private List<QaRecommand> qaRecommands;
 
+    @OneToMany(mappedBy = "qaContent", fetch = FetchType.LAZY)
+    private List<QaFile> qaFiles;
+
     @Transient
-    private String keywords;
+    private List keyword;
+
+    @Transient
+    private List realName;
+
+    @Transient
+    private List savedName;
+
+    @Transient
+    private List filePath;
+
+    @Transient
+    private List fileSize;
+
+    @Transient
+    private List fileType;
 }
