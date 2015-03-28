@@ -16,13 +16,14 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#">관련 키워드</a></li>
                         <li class="pull-left readCnt">
-                            <span class="label label-primary">Spring</span>
-                            <span class="label label-success">JAVA</span>
+                            {{#each keywordList}}
+                            <span class="label label-primary">{{keywordList.keywordName}}</span>
+                            {{/each}}
                         </li>
                         <li class="pull-right">
                             <div class="user-profile-sm">
                                 <span class="nickname">sjune</span>
-                                <img alt="avatar" class="profile-image" src="../images/avatar.png" />
+                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                             </div>
                         </li>
                     </ul>
