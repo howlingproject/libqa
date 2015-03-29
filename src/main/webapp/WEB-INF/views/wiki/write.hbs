@@ -78,7 +78,6 @@
 
 
 {{# partial "script-body" }}
-    <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             DualEditor.setting({
@@ -105,28 +104,58 @@
                     type:'POST',
                     data:data,
                     url:'/wiki/save',
-                    success:function(data,textStatus){
-                        Wiki.saveComplete(data);
+                    success:function(req){
+                        if (req.resultCode == 1) {
+                            $.confirm({
+                                title: '완료',
+                                content: '위키를 저장하였습니다. 위키페이지으로 이동하겠습니까?',
+                                confirmButton: '이동',
+                                confirmButtonClass: 'btn-info',
+                                icon: 'fa fa-question-circle',
+                                animation: 'top',
+                                confirm: function () {
+                                    $(location).attr('href', req.data.wikiId);
+                                }
+                            });
+
+                        }
                     },
-                    error:function(XMLHttpRequest,textStatus,errorThrown){}});
+                    error:function(req){
+                        if (req.status == 500) {
+                            error500(true, '');
+                        } else {
+                            error500(false, req.status);
+                        }
+                    }});
                 return false;
-            },
+            }
+        };
 
-            saveComplete: function () {
-                $('#writeModal').modal('hide');
-                alert("저장을 완료했습니다.");
-            },
-
-            renderList: function() {
-                $.ajax({
-                    url: '/wiki/allList',
-                    failure: function(){ },
-                    success: function(response) {
-                        $('#feedListArea').html(response);
+        function error500(condition, status) {
+            if (condition) {
+                $.alert({
+                    title: '확인',
+                    content: '공간 정보 저장중 에러가 발생했습니다.',
+                    confirmButton: 'OK',
+                    confirmButtonClass: 'btn-primary',
+                    icon: 'fa fa-info',
+                    animation: 'zoom',
+                    confirm: function () {
+                    }
+                });
+            } else {
+                $.alert({
+                    title: '확인',
+                    content: '공간 정보 저장중 에러가 발생했습니다. 에러코드 [' + status + ']',
+                    confirmButton: 'OK',
+                    confirmButtonClass: 'btn-primary',
+                    icon: 'fa fa-info',
+                    animation: 'zoom',
+                    confirm: function () {
                     }
                 });
             }
-        };
+        }
 
         var keywordData = [];
 

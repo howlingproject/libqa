@@ -2,15 +2,8 @@ package com.libqa.web.domain;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
@@ -95,4 +88,7 @@ public class Wiki {
 
     @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)
     private Set<WikiFile> wikiFileList;
+
+    @Transient
+    private String keywords;
 }
