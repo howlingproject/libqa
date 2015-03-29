@@ -49,7 +49,7 @@
                         <li class="divider"></li>
                         <li>
                             <a href="#"><i class="fa fa-fw fa-power-off"></i> Sign Out</a>
-                            <a href="/user/login"><i class="fa fa-fw fa-gear"></i> Sign in</a>
+                            <a href="#" data-toggle="modal" data-target="#loginLayer"><i class="fa fa-fw fa-gear"></i> Sign in</a>
                         </li>
                     </ul>
                 </li>
@@ -58,6 +58,51 @@
         </nav>
     </div>
 </header>
+
+<div class="modal fade" style="padding-top:100px" id="loginLayer" tabindex="-1" role="dialog" aria-labelledby="Sign in" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Sign in</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="loginForm" method="post" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">Username</label>
+                        <div class="col-xs-5">
+                            <input type="text" class="form-control" name="username" placeholder="Email"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">Password</label>
+                        <div class="col-xs-5">
+                            <input type="password" class="form-control" name="password" placeholder="password"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">Remember me</label>
+                        <div class="col-xs-5" style="padding-top:9px" >
+                            <input type="checkbox" value="remember-me">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="border-top:1px solid #e5e5e5">
+                        <div class="col-xs-8 pull-right" style="padding-top:10px">
+                            <button type="submit" class="btn btn-primary">Sign in</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {{/partial}}
 
 {{# partial "footer" }}
@@ -78,8 +123,15 @@
         </div>
     </div>
 </footer>
+{{/partial}}
 
+{{# partial "script-body" }}
+<script type="text/javascript">
+    // bind the on-change event
+    $(document).ready(function () {
 
+    });
+</script>
 {{/partial}}
 
 {{> template/layout}}
