@@ -1,5 +1,6 @@
 package com.libqa.web.domain;
 
+import com.libqa.application.enums.Role;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,10 +21,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
 
-    @Column(length = 80, nullable = false)
+    @Column(length = 80, nullable = false, unique = true)
     private String userEmail;
 
-    @Column(length = 40, nullable = false)
+    @Column(length = 40, nullable = false, unique = true)
     private String userNick;
 
     @Column(length = 100, nullable = false)
@@ -44,18 +45,8 @@ public class User {
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;  // (Y : 탈퇴, N: 활성)
 
-    @Column(length = 255, nullable = true)
-    private String faceBookKey;
-
-    @Column(length = 255, nullable = true)
-    private String googleKey;
-
-    @Column(length = 255, nullable = true)
-    private String tweeterKey;
-
     @Column(length = 255, nullable = false)
     private String userPass;
-
 
     @Column(nullable = false, columnDefinition = "int default 0")
     private Integer visiteCount;
@@ -72,13 +63,18 @@ public class User {
     private Date updateDate;
 
     @Column(nullable = false, columnDefinition = "int default 0")
-    private Integer userPoint;
+    private Integer userTotalPoint;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isCertification;
 
     @Column(length = 255, nullable = false)
     private String certificationKey;
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserKeyword> userKeywords;

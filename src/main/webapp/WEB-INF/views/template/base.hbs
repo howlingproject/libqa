@@ -1,6 +1,7 @@
 {{# partial "header" }}
 <header class="navbar navbar-default" id="header">
     <div class="container">
+
         <div class="navbar-header">
             <button data-target=".bs-navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
                 <span class="sr-only">Toggle navigation</span>
@@ -33,7 +34,25 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right navi-info">
-                <li class="user"><a href="#"><i class="fa fa-user fa-2x"></i></a></li>
+                <li class="dropdown">
+                    <a aria-expanded="true" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-2x"></i></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+                        </li>
+                        <li>
+                            <a href="/user/signup"><i class="fa fa-fw fa-user-plus"></i> Sign Up</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Sign Out</a>
+                            <a href="/user/login"><i class="fa fa-fw fa-gear"></i> Sign in</a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="messenger"><a href="#"><i class="fa fa-weixin fa-2x"></i></a></li>
             </ul>
         </nav>

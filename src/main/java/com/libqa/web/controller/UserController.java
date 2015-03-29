@@ -14,9 +14,18 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 
 
-    @RequestMapping("/login")
+    @RequestMapping("/user/login")
     public ModelAndView fileUpload(Model model) {
+        log.info("/login");
         ModelAndView mav = new ModelAndView("/user/login");
         return mav;
     }
+
+    @RequestMapping("/user/signup")
+    public ModelAndView signUp(Model model) {
+        ModelAndView mav = new ModelAndView("/user/form");
+        return mav;
+    }
+
+
 }
