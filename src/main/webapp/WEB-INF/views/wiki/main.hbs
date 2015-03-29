@@ -5,7 +5,7 @@
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Search">
             </div>
-            <a class="form-control btn btn-primary" data-toggle="modal" href="/wiki/write" data-target="#writeModal">
+            <a class="form-control btn btn-primary" href="/wiki/write">
                 위키생성
             </a>
         </div>
@@ -72,15 +72,6 @@
                 <!--// 최근 활동 -->
             </div>
         </div>
-
-        <!-- 하단 컨텐츠 -->
-        <div class="modal fade" id="writeModal" role="dialog" aria-hidden="true" data-keyboard="false">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                </div>
-            </div>
-        </div>
-
     </div>
 
 
@@ -93,26 +84,6 @@
             Wiki.renderList();
         });
         var Wiki = {
-            save:function(){
-                var data = $("#wikiForm").serialize()
-                data = data.replace("we_wiki_text","contentsMarkup");
-                data += "&contents="+encodeURIComponent($("#wikimaincol").html());
-                jQuery.ajax({
-                    type:'POST',
-                    data:data,
-                    url:'/howling/wiki/save',
-                    success:function(data,textStatus){
-                        Wiki.saveComplete(data);
-                    },
-                    error:function(XMLHttpRequest,textStatus,errorThrown){}});
-                return false;
-            },
-
-            saveComplete: function () {
-                $('#writeModal').modal('hide');
-                alert("저장을 완료했습니다.");
-            },
-
             renderList: function() {
                 $.ajax({
                     url: '/wiki/bestList',
@@ -137,11 +108,6 @@
                 });
             }
         }
-    </script>
-    <script>
-
-
-
     </script>
 {{/partial}}
 

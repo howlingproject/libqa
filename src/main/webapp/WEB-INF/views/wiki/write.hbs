@@ -1,54 +1,81 @@
-<div class="modal-body">
-    <form role="form" id="wikiForm">
-        <div class="form-horizontal">
-            <div class="form-group">
-                <label for="space_title" class="col-sm-2 control-label">공간제목</label>
-                <div class="col-sm-10">
-                    <input type="text"  class="form-control" id="space_title" placeholder="이미 생성된 공간 선택 가능하도록 셀렉트 박스로 (입력은 못함)">
+
+{{#partial "title"}}LibQA~{{/partial}}
+
+{{# partial "content" }}
+<div class="container">
+    <section id="forms">
+
+        <div class="page-header">
+            <h2>위키 생성하기</h2>
+        </div>
+
+        <div class="modal-body well">
+            <form role="form-" id="wikiForm">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="space_title" class="col-sm-1 control-label">공간제목</label>
+                        <div class="col-sm-11">
+                            <input type="text"  class="form-control" id="space_title" placeholder="이미 생성된 공간 선택 가능하도록 셀렉트 박스로 (입력은 못함)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-1 control-label">위키제목</label>
+                        <div class="col-sm-11">
+                            <input type="text"  class="form-control" id="title" name="title" placeholder="">
+                        </div>
+                    </div>
+
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="title" class="col-sm-2 control-label">위키제목</label>
-                <div class="col-sm-10">
-                    <input type="text"  class="form-control" id="title" name="title" placeholder="">
+                <hr style="background-color:#ccc; height: 1px; margin-top:0px; margin-bottom: 10px;">
+                <!-- 에디터 -->
+                <div class="form-group">
+                    <input type="hidden" name="contents" id="contents" />
+                    <input type="hidden" name="contentsMarkup" id="contentsMarkup" />
+                    <div id="editor" class="form-group"></div>
                 </div>
-            </div>
+                <!--// 에디터 -->
 
+                <div class="form-inline" id="tag-info">
+                    <label for="keyword" class="sr-only">키워드</label>
+                    <input type="text" class="form-control" id="interesting" style="width: 50%;" placeholder="키워드를 입력하세요. (최대 5개)">
+                    <button type="button" class="btn btn-primary btn-sm" id="keywordAdd">키워드추가 <i class="glyphicon glyphicon-plus"></i></button>
+                    <ul id="tag-cloud" style="padding-left: 0px; width:100%;"></ul>
+                    <input type="hidden" name="keywords" id="keywords" />
+                </div>
+                <div class="form-group">
+                    <div class="form-inline col-md-pull-10">
+                        <input id="file-attachment" type="file" style="display:none">
+                        <input id="fileAttachmentInput" class="form-control" type="text" style="width: 50%;" placeholder="첨부파일">
+                        <button class="btn btn-info btn-default" type="button" onclick="$('input[id=file-attachment]').click();">파일선택
+                        </button>
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="form-actions text-center">
+            <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+            <button type="button" class="btn btn-primary" id="saveWiki">저장</button>
         </div>
 
-
-        <!-- 에디터 -->
-        <div class="form-group">
-            <div id="editor" class="form-group"></div>
-        </div>
-        <!--// 에디터 -->
-
-        <div class="form-inline" id="tag-info">
-            <label for="keyword" class="sr-only">키워드</label>
-            <input type="text" class="form-control" id="keyword" style="width: 50%;" placeholder="키워드를 입력하세요. (최대 5개)">
-            <button type="button" class="btn btn-primary btn-sm">키워드추가 <i class="glyphicon glyphicon-plus"></i></button>
-            <ul id="tag-cloud" style="padding-left: 0px; width:100%;"></ul>
-        </div>
-        <div class="form-group">
-            <div class="form-inline col-md-pull-10">
-                <input id="file-attachment" type="file" style="display:none">
-                <input id="fileAttachmentInput" class="form-control" type="text" style="width: 50%;" placeholder="공간을 표현할 수 있는 대표 이미지를 등록하세요.">
-                <button class="btn btn-info btn-default" type="button" onclick="$('input[id=file-attachment]').click();">파일선택
-                </button>
-                <p class="help-block"></p>
-            </div>
-        </div>
-    </form>
+    </section>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-    <button type="button" class="btn btn-primary" id="saveWiki">저장</button>
-</div>
+{{/partial}}
 
 
 {{# partial "style" }}
     <link href="/resource/app/js/DualEditor/css/DualEditor.css" rel="stylesheet">
 {{/partial}}
+
+{{#partial "plugin-style"}}
+{{!-- 여기에 .css 파일 경로 --}}
+    <link href="/resource/public/css/bootstrap-tag-cloud/bootstrap-tag-cloud.css" rel="stylesheet">
+{{/partial}}
+{{#partial "script-header"}}
+    <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
+    <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
+{{/partial}}
+
 
 {{# partial "script-body" }}
     <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
@@ -59,7 +86,7 @@
                 ,tarketId : 'editor'
                 //,type : 'mini'
                 ,width : '100%'
-                ,height : '300px'
+                //,height : '300px'
             });
         });
 
@@ -70,9 +97,10 @@
         var Wiki = {
 
             save:function(){
-                var data = $("#wikiForm").serialize()
-                data = data.replace("we_wiki_text","contentsMarkup");
-                data += "&contents="+encodeURIComponent(DualEditor.getMarkupConvertToHtml());
+                $("#keywords").val(keywordData);
+                $("#contents").val(DualEditor.getMarkupConvertToHtml());
+                $("#contentsMarkup").val(DualEditor.getMarkupEditHtml());
+                var data = $("#wikiForm").serialize();
                 jQuery.ajax({
                     type:'POST',
                     data:data,
@@ -98,9 +126,54 @@
                     }
                 });
             }
-        }
+        };
+
+        var keywordData = [];
+
+        /**
+         * 키워드 추가
+         * 키워드가 3건 이상 등록 될 경우 폼을 disabled 한다.
+         * 대소문자 중복 허용하지 않는다.
+         */
+        $('#keywordAdd').click(function () {
+            var keyword = $('#interesting').val();
+
+            if (keywordData.length == 3) {
+                alert('키워드는 최대 3건만 등록할 수 있습니다.');
+                return;
+            }
+
+            keywordData.push(keyword);
+
+            var taskArray = new Array();
+            $("input[name=keywords]").each(function () {
+                taskArray.push(keyword);
+            });
+
+
+            if (keywordData.length > 2) {
+                $("#interesting").attr("readonly", true);
+                $("#keywordAdd").attr("disabled", true);
+            }
+        });
+
+        /**
+         * 키워드 삭제
+         * 키워드가 삭제되면 폼을 enabled 한다.
+         */
+        $('#tag-cloud').on('click', 'li', function (event) {
+            var keyword = $(event.target).text();
+            var index = keywordData.indexOf(keyword);
+
+            if (index > -1) {
+                keywordData.splice(index, 1);
+                $('input[name=keywords]').val(keywordData);
+                $("#interesting").attr("readonly", false);
+                $("#keywordAdd").attr("disabled", false);
+            }
+        });
 
     </script>
 {{/partial}}
 
-{{> template/layout}}
+{{> template/base}}
