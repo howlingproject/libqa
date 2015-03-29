@@ -19,7 +19,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by yion on 2015. 2. 8..
+ * @Author : yion
+ * @Date : 2015.01.23
+ * @Description : 공간 생성 및 조회 controller
  */
 @Slf4j
 @Controller
