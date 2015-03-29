@@ -2,10 +2,8 @@
 
 {{# partial "content" }}
     <!-- contents -->
-
-    <div class="modal fade" id="layerLogin" role="dialog" aria-hidden="false" data-keyboard="false" style="padding-top:100px">
-        <div class="modal-dialog modal-lg">
-
+    <div class="container">
+        <div class="row" style="padding-top: 100px;padding-bottom: 80px">
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
@@ -37,6 +35,22 @@
 
 {{/partial}}
 
+{{# partial "script-body" }}
+    <script>
+        $(document).ready(function() {
+            $.alert({
+                title: '확인',
+                content: '회원 정보 만들어야 함 ',
+                confirmButton: 'OK',
+                confirmButtonClass: 'btn-primary',
+                icon: 'fa fa-info',
+                animation: 'zoom',
+                confirm: function () {
+                }
+            });
+        });
+    </script>
+{{/partial}}
 
 {{> template/base}}
 
