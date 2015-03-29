@@ -1,7 +1,6 @@
 package com.libqa.application.framework;
 
 import com.libqa.application.enums.StatusCodeEnum;
-
 import lombok.Data;
 
 /**
@@ -13,13 +12,16 @@ public class ResponseData<T> {
 
     private int resultCode;
     private String comment;
-    private T data;
+    private Object data;
 
     public ResponseData(int code, String comment, T data) {
         init(code, comment, data);
     }
 
-    public ResponseData() {
+    public ResponseData(int code, String comment, Iterable data) {
+        this.resultCode = code;
+        this.comment = comment;
+        this.data = data;
     }
 
     private void init(int code, String comment, T data) {
@@ -36,7 +38,15 @@ public class ResponseData<T> {
         return new ResponseData<>(StatusCodeEnum.SUCCESS.getCode(), StatusCodeEnum.SUCCESS.getComment(), data);
     }
 
+    public static <T> ResponseData<T> createSuccessResult(Iterable<T> data) {
+        return new ResponseData<>(StatusCodeEnum.SUCCESS.getCode(), StatusCodeEnum.SUCCESS.getComment(), data);
+    }
+
     public static <T> ResponseData<T> createFailResult(T data) {
+        return new ResponseData<>(StatusCodeEnum.FAIL.getCode(), StatusCodeEnum.FAIL.getComment(), data);
+    }
+
+    public static <T> ResponseData<T> createFailResult(Iterable<T> data) {
         return new ResponseData<>(StatusCodeEnum.FAIL.getCode(), StatusCodeEnum.FAIL.getComment(), data);
     }
 

@@ -30,10 +30,10 @@ public class Feed implements Serializable {
     private String feedUrl;
 
     @Column
-    private Integer likeCount;
+    private Integer likeCount = 0;
 
     @Column
-    private Integer claimCount;
+    private Integer claimCount = 0;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isShared;

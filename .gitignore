@@ -22,3 +22,6 @@ target
 *.MF
 bin/
 tmp/
+
+#libqa
+webapp/resource/temp/
