@@ -8,5 +8,7 @@ import com.libqa.web.domain.Wiki;
 public interface WikiService {
     Wiki save(Wiki wiki);
 
+    Wiki saveWithKeyword(Wiki wiki);
+
     Wiki findById(Integer wikiId);
 }

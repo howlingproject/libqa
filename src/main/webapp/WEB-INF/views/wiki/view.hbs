@@ -1,0 +1,385 @@
+{{#partial "title"}}LibQA~{{/partial}}
+
+{{# partial "content" }}
+<div class="container">
+    <div class="col-md" >
+        <div style="padding-bottom: 45px;">
+            <div class="btn-group" data-toggle="buttons" style="float: left">
+                <a href="#" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                <a href="#" class="btn btn-primary"><i class="fa fa-minus"></i></a>
+                <a href="#" class="btn btn-primary"><i class="fa fa-laptop"></i></a>
+                <a href="#" class="btn btn-primary"><i class="fa fa-star-o"></i></a>
+            </div>
+            <div class="btn-group" data-toggle="buttons" style="float: right">
+                <a href="#" class="btn btn-primary">히스토리</a>
+                <a href="#" class="btn btn-primary">편집</a>
+                <a href="#" class="btn btn-primary">삭제</a>
+                <a href="#" class="btn btn-primary">잠금</a>
+                <a href="#" class="btn btn-primary">자식위키생성</a>
+                <a href="#" class="btn btn-primary">공간메인</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-9" role="main" style="padding-bottom: 20px;">
+                {{{wiki.contents}}}
+            </div>
+
+            <div class="col-md-3">
+                <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
+                    <ul class="nav bs-docs-sidenav">
+                        <li class="active">
+                            <a href="#type">Typography</a>
+                            <ul class="nav">
+                                <li class=""><a href="#type-style">스타일</a></li>
+                                <li class=""><a href="#type-headings">제목</a></li>
+                                <li class="">
+                                    <a href="#type-lnline">Inline text elements</a>
+                                    <ul class="nav">
+                                        <li class=""><a href="#type-lnline-bold">Bold</a></li>
+                                        <li class=""><a href="#type-lnline-italics">Italics</a></li>
+                                        <li class=""><a href="#type-lnline-deleted">Deleted text</a></li>
+                                        <li class=""><a href="#type-lnline-underlined">Underlined text</a></li>
+                                    </ul>
+                                </li>
+                                <li class=""><a href="#type-alignment">Alignment classes</a></li>
+                                <li class=""><a href="#type-script">subscript, supscript</a></li>
+                                <li class="">
+                                    <a href="#type-division">Division line</a>
+                                    <ul class="nav">
+                                        <li class=""><a href="#type-division-blockquote">Blockquote</a></li>
+                                    </ul>
+                                </li>
+                                <li class="">
+                                    <a href="#type-lists">Lists</a>
+                                    <ul class="nav">
+                                        <li class=""><a href="#type-lists-unordered">Unordered</a></li>
+                                        <li class=""><a href="#type-lists-ordered">Ordered</a></li>
+                                    </ul>
+                                </li>
+                                <li class=""><a href="#type-talbe">Table</a></li>
+                                <li class=""><a href="#type-link">Link</a></li>
+                                <li class=""><a href="#type-field-panels">Field Panels</a></li>
+                                <li class=""><a href="#type-alert-panels">Alert Panels</a></li>
+                                <li class=""><a href="#type-info-panels">Information Panels</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>작성자</th>
+                            <th>SON.js</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>작성일</td>
+                            <td>2013.08.01 00:00:00</td>
+                        </tr>
+                        <tr>
+                            <td>수정일</td>
+                            <td>2013.08.01 00:00:00</td>
+                        </tr>
+                        <tr>
+                            <td>조회수</td>
+                            <td>312</td>
+                        </tr>
+                        <tr>
+                            <td>공감수</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>글상태</td>
+                            <td>기본</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <a href="#" class="btn btn-primary">추천하기</a>
+                    <a href="#" class="btn btn-primary">인쇄하기</a>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+
+        <div class="col-md">
+            <div style="padding-bottom: 5px">
+                링크목록
+                <ul>
+                    <li>1. 다운로드 - http://son.com</li>
+                    <li>2. 다운로드 - http://son.com</li>
+                </ul>
+            </div>
+            <div style="padding-bottom: 10px">
+                관련키워드
+                <div>
+                    <span class="label label-primary">Spring</span>
+                    <span class="label label-success">JAVA</span>
+                </div>
+            </div>
+            <div style="padding-bottom: 5px">
+                주석
+                <ul>
+                    <li>son.js : 설명~~~</li>
+                    <li>glider.js : 설명~~~</li>
+                </ul>
+            </div>
+            <div style="padding-bottom: 5px">
+                첨부파일
+                <div>
+                    <i class="fa fa-file">압축파일.zip</i>
+                    <i class="fa fa-file">압축파일.zip</i>
+                    <i class="fa fa-file">압축파일.zip</i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md text-center">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    EXPORT <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">HTML</a></li>
+                    <li><a href="#">PDF</a></li>
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="modal" data-target="#askModal">
+                    이 위키에 질문하기
+                </button>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    이 위키 공유하기 <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">페이스북에 공유</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#emailShareModal">이메일에 공유</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="nav-tabs-header">10개의 댓글</div>
+
+            <div class="my-qna-item">
+                <a class="pull-left" href="#">
+                    <div class="user-profile">
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                    </div>
+                </a>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="my-my-qna-item-body">
+                            <div class="media-heading">
+                                2014-04-05 12:12
+                                <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;이온</span>
+                                <strong><span class="pull-right">form facebook</span></strong>
+                            </div>
+                            여기서 질문을 해야 합니다. 질문은 제목만 보여주고요.내용은 일부만 보여줍니다. 첫 줄만?
+                            나머지는 디테일...  내용은 일부만 보여줍니다. 첫 줄만? 나머지는 디테일...  내용은 일부만 보여줍니다. 첫 줄
+                        </div>
+                    </div>
+                    <div class="col-md-1 my-qna-rating pull-right">
+                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 1</button>
+                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">비추천 1</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-qna-item">
+                <a class="pull-left" href="#">
+                    <div class="user-profile">
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                    </div>
+                </a>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="my-my-qna-item-body">
+                            <div class="media-heading">
+                                2014-04-05 12:12
+                                <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;이온</span>
+                                <strong><span class="pull-right">form facebook</span></strong>
+                            </div>
+                            여기서 질문을 해야 합니다. 질문은 제목만 보여주고요.내용은 일부만 보여줍니다. 첫 줄만?
+                            나머지는 디테일...  내용은 일부만 보여줍니다. 첫 줄만? 나머지는 디테일...  내용은 일부만 보여줍니다. 첫 줄
+                        </div>
+                    </div>
+                    <div class="col-md-1 my-qna-rating pull-right">
+                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 1</button>
+                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">비추천 1</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-qna-item">
+                <a class="pull-left" href="#">
+                    <div class="user-profile">
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                    </div>
+                </a>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="my-my-qna-item-body">
+                            <div class="media-heading">
+                                2014-04-05 12:12
+                                <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;이온</span>
+                                <strong><span class="pull-right">form facebook</span></strong>
+                            </div>
+                            여기서 질문을 해야 합니다. 질문은 제목만 보여주고요.내용은 일부만 보여줍니다. 첫 줄만?
+                            나머지는 디테일...  내용은 일부만 보여줍니다. 첫 줄만? 나머지는 디테일...  내용은 일부만 보여줍니다. 첫 줄
+                        </div>
+                    </div>
+                    <div class="col-md-1 my-qna-rating pull-right">
+                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 1</button>
+                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">비추천 1</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br>
+
+        <div class="col-md">
+            <div class="nav-tabs-header">10개의 활동</div>
+
+            <div class="my-qna-item">
+                <a class="pull-left" href="#">
+                    <div class="user-profile">
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                    </div>
+                </a>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="my-my-qna-item-body">
+                            <div class="media-heading">
+                                2014-04-05 12:12
+                                <span class="my-qna-writer">XXX님이 이 위키를 5명의 이메일로 전송했습니다.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-qna-item">
+                <a class="pull-left" href="#">
+                    <div class="user-profile">
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                    </div>
+                </a>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="my-my-qna-item-body">
+                            <div class="media-heading">
+                                2014-04-05 12:12
+                                <span class="my-qna-writer">XXX님이 이 위키를 5명의 facebook 전송했습니다.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-qna-item">
+                <a class="pull-left" href="#">
+                    <div class="user-profile">
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                    </div>
+                </a>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="my-my-qna-item-body">
+                            <div class="media-heading">
+                                2014-04-05 12:12
+                                <span class="my-qna-writer">XXX님이 이 위키를 추천했습니다.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="askModal" tabindex="-1" role="dialog" aria-labelledby="askModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="askModalLabel">위키에 질문하기</h4>
+            </div>
+            <div class="modal-body" id="askEdit">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="emailShareModal" tabindex="-1" role="dialog" aria-labelledby="emailShareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="emailShareModalLabel">이메일로 공유하기</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-inline" role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control">
+                    </div>
+                    <button type="button" class="btn btn-primary">추가</button>
+                </form>
+                <br>
+                <button type="button" class="btn btn-default btn-sm">cafeciel@hanmail.net <span class="glyphicon glyphicon-remove"></span></button>
+                <button type="button" class="btn btn-default btn-sm">cafeciel@hanmail.net <span class="glyphicon glyphicon-remove"></span></button>
+                <button type="button" class="btn btn-default btn-sm">cafeciel@hanmail.net <span class="glyphicon glyphicon-remove"></span></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{/partial}}
+
+
+{{# partial "style" }}
+    <link href="/resource/app/js/DualEditor/css/DualEditor.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/assets/css/docs.min.css" rel="stylesheet">
+{{/partial}}
+
+{{#partial "plugin-style"}}
+{{!-- 여기에 .css 파일 경로 --}}
+    <link href="/resource/public/css/bootstrap-tag-cloud/bootstrap-tag-cloud.css" rel="stylesheet">
+{{/partial}}
+{{#partial "script-header"}}
+    <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
+    <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
+{{/partial}}
+
+
+{{# partial "script-body" }}
+    <script type="text/javascript">
+
+    </script>
+{{/partial}}
+
+{{> template/base}}

@@ -1,6 +1,8 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.StringUtil;
+import com.libqa.web.domain.Space;
 import com.libqa.web.domain.Wiki;
 import com.libqa.web.service.WikiService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,32 +35,38 @@ public class WikiController {
     @RequestMapping("wiki/write")
     public ModelAndView write(Model model){
         ModelAndView mav = new ModelAndView("wiki/write");
+        return mav;
+    }
 
+    @RequestMapping(value = "/wiki/{wikiId}", method = RequestMethod.GET)
+    public ModelAndView spaceDetail(@PathVariable Integer wikiId) {
+        Wiki wiki = wikiService.findById(wikiId);
+
+        log.info("# view : {}", wiki);
+        ModelAndView mav = new ModelAndView("wiki/view");
+
+        mav.addObject("wiki", wiki);
         return mav;
     }
 
     @RequestMapping(value = "wiki/save", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<?> save(@ModelAttribute Wiki wiki){
-
         try{
-
             log.info("####### WIKI SAVE Begin INFO ########");
             log.info("wiki = {}", wiki);
             wiki.setSpaceId(1);
             wiki.setPasswd("1234");
             wiki.setUserNick("하이");
             wiki.setUserId(0);
+            wiki.setInsertDate(new Date());
 
+            Wiki result = wikiService.saveWithKeyword(wiki);
 
-            Wiki result = wikiService.save(wiki);
-
-            Wiki ww = wikiService.findById(result.getWikiId());
             log.info("####### WIKI SAVE After INFO ########");
             log.info("result = {}", result);
 
-            log.info("@@@ ww : {}", ww);
-            return ResponseData.createSuccessResult(wiki);
+            return ResponseData.createSuccessResult(result);
         }catch(Exception e){
             e.printStackTrace();
             log.error(e.toString());
