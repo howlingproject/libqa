@@ -49,7 +49,7 @@ public class User {
     private String userPass;
 
     @Column(nullable = false, columnDefinition = "int default 0")
-    private Integer visiteCount;
+    private int visiteCount;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
@@ -63,7 +63,7 @@ public class User {
     private Date updateDate;
 
     @Column(nullable = false, columnDefinition = "int default 0")
-    private Integer userTotalPoint;
+    private int userTotalPoint;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isCertification;

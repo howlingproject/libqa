@@ -21,27 +21,27 @@ Time: 16:20
 <div class="container">
     <h3 class="page-header">회원 가입 </h3>
     <!-- form start -->
-    <form class="form-horizontal well" role="form" method="post">
+    <form class="form-horizontal well" role="form" method="post" name="registForm" id="registForm">
 
         <div class="form-group">
             <label for="inputEmail3" class="col-sm-2 control-label">이메일</label>
 
             <div class="col-sm-5 col-md-5">
-                <input type="email" class="form-control" id="inputEmail3" placeholder="Email"/>
+                <input type="email" class="form-control" name="userEmail" id="userEmail" placeholder="Email"/>
             </div>
 
             <div class="col-sm-5 col-md-5">
-                <label class="control-label error-label">이메일을 올바르게 입력해주세요.</label>
+                <label class="control-label error-label hide" id="email_text">이메일을 올바르게 입력해주세요.</label>
             </div>
         </div>
         <div class="form-group">
             <label for="nickname" class="col-sm-2 control-label">닉네임</label>
 
             <div class="col-sm-5 col-md-5">
-                <input type="nickname" class="form-control" id="nickname" placeholder="Nickname"/>
+                <input type="nickname" class="form-control" id="userNick" name="userNick" placeholder="Nickname"/>
             </div>
             <div class="col-sm-5 col-md-5">
-                <label class="control-label error-label hide">닉네임을 입력해주세요.</label>
+                <label class="control-label error-label hide" id="nickname_text">닉네임을 입력해주세요.</label>
             </div>
         </div>
         <div class="form-group">
@@ -58,6 +58,7 @@ Time: 16:20
                 <input type="password" class="form-control" id="inputPassword2" placeholder="Password"/>
             </div>
         </div>
+        <!--
         <div class="form-group">
             <label for="homepage" class="col-sm-2 control-label">홈페이지</label>
 
@@ -85,7 +86,7 @@ Time: 16:20
                 <ul id="tag-cloud" style="padding-left: 0px; width:100%;"></ul>
             </div>
         </div>
-
+        -->
         <div class="form-group">
             <div class="col-sm-12 text-center">
                 <button type="button" class="btn btn-info">가입 신청</button>
@@ -97,10 +98,32 @@ Time: 16:20
 </div>
 
 {{/partial}}
-
-
 {{# partial "script-body" }}
+    <script type="text/javascript">
+        // bind the on-change event
+        $(document).ready(function() {
+            $("#userNick").focusout(function() {
+                console.log("usernick focus")
+                userEmail = $("#userEmail").val();
+                if (!checkValidEmail(userEmail)) {
+                    $("#email_text").css("visibility", "visible");
+                    return;
+                }
+            });
+        });
 
+        function checkValidEmail(email) {
+            if (email.length < 4) {
+                return false;
+            }
+            var regExp = /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+            if (!regExp.test(email)) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    </script>
 {{/partial}}
 
 {{> template/base}}
