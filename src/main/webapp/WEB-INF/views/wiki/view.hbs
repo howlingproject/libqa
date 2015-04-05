@@ -80,11 +80,11 @@
                         <tbody>
                         <tr>
                             <td>작성일</td>
-                            <td>2013.08.01 00:00:00</td>
+                            <td>{{formatDate wiki.insertDate "yyyy.mm.dd HH:MM:SS"}}</td>
                         </tr>
                         <tr>
                             <td>수정일</td>
-                            <td>2013.08.01 00:00:00</td>
+                            <td>{{formatDate wiki.updateDate "yyyy.mm.dd HH:MM:SS"}}</td>
                         </tr>
                         <tr>
                             <td>조회수</td>
@@ -104,10 +104,6 @@
                     <a href="#" class="btn btn-primary">인쇄하기</a>
                 </div>
             </div>
-
-
-
-
         </div>
 
 
@@ -373,10 +369,11 @@
 {{#partial "script-header"}}
     <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
     <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
+    <script src="/resource/app/js/Helpers-lib/swag.js"></script>
 {{/partial}}
 
 
-{{# partial "script-page" }}
+{{#partial "script-page" }}
     <script type="text/javascript">
 
     </script>
