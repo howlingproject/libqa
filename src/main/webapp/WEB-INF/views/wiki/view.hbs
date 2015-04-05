@@ -74,7 +74,7 @@
                         <thead>
                         <tr>
                             <th>작성자</th>
-                            <th>SON.js</th>
+                            <th>{{wiki.userNick}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -88,11 +88,11 @@
                         </tr>
                         <tr>
                             <td>조회수</td>
-                            <td>312</td>
+                            <td>{{wiki.viewCount}}</td>
                         </tr>
                         <tr>
                             <td>공감수</td>
-                            <td>1</td>
+                            <td>{{wiki.likeCount}}</td>
                         </tr>
                         <tr>
                             <td>글상태</td>
@@ -376,7 +376,7 @@
 {{/partial}}
 
 
-{{# partial "script-body" }}
+{{# partial "script-page" }}
     <script type="text/javascript">
 
     </script>
