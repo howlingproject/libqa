@@ -6,4 +6,4 @@ DualEditor.markup.LAYOUT = function(contents){
     pattern.compile(/^\[layout\](.*?)\[layout\]\n\[layout\](.*?)\[layout\]/igm);
     contents = contents.replace(pattern, "<div class=\"row\"><div class=\"col-md-6\">$1</div><div class=\"col-md-6\">$2</div></div>");
     return contents;
-}
+};

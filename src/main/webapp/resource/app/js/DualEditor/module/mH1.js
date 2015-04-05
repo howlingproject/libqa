@@ -4,4 +4,4 @@ DualEditor.markup.H1 = function(contents){
 	contents = contents.replace(/^### ([^\s](.*))/igm, "<h3>$1</h3>");
 	
 	return contents;
-}
+};

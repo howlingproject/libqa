@@ -198,7 +198,7 @@ To change this template use File | Settings | File Templates.
 {{/partial}}
 
 
-{{# partial "script-body" }}
+{{# partial "script-page" }}
 <script type="text/javascript">
     // bind the on-change event
     $(document).ready(function() {
@@ -232,14 +232,14 @@ To change this template use File | Settings | File Templates.
                 icon: 'fa fa-info',
                 animation: 'zoom',
                 confirm: function () {
-                    return;
+
                 }
             });
         }
 
         keywordData.push(keyword);
 
-        var taskArray = new Array();
+        var taskArray = [];
         $("input[name=keywords]").each(function () {
             taskArray.push(keyword);
         });
@@ -411,8 +411,7 @@ To change this template use File | Settings | File Templates.
                 }
             });
         }
-    }; // function uploadFile
-
+    } // function uploadFile
     /**
      * Form value 검증
      */

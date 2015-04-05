@@ -1,4 +1,4 @@
-package com.libqa.application.Helper;
+package com.libqa.application.helper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by songanji on 2015. 4. 5..
  */
-public class HowlingHelper {
+public class HandlebarsHelper {
 
     public String formatDate(Date date, String pattern) {
         if (date == null) {
@@ -16,4 +16,12 @@ public class HowlingHelper {
         return sdf.format(date);
     }
 
+    public String nullToNumber(String num, Options options) {
+        if( num == null ){
+            return "0";
+        }
+        return num;
+    }
+
 }
+
