@@ -1,7 +1,5 @@
 package com.libqa.application.Helper;
 
-import com.github.jknack.handlebars.Options;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -11,7 +9,7 @@ import java.util.Date;
 public class HowlingHelper {
 
     public String formatDate(Date date, String pattern) {
-        if( date == null ){
+        if (date == null) {
             return "";
         }
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);

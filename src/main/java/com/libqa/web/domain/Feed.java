@@ -72,7 +72,8 @@ public class Feed implements Serializable {
     @Column
     private Integer updateUserId;
 
-    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "feedId", referencedColumnName = "feedId")
     private List<FeedReply> feedReplies;
 
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
