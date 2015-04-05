@@ -29,35 +29,38 @@ public class QaServiceImpl implements QaService {
     QaFileService qaFileService;
 
     @Override
-    public QaContent saveWithKeyword(QaContent qaContentInstance) {
+    public QaContent saveWithKeyword(QaContent qaContentInstance, QaFile qaFile) {
         QaContent qaContent;
         try {
-            qaContentInstance.setUserId(1);
-            qaContentInstance.setUserNick("용퓌");
-            qaContentInstance.setInsertUserId(1);
-            qaContentInstance.setInsertDate(new Date());
-            qaContent = qaRepository.save(qaContentInstance);
-
-            for(int i=0; i < qaContentInstance.getRealName().size(); i++){
-                QaFile qaFileInstance = new QaFile();
-                qaFileInstance.setQaContent(qaContentInstance);
-                qaFileInstance.setRealName((String) qaContentInstance.getRealName().get(i));
-                qaFileInstance.setSavedName((String) qaContentInstance.getSavedName().get(i));
-                qaFileInstance.setFilePath((String) qaContentInstance.getFilePath().get(i));
-                qaFileInstance.setFileSize(Integer.parseInt((String) qaContentInstance.getFileSize().get(i)));
-                qaFileInstance.setFileType((String) qaContentInstance.getFileType().get(i));
-                qaFileInstance.setUserId(1);
-                qaFileService.saveQaFile(qaFileInstance);
-            }
-
-            String [] keywordArrays = (String[]) qaContentInstance.getKeyword().toArray(new String[qaContentInstance.getKeyword().size()]);
-            if (keywordArrays.length > 0) {
-                keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.QA, qaContent.getQaId());
-            }
+            qaContent = qaContentSave(qaContentInstance);
+            saveQaFileAndFileMove(qaContentInstance);
+            saveKeywordAndList(qaContentInstance, qaContent);
         }catch(Exception e){
             log.info(e.toString());
             throw new RuntimeException("제발제발!!!!!");
         }
+        return qaContent;
+    }
+
+    public void saveKeywordAndList(QaContent qaContentInstance, QaContent qaContent) {
+        if (qaContentInstance.getKeyword() != null) {
+            int keywordListSize = qaContentInstance.getKeyword().size();
+            String [] keywordArrays = (String[]) qaContentInstance.getKeyword().toArray(new String[keywordListSize]);
+            keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.QA, qaContent.getQaId());
+        }
+    }
+
+    public boolean saveQaFileAndFileMove(QaContent qaContentInstance) {
+        return qaFileService.saveQaFileAndFileMove(qaContentInstance);
+    }
+
+    public QaContent qaContentSave(QaContent qaContentInstance) {
+        QaContent qaContent;
+        qaContentInstance.setUserId(1);
+        qaContentInstance.setUserNick("용퓌");
+        qaContentInstance.setInsertUserId(1);
+        qaContentInstance.setInsertDate(new Date());
+        qaContent = qaRepository.save(qaContentInstance);
         return qaContent;
     }
 
