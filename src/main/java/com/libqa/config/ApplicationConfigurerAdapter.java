@@ -1,7 +1,7 @@
 package com.libqa.config;
 
 import com.github.jknack.handlebars.springmvc.HandlebarsViewResolver;
-import com.libqa.application.Helper.HowlingHelper;
+import com.libqa.application.helper.HandlebarsHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
 
 import javax.sql.DataSource;
-import java.io.File;
-import java.net.URI;
 
 @Configuration
 @EnableWebMvc
@@ -31,7 +29,7 @@ public class ApplicationConfigurerAdapter extends WebMvcConfigurerAdapter {
         viewResolver.setPrefix("/WEB-INF/views/");
         viewResolver.setSuffix(".hbs");
         viewResolver.setCache(viewResolverCached);
-        viewResolver.registerHelpers(new HowlingHelper());
+        viewResolver.registerHelpers(new HandlebarsHelper());
         return viewResolver;
     }
 
