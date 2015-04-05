@@ -27,7 +27,7 @@ public class FeedController {
     @Autowired
     private FeedReplyService feedReplyService;
 
-    @RequestMapping(value = "main", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView main(ModelAndView mav) {
         mav.setViewName("feed/main");
         return mav;

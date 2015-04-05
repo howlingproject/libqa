@@ -1,5 +1,7 @@
 package com.libqa.application.helper;
 
+import com.github.jknack.handlebars.Options;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,10 +19,14 @@ public class HandlebarsHelper {
     }
 
     public String nullToNumber(String num, Options options) {
-        if( num == null ){
+        if (num == null) {
             return "0";
         }
         return num;
+    }
+
+    public String nl2br(String str, Options options) {
+        return null;
     }
 
 }
