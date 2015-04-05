@@ -20,7 +20,7 @@ DualEditor.markup.TABLE = function(contents){
                 idx++;
             }
             arrayContents[i] = arrayContents[i].replace("||","\n</td>\n<td>\n");
-            arrayContents[i] = "<thead>" + arrayContents[i] + "</thead>"
+            arrayContents[i] = "<thead>" + arrayContents[i] + "</thead>";
             if( !flag ){
                 flag = true;
                 arrayContents[i] = "<table class=\"table table-bordered\">\n" + arrayContents[i];
@@ -39,7 +39,7 @@ DualEditor.markup.TABLE = function(contents){
                 idx++;
             }
             arrayContents[i] = arrayContents[i].replace("|","\n</td>\n<td>\n");
-            arrayContents[i] = "<tbody>" + arrayContents[i] + "</tbody>"
+            arrayContents[i] = "<tbody>" + arrayContents[i] + "</tbody>";
             if( !flag ){
                 flag = true;
                 arrayContents[i] = "<table class=\"table table-bordered\">\n" + arrayContents[i];
@@ -52,4 +52,4 @@ DualEditor.markup.TABLE = function(contents){
 
     }
     return arrayContents.join("<br>");
-}
+};

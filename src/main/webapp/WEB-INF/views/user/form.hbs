@@ -103,11 +103,11 @@ Time: 16:20
         // bind the on-change event
         $(document).ready(function() {
             $("#userNick").focusout(function() {
-                console.log("usernick focus")
+                console.log("usernick focus");
                 userEmail = $("#userEmail").val();
                 if (!checkValidEmail(userEmail)) {
                     $("#email_text").css("visibility", "visible");
-                    return;
+
                 }
             });
         });
