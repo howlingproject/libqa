@@ -1,6 +1,7 @@
 package com.libqa.config;
 
 import com.github.jknack.handlebars.springmvc.HandlebarsViewResolver;
+import com.libqa.application.helper.HandlebarsHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -22,12 +23,13 @@ public class ApplicationConfigurerAdapter extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public HandlebarsViewResolver viewResolver() {
+    public HandlebarsViewResolver viewResolver() throws Exception {
         HandlebarsViewResolver viewResolver = new HandlebarsViewResolver();
         viewResolver.setOrder(1);
         viewResolver.setPrefix("/WEB-INF/views/");
         viewResolver.setSuffix(".hbs");
         viewResolver.setCache(viewResolverCached);
+        viewResolver.registerHelpers(new HandlebarsHelper());
         return viewResolver;
     }
 

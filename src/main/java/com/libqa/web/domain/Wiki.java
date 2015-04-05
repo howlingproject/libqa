@@ -54,10 +54,10 @@ public class Wiki {
     private Integer userId;
 
     @Column
-    private Integer viewCount;
+    private Integer viewCount = 0;
 
     @Column
-    private Integer likeCount;
+    private Integer likeCount = 0;
 
     @Column
     private Integer reportCount;

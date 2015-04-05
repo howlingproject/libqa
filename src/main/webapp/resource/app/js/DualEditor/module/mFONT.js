@@ -16,12 +16,12 @@ DualEditor.markup.FONT = function(contents){
 
 	contents = contents.replace(rex, "<span style=\"font-family:'"+font+"','"+fontType+"'\">$2\r\n</span>");
 	return contents;
-}
+};
 
 DualEditor.markup.FONTSIZE = function(contents){
 	contents = contents.replace(/\[size\|(.*?)\]([\w\W]+?)\[size\]/igm, "<span style=\"font-size: $1px;\">$2\r\n</span>");
 	return contents;
-}
+};
 
 DualEditor.markup.FONTSTYLE = function(contents){
 	var rex = /(h1\.(\s{0,}))(.*)?/igm;
@@ -40,6 +40,6 @@ DualEditor.markup.FONTSTYLE = function(contents){
 	}
 	
 	return contents;
-}
+};
 
 

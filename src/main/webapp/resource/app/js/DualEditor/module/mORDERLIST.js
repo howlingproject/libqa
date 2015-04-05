@@ -6,8 +6,8 @@ DualEditor.markup.ORDERLIST = function(contents){
     editText = getOrderListReplaceAll(reg, reg2, "ol", editText);
     editText = getOrderListReplaceAll(reg2, reg, "ol", editText);
 
-    return editText;;
-}
+    return editText;
+};
 DualEditor.markup.UNORDERLIST = function(contents){
     var editText = contents;
 
@@ -17,7 +17,7 @@ DualEditor.markup.UNORDERLIST = function(contents){
     editText = getOrderListReplaceAll(reg2, reg, "ul", editText);
 
     return editText;
-}
+};
 
 function getOrderListReplaceAll( reg, reg2, tag, editText ){
     var arrayContents = editText.split("<br>");

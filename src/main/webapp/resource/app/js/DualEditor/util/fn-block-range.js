@@ -68,7 +68,7 @@
 	                }
 	            }
 	            targetText = textEditor.value.substring(start, end);
-	            textLength : targetText.length;
+	            targetText.length;
 	        }
 		} else {
 			len =  textEditor.value.length;
@@ -105,7 +105,7 @@
             textEditor.focus();
             var sel = document.selection.createRange();
             sel.text = textValue;
-            return;
+
         } else if (textEditor.selectionStart || textEditor.selectionStart == '0') { // FF, CROME
             var startPos = textEditor.selectionStart;
             var endPos = textEditor.selectionEnd;

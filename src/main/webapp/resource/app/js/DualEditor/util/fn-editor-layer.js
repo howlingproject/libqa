@@ -67,7 +67,7 @@ var jisung;
 
             table.find(".dualEditor-wiki-btn").on("click", function () {
                 $('#tableModal').modal('hide');
-            })
+            });
 
             //테이블적용
             table.find('#ok').on("click",function(){
@@ -138,7 +138,7 @@ var jisung;
 
             link.find(".dualEditor-wiki-btn").on("click", function () {
                 $('#urlModal').modal('hide');
-            })
+            });
 
         	//여기서부터 링크
         	link.find('#ok').on("click",function(){
@@ -168,7 +168,7 @@ var jisung;
 
             img.find(".dualEditor-wiki-btn").on("click", function () {
                 $('#imgModal').modal('hide');
-            })
+            });
 
         	//여기서부터 링크
         	img.find('#ok').on("click",function(){
