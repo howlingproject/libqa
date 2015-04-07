@@ -71,7 +71,7 @@ public class QaContent {
     @Column
     private Integer updateUserId;
 
-    @OneToMany(mappedBy = "qaContent", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "qaContent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<QaReply> qaReplys;
 
     @OneToMany(mappedBy = "qaContent", fetch = FetchType.LAZY)
