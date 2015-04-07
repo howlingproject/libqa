@@ -3,6 +3,7 @@ package com.libqa.web.controller;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
+import com.libqa.web.domain.QaReply;
 import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.QaService;
 import lombok.extern.slf4j.Slf4j;
@@ -48,10 +49,13 @@ public class QaController {
         boolean isDeleted = false;
 
         QaContent qaContent =  qaService.findByQaId(qaId, isDeleted);
+        List<QaReply> qaReply = qaContent.getQaReplys();
         List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
 
+        log.info("### qaReply : ", qaReply);
         ModelAndView mav = new ModelAndView("qa/view");
         mav.addObject("qaContent", qaContent);
+        mav.addObject("qaReply", qaReply);
         mav.addObject("keyword", keywordList);
         return mav;
     }

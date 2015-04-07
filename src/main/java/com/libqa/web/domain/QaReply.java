@@ -10,14 +10,17 @@ import java.util.List;
 /**
  * Created by yong on 15. 2. 1..
  */
-@Entity
 @Data
+@Entity
+@Table(name = "qa_reply")
 @EqualsAndHashCode
 public class QaReply {
+
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer replyId;
+
 
     @ManyToOne
     @JoinColumn(name="qaId", referencedColumnName="qaId", nullable=false)
@@ -29,16 +32,16 @@ public class QaReply {
     @Column(nullable = false, columnDefinition = "int default 0")
     private Integer orderIdx;
 
-    @Column(nullable = false,columnDefinition = "int default 0")
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer depthIdx;
 
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false, columnDefinition="Text")
+    @Column(nullable = false, columnDefinition = "Text")
     private String contents;
 
-    @Column(nullable = false, columnDefinition="Text")
+    @Column(nullable = false, columnDefinition = "Text")
     private String contentsMarkup;
 
     @Column(nullable = false)
