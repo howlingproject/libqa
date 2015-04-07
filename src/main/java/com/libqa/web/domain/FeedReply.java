@@ -43,8 +43,6 @@ public class FeedReply {
     @Column
     private Integer updateUserId;
 
-    @ManyToOne
-    @JoinColumn(name = "feedId", referencedColumnName = "feedId", nullable = false)
-    private Feed feed;
+    private Long feedId;
 }
 

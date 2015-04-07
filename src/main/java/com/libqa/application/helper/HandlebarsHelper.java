@@ -11,7 +11,7 @@ import java.util.Date;
 public class HandlebarsHelper {
 
     public String formatDate(Date date, String pattern) {
-        if( date == null ){
+        if (date == null) {
             return "";
         }
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
@@ -19,10 +19,14 @@ public class HandlebarsHelper {
     }
 
     public String nullToNumber(String num, Options options) {
-        if( num == null ){
+        if (num == null) {
             return "0";
         }
         return num;
+    }
+
+    public String nl2br(String str, Options options) {
+        return null;
     }
 
 }
