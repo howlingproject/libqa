@@ -1,5 +1,5 @@
 {{# partial "title" }}Feed{{/partial}}
-    
+
 {{# partial "content" }}
 <div class="container">
     <div class="col-md-12 col-xs-12">
@@ -415,20 +415,21 @@
 <!-- popover-config end -->
 {{/partial}}
 
-{{# partial "script-body" }}
-{{embedded "feed/feedList"}}
+{{# partial "script-page" }}
+{{embedded "feed/list"}}
     <script type="text/javascript">
-    $(function(){
-//        $('#right-panel-link').panelslider({side: 'right', clickClose: true, duration: 200 });
-
         var Feed = {
             init : function() {
                 this.bindSave();
                 this.searchList();
             },
             searchList : function() {
-                $.get("/feed/list", function (response, status, xhr) {
-                    var source = $('#feed-feedList-hbs').html();
+                $.get("/feed/list", function (response) {
+                    if(response.resultCode != 1) {
+                        alert(response.comment);
+                        return;
+                    }
+                    var source = $('#feed-list-hbs').html();
                     var template = Handlebars.compile(source);
 
                     var html = template(response);
@@ -438,8 +439,17 @@
             bindSave : function() {
                 var that = this;
                 $('#feedSave').click(function(){
+                    if(!that.checkValidate()) {
+                        return false;
+                    }
+
                     var data = $('#feedForm').serialize();
-                    $.post('/feed/save', data).done(function(data){
+                    $.post('/feed/save', data).done(function(response){
+                        if(response.resultCode != 1) {
+                            alert(response.comment);
+                            return;
+                        }
+                        
                         that.searchList();
                         that.clearForm();
                     }).fail(function(){
@@ -449,10 +459,22 @@
             },
             clearForm: function() {
                 $('#feedForm').find('textarea').val('');
+            },
+            checkValidate: function() {
+                var $frm = $('#feedForm');
+                if (!$frm.find('textarea[name=feedContent]').val().trim().length) {
+                    alert('feed를 입력해주세요!');
+                    return false;
+                }
+                return true;
             }
         };
-        
+
         Feed.init();
+        
+
+    $(function(){
+//        $('#right-panel-link').panelslider({side: 'right', clickClose: true, duration: 200 });
     });
     </script>
     <script src="/resource/public/js/jquery/plugin/jquery-panelslider/jquery.panelslider.min.js"></script>

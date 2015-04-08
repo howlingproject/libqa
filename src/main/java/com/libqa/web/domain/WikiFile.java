@@ -18,7 +18,7 @@ public class WikiFile{
     private Integer fileId;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName="wikiId",  nullable = false)
+    @JoinColumn(name="wikiId", referencedColumnName="wikiId",  nullable = false)
     private Wiki wiki;
 
     @Temporal(TemporalType.DATE)
@@ -48,6 +48,4 @@ public class WikiFile{
 
     @Column(nullable = false)
     private Integer userId;
-
-
 }

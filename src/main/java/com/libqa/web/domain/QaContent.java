@@ -2,6 +2,7 @@ package com.libqa.web.domain;
 
 import com.libqa.application.enums.ContentsTypeEnum;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,8 +11,9 @@ import java.util.List;
 /**
  * Created by yong on 15. 2. 1..
  */
-@Entity
 @Data
+@Entity
+@EqualsAndHashCode
 public class QaContent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -5,6 +5,7 @@ import com.libqa.application.enums.SpaceViewEnum;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.Space;
+import com.libqa.web.domain.SpaceAccessUser;
 import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.SpaceService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +55,14 @@ public class SpaceController {
 		log.info("## /main");
 		boolean isDeleted = false;    // 삭제 하지 않은 것
 		List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
+
+		List<SpaceAccessUser> spaceAccessUserList = new ArrayList<>();
+		for (Space space : spaceList) {
+			List<SpaceAccessUser> accessUser = space.getSpaceAccessUsers();
+			spaceAccessUserList.addAll(accessUser);
+		}
 		log.info("# spaceList.size = {}", spaceList.size());
+		log.info("# spaceAccessUserList.size = {}", spaceAccessUserList.size());
 
 		ModelAndView mav = new ModelAndView("/space/main");
 		mav.addObject("spaceList", spaceList);
