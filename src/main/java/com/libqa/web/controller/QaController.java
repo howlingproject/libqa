@@ -4,7 +4,6 @@ import com.libqa.application.framework.ResponseData;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
-import com.libqa.web.domain.QaReply;
 import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.QaService;
 import lombok.extern.slf4j.Slf4j;
@@ -51,10 +50,8 @@ public class QaController {
 
         QaContent qaContent =  qaService.findByQaId(qaId, isDeleted);
         List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
-        List<QaReply> replys = qaContent.getQaReplys();
         ModelAndView mav = new ModelAndView("qa/view");
         mav.addObject("qaContent", qaContent);
-        mav.addObject("replys", replys);
         mav.addObject("keywordList", keywordList);
         return mav;
     }

@@ -36,7 +36,9 @@
                     <div class="row">
                         <div class="col-md-8">
                             <span class="qna-alert-title">{{qaContent.title}}</span>
-                            <!--<span class="badge">{{qaContent.replys}}</span>-->
+                            {{#each qaContent.qaFiles}}
+                                <span class="badge">{{realName}}</span>
+                            {{/each}}
                         </div>
                         <div class="col-md-4 text-right">
                             <span class="qna-alert-title">{{qaContent.insertDate}}</span>
@@ -46,7 +48,7 @@
                 </div>
                 <div>
                     <p>
-                        {{{qaContent.contentsMarkup}}}
+                        {{{qaContent.contents}}}
                     </p>
                 </div>
                 <!--// 본문 제목, 내용 -->
