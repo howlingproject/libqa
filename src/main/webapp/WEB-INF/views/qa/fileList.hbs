@@ -1,0 +1,13 @@
+{{#each data}}
+    <div class="fileDiv" style="padding: 5px;"> 
+        <input name="realName" type="hidden" value="{{realName}}"> 
+        <input name="savedName" type="hidden" value="{{savedName}}"> 
+        <input name="filePath" type="hidden" value="{{filePath}}">
+        <input name="fileSize" type="hidden" value="{{fileSize}}">
+        <input name="fileType" type="hidden" value="{{fileExtendType}}">
+        <a href="{{filePath}}/{{savedName}}">{{realName}}</a>
+        <a href="#fileDiv" onclick="$(this).parent().remove();"> 
+            <span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span> 
+        </a>
+    </div>
+{{/each}}
