@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by songanji on 2015. 2. 8..
@@ -87,7 +87,10 @@ public class Wiki {
     private Date updateDate;
 
     @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)
-    private Set<WikiFile> wikiFileList;
+    private List<WikiFile> wikiFiles;
+
+    @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)
+    private List<WikiSnapShot> wikiSnapShots;
 
     @Transient
     private String keywords;

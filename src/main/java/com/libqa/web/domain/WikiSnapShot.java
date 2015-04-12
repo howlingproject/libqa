@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Created by songanji on 2015. 2. 8..
@@ -19,11 +18,12 @@ public class WikiSnapShot{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer wikiBackId;
 
-    @Column(nullable = false)
-    private Integer spaceId;
+    @ManyToOne
+    @JoinColumn(name="wikiId", referencedColumnName = "wikiId", nullable=false)
+    private Wiki wiki;
 
     @Column(nullable = false)
-    private Integer wikiId;
+    private Integer spaceId;
 
     @Column(nullable = false)
     private Integer parentsId;
@@ -87,9 +87,6 @@ public class WikiSnapShot{
 
     @Temporal(TemporalType.DATE)
     private Date updateDate;
-
-    @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)
-    private Set<WikiFile> wikiFileList;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)

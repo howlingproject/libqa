@@ -1,6 +1,6 @@
 package com.libqa.web.service;
 
-import com.libqa.web.domain.QaFile;
+import com.libqa.web.domain.QaContent;
 
 /**
  * Created by yong on 2015-03-28.
@@ -8,5 +8,5 @@ import com.libqa.web.domain.QaFile;
  * @author yong
  */
 public interface QaFileService {
-    void saveQaFile(QaFile qaFileInstance);
+    boolean saveQaFileAndFileMove(QaContent qaContent);
 }
