@@ -5,6 +5,6 @@ package com.libqa.application.enums;
  * @Date : 2015. 3. 29.
  * @Description :
  */
-public enum Role {
+public enum RoleEnum {
     GUEST, USER, MANAGER, ADMIN
 }

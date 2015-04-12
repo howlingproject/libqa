@@ -25,6 +25,7 @@ Time: 16:20
 
 
     <form class="form-horizontal well" style="background-color:#ffffff" role="form" method="post" name="registForm" id="registForm">
+        <input type="hidden" name="loginType" id="loginType"/>
         <div class="omb_login">
             <h3 class="omb_authTitle"><a href="#">Sign up with</a></h3>
             <div class="row omb_row-sm-offset-3 omb_socialButtons">
@@ -57,27 +58,26 @@ Time: 16:20
 
             <div class="row omb_row-sm-offset-3">
                 <div class="col-xs-12 col-sm-6">
-                    <form class="omb_loginForm" action="" autocomplete="off" method="POST">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user" style="width:14px"></i></span>
-                            <input type="text" class="form-control" name="username" placeholder="Email address">
-                        </div>
-                        <span class="help-block"></span>
 
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
-                            <input type="text" class="form-control" name="username" placeholder="User Nickname">
-                        </div>
-                        <span class="help-block"></span>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user" style="width:14px"></i></span>
+                        <input type="text" class="form-control" name="userEmail" id="userEmail" placeholder="Email address">
+                    </div>
+                    <span class="help-block"></span>
 
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-lock" style="width:14px"></i></span>
-                            <input  type="password" class="form-control" name="password" placeholder="Password">
-                        </div>
-                        <span class="help-block">Password error</span>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
+                        <input type="text" class="form-control" name="userNick" id="userNick" placeholder="User Nickname">
+                    </div>
+                    <span class="help-block"></span>
 
-                        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
-                    </form>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock" style="width:14px"></i></span>
+                        <input  type="password" class="form-control" name="userPass" id="userPass" placeholder="Password">
+                    </div>
+                    <span class="help-block">Password error - 중복검사 안내 문구 출력 </span>
+
+                    <button class="btn btn-lg btn-primary btn-block" type="button" id="signUser">Sign up</button>
                 </div>
             </div>
             <div class="row omb_row-sm-offset-3">
@@ -99,19 +99,128 @@ Time: 16:20
 </div>
 
 {{/partial}}
-{{# partial "script-body" }}
+{{# partial "script-page" }}
     <script type="text/javascript">
         // bind the on-change event
         $(document).ready(function() {
-            $("#userNick").focusout(function() {
-                console.log("usernick focus");
+            $("#signUser").click(function() {
                 userEmail = $("#userEmail").val();
+                userNick = $("#userNick").val();
+                userPass = $("#userPass").val();
                 if (!checkValidEmail(userEmail)) {
-                    $("#email_text").css("visibility", "visible");
-
+                    alertEmail();
+                    return false;
                 }
+
+                if (!checkValidName(userNick)) {
+                    alertName();
+                    return false;
+                }
+
+                if (!checkLength(userPass, 4)) {
+                    alertPass();
+                    return false;
+                }
+
+                createUser();
             });
         });
+
+        function createUser() {
+            var data = $("#registForm").serialize();
+            $.confirm({
+                title: '가입확인',
+                content: 'Login id : ' + userEmail + " <BR>Password : " + userPass +"<BR>현재 정보로 가입하시겠습니까?",
+                confirmButton: '가입',
+                cancelButton: '취소',
+                confirmButtonClass: 'btn-info',
+                icon: 'fa fa-question-circle',
+                animation: 'top',
+                confirm: function () {
+                    $.ajax({
+                        type: "post",
+                        dataType: "json",
+                        data: data,
+                        url: "/user/createUser",
+                        cache: false,
+                        success: function (req) {
+                            if (req.resultCode == 1) {
+                                $.confirm({
+                                    title: '완료',
+                                    content: '회원가입 완료!' + '<BR>회원님의 메일 주소로 인증 메일이 발송되었습니다. 메일을 확인하세요.' ,
+                                    confirmButton: '확인',
+                                    cancelButton: '취소',
+                                    confirmButtonClass: 'btn-info',
+                                    icon: 'fa fa-question-circle',
+                                    animation: 'top',
+                                    confirm: function () {
+                                        $(location).attr('href', req.data.spaceId);
+                                    }
+                                });
+                            }
+                        },
+                        error: function (req) {
+                            // Handle upload error
+                            console.log("#req = " + req.status);
+                            $.alert({
+                                title: '에러',
+                                content: '회원 가입시 에러가 발생했습니다. 다시 시도 하세요.',
+                                confirmButton: 'OK',
+                                confirmButtonClass: 'btn-primary',
+                                icon: 'fa fa-info',
+                                animation: 'zoom',
+                                confirm: function () {
+                                }
+                            });
+
+                        }
+                    });
+                }
+            });
+        }
+
+        /**
+         * 이메일 입력 확인
+         */
+        function alertEmail(){
+            $.alert({
+                title: '확인',
+                content: '이메일 주소를 확인하세요.',
+                confirmButton: 'OK',
+                confirmButtonClass: 'btn-primary',
+                icon: 'fa fa-info',
+                animation: 'zoom',
+                confirm: function () {
+                }
+            });
+        }
+        /**
+         * 닉네임 확인
+         */
+        function alertName(){
+            $.alert({
+                title: '확인',
+                content: '닉네임은 글 작성자를 표시하는 것으로 최소 2자 이상 필수값입니다.',
+                confirmButton: 'OK',
+                confirmButtonClass: 'btn-primary',
+                icon: 'fa fa-info',
+                animation: 'zoom',
+                confirm: function () {
+                }
+            });
+        }
+        function alertPass(){
+            $.alert({
+                title: '확인',
+                content: '비밀번호는 최소 4자 이상으로 필수값입니다.',
+                confirmButton: 'OK',
+                confirmButtonClass: 'btn-primary',
+                icon: 'fa fa-info',
+                animation: 'zoom',
+                confirm: function () {
+                }
+            });
+        }
 
         function checkValidEmail(email) {
             if (email.length < 4) {
@@ -119,6 +228,23 @@ Time: 16:20
             }
             var regExp = /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
             if (!regExp.test(email)) {
+                return false;
+            } else {
+                // Ajax로 중복 검사
+                return true;
+            }
+        }
+
+        function checkValidName(name) {
+            if (name.length < 2) {
+                return false;
+            } else {
+                // Ajax로 중복 검사
+                return true;
+            }
+        }
+        function checkLength(value, length) {
+            if (value.length < length) {
                 return false;
             } else {
                 return true;

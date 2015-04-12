@@ -1,6 +1,7 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.Role;
+import com.libqa.application.enums.RoleEnum;
+import com.libqa.application.enums.SocialChannelTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -27,22 +28,22 @@ public class User {
     @Column(length = 40, nullable = false, unique = true)
     private String userNick;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 100, nullable = true)
     private String userSite;
 
-    @Column(length = 40, nullable = false)
+    @Column(length = 40, nullable = true)
     private String userImageName;
 
-    @Column(length = 80)
+    @Column(length = 80, nullable = true)
     private String userImagePath;
 
-    @Column(length = 40, nullable = false)
+    @Column(length = 40, nullable = true)
     private String userThumbnailImageName;
 
-    @Column(length = 80)
+    @Column(length = 80, nullable = true)
     private String userThumbnailImagePath;
 
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isDeleted;  // (Y : 탈퇴, N: 활성)
 
     @Column(length = 255, nullable = false)
@@ -68,13 +69,17 @@ public class User {
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isCertification;
 
+    // 인증 키값 (랜덤함수)
     @Column(length = 255, nullable = false)
     private String certificationKey;
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private RoleEnum role;
 
+    @Column(name = "channelType", length = 20,  nullable = true)
+    @Enumerated(EnumType.STRING)
+    private SocialChannelTypeEnum channelType;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserKeyword> userKeywords;
@@ -85,4 +90,20 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserFavorite> userFavorites;
 
+    public static User createUser(String userEmail, String userNick, String password, String channelType) {
+        Date now = new Date();
+        User user = new User();
+        user.setUserEmail(userEmail);
+        user.setUserNick(userNick);
+        user.setUserPass(password);
+        // user.setDeleted(false);
+        // user.setCertification(false);
+        user.setLastVisiteDate(now);
+        user.setInsertDate(now);
+        user.setRole(RoleEnum.USER);
+        user.setCertificationKey(String.valueOf(System.nanoTime()).substring(0, 5));
+        user.setChannelType(SocialChannelTypeEnum.valueOf(channelType));
+
+        return user;
+    }
 }
