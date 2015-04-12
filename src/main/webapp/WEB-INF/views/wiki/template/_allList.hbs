@@ -1,5 +1,5 @@
 <div class="nav-tabs-header">전체 위키</div>
-{{#each allList}}
+{{#each allWiki}}
     <div class="media qna-item">
         <a class="pull-left" href="#">
             <div class="user-profile">
@@ -10,7 +10,7 @@
             <div class="col-xs-6 col-sm-8 col-md-8">
                 <div class="media-body">
                     <div class="media-heading">
-                        <span>{{insertDate}}</span>
+                        <span>{{formatDate insertDate "yyyy.MM.dd HH:mm:SS"}}</span>
                         <div class="pull-right">
                             <span class="label label-primary">Spring</span>
                             <span class="label label-primary">Spring</span>
@@ -18,7 +18,7 @@
                             <span class="label label-primary">Spring</span>
                         </div>
                     </div>
-                    {{contets}}
+                    <div>{{subString (htmlDelete contents) 0 100 }}</div>
                 </div>
             </div>
             <div class="col-md-2 my-qna-rating">
