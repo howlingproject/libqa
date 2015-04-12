@@ -90,6 +90,9 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserFavorite> userFavorites;
 
+    @Transient
+    private String targetUrl;
+
     public static User createUser(String userEmail, String userNick, String password, String channelType) {
         Date now = new Date();
         User user = new User();

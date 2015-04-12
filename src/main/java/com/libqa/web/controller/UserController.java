@@ -33,7 +33,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("/user/login")
-    public ModelAndView fileUpload(Model model) {
+    public ModelAndView login(Model model) {
         log.info("/login");
         ModelAndView mav = new ModelAndView("/user/login");
         return mav;
@@ -41,37 +41,45 @@ public class UserController {
 
     /**
      * 회원 가입 form
-     * @param request
      * @return
      */
     @RequestMapping("/user/signup")
     public ModelAndView signUp(HttpServletRequest request) {
-        UrlPathHelper urlPathHelper = new UrlPathHelper();
-        String originalURL = urlPathHelper.getOriginatingRequestUri(request);
-        log.info("@ OriginalURL ==>" + originalURL);
+        String targetUrl = request.getHeader("Referer");
+        log.info("## Using Referer header: " + targetUrl);
+
+        if (targetUrl == null) {
+            targetUrl = "/";
+        }
+
         ModelAndView mav = new ModelAndView("/user/form");
+        mav.addObject("targetUrl", targetUrl);
         return mav;
     }
 
     @RequestMapping("/user/createUser")
     @ResponseBody
     public ResponseData<User> createUser(@RequestParam String userEmail,
-                                     @RequestParam String userNick,
-                                     @RequestParam String userPass,
-                                     @RequestParam String loginType // Social Login type
-                                     ) {
+                                         @RequestParam String userNick,
+                                         @RequestParam String userPass,
+                                         @RequestParam String loginType, // Social Login type
+                                         @RequestParam String targetUrl) {
         log.info("# userEmail = {}", userEmail);
         log.info("# userNick = {}", userNick);
         log.info("# userPass = {}", userPass);
         log.info("# loginType = {}", loginType);
+        ResponseData<User> resultDate = null;
         User user = null;
         try {
             user = userService.createUser(userEmail, userNick, userPass, loginType);
+            user.setTargetUrl(targetUrl);
+            resultDate = resultDate.createSuccessResult(user);
         } catch (UserNotCreateException e) {
             e.printStackTrace();
+            resultDate = resultDate.createFailResult(user);
         }
 
-        return ResponseData.createSuccessResult(user);
+        return resultDate;
     }
 
 }

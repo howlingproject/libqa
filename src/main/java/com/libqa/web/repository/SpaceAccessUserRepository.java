@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Created by yong on 15. 2. 8..
  */
-public interface SpaceAccessUserRepository extends JpaRepository<SpaceAccessUser, Long> {
+public interface SpaceAccessUserRepository extends JpaRepository<SpaceAccessUser, Integer> {
 }
