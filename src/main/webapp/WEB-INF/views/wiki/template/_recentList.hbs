@@ -1,5 +1,5 @@
 
-{{#each recentList}}
+{{#each resecntWiki}}
     <!-- 최근 활동 -->
     <div class="best-qna-item">
         <div>
@@ -14,7 +14,7 @@
                 </div>
             </a>
             <div class="media-body">
-                {{contets}}
+                <div>{{subString (htmlDelete contents) 0 100 }}</div>
             </div>
         </div>
     </div>
