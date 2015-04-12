@@ -59,6 +59,7 @@
 
                 <!-- 전체 위키 -->
                 <div id="allWikiList">
+                    {{> wiki/template/_allList}}
                 </div>
                 <!--// 위키 -->
 
@@ -68,6 +69,7 @@
                 <!-- 최근 활동 -->
                 <div class="nav-tabs-header">최근 활동</div>
                 <div id="recentWikiList">
+                    {{> wiki/template/_recentList}}
                 </div>
                 <!--// 최근 활동 -->
             </div>
@@ -92,20 +94,20 @@
                         $('#bestWikiList').html(response);
                     }
                 });
-                $.ajax({
+                /*$.ajax({
                     url: '/wiki/allList',
                     failure: function(){ },
                     success: function(response) {
                         $('#allWikiList').html(response);
                     }
-                });
-                $.ajax({
+                });*/
+                /*$.ajax({
                     url: '/wiki/recentList',
                     failure: function(){ },
                     success: function(response) {
                         $('#recentWikiList').html(response);
                     }
-                });
+                });*/
             }
         }
     </script>

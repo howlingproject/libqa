@@ -4,6 +4,9 @@
   Date: 2014. 9. 22.
   Time: 오후 10:57
 -->
+{{#partial "script-header"}}
+    <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
+{{/partial}}
 
 {{# partial "content" }}
     <!-- 메뉴 -->
@@ -17,7 +20,7 @@
                         <li class="active"><a href="#">관련 키워드</a></li>
                         <li class="pull-left readCnt">
                             {{#each keywordList}}
-                            <span class="label label-primary">{{keywordName}}</span>
+                                <span class="label label-primary">{{keywordName}}</span>
                             {{/each}}
                         </li>
                         <li class="pull-right">
@@ -36,9 +39,7 @@
                     <div class="row">
                         <div class="col-md-8">
                             <span class="qna-alert-title">{{qaContent.title}}</span>
-                            {{#each qaContent.qaFiles}}
-                                <span class="badge">{{realName}}</span>
-                            {{/each}}
+                            <span class="badge">{{qaReplyCnt}}</span>
                         </div>
                         <div class="col-md-4 text-right">
                             <span class="qna-alert-title">{{qaContent.insertDate}}</span>
@@ -51,10 +52,27 @@
                         {{{qaContent.contents}}}
                     </p>
                 </div>
+                <div class="form-group">
+                    <div id="uploadFilesArea">
+                        <span class="glyphicon glyphicon-paperclip btn-m"></span>
+                        <span>Attachments</span>
+                        <div id="uploadfileList" class="alert alert-success attachment-thumbnail">
+                        </div>
+                    </div>
+                    <input name="uploadType" value="Qa" type="hidden">
+                    <input name="uploadFilePath" id="uploadFilePath" type="hidden">
+                    <input id="file-attachment" name="uploadfile" type="file" style="display:none">
+                    <p class="help-block"></p>
+                    <button class="btn btn-info btn-default" type="button" onclick="$('#file-attachment').click();">파일선택</button>
+
+                </div>
+                <input type="hidden" name="qaId" value="{{qaContent.qaId}}">
+                <input type="hidden" name="wikiId">
+            </div>
                 <!--// 본문 제목, 내용 -->
                 <div>
                     <div class="text-left">
-                        <i class="fa fa-thumbs-o-up"><span class="like-count">(30)</span></i>
+                        <i class="fa fa-thumbs-o-up"><span class="like-count">({{qaContent.recommandCount}})</span></i>
                         <i class="fa fa-share-alt"><span class="claim-count">(0)</span></i>
                     </div>
                     <div class="text-right">
@@ -79,13 +97,180 @@
 
 {{#partial "script-page"}}
     <script type="text/javascript">
-        DualEditor.setting({
-            src : '/resource/app'
-            , tarketId : 'editor'
-            , type : 'mini'
-            , width : '100%'
-            , height : '400px;'
+        $(document).ready(function(){
+            Qa.makeEditor();
+//            Qa.makeFileList();
         });
+
+        function setParam(){
+            $('#contents').val(DualEditor.getMarkupConvertToHtml());
+            $('#contentsMarkup').val(DualEditor.getMarkupEditHtml());
+            $('#tag-cloud').find('li').each(function(){
+                $('#qaForm').append('<input type="hidden" name="keyword" value="'+this.innerHTML+'">');
+            });
+        }
+
+        var Qa = {
+            makeEditor : function(){
+                DualEditor.setting({
+                    src : '/resource/app'
+                    , tarketId : 'editor'
+                    , type : 'mini'
+                    , width : '100%'
+                    , height : '400px;'
+                });
+            },
+            bindEvent : function(){
+                Qa.fileAttachmentEvent();
+                Qa.keywordAddEvent();
+                Qa.tagCloudEvent();
+                Qa.formEvent();
+            },
+            fileAttachmentEvent : function(){
+                $("#file-attachment").on("change", Qa.uploadFile);
+            },
+            uploadFile : function(){
+                var field = $("#file-attachment").val();
+                if (field != '') {
+                    $.ajax({
+                        url: "/common/uploadFile",
+                        type: "POST",
+                        data: new FormData($("#qaForm")[0]),
+                        enctype: 'multipart/form-data',
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        success: function (req) {
+                            console.log('req : ' + req);
+                            console.log('req.data.uploadType : ' + req.data.uploadType);
+                            if (req.resultCode == 1) {
+                                var fileDivTemplat = Qa.makeFileDivTemplate(req);
+                                $('#uploadfileList').append(fileDivTemplat);
+                            }
+                        },
+                        error: function (req) {
+                            // Handle upload error
+                            alert('req : ' + req);
+                            console.log('req : ' + req.status);
+                            console.log('req : ' + req.readyState);
+
+                            if (req.status == 500) {
+                                alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
+                            } else {
+                                alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                            }
+                        }
+                    });
+                }
+            },
+            /**
+             * 키워드 추가
+             * 키워드가 3건 이상 등록 될 경우 폼을 disabled 한다.
+             */
+            keywordAddEvent : function(){
+                $('#keywordAdd').click(function(){
+                    if ($('#tag-cloud').find('li').length > 3) {
+                        alert('키워드는 최대 3건만 등록할 수 있습니다.');
+                        $('#tag-cloud').find('li')[3].remove();
+                        $("#interesting").attr("readonly",true);
+                        $("#keywordAdd").attr("disabled",true);
+
+                    }
+                });
+            },
+
+            /**
+             * 키워드 삭제
+             * 키워드가 삭제되면 폼을 enabled 한다.
+             */
+            tagCloudEvent : function(){
+                $('#tag-cloud').on('click', 'li', function (event) {
+                    if ($('#tag-cloud').find('li').length < 4) {
+                        $("#interesting").attr("readonly",false);
+                        $("#keywordAdd").attr("disabled",false);
+                    }
+                });
+            },
+            formEvent : function(){
+                $("#cancelButton").on("click", Qa.cancelContents);
+                $("#saveButton").on("click", Qa.saveContents);
+            },
+            saveContents : function(){
+                setParam();
+                $.ajax({
+                    type : 'POST',
+                    data : $('#qaForm').serialize(),
+                    url : '/qa/save',
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            location.href = "/qa/" + data.data.qaId;
+                        }
+                    },
+                    error : function(XMLHttpRequest,textStatus,errorThrown){
+                    }
+                });
+            },
+            cancelContents : function(){
+                location.href = '/qa/main';
+            },
+            deleteFile : function(fileDeleteObj){
+                var individualFileDivObj = $(fileDeleteObj).parent();
+                $.ajax({
+                    url: "/common/deleteFile",
+                    type: "POST",
+                    data: { filePath : individualFileDivObj.find('[name=filePath]').val(),
+                        savedName : individualFileDivObj.find('[name=savedName]').val()
+                    },
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            individualFileDivObj.remove();
+                        }
+                    },
+                    error : function(req){
+                        // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
+
+                        if (req.status == 500) {
+                            alert('삭제 중 에러가 발생했습니다. 존재하지 않은 파일 입니다.');
+                        } else {
+                            alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                        }
+                    }
+                });
+            },
+            makeFileDivTemplate : function(dataObj){
+                var req = dataObj;
+                var template =
+                        '<div class="fileDiv" style="padding: 5px;">' +
+                        '<input name="realName" type="hidden" value="'+req.data.realName+'">' +
+                        '<input name="savedName" type="hidden" value="'+req.data.savedName+'">' +
+                        '<input name="filePath" type="hidden" value="'+req.data.filePath+'">' +
+                        '<input name="fileSize" type="hidden" value="'+req.data.fileSize+'">' +
+                        '<input name="fileType" type="hidden" value="'+req.data.fileExtendType+'">' +
+                        '<a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
+                        '<a href="#fileDiv" onclick="$(this).parent().remove();">' +
+                        '<span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>' +
+                        '</a>' +
+                        '</div>';
+                return template;
+            },
+            makeFileList : function(){
+                $.get("/qa/fileList",{qaId : $('[name=qaId]').val()}, function (response) {
+                    if(response.resultCode != 1) {
+                        alert(response.comment);
+                        return;
+                    }
+                    var source = $('#qa-fileList-hbs').html();
+                    var template = Handlebars.compile(source);
+
+                    var html = template(response);
+                    $('#uploadfileList').html(html);
+                });
+            }
+        }
+
     </script>
 {{/partial}}
 

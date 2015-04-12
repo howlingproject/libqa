@@ -4,6 +4,8 @@ import com.github.jknack.handlebars.Options;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by songanji on 2015. 4. 5..
@@ -23,6 +25,21 @@ public class HandlebarsHelper {
             return "0";
         }
         return num;
+    }
+
+    public String htmlDelete(String html, Options options) {
+        Pattern pattern = Pattern.compile("(<[\\w\\W]+?>)");
+        Matcher matcher = pattern.matcher(html);
+
+        if(matcher.find()){
+            html = matcher.replaceAll(" ");
+        }
+
+        return html;
+    }
+
+    public String subString(String html, int startIdx, int endIdx){
+        return html.substring(startIdx, endIdx);
     }
 
     public String nl2br(String str, Options options) {

@@ -131,17 +131,7 @@
                             console.log('req : ' + req);
                             console.log('req.data.uploadType : ' + req.data.uploadType);
                             if (req.resultCode == 1) {
-                                var fileDivTemplat = '<div class="fileDiv" style="padding: 5px;">' +
-                                        '<input name="realName" type="hidden" value="'+req.data.realName+'">' +
-                                        '<input name="savedName" type="hidden" value="'+req.data.savedName+'">' +
-                                        '<input name="filePath" type="hidden" value="'+req.data.filePath+'">' +
-                                        '<input name="fileSize" type="hidden" value="'+req.data.fileSize+'">' +
-                                        '<input name="fileType" type="hidden" value="'+req.data.fileExtendType+'">' +
-                                        '<a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
-                                        '<a href="#fileDiv" onclick="$(this).parent().remove();">' +
-                                        '<span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>' +
-                                        '</a>' +
-                                        '</div>';
+                                var fileDivTemplat = Qa.makeFileDivTemplate(req);
                                 $('#uploadfileList').append(fileDivTemplat);
                             }
                         },
@@ -236,6 +226,22 @@
                         }
                     }
                 });
+            },
+            makeFileDivTemplate : function(dataObj){
+                var req = dataObj;
+                var template =
+                        '<div class="fileDiv" style="padding: 5px;">' +
+                            '<input name="realName" type="hidden" value="'+req.data.realName+'">' +
+                            '<input name="savedName" type="hidden" value="'+req.data.savedName+'">' +
+                            '<input name="filePath" type="hidden" value="'+req.data.filePath+'">' +
+                            '<input name="fileSize" type="hidden" value="'+req.data.fileSize+'">' +
+                            '<input name="fileType" type="hidden" value="'+req.data.fileExtendType+'">' +
+                            '<a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
+                            '<a href="#fileDiv" onclick="$(this).parent().remove();">' +
+                                '<span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>' +
+                            '</a>' +
+                        '</div>';
+                return template;
             }
         }
 

@@ -1,8 +1,6 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.framework.ResponseData;
-import com.libqa.application.util.StringUtil;
-import com.libqa.web.domain.Space;
 import com.libqa.web.domain.Wiki;
 import com.libqa.web.service.WikiService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +27,15 @@ public class WikiController {
     @RequestMapping("wiki/main")
     public ModelAndView main(Model model){
         ModelAndView mav = new ModelAndView("wiki/main");
+
+        List<Wiki> allWiki = wikiService.findByAllWiki(0, 5);
+        mav.addObject("allWiki", allWiki);
+
+        int userId = 0;
+        List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
+        mav.addObject("resecntWiki", resecntWiki);
+
+
         return mav;
     }
 
