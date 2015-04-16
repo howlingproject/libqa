@@ -69,7 +69,7 @@ public class QaFileServiceImpl implements QaFileService {
     public void makeQaFileInstance(QaContent qaContentInstance, ResponseData<?> resultFile) {
         FileDto resultFileDto = (FileDto) resultFile.getData();
         QaFile qaFileInstance = new QaFile();
-        qaFileInstance.setQaContent(qaContentInstance);
+        qaFileInstance.setQaId(qaContentInstance.getQaId());
         qaFileInstance.setRealName(resultFileDto.getRealName());
         qaFileInstance.setSavedName(resultFileDto.getSavedName());
         qaFileInstance.setFilePath(resultFileDto.getFilePath());

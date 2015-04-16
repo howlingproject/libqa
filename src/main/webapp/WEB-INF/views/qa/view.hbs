@@ -11,6 +11,7 @@
 {{# partial "content" }}
     <!-- 메뉴 -->
     <div class="container contents-container">
+        <form id="qaForm">
         <!-- contents -->
         <div class="col-md-12">
             <!-- 관련키워드 -->
@@ -47,10 +48,12 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <p>
-                        {{{qaContent.contents}}}
-                    </p>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <p>
+                            {{{qaContent.contents}}}
+                        </p>
+                    </div>
                 </div>
                 <div class="form-group">
                     <div id="uploadFilesArea">
@@ -63,51 +66,73 @@
                     <input name="uploadFilePath" id="uploadFilePath" type="hidden">
                     <input id="file-attachment" name="uploadfile" type="file" style="display:none">
                     <p class="help-block"></p>
-                    <button class="btn btn-info btn-default" type="button" onclick="$('#file-attachment').click();">파일선택</button>
-
                 </div>
                 <input type="hidden" name="qaId" value="{{qaContent.qaId}}">
                 <input type="hidden" name="wikiId">
             </div>
-                <!--// 본문 제목, 내용 -->
-                <div>
-                    <div class="text-left">
-                        <i class="fa fa-thumbs-o-up"><span class="like-count">({{qaContent.recommandCount}})</span></i>
-                        <i class="fa fa-share-alt"><span class="claim-count">(0)</span></i>
-                    </div>
-                    <div class="text-right">
-                        <button type="button" class="btn btn-primary btn-sm">수정</button>
-                        <button type="button" class="btn btn-danger btn-sm">삭제</button>
-                        <button type="button" class="btn btn-primary btn-sm">목록</button>
-                    </div>
+            <!--// 본문 제목, 내용 -->
+            <div>
+                <div class="text-left">
+                    <i class="fa fa-thumbs-o-up"><span class="like-count">({{qaContent.recommandCount}})</span></i>
+                    <i class="fa fa-share-alt"><span class="claim-count">(0)</span></i>
+                </div>
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm">수정</button>
+                    <button type="button" class="btn btn-danger btn-sm">삭제</button>
+                    <button type="button" class="btn btn-primary btn-sm">목록</button>
                 </div>
             </div>
 
+            <!-- 댓글 list -->
+            <div class="top-buffer">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            답변 {{qaReplyCnt}}
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        {{#each qaReplyList}}
+                            {{title}}
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+            <!--// 댓글 list -->
+
             <!-- 댓글작성 Bootstrap Live Editor -->
-            <div id="editor" class="form-group"></div>
+            <div id="editor" class="form-group">
+                <input type="hidden" id="contents" name="contents" />
+                <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
+                <input type="hidden" id="orderIdx" name="orderIdx" value="1" />   <!-- 답변 계층 -->
+                <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
+                <input type="hidden" id="parentsId" name="parentsId" value="3" />   <!-- 답변 계층 -->
+                <input type="hidden" id="parentsId" name="title" value="답변에 title?" />   <!-- 답변 계층 -->
+            </div>
             <!--// 댓글작성 Bootstrap Live Editor -->
 
             <div class="text-center">
-                <button type="button" class="btn btn-primary btn-default">저장</button>
+                <button id="saveReplyButton" type="button" class="btn btn-primary btn-default">저장</button>
             </div>
+
         </div>
+        </form>
     </div>
 
 {{/partial}}
 
 {{#partial "script-page"}}
+{{embedded "qa/fileList"}}
     <script type="text/javascript">
         $(document).ready(function(){
             Qa.makeEditor();
-//            Qa.makeFileList();
+            Qa.bindEvent();
+            Qa.makeFileList();
         });
 
         function setParam(){
             $('#contents').val(DualEditor.getMarkupConvertToHtml());
             $('#contentsMarkup').val(DualEditor.getMarkupEditHtml());
-            $('#tag-cloud').find('li').each(function(){
-                $('#qaForm').append('<input type="hidden" name="keyword" value="'+this.innerHTML+'">');
-            });
         }
 
         var Qa = {
@@ -121,124 +146,15 @@
                 });
             },
             bindEvent : function(){
-                Qa.fileAttachmentEvent();
-                Qa.keywordAddEvent();
-                Qa.tagCloudEvent();
                 Qa.formEvent();
-            },
-            fileAttachmentEvent : function(){
-                $("#file-attachment").on("change", Qa.uploadFile);
-            },
-            uploadFile : function(){
-                var field = $("#file-attachment").val();
-                if (field != '') {
-                    $.ajax({
-                        url: "/common/uploadFile",
-                        type: "POST",
-                        data: new FormData($("#qaForm")[0]),
-                        enctype: 'multipart/form-data',
-                        processData: false,
-                        contentType: false,
-                        cache: false,
-                        success: function (req) {
-                            console.log('req : ' + req);
-                            console.log('req.data.uploadType : ' + req.data.uploadType);
-                            if (req.resultCode == 1) {
-                                var fileDivTemplat = Qa.makeFileDivTemplate(req);
-                                $('#uploadfileList').append(fileDivTemplat);
-                            }
-                        },
-                        error: function (req) {
-                            // Handle upload error
-                            alert('req : ' + req);
-                            console.log('req : ' + req.status);
-                            console.log('req : ' + req.readyState);
-
-                            if (req.status == 500) {
-                                alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
-                            } else {
-                                alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
-                            }
-                        }
-                    });
-                }
-            },
-            /**
-             * 키워드 추가
-             * 키워드가 3건 이상 등록 될 경우 폼을 disabled 한다.
-             */
-            keywordAddEvent : function(){
-                $('#keywordAdd').click(function(){
-                    if ($('#tag-cloud').find('li').length > 3) {
-                        alert('키워드는 최대 3건만 등록할 수 있습니다.');
-                        $('#tag-cloud').find('li')[3].remove();
-                        $("#interesting").attr("readonly",true);
-                        $("#keywordAdd").attr("disabled",true);
-
-                    }
-                });
-            },
-
-            /**
-             * 키워드 삭제
-             * 키워드가 삭제되면 폼을 enabled 한다.
-             */
-            tagCloudEvent : function(){
-                $('#tag-cloud').on('click', 'li', function (event) {
-                    if ($('#tag-cloud').find('li').length < 4) {
-                        $("#interesting").attr("readonly",false);
-                        $("#keywordAdd").attr("disabled",false);
-                    }
-                });
             },
             formEvent : function(){
                 $("#cancelButton").on("click", Qa.cancelContents);
                 $("#saveButton").on("click", Qa.saveContents);
-            },
-            saveContents : function(){
-                setParam();
-                $.ajax({
-                    type : 'POST',
-                    data : $('#qaForm').serialize(),
-                    url : '/qa/save',
-                    success : function(data){
-                        if(data.resultCode == 1) {
-                            location.href = "/qa/" + data.data.qaId;
-                        }
-                    },
-                    error : function(XMLHttpRequest,textStatus,errorThrown){
-                    }
-                });
+                $("#saveReplyButton").on("click", Qa.saveReply);
             },
             cancelContents : function(){
                 location.href = '/qa/main';
-            },
-            deleteFile : function(fileDeleteObj){
-                var individualFileDivObj = $(fileDeleteObj).parent();
-                $.ajax({
-                    url: "/common/deleteFile",
-                    type: "POST",
-                    data: { filePath : individualFileDivObj.find('[name=filePath]').val(),
-                        savedName : individualFileDivObj.find('[name=savedName]').val()
-                    },
-                    success : function(data){
-                        if(data.resultCode == 1) {
-                            individualFileDivObj.remove();
-                        }
-                    },
-                    error : function(req){
-                        // Handle upload error
-                        alert('req : ' + req);
-                        console.log('req : ' + req.status);
-                        console.log('req : ' + req.readyState);
-
-                        if (req.status == 500) {
-                            alert('삭제 중 에러가 발생했습니다. 존재하지 않은 파일 입니다.');
-                        } else {
-                            alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
-                        }
-                    }
-                });
             },
             makeFileDivTemplate : function(dataObj){
                 var req = dataObj;
@@ -267,6 +183,22 @@
 
                     var html = template(response);
                     $('#uploadfileList').html(html);
+                });
+            },
+            saveReply : function(){
+                alert("##");
+                setParam();
+                $.ajax({
+                    type : 'POST',
+                    data : $('#qaForm').serialize(),
+                    url : '/qa/saveReply',
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            location.href = "/qa/" + data.data.qaId;
+                        }
+                    },
+                    error : function(XMLHttpRequest,textStatus,errorThrown){
+                    }
                 });
             }
         }

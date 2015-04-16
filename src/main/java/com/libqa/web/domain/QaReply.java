@@ -1,5 +1,7 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,10 +23,9 @@ public class QaReply {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer replyId;
 
-
-    @ManyToOne
-    @JoinColumn(name="qaId", referencedColumnName="qaId", nullable=false)
-    private QaContent qaContent;
+    @JsonBackReference
+    @Column(nullable = false)
+    private Integer qaId;
 
     @Column(nullable = false)
     private Integer parentsId;
@@ -51,10 +52,10 @@ public class QaReply {
     private String userNick;
 
     @Column(nullable = false, columnDefinition = "int default 0")
-    private Integer voteUpCount;
+    private int voteUpCount = 0;
 
     @Column(nullable = false, columnDefinition = "int default 0")
-    private Integer voteDownCount;
+    private int voteDownCount = 0;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isChoice;
@@ -72,9 +73,10 @@ public class QaReply {
     @Column(nullable = false)
     private Integer insertUserId;
 
-    @Column(nullable = false)
+    @Column
     private Integer updateUserId;
 
-    @OneToMany(mappedBy = "qaReply", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "replyId", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Vote> votes;
 }

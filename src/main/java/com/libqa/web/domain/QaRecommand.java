@@ -1,5 +1,6 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,9 +18,9 @@ public class QaRecommand {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer qaRecommandId;
 
-    @ManyToOne
-    @JoinColumn(name="qaId", referencedColumnName = "qaId", nullable=false)
-    private QaContent qaContent;
+    @JsonBackReference
+    @Column(nullable = false)
+    private Integer qaId;
 
     @Column(nullable = false)
     private Integer userId;
