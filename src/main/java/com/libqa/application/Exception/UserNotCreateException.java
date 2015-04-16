@@ -12,6 +12,9 @@ public class UserNotCreateException extends Throwable {
     public UserNotCreateException(String msg, Exception e) {
         log.error("### UserNotCreateException Message = {}", msg);
         log.error("### Error Message = {}", e);
+    }
 
+    public UserNotCreateException(String msg) {
+        super(msg);
     }
 }

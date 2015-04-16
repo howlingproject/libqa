@@ -24,6 +24,9 @@ public class ResponseData<T> {
         this.data = data;
     }
 
+    public ResponseData() {
+    }
+
     private void init(int code, String comment, T data) {
         this.resultCode = code;
         this.comment = comment;

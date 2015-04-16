@@ -1,7 +1,6 @@
 package com.libqa.web.service;
 
 import com.libqa.application.Exception.UserNotCreateException;
-import com.libqa.application.enums.RoleEnum;
 import com.libqa.application.enums.SocialChannelTypeEnum;
 import com.libqa.web.domain.User;
 import com.libqa.web.repository.UserRepository;
@@ -11,8 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * 회원 가입, 탈퇴, 로그인, 정보 수정
+ *
  * @Author : yion
  * @Date : 2015. 4. 12.
  * @Description :
@@ -38,6 +40,7 @@ public class UserServiceImpl implements UserService {
             createUser = userRepository.save(user);
             log.info("### createUser = {}", createUser);
 
+            // 인증 메일 보내기
             sendAuthMail(createUser);
         } catch (Exception e) {
             log.error("User Not Create Exception!!! ", createUser);
@@ -52,4 +55,43 @@ public class UserServiceImpl implements UserService {
         log.info("### Send mail ");
         // mailService
     }
+
+
+    @Override
+    public int updateForCertificationByKey(Integer userId, Integer certificationKey) throws UserNotCreateException {
+        User user = userRepository.findOne(userId);
+        int result = 0;
+        if (user == null) {
+            log.error("@ 회원 인증키 업데이트 실패 : 회원 정보가 존재하지 않음");
+            throw new UserNotCreateException("사용자 정보가 존재하지 않습니다.");
+        }
+        Date now = new Date();
+        user.setCertification(true);
+        user.setCertificationKey(certificationKey + "");
+        user.setVisiteCount(user.getVisiteCount() + 1);
+        user.setLastVisiteDate(now);
+        user.setUpdateDate(now);
+
+        try {
+            userRepository.save(user);
+            result = 1;
+        } catch (Exception e) {
+            log.error("@ 회원 인증키 업데이트 실행시 에러가 발생했습니다.", e);
+            e.printStackTrace();
+            result = -1;
+        }
+
+        return result;
+    }
+
+    @Override
+    public User findByEmail(String userEmail) {
+        return userRepository.findByUserEmail(userEmail);
+    }
+
+    @Override
+    public User findByNick(String userNick) {
+        return userRepository.findByUserNick(userNick);
+    }
+
 }

@@ -72,7 +72,7 @@
 
             <div class="modal-body" style="height: 260px">
 
-                <form id="loginForm" method="post" class="form-horizontal">
+                <form id="loginForm" name="loginForm" method="post" class="form-horizontal">
                     <div class="row" style="height: 40px">
                         <div class="col-xs-4 text-left">
                             <span style="color: #428bca;"><a href="#">Forgot password?</a></span>
@@ -80,24 +80,24 @@
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                        <input type="text" class="form-control" name="username" placeholder="email address">
+                        <input type="text" class="form-control" name="userEmail" id="userEmail" placeholder="email address">
                     </div>
                     <span class="help-block"></span>
 
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                        <input  type="password" class="form-control" name="password" placeholder="Password">
+                        <input type="password" class="form-control" name="userPass" id="userPass" placeholder="Password">
                     </div>
-                    <span class="help-block" style="color: red">Password error</span>
+                    <span class="help-block" style="color: red" id="loginInfo">Password error</span>
 
                     <div style="padding-top:10px;border-top: 1px solid #e5e5e5">
                         <div class="col-xs-4">
                             <label class="checkbox">
-                                <input type="checkbox" value="remember-me">Remember Me
+                                <input type="checkbox" id="remember-me" value="remember-me">Remember Me
                             </label>
                         </div>
                         <div class="col-xs-4" >
-                            <button type="submit" class="btn btn-primary">Sign in</button>
+                            <button type="button" class="btn btn-primary" id="loginBtn">Sign in</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </div>
 
@@ -135,8 +135,116 @@
 <script type="text/javascript">
     // bind the on-change event
     $(document).ready(function () {
+        $("#loginBtn").click(function() {
+            userEmail = $("#userEmail").val();
+            userPass = $("#userPass").val();
+            if (!checkValidEmail(userEmail)) {
+                alertEmail();
+                return false;
+            }
 
+            if (!checkLength(userPass, 4)) {
+                alertPass();
+                return false;
+            }
+
+
+            var data = $("#loginForm").serialize();
+
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                data: data,
+                url: "/user/login",
+                cache: false,
+                success: function (req) {
+                    console.log("## req = " + req.resultCode);
+                    console.log("## req.data.targetUrl = " + req.data.targetUrl);
+                    if (req.resultCode == 1) {
+                        $(location).attr('href', req.data.targetUrl);
+                    } else if (req.resultCode == -1) {
+                        $.alert({
+                            title: '에러',
+                            content: '로그인 정보가 올바르지 않습니다. 다시 시도 하세요.',
+                            confirmButton: 'OK',
+                            confirmButtonClass: 'btn-primary',
+                            icon: 'fa fa-info',
+                            animation: 'zoom',
+                            confirm: function () {
+                            }
+                        });
+                    }
+                },
+                error: function (req) {
+                    // Handle upload error
+                    console.log("#req = " + req.status);
+                    $.alert({
+                        title: '에러',
+                        content: '서버 에러가 발생했습니다. 에러코드 [' + status + '] 다시 시도 하세요.',
+                        confirmButton: 'OK',
+                        confirmButtonClass: 'btn-primary',
+                        icon: 'fa fa-info',
+                        animation: 'zoom',
+                        confirm: function () {
+                        }
+                    });
+                }
+            });
+        });
     });
+
+
+    /**
+     * 이메일 입력 확인
+     */
+    function alertEmail(){
+        $.alert({
+            title: '확인',
+            content: '이메일 주소를 확인하세요.',
+            confirmButton: 'OK',
+            confirmButtonClass: 'btn-primary',
+            icon: 'fa fa-info',
+            animation: 'zoom',
+            confirm: function () {
+            }
+        });
+    }
+    /**
+     * 패스워드 확인
+     */
+    function alertPass(){
+        $.alert({
+            title: '확인',
+            content: '비밀번호는 최소 4자 이상으로 필수값입니다.',
+            confirmButton: 'OK',
+            confirmButtonClass: 'btn-primary',
+            icon: 'fa fa-info',
+            animation: 'zoom',
+            confirm: function () {
+            }
+        });
+    }
+
+    function checkValidEmail(email) {
+        if (email.length < 4) {
+            return false;
+        }
+        var regExp = /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        if (!regExp.test(email)) {
+            return false;
+        } else {
+            // Ajax로 중복 검사
+            return true;
+        }
+    }
+
+    function checkLength(value, length) {
+        if (value.length < length) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 </script>
 {{/partial}}
 
