@@ -1,5 +1,6 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,9 +15,9 @@ public class QaFile {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer fileId;
 
-    @ManyToOne
-    @JoinColumn(name="qaId", referencedColumnName = "qaId", nullable=false)
-    private QaContent qaContent;
+    @JsonBackReference
+    @Column(nullable = false)
+    private Integer qaId;
 
     @Column(nullable = false, length = 40)
     private String realName;

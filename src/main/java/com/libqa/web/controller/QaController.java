@@ -4,8 +4,10 @@ import com.libqa.application.framework.ResponseData;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
+import com.libqa.web.domain.QaReply;
 import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.QaFileService;
+import com.libqa.web.service.QaReplyService;
 import com.libqa.web.service.QaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ public class QaController {
     QaFileService qaFileService;
 
     @Autowired
+    QaReplyService qaReplyService;
+
+    @Autowired
     KeywordService keywordService;
 
     @RequestMapping("/qa")
@@ -55,6 +60,7 @@ public class QaController {
         List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
         ModelAndView mav = new ModelAndView("qa/view");
         mav.addObject("qaContent", qaContent);
+        mav.addObject("qaReplyList", qaContent.getQaReplys());
         mav.addObject("qaReplyCnt", qaContent.getQaReplys().size());
         mav.addObject("keywordList", keywordList);
         return mav;
@@ -69,11 +75,24 @@ public class QaController {
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaContent> save(QaContent qaContent, QaFile qaFile){
-        QaContent newQaContent = qaService.saveWithKeyword(qaContent, qaFile);
+        QaContent newQaContent = new QaContent();
+        try {
+            newQaContent = qaService.saveWithKeyword(qaContent, qaFile);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return ResponseData.createSuccessResult(newQaContent);
     }
 
+    @RequestMapping(value = "/qa/saveReply", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<QaReply> saveReply(QaReply qaReply){
+        QaReply newQaReply = qaReplyService.saveWithQaContent(qaReply);
+        return ResponseData.createSuccessResult(newQaReply);
+    }
+
     @RequestMapping(value = "/qa/fileList", method = RequestMethod.GET)
+    @ResponseBody
     public ResponseData<QaFile> fileList(@RequestParam("qaId") Integer qaId) throws IOException {
         boolean isDeleted = false;
         List<QaFile> qaFileList = new ArrayList<>();
