@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 
 /**
  * Created by yion on 2015. 3. 1..
@@ -26,6 +28,23 @@ import java.nio.file.Paths;
 @Slf4j
 @Controller
 public class CommonController {
+
+    // 403 Access Denied
+    @RequestMapping(value = "/access", method = RequestMethod.GET)
+    public ModelAndView accessDenied(Principal user) {
+        ModelAndView model = new ModelAndView();
+
+        if (user != null) {
+            model.addObject("msg", "Hi " + user.getName()
+                    + ", you do not have permission to access this page!");
+        } else {
+            model.addObject("msg",
+                    "You do not have permission to access this page!");
+        }
+
+        model.setViewName("/common/403");
+        return model;
+    }
 
     /**
      * /space/ajaxUpload.hbs 파일 참조 - File input 의 onChange 시점에 임시 저장하여 view에 정보를 넘겨준다.

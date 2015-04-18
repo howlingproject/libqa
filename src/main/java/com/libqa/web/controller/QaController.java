@@ -7,7 +7,6 @@ import com.libqa.web.domain.QaFile;
 import com.libqa.web.domain.QaReply;
 import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.QaFileService;
-import com.libqa.web.service.QaReplyService;
 import com.libqa.web.service.QaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +33,6 @@ public class QaController {
 
     @Autowired
     QaFileService qaFileService;
-
-    @Autowired
-    QaReplyService qaReplyService;
 
     @Autowired
     KeywordService keywordService;
@@ -86,9 +82,11 @@ public class QaController {
 
     @RequestMapping(value = "/qa/saveReply", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaReply> saveReply(QaReply qaReply){
-        QaReply newQaReply = qaReplyService.saveWithQaContent(qaReply);
-        return ResponseData.createSuccessResult(newQaReply);
+    public ResponseData<QaReply> saveReply(QaReply qaReply) {
+        //QaReply newQaReply = qaReplyService.saveWithQaContent(qaReply);
+        //return ResponseData.createSuccessResult(newQaReply);
+
+        return null;
     }
 
     @RequestMapping(value = "/qa/fileList", method = RequestMethod.GET)

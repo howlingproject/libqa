@@ -1,20 +1,31 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.Exception.UserNotCreateException;
+import com.libqa.application.enums.RoleEnum;
 import com.libqa.application.enums.StatusCodeEnum;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by yion on 2015. 3. 23..
@@ -26,6 +37,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /*
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<User> login(HttpServletRequest request, User loginUser) {
@@ -57,6 +69,7 @@ public class UserController {
         log.info("### responseData = {} ", responseData);
         return responseData;
     }
+    */
 
     /**
      * 회원 가입 form
@@ -72,7 +85,34 @@ public class UserController {
         return mav;
     }
 
+    // @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('USER')")
+    @RequestMapping("/userInfo")
+    public ModelAndView userInfo(Model model) {
 
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = (String) authentication.getPrincipal();
+        String password = (String) authentication.getCredentials();
+        Collection<? extends GrantedAuthority> auths =authentication.getAuthorities();
+
+//        Iterables.getFirst(
+        List<GrantedAuthority> grantedAuths = (List<GrantedAuthority>) authentication.getAuthorities();
+        System.out.println("### grantedAuthority = " + grantedAuths.get(0));
+
+
+        log.info("user info = {}", email);
+        log.info("authentication.isAuthenticated() = {}", authentication.isAuthenticated());
+        log.info("authentication.getDetails().toString() = {}", authentication.getDetails().toString());
+        log.info("authentication.getDetails().getName() = {}", authentication.getName());
+        log.info("authentication.gerRole() = {}", grantedAuths.get(0));
+
+        ModelAndView mav = new ModelAndView("/user/info");
+        mav.addObject("userEmail", email);
+        mav.addObject("auth", authentication.isAuthenticated());
+        return mav;
+    }
 
     @RequestMapping("/user/createUser")
     @ResponseBody
@@ -160,15 +200,13 @@ public class UserController {
      *
      * @param request
      * @param response
-     * @return
-
-    private String getReturnUrl(HttpServletRequest request, HttpServletResponse response) {
-        RequestCache requestCache = new HttpSessionRequestCache();
-        SavedRequest savedRequest = requestCache.getRequest(request, response);
-        if (savedRequest == null) {
-            return request.getSession().getServletContext().getContextPath();
-        }
-        return savedRequest.getRedirectUrl();
+     * @return private String getReturnUrl(HttpServletRequest request, HttpServletResponse response) {
+    RequestCache requestCache = new HttpSessionRequestCache();
+    SavedRequest savedRequest = requestCache.getRequest(request, response);
+    if (savedRequest == null) {
+    return request.getSession().getServletContext().getContextPath();
+    }
+    return savedRequest.getRedirectUrl();
     }
      */
 

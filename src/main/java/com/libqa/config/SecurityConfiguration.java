@@ -1,22 +1,16 @@
 package com.libqa.config;
 
 
-import com.libqa.application.handler.LoginHandler;
-import com.libqa.web.service.UserService;
+import com.libqa.config.security.CustomAuthenticationProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -26,13 +20,15 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  */
 @Slf4j
 @Configuration
-@EnableWebMvcSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+//    @Autowired
+//    private CustomUserDetailsService customUserDetailsService;
+
     @Autowired
-    private UserService userService;
+    private CustomAuthenticationProvider customAuthenticationProvider;
 
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {
@@ -47,28 +43,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable();
         log.info("## configure httpSecurity = {}", httpSecurity);
 
-        httpSecurity.authorizeRequests()
+        httpSecurity
+                .authorizeRequests()
                 .antMatchers("/user/**", "/space", "/space/**", "/feed/main", "/qa", "/qa/**", "/wiki/**", "/common/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .anyRequest().authenticated()
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                .logoutSuccessUrl("/")
-                .permitAll();
-    }
+                .formLogin()
+                .loginPage("/login").usernameParameter("userEmail").passwordParameter("userPass")
+                .failureUrl("/login?error")
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .and()
+                .exceptionHandling().accessDeniedPage("/access?error")
+                .and()
+                .authenticationProvider(customAuthenticationProvider);
 
-    @Bean
-    public AuthenticationSuccessHandler loginSuccessHandler() {
-        log.info("### AuthenticationSuccessHandler");
-        return new LoginHandler("/");
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        log.info("### SecurityConfiguration configure = {} ", auth);
-
-
-        auth.inMemoryAuthentication().withUser("userEmail").password("userPass").roles("USER");
+        //.logout().logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
 
     }
 }

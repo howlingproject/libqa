@@ -11,6 +11,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
 import javax.servlet.Filter;
 import java.nio.charset.Charset;
@@ -48,5 +49,13 @@ public class Application {
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
         return characterEncodingFilter;
+    }
+
+    @Bean
+    protected Filter getServletFilters() {
+        System.out.println("#### getServletFilters start!!");
+        DelegatingFilterProxy proxyFilter = new DelegatingFilterProxy("springSecurityFilterChain");
+
+        return proxyFilter;
     }
 }

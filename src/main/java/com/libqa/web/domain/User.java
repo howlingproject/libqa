@@ -101,8 +101,8 @@ public class User {
         user.setUserEmail(userEmail);
         user.setUserNick(userNick);
         user.setUserPass(password);
-        // user.setDeleted(false);
-        // user.setCertification(false);
+        user.setDeleted(false);
+        user.setCertification(false);
         user.setLastVisiteDate(now);
         user.setInsertDate(now);
         user.setRole(RoleEnum.USER);
