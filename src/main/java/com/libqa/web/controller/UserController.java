@@ -79,6 +79,7 @@ public class UserController {
     @RequestMapping("/user/signup")
     public ModelAndView signUp(HttpServletRequest request) {
         String targetUrl = returnUrl(request);
+        request.getSession().setAttribute("targetUrl", targetUrl);
 
         ModelAndView mav = new ModelAndView("/user/form");
         mav.addObject("targetUrl", targetUrl);
