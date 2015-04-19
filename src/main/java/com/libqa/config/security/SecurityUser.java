@@ -13,6 +13,7 @@ import java.util.Collection;
  * @Date : 2015. 4. 18.
  * @Description :
  */
+@Deprecated
 public class SecurityUser extends User implements UserDetails {
     private static final long serialVersionUID = 1L;
 

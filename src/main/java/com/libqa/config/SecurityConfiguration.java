@@ -1,16 +1,18 @@
 package com.libqa.config;
 
 
+import com.libqa.application.handler.LoginHandler;
 import com.libqa.config.security.CustomAuthenticationProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -24,8 +26,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-//    @Autowired
-//    private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     private CustomAuthenticationProvider customAuthenticationProvider;
@@ -35,7 +35,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         webSecurity
                 .ignoring()
                 .antMatchers("/", "/resource/**");
-
     }
 
     @Override
@@ -45,11 +44,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         httpSecurity
                 .authorizeRequests()
-                .antMatchers("/user/**", "/space", "/space/**", "/feed/main", "/qa", "/qa/**", "/wiki/**", "/common/**").permitAll()
+                .antMatchers("/user/**", "/space", "/space/**", "/feed/**", "/qa", "/qa/**", "/wiki/**", "/common/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .and()
                 .formLogin()
                 .loginPage("/login").usernameParameter("userEmail").passwordParameter("userPass")
+                .successHandler(loginSuccessHandler())
                 .failureUrl("/login?error")
                 .and()
                 .logout()
@@ -61,5 +61,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         //.logout().logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
 
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler loginSuccessHandler() {
+        return new LoginHandler("/index");
     }
 }

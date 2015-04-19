@@ -1,22 +1,18 @@
 package com.libqa.web.domain;
 
+import com.libqa.application.enums.FileTypeEnum;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by sjune on 2015-02-01.
- *
- * @author sjune
- */
 @Data
 @Entity
 public class FeedFile {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer feedFileId;
+    private Long feedFileId;
 
     @Column(nullable = false, length = 40)
     private String realName;
@@ -31,10 +27,11 @@ public class FeedFile {
     private Integer fileSize;
 
     @Column(nullable = true, length = 10)
-    private String fileType;
+    @Enumerated(EnumType.STRING)
+    private FileTypeEnum fileType;
 
     @Column
-    private Integer downloadCount;
+    private Integer downloadCount = 0;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
@@ -42,9 +39,6 @@ public class FeedFile {
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date insertDate;
-
-    @Temporal(TemporalType.DATE)
-    private Date updateDate;
 
     @Column(nullable = false)
     private Integer userId;
@@ -55,10 +49,5 @@ public class FeedFile {
     @Column(nullable = false)
     private Integer insertUserId;
 
-    @Column
-    private Integer updateUserId;
-    
-    @ManyToOne
-    @JoinColumn(name = "feedId", referencedColumnName = "feedId", nullable = false)
-    private Feed feed;
+    private Long feedId;
 }

@@ -4,13 +4,12 @@ import com.libqa.application.enums.ContentsTypeEnum;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Data
 @Entity
-public class Feed implements Serializable {
+public class Feed {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -76,7 +75,8 @@ public class Feed implements Serializable {
     @JoinColumn(name = "feedId", referencedColumnName = "feedId")
     private List<FeedReply> feedReplies;
 
-    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "feedId", referencedColumnName = "feedId")
     private List<FeedFile> feedFiles;
 
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)

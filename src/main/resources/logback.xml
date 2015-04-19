@@ -8,5 +8,5 @@
     <logger name="jdbc.audit"          level="INFO"/>
     <logger name="jdbc.resultset"      level="ERROR"/>
     <logger name="jdbc.resultsettable" level="ERROR"/>
-    <logger name="jdbc.connection"     level="DEBUG"/>
+    <logger name="jdbc.connection"     level="INFO"/>
 </configuration>

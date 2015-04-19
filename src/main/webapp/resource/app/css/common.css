@@ -78,6 +78,7 @@ label.error-label.hide {display: none;}
 .feed ul li .message .feed-url { padding-top:50px; height:150px; }
 .feed ul li .message .feed-url .feed-url-title { font-weight: bold; font-size: 14px; }
 .feed ul li .message .feed-url .feed-url-contents { border: 1px solid #e9ebec; box-shadow: none; height: 110px; padding: 10px; width: 100%; }
+.feed ul li .message .attachment{ margin-top: 30px;}
 .feed ul li .config { background: none repeat scroll 0 0 #ced1d4; cursor: pointer; display: inline-block; padding: 5px 10px; position: absolute; top: 10px; right: -31px; }
 .feed ul li .name { background: none repeat scroll 0 0 #e9ebec; left: 10px; padding: 5px 10px; position: absolute; top: 10px; width: 100%; font-weight: bold; }
 .feed ul li .date { background: none repeat scroll 0 0 #dbdee0; padding: 5px 20px 5px 10px; position: absolute; right: -1px; top: 10px; z-index: 1; }
