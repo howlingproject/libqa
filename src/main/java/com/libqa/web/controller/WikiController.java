@@ -35,6 +35,7 @@ public class WikiController {
         List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
         mav.addObject("resecntWiki", resecntWiki);
 
+        List<Wiki> bestWiki = wikiService.findByBestWiki(0, 5);
 
         return mav;
     }
@@ -62,6 +63,7 @@ public class WikiController {
         try{
             log.info("####### WIKI SAVE Begin INFO ########");
             log.info("wiki = {}", wiki);
+            log.info("wiki.wikiFile = {}", wiki.getWikiFiles());
             wiki.setSpaceId(1);
             wiki.setPasswd("1234");
             wiki.setUserNick("하이");

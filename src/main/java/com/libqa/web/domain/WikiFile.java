@@ -17,10 +17,6 @@ public class WikiFile{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer fileId;
 
-    @ManyToOne
-    @JoinColumn(name="wikiId", referencedColumnName="wikiId",  nullable = false)
-    private Wiki wiki;
-
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date insertDate;
@@ -48,4 +44,6 @@ public class WikiFile{
 
     @Column(nullable = false)
     private Integer userId;
+
+    private Integer wikiId;
 }

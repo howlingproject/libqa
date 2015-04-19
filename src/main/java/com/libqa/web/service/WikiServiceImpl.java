@@ -2,6 +2,8 @@ package com.libqa.web.service;
 
 import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.web.domain.Wiki;
+import com.libqa.web.domain.WikiFile;
+import com.libqa.web.repository.KeywordRepository;
 import com.libqa.web.repository.WikiRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,12 @@ public class WikiServiceImpl implements WikiService {
     WikiRepository wikiRepository;
 
     @Autowired
+    KeywordRepository keywordRepository;
+
+    @Autowired
+    private WikiFileService wikiFileService;
+
+    @Autowired
     private KeywordService keywordService;
 
     @Override
@@ -31,13 +39,31 @@ public class WikiServiceImpl implements WikiService {
     @Override
     public Wiki saveWithKeyword(Wiki wiki) {
         Wiki result = save(wiki);
+        saveWikiFileAndList(result);
+        saveKeywordAndList(wiki, result);
+        return result;
+    }
 
+    private void saveWikiFileAndList(Wiki wiki) {
+        List<WikiFile> wikiFiles= wiki.getWikiFiles();
+        Wiki tempWiki = new Wiki();
+        tempWiki.setWikiId(wiki.getWikiId());
+
+        for( WikiFile wikiFile : wikiFiles ){
+            wikiFile.setInsertDate( wiki.getInsertDate());
+            wikiFile.setUserId(wiki.getUserId() );
+            wikiFile.setWikiId( wiki.getWikiId() );
+            wikiFileService.saveWikiFileAndList(wikiFile);
+        }
+
+    }
+
+    private void saveKeywordAndList(Wiki wiki, Wiki result) {
         String[] keywordArrays = wiki.getKeywords().split(",");
         log.info(" keywordArrays : {}", keywordArrays.length);
         if (keywordArrays.length > 0) {
             keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.WIKI, result.getSpaceId());
         }
-        return result;
     }
 
     @Override
@@ -53,6 +79,7 @@ public class WikiServiceImpl implements WikiService {
 
     @Override
     public List<Wiki> findByBestWiki(int startIdx, int endIdx) {
+
         return null;
     }
 
@@ -64,6 +91,8 @@ public class WikiServiceImpl implements WikiService {
                 )
 
         );
+
+
 
         return wikiRepository.findAll(pageRequest).getContent();
     }
