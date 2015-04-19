@@ -12,6 +12,11 @@
     <div class="thread-message-box">
         <div class="message">
             {{nl2br feedContent}}
+            <div class="attachment">
+                {{#feedFiles}}
+                <a href="{{filePath}}/{{savedName}}" target="_blank"><i class="fa fa-file-o"></i> {{realName}}</a>&nbsp;
+                {{/feedFiles}}
+            </div>
         </div>
         <div class="action-buttons">
             <i class="fa fa-thumbs-o-up"><span class="like-count">(72)</span></i>
@@ -44,7 +49,7 @@
     <ul>
         <li>
             <div class="row">
-                <form name="feedReplyForm">
+                <form name="feedReplyForm" onsubmit="return false;">
                     <input type="hidden" name="feedId" value="{{feedId}}" />
                     
                     <div class="col-xs-9 col-md-10">

@@ -42,4 +42,5 @@ public class Keyword {
     @Temporal(TemporalType.DATE)
     private Date updateDate;
 
+    private int keywordGroupCount;
 }

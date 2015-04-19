@@ -10,7 +10,7 @@
         </div>
 
         <div class="modal-body well">
-            <form role="form-" id="wikiForm">
+            <form role="form" id="wikiForm">
                 <div class="form-horizontal">
                     <div class="form-group">
                         <label for="space_title" class="col-sm-1 control-label">공간제목</label>
@@ -43,13 +43,19 @@
                     <input type="hidden" name="keywords" id="keywords" />
                 </div>
                 <div class="form-group">
-                    <div class="form-inline col-md-pull-10">
-                        <input id="file-attachment" type="file" style="display:none">
-                        <input id="fileAttachmentInput" class="form-control" type="text" style="width: 50%;" placeholder="첨부파일">
-                        <button class="btn btn-info btn-default" type="button" onclick="$('input[id=file-attachment]').click();">파일선택
-                        </button>
-                        <p class="help-block"></p>
+                    <div id="uploadFilesArea">
+                        <span class="glyphicon glyphicon-paperclip btn-m"></span>
+                        <span>Attachments</span>
+                        <div id="uploadfileList" class="alert alert-success attachment-thumbnail">
+                        </div>
                     </div>
+                    <input name="uploadType" value="Qa" type="hidden">
+                    <input name="uploadFilePath" id="uploadFilePath" type="hidden">
+                    <input id="viewType" name="viewType" value="Image" type="hidden" />
+                    <input id="file-attachment" name="uploadfile" type="file" style="display:none">
+                    <p class="help-block"></p>
+                    <button class="btn btn-info btn-default" type="button" onclick="$('#file-attachment').click();">파일선택</button>
+
                 </div>
             </form>
         </div>
@@ -87,6 +93,7 @@
                 ,width : '100%'
                 //,height : '300px'
             });
+            $("#file-attachment").on("change", Wiki.uploadFile);
         });
 
         $("#saveWiki").on("click", function(e){
@@ -128,6 +135,51 @@
                         }
                     }});
                 return false;
+            },
+            uploadFile : function(){
+                var field = $("#file-attachment").val();
+                if (field != '') {
+                    $.ajax({
+                        url: "/common/uploadFile",
+                        type: "POST",
+                        data: new FormData($("#wikiForm")[0]),
+                        enctype: 'multipart/form-data',
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        success: function (req) {
+                            console.log('req : ' + req);
+                            console.log('req.data.uploadType : ' + req.data.uploadType);
+                            if (req.resultCode == 1) {
+                                var idx = $('#realName').size();
+                                var fileDivTemplat = '<div class="fileDiv" style="padding: 5px;">' +
+                                        '<input name="wikiFiles['+idx+'].realName"  id="realName" type="hidden" value="'+req.data.realName+'">' +
+                                        '<input name="wikiFiles['+idx+'].savedName" id="savedName" type="hidden" value="'+req.data.savedName+'">' +
+                                        '<input name="wikiFiles['+idx+'].filePath"  id="filePath" type="hidden" value="'+req.data.filePath+'">' +
+                                        '<input name="wikiFiles['+idx+'].fileSize"  id="fileSize" type="hidden" value="'+req.data.fileSize+'">' +
+                                        '<input name="wikiFiles['+idx+'].fileType"  id="fileType" type="hidden" value="'+req.data.fileExtendType+'">' +
+                                        '<a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
+                                        '<a href="#fileDiv" onclick="$(this).parent().remove();">' +
+                                        '<span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>' +
+                                        '</a>' +
+                                        '</div>';
+                                $('#uploadfileList').append(fileDivTemplat);
+                            }
+                        },
+                        error: function (req) {
+                            // Handle upload error
+                            alert('req : ' + req);
+                            console.log('req : ' + req.status);
+                            console.log('req : ' + req.readyState);
+
+                            if (req.status == 500) {
+                                alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
+                            } else {
+                                alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                            }
+                        }
+                    });
+                }
             }
         };
 

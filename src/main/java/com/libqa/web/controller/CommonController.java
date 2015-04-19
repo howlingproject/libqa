@@ -22,6 +22,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
 
+import static com.libqa.application.enums.FileTypeEnum.FILE;
+import static com.libqa.application.enums.FileTypeEnum.IMAGE;
+
 /**
  * Created by yion on 2015. 3. 1..
  */
@@ -48,6 +51,7 @@ public class CommonController {
 
     /**
      * /space/ajaxUpload.hbs 파일 참조 - File input 의 onChange 시점에 임시 저장하여 view에 정보를 넘겨준다.
+     *
      * @param uploadfile
      * @param request
      * @return
@@ -87,6 +91,7 @@ public class CommonController {
             // 파일 정보 추출
             fileDto = FileUtil.extractFileInfo(uploadfile, localDir);
             fileDto.setFilePath(localDir);
+            fileDto.setFileType(FileUtil.checkImageFile(uploadfile) ? IMAGE : FILE);
 
             String filePath = Paths.get(serverPath, localDir, fileDto.getSavedName()).toString();
             log.debug("## filePath : {}", filePath);
@@ -135,7 +140,7 @@ public class CommonController {
 
     @RequestMapping(value = "/common/deleteFile", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<?> deleteFile(HttpServletRequest request){
+    public ResponseData<?> deleteFile(HttpServletRequest request) {
         String filePath = request.getParameter("filePath");
         String savedName = request.getParameter("savedName");
         FileDto fileDto = new FileDto();

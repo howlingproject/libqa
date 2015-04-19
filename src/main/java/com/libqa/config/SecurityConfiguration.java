@@ -45,7 +45,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         webSecurity
                 .ignoring()
                 .antMatchers("/", "/resource/**");
-
     }
 
     @Override
@@ -55,7 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         httpSecurity
                 .authorizeRequests()
-                .antMatchers("/user/**", "/space", "/space/**", "/feed/main", "/qa", "/qa/**", "/wiki/**", "/common/**").permitAll()
+                .antMatchers("/user/**", "/space", "/space/**", "/feed/**", "/qa", "/qa/**", "/wiki/**", "/common/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .and()
                 .formLogin()

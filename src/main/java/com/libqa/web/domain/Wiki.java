@@ -1,5 +1,6 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -86,7 +87,8 @@ public class Wiki {
     @Temporal(TemporalType.DATE)
     private Date updateDate;
 
-    @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<WikiFile> wikiFiles;
 
     @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)

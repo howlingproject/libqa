@@ -1,6 +1,7 @@
 package com.libqa.web.service;
 
 import com.libqa.web.domain.Wiki;
+import com.libqa.web.domain.WikiFile;
 
 import java.util.List;
 

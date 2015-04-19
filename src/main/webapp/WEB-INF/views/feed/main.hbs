@@ -8,7 +8,7 @@
         <div class="feed feed-write well">
             <div class="feed-write-top">
                 <div class="action-buttons text-right">
-                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#fileUploadModal">파일첨부</button>
+                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#fileUploadModal">이미지 및 파일첨부</button>
                 </div>
             </div>
             <ul>
@@ -20,6 +20,12 @@
                     </div>
                     <div class="write-box">
                         <textarea class="form-control" name="feedContent" rows="6" placeholder="오늘 있었던 일을 동료와 공유해주세요"></textarea>
+                    </div>
+                    <div class="attachmentArea">
+                        <div class="images text-left"></div>
+                        <div class="files">
+                            <!--<a href="#"><i class="fa fa-file-o"></i> 첨부파일.zip</a>-->
+                        </div>
                     </div>
                 </li>
             </ul>
@@ -335,38 +341,22 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="fileUploadModalLabel">파일 첨부</h4>
+                <h4 class="modal-title" id="fileUploadModalLabel">이미지 및 파일 첨부</h4>
             </div>
             <div class="modal-body">
                 <div class="feed well">
-                    <form class="form-horizontal attachmentForm" role="form">
-
+                    <form class="form-horizontal attachmentForm" role="form" id="feedFileForm">
                         <div class="form-group">
-                            <label class="col-sm-2 col-md-2 control-label">타입</label>
-
-                            <div class="col-sm-10 col-md-10">
-                                <label class="radio-inline">
-                                    <input type="radio" name="fileType" id="fileType1" value="file" checked="checked">
-                                    파일
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="fileType" id="fileTyp2" value="image"> 이미지
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <input id="file-attachment" type="file" style="display:none">
-                            <label for="fileAttachmentInput" class="col-sm-2 control-label">파일첨부</label>
+                            <input id="uploadfile" type="file" name="uploadfile" accept="*" style="display:none">
+                            <label for="fileAttachmentInput" class="col-sm-2 control-label">첨부파일</label>
 
                             <div class="col-sm-10 col-md-10">
                                 <div class="row">
                                     <div class="col-sm-9 col-xs-9 col-md-9">
-                                        <input id="fileAttachmentInput" class="form-control" type="text" placeholder="파일을 선택해주세요.">
+                                        <input id="fileAttachmentInput" class="form-control" type="text" />
                                     </div>
                                     <div class="col-sm-3 col-xs-3 col-md-3">
-                                        <button class="btn btn-info btn-default" type="button" onclick="$('input[id=file-attachment]').click();">파일선택
-                                        </button>
+                                        <button class="btn btn-info btn-default" type="button" onclick="$('#uploadfile').click();">선택</button>
                                     </div>
                                 </div>
                             </div>
@@ -380,23 +370,10 @@
                             </div>
                         </div>
                     </form>
-                    <script type="text/javascript">
-                        $('input[id="file-attachment"]').change(function () {
-                            $('#attachmentInput').val($(this).val());
-                        });
-                        $('input[name="fileType"]').change(function () {
-                            if($(this).val() == 'file') {
-                               $('.image-options').hide();
-                            } else {
-                                $('.image-options').show();
-                            }
-                        });
-                    </script>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-info" type="button">확인</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
             </div>
         </div>
     </div>
@@ -420,7 +397,9 @@
     <script type="text/javascript">
         var Feed = {
             init : function() {
+                this.initModal();
                 this.bindSave();
+                this.bindAttachment();
                 this.searchList();
             },
             searchList : function() {
@@ -442,19 +421,20 @@
                     if(!that.checkValidate()) {
                         return false;
                     }
-
                     var data = $('#feedForm').serialize();
-                    $.post('/feed/save', data).done(function(response){
-                        if(response.resultCode != 1) {
-                            alert(response.comment);
-                            return;
-                        }
-                        
-                        that.searchList();
-                        that.clearForm();
-                    }).fail(function(){
-                        alert('Error saving feed');
-                    });
+                    $.post('/feed/save', data)
+                        .done(function(response){
+                            if(response.resultCode != 1) {
+                                alert(response.comment);
+                                return;
+                            }
+
+                            that.searchList();
+                            that.clearForm();
+                            FeedFile.clear();
+                        }).fail(function(){
+                            alert('Error saving feed');
+                        });
                 });
             },
             clearForm: function() {
@@ -467,13 +447,78 @@
                     return false;
                 }
                 return true;
+            },
+            bindAttachment: function () {
+                $('#uploadfile').change(function(){
+                    $('#fileAttachmentInput').val($('#uploadfile').val());
+                    
+                    var $feedFileForm = $("#feedFileForm");
+                    $.ajax({
+                        url: "/common/uploadFile",
+                        type: "POST",
+                        data: new FormData($feedFileForm[0]),
+                        enctype: 'multipart/form-data',
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        success: function (req) {
+                            FeedFile.add(req.data);
+                            $('#fileUploadModal').modal('hide');
+                        },
+                        error: function (req) {
+                            alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
+                        }
+                    });
+                });
+            },
+            initModal: function() {
+                $('#fileUploadModal').on('show.bs.modal', function () {
+                    $('#fileAttachmentInput').val('');
+                });
             }
         };
 
-        Feed.init();
-        
+        var FeedFile = {
+            add: function(fileObj) {
+                this.createDownloadLinkToForm(fileObj);
+                this.addHiddenTagToForm(fileObj);
+            },
+            clear: function(){
+                this.removeDonwloadLinksInForm();
+                this.removeHiddenTagsInForm();
+            },
+            createDownloadLinkToForm: function (obj) {
+                var downloadPath = obj.filePath + '/' + obj.savedName;
+                var $file = ' <a href="' + downloadPath + '" target="_blank"><i class="fa fa-file-o"></i> ' + obj.realName + '</a>';
+                $('#feedForm .attachmentArea .files').append($file);
+            },
+            addHiddenTagToForm: function (obj) {
+                var idx = $('#feedForm input[name$=fileType]').size();
+                
+                var $input = $('<input />').attr('type', 'hidden');
+                $('#feedForm').append($input.clone().attr('name', "feedFiles["+ idx + "].realName").val(obj.realName))
+                    .append($input.clone().attr('name', "feedFiles["+ idx + "].savedName").val(obj.savedName))
+                    .append($input.clone().attr('name', "feedFiles["+ idx + "].filePath").val(obj.filePath))
+                    .append($input.clone().attr('name', "feedFiles["+ idx + "].fileSize").val(obj.fileSize))
+                    .append($input.clone().attr('name', "feedFiles["+ idx + "].fileType").val(obj.fileType));
 
+//                $('#feedForm').append('<input type="hidden" name="feedFiles['+ idx + '].realName" value="'+ obj.realName+'" />')
+//                    .append('<input type="hidden" name="feedFiles['+ idx + '].savedName" value="'+ obj.savedName +'" />')
+//                    .append('<input type="hidden" name="feedFiles['+ idx + '].filePath" value="'+ obj.filePath +'" />')
+//                    .append('<input type="hidden" name="feedFiles['+ idx + '].fileSize" value="'+ obj.fileSize +'" />')
+//                    .append('<input type="hidden" name="feedFiles['+ idx + '].fileType" value="'+ obj.fileType +'" />')
+            },
+            removeDonwloadLinksInForm: function() {
+                $('#feedForm .attachmentArea .files').empty();
+                $('#feedForm input[name^=feedFiles]').remove();
+            },
+            removeHiddenTagsInForm: function() {
+                $('#feedForm input[name^=feedFiles]').remove();
+            }
+        };
+        
     $(function(){
+        Feed.init();
 //        $('#right-panel-link').panelslider({side: 'right', clickClose: true, duration: 200 });
     });
     </script>

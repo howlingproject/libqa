@@ -39,7 +39,10 @@ public class HandlebarsHelper {
     }
 
     public String subString(String html, int startIdx, int endIdx){
-        return html.substring(startIdx, endIdx);
+        if( html.length() > endIdx ){
+            return html.substring(startIdx, endIdx);
+        }
+        return html;
     }
 
     public String nl2br(String str, Options options) {
