@@ -27,14 +27,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-//    @Autowired
-//    private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     private CustomAuthenticationProvider customAuthenticationProvider;
-
-    @Autowired
-    private LoginHandler loginHandler;
 
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {

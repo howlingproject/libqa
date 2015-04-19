@@ -16,6 +16,7 @@ import java.io.IOException;
  * @Description :
  */
 public class LoginHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+
     public LoginHandler(String defaultTargetUrl) {
         setDefaultTargetUrl(defaultTargetUrl);
     }

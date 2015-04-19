@@ -86,7 +86,21 @@ public class UserController {
         return mav;
     }
 
+
+
+    /**
+     * hasAnyAuthority() or hasAnyRole() ('authority' and 'role' are synonyms in Spring Security lingo!) - checks whether the current user has one of the GrantedAuthority in the list.
+     hasAuthority() or hasRole() - as above, but for just one.
+     isAuthenticated() or isAnonymous() - whether the current user is authenticated or not.
+     isRememberMe() or isFullyAuthenticated() - whether the current user is authenticated by 'remember me' token or not.
+     * @param model
+     * @return
+     */
     // @PreAuthorize("hasAuthority('ADMIN')")
+    // hasAnyRole('USER', 'ADMIN')
+    // isFullyAuthenticated() and hasAnyRole(‘customer’, ‘admin’)
+    // hasIpAddress(‘127.0.0.1’)
+    // hasRole(‘admin’) and hasIpAddress(‘192.168.1.0/24’)
     @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("/userInfo")
     public ModelAndView userInfo(Model model) {

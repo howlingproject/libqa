@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
  * @Date : 2015. 4. 18.
  * @Description :
  */
+@Deprecated
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
