@@ -1,5 +1,6 @@
 package com.libqa.application.dto;
 
+import com.libqa.application.enums.FileTypeEnum;
 import lombok.Data;
 
 /**
@@ -22,4 +23,6 @@ public class FileDto {
     private String fileExtendType;
 
     private String uploadType;
+
+    private FileTypeEnum fileType;
 }
