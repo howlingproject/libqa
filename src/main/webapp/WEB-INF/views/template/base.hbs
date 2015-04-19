@@ -150,13 +150,15 @@
             }
 
             var data = $("#loginForm").serialize();
-            $.post('/login', data).done(function(){
-                console.log("success");
-                $(location).attr('href', "/userInfo");
+            $.post('/login', data).done(function(response){
+                var result = jQuery.parseJSON(response);
+
+                if (result.status == true) {
+                    $(location).attr('href', result.returnUrl);
+                }
             }).fail(function(){
                 console.log("# ERROR login");
-                console.log({{error}});
-                console.log({{status}});
+
                 $("#loginInfo").show();
             });
         });

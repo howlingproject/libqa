@@ -94,4 +94,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUserNick(userNick);
     }
 
+    @Override
+    public User findByEmailAndIsCertification(String email) {
+        User user = this.findByEmail(email);
+
+        if (user.isCertification() == false) {
+            return null;
+        }
+
+        return user;
+    }
+
 }

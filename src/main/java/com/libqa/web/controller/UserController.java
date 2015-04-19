@@ -1,9 +1,9 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.Exception.UserNotCreateException;
-import com.libqa.application.enums.RoleEnum;
 import com.libqa.application.enums.StatusCodeEnum;
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.RequestUtil;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,19 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,6 +32,23 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+
+    @RequestMapping(value = "/user/view", method = RequestMethod.GET)
+    public String printWelcome(ModelMap model) {
+
+        return "/user/view";
+    }
+
+
+//    @RequestMapping(value="/user/view", method = RequestMethod.GET)
+//    public String printWelcome(ModelMap model, Principal principal ) {
+//        String name = principal.getName();
+//        model.addAttribute("username", name);
+//        model.addAttribute("message", "Spring Security Custom Form example");
+//        return "/user/view";
+//    }
+
 
     /*
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
@@ -78,7 +91,7 @@ public class UserController {
      */
     @RequestMapping("/user/signup")
     public ModelAndView signUp(HttpServletRequest request) {
-        String targetUrl = returnUrl(request);
+        String targetUrl = RequestUtil.refererUrl(request, "/index");
         request.getSession().setAttribute("targetUrl", targetUrl);
 
         ModelAndView mav = new ModelAndView("/user/form");
@@ -87,12 +100,12 @@ public class UserController {
     }
 
 
-
     /**
      * hasAnyAuthority() or hasAnyRole() ('authority' and 'role' are synonyms in Spring Security lingo!) - checks whether the current user has one of the GrantedAuthority in the list.
-     hasAuthority() or hasRole() - as above, but for just one.
-     isAuthenticated() or isAnonymous() - whether the current user is authenticated or not.
-     isRememberMe() or isFullyAuthenticated() - whether the current user is authenticated by 'remember me' token or not.
+     * hasAuthority() or hasRole() - as above, but for just one.
+     * isAuthenticated() or isAnonymous() - whether the current user is authenticated or not.
+     * isRememberMe() or isFullyAuthenticated() - whether the current user is authenticated by 'remember me' token or not.
+     *
      * @param model
      * @return
      */
@@ -110,7 +123,7 @@ public class UserController {
 
         String email = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
-        Collection<? extends GrantedAuthority> auths =authentication.getAuthorities();
+        Collection<? extends GrantedAuthority> auths = authentication.getAuthorities();
 
 //        Iterables.getFirst(
         List<GrantedAuthority> grantedAuths = (List<GrantedAuthority>) authentication.getAuthorities();
@@ -131,28 +144,28 @@ public class UserController {
 
     @RequestMapping("/user/createUser")
     @ResponseBody
-    public ResponseData<User> createUser(@RequestParam String userEmail,
-                                         @RequestParam String userNick,
-                                         @RequestParam String userPass,
+    public ResponseData<User> createUser(@RequestParam String loginUserMail,
+                                         @RequestParam String loginUserNick,
+                                         @RequestParam String loginUserPass,
                                          @RequestParam String loginType, // Social Login type
                                          @RequestParam String targetUrl) {
-        log.info("# userEmail = {}", userEmail);
-        log.info("# userNick = {}", userNick);
-        log.info("# userPass = {}", userPass);
+        log.info("# userEmail = {}", loginUserMail);
+        log.info("# userNick = {}", loginUserNick);
+        log.info("# userPass = {}", loginUserPass);
         log.info("# loginType = {}", loginType);
         ResponseData<User> resultData = null;
         User user = new User();
         try {
-            User duplicateEmail = userService.findByEmail(userEmail);   // 이메일 중복 체크
-            User duplicateNick = userService.findByNick(userNick);      // 닉네임 중복 체크
+            User duplicateEmail = userService.findByEmail(loginUserMail);   // 이메일 중복 체크
+            User duplicateNick = userService.findByNick(loginUserNick);      // 닉네임 중복 체크
 
             if (duplicateEmail == null && duplicateNick == null) {
-                user = userService.createUser(userEmail, userNick, userPass, loginType);
+                user = userService.createUser(loginUserMail, loginUserNick, loginUserPass, loginType);
                 user.setTargetUrl(targetUrl);   // 이전 주소 세팅
                 resultData = resultData.createSuccessResult(user);
             } else {
-                user.setUserEmail(userEmail);
-                user.setUserNick(userNick);
+                user.setUserEmail(loginUserMail);
+                user.setUserNick(loginUserNick);
 
                 resultData = new ResponseData();
                 resultData.setComment("가입정보의 이메일 혹은 닉네임이 이미 존재합니다. 다른 정보로 가입하세요.");
@@ -162,8 +175,8 @@ public class UserController {
 
         } catch (UserNotCreateException e) {
             e.printStackTrace();
-            user.setUserEmail(userEmail);
-            user.setUserNick(userNick);
+            user.setUserEmail(loginUserMail);
+            user.setUserNick(loginUserNick);
             resultData = resultData.createFailResult(user);
         }
 
@@ -198,16 +211,6 @@ public class UserController {
         mav.addObject("result", result);
         mav.addObject("msg", msg);
         return mav;
-    }
-
-    private String returnUrl(HttpServletRequest request) {
-        String targetUrl = request.getHeader("Referer");
-        log.info("## Using Referer header: " + targetUrl);
-
-        if (targetUrl == null) {
-            targetUrl = "/";
-        }
-        return targetUrl;
     }
 
     /**

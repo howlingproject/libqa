@@ -2,6 +2,8 @@ package com.libqa.config;
 
 import com.github.jknack.handlebars.springmvc.HandlebarsViewResolver;
 import com.libqa.application.helper.HandlebarsHelper;
+import com.libqa.config.security.PopulateGlobalAttrInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
@@ -20,6 +22,16 @@ import javax.sql.DataSource;
 public class ApplicationConfigurerAdapter extends WebMvcConfigurerAdapter {
     @Value("${environment.viewResolver.cached}")
     private boolean viewResolverCached;
+
+    @Bean
+    public PopulateGlobalAttrInterceptor populateGlobalAttrInterceptor() {
+        return new PopulateGlobalAttrInterceptor();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(populateGlobalAttrInterceptor());
+    }
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {

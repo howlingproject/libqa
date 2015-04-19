@@ -63,19 +63,19 @@ Time: 16:20
 
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user" style="width:14px"></i></span>
-                        <input type="text" class="form-control" name="userEmail" id="userEmail" placeholder="Email address">
+                        <input type="text" class="form-control" name="loginUserMail" id="loginUserMail" placeholder="Email address">
                     </div>
                     <span class="help-block"></span>
 
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
-                        <input type="text" class="form-control" name="userNick" id="userNick" placeholder="User Nickname">
+                        <input type="text" class="form-control" name="loginUserNick" id="loginUserNick" placeholder="User Nickname">
                     </div>
                     <span class="help-block"></span>
 
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-lock" style="width:14px"></i></span>
-                        <input  type="password" class="form-control" name="userPass" id="userPass" placeholder="Password">
+                        <input  type="password" class="form-control" name="loginUserPass" id="loginUserPass" placeholder="Password">
                     </div>
                     <span class="help-block">Password error - 중복검사 안내 문구 출력 </span>
 
@@ -106,9 +106,13 @@ Time: 16:20
         // bind the on-change event
         $(document).ready(function() {
             $("#signUser").click(function() {
-                userEmail = $("#userEmail").val();
-                userNick = $("#userNick").val();
-                userPass = $("#userPass").val();
+                userEmail = $("#loginUserMail").val();
+                userNick = $("#loginUserNick").val();
+                userPass = $("#loginUserPass").val();
+
+                console.log('userEmail=' + userEmail);
+                console.log('userNick=' + userNick);
+                console.log('userPass=' + userPass);
                 if (!checkValidEmail(userEmail)) {
                     alertEmail();
                     return false;
@@ -235,6 +239,7 @@ Time: 16:20
                 // Ajax로 중복 검사
                 return true;
             }
+
         }
 
         function checkValidName(name) {

@@ -42,4 +42,11 @@ public interface UserService {
      * @return
      */
     User findByNick(String userNick);
+
+    /**
+     * 로그인 처리 (인증 여부 검사)
+     * @param email
+     * @return
+     */
+    User findByEmailAndIsCertification(String email);
 }

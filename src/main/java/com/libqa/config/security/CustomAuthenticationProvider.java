@@ -37,7 +37,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         log.info("### CustomAuthenticationProvider email = {}", email);
         log.info("### CustomAuthenticationProvider password = {}", password);
         log.info("### CustomAuthenticationProvider principal = {}", principal);
-        User user = userService.findByEmail(email);
+        User user = userService.findByEmailAndIsCertification(email);
+
+
         if (user != null) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             boolean isUser = encoder.matches(password, user.getUserPass());

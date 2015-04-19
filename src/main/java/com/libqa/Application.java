@@ -50,12 +50,4 @@ public class Application {
         characterEncodingFilter.setForceEncoding(true);
         return characterEncodingFilter;
     }
-
-    @Bean
-    protected Filter getServletFilters() {
-        System.out.println("#### getServletFilters start!!");
-        DelegatingFilterProxy proxyFilter = new DelegatingFilterProxy("springSecurityFilterChain");
-
-        return proxyFilter;
-    }
 }
