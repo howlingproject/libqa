@@ -186,7 +186,6 @@
                 });
             },
             saveReply : function(){
-                alert("##");
                 setParam();
                 $.ajax({
                     type : 'POST',
@@ -198,6 +197,7 @@
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
+                        alert(errorThrown);
                     }
                 });
             }

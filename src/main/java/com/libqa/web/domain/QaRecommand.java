@@ -18,7 +18,6 @@ public class QaRecommand {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer qaRecommandId;
 
-    @JsonBackReference
     @Column(nullable = false)
     private Integer qaId;
 

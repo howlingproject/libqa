@@ -1,6 +1,5 @@
 package com.libqa.web.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,7 +22,6 @@ public class QaReply {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer replyId;
 
-    @JsonBackReference
     @Column(nullable = false)
     private Integer qaId;
 
