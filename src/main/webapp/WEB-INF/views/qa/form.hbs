@@ -76,7 +76,7 @@
             </fieldset>
             <div class="col-md12 text-center">
                 <button id="cancelButton" type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-                <button id="saveButton" class="btn btn-primary">저장</button>
+                <button id="saveButton" class="btn btn-primary" onclick="test();">저장</button>
             </div>
         </section>
     </div>
@@ -95,6 +95,34 @@
             $('#contentsMarkup').val(DualEditor.getMarkupEditHtml());
             $('#tag-cloud').find('li').each(function(){
                 $('#qaForm').append('<input type="hidden" name="keyword" value="'+this.innerHTML+'">');
+            });
+        }
+
+        function test(){
+            setParam();
+            var data = $('#qaForm').serialize();
+//                $.post('/qa/save', data)
+//                        .done(function(response){
+//                            if(response.resultCode == 1) {
+//                                location.href = "/qa/" + response.data.qaId;
+//                            }
+//                        }).fail(function(){
+//                            alert('Error saving qa');
+//                        });
+            $.ajax({
+                url : '/qa/save',
+                type : "POST",
+                dataType: "json",
+                cache: false,
+                data : data,
+                success : function(data){
+                    if(data.resultCode == 1) {
+                        location.href = "/qa/" + data.data.qaId;
+                    }
+                },
+                error : function(XMLHttpRequest,textStatus,errorThrown){
+                    alert(errorThrown);
+                }
             });
         }
 
@@ -180,14 +208,25 @@
             },
             formEvent : function(){
                 $("#cancelButton").on("click", Qa.cancelContents);
-                $("#saveButton").on("click", Qa.saveContents);
+//                $("#saveButton").on("click", Qa.saveContents);
             },
             saveContents : function(){
                 setParam();
+                var data = $('#qaForm').serialize();
+//                $.post('/qa/save', data)
+//                        .done(function(response){
+//                            if(response.resultCode == 1) {
+//                                location.href = "/qa/" + response.data.qaId;
+//                            }
+//                        }).fail(function(){
+//                            alert('Error saving qa');
+//                        });
                 $.ajax({
-                    type : 'POST',
-                    data : $('#qaForm').serialize(),
                     url : '/qa/save',
+                    type : "POST",
+                    dataType: "json",
+                    cache: false,
+                    data : data,
                     success : function(data){
                         if(data.resultCode == 1) {
                             location.href = "/qa/" + data.data.qaId;
