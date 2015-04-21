@@ -51,17 +51,19 @@ public class QaFileServiceImpl implements QaFileService {
     }
 
     public void qaFileMove(QaContent qaContentInstance) throws Exception {
-        for(int i=0; i < qaContentInstance.getRealName().size(); i++){
-            FileDto fileDto = new FileDto();
-            fileDto.setRealName((String) qaContentInstance.getRealName().get(i));
-            fileDto.setSavedName((String) qaContentInstance.getSavedName().get(i));
-            fileDto.setFilePath((String) qaContentInstance.getFilePath().get(i));
-            fileDto.setRootPath(StringUtil.defaultString(servletContext.getRealPath(FileUtil.SEPARATOR)));
-            fileDto.setFileSize(Integer.parseInt((String) qaContentInstance.getFileSize().get(i)));
-            fileDto.setFileExtendType((String) qaContentInstance.getFileType().get(i));
-            ResponseData<?> resultFile = commonController.moveFileToProduct(fileDto);
-            if(1 == resultFile.getResultCode()) {
-                makeQaFileInstance(qaContentInstance, resultFile);
+        if(qaContentInstance.getRealName() != null) {
+            for (int i = 0; i < qaContentInstance.getRealName().size(); i++) {
+                FileDto fileDto = new FileDto();
+                fileDto.setRealName((String) qaContentInstance.getRealName().get(i));
+                fileDto.setSavedName((String) qaContentInstance.getSavedName().get(i));
+                fileDto.setFilePath((String) qaContentInstance.getFilePath().get(i));
+                fileDto.setRootPath(StringUtil.defaultString(servletContext.getRealPath(FileUtil.SEPARATOR)));
+                fileDto.setFileSize(Integer.parseInt((String) qaContentInstance.getFileSize().get(i)));
+                fileDto.setFileExtendType((String) qaContentInstance.getFileType().get(i));
+                ResponseData<?> resultFile = commonController.moveFileToProduct(fileDto);
+                if (1 == resultFile.getResultCode()) {
+                    makeQaFileInstance(qaContentInstance, resultFile);
+                }
             }
         }
     }

@@ -31,23 +31,23 @@ public class QaServiceImpl implements QaService {
 
     @Override
     public QaContent saveWithKeyword(QaContent qaContentInstance, QaFile qaFile) {
-        QaContent qaContent;
+        QaContent newQaContent;
         try {
-            qaContent = qaContentSave(qaContentInstance);
+            newQaContent = qaContentSave(qaContentInstance);
             saveQaFileAndFileMove(qaContentInstance);
-            saveKeywordAndList(qaContentInstance, qaContent);
+            saveKeywordAndList(qaContentInstance, newQaContent);
         }catch(Exception e){
             log.info(e.toString());
             throw new RuntimeException("제발제발!!!!!");
         }
-        return qaContent;
+        return newQaContent;
     }
 
-    public void saveKeywordAndList(QaContent qaContentInstance, QaContent qaContent) {
+    public void saveKeywordAndList(QaContent qaContentInstance, QaContent newQaContent) {
         if (qaContentInstance.getKeyword() != null) {
             int keywordListSize = qaContentInstance.getKeyword().size();
             String [] keywordArrays = (String[]) qaContentInstance.getKeyword().toArray(new String[keywordListSize]);
-            keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.QA, qaContent.getQaId());
+            keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.QA, newQaContent.getQaId());
         }
     }
 
@@ -56,19 +56,16 @@ public class QaServiceImpl implements QaService {
     }
 
     public QaContent qaContentSave(QaContent qaContentInstance) {
-        QaContent qaContent;
         qaContentInstance.setUserId(1);
         qaContentInstance.setUserNick("용퓌");
         qaContentInstance.setInsertUserId(1);
         qaContentInstance.setInsertDate(new Date());
-        qaContent = qaRepository.save(qaContentInstance);
-        return qaContent;
+        return qaRepository.save(qaContentInstance);
     }
 
     @Override
     @Transactional(readOnly = false)
     public QaContent findByQaId(Integer qaId, boolean isDeleted) {
-
         return qaRepository.findOneByQaIdAndIsDeleted(qaId, isDeleted);
     }
 
