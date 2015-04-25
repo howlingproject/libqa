@@ -5,10 +5,7 @@ import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
 import com.libqa.web.domain.QaReply;
-import com.libqa.web.service.KeywordService;
-import com.libqa.web.service.QaFileService;
-import com.libqa.web.service.QaReplyService;
-import com.libqa.web.service.QaService;
+import com.libqa.web.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yong on 2015-02-08.
@@ -41,6 +40,9 @@ public class QaController {
     @Autowired
     KeywordService keywordService;
 
+    @Autowired
+    KeywordListService keywordListService;
+
     @RequestMapping("/qa")
     public String qa() {
         return "redirect:/qa/main";
@@ -48,6 +50,8 @@ public class QaController {
 
     @RequestMapping("/qa/main")
     public ModelAndView main(Model model){
+        boolean isDeleted = false;
+
         ModelAndView mav = new ModelAndView("qa/main");
         return mav;
     }
@@ -95,7 +99,7 @@ public class QaController {
     @ResponseBody
     public ResponseData<QaFile> fileList(@RequestParam("qaId") Integer qaId) throws IOException {
         boolean isDeleted = false;
-        List<QaFile> qaFileList = new ArrayList<>();
+        List<QaFile> qaFileList = new ArrayList<QaFile>();
         try {
             QaContent qaContent = qaService.findByQaId(qaId, isDeleted);
             qaFileList = qaContent.getQaFiles();
@@ -103,6 +107,20 @@ public class QaController {
         }catch (Exception e){
             e.printStackTrace();
             return ResponseData.createFailResult(qaFileList);
+        }
+    }
+
+    @RequestMapping(value = "/qa/qaList", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<HashMap> qaList(@RequestParam Map<String, String> params){
+        List<QaContent> qaContentList = new ArrayList<>();
+        HashMap resultMap = new HashMap();
+        try {
+            qaContentList = qaService.findByIsReplyedAndDaytype(params);
+            resultMap.put("qaContentList", qaContentList);
+            return ResponseData.createSuccessResult(resultMap);
+        }catch(Exception e){
+            return ResponseData.createFailResult(resultMap);
         }
     }
 }

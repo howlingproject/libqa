@@ -15,4 +15,7 @@ public interface KeywordService {
     boolean saveKeywordAndList(String[] keywordNames, KeywordTypeEnum keywordType, Integer entityId);
 
     List<Keyword> findByQaId(Integer qaId, boolean isDeleted);
+
+    List<Keyword> findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum keywordType, String keywordName, boolean isDeleted);
+
 }

@@ -1,0 +1,8 @@
+<div class="media qna-item">
+    <ul class="nav nav-pills nav-stacked cat-keyword">
+        <li class="active" value="JAVA"><a href="#">JAVA(120/789)</a></li>
+        {{#each data}}
+            <li value="{{keywordName}}"><a href="#">{{keywordName}}({{keywordCount}}/789)</a></li>
+        {{/each}}
+    </ul>
+</div>

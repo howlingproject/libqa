@@ -308,6 +308,8 @@
 {{/partial}}
 
 {{#partial "script-page"}}
+{{embedded "common/keywordList"}}
+{{embedded "qa/list"}}
     <script type="text/javascript">
         $(document).ready(function(){
             Qa.init();
@@ -317,40 +319,68 @@
             init : function(){
                 this.renderKeywordList();
                 this.renderRecentQaList();
-                this.renderWaitReplyQaList();
+//                this.renderWaitReplyQaList();
                 this.bindDayTypeEvent();
             },
             renderKeywordList : function(keywordName){
                 $.ajax({
-                    url: '${createLink(controller:'keywordList',action:'categorizeKeywordList')}',
-                    data : {keywordType : 'QA', keywordName : Qa.selectedKeyword(keywordName)},
-                    failure: function(){ },
-                    success: function(response) {
-                        $('#categorizeKeywordListArea').html(response);
-                        Qa.bindKeywordListEvent()
+                    url: "/common/getKeywordList",
+                    type: "POST",
+                    data: { keywordType : 'QA', keywordName : Qa.selectedKeyword(keywordName) },
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            var source = $('#common-keywordList-hbs').html();
+                            var template = Handlebars.compile(source);
+
+                            var html = template(data);
+                            $('#categorizeKeywordListArea').html(html);
+                            Qa.bindKeywordListEvent();
+                        }
+                    },
+                    error : function(req){
+                        // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
+
+                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
                     }
                 });
             },
             renderRecentQaList : function(dayType){
                 $.ajax({
-                    url: '${createLink(controller:'qa',action:'renderQaList')}',
-                    data : {keywordType : 'QA', keywordName : Qa.selectedKeyword(), dayType : dayType},
-                    failure: function(){ },
-                    success: function(response) {
-                        $('#recentQaListArea').html(response);
+                    url: "/qa/qaList",
+                    type: "POST",
+                    data: { keywordType : 'QA', keywordName : Qa.selectedKeyword(), dayType : dayType },
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            var source = $('#qa-list-hbs').html();
+                            var template = Handlebars.compile(source);
+
+                            var html = template(data);
+                            $('#recentQaListArea').html(html);
+                        }
+                    },
+                    error : function(req){
+                        // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
+
+                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
                     }
                 });
             },
-            renderWaitReplyQaList : function(dayType){
-                $.ajax({
-                    url: '${createLink(controller:'qa',action:'renderQaList')}',
-                    data : {keywordType : 'QA', keywordName : Qa.selectedKeyword(), waitReply : 'Y', dayType : dayType},
-                    failure: function(){ },
-                    success: function(response) {
-                        $('#waitReplyQaListArea').html(response);
-                    }
-                });
-            },
+//            renderWaitReplyQaList : function(dayType){
+//                $.ajax({
+//                    url: '${createLink(controller:'qa',action:'renderQaList')}',
+//                    data : {keywordType : 'QA', keywordName : Qa.selectedKeyword(), waitReply : 'Y', dayType : dayType},
+//                    failure: function(){ },
+//                    success: function(response) {
+//                        $('#waitReplyQaListArea').html(response);
+//                    }
+//                });
+//            },
             selectedKeyword : function(keywordName){
                 if(!keywordName){
                     keywordName = '';

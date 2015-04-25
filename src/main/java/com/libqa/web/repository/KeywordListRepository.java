@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface KeywordListRepository extends JpaRepository<KeywordList, Long> {
 	List<KeywordList> findByKeywordNameAndKeywordType(String keywordName, KeywordTypeEnum keywordType);
+
+	List<KeywordList> findByKeywordTypeAndIsDeleted(KeywordTypeEnum keywordType, boolean isDeleted);
 }

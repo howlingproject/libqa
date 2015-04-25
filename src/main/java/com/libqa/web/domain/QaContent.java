@@ -99,4 +99,5 @@ public class QaContent {
 
     @Transient
     private List fileType;
+
 }
