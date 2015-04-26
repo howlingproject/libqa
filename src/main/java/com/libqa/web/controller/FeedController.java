@@ -40,10 +40,6 @@ public class FeedController {
     
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public ResponseData<Feed> save(Feed feed) {
-        feed.setInsertDate(new Date());
-        feed.setUserId(1234);
-        feed.setUserNick("feedTester");
-        feed.setInsertUserId(1234);
         try {
             feedService.save(feed);
             return createSuccessResult(feed);
@@ -56,10 +52,6 @@ public class FeedController {
     @RequestMapping(value = "reply/save", method = RequestMethod.POST)
     public ResponseData<FeedReply> saveReply(FeedReply feedReply) {
         try {
-            feedReply.setInsertDate(new Date());
-            feedReply.setUserId(1234);
-            feedReply.setUserNick("feedReplyTester");
-            feedReply.setInsertUserId(1234);
             feedReplyService.save(feedReply);
             return createSuccessResult(feedReply);
         } catch (Exception e)  {
