@@ -7,6 +7,8 @@ import com.libqa.web.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,6 +29,9 @@ import java.util.Date;
 public class UserServiceImpl implements UserService {
 
     @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -34,17 +39,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User createUser(String userEmail, String userNick, String password, String LoginType) throws UserNotCreateException {
+    public User createUser(String userEmail, String userNick, String password, String loginType) throws UserNotCreateException {
         // LoginType 에 따라 소셜 연동 여부를 결정 짓는다.
-        LoginType = SocialChannelTypeEnum.WEB.name();
+        loginType = SocialChannelTypeEnum.WEB.name();
         User createUser = null;
         try {
-            User user = User.createUser(userEmail, userNick, new BCryptPasswordEncoder().encode(password), LoginType);
+            User user = User.createUser(userEmail, userNick, new BCryptPasswordEncoder().encode(password), loginType);
             createUser = userRepository.save(user);
             log.info("### createUser = {}", createUser);
 
             // 인증 메일 보내기
-            sendAuthMail(createUser);
+            if (loginType.equals(SocialChannelTypeEnum.WEB.name())) {
+                sendAuthMail(createUser);
+            }
+
         } catch (Exception e) {
             log.error("User Not Create Exception!!! ", createUser);
             throw new UserNotCreateException("사용자 정보가 생성되지 않았습니다. 에러를 확인하세요.", e);
@@ -54,9 +62,18 @@ public class UserServiceImpl implements UserService {
         return createUser;
     }
 
-    private void sendAuthMail(User createUser) {
+    void sendAuthMail(User createUser) {
         log.info("### Send mail ");
         // mailService
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo("someone@localhost");
+        mailMessage.setReplyTo("someone@localhost");
+        mailMessage.setFrom("someone@localhost");
+        mailMessage.setSubject("Lorem ipsum");
+        mailMessage.setText("Lorem ipsum dolor sit amet [...]");
+        javaMailSender.send(mailMessage);
+
     }
 
 

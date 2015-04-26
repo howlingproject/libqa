@@ -1,6 +1,6 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.ContentsTypeEnum;
+import com.libqa.application.enums.SocialChannelTypeEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,7 +20,7 @@ public class Feed {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true, length = 20)
-    private ContentsTypeEnum sharedContentsType;
+    private SocialChannelTypeEnum socialChannelTypeEnum;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String feedContent;
