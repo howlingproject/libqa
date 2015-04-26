@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedFile;
 import com.libqa.web.domain.User;
@@ -20,7 +21,7 @@ import java.util.List;
 public class FeedService {
 
     @Autowired
-    private UserService userService;
+    private LoggedUser loggedUser;
     @Autowired
     private FeedRepository feedRepository;
     @Autowired
@@ -32,7 +33,7 @@ public class FeedService {
     }
 
     public void save(Feed feed) {
-        User user = userService.findByAuthentication();
+        User user = loggedUser.get();
         
         feed.setInsertDate(new Date());
         feed.setUserNick(user.getUserNick());

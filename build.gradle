@@ -1,7 +1,6 @@
 buildscript {
     ext.springBootVersion = '1.2.2.RELEASE'
     repositories {
-//        jcenter()
         maven { url 'https://repo.spring.io/libs-release' }
         mavenLocal()
         mavenCentral()
