@@ -22,8 +22,7 @@ public class LoggedUser {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
         if (isInvalidUser(userEmail)) {
-            throw new RuntimeException(userEmail + " is invalid user!");
-
+            throw new RuntimeException(userEmail + " is invalid logged user!");
         }
         return userService.findByEmail(userEmail);
     }
