@@ -96,4 +96,6 @@ public class Wiki {
 
     @Transient
     private String keywords;
+
+    private long replyCount;
 }

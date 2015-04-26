@@ -52,7 +52,7 @@ public class QaContent {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private SocialChannelTypeEnum socialChannelTypeEnum;
+    private SocialChannelTypeEnum sharedContentsType;
 
     @Column(nullable = true)
     private Integer sharedResponseId;

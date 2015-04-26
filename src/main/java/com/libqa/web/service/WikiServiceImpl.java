@@ -31,6 +31,9 @@ public class WikiServiceImpl implements WikiService {
     @Autowired
     private KeywordService keywordService;
 
+    @Autowired
+    private WikiReplyService wikiReplyService;
+
     @Override
     public Wiki save(Wiki wiki) {
         return wikiRepository.save(wiki);
@@ -48,14 +51,14 @@ public class WikiServiceImpl implements WikiService {
         List<WikiFile> wikiFiles= wiki.getWikiFiles();
         Wiki tempWiki = new Wiki();
         tempWiki.setWikiId(wiki.getWikiId());
-
-        for( WikiFile wikiFile : wikiFiles ){
-            wikiFile.setInsertDate( wiki.getInsertDate());
-            wikiFile.setUserId(wiki.getUserId() );
-            wikiFile.setWikiId( wiki.getWikiId() );
-            wikiFileService.saveWikiFileAndList(wikiFile);
+        if( wikiFiles != null && wikiFiles.size() > 0){
+            for( WikiFile wikiFile : wikiFiles ){
+                wikiFile.setInsertDate( wiki.getInsertDate());
+                wikiFile.setUserId(wiki.getUserId() );
+                wikiFile.setWikiId( wiki.getWikiId() );
+                wikiFileService.saveWikiFileAndList(wikiFile);
+            }
         }
-
     }
 
     private void saveKeywordAndList(Wiki wiki, Wiki result) {
@@ -74,7 +77,15 @@ public class WikiServiceImpl implements WikiService {
     @Override
     public List<Wiki> findByAllWiki(int startIdx, int endIdx) {
         PageRequest pageRequest = new PageRequest(startIdx, endIdx, new Sort(new Sort.Order(Sort.Direction.DESC, "insertDate")));
-        return wikiRepository.findAll(pageRequest).getContent();
+        List<Wiki> list = wikiRepository.findAll(pageRequest).getContent();
+        if( list != null && list.size() > 0 ){
+            for( Wiki wiki : list ){
+                long replyCount = wikiReplyService.countByWikiWikiId(wiki.getWikiId());
+                wiki.setReplyCount(replyCount);
+            }
+        }
+
+        return list;
     }
 
     @Override

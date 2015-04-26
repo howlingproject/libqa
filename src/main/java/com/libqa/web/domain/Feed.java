@@ -20,7 +20,7 @@ public class Feed {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true, length = 20)
-    private SocialChannelTypeEnum socialChannelTypeEnum;
+    private SocialChannelTypeEnum sharedContentsType;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String feedContent;
