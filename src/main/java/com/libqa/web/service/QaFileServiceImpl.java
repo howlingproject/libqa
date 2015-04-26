@@ -38,7 +38,7 @@ public class QaFileServiceImpl implements QaFileService {
     public boolean saveQaFileAndFileMove(QaContent qaContentInstance) {
         boolean result = true;
         try {
-            qaFileMove(qaContentInstance);
+            //qaFileMove(qaContentInstance);
         } catch (Exception e) {
             e.printStackTrace();
             result = false;
@@ -50,6 +50,7 @@ public class QaFileServiceImpl implements QaFileService {
             qaFileRepository.save(qaFileInstance);
     }
 
+    /*
     public void qaFileMove(QaContent qaContentInstance) throws Exception {
         if(qaContentInstance.getRealName() != null) {
             for (int i = 0; i < qaContentInstance.getRealName().size(); i++) {
@@ -67,6 +68,7 @@ public class QaFileServiceImpl implements QaFileService {
             }
         }
     }
+    */
 
     public void makeQaFileInstance(QaContent qaContentInstance, ResponseData<?> resultFile) {
         FileDto resultFileDto = (FileDto) resultFile.getData();

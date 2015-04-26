@@ -64,8 +64,8 @@ public class QaController {
         List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
         ModelAndView mav = new ModelAndView("qa/view");
         mav.addObject("qaContent", qaContent);
-        mav.addObject("qaReplyList", qaContent.getQaReplys());
-        mav.addObject("qaReplyCnt", qaContent.getQaReplys().size());
+//        mav.addObject("qaReplyList", qaContent.getQaReplys());
+//        mav.addObject("qaReplyCnt", qaContent.getQaReplys().size());
         mav.addObject("keywordList", keywordList);
         return mav;
     }
@@ -78,14 +78,25 @@ public class QaController {
 
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaContent> save(QaContent qaContent, QaFile qaFile){
-        QaContent newQaContent = new QaContent();
+    public ResponseData<QaContent> save(@ModelAttribute QaContent paramQaContent
+                                        //, @ModelAttribute List<QaFile> paramQaFiles
+    ) {
+
+        log.info("## qaContent = {}", paramQaContent);
+        //log.info("## qaFile = {}", paramQaFiles.size());
+
+        QaContent qaContent = new QaContent();
         try {
-            newQaContent = qaService.saveWithKeyword(qaContent, qaFile);
-        } catch (Exception e){
+
+            //qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return ResponseData.createSuccessResult(newQaContent);
+
+        log.info("## Save info = {}", ResponseData.createSuccessResult(qaContent));
+
+        return ResponseData.createSuccessResult(qaContent);
+
     }
 
     @RequestMapping(value = "/qa/saveReply", method = RequestMethod.POST)
@@ -102,7 +113,7 @@ public class QaController {
         List<QaFile> qaFileList = new ArrayList<QaFile>();
         try {
             QaContent qaContent = qaService.findByQaId(qaId, isDeleted);
-            qaFileList = qaContent.getQaFiles();
+            //qaFileList = qaContent.getQaFiles();
             return ResponseData.createSuccessResult(qaFileList);
         }catch (Exception e){
             e.printStackTrace();

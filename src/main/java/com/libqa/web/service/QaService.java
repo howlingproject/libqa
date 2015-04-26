@@ -12,7 +12,7 @@ import java.util.Map;
  * @author yong
  */
 public interface QaService {
-    QaContent saveWithKeyword(QaContent qaContent, QaFile qaFile);
+    QaContent saveWithKeyword(QaContent qaContent, List<QaFile> qaFiles);
 
     QaContent findByQaId(Integer qaId, boolean isDeleted);
 

@@ -83,21 +83,8 @@ public class QaContent {
     private List<QaFile> qaFiles;
 
     @Transient
-    private List keyword;
+    private String keywords;
 
-    @Transient
-    private List realName;
 
-    @Transient
-    private List savedName;
-
-    @Transient
-    private List filePath;
-
-    @Transient
-    private List fileSize;
-
-    @Transient
-    private List fileType;
 
 }
