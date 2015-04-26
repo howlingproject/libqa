@@ -156,10 +156,10 @@
                 if (result.status == true) {
                     $(location).attr('href', result.returnUrl);
                 }
-            }).fail(function(){
-                console.log("# ERROR login");
+            }).fail(function(response){
+                console.log("# ERROR login : " + response.status);
 
-                $("#loginInfo").show();
+                $("#loginInfo").show(0).delay(5000).hide(0);
             });
         });
     });

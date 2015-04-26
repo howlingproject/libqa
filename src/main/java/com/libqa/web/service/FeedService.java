@@ -2,6 +2,7 @@ package com.libqa.web.service;
 
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedFile;
+import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedFileRepository;
 import com.libqa.web.repository.FeedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import java.util.List;
 public class FeedService {
 
     @Autowired
+    private UserService userService;
+    @Autowired
     private FeedRepository feedRepository;
     @Autowired
     private FeedFileRepository feedFileRepository;
@@ -29,6 +32,12 @@ public class FeedService {
     }
 
     public void save(Feed feed) {
+        User user = userService.findByAuthentication();
+        
+        feed.setInsertDate(new Date());
+        feed.setUserNick(user.getUserNick());
+        feed.setUserId(user.getUserId());
+        feed.setInsertUserId(user.getUserId());
         saveFeedFiles(feed);
         feedRepository.save(feed);
     }

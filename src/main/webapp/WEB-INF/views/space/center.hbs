@@ -1,11 +1,15 @@
-<%--
+{{!--
 Created by IntelliJ IDEA.
 User: yion
-Date: 2014. 11. 16.
-Time: 15:05
-Desc: 기본형 메뉴 화면
---%>
-<!-- contents -->
+Date: 2014. 12. 7.
+Time: 16:20
+To change this template use File | Settings | File Templates.
+--}}
+
+{{#partial "title"}}LibQA~{{/partial}}
+
+{{# partial "content" }}
+    <!-- contents -->
 <div class="container">
     <div class="col-md" >
         <div style="padding-bottom: 45px;">
@@ -259,3 +263,16 @@ Desc: 기본형 메뉴 화면
 
 </div>
 
+{{/partial}}
+
+
+{{# partial "script-page" }}
+    <script type="text/javascript">
+        // bind the on-change event
+        $(document).ready(function() {
+
+        });
+    </script>
+{{/partial}}
+
+{{> template/base}}
