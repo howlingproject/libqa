@@ -125,7 +125,7 @@ var DualEditor = (function(){
 
     DualEditor.getMarkupEditHtml = function(){
         var target = $("#wikiEditor");
-        return target.var();
+        return target.val();
     };
 
     DualEditor.getMarkupConvertToHtml = function(){
