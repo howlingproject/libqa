@@ -11,6 +11,7 @@ import com.libqa.web.domain.User;
 public interface UserService {
     /**
      * 회원 가입 (사용자 계정 생성)
+     *
      * @param userEmail
      * @param userNick
      * @param password
@@ -22,6 +23,7 @@ public interface UserService {
 
     /**
      * 인증 여부 업데이트
+     *
      * @param userId
      * @param certificationKey
      * @return
@@ -31,6 +33,7 @@ public interface UserService {
 
     /**
      * 이메일 중복 확인
+     *
      * @param userEmail
      * @return
      */
@@ -38,6 +41,7 @@ public interface UserService {
 
     /**
      * 닉네임 중복 확인
+     *
      * @param userNick
      * @return
      */
@@ -45,8 +49,16 @@ public interface UserService {
 
     /**
      * 로그인 처리 (인증 여부 검사)
+     *
      * @param email
      * @return
      */
     User findByEmailAndIsCertification(String email);
+
+    /**
+     * 인증된 회원 정보를 조회
+     *
+     * @return
+     */
+    User findByAuthentication();
 }

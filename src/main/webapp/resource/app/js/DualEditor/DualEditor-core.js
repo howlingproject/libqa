@@ -92,7 +92,7 @@ var DualEditor = (function(){
         };
         $divs.on( 'scroll', sync);
 
-        $("#wikiEditor").append("마크업 테스트\r\n***\r\n**굵게**\r\n__굵게__\r\n*기울임*\r\n_기울임_\r\n//밑줄//\r\n[d]취소선[d]\r\n[field|필드셋 타이틀]필드셋[field]\r\n[alert]경고[alert]\r\n[info]안내[info]\r\n[sp]아래첨자[sp]\r\n[sb]위첨자[sb]\r\n\r\n||셀제목1||셀제목2||셀제목3||셀제목4||\r\n|컬럼1|컬럼2|컬럼1|컬럼2|\r\n|컬럼3|컬럼4|컬럼3|컬럼4| \r\n\r\n[layout] [field|필드셋 타이틀]필드셋[field] [layout]\n[layout] [alert]경고[alert] [layout]\n[layout] [info]안내[info] [layout]\n[layout] [info]4444[info] [layout]\n[layout] paddig5 [layout]\n[layout] paddig2-1 [layout]\n[layout] paddig2-2 [layout] \r\n\r\n [alert]중간[alert]  \r\n\r\n[layout] [field|필드셋 타이틀]필드셋[field] [layout]\n[layout] [alert]경고[alert] [layout]\n[layout] [info]안내[info] [layout]");
+        $("#wikiEditor").val("마크업 테스트\r\n***\r\n**굵게**\r\n__굵게__\r\n*기울임*\r\n_기울임_\r\n//밑줄//\r\n[d]취소선[d]\r\n[field|필드셋 타이틀]필드셋[field]\r\n[alert]경고[alert]\r\n[info]안내[info]\r\n[sp]아래첨자[sp]\r\n[sb]위첨자[sb]\r\n\r\n||셀제목1||셀제목2||셀제목3||셀제목4||\r\n|컬럼1|컬럼2|컬럼1|컬럼2|\r\n|컬럼3|컬럼4|컬럼3|컬럼4| \r\n\r\n[layout] [field|필드셋 타이틀]필드셋[field] [layout]\n[layout] [alert]경고[alert] [layout]\n[layout] [info]안내[info] [layout]\n[layout] [info]4444[info] [layout]\n[layout] paddig5 [layout]\n[layout] paddig2-1 [layout]\n[layout] paddig2-2 [layout] \r\n\r\n [alert]중간[alert]  \r\n\r\n[layout] [field|필드셋 타이틀]필드셋[field] [layout]\n[layout] [alert]경고[alert] [layout]\n[layout] [info]안내[info] [layout]");
         var editor = document.getElementById("wikiEditor");		// [object HTMLTextAreaElement]
 
         // 각 에디터 버튼 클릭시 액션 처리
@@ -118,14 +118,14 @@ var DualEditor = (function(){
         setInterval(function() {
             $("#wikimaincol").text("");
             var txt = DualEditor.markup( "<div style=\"width:96%\">"+$("#wikiEditor").val()+"</div>" );
-            $("#wikimaincol").append( txt );
+            $("#wikimaincol").html( txt );
         }, 1000);
 
     };
 
     DualEditor.getMarkupEditHtml = function(){
         var target = $("#wikiEditor");
-        return target.html();
+        return target.val();
     };
 
     DualEditor.getMarkupConvertToHtml = function(){
