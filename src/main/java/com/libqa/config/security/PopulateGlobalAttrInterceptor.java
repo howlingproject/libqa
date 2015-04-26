@@ -2,7 +2,6 @@ package com.libqa.config.security;
 
 import com.libqa.application.dto.SecurityUserDto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,7 +34,7 @@ public class PopulateGlobalAttrInterceptor implements HandlerInterceptor {
         boolean isRedirectView = mav.getView() instanceof RedirectView;
         boolean isViewObject = mav.getView() != null;
         boolean viewNameStartsWithRedirect =
-                        (mav.getViewName() == null ? true : mav.getViewName().startsWith(UrlBasedViewResolver.REDIRECT_URL_PREFIX));
+                (mav.getViewName() == null ? true : mav.getViewName().startsWith(UrlBasedViewResolver.REDIRECT_URL_PREFIX));
         if (mav.hasView() && ((isViewObject && !isRedirectView) || (!isViewObject && !viewNameStartsWithRedirect))) {
             Authentication authentication =
                     SecurityContextHolder.getContext().getAuthentication();
@@ -48,6 +47,7 @@ public class PopulateGlobalAttrInterceptor implements HandlerInterceptor {
             String password = (String) authentication.getCredentials();
             Collection<? extends GrantedAuthority> auths = authentication.getAuthorities();
 
+            // 미 로그인 사용자일 경우 role : ROLE_ANONYMOUS
             List<GrantedAuthority> grantedAuths = (List<GrantedAuthority>) authentication.getAuthorities();
             System.out.println("### grantedAuthority = " + grantedAuths.get(0));
 
@@ -67,7 +67,7 @@ public class PopulateGlobalAttrInterceptor implements HandlerInterceptor {
     }
 
 
-    private void addCommonModelData(ModelAndView mav, SecurityUserDto securityUserDto ) {
+    private void addCommonModelData(ModelAndView mav, SecurityUserDto securityUserDto) {
         properties.put("loginUserInfo", securityUserDto);
 
         mav.getModel().putAll(properties);
