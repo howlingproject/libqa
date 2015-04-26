@@ -6,5 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Created by yong on 15. 2. 8..
  */
-public interface WikiReplyRepository extends JpaRepository<WikiReply, Long> {
+public interface WikiReplyRepository extends JpaRepository<WikiReply, Integer>{
+
+    Long countByWikiWikiId(Integer wikiId);
 }
