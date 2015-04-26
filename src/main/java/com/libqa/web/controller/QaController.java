@@ -79,23 +79,24 @@ public class QaController {
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaContent> save(@ModelAttribute QaContent paramQaContent
-                                        //, @ModelAttribute List<QaFile> paramQaFiles
+            , @ModelAttribute List<QaFile> paramQaFiles
     ) {
-
+        ResponseData resultData = new ResponseData();
         log.info("## qaContent = {}", paramQaContent);
         //log.info("## qaFile = {}", paramQaFiles.size());
 
         QaContent qaContent = new QaContent();
         try {
-
-            //qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles);
+            qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles);
+            resultData.createSuccessResult(qaContent);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("## QA 저장시 에러 발생 = ", e);
+            resultData.createFailResult(qaContent);
         }
 
-        log.info("## Save info = {}", ResponseData.createSuccessResult(qaContent));
+        log.info("## Save info = {}", resultData);
 
-        return ResponseData.createSuccessResult(qaContent);
+        return resultData;
 
     }
 

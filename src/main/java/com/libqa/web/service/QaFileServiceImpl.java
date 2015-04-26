@@ -46,6 +46,16 @@ public class QaFileServiceImpl implements QaFileService {
         return result;
     }
 
+    @Override
+    public QaFile save(QaFile qaFile) {
+        return qaFileRepository.save(qaFile);
+    }
+
+    @Override
+    public void removeFile(QaFile qaFile) {
+
+    }
+
     public void saveQaFile(QaFile qaFileInstance) {
             qaFileRepository.save(qaFileInstance);
     }

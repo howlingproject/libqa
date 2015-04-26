@@ -36,19 +36,37 @@ public class QaServiceImpl implements QaService {
     QaFileService qaFileService;
 
     @Override
+    @Transactional
     public QaContent saveWithKeyword(QaContent qaContent, List<QaFile> qaFiles) {
         QaContent newQaContent;
         try {
             newQaContent = qaContentSave(qaContent);
-            //saveQaFileAndFileMove(qaContentInstance);
+            saveQaFilesAndReMove(newQaContent.getQaId(), qaFiles);
             //saveFileAndRemove(qaFile);
-
             saveKeywordAndList(newQaContent.getQaId(), qaContent.getKeywords());
         }catch(Exception e){
             log.info(e.toString());
             throw new RuntimeException("제발제발!!!!!");
         }
         return newQaContent;
+    }
+
+    void saveQaFilesAndReMove(Integer qaId, List<QaFile> qaFiles) {
+        for (QaFile qaFile : qaFiles) {
+
+            qaFile.setQaId(qaId);
+            QaFile temp = qaFileService.save(qaFile);
+
+            if (temp != null) {
+                fileReMove(qaFile);
+            }
+
+        }
+
+    }
+
+    void fileReMove(QaFile qaFile) {
+        qaFileService.removeFile(qaFile);
     }
 
     void saveKeywordAndList(Integer qaId, String keywords) {
