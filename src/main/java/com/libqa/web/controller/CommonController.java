@@ -5,7 +5,10 @@ import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.DateUtil;
 import com.libqa.application.util.FileUtil;
 import com.libqa.application.util.StringUtil;
+import com.libqa.web.domain.KeywordList;
+import com.libqa.web.service.KeywordListService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.libqa.application.enums.FileTypeEnum.FILE;
 import static com.libqa.application.enums.FileTypeEnum.IMAGE;
@@ -31,6 +36,9 @@ import static com.libqa.application.enums.FileTypeEnum.IMAGE;
 @Slf4j
 @Controller
 public class CommonController {
+
+    @Autowired
+    KeywordListService keywordListService;
 
     // 403 Access Denied
     @RequestMapping(value = "/access", method = RequestMethod.GET)
@@ -131,11 +139,11 @@ public class CommonController {
             } else {
                 log.debug("파일이 존재하지 않거나 폴더 경로 입니다.");
             }
+            return ResponseData.createSuccessResult(fileDto);
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseData.createFailResult(fileDto);
         }
-        return ResponseData.createSuccessResult(fileDto);
     }
 
     @RequestMapping(value = "/common/deleteFile", method = RequestMethod.POST)
@@ -159,6 +167,20 @@ public class CommonController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseData.createFailResult(fileDto);
+        }
+    }
+
+    @RequestMapping(value = "/common/getKeywordList", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<KeywordList> getKeywordlist(@RequestParam("keywordType") String keywordType){
+        boolean isDeleted = false;
+        List<KeywordList> keywordList = new ArrayList<KeywordList>();
+
+        try {
+            keywordList = keywordListService.findByKeywordType(keywordType, isDeleted);
+            return ResponseData.createSuccessResult(keywordList);
+        } catch (Exception e){
+            return ResponseData.createFailResult(keywordList);
         }
     }
 

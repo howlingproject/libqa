@@ -15,7 +15,6 @@ public class QaFile {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer fileId;
 
-    @JsonBackReference
     @Column(nullable = false)
     private Integer qaId;
 

@@ -1,6 +1,5 @@
 package com.libqa.web.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.libqa.application.enums.ContentsTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -75,15 +74,12 @@ public class QaContent {
     private Integer updateUserId;
 
     @OneToMany(mappedBy = "qaId", fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<QaReply> qaReplys;
 
     @OneToMany(mappedBy = "qaId", fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<QaRecommand> qaRecommands;
 
     @OneToMany(mappedBy = "qaId", fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<QaFile> qaFiles;
 
     @Transient
@@ -103,4 +99,5 @@ public class QaContent {
 
     @Transient
     private List fileType;
+
 }

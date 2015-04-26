@@ -1,6 +1,5 @@
 package com.libqa.web.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,7 +16,6 @@ public class Vote {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer voteId;
 
-    @JsonBackReference
     @Column(nullable = false)
     private Integer replyId;
 

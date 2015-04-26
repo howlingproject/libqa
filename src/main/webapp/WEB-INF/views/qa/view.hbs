@@ -91,25 +91,47 @@
                             답변 {{qaReplyCnt}}
                         </h3>
                     </div>
-                    <div class="panel-body">
+                    <ul class="list-group">
                         {{#each qaReplyList}}
-                            {{title}}
+                            <li class="list-group-item">
+                                <div style="margin-left: 5px; margin-bottom: 10px;">
+                                    <div class="avatar avatar-medium clearfix ">
+                                        <div class="user-profile-sm">
+                                            <span class="nickname">sjune</span>
+                                            <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                                        </div>
+                                    </div>
+                                </div>
+                                {{title}}
+                                <div class="pull-right" style="width:10%;border: 1px solid red;vertical-align: middle;">
+                                    추천<br>비추천
+                                </div>
+                            </li>
                         {{/each}}
-                    </div>
+                        <li class="list-group-item">
+                            <div style="margin-left: 5px; margin-bottom: 10px;">
+                                <div class="avatar avatar-medium clearfix ">
+                                    <div class="user-profile-sm">
+                                        <span class="nickname">sjune</span>
+                                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 댓글작성 Bootstrap Live Editor -->
+                            <div id="editor" class="form-group">
+                                <input type="hidden" id="contents" name="contents" />
+                                <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
+                                <input type="hidden" id="orderIdx" name="orderIdx" value="1" />   <!-- 답변 계층 -->
+                                <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
+                                <input type="hidden" id="parentsId" name="parentsId" value="3" />   <!-- 답변 계층 -->
+                                <input type="hidden" id="parentsId" name="title" value="답변에 title?" />   <!-- 답변 계층 -->
+                            </div>
+                            <!--// 댓글작성 Bootstrap Live Editor -->
+                        </li>
+                    </ul>
                 </div>
             </div>
             <!--// 댓글 list -->
-
-            <!-- 댓글작성 Bootstrap Live Editor -->
-            <div id="editor" class="form-group">
-                <input type="hidden" id="contents" name="contents" />
-                <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
-                <input type="hidden" id="orderIdx" name="orderIdx" value="1" />   <!-- 답변 계층 -->
-                <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
-                <input type="hidden" id="parentsId" name="parentsId" value="3" />   <!-- 답변 계층 -->
-                <input type="hidden" id="parentsId" name="title" value="답변에 title?" />   <!-- 답변 계층 -->
-            </div>
-            <!--// 댓글작성 Bootstrap Live Editor -->
 
             <div class="text-center">
                 <button id="saveReplyButton" type="button" class="btn btn-primary btn-default">저장</button>
@@ -186,7 +208,6 @@
                 });
             },
             saveReply : function(){
-                alert("##");
                 setParam();
                 $.ajax({
                     type : 'POST',
@@ -198,6 +219,7 @@
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
+                        alert(errorThrown);
                     }
                 });
             }

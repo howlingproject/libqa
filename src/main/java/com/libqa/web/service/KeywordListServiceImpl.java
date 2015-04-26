@@ -1,8 +1,13 @@
 package com.libqa.web.service;
 
 import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.web.domain.KeywordList;
+import com.libqa.web.repository.KeywordListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by yong on 2015-03-08.
@@ -12,6 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class KeywordListServiceImpl implements KeywordListService {
 
+    @Autowired
+    KeywordListRepository keywordListRepository;
 
     @Override
     public boolean saveKeywordList(Object obj, KeywordTypeEnum keywordType) {
@@ -37,5 +44,19 @@ public class KeywordListServiceImpl implements KeywordListService {
 //            successType = 0
 //        }
         return successType;
+    }
+
+    @Override
+    public List<KeywordList> findByKeywordType(String keywordType, boolean isDeleted) {
+        List<KeywordList> keywordList = new ArrayList<>();
+        switch (keywordType){
+            case "WIKI" :
+                keywordList = keywordListRepository.findByKeywordTypeAndIsDeleted(KeywordTypeEnum.WIKI, isDeleted);
+            case "SPACE" :
+                keywordList = keywordListRepository.findByKeywordTypeAndIsDeleted(KeywordTypeEnum.SPACE, isDeleted);
+            case "QA" :
+                keywordList = keywordListRepository.findByKeywordTypeAndIsDeleted(KeywordTypeEnum.QA, isDeleted);
+        }
+        return keywordList;
     }
 }
