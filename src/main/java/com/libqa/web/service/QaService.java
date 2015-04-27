@@ -12,9 +12,9 @@ import java.util.Map;
  * @author yong
  */
 public interface QaService {
-    QaContent saveWithKeyword(QaContent qaContent, List<QaFile> qaFiles);
+    QaContent saveWithKeyword(QaContent qaContent, QaFile qaFiles)throws Exception;
 
     QaContent findByQaId(Integer qaId, boolean isDeleted);
 
-    List<QaContent> findByIsReplyedAndDaytype(Map<String, String> params);
+    List<QaContent> findByIsReplyedAndDayType(Map<String, String> params);
 }

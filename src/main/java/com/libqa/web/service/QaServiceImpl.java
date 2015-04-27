@@ -37,36 +37,21 @@ public class QaServiceImpl implements QaService {
 
     @Override
     @Transactional
-    public QaContent saveWithKeyword(QaContent qaContent, List<QaFile> qaFiles) {
-        QaContent newQaContent;
+    public QaContent saveWithKeyword(QaContent qaContent, QaFile qaFiles){
+        QaContent newQaContent = new QaContent();
         try {
             newQaContent = qaContentSave(qaContent);
-            saveQaFilesAndReMove(newQaContent.getQaId(), qaFiles);
-            //saveFileAndRemove(qaFile);
+            moveQaFilesToProductAndSave(newQaContent.getQaId(), qaFiles);
             saveKeywordAndList(newQaContent.getQaId(), qaContent.getKeywords());
         }catch(Exception e){
-            log.info(e.toString());
-            throw new RuntimeException("제발제발!!!!!");
+            log.error("### moveQaFilesToProductAndSave Exception = {}", e);
+            throw new RuntimeException("moveQaFilesToProductAndSave Exception");
         }
         return newQaContent;
     }
 
-    void saveQaFilesAndReMove(Integer qaId, List<QaFile> qaFiles) {
-        for (QaFile qaFile : qaFiles) {
-
-            qaFile.setQaId(qaId);
-            QaFile temp = qaFileService.save(qaFile);
-
-            if (temp != null) {
-                fileReMove(qaFile);
-            }
-
-        }
-
-    }
-
-    void fileReMove(QaFile qaFile) {
-        qaFileService.removeFile(qaFile);
+    void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
+        qaFileService.moveQaFilesToProductAndSave(qaId, qaFiles);
     }
 
     void saveKeywordAndList(Integer qaId, String keywords) {
@@ -76,7 +61,6 @@ public class QaServiceImpl implements QaService {
             if (keywordArrays.length > 0) {
                 keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.QA, qaId);
             }
-
         }
     }
 
@@ -89,17 +73,6 @@ public class QaServiceImpl implements QaService {
         }
     }
     */
-
-
-    private void saveFileAndRemove(QaFile qaFile) {
-
-    }
-
-
-
-    public boolean saveQaFileAndFileMove(QaContent qaContentInstance) {
-        return qaFileService.saveQaFileAndFileMove(qaContentInstance);
-    }
 
     public QaContent qaContentSave(QaContent qaContent) {
         qaContent.setUserId(1);
@@ -116,7 +89,7 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public List<QaContent> findByIsReplyedAndDaytype(Map<String, String> params) {
+    public List<QaContent> findByIsReplyedAndDayType(Map<String, String> params) {
         boolean isDeleted = false;
         Date today = new Date();
         List<QaContent> returnQaContentObj = new ArrayList<>();

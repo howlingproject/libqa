@@ -14,6 +14,7 @@
 {{!-- 여기에 .css 파일 경로 --}}
     <link href="/resource/public/css/bootstrap-tag-cloud/bootstrap-tag-cloud.css" rel="stylesheet">
 {{/partial}}
+
 {{#partial "script-header"}}
     <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
     <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
@@ -39,7 +40,7 @@
                                 <!-- 에디터 -->
                                 <div id="editor" class="form-group">
                                     <input type="hidden" id="contents" name="contents" />
-                                    <input type="hidden" id="contentsMarkup" name="contentsMarkup" value=""/>
+                                    <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
                                 </div>
                                 <!--// 에디터 -->
                                 <div class="form-group">
@@ -49,8 +50,6 @@
                                             <button type="button" class="btn btn-primary" id="keywordAdd">Add <i class="glyphicon glyphicon-plus"></i></button>
                                         </div>
                                     </div>
-                                    <input type="hidden" name="keywords" id="keywords" />
-
                                     <div class="col-md-8">
                                         <ul id="tag-cloud" style="padding-left: 0px; width:100%;"></ul>
                                     </div>
@@ -89,181 +88,217 @@
 {{#partial "script-page"}}
     <script type="text/javascript">
         $(document).ready(function(){
-
-            DualEditor.setting({
-                 src : '/resource/app'
-                ,tarketId : 'editor'
-                ,width : '100%'
-            });
-
-            // Qa.bindEvent();
+            Qa.makeEditor();
+            Qa.bindEvent();
         });
 
-        var keywordData = [];
-
-        /**
-         * 키워드 추가
-         * 키워드가 3건 이상 등록 될 경우 폼을 disabled 한다.
-         * 대소문자 중복 허용하지 않는다.
-         */
-        $('#keywordAdd').click(function () {
-            var keyword = $('#interesting').val();
-
-            if (keywordData.length == 3) {
-                $.alert({
-                    title: '확인',
-                    content: '키워드는 최대 3건만 등록할 수 있습니다.',
-                    confirmButton: 'OK',
-                    confirmButtonClass: 'btn-primary',
-                    icon: 'fa fa-info',
-                    animation: 'zoom',
-                    confirm: function () {
-
-                    }
-                });
-            }
-
-            keywordData.push(keyword);
-
-            var taskArray = [];
-            $("input[name=keywords]").each(function () {
-                taskArray.push(keyword);
+        function setParam(){
+            $('#contents').val(DualEditor.getMarkupConvertToHtml());
+            $('#contentsMarkup').val(DualEditor.getMarkupEditHtml());
+            $('#tag-cloud').find('li').each(function(){
+                $('#qaForm').append('<input type="hidden" name="keywords" value="'+this.innerHTML+'">');
             });
-
-            if (keywordData.length > 2) {
-                $("#interesting").attr("readonly", true);
-                $("#keywordAdd").attr("disabled", true);
-            }
-        });
-
-
-        /**
-         * 키워드 삭제
-         * 키워드가 삭제되면 폼을 enabled 한다.
-         */
-        $('#tag-cloud').on('click', 'li', function (event) {
-            var keyword = $(event.target).text();
-            var index = keywordData.indexOf(keyword);
-
-            if (index > -1) {
-                keywordData.splice(index, 1);
-                $('input[name=keywords]').val(keywordData);
-                $("#interesting").attr("readonly", false);
-                $("#keywordAdd").attr("disabled", false);
-            }
-        });
-
-        $('#saveButton').on('click', function () {
-            $.confirm({
-                title: '확인',
-                content: '공간을 생성 하겠습니까?<BR>11',
-                confirmButton: '공간생성',
-                cancelButton: '취소',
-                confirmButtonClass: 'btn-info',
-                confirm: function () {
-                    create();
-                },
-                cancel: function(){
-
-                }
-            });
-        });
-
-
-        function create(){
-            $('#contents').val("123");
-            $('#contentsMarkup').val("1234");
-            $("#keywords").val(keywordData);
-
-            var data = $('#qaForm').serialize();
-
-            console.log("#QaForm : " + data);
-            $.ajax({
-                type: "post",
-                dataType: "json",
-                data: data,
-                url: "/qa/save",
-                cache: false,
-                success: function (req) {
-                    console.log("req = " + req);
-                    console.log("req.resultCode = " + req.resultCode);
-                    console.log("req.data = " + req.data);
-
-                    if (req.resultCode == 1) {
-                        $.confirm({
-                            title: '완료',
-                            content: '저장 완료 ',
-                            confirmButton: '이동',
-                            cancelButton: '취소',
-                            confirmButtonClass: 'btn-info',
-                            icon: 'fa fa-question-circle',
-                            animation: 'top',
-                            confirm: function () {
-                                location.href = "/qa/" + response.data.qaId;
-                            }
-                        });
-
-                    }
-                },
-                error: function (req) {
-                    // Handle upload error
-                    if (req.status == 500) {
-                        error500(true, '');
-                    } else {
-                        error500(false, req.status);
-                    }
-                }
-            });
-
-
-//                $.post('/qa/save', data)
-//                        .done(function(response){
-//                            if(response.resultCode == 1) {
-//                                location.href = "/qa/" + response.data.qaId;
-//                            }
-//                        }).fail(function(){
-//                            alert('Error saving qa');
-//                        });
-//            $.ajax({
-//                url : '/qa/save',
-//                type : "POST",
-//                dataType: "json",
-//                cache: false,
-//                data : data,
-//                success : function(data){
-//                    if(data.resultCode == 1) {
-//                        location.href = "/qa/" + data.data.qaId;
-//                    }
-//                },
-//                error : function(XMLHttpRequest,textStatus,errorThrown){
-//                    alert(errorThrown);
-//                }
-//            });
         }
 
-        function error500(condition, status) {
-            if (condition) {
-                $.alert({
-                    title: '확인',
-                    content: '공간 정보 저장중 에러가 발생했습니다.',
-                    confirmButton: 'OK',
-                    confirmButtonClass: 'btn-primary',
-                    icon: 'fa fa-info',
-                    animation: 'zoom',
-                    confirm: function () {
+        var Qa = {
+            keywordData : [],
+            makeEditor : function(){
+                DualEditor.setting({
+                    src : '/resource/app'
+                    ,tarketId : 'editor'
+                    ,width : '100%'
+                });
+            },
+            bindEvent : function(){
+                Qa.fileAttachmentEvent();
+                Qa.keywordAddEvent();
+                Qa.tagCloudEvent();
+                Qa.formEvent();
+            },
+            fileAttachmentEvent : function(){
+                $("#file-attachment").on("change", Qa.uploadFile);
+            },
+            uploadFile : function(){
+                var field = $("#file-attachment").val();
+                if (field != '') {
+                    $.ajax({
+                        url: "/common/uploadFile",
+                        type: "POST",
+                        data: new FormData($("#qaForm")[0]),
+                        enctype: 'multipart/form-data',
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        success: function (req) {
+                            console.log('req : ' + req);
+                            console.log('req.data.uploadType : ' + req.data.uploadType);
+                            if (req.resultCode == 1) {
+                                var fileDivTemplat = Qa.makeFileDivTemplate(req);
+                                $('#uploadfileList').append(fileDivTemplat);
+                            }
+                        },
+                        error: function (req) {
+                            // Handle upload error
+                            alert('req : ' + req);
+                            console.log('req : ' + req.status);
+                            console.log('req : ' + req.readyState);
+
+                            if (req.status == 500) {
+                                alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
+                            } else {
+                                alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                            }
+                        }
+                    });
+                }
+            },
+            /**
+             * 키워드 추가
+             * 키워드가 3건 이상 등록 될 경우 폼을 disabled 한다.
+             */
+            keywordAddEvent : function(){
+                $('#keywordAdd').click(function(){
+                    if ($('#tag-cloud').find('li').length > 3) {
+                        alert('키워드는 최대 3건만 등록할 수 있습니다.');
+                        $('#tag-cloud').find('li')[3].remove();
+                        $("#interesting").attr("readonly",true);
+                        $("#keywordAdd").attr("disabled",true);
+
                     }
                 });
-            } else {
-                $.alert({
-                    title: '확인',
-                    content: '공간 정보 저장중 에러가 발생했습니다. 에러코드 [' + status + ']',
-                    confirmButton: 'OK',
-                    confirmButtonClass: 'btn-primary',
-                    icon: 'fa fa-info',
-                    animation: 'zoom',
-                    confirm: function () {
+            },
+
+            /**
+             * 키워드 삭제
+             * 키워드가 삭제되면 폼을 enabled 한다.
+             */
+            tagCloudEvent : function(){
+                $('#tag-cloud').on('click', 'li', function (event) {
+                    if ($('#tag-cloud').find('li').length < 4) {
+                        $("#interesting").attr("readonly",false);
+                        $("#keywordAdd").attr("disabled",false);
                     }
                 });
+            },
+            formEvent : function(){
+                $("#cancelButton").on("click", Qa.cancelContents);
+                $("#saveButton").on("click", Qa.saveConfirm);
+            },
+            saveContents : function(){
+                setParam();
+                var data = $('#qaForm').serialize();
+                $.ajax({
+                    url : '/qa/save',
+                    type : "POST",
+                    dataType: "json",
+                    cache: false,
+                    data : data,
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            $.confirm({
+                                title: '완료',
+                                content: '저장 완료 ',
+                                confirmButton: '이동',
+                                cancelButton: '취소',
+                                confirmButtonClass: 'btn-info',
+                                icon: 'fa fa-question-circle',
+                                animation: 'top',
+                                confirm: function () {
+                                    location.href = "/qa/" + data.data.qaId;
+                                }
+                            });
+                        }
+                    },
+                    error : function(XMLHttpRequest,textStatus,errorThrown){
+                        alert(XMLHttpRequest);
+                    }
+                });
+            },
+            cancelContents : function(){
+                location.href = '/qa/main';
+            },
+            deleteFile : function(fileDeleteObj){
+                var individualFileDivObj = $(fileDeleteObj).parent();
+                $.ajax({
+                    url: "/common/deleteFile",
+                    type: "POST",
+                    data: { filePath : individualFileDivObj.find('[name=filePath]').val(),
+                        savedName : individualFileDivObj.find('[name=savedName]').val()
+                    },
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            individualFileDivObj.remove();
+                        }
+                    },
+                    error : function(req){
+                        // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
+
+                        if (req.status == 500) {
+                            alert('삭제 중 에러가 발생했습니다. 존재하지 않은 파일 입니다.');
+                        } else {
+                            alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                        }
+                    }
+                });
+            },
+            makeFileDivTemplate : function(dataObj){
+                var req = dataObj;
+                var template =
+                        '<div class="fileDiv" style="padding: 5px;">' +
+                        '<input name="realNames" type="hidden" value="'+req.data.realName+'">' +
+                        '<input name="savedNames" type="hidden" value="'+req.data.savedName+'">' +
+                        '<input name="filePaths" type="hidden" value="'+req.data.filePath+'">' +
+                        '<input name="fileSizes" type="hidden" value="'+req.data.fileSize+'">' +
+                        '<input name="fileTypes" type="hidden" value="'+req.data.fileExtendType+'">' +
+                        '<a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
+                        '<a href="#fileDiv" onclick="$(this).parent().remove();">' +
+                        '<span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>' +
+                        '</a>' +
+                        '</div>';
+                return template;
+            },
+            saveConfirm : function(){
+                $.confirm({
+                    title: '확인',
+                    content: '질문을 저장하시겠습니까?',
+                    confirmButton: '질문저장',
+                    cancelButton: '취소',
+                    confirmButtonClass: 'btn-info',
+                    confirm: function () {
+                        Qa.saveContents();
+                    },
+                    cancel: function(){
+                        return true;
+                    }
+                });
+            },
+            error500 : function(condition, status){
+                if (condition) {
+                    $.alert({
+                        title: '확인',
+                        content: '공간 정보 저장중 에러가 발생했습니다.',
+                        confirmButton: 'OK',
+                        confirmButtonClass: 'btn-primary',
+                        icon: 'fa fa-info',
+                        animation: 'zoom',
+                        confirm: function () {
+                        }
+                    });
+                } else {
+                    $.alert({
+                        title: '확인',
+                        content: '공간 정보 저장중 에러가 발생했습니다. 에러코드 [' + status + ']',
+                        confirmButton: 'OK',
+                        confirmButtonClass: 'btn-primary',
+                        icon: 'fa fa-info',
+                        animation: 'zoom',
+                        confirm: function () {
+                        }
+                    });
+                }
             }
         }
 
