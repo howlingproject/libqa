@@ -5,7 +5,6 @@ import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.FileUtil;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.controller.CommonController;
-import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
 import com.libqa.web.repository.QaFileRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -35,61 +34,55 @@ public class QaFileServiceImpl implements QaFileService {
 
     @Override
     @Transactional
-    public boolean saveQaFileAndFileMove(QaContent qaContentInstance) {
+    public boolean moveQaFilesToProductAndSave(Integer qaId, QaFile paramQaFiles) {
         boolean result = true;
         try {
-            //qaFileMove(qaContentInstance);
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (paramQaFiles.getRealNames() != null) {
+                for (int qaFileIndex = 0; qaFileIndex < paramQaFiles.getRealNames().size(); qaFileIndex++) {
+                    ResponseData<?> resultFile = moveQaFileToProduct(paramQaFiles, qaFileIndex);
+                    if (1 == resultFile.getResultCode()) {
+                        makeQaFileInstance(qaId, resultFile);
+                    }
+                }
+            }
+        }catch(Exception e){
             result = false;
+            log.error("### moveQaFilesToProductAndSave Exception = {}", e);
         }
         return result;
     }
 
-    @Override
-    public QaFile save(QaFile qaFile) {
-        return qaFileRepository.save(qaFile);
+    public ResponseData<?> moveQaFileToProduct(QaFile paramQaFiles, int qaFileIndex) {
+        ResponseData<?> resultFile = new ResponseData<>();
+        FileDto fileDto = new FileDto();
+        try {
+            fileDto.setRealName((String) paramQaFiles.getRealNames().get(qaFileIndex));
+            fileDto.setSavedName((String) paramQaFiles.getSavedNames().get(qaFileIndex));
+            fileDto.setFilePath((String) paramQaFiles.getFilePaths().get(qaFileIndex));
+            fileDto.setRootPath(StringUtil.defaultString(servletContext.getRealPath(FileUtil.SEPARATOR)));
+            fileDto.setFileSize(Integer.parseInt((String)paramQaFiles.getFileSizes().get(qaFileIndex)));
+            fileDto.setFileExtendType((String) paramQaFiles.getFileTypes().get(qaFileIndex));
+            resultFile = commonController.moveFileToProduct(fileDto);
+        }catch(Exception e){
+            log.error("### moveQaFileToProduct Exception = {}", e);
+        }
+        return resultFile;
     }
 
-    @Override
-    public void removeFile(QaFile qaFile) {
-
+    public void makeQaFileInstance(Integer qaId, ResponseData<?> resultFile) {
+        FileDto resultFileDto = (FileDto) resultFile.getData();
+        QaFile qaFile = new QaFile();
+        qaFile.setQaId(qaId);
+        qaFile.setRealName(resultFileDto.getRealName());
+        qaFile.setSavedName(resultFileDto.getSavedName());
+        qaFile.setFilePath(resultFileDto.getFilePath());
+        qaFile.setFileSize((int) resultFileDto.getFileSize());
+        qaFile.setFileType(resultFileDto.getFileExtendType());
+        qaFile.setUserId(1);
+        saveQaFile(qaFile);
     }
 
     public void saveQaFile(QaFile qaFileInstance) {
-            qaFileRepository.save(qaFileInstance);
-    }
-
-    /*
-    public void qaFileMove(QaContent qaContentInstance) throws Exception {
-        if(qaContentInstance.getRealName() != null) {
-            for (int i = 0; i < qaContentInstance.getRealName().size(); i++) {
-                FileDto fileDto = new FileDto();
-                fileDto.setRealName((String) qaContentInstance.getRealName().get(i));
-                fileDto.setSavedName((String) qaContentInstance.getSavedName().get(i));
-                fileDto.setFilePath((String) qaContentInstance.getFilePath().get(i));
-                fileDto.setRootPath(StringUtil.defaultString(servletContext.getRealPath(FileUtil.SEPARATOR)));
-                fileDto.setFileSize(Integer.parseInt((String) qaContentInstance.getFileSize().get(i)));
-                fileDto.setFileExtendType((String) qaContentInstance.getFileType().get(i));
-                ResponseData<?> resultFile = commonController.moveFileToProduct(fileDto);
-                if (1 == resultFile.getResultCode()) {
-                    makeQaFileInstance(qaContentInstance, resultFile);
-                }
-            }
-        }
-    }
-    */
-
-    public void makeQaFileInstance(QaContent qaContentInstance, ResponseData<?> resultFile) {
-        FileDto resultFileDto = (FileDto) resultFile.getData();
-        QaFile qaFileInstance = new QaFile();
-        qaFileInstance.setQaId(qaContentInstance.getQaId());
-        qaFileInstance.setRealName(resultFileDto.getRealName());
-        qaFileInstance.setSavedName(resultFileDto.getSavedName());
-        qaFileInstance.setFilePath(resultFileDto.getFilePath());
-        qaFileInstance.setFileSize((int) resultFileDto.getFileSize());
-        qaFileInstance.setFileType(resultFileDto.getFileExtendType());
-        qaFileInstance.setUserId(1);
-        saveQaFile(qaFileInstance);
+        qaFileRepository.save(qaFileInstance);
     }
 }

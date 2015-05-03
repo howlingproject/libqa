@@ -64,8 +64,8 @@ public class QaController {
         List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
         ModelAndView mav = new ModelAndView("qa/view");
         mav.addObject("qaContent", qaContent);
-//        mav.addObject("qaReplyList", qaContent.getQaReplys());
-//        mav.addObject("qaReplyCnt", qaContent.getQaReplys().size());
+        mav.addObject("qaReplyList", qaContent.getQaReplys());
+        mav.addObject("qaReplyCnt", qaContent.getQaReplys().size());
         mav.addObject("keywordList", keywordList);
         return mav;
     }
@@ -78,26 +78,16 @@ public class QaController {
 
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaContent> save(@ModelAttribute QaContent paramQaContent
-            , @ModelAttribute List<QaFile> paramQaFiles
-    ) {
+    public ResponseData<QaContent> save(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles) {
         ResponseData resultData = new ResponseData();
-        log.info("## qaContent = {}", paramQaContent);
-        //log.info("## qaFile = {}", paramQaFiles.size());
 
         QaContent qaContent = new QaContent();
         try {
             qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles);
-            resultData.createSuccessResult(qaContent);
+            return resultData.createSuccessResult(qaContent);
         } catch (Exception e) {
-            log.error("## QA 저장시 에러 발생 = ", e);
-            resultData.createFailResult(qaContent);
+            return resultData.createFailResult(qaContent);
         }
-
-        log.info("## Save info = {}", resultData);
-
-        return resultData;
-
     }
 
     @RequestMapping(value = "/qa/saveReply", method = RequestMethod.POST)
@@ -114,7 +104,7 @@ public class QaController {
         List<QaFile> qaFileList = new ArrayList<QaFile>();
         try {
             QaContent qaContent = qaService.findByQaId(qaId, isDeleted);
-            //qaFileList = qaContent.getQaFiles();
+            qaFileList = qaContent.getQaFiles();
             return ResponseData.createSuccessResult(qaFileList);
         }catch (Exception e){
             e.printStackTrace();
@@ -128,7 +118,7 @@ public class QaController {
         List<QaContent> qaContentList = new ArrayList<>();
         HashMap resultMap = new HashMap();
         try {
-            qaContentList = qaService.findByIsReplyedAndDaytype(params);
+            qaContentList = qaService.findByIsReplyedAndDayType(params);
             resultMap.put("qaContentList", qaContentList);
             return ResponseData.createSuccessResult(resultMap);
         }catch(Exception e){

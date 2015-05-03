@@ -39,12 +39,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         log.info("### CustomAuthenticationProvider principal = {}", principal);
         User user = userService.findByEmailAndIsCertification(email);
 
-
         if (user != null) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            boolean isUser = encoder.matches(password, user.getUserPass());
-            log.info("### isUser = {}", isUser);
-            if (isUser) {
+            boolean isMatchedUser = encoder.matches(password, user.getUserPass());
+            log.info("### isMatchedUser = {}", isMatchedUser);
+            if (isMatchedUser) {
                 List<GrantedAuthority> grantedAuths = new ArrayList<>();
                 grantedAuths.add(new SimpleGrantedAuthority(user.getRole().name()));
                 System.out.println("### grantedAuthority = " + grantedAuths.get(0));

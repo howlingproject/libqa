@@ -5,10 +5,10 @@ import com.libqa.application.enums.SocialChannelTypeEnum;
 import com.libqa.web.domain.User;
 import com.libqa.web.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +26,11 @@ import java.util.Date;
 @Service
 public class UserServiceImpl implements UserService {
 
+    public static final String USER_EMAIL_CACHE = "usersCache";
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -34,17 +39,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User createUser(String userEmail, String userNick, String password, String LoginType) throws UserNotCreateException {
+    public User createUser(String userEmail, String userNick, String password, String loginType) throws UserNotCreateException {
         // LoginType 에 따라 소셜 연동 여부를 결정 짓는다.
-        LoginType = SocialChannelTypeEnum.WEB.name();
+        loginType = SocialChannelTypeEnum.WEB.name();
         User createUser = null;
         try {
-            User user = User.createUser(userEmail, userNick, new BCryptPasswordEncoder().encode(password), LoginType);
+            User user = User.createUser(userEmail, userNick, new BCryptPasswordEncoder().encode(password), loginType);
             createUser = userRepository.save(user);
             log.info("### createUser = {}", createUser);
 
             // 인증 메일 보내기
-            sendAuthMail(createUser);
+            if (loginType.equals(SocialChannelTypeEnum.WEB.name())) {
+                sendAuthMail(createUser);
+            }
+
         } catch (Exception e) {
             log.error("User Not Create Exception!!! ", createUser);
             throw new UserNotCreateException("사용자 정보가 생성되지 않았습니다. 에러를 확인하세요.", e);
@@ -54,9 +62,18 @@ public class UserServiceImpl implements UserService {
         return createUser;
     }
 
-    private void sendAuthMail(User createUser) {
+    void sendAuthMail(User createUser) {
         log.info("### Send mail ");
         // mailService
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo("someone@localhost");
+        mailMessage.setReplyTo("someone@localhost");
+        mailMessage.setFrom("someone@localhost");
+        mailMessage.setSubject("Lorem ipsum");
+        mailMessage.setText("Lorem ipsum dolor sit amet [...]");
+        javaMailSender.send(mailMessage);
+
     }
 
 
@@ -88,8 +105,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmail(String userEmail) {
-        return userRepository.findByUserEmail(userEmail);
+    @Cacheable(value = USER_EMAIL_CACHE)
+    public User findByEmail(String email) {
+        return userRepository.findByUserEmail(email);
     }
 
     @Override
@@ -108,15 +126,5 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public User findByAuthentication() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        if (StringUtils.isBlank(email)) {
-            return null;
-        }
-
-        return findByEmail(email);
-    }
 
 }

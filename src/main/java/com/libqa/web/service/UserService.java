@@ -55,10 +55,4 @@ public interface UserService {
      */
     User findByEmailAndIsCertification(String email);
 
-    /**
-     * 인증된 회원 정보를 조회
-     *
-     * @return
-     */
-    User findByAuthentication();
 }

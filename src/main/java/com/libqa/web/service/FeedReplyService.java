@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedReplyRepository;
@@ -12,12 +13,12 @@ import java.util.Date;
 public class FeedReplyService {
 
     @Autowired
-    private UserService userService;
+    private LoggedUser loggedUser;
     @Autowired
     private FeedReplyRepository feedReplyRepository;
 
     public void save(FeedReply feedReply) {
-        User user = userService.findByAuthentication();
+        User user = loggedUser.get();
 
         feedReply.setInsertDate(new Date());
         feedReply.setUserId(user.getUserId());

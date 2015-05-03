@@ -1,9 +1,10 @@
 package com.libqa.web.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
+
 /**
  * Created by yong on 15. 2. 1..
  */
@@ -38,4 +39,19 @@ public class QaFile {
 
     @Column(nullable = true)
     private Integer userId;
+
+    @Transient
+    private List realNames;
+
+    @Transient
+    private List savedNames;
+
+    @Transient
+    private List filePaths;
+
+    @Transient
+    private List fileSizes;
+
+    @Transient
+    private List fileTypes;
 }

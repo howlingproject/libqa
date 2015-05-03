@@ -1,6 +1,5 @@
 package com.libqa.web.service;
 
-import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
 
 /**
@@ -9,11 +8,6 @@ import com.libqa.web.domain.QaFile;
  * @author yong
  */
 public interface QaFileService {
-    boolean saveQaFileAndFileMove(QaContent qaContent);
-
-    QaFile save(QaFile qaFile);
-
-    void removeFile(QaFile qaFile);
-
+    boolean moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles);
 
 }
