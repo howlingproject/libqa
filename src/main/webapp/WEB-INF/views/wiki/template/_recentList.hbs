@@ -3,8 +3,9 @@
     <!-- 최근 활동 -->
     <div class="best-qna-item">
         <div>
-            <span class="label label-primary">Spring</span>
-            <span class="label label-success">JAVA</span>
+            {{#each keywordList}}
+                <span class="label label-primary">{{keywordName}}</span>
+            {{/each}}
             <strong> {{title}}</strong>
         </div>
         <div class="media">

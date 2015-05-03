@@ -12,10 +12,9 @@
                     <div class="media-heading">
                         <span>{{formatDate insertDate "yyyy.MM.dd HH:mm:SS"}}</span>
                         <div class="pull-right">
-                            <span class="label label-primary">Spring</span>
-                            <span class="label label-primary">Spring</span>
-                            <span class="label label-primary">Spring</span>
-                            <span class="label label-primary">Spring</span>
+                            {{#each keywordList}}
+                                <span class="label label-primary">{{keywordName}}</span>
+                            {{/each}}
                         </div>
                     </div>
                     <div>{{subString (htmlDelete contents) 0 100 }}</div>

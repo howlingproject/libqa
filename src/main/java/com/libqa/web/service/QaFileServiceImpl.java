@@ -10,9 +10,9 @@ import com.libqa.web.repository.QaFileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.ServletContext;
-import javax.transaction.Transactional;
 
 /**
  * Created by yong on 2015-03-28.

@@ -98,4 +98,6 @@ public class Wiki {
     private String keywords;
 
     private long replyCount;
+
+    private List<Keyword> keywordList;
 }
