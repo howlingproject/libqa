@@ -1,7 +1,9 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.framework.ResponseData;
+import com.libqa.web.domain.Space;
 import com.libqa.web.domain.Wiki;
+import com.libqa.web.service.SpaceService;
 import com.libqa.web.service.WikiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class WikiController {
     @Autowired
     WikiService wikiService;
 
+    @Autowired
+    private SpaceService spaceService;
+
     @RequestMapping("wiki/main")
     public ModelAndView main(Model model){
         ModelAndView mav = new ModelAndView("wiki/main");
@@ -41,8 +46,19 @@ public class WikiController {
     }
 
     @RequestMapping("wiki/write")
-    public ModelAndView write(Model model){
+    public ModelAndView write(@ModelAttribute Space modelSpace){
         ModelAndView mav = new ModelAndView("wiki/write");
+        log.info("# spaceId : {}", modelSpace.getSpaceId());
+
+        if( modelSpace.getSpaceId() == null ){
+            boolean isDeleted = false;    // 삭제 하지 않은 것
+            List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
+            mav.addObject("spaceList", spaceList);
+        }else{
+            Space space = spaceService.findOne(modelSpace.getSpaceId());
+            mav.addObject("space", space);
+        }
+
         return mav;
     }
 
@@ -64,7 +80,6 @@ public class WikiController {
             log.info("####### WIKI SAVE Begin INFO ########");
             log.info("wiki = {}", wiki);
             log.info("wiki.wikiFile = {}", wiki.getWikiFiles());
-            wiki.setSpaceId(1);
             wiki.setPasswd("1234");
             wiki.setUserNick("하이");
             wiki.setUserId(0);

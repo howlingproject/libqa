@@ -15,7 +15,16 @@
                     <div class="form-group">
                         <label for="space_title" class="col-sm-1 control-label">공간제목</label>
                         <div class="col-sm-11">
-                            <input type="text"  class="form-control" id="space_title" placeholder="이미 생성된 공간 선택 가능하도록 셀렉트 박스로 (입력은 못함)">
+                            {{#if space.spaceId}}
+                                <input type="text"  class="form-control" id="space_title" placeholder="{{space.title}}">
+                                <input type="hidden" id="spaceId" placeholder="{{space.spaceId}}">
+                            {{else}}
+                                <select class="form-control" id="spaceId">
+                                    {{#each spaceList}}
+                                    <option value="{{spaceId}}">{{title}}</option>
+                                    {{/each}}
+                                </select>
+                            {{/if}}
                         </div>
                     </div>
                     <div class="form-group">
