@@ -1,5 +1,7 @@
 buildscript {
-    ext.springBootVersion = '1.2.2.RELEASE'
+    ext {
+        springBootVersion = '1.2.3.RELEASE'
+    }
     repositories {
         maven { url 'https://repo.spring.io/libs-release' }
         mavenLocal()
@@ -7,8 +9,8 @@ buildscript {
     }
 
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE')
-        classpath('org.springframework:springloaded:1.2.1.RELEASE')
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.springframework:springloaded:${springBootVersion}")
     }
 }
 
@@ -36,9 +38,9 @@ repositories {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web:1.2.3.RELEASE')
-    compile('org.springframework.data:spring-data-jpa:1.8.0.RELEASE')
-    compile('org.springframework.boot:spring-boot-starter-security')
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
     compile("org.springframework:spring-context-support")
     compile("com.sun.mail:javax.mail")
     compile('mysql:mysql-connector-java:5.1.28')
@@ -53,7 +55,6 @@ dependencies {
     compile('com.google.guava:guava:18.0')
     compile('javax.inject:javax.inject:1')
     //compile('org.springframework.boot:spring-boot-actuator:1.2.1.RELEASE')
-    compile('org.eclipse.persistence:javax.persistence:2.0.0')
     testCompile('junit:junit:4.11')
     testCompile('com.jayway.restassured:spring-mock-mvc:2.4.0')
     testCompile('org.spockframework:spock-core:0.7-groovy-2.0')
