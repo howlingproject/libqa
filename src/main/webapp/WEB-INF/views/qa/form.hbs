@@ -110,15 +110,16 @@
                 });
             },
             bindEvent : function(){
-                Qa.fileAttachmentEvent();
-                Qa.keywordAddEvent();
-                Qa.tagCloudEvent();
-                Qa.formEvent();
+                this.fileAttachmentEvent();
+                this.keywordAddEvent();
+                this.tagCloudEvent();
+                this.formEvent();
             },
             fileAttachmentEvent : function(){
-                $("#file-attachment").on("change", Qa.uploadFile);
+                $("#file-attachment").on("change", this.uploadFile);
             },
             uploadFile : function(){
+                var that = this;
                 var field = $("#file-attachment").val();
                 if (field != '') {
                     $.ajax({
@@ -133,7 +134,7 @@
                             console.log('req : ' + req);
                             console.log('req.data.uploadType : ' + req.data.uploadType);
                             if (req.resultCode == 1) {
-                                var fileDivTemplat = Qa.makeFileDivTemplate(req);
+                                var fileDivTemplat = that.makeFileDivTemplate(req);
                                 $('#uploadfileList').append(fileDivTemplat);
                             }
                         },
@@ -163,7 +164,6 @@
                         $('#tag-cloud').find('li')[3].remove();
                         $("#interesting").attr("readonly",true);
                         $("#keywordAdd").attr("disabled",true);
-
                     }
                 });
             },
@@ -181,8 +181,8 @@
                 });
             },
             formEvent : function(){
-                $("#cancelButton").on("click", Qa.cancelContents);
-                $("#saveButton").on("click", Qa.saveConfirm);
+                $("#cancelButton").on("click", this.cancelContents);
+                $("#saveButton").on("click", this.saveConfirm);
             },
             saveContents : function(){
                 setParam();
@@ -261,6 +261,7 @@
                 return template;
             },
             saveConfirm : function(){
+                var that = this;
                 $.confirm({
                     title: '확인',
                     content: '질문을 저장하시겠습니까?',
@@ -268,7 +269,7 @@
                     cancelButton: '취소',
                     confirmButtonClass: 'btn-info',
                     confirm: function () {
-                        Qa.saveContents();
+                        that.saveContents();
                     },
                     cancel: function(){
                         return true;

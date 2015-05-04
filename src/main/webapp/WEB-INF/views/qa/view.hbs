@@ -77,9 +77,9 @@
                     <i class="fa fa-share-alt"><span class="claim-count">(0)</span></i>
                 </div>
                 <div class="text-right">
-                    <button type="button" class="btn btn-primary btn-sm">수정</button>
-                    <button type="button" class="btn btn-danger btn-sm">삭제</button>
-                    <button type="button" class="btn btn-primary btn-sm">목록</button>
+                    <button id="editButton" type="button" class="btn btn-primary btn-sm">수정</button>
+                    <button id="deleteButton" type="button" class="btn btn-danger btn-sm">삭제</button>
+                    <button id="listButton" type="button" class="btn btn-primary btn-sm">목록</button>
                 </div>
             </div>
 
@@ -167,34 +167,31 @@
                     , height : '400px;'
                 });
             },
+            buttonEvent : function(){
+                var that = this;
+                $('#editButton').on("click", function(){
+                    location.href = "/qa/edit/" + data.data.qaId;
+                });
+                $('#deleteButton').on("click",function(){
+                    confirmDialog.deleteConfirm();
+                });
+                $('#listButton').on("click", function(){
+                    location.href = "/qa/main";
+                });
+            },
             bindEvent : function(){
-                Qa.formEvent();
+                this.formEvent();
+                this.buttonEvent();
             },
             formEvent : function(){
-                $("#cancelButton").on("click", Qa.cancelContents);
-                $("#saveButton").on("click", Qa.saveContents);
-                $("#saveReplyButton").on("click", Qa.saveReply);
+                $("#cancelButton").on("click", this.cancelContents);
+                $("#saveReplyButton").on("click", this.saveReply);
             },
             cancelContents : function(){
                 location.href = '/qa/main';
             },
-            makeFileDivTemplate : function(dataObj){
-                var req = dataObj;
-                var template =
-                        '<div class="fileDiv" style="padding: 5px;">' +
-                        '<input name="realName" type="hidden" value="'+req.data.realName+'">' +
-                        '<input name="savedName" type="hidden" value="'+req.data.savedName+'">' +
-                        '<input name="filePath" type="hidden" value="'+req.data.filePath+'">' +
-                        '<input name="fileSize" type="hidden" value="'+req.data.fileSize+'">' +
-                        '<input name="fileType" type="hidden" value="'+req.data.fileExtendType+'">' +
-                        '<a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
-                        '<a href="#fileDiv" onclick="$(this).parent().remove();">' +
-                        '<span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>' +
-                        '</a>' +
-                        '</div>';
-                return template;
-            },
             makeFileList : function(){
+                var that = this;
                 $.get("/qa/fileList",{qaId : $('[name=qaId]').val()}, function (response) {
                     if(response.resultCode != 1) {
                         alert(response.comment);
@@ -205,6 +202,7 @@
 
                     var html = template(response);
                     $('#uploadfileList').html(html);
+                    that.unbindDeleteEventFileList();
                 });
             },
             saveReply : function(){
@@ -220,6 +218,61 @@
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
                         alert(errorThrown);
+                    }
+                });
+            },
+            unbindDeleteEventFileList : function(){
+                $('.fileDiv').find('[href=#fileDiv]').remove();
+            },
+            deleteContents : function(){
+                setParam();
+                $.ajax({
+                    type : 'POST',
+                    data : $('#qaForm').serialize(),
+                    url : '/qa/delete',
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            confirmDialog.successConfirm();
+                        }
+                    },
+                    error : function(XMLHttpRequest,textStatus,errorThrown){
+                        alert(errorThrown);
+                    }
+                });
+            },
+            unbindDeleteEventFileList : function(){
+                $('.fileDiv').find('[href=#fileDiv]').remove();
+            }
+        }
+
+        var confirmDialog = {
+            deleteConfirm : function(){
+                var that = this;
+                $.confirm({
+                    title: '확인',
+                    content: '질문을 삭제하시겠습니까?',
+                    confirmButton: '질문삭제',
+                    cancelButton: '취소',
+                    confirmButtonClass: 'btn-info',
+                    confirm: function () {
+                        Qa.deleteContents();
+                    },
+                    cancel: function(){
+                        return true;
+                    }
+                });
+            },
+            successConfirm : function(){
+                $.confirm({
+                    title: '완료',
+                    content: '삭제 완료 ',
+                    confirmButton: '이동',
+                    cancelButton: '취소',
+                    confirmButtonClass: 'btn-info',
+                    icon: 'fa fa-question-circle',
+                    animation: 'top',
+                    confirm: function () {
+                        location.href = "/qa/main";
                     }
                 });
             }

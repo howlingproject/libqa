@@ -70,6 +70,20 @@ public class QaController {
         return mav;
     }
 
+    @RequestMapping("/qa/edit/{qaId}")
+    public ModelAndView edit(@PathVariable Integer qaId) {
+        boolean isDeleted = false;
+
+        QaContent qaContent =  qaService.findByQaId(qaId, isDeleted);
+        List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
+        ModelAndView mav = new ModelAndView("qa/edit");
+        mav.addObject("qaContent", qaContent);
+        mav.addObject("qaReplyList", qaContent.getQaReplys());
+        mav.addObject("qaReplyCnt", qaContent.getQaReplys().size());
+        mav.addObject("keywordList", keywordList);
+        return mav;
+    }
+
     @RequestMapping("/qa/form")
     public ModelAndView create(Model model){
         ModelAndView mav = new ModelAndView("qa/form");
@@ -79,6 +93,20 @@ public class QaController {
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaContent> save(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles) {
+        ResponseData resultData = new ResponseData();
+
+        QaContent qaContent = new QaContent();
+        try {
+            qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles);
+            return resultData.createSuccessResult(qaContent);
+        } catch (Exception e) {
+            return resultData.createFailResult(qaContent);
+        }
+    }
+
+    @RequestMapping(value = "/qa/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<QaContent> delete(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles) {
         ResponseData resultData = new ResponseData();
 
         QaContent qaContent = new QaContent();
