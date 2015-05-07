@@ -119,7 +119,6 @@
                 $("#file-attachment").on("change", this.uploadFile);
             },
             uploadFile : function(){
-                var that = this;
                 var field = $("#file-attachment").val();
                 if (field != '') {
                     $.ajax({
@@ -134,7 +133,7 @@
                             console.log('req : ' + req);
                             console.log('req.data.uploadType : ' + req.data.uploadType);
                             if (req.resultCode == 1) {
-                                var fileDivTemplat = that.makeFileDivTemplate(req);
+                                var fileDivTemplat = Qa.makeFileDivTemplate(req);
                                 $('#uploadfileList').append(fileDivTemplat);
                             }
                         },
@@ -182,7 +181,7 @@
             },
             formEvent : function(){
                 $("#cancelButton").on("click", this.cancelContents);
-                $("#saveButton").on("click", this.saveConfirm);
+                $("#saveButton").on("click", ConfirmDialog.saveConfirm);
             },
             saveContents : function(){
                 setParam();
@@ -195,18 +194,7 @@
                     data : data,
                     success : function(data){
                         if(data.resultCode == 1) {
-                            $.confirm({
-                                title: '완료',
-                                content: '저장 완료 ',
-                                confirmButton: '이동',
-                                cancelButton: '취소',
-                                confirmButtonClass: 'btn-info',
-                                icon: 'fa fa-question-circle',
-                                animation: 'top',
-                                confirm: function () {
-                                    location.href = "/qa/" + data.data.qaId;
-                                }
-                            });
+                            ConfirmDialog.successConfirm(data.data.qaId);
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
@@ -259,9 +247,11 @@
                         '</a>' +
                         '</div>';
                 return template;
-            },
+            }
+        }
+
+        var ConfirmDialog = {
             saveConfirm : function(){
-                var that = this;
                 $.confirm({
                     title: '확인',
                     content: '질문을 저장하시겠습니까?',
@@ -269,10 +259,24 @@
                     cancelButton: '취소',
                     confirmButtonClass: 'btn-info',
                     confirm: function () {
-                        that.saveContents();
+                        Qa.saveContents();
                     },
                     cancel: function(){
                         return true;
+                    }
+                });
+            },
+            successConfirm : function(qaId){
+                $.confirm({
+                    title: '완료',
+                    content: '저장 완료 ',
+                    confirmButton: '이동',
+                    cancelButton: '취소',
+                    confirmButtonClass: 'btn-info',
+                    icon: 'fa fa-question-circle',
+                    animation: 'top',
+                    confirm: function () {
+                        location.href = "/qa/" + qaId;
                     }
                 });
             },

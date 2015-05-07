@@ -173,7 +173,7 @@
                     location.href = "/qa/edit/" + data.data.qaId;
                 });
                 $('#deleteButton').on("click",function(){
-                    confirmDialog.deleteConfirm();
+                    ConfirmDialog.deleteConfirm();
                 });
                 $('#listButton').on("click", function(){
                     location.href = "/qa/main";
@@ -225,14 +225,13 @@
                 $('.fileDiv').find('[href=#fileDiv]').remove();
             },
             deleteContents : function(){
-                setParam();
                 $.ajax({
                     type : 'POST',
-                    data : $('#qaForm').serialize(),
+                    data : {qaId : $('[name=qaId]').val()},
                     url : '/qa/delete',
                     success : function(data){
                         if(data.resultCode == 1) {
-                            confirmDialog.successConfirm();
+                            ConfirmDialog.successConfirm();
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
@@ -245,9 +244,8 @@
             }
         }
 
-        var confirmDialog = {
+        var ConfirmDialog = {
             deleteConfirm : function(){
-                var that = this;
                 $.confirm({
                     title: '확인',
                     content: '질문을 삭제하시겠습니까?',

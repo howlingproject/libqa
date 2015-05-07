@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,12 +37,15 @@ public class QaServiceImpl implements QaService {
     @Autowired
     QaFileService qaFileService;
 
+    @PersistenceContext
+    EntityManager entityManager;
+
     @Override
     @Transactional
     public QaContent saveWithKeyword(QaContent qaContent, QaFile qaFiles){
         QaContent newQaContent = new QaContent();
         try {
-            newQaContent = qaContentSave(qaContent);
+            newQaContent = save(qaContent);
             moveQaFilesToProductAndSave(newQaContent.getQaId(), qaFiles);
             saveKeywordAndList(newQaContent.getQaId(), qaContent.getKeywords());
         }catch(Exception e){
@@ -48,6 +53,22 @@ public class QaServiceImpl implements QaService {
             throw new RuntimeException("moveQaFilesToProductAndSave Exception");
         }
         return newQaContent;
+    }
+
+
+    @Override
+    public boolean deleteWithKeyword(Integer qaId) {
+        boolean result = false;
+        try{
+            delete(qaId);
+
+            // TODO List reply, file, recommand, keyword, keywordList 처리 확인
+            result = true;
+        } catch (Exception e) {
+            log.error("삭제시 오류 발생", e);
+            result = false;
+        }
+        return result;
     }
 
     void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
@@ -74,12 +95,20 @@ public class QaServiceImpl implements QaService {
     }
     */
 
-    public QaContent qaContentSave(QaContent qaContent) {
-        qaContent.setUserId(1);
-        qaContent.setUserNick("용퓌");
-        qaContent.setInsertUserId(1);
-        qaContent.setInsertDate(new Date());
+    public QaContent save(QaContent qaContent) {
         return qaRepository.save(qaContent);
+    }
+
+    private void delete(Integer qaId) {
+        QaContent targetQaContent = findByQaId(qaId, false);
+//        entityManager.getTransaction().begin();
+        // TODO List 차후 로그인으로 변경
+        targetQaContent.setDeleted(true);
+        targetQaContent.setUpdateUserId(1);
+        targetQaContent.setUpdateDate(new Date());
+        qaRepository.flush();
+//        entityManager.getTransaction().commit();
+
     }
 
     @Override

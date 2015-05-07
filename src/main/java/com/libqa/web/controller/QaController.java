@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yong on 2015-02-08.
@@ -96,6 +93,12 @@ public class QaController {
         ResponseData resultData = new ResponseData();
 
         QaContent qaContent = new QaContent();
+
+        // TODO List 차후 로그인으로 변경
+        paramQaContent.setUserId(1);
+        paramQaContent.setUserNick("용퓌");
+        paramQaContent.setInsertUserId(1);
+        paramQaContent.setInsertDate(new Date());
         try {
             qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles);
             return resultData.createSuccessResult(qaContent);
@@ -106,12 +109,12 @@ public class QaController {
 
     @RequestMapping(value = "/qa/delete", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaContent> delete(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles) {
+    public ResponseData<QaContent> delete(@RequestParam("qaId") Integer qaId) {
         ResponseData resultData = new ResponseData();
 
         QaContent qaContent = new QaContent();
         try {
-            qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles);
+            qaService.deleteWithKeyword(qaId);
             return resultData.createSuccessResult(qaContent);
         } catch (Exception e) {
             return resultData.createFailResult(qaContent);
@@ -121,6 +124,13 @@ public class QaController {
     @RequestMapping(value = "/qa/saveReply", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaReply> saveReply(QaReply qaReply) {
+
+        // TODO List 차후 로그인으로 변경
+        qaReply.setInsertDate(new Date());
+        qaReply.setInsertUserId(1);
+        qaReply.setUserId(1);
+        qaReply.setUserNick("용퓌");
+
         QaReply newQaReply = qaReplyService.saveWithQaContent(qaReply);
         return ResponseData.createSuccessResult(newQaReply);
     }

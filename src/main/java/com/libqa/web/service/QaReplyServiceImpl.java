@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-
 /**
  * Created by yong on 2015-04-12.
  *
@@ -22,10 +20,6 @@ public class QaReplyServiceImpl implements QaReplyService {
 
     @Override
     public QaReply saveWithQaContent(QaReply qaReply) {
-        qaReply.setInsertDate(new Date());
-        qaReply.setInsertUserId(1);
-        qaReply.setUserId(1);
-        qaReply.setUserNick("용퓌");
         return qaReplyRepository.save(qaReply);
     }
 }

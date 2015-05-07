@@ -17,4 +17,6 @@ public interface QaService {
     QaContent findByQaId(Integer qaId, boolean isDeleted);
 
     List<QaContent> findByIsReplyedAndDayType(Map<String, String> params);
+
+    boolean deleteWithKeyword(Integer qaId);
 }
