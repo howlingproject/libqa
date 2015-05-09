@@ -5,6 +5,7 @@ import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.service.FeedReplyService;
 import com.libqa.web.service.FeedService;
+import com.libqa.web.view.DisplayFeed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.Date;
 
 import static com.libqa.application.framework.ResponseData.createFailResult;
 import static com.libqa.application.framework.ResponseData.createSuccessResult;
@@ -34,7 +34,7 @@ public class FeedController {
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public ResponseData<Feed> list() throws IOException {
+    public ResponseData<DisplayFeed> list() throws IOException {
         return createSuccessResult(feedService.search(0, 10));
     }
     

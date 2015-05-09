@@ -50,4 +50,12 @@ public class FeedFile {
     private Integer insertUserId;
 
     private Long feedId;
+
+    public boolean isFileType() {
+        return FileTypeEnum.FILE == this.fileType;
+    }
+
+    public boolean isImageType() {
+        return FileTypeEnum.IMAGE == this.fileType;
+    }
 }

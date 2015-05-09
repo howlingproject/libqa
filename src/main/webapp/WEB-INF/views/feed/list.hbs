@@ -5,17 +5,22 @@
             <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
         </div>
     </div>
-    <div class="name">{{userNick}}</div>
-    <div class="date">{{insertDate}}</div>
+    <div class="name">{{feed.userNick}}</div>
+    <div class="date">{{feed.insertDate}}</div>
     <div class="config"><i class="fa fa-check popover-config" data-container="body" data-toggle="popover" data-placement="right"></i></div>
 
     <div class="thread-message-box">
         <div class="message">
-            {{nl2br feedContent}}
+            {{nl2br feed.feedContent}}
+            <div class="images text-center">
+                {{#images}}
+                    <img width="190" class="img-thumbnail" src="{{filePath}}/{{savedName}}" />
+                {{/images}}
+            </div>            
             <div class="attachment">
-                {{#feedFiles}}
-                <a href="{{filePath}}/{{savedName}}" target="_blank"><i class="fa fa-file-o"></i> {{realName}}</a>&nbsp;
-                {{/feedFiles}}
+                {{#files}}
+                    <a href="{{filePath}}/{{savedName}}" target="_blank"><i class="fa fa-file-o"></i> {{realName}}</a>&nbsp;
+                {{/files}}
             </div>
         </div>
         <div class="action-buttons">
@@ -25,7 +30,7 @@
     </div>
 
     <ul>
-        {{#feedReplies}}
+        {{#feed.feedReplies}}
         <li>
             <div class="author">
                 <div class="user-profile-sm">
@@ -34,7 +39,7 @@
             </div>
             <div class="name">{{userNick}}</div>
             <div class="date">{{insertDate}}</div>
-            <div class="config"><i class="fa fa-check popover-config" data-container="body" data-toggle="popover" data-placement="right"></i></div>
+            <div class="config"><i class="fa fa-close"></i></div>
             <div class="message-box">
                 <div class="message">{{feedReplyContent}}</div>
                 <div class="action-buttons">
@@ -43,14 +48,14 @@
                 </div>
             </div>
         </li>
-        {{/feedReplies}}
+        {{/feed.feedReplies}}
     </ul>
     
     <ul>
         <li>
             <div class="row">
                 <form name="feedReplyForm" onsubmit="return false;">
-                    <input type="hidden" name="feedId" value="{{feedId}}" />
+                    <input type="hidden" name="feedId" value="{{feed.feedId}}" />
                     
                     <div class="col-xs-9 col-md-10">
                         <input type="text" name="feedReplyContent" class="form-control input-sm" placeholder="댓글 입력">
