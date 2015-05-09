@@ -29,29 +29,27 @@ public class FeedService {
     private FeedFileRepository feedFileRepository;
 
     public List<DisplayFeed> search(int startIdx, int endIdx) {
-        PageRequest pageRequest = new PageRequest(startIdx, endIdx, new Sort(new Order(Direction.DESC, "feedId")));
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
+        
+        PageRequest pageRequest = new PageRequest(startIdx, endIdx, new Sort(new Order(Direction.DESC, "feedId")));
         List<Feed> feeds = feedRepository.findAll(pageRequest).getContent();
         for (Feed feed : feeds) {
             displayFeeds.add(new DisplayFeed(feed));
         }
-        
-        
         return displayFeeds;
-        
     }
 
     public void save(Feed feed) {
-//        User user = loggedUser.get();
-        
-        feed.setInsertDate(new Date());
+//        User user = loggedUser.get(); // TODO 개발 완료후 로그인 기능 추가할 예정.
+
 //        feed.setUserNick(user.getUserNick());
 //        feed.setUserId(user.getUserId());
 //        feed.setInsertUserId(user.getUserId());
         feed.setUserId(1234);
         feed.setUserNick("testerNick");
         feed.setInsertUserId(1234);
-        
+        feed.setInsertDate(new Date());
+
         saveFeedFiles(feed);
         feedRepository.save(feed);
     }

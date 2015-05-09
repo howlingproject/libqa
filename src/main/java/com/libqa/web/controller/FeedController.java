@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
-
 import static com.libqa.application.framework.ResponseData.createFailResult;
 import static com.libqa.application.framework.ResponseData.createSuccessResult;
 
@@ -34,7 +32,7 @@ public class FeedController {
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public ResponseData<DisplayFeed> list() throws IOException {
+    public ResponseData<DisplayFeed> list() {
         return createSuccessResult(feedService.search(0, 10));
     }
     
