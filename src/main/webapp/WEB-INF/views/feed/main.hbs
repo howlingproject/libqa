@@ -381,7 +381,7 @@
 <!-- popover-config start -->
 <div id="popover-config-content" style="display: none;">
     <div class="button"><a href="#">수정</a></div>
-    <div class="button"><a href="#">삭제</a></div>
+    <div class="button"><a href="javascript:void(0);" onclick="Feed.delete(this);">삭제</a></div>
 </div>
 <div id="popover-feed-image-content" style="display: none;">
     <div class="file_upload"><a href="#">파일 업로드</a></div>
@@ -473,6 +473,24 @@
                 $('#fileUploadModal').on('show.bs.modal', function () {
                     $('#fileAttachmentInput').val('');
                 });
+            },
+            delete: function(el) {
+                if (!confirm("FEED를 삭제하시겠습니까?")) {
+                    return;
+                }
+                var popverId = $(el).closest('.popover').attr('id');
+                var feedId = $('.thread .config').find('[aria-describedby='+ popverId +']').closest('.thread').attr('data-feed-id');
+                $.post('/feed/delete/' + feedId)
+                    .done(function (response) {
+                        if (response.resultCode != 1) {
+                            alert(response.comment);
+                            return;
+                        }
+                        Feed.searchList();
+                        $('#' + popverId).remove();
+                    }).fail(function () {
+                        alert('Error delete feed');
+                    });
             }
         };
 

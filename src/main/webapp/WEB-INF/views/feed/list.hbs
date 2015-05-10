@@ -1,5 +1,5 @@
 {{#each data}}
-<li class="thread">
+<li class="thread" data-feed-id="{{feed.feedId}}">
     <div class="author">
         <div class="user-profile">
             <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
@@ -108,7 +108,7 @@ $(function(){
                     });
             });
         },
-        bindDelete: function(feedReplyId) {
+        bindDelete: function() {
             $('.feedReplyDeleteBtn').click(function () {
                 if (!confirm("댓글을 삭제하시겠습니까?")) {
                     return;
