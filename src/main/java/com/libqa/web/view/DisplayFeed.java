@@ -4,10 +4,11 @@ import com.google.common.collect.Lists;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedFile;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
-@Data
+@Getter
 public class DisplayFeed {
     private Feed feed;
     private List<FeedFile> files = Lists.newArrayList();

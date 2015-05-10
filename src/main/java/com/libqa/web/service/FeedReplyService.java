@@ -17,7 +17,7 @@ public class FeedReplyService {
     private FeedReplyRepository feedReplyRepository;
 
     public void save(FeedReply feedReply) {
-//        User user = loggedUser.get();
+//        User user = loggedUser.get(); // TODO 개발 완료후 로그인 기능 추가할 예정.
 
         feedReply.setInsertDate(new Date());
 //        feedReply.setUserId(user.getUserId());
@@ -26,6 +26,24 @@ public class FeedReplyService {
         feedReply.setUserId(1234);
         feedReply.setUserNick("testerNick");
         feedReply.setInsertUserId(1234);
+        feedReplyRepository.save(feedReply);
+    }
+
+    public void delete(Long feedReplyId) {
+        FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
+        deleteIfExists(feedReply);
+    }
+
+    public void deleteByFeedId(Long feedId) {
+        FeedReply feedReply = feedReplyRepository.findByFeedId(feedId);
+        deleteIfExists(feedReply);
+    }
+
+    private void deleteIfExists(FeedReply feedReply) {
+        if (feedReply == null) {
+            return;
+        }
+        feedReply.setDeleted(true);
         feedReplyRepository.save(feedReply);
     }
 
