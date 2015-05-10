@@ -478,8 +478,8 @@
                 if (!confirm("FEED를 삭제하시겠습니까?")) {
                     return;
                 }
-                var popverId = $(el).closest('.popover').attr('id');
-                var feedId = $('.thread .config').find('[aria-describedby='+ popverId +']').closest('.thread').attr('data-feed-id');
+                var popoverId = $(el).closest('.popover').attr('id');
+                var feedId = $('.thread .config').find('[aria-describedby='+ popoverId +']').closest('.thread').attr('data-feed-id');
                 $.post('/feed/delete/' + feedId)
                     .done(function (response) {
                         if (response.resultCode != 1) {
@@ -487,7 +487,7 @@
                             return;
                         }
                         Feed.searchList();
-                        $('#' + popverId).remove();
+                        $('#' + popoverId).remove();
                     }).fail(function () {
                         alert('Error delete feed');
                     });
