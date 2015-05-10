@@ -16,7 +16,7 @@
                 {{#images}}
                     <img width="190" class="img-thumbnail" src="{{filePath}}/{{savedName}}" />
                 {{/images}}
-            </div>            
+            </div>
             <div class="attachment">
                 {{#files}}
                     <a href="{{filePath}}/{{savedName}}" target="_blank"><i class="fa fa-file-o"></i> {{realName}}</a>&nbsp;
@@ -39,7 +39,7 @@
             </div>
             <div class="name">{{userNick}}</div>
             <div class="date">{{insertDate}}</div>
-            <div class="config"><i class="fa fa-close"></i></div>
+            <div class="config"><i class="fa fa-close feedReplyDeleteBtn" data-feed-reply-id="{{feedReplyId}}"></i></div>
             <div class="message-box">
                 <div class="message">{{feedReplyContent}}</div>
                 <div class="action-buttons">
@@ -50,13 +50,13 @@
         </li>
         {{/feed.feedReplies}}
     </ul>
-    
+
     <ul>
         <li>
             <div class="row">
                 <form name="feedReplyForm" onsubmit="return false;">
                     <input type="hidden" name="feedId" value="{{feed.feedId}}" />
-                    
+
                     <div class="col-xs-9 col-md-10">
                         <input type="text" name="feedReplyContent" class="form-control input-sm" placeholder="댓글 입력">
                     </div>
@@ -86,28 +86,49 @@ $(function(){
         content: function () {
             return $('#popover-feed-image-content').html();
         }
-    });    
-    
+    });
+
     var FeedReply = {
         init: function(){
             this.bindSave();
+            this.bindDelete();
         },
         bindSave: function() {
-            $('button[name=saveReply]').click(function(){
+            $('button[name=saveReply]').click(function () {
                 var data = $(this).closest('form').serialize();
-                $.post('/feed/reply/save', data).done(function(response){
-                    if(response.resultCode != 1) {
-                        alert(response.comment);
-                        return;
-                    }
-                    Feed.searchList();
-                }).fail(function(){
-                    alert('Error saving feed Reply');
-                });
+                $.post('/feed/reply/save', data)
+                    .done(function (response) {
+                        if (response.resultCode != 1) {
+                            alert(response.comment);
+                            return;
+                        }
+                        Feed.searchList();
+                    }).fail(function () {
+                        alert('Error saving feed Reply');
+                    });
+            });
+        },
+        bindDelete: function(feedReplyId) {
+            $('.feedReplyDeleteBtn').click(function () {
+                if (!confirm("댓글을 삭제하시겠습니까?")) {
+                    return;
+                }
+
+                var feedReplyId = $(this).attr('data-feed-reply-id');
+                $.post('/feed/reply/delete/' + feedReplyId)
+                    .done(function (response) {
+                        if (response.resultCode != 1) {
+                            alert(response.comment);
+                            return;
+                        }
+                        Feed.searchList();
+                    }).fail(function () {
+                        alert('Error delete feed Reply');
+                    });
             });
         }
     };
-    
+
     FeedReply.init();
 });
 </script>
