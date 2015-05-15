@@ -8,7 +8,7 @@ import lombok.Getter;
  * @author yong
  */
 public enum DayTypeEnum {
-    TODAY("TODAY"),  // 오
+    TODAY("TODAY"),  // 오늘
     WEEK("WEEK"), // 일주일
     ALL("ALL");  // 전체
 

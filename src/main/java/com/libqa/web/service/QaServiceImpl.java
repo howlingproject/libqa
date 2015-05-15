@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.libqa.application.dto.QaDto;
 import com.libqa.application.enums.DayTypeEnum;
 import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.web.domain.Keyword;
@@ -17,7 +18,6 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by yong on 2015-03-08.
@@ -118,14 +118,14 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public List<QaContent> findByIsReplyedAndDayType(Map<String, String> params) {
+    public List<QaContent> findByIsReplyedAndDayType(QaDto qaDto) {
         boolean isDeleted = false;
         Date today = new Date();
         List<QaContent> returnQaContentObj = new ArrayList<>();
         try {
-            Date fromDate = searchDayType(params.get("dayType"));
-            List<Integer> qaIds = getQaIdByKeyword(params);
-            if ("Y".equals(params.get("waitReply"))) {
+            Date fromDate = searchDayType(qaDto.getDayType());
+            List<Integer> qaIds = getQaIdByKeyword(qaDto.getKeywordName());
+            if ("Y".equals(qaDto.getWaitReply())) {
                 returnQaContentObj = qaRepository.findAllByQaIdInAndIsReplyedAndInsertDateBetweenAndIsDeleted(qaIds, false, fromDate, today, isDeleted);
             } else {
                 returnQaContentObj = qaRepository.findAllByQaIdInAndInsertDateBetweenAndIsDeleted(qaIds, fromDate, today, isDeleted);
@@ -139,9 +139,9 @@ public class QaServiceImpl implements QaService {
     public Date searchDayType(String dayType){
         Date now = new Date();
         Date returnDate;
-        if(DayTypeEnum.WEEK.equals(dayType)){
+        if(DayTypeEnum.WEEK.getCode().equals(dayType)){
             returnDate = DateUtils.addDays(now, -7);
-        } else if(DayTypeEnum.ALL.equals(dayType)){
+        } else if(DayTypeEnum.ALL.getCode().equals(dayType)){
             returnDate = null;
         } else{
             returnDate = now;
@@ -149,10 +149,10 @@ public class QaServiceImpl implements QaService {
         return returnDate;
     }
 
-    public List<Integer> getQaIdByKeyword(Map<String, String> params){
+    public List<Integer> getQaIdByKeyword(String keywordName){
         boolean isDeleted = false;
         List<Integer> qaIds = new ArrayList();
-        List<Keyword> keywords = keywordService.findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum.QA, params.get("keywordName"), isDeleted);
+        List<Keyword> keywords = keywordService.findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum.QA, keywordName, isDeleted);
         for(Keyword keyword : keywords){
             qaIds.add(keyword.getQaId());
         }

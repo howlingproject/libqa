@@ -1,11 +1,13 @@
 package com.libqa.web.controller;
 
+import com.libqa.application.dto.QaDto;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
 import com.libqa.web.domain.QaReply;
 import com.libqa.web.service.*;
+import com.libqa.web.view.DisplayQa;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -152,15 +154,18 @@ public class QaController {
 
     @RequestMapping(value = "/qa/qaList", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<HashMap> qaList(@RequestParam Map<String, String> params){
+    public ResponseData<DisplayQa> qaList(@ModelAttribute QaDto qaDto){
+        boolean isDeleted = false;
         List<QaContent> qaContentList = new ArrayList<>();
-        HashMap resultMap = new HashMap();
+        List<DisplayQa> displayQaList = new ArrayList<>();
         try {
-            qaContentList = qaService.findByIsReplyedAndDayType(params);
-            resultMap.put("qaContentList", qaContentList);
-            return ResponseData.createSuccessResult(resultMap);
+            qaContentList = qaService.findByIsReplyedAndDayType(qaDto);
+            for(QaContent qaContent : qaContentList) {
+                displayQaList.add(new DisplayQa(qaContent, keywordService.findByQaId(qaContent.getQaId(), isDeleted)));
+            }
+            return ResponseData.createSuccessResult(displayQaList);
         }catch(Exception e){
-            return ResponseData.createFailResult(resultMap);
+            return ResponseData.createFailResult(displayQaList);
         }
     }
 }
