@@ -29,6 +29,8 @@ public class FeedService {
     private FeedReplyService feedReplyService;
     @Autowired
     private FeedFileService feedFileService;
+    @Autowired
+    private FeedLikeUserService feedLikeUserService;
 
     public List<DisplayFeed> search(int startIdx, int endIdx) {
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
@@ -77,6 +79,17 @@ public class FeedService {
             each.setInsertDate(new Date());
             feedFileService.save(each);
         }
+    }
+    
+    @Transactional
+    public void likeOrUnlike(long feedId, Integer userId) {
+        Feed feed = feedRepository.findByFeedIdAndUserId(feedId, userId);
+        
+        boolean notLike = feedLikeUserService.isNotLike(feed);
+        int willLikeCount = (notLike) ? feed.getLikeCount() + 1 : feed.getLikeCount() - 1;
+        feed.setLikeCount(willLikeCount);
+
+        feedLikeUserService.saveByFeed(feed, !notLike);
     }
 
 }

@@ -21,6 +21,6 @@ public class FeedFileService {
         }
         
         feedFile.setDeleted(true);
-        repository.save(feedFile);
+        repository.save(feedFile);          // TODO 영속성 체크
     }
 }

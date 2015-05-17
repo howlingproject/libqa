@@ -9,4 +9,6 @@ import java.util.List;
 public interface FeedRepository extends JpaRepository<Feed, Long> {
 
     List<Feed> findByIsDeleted(boolean isDeleted, Pageable pageable);
+
+    Feed findByFeedIdAndUserId(long feedId, Integer userId);
 }
