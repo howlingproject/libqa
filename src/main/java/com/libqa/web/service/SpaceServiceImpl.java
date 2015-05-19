@@ -1,14 +1,17 @@
 package com.libqa.web.service;
 
+import com.libqa.application.enums.FavoriteTypeEnum;
 import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.application.enums.SpaceViewEnum;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.Space;
+import com.libqa.web.domain.UserFavorite;
 import com.libqa.web.repository.SpaceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +26,9 @@ public class SpaceServiceImpl implements SpaceService {
 
 	@Autowired
 	private KeywordService keywordService;
+
+	@Autowired
+	private UserFavoriteService userFavoriteService;
 
 	@Override
 	public Space save(Space space) {
@@ -51,6 +57,28 @@ public class SpaceServiceImpl implements SpaceService {
 		}
 
 		return result;
+	}
+
+	@Override
+	public List<Space> findUserFavoriteSpace(Integer userId) {
+		if (userId == null || userId == 0) {
+			return null;
+		}
+
+		List<UserFavorite> userFavoriteList = userFavoriteService.findByFavoriteTypeAndUserId(FavoriteTypeEnum.SPACE, userId);
+
+		if (userFavoriteList.isEmpty()) {
+			return null;
+		}
+
+		List<Space> mySpaceList = new ArrayList<>();
+		for (UserFavorite favorite : userFavoriteList) {
+			Space space = spaceRepository.findOne(favorite.getSpaceId());
+
+			mySpaceList.add(space);
+		}
+
+		return mySpaceList;
 	}
 
 

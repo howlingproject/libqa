@@ -6,8 +6,12 @@ import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.Space;
 import com.libqa.web.domain.SpaceAccessUser;
+import com.libqa.web.domain.UserFavorite;
+import com.libqa.web.domain.Wiki;
 import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.SpaceService;
+import com.libqa.web.service.UserFavoriteService;
+import com.libqa.web.service.WikiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +42,9 @@ public class SpaceController {
 	@Autowired
 	private KeywordService keywordService;
 
+	@Autowired
+	private WikiService wikiService;
+
 
 	@RequestMapping("/space/fileUpload")
 	public ModelAndView fileUpload(Model model) {
@@ -53,19 +60,40 @@ public class SpaceController {
 	@RequestMapping("/space/main")
 	public ModelAndView spaceMain(Model model) {
 		log.info("## /main");
-		boolean isDeleted = false;    // 삭제 하지 않은 것
+
+		Integer userId = 1;
+		/**
+		 * 전체 space 목록 조회
+		 */
+		boolean isDeleted = false;
 		List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
 
+		/**
+		 * Space 접근 가능 사용자 목록 조회
+		 */
 		List<SpaceAccessUser> spaceAccessUserList = new ArrayList<>();
 		for (Space space : spaceList) {
 			List<SpaceAccessUser> accessUser = space.getSpaceAccessUsers();
 			spaceAccessUserList.addAll(accessUser);
 		}
+
+		/**
+		 * 내 즐겨찾기 공간 정보 조회
+		 */
+		List<Space> myFavoriteSpaceList = spaceService.findUserFavoriteSpace(userId);
+
+		/**
+		 * 최근 수정된 위키 정보 조회 10개
+		 */
+		List<Wiki> updateWikiList = wikiService.findByAllWiki(0, 10);
+
+
 		log.info("# spaceList.size = {}", spaceList.size());
 		log.info("# spaceAccessUserList.size = {}", spaceAccessUserList.size());
 
 		ModelAndView mav = new ModelAndView("/space/main");
 		mav.addObject("spaceList", spaceList);
+		mav.addObject("myFavoriteSpaceList", myFavoriteSpaceList);
 		return mav;
 	}
 

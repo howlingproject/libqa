@@ -103,8 +103,6 @@ public class WikiServiceImpl implements WikiService {
 
         );
 
-
-
         return wikiRepository.findAll(pageRequest).getContent();
     }
 
