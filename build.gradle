@@ -54,10 +54,9 @@ dependencies {
     compile('com.google.collections:google-collections:1.0-rc5')
     compile('com.google.guava:guava:18.0')
     compile('javax.inject:javax.inject:1')
-    //compile('org.springframework.boot:spring-boot-actuator:1.2.1.RELEASE')
-    testCompile('junit:junit:4.11')
     testCompile('com.jayway.restassured:spring-mock-mvc:2.4.0')
     testCompile('org.spockframework:spock-core:0.7-groovy-2.0')
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 }
 
 task wrapper(type: Wrapper) {
