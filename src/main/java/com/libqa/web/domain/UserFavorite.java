@@ -1,5 +1,6 @@
 package com.libqa.web.domain;
 
+import com.libqa.application.enums.FavoriteTypeEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -38,4 +39,7 @@ public class UserFavorite {
 
     @Temporal(TemporalType.DATE)
     private Date updateDate;
+    
+    @Column(nullable = false)
+    private FavoriteTypeEnum favoriteType;
 }
