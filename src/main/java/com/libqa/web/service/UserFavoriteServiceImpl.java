@@ -17,7 +17,12 @@ import java.util.List;
 @Slf4j
 @Service
 public class UserFavoriteServiceImpl implements UserFavoriteService {
+    @Override
+    public List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteTypeEnum typeEnum, Integer userId) {
+        return null;
+    }
 
+    /*
     @Autowired
     private UserFavoriteRepository userFavoriteRepository;
 
@@ -26,4 +31,5 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
 
         return userFavoriteRepository.findByFavoriteTypeAndUserId(favoriteTypeEnum, userId);
     }
+    */
 }

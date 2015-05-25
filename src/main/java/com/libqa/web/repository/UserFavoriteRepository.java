@@ -10,6 +10,6 @@ import java.util.List;
  * Created by yong on 15. 2. 8..
  */
 public interface UserFavoriteRepository extends JpaRepository<UserFavorite, Integer>{
-    List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteTypeEnum favoriteTypeEnum, Integer userId);
+    //List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteTypeEnum favoriteTypeEnum, Integer userId);
 
 }
