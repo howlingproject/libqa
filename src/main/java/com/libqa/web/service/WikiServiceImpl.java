@@ -1,6 +1,7 @@
 package com.libqa.web.service;
 
 import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.Wiki;
 import com.libqa.web.domain.WikiFile;
 import com.libqa.web.repository.KeywordRepository;
@@ -33,6 +34,8 @@ public class WikiServiceImpl implements WikiService {
 
     @Autowired
     private WikiReplyService wikiReplyService;
+
+    final boolean isDeleted = false;
 
     @Override
     public Wiki save(Wiki wiki) {
@@ -75,16 +78,17 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-    public List<Wiki> findByAllWiki(int startIdx, int endIdx) {
-        PageRequest pageRequest = new PageRequest(startIdx, endIdx, new Sort(new Sort.Order(Sort.Direction.DESC, "insertDate")));
-        List<Wiki> list = wikiRepository.findAll(pageRequest).getContent();
+    public List<Wiki> findByAllWiki(int page, int size) {
+        List<Wiki> list = wikiRepository.findAllByIsDeleted(
+                PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "insertDate")).getSort()
+                ,isDeleted);
         if( list != null && list.size() > 0 ){
             for( Wiki wiki : list ){
                 long replyCount = wikiReplyService.countByWikiWikiId(wiki.getWikiId());
                 wiki.setReplyCount(replyCount);
+                wiki.setKeywordList(keywordService.findByWikiId(wiki.getWikiId(), isDeleted));
             }
         }
-
         return list;
     }
 
@@ -95,15 +99,21 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-    public List<Wiki> findByRecentWiki(int userId, int startIdx, int endIdx) {
-        PageRequest pageRequest = new PageRequest(startIdx, endIdx,
-                new Sort(new Sort.Order(Sort.Direction.DESC, "userId")
-                ,new Sort.Order(Sort.Direction.DESC, "insertDate")
-                )
-
-        );
-
-        return wikiRepository.findAll(pageRequest).getContent();
+    public List<Wiki> findByRecentWiki(int userId, int page, int size) {
+        List<Wiki> list = wikiRepository.findAllByUserIdAndIsDeleted(
+                userId
+                , PageUtil.sortPageable(
+                        page
+                        , size
+                        , PageUtil.sort(PageUtil.order("DESC", "userId"), PageUtil.order("DESC", "insertDate"))
+                ).getSort()
+                , isDeleted);
+        if( list != null && list.size() > 0 ){
+            for( Wiki wiki : list ){
+                wiki.setKeywordList(keywordService.findByWikiId(wiki.getWikiId(), isDeleted));
+            }
+        }
+        return list;
     }
 
 

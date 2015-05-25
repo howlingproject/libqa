@@ -9,9 +9,9 @@ import com.libqa.web.repository.KeywordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +44,12 @@ public class KeywordServiceImpl implements KeywordService {
 		}
 	}
 
-	/**
+    @Override
+    public List<Keyword> findByWikiId(Integer wikiId, boolean isDeleted) {
+        return keywordRepository.findAllByWikiIdAndIsDeleted(wikiId, isDeleted);
+    }
+
+    /**
 	 * 키워드를 저장한 후 통계 데이터를 생성한다.
 	 * 키워드 리스트는 객체 (Space, Wiki, QaContent)의 List 타입으로 넘어온다)
 	 * @param keywordParams
