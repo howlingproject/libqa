@@ -52,10 +52,13 @@ public class KeywordListServiceImpl implements KeywordListService {
         switch (keywordType){
             case "WIKI" :
                 keywordList = keywordListRepository.findByKeywordTypeAndIsDeleted(KeywordTypeEnum.WIKI, isDeleted);
+                break;
             case "SPACE" :
                 keywordList = keywordListRepository.findByKeywordTypeAndIsDeleted(KeywordTypeEnum.SPACE, isDeleted);
+                break;
             case "QA" :
                 keywordList = keywordListRepository.findByKeywordTypeAndIsDeleted(KeywordTypeEnum.QA, isDeleted);
+                break;
         }
         return keywordList;
     }
