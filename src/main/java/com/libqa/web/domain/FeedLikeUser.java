@@ -2,17 +2,16 @@ package com.libqa.web.domain;
 
 import com.libqa.application.enums.FeedLikeTypeEnum;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by sjune on 2015-02-01.
- *
- * @author sjune
- */
 @Data
 @Entity
+@EqualsAndHashCode(of = "feedLikeUserId")
+@ToString
 public class FeedLikeUser {
 
     @Id
@@ -48,11 +47,7 @@ public class FeedLikeUser {
 
     @Column
     private Integer updateUserId;
-    
-    @ManyToOne
-    @JoinColumn(name = "feedId", referencedColumnName = "feedId", nullable = false)
-    private Feed feed;    
 
-    @Column(nullable = false, insertable = false, updatable = false)
-    private long feedId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Feed feed;
 }

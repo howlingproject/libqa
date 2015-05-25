@@ -5,6 +5,7 @@ import com.libqa.web.domain.FeedReply;
 import com.libqa.web.repository.FeedReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -29,22 +30,10 @@ public class FeedReplyService {
         feedReplyRepository.save(feedReply);
     }
 
+    @Transactional
     public void delete(Long feedReplyId) {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
-        deleteIfExists(feedReply);
-    }
-
-    public void deleteByFeedId(Long feedId) {
-        FeedReply feedReply = feedReplyRepository.findByFeedId(feedId);
-        deleteIfExists(feedReply);
-    }
-
-    private void deleteIfExists(FeedReply feedReply) {
-        if (feedReply == null) {
-            return;
-        }
         feedReply.setDeleted(true);
-        feedReplyRepository.save(feedReply);
     }
 
 }
