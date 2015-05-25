@@ -29,7 +29,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     @Override
     public List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteTypeEnum favoriteTypeEnum, Integer userId) {
 
-        return userFavoriteRepository.findByFavoriteTypeAndUserId(favoriteTypeEnum, userId);
+        return userFavoriteRepository.findByFavoriteTypeAndUserUserId(favoriteTypeEnum, userId);
     }
     */
 }
