@@ -170,16 +170,16 @@ public class CommonController {
         }
     }
 
-    @RequestMapping(value = "/common/getKeywordList", method = RequestMethod.POST)
+    @RequestMapping(value = "/common/findKeywordList", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<KeywordList> getKeywordlist(@RequestParam("keywordType") String keywordType){
+    public ResponseData<KeywordList> findKeywordList(@RequestParam("keywordType") String keywordType){
         boolean isDeleted = false;
-        List<KeywordList> keywordList = new ArrayList<KeywordList>();
+        List<KeywordList> keywordList = new ArrayList<>();
 
         try {
             keywordList = keywordListService.findByKeywordType(keywordType, isDeleted);
             return ResponseData.createSuccessResult(keywordList);
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseData.createFailResult(keywordList);
         }
     }

@@ -3,6 +3,7 @@ package com.libqa.web.service;
 import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.web.domain.KeywordList;
 import com.libqa.web.repository.KeywordListRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @author yong
  */
 @Service
+@Slf4j
 public class KeywordListServiceImpl implements KeywordListService {
 
     @Autowired
@@ -48,15 +50,12 @@ public class KeywordListServiceImpl implements KeywordListService {
 
     @Override
     public List<KeywordList> findByKeywordType(String keywordType, boolean isDeleted) {
+        log.info("### keywordType = {}", keywordType);
         List<KeywordList> keywordList = new ArrayList<>();
-        switch (keywordType){
-            case "WIKI" :
-                keywordList = keywordListRepository.findByKeywordTypeAndIsDeleted(KeywordTypeEnum.WIKI, isDeleted);
-            case "SPACE" :
-                keywordList = keywordListRepository.findByKeywordTypeAndIsDeleted(KeywordTypeEnum.SPACE, isDeleted);
-            case "QA" :
-                keywordList = keywordListRepository.findByKeywordTypeAndIsDeleted(KeywordTypeEnum.QA, isDeleted);
-        }
+        KeywordTypeEnum paramEnum = KeywordTypeEnum.valueOf(keywordType);
+
+        keywordList = keywordListRepository.findByKeywordTypeAndIsDeleted(paramEnum, isDeleted);
+
         return keywordList;
     }
 }
