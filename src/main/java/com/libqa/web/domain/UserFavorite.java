@@ -2,7 +2,6 @@ package com.libqa.web.domain;
 
 import com.libqa.application.enums.FavoriteTypeEnum;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,7 +12,6 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "user_favorite")
-@EqualsAndHashCode
 public class UserFavorite {
 
     @Id
@@ -21,9 +19,8 @@ public class UserFavorite {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer favoriteId;
 
-    @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "userId", nullable = false)
-    private User user;
+    @Column(name = "userId", nullable = false)
+    private Integer userId;
 
     @Column(nullable = true)
     private Integer spaceId;
