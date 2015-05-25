@@ -15,6 +15,17 @@ public class PageUtil {
             return new Sort(Sort.Direction.ASC, columnId);
     }
 
+    public static Sort sort(Sort.Order order1, Sort.Order order2) {
+        return new Sort( order1, order2 );
+    }
+
+    public static Sort.Order order(String direction, String columnId){
+        if (direction.equals("DESC"))
+            return new Sort.Order(Sort.Direction.DESC, columnId);
+        else
+            return new Sort.Order(Sort.Direction.ASC, columnId);
+    }
+
     public static PageRequest sortPageable(int page, int size, Sort sort) {
         return new PageRequest(page, size, sort);
     }

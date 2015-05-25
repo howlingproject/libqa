@@ -65,7 +65,9 @@ public class SpaceServiceImpl implements SpaceService {
 			return null;
 		}
 
-		List<UserFavorite> userFavoriteList = userFavoriteService.findByFavoriteTypeAndUserId(FavoriteTypeEnum.SPACE, userId);
+		List<UserFavorite> userFavoriteList = new ArrayList<>();
+
+		userFavoriteList = userFavoriteService.findByFavoriteTypeAndUserId(FavoriteTypeEnum.SPACE, userId);
 
 		if (userFavoriteList.isEmpty()) {
 			return null;

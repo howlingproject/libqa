@@ -18,12 +18,13 @@ import java.util.List;
 @Service
 public class UserFavoriteServiceImpl implements UserFavoriteService {
 
+
     @Autowired
     private UserFavoriteRepository userFavoriteRepository;
 
     @Override
     public List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteTypeEnum favoriteTypeEnum, Integer userId) {
-
-        return userFavoriteRepository.findByFavoriteTypeAndUserUserId(favoriteTypeEnum, userId);
+        return userFavoriteRepository.findByFavoriteTypeAndUserId(favoriteTypeEnum, userId);
     }
+
 }

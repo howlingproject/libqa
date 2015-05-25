@@ -18,4 +18,6 @@ public interface KeywordService {
 
     List<Keyword> findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum keywordType, String keywordName, boolean isDeleted);
 
+    List<Keyword> findByWikiId(Integer wikiId, boolean isDeleted);
+
 }

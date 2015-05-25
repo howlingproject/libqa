@@ -11,21 +11,26 @@ import java.util.Date;
  */
 @Data
 @Entity
+@Table(name = "user_favorite")
 public class UserFavorite {
+
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer favoriteId;
 
-    @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "userId", nullable = false)
-    private User user;
+    @Column(name = "userId", nullable = false)
+    private Integer userId;
 
     @Column(nullable = true)
     private Integer spaceId;
 
     @Column(nullable = true)
     private Integer wikiId;
+
+    @Column(name = "favoriteType", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private FavoriteTypeEnum favoriteType;
 
     @Column(nullable = true)
     private Integer qaId;
@@ -39,7 +44,5 @@ public class UserFavorite {
 
     @Temporal(TemporalType.DATE)
     private Date updateDate;
-    
-    @Column(nullable = false)
-    private FavoriteTypeEnum favoriteType;
+
 }

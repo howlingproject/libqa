@@ -37,22 +37,12 @@
 <div class="container contents-container top-buffer">
     <!-- keyword -->
     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+
         <div class="nav-tabs-header">분류키워드</div>
-        <div class="media qna-item">
-            <ul class="nav nav-pills nav-stacked cat-keyword">
-                <li class="active"><a href="#">Java(120/789)</a></li>
-                <li><a href="#">Spring(120/539)</a></li>
-                <li><a href="#">Groovy(100/299)</a></li>
-                <li><a href="#">Grails(3/300)</a></li>
-                <li><a href="#">Gradle(282/402)</a></li>
-                <li><a href="#">Tomcat(282/402)</a></li>
-                <li><a href="#">Apache(282/402)</a></li>
-                <li><a href="#">Javascript(282/402)</a></li>
-                <li><a href="#">NodeJS(282/402)</a></li>
-                <li><a href="#">MySQL(282/402)</a></li>
-                <li><a href="#">MariaDB(282/402)</a></li>
-            </ul>
-        </div>
+        <!-- 분류키워드 list start -->
+        <div id="categorizeKeywordListArea"></div>
+        <!-- 분류키워드 list end -->
+
     </div>
     <!--// lnb -->
 
@@ -485,10 +475,63 @@
 
         <!--// BEST Q&A -->
 
-
     </div>
 </div>
 <!--// contents -->
 {{/partial}}
+
+{{#partial "script-page"}}
+    {{embedded "common/keywordList"}}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            Space.init();
+        });
+
+        var Space = {
+            init : function(){
+                this.renderKeywordList();
+            },
+            renderKeywordList : function(keywordName){
+                $.ajax({
+                    url: "/common/getKeywordList",
+                    type: "POST",
+                    data: { keywordType : 'SPACE', keywordName : Space.selectedKeyword(keywordName) },
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            var source = $('#common-keywordList-hbs').html();
+                            var template = Handlebars.compile(source);
+
+                            var html = template(data);
+                            $('#categorizeKeywordListArea').html(html);
+                            Space.bindKeywordListEvent();
+                        }
+                    },
+                    error : function(req){
+                        // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
+
+                        alert('키워드 목록 조회에서 에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                    }
+                });
+            },
+            selectedKeyword : function(keywordName){
+                if(!keywordName){
+                    keywordName = '';
+                }
+                return keywordName;
+            },
+            bindKeywordListEvent : function(){
+                $('#categorizeKeywordListArea').find('li').click(function(){
+                    Space.renderKeywordList(this.getAttribute('value'));
+                });
+            }
+        };
+    </script>
+{{/partial}}
+
+
+
 
 {{> template/base}}
