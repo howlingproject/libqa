@@ -36,11 +36,17 @@ public class WikiController {
         List<Wiki> allWiki = wikiService.findByAllWiki(0, 5);
         mav.addObject("allWiki", allWiki);
 
-        int userId = 0;
+        //유저 하드코딩
+        int userId = 1;
         List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
         mav.addObject("resecntWiki", resecntWiki);
 
         List<Wiki> bestWiki = wikiService.findByBestWiki(0, 5);
+        mav.addObject("bestWiki", bestWiki);
+        log.info("#######################################");
+        log.info("# bestWiki.size : {}", bestWiki.size());
+        log.info("#######################################");
+
 
         return mav;
     }
@@ -49,7 +55,7 @@ public class WikiController {
     public ModelAndView write(@ModelAttribute Space modelSpace){
         ModelAndView mav = new ModelAndView("wiki/write");
         log.info("# spaceId : {}", modelSpace.getSpaceId());
-
+        /*
         if( modelSpace.getSpaceId() == null ){
             boolean isDeleted = false;    // 삭제 하지 않은 것
             List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
@@ -58,6 +64,12 @@ public class WikiController {
             Space space = spaceService.findOne(modelSpace.getSpaceId());
             mav.addObject("space", space);
         }
+        */
+        //임시 공간영역 하드코딩
+        Space space = new Space();
+        space.setSpaceId(1);
+        space.setTitle("테스트");
+        mav.addObject("space", space);
 
         return mav;
     }
@@ -82,7 +94,7 @@ public class WikiController {
             log.info("wiki.wikiFile = {}", wiki.getWikiFiles());
             wiki.setPasswd("1234");
             wiki.setUserNick("하이");
-            wiki.setUserId(0);
+            wiki.setUserId(1);
             wiki.setInsertDate(new Date());
 
             Wiki result = wikiService.saveWithKeyword(wiki);
@@ -100,6 +112,7 @@ public class WikiController {
     }
 
     @RequestMapping("wiki/bestList")
+    @Deprecated
     public ModelAndView bestList(Model model){
         ModelAndView mav = new ModelAndView("wiki/template/_bestList");
 
@@ -118,6 +131,7 @@ public class WikiController {
     }
 
     @RequestMapping("wiki/allList")
+    @Deprecated
     public ModelAndView allList(Model model){
         ModelAndView mav = new ModelAndView("wiki/template/_allList");
 
@@ -136,6 +150,7 @@ public class WikiController {
     }
 
     @RequestMapping("wiki/recentList")
+    @Deprecated
     public ModelAndView recentList(Model model){
         ModelAndView mav = new ModelAndView("wiki/template/_recentList");
 
