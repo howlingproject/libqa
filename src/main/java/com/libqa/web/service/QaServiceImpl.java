@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,9 +34,6 @@ public class QaServiceImpl implements QaService {
 
     @Autowired
     QaFileService qaFileService;
-
-    @PersistenceContext
-    EntityManager entityManager;
 
     @Override
     @Transactional
@@ -148,8 +143,7 @@ public class QaServiceImpl implements QaService {
     }
 
     public List<QaContent> findWaitList(List<Integer> qaIds, Date fromDate, Date today, boolean isDeleted){
-        List<QaContent> waitList = new ArrayList<>();
-        return waitList = qaRepository.findAllByQaIdInAndInsertDateBetweenAndIsDeleted(qaIds, fromDate, today, isDeleted);
+        return qaRepository.findAllByQaIdInAndInsertDateBetweenAndIsDeleted(qaIds, fromDate, today, isDeleted);
     }
 
     public Date getFromDate(String dayType){
