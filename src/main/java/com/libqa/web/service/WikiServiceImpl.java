@@ -8,8 +8,6 @@ import com.libqa.web.repository.KeywordRepository;
 import com.libqa.web.repository.WikiRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -68,7 +66,7 @@ public class WikiServiceImpl implements WikiService {
         String[] keywordArrays = wiki.getKeywords().split(",");
         log.info(" keywordArrays : {}", keywordArrays.length);
         if (keywordArrays.length > 0) {
-            keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.WIKI, result.getSpaceId());
+            keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.WIKI, result.getWikiId());
         }
     }
 
@@ -93,9 +91,18 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-    public List<Wiki> findByBestWiki(int startIdx, int endIdx) {
-
-        return null;
+    public List<Wiki> findByBestWiki(int page, int size) {
+        List<Wiki> list = wikiRepository.findAllByIsDeleted(
+                PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "likeCount")).getSort()
+                ,isDeleted);
+        if( list != null && list.size() > 0 ){
+            for( Wiki wiki : list ){
+                long replyCount = wikiReplyService.countByWikiWikiId(wiki.getWikiId());
+                wiki.setReplyCount(replyCount);
+                wiki.setKeywordList(keywordService.findByWikiId(wiki.getWikiId(), isDeleted));
+            }
+        }
+        return list;
     }
 
     @Override

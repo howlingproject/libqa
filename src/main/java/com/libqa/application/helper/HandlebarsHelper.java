@@ -40,7 +40,7 @@ public class HandlebarsHelper {
 
     public String subString(String html, int startIdx, int endIdx){
         if( html.length() > endIdx ){
-            return html.substring(startIdx, endIdx);
+            return html.substring(startIdx, endIdx)+ "...";
         }
         return html;
     }

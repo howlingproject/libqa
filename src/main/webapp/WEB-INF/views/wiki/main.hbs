@@ -28,6 +28,7 @@
                 </div>
                 <!-- BEST 위키 컨텐츠 -->
                 <div class="panel-body" id="bestWikiList">
+                    {{> wiki/template/_bestList}}
                 </div>
                 <!-- BEST 위키 컨텐츠 -->
             </div>
@@ -83,9 +84,10 @@
 {{# partial "script-page" }}
     <script>
         $(document).ready(function() {
-            Wiki.renderList();
+            /*Wiki.renderList();*/
         });
         var Wiki = {
+            /*
             renderList: function() {
                 $.ajax({
                     url: '/wiki/bestList',
@@ -94,21 +96,22 @@
                         $('#bestWikiList').html(response);
                     }
                 });
-                /*$.ajax({
+                $.ajax({
                     url: '/wiki/allList',
                     failure: function(){ },
                     success: function(response) {
                         $('#allWikiList').html(response);
                     }
-                });*/
-                /*$.ajax({
+                });
+                $.ajax({
                     url: '/wiki/recentList',
                     failure: function(){ },
                     success: function(response) {
                         $('#recentWikiList').html(response);
                     }
-                });*/
+                });
             }
+            */
         }
     </script>
 {{/partial}}

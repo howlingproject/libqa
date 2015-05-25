@@ -1,6 +1,4 @@
-
-
-{{#each bestList}}
+{{#each bestWiki}}
     <div class="row" style="padding-bottom: 10px;">
         <div class="col-md-1">
             <div class="user-profile">
@@ -10,7 +8,8 @@
         <div class="col-md-11">
             <div class="row">
                 <div class="col-md-8">
-                    {{userNick}} {{insertDate}} 사람 {{likeCount}}명 리플 0개
+                    <!--{{userNick}} {{insertDate}} 사람 {{likeCount}}명 리플 0개-->
+                    {{userNick}} {{formatDate insertDate "yyyy.MM.dd"}} 사람 {{likeCount}}명 리플 {{replyCount}}개
                 </div>
                 <div class="col-md-4 text-right">
                     페이시북 구플 트위트
@@ -18,7 +17,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    {{contets}}
+                    {{subString (htmlDelete contents) 0 300 }}
                 </div>
             </div>
         </div>
