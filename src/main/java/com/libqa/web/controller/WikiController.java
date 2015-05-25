@@ -3,6 +3,7 @@ package com.libqa.web.controller;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.web.domain.Space;
 import com.libqa.web.domain.Wiki;
+import com.libqa.web.service.KeywordListService;
 import com.libqa.web.service.SpaceService;
 import com.libqa.web.service.WikiService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,9 @@ public class WikiController {
     @Autowired
     private SpaceService spaceService;
 
+    @Autowired
+    KeywordListService keywordListService;
+
     @RequestMapping("wiki/main")
     public ModelAndView main(Model model){
         ModelAndView mav = new ModelAndView("wiki/main");
@@ -43,10 +47,6 @@ public class WikiController {
 
         List<Wiki> bestWiki = wikiService.findByBestWiki(0, 5);
         mav.addObject("bestWiki", bestWiki);
-        log.info("#######################################");
-        log.info("# bestWiki.size : {}", bestWiki.size());
-        log.info("#######################################");
-
 
         return mav;
     }

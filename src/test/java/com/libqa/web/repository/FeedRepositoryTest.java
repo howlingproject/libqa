@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static junit.framework.Assert.assertNull;
 
 @Slf4j
-public class FeedRepositoryIntegrationTest extends LibQaIntegrationTest {
+public class FeedRepositoryTest extends LibQaIntegrationTest {
     @Autowired
     private FeedRepository feedRepository;
     

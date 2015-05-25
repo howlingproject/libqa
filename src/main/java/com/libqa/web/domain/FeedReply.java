@@ -1,6 +1,9 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,6 +15,8 @@ import java.util.Date;
  */
 @Data
 @Entity
+@EqualsAndHashCode(of = "feedReplyId")
+@ToString
 public class FeedReply {
     @Id
     @Column(name = "feedReplyId", nullable = false)
@@ -43,6 +48,9 @@ public class FeedReply {
     @Column
     private Integer updateUserId;
 
-    private Long feedId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Feed feed;
+
 }
 

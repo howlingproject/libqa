@@ -1,17 +1,17 @@
 {{#each data}}
-<li class="thread" data-feed-id="{{feed.feedId}}">
+<li class="thread" data-feed-id="{{feedId}}">
     <div class="author">
         <div class="user-profile">
             <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
         </div>
     </div>
-    <div class="name">{{feed.userNick}}</div>
-    <div class="date">{{feed.insertDate}}</div>
+    <div class="name">{{userNick}}</div>
+    <div class="date">{{insertDate}}</div>
     <div class="config"><i class="fa fa-check popover-config" data-container="body" data-toggle="popover" data-placement="right"></i></div>
 
     <div class="thread-message-box">
         <div class="message">
-            {{nl2br feed.feedContent}}
+            {{nl2br feedContent}}
             <div class="images text-center">
                 {{#images}}
                     <img width="190" class="img-thumbnail" src="{{filePath}}/{{savedName}}" />
@@ -30,7 +30,7 @@
     </div>
 
     <ul>
-        {{#feed.feedReplies}}
+        {{#replies}}
         <li>
             <div class="author">
                 <div class="user-profile-sm">
@@ -48,14 +48,14 @@
                 </div>
             </div>
         </li>
-        {{/feed.feedReplies}}
+        {{/replies}}
     </ul>
 
     <ul>
         <li>
             <div class="row">
                 <form name="feedReplyForm" onsubmit="return false;">
-                    <input type="hidden" name="feedId" value="{{feed.feedId}}" />
+                    <input type="hidden" name="feed.feedId" value="{{feedId}}" />
 
                     <div class="col-xs-9 col-md-10">
                         <input type="text" name="feedReplyContent" class="form-control input-sm" placeholder="댓글 입력">

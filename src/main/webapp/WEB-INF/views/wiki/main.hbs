@@ -38,20 +38,10 @@
         <!-- 하단 컨텐츠 -->
         <div class="col-md-12 col-lg-12">
             <!-- 전체 키워드 선택 -->
-            <div class="col-md-2" style="padding-left: 0px;">
+            <div class="col-md-2" style="padding-left: 0px;" id="categorizeKeywordListArea">
                 <div class="well">전체 키워드 선택</div>
-                <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="#">Java(120/789)</a></li>
-                    <li><a href="#">Spring(120/539)</a></li>
-                    <li><a href="#">Groovy(100/299)</a></li>
-                    <li><a href="#">Grails(3/300)</a></li>
-                    <li><a href="#">Gradle(282/402)</a></li>
-                    <li><a href="#">Tomcat(282/402)</a></li>
-                    <li><a href="#">Apache(282/402)</a></li>
-                    <li><a href="#">Javascript(282/402)</a></li>
-                    <li><a href="#">NodeJS(282/402)</a></li>
-                    <li><a href="#">MySQL(282/402)</a></li>
-                    <li><a href="#">MariaDB(282/402)</a></li>
+                <ul class="nav nav-pills nav-stacked" >
+                    <!--<li class="active"><a href="#">Java(120/789)</a></li>-->
                 </ul>
             </div>
             <!--// 전체 키워드 선택 -->
@@ -82,36 +72,48 @@
 {{/partial}}
 
 {{# partial "script-page" }}
+{{embedded "common/keywordList"}}
     <script>
         $(document).ready(function() {
-            /*Wiki.renderList();*/
+            Wiki.renderKeywordList();
         });
         var Wiki = {
-            /*
-            renderList: function() {
+            renderKeywordList : function(keywordName){
                 $.ajax({
-                    url: '/wiki/bestList',
-                    failure: function(){ },
-                    success: function(response) {
-                        $('#bestWikiList').html(response);
+                    url: "/common/findKeywordList",
+                    type: "POST",
+                    data: { keywordType : 'WIKI', keywordName : Wiki.selectedKeyword(keywordName) },
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            var source = $('#common-keywordList-hbs').html();
+                            var template = Handlebars.compile(source);
+
+                            var html = template(data);
+                            $('#categorizeKeywordListArea').html(html);
+                            Wiki.bindKeywordListEvent();
+                        }
+                    },
+                    error : function(req){
+                        // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
+
+                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
                     }
                 });
-                $.ajax({
-                    url: '/wiki/allList',
-                    failure: function(){ },
-                    success: function(response) {
-                        $('#allWikiList').html(response);
-                    }
+            },
+            selectedKeyword : function(keywordName){
+                if(!keywordName){
+                    keywordName = '';
+                }
+                return keywordName;
+            },
+            bindKeywordListEvent : function(){
+                $('#categorizeKeywordListArea').find('li').click(function(){
+                    Wiki.renderKeywordList(this.getAttribute('value'));
                 });
-                $.ajax({
-                    url: '/wiki/recentList',
-                    failure: function(){ },
-                    success: function(response) {
-                        $('#recentWikiList').html(response);
-                    }
-                });
-            }
-            */
+            },
         }
     </script>
 {{/partial}}
