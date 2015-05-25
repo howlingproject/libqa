@@ -320,12 +320,15 @@
             init : function(){
                 this.renderKeywordList();
                 this.renderRecentQaList();
-//                this.renderWaitReplyQaList();
+                this.renderWaitReplyQaList();
+                this.renderDayType($('#recentQaDayTypeUl'));
+                this.renderDayType($('#waitReplyQaDayTypeUl'));
                 this.bindDayTypeEvent();
+                this.bindQaListEvent();
             },
             renderKeywordList : function(keywordName){
                 $.ajax({
-                    url: "/common/getKeywordList",
+                    url: "/common/findKeywordList",
                     type: "POST",
                     data: { keywordType : 'QA', keywordName : Qa.selectedKeyword(keywordName) },
                     success : function(data){
@@ -404,7 +407,7 @@
             },
             bindKeywordListEvent : function(){
                 $('#categorizeKeywordListArea').find('li').click(function(){
-                    Qa.renderKeywordList(this.getAttribute('value'));
+                    KeywordList.findKeywordList(this);
                 });
             },
             bindDayTypeEvent : function(){
@@ -421,8 +424,31 @@
                 var ulObj = $(dayTypeObj).parent();
                 ulObj.find('li').removeClass('active');
                 ulObj.find('li[value='+dayTypeObj.getAttribute('value')+']').addClass('active');
+            },
+            renderDayType : function(targetObj){
+                targetObj.find('li').removeClass('active');
+                targetObj.find('li[value=""]').addClass('active');
             }
         };
+
+        var KeywordList = {
+            findKeywordList : function(keywordListObj){
+                var ulObj = $(keywordListObj).parent();
+                ulObj.find('li').removeClass('active');
+                var keywordListValue = keywordListObj.getAttribute('value');
+                if(keywordListValue == ''){
+                    ulObj.find('li[value=""]').addClass('active');
+                } else {
+                    ulObj.find('li[value=' + keywordListValue + ']').addClass('active');
+                }
+                // keyword 해당되는 질문 전체 목록 List up
+                // 화면 분할? 같이? 고민
+//                Qa.renderDayType($('#recentQaDayTypeUl'));
+//                Qa.renderDayType($('#waitReplyQaDayTypeUl'));
+//                Qa.renderRecentQaList();
+//                Qa.renderWaitReplyQaList();
+            }
+        }
     </script>
 {{/partial}}
 
