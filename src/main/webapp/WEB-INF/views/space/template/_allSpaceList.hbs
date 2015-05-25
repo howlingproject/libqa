@@ -16,9 +16,13 @@
                 </div>
             </a>
             <div class="media-body">{{subString (htmlDelete description) 0 100 }}
-                <div class="pull-right"><span class="badge">291</span></div>
+                <div class="pull-right"><span class="badge">
+
+                    {{ wikiCountMap.[spaceId] }}
+
+                </span></div>
             </div>
-            <div class="pull-left"><span class="nickname">공간오너 : {{insertUserId}}</span></div>
+            <div class="pull-left"><span class="nickname">공간오너 : {{insertUserNick}}</span></div>
             <div class="pull-right">{{insertDate}}</div>
         </div>
     </div>

@@ -128,4 +128,9 @@ public class WikiServiceImpl implements WikiService {
         return wikiRepository.findAllByIsDeleted(PageUtil.sortId("ASC", "wikiId"), isDeleted);
     }
 
+    @Override
+    public List<Wiki> findBySpaceId(Integer spaceId) {
+        return wikiRepository.findBySpaceIdAndIsDeleted(spaceId, false);
+    }
+
 }

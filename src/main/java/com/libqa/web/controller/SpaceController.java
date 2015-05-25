@@ -16,9 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Author : yion
@@ -63,12 +61,17 @@ public class SpaceController {
          */
         boolean isDeleted = false;
         List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
+        Map<Integer, Integer> wikiCountMap = new HashMap<>();
 
         /**
          * Space 접근 가능 사용자 목록 조회
          */
         List<SpaceAccessUser> spaceAccessUserList = new ArrayList<>();
         for (Space space : spaceList) {
+            Integer spaceId = space.getSpaceId();
+            List<Wiki> wikis = wikiService.findBySpaceId(spaceId);
+            wikiCountMap.put(spaceId, wikis.size());
+
             if (space.isPrivate() == true) {
                 List<SpaceAccessUser> accessUser = space.getSpaceAccessUsers();
                 spaceAccessUserList.addAll(accessUser);
@@ -91,6 +94,7 @@ public class SpaceController {
 
         ModelAndView mav = new ModelAndView("/space/main");
         mav.addObject("spaceList", spaceList);
+        mav.addObject("wikiCountMap", wikiCountMap);
         mav.addObject("myFavoriteSpaceList", myFavoriteSpaceList);
         mav.addObject("updateWikiList", updateWikiList);
         mav.addObject("spaceAccessUserList", spaceAccessUserList);
