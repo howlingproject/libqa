@@ -45,7 +45,7 @@
             <span class="pull-right section-category">
                 <ul id="recentQaDayTypeUl" class="nav nav-tabs">
                     <li class="active" value=""><a href="#">Today</a></li>
-                    <li value="week"><a href="#">Week</a></li>
+                    <li value="WEEK"><a href="#">Week</a></li>
                 </ul>
             </span>
         </div>
@@ -60,8 +60,8 @@
             <span class="pull-right section-category">
                 <ul id="waitReplyQaDayTypeUl" class="nav nav-tabs">
                     <li class="active" value=""><a href="#">Today</a></li>
-                    <li value="Week"><a href="#">Week</a></li>
-                    <li value="all"><a href="#">All</a></li>
+                    <li value="WEEK"><a href="#">Week</a></li>
+                    <li value="ALL"><a href="#">All</a></li>
                 </ul>
             </span>
         </div>
@@ -372,16 +372,30 @@
                     }
                 });
             },
-//            renderWaitReplyQaList : function(dayType){
-//                $.ajax({
-//                    url: '${createLink(controller:'qa',action:'renderQaList')}',
-//                    data : {keywordType : 'QA', keywordName : Qa.selectedKeyword(), waitReply : 'Y', dayType : dayType},
-//                    failure: function(){ },
-//                    success: function(response) {
-//                        $('#waitReplyQaListArea').html(response);
-//                    }
-//                });
-//            },
+            renderWaitReplyQaList : function(dayType){
+                $.ajax({
+                    url: "/qa/qaList",
+                    type: "POST",
+                    data : {keywordType : 'QA', keywordName : Qa.selectedKeyword(), waitReply : 'Y', dayType : dayType},
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            var source = $('#qa-list-hbs').html();
+                            var template = Handlebars.compile(source);
+
+                            var html = template(data);
+                            $('#waitReplyQaListArea').html(html);
+                        }
+                    },
+                    error : function(req){
+                        // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
+
+                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                    }
+                });
+            },
             selectedKeyword : function(keywordName){
                 if(!keywordName){
                     keywordName = '';
@@ -395,18 +409,18 @@
             },
             bindDayTypeEvent : function(){
                 $('#recentQaDayTypeUl > li').click(function(){
-                    Qa.changeDayType(this.getAttribute('value'));
+                    Qa.changeDayType(this);
                     Qa.renderRecentQaList(this.getAttribute('value'));
                 });
                 $('#waitReplyQaDayTypeUl > li').click(function(){
-                    Qa.changeDayType(this.getAttribute('value'));
+                    Qa.changeDayType(this);
                     Qa.renderWaitReplyQaList(this.getAttribute('value'));
                 });
             },
-            changeDayType : function(dayType){
-                var ulObj = $(this).parent();
+            changeDayType : function(dayTypeObj){
+                var ulObj = $(dayTypeObj).parent();
                 ulObj.find('li').removeClass('active');
-                ulObj.find('li[value='+dayType+']').addClass('active');
+                ulObj.find('li[value='+dayTypeObj.getAttribute('value')+']').addClass('active');
             }
         };
     </script>

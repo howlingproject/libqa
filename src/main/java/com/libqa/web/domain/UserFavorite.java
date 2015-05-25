@@ -1,6 +1,8 @@
 package com.libqa.web.domain;
 
+import com.libqa.application.enums.FavoriteTypeEnum;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,7 +12,10 @@ import java.util.Date;
  */
 @Data
 @Entity
+@Table(name = "user_favorite")
+@EqualsAndHashCode
 public class UserFavorite {
+
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,6 +31,10 @@ public class UserFavorite {
     @Column(nullable = true)
     private Integer wikiId;
 
+    @Column(name = "favoriteType", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private FavoriteTypeEnum favoriteType;
+
     @Column(nullable = true)
     private Integer qaId;
 
@@ -38,4 +47,5 @@ public class UserFavorite {
 
     @Temporal(TemporalType.DATE)
     private Date updateDate;
+
 }

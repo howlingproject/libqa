@@ -23,9 +23,7 @@
                     </div>
                     <div class="attachmentArea">
                         <div class="images text-left"></div>
-                        <div class="files">
-                            <!--<a href="#"><i class="fa fa-file-o"></i> 첨부파일.zip</a>-->
-                        </div>
+                        <div class="files">&nbsp;</div>
                     </div>
                 </li>
             </ul>
@@ -383,7 +381,7 @@
 <!-- popover-config start -->
 <div id="popover-config-content" style="display: none;">
     <div class="button"><a href="#">수정</a></div>
-    <div class="button"><a href="#">삭제</a></div>
+    <div class="button"><a href="javascript:void(0);" onclick="Feed.delete(this);">삭제</a></div>
 </div>
 <div id="popover-feed-image-content" style="display: none;">
     <div class="file_upload"><a href="#">파일 업로드</a></div>
@@ -475,41 +473,60 @@
                 $('#fileUploadModal').on('show.bs.modal', function () {
                     $('#fileAttachmentInput').val('');
                 });
+            },
+            delete: function(el) {
+                if (!confirm("FEED를 삭제하시겠습니까?")) {
+                    return;
+                }
+                var popoverId = $(el).closest('.popover').attr('id');
+                var feedId = $('.thread .config').find('[aria-describedby='+ popoverId +']').closest('.thread').attr('data-feed-id');
+                $.post('/feed/delete/' + feedId)
+                    .done(function (response) {
+                        if (response.resultCode != 1) {
+                            alert(response.comment);
+                            return;
+                        }
+                        Feed.searchList();
+                        $('#' + popoverId).remove();
+                    }).fail(function () {
+                        alert('Error delete feed');
+                    });
             }
         };
 
         var FeedFile = {
             add: function(fileObj) {
-                this.createDownloadLinkToForm(fileObj);
-                this.addHiddenTagToForm(fileObj);
+                this.addPreviewToForm(fileObj);
+                this.addHiddenInputToForm(fileObj);
             },
             clear: function(){
-                this.removeDonwloadLinksInForm();
+                this.removePreviewInForm();
                 this.removeHiddenTagsInForm();
             },
-            createDownloadLinkToForm: function (obj) {
-                var downloadPath = obj.filePath + '/' + obj.savedName;
-                var $file = ' <a href="' + downloadPath + '" target="_blank"><i class="fa fa-file-o"></i> ' + obj.realName + '</a>';
-                $('#feedForm .attachmentArea .files').append($file);
-            },
-            addHiddenTagToForm: function (obj) {
-                var idx = $('#feedForm input[name$=fileType]').size();
+            addPreviewToForm: function (obj) {
+                var fullPath = obj.filePath + '/' + obj.savedName;
                 
+                if(obj.fileType == 'FILE') {
+                    var $file = ' <a href="' + fullPath + '" target="_blank"><i class="fa fa-file-o"></i> ' + obj.realName + '</a>';
+                    $('#feedForm .attachmentArea .files').append($file);
+                } else {
+                    var $image = ' <img width="190" class="img-thumbnail" src="' + fullPath + '">';
+                    $('#feedForm .attachmentArea .images').append($image);
+                }
+            },
+            addHiddenInputToForm: function (obj) {
+                var idx = $('#feedForm input[name$=fileType]').size();
                 var $input = $('<input />').attr('type', 'hidden');
+                
                 $('#feedForm').append($input.clone().attr('name', "feedFiles["+ idx + "].realName").val(obj.realName))
                     .append($input.clone().attr('name', "feedFiles["+ idx + "].savedName").val(obj.savedName))
                     .append($input.clone().attr('name', "feedFiles["+ idx + "].filePath").val(obj.filePath))
                     .append($input.clone().attr('name', "feedFiles["+ idx + "].fileSize").val(obj.fileSize))
                     .append($input.clone().attr('name', "feedFiles["+ idx + "].fileType").val(obj.fileType));
-
-//                $('#feedForm').append('<input type="hidden" name="feedFiles['+ idx + '].realName" value="'+ obj.realName+'" />')
-//                    .append('<input type="hidden" name="feedFiles['+ idx + '].savedName" value="'+ obj.savedName +'" />')
-//                    .append('<input type="hidden" name="feedFiles['+ idx + '].filePath" value="'+ obj.filePath +'" />')
-//                    .append('<input type="hidden" name="feedFiles['+ idx + '].fileSize" value="'+ obj.fileSize +'" />')
-//                    .append('<input type="hidden" name="feedFiles['+ idx + '].fileType" value="'+ obj.fileType +'" />')
             },
-            removeDonwloadLinksInForm: function() {
+            removePreviewInForm: function() {
                 $('#feedForm .attachmentArea .files').empty();
+                $('#feedForm .attachmentArea .images').empty();
                 $('#feedForm input[name^=feedFiles]').remove();
             },
             removeHiddenTagsInForm: function() {

@@ -34,7 +34,7 @@ public class FeedFile {
     private Integer downloadCount = 0;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean isDeleted;
+    private boolean isDeleted;  // TODO index 추가 필요
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
@@ -50,4 +50,12 @@ public class FeedFile {
     private Integer insertUserId;
 
     private Long feedId;
+
+    public boolean isFileType() {
+        return FileTypeEnum.FILE == this.fileType;
+    }
+
+    public boolean isImageType() {
+        return FileTypeEnum.IMAGE == this.fileType;
+    }
 }

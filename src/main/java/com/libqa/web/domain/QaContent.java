@@ -85,6 +85,4 @@ public class QaContent {
     @Transient
     private String keywords;
 
-
-
 }

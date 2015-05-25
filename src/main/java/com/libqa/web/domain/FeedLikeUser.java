@@ -52,4 +52,7 @@ public class FeedLikeUser {
     @ManyToOne
     @JoinColumn(name = "feedId", referencedColumnName = "feedId", nullable = false)
     private Feed feed;    
+
+    @Column(nullable = false, insertable = false, updatable = false)
+    private long feedId;
 }

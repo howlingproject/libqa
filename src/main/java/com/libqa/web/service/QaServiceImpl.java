@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.libqa.application.dto.QaDto;
 import com.libqa.application.enums.DayTypeEnum;
 import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.web.domain.Keyword;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by yong on 2015-03-08.
@@ -40,7 +40,7 @@ public class QaServiceImpl implements QaService {
     public QaContent saveWithKeyword(QaContent qaContent, QaFile qaFiles){
         QaContent newQaContent = new QaContent();
         try {
-            newQaContent = qaContentSave(qaContent);
+            newQaContent = save(qaContent);
             moveQaFilesToProductAndSave(newQaContent.getQaId(), qaFiles);
             saveKeywordAndList(newQaContent.getQaId(), qaContent.getKeywords());
         }catch(Exception e){
@@ -48,6 +48,22 @@ public class QaServiceImpl implements QaService {
             throw new RuntimeException("moveQaFilesToProductAndSave Exception");
         }
         return newQaContent;
+    }
+
+
+    @Override
+    public boolean deleteWithKeyword(Integer qaId) {
+        boolean result = false;
+        try{
+            delete(qaId);
+
+            // TODO List reply, file, recommand, keyword, keywordList 처리 확인
+            result = true;
+        } catch (Exception e) {
+            log.error("삭제시 오류 발생", e);
+            result = false;
+        }
+        return result;
     }
 
     void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
@@ -74,12 +90,20 @@ public class QaServiceImpl implements QaService {
     }
     */
 
-    public QaContent qaContentSave(QaContent qaContent) {
-        qaContent.setUserId(1);
-        qaContent.setUserNick("용퓌");
-        qaContent.setInsertUserId(1);
-        qaContent.setInsertDate(new Date());
+    public QaContent save(QaContent qaContent) {
         return qaRepository.save(qaContent);
+    }
+
+    private void delete(Integer qaId) {
+        QaContent targetQaContent = findByQaId(qaId, false);
+//        entityManager.getTransaction().begin();
+        // TODO List 차후 로그인으로 변경
+        targetQaContent.setDeleted(true);
+        targetQaContent.setUpdateUserId(1);
+        targetQaContent.setUpdateDate(new Date());
+        qaRepository.flush();
+//        entityManager.getTransaction().commit();
+
     }
 
     @Override
@@ -89,17 +113,18 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public List<QaContent> findByIsReplyedAndDayType(Map<String, String> params) {
+    public List<QaContent> findByIsReplyedAndDayType(QaDto qaDto) {
         boolean isDeleted = false;
+        boolean isReplyed = false;
         Date today = new Date();
         List<QaContent> returnQaContentObj = new ArrayList<>();
         try {
-            Date fromDate = searchDayType(params.get("dayType"));
-            List<Integer> qaIds = getQaIdByKeyword(params);
-            if ("Y".equals(params.get("waitReply"))) {
-                returnQaContentObj = qaRepository.findAllByQaIdInAndIsReplyedAndInsertDateBetweenAndIsDeleted(qaIds, false, fromDate, today, isDeleted);
+            Date fromDate = getFromDate(qaDto.getDayType());
+            List<Integer> qaIds = getQaIdByKeyword(qaDto.getKeywordName());
+            if ("Y".equals(qaDto.getWaitReply())) {
+                returnQaContentObj = findRecentList(qaIds, isReplyed, fromDate, today, isDeleted);
             } else {
-                returnQaContentObj = qaRepository.findAllByQaIdInAndInsertDateBetweenAndIsDeleted(qaIds, fromDate, today, isDeleted);
+                returnQaContentObj = findWaitList(qaIds, fromDate, today, isDeleted);
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -107,12 +132,26 @@ public class QaServiceImpl implements QaService {
         return returnQaContentObj;
     }
 
-    public Date searchDayType(String dayType){
+    public List<QaContent> findRecentList(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted){
+        List<QaContent> recentList = new ArrayList<>();
+        if(fromDate == null){
+            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndIsDeleted(qaIds, isReplyed, isDeleted);
+        } else {
+            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndInsertDateBetweenAndIsDeleted(qaIds, isReplyed, fromDate, today, isDeleted);
+        }
+        return recentList;
+    }
+
+    public List<QaContent> findWaitList(List<Integer> qaIds, Date fromDate, Date today, boolean isDeleted){
+        return qaRepository.findAllByQaIdInAndInsertDateBetweenAndIsDeleted(qaIds, fromDate, today, isDeleted);
+    }
+
+    public Date getFromDate(String dayType){
         Date now = new Date();
         Date returnDate;
-        if(DayTypeEnum.WEEK.equals(dayType)){
+        if(DayTypeEnum.WEEK.getCode().equals(dayType)){
             returnDate = DateUtils.addDays(now, -7);
-        } else if(DayTypeEnum.ALL.equals(dayType)){
+        } else if(DayTypeEnum.ALL.getCode().equals(dayType)){
             returnDate = null;
         } else{
             returnDate = now;
@@ -120,10 +159,10 @@ public class QaServiceImpl implements QaService {
         return returnDate;
     }
 
-    public List<Integer> getQaIdByKeyword(Map<String, String> params){
+    public List<Integer> getQaIdByKeyword(String keywordName){
         boolean isDeleted = false;
         List<Integer> qaIds = new ArrayList();
-        List<Keyword> keywords = keywordService.findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum.QA, params.get("keywordName"), isDeleted);
+        List<Keyword> keywords = keywordService.findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum.QA, keywordName, isDeleted);
         for(Keyword keyword : keywords){
             qaIds.add(keyword.getQaId());
         }

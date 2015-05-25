@@ -2,6 +2,7 @@ package com.libqa.web.domain;
 
 import com.libqa.application.enums.SocialChannelTypeEnum;
 import lombok.Data;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -50,7 +51,7 @@ public class Feed {
     private boolean isSharedGp;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean isDeleted;
+    private boolean isDeleted;   // TODO index 추가 필요
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
@@ -73,10 +74,12 @@ public class Feed {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "feedId", referencedColumnName = "feedId")
+    @Where(clause = "is_deleted = 0")
     private List<FeedReply> feedReplies;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "feedId", referencedColumnName = "feedId")
+    @Where(clause = "is_deleted = 0")
     private List<FeedFile> feedFiles;
 
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)

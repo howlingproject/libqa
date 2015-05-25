@@ -22,7 +22,7 @@ public class FeedReply {
     private String feedReplyContent;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean isDeleted;
+    private boolean isDeleted;   // TODO index 추가 필요
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)

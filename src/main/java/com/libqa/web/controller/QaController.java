@@ -1,11 +1,13 @@
 package com.libqa.web.controller;
 
+import com.libqa.application.dto.QaDto;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
 import com.libqa.web.domain.QaReply;
 import com.libqa.web.service.*;
+import com.libqa.web.view.DisplayQa;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yong on 2015-02-08.
@@ -70,6 +69,20 @@ public class QaController {
         return mav;
     }
 
+    @RequestMapping("/qa/edit/{qaId}")
+    public ModelAndView edit(@PathVariable Integer qaId) {
+        boolean isDeleted = false;
+
+        QaContent qaContent =  qaService.findByQaId(qaId, isDeleted);
+        List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
+        ModelAndView mav = new ModelAndView("qa/edit");
+        mav.addObject("qaContent", qaContent);
+        mav.addObject("qaReplyList", qaContent.getQaReplys());
+        mav.addObject("qaReplyCnt", qaContent.getQaReplys().size());
+        mav.addObject("keywordList", keywordList);
+        return mav;
+    }
+
     @RequestMapping("/qa/form")
     public ModelAndView create(Model model){
         ModelAndView mav = new ModelAndView("qa/form");
@@ -82,8 +95,28 @@ public class QaController {
         ResponseData resultData = new ResponseData();
 
         QaContent qaContent = new QaContent();
+
+        // TODO List 차후 로그인으로 변경
+        paramQaContent.setUserId(1);
+        paramQaContent.setUserNick("용퓌");
+        paramQaContent.setInsertUserId(1);
+        paramQaContent.setInsertDate(new Date());
         try {
             qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles);
+            return resultData.createSuccessResult(qaContent);
+        } catch (Exception e) {
+            return resultData.createFailResult(qaContent);
+        }
+    }
+
+    @RequestMapping(value = "/qa/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<QaContent> delete(@RequestParam("qaId") Integer qaId) {
+        ResponseData resultData = new ResponseData();
+
+        QaContent qaContent = new QaContent();
+        try {
+            qaService.deleteWithKeyword(qaId);
             return resultData.createSuccessResult(qaContent);
         } catch (Exception e) {
             return resultData.createFailResult(qaContent);
@@ -93,6 +126,13 @@ public class QaController {
     @RequestMapping(value = "/qa/saveReply", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaReply> saveReply(QaReply qaReply) {
+
+        // TODO List 차후 로그인으로 변경
+        qaReply.setInsertDate(new Date());
+        qaReply.setInsertUserId(1);
+        qaReply.setUserId(1);
+        qaReply.setUserNick("용퓌");
+
         QaReply newQaReply = qaReplyService.saveWithQaContent(qaReply);
         return ResponseData.createSuccessResult(newQaReply);
     }
@@ -114,15 +154,18 @@ public class QaController {
 
     @RequestMapping(value = "/qa/qaList", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<HashMap> qaList(@RequestParam Map<String, String> params){
+    public ResponseData<DisplayQa> qaList(@ModelAttribute QaDto qaDto){
+        boolean isDeleted = false;
         List<QaContent> qaContentList = new ArrayList<>();
-        HashMap resultMap = new HashMap();
+        List<DisplayQa> displayQaList = new ArrayList<>();
         try {
-            qaContentList = qaService.findByIsReplyedAndDayType(params);
-            resultMap.put("qaContentList", qaContentList);
-            return ResponseData.createSuccessResult(resultMap);
+            qaContentList = qaService.findByIsReplyedAndDayType(qaDto);
+            for(QaContent qaContent : qaContentList) {
+                displayQaList.add(new DisplayQa(qaContent, keywordService.findByQaId(qaContent.getQaId(), isDeleted)));
+            }
+            return ResponseData.createSuccessResult(displayQaList);
         }catch(Exception e){
-            return ResponseData.createFailResult(resultMap);
+            return ResponseData.createFailResult(displayQaList);
         }
     }
 }
