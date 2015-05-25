@@ -1,0 +1,32 @@
+{{#if spaceList}}
+    {{#each spaceList}}
+    <div class="best-qna-item">
+        <div>
+            <strong><a href="/space/{{spaceId}}">{{title}}</a></strong>
+            <div class="pull-right">
+                <span class="label label-default">Spring</span>
+                <span class="label label-success">JAVA</span>
+                <span class="label label-warning">JavaScript</span>
+            </div>
+        </div>
+        <div class="media">
+            <a class="pull-left" href="#">
+                <div class="user-profile">
+                    <img alt="avatar" class="profile-image" src="{{titleImagePath}}/{{titleImage}}" />
+                </div>
+            </a>
+            <div class="media-body">{{subString (htmlDelete description) 0 100 }}
+                <div class="pull-right"><span class="badge">291</span></div>
+            </div>
+            <div class="pull-left"><span class="nickname">공간오너 : {{insertUserId}}</span></div>
+            <div class="pull-right">{{insertDate}}</div>
+        </div>
+    </div>
+    {{/each}}
+{{^}}
+
+    <div class="best-qna-item">
+        생성된 공간이 없습니다.
+    </div>
+
+{{/if}}

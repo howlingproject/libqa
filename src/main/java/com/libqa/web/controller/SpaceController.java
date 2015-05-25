@@ -69,8 +69,10 @@ public class SpaceController {
          */
         List<SpaceAccessUser> spaceAccessUserList = new ArrayList<>();
         for (Space space : spaceList) {
-            List<SpaceAccessUser> accessUser = space.getSpaceAccessUsers();
-            spaceAccessUserList.addAll(accessUser);
+            if (space.isPrivate() == true) {
+                List<SpaceAccessUser> accessUser = space.getSpaceAccessUsers();
+                spaceAccessUserList.addAll(accessUser);
+            }
         }
 
         /**
@@ -90,6 +92,8 @@ public class SpaceController {
         ModelAndView mav = new ModelAndView("/space/main");
         mav.addObject("spaceList", spaceList);
         mav.addObject("myFavoriteSpaceList", myFavoriteSpaceList);
+        mav.addObject("updateWikiList", updateWikiList);
+        mav.addObject("spaceAccessUserList", spaceAccessUserList);
         return mav;
     }
 
@@ -128,6 +132,13 @@ public class SpaceController {
         return mav;
     }
 
+    @RequestMapping(value = "/space/count", method = RequestMethod.GET)
+    @ResponseBody
+    public String spaceCount() {
+        List<Space> spaces = spaceService.findAllByCondition(false);
+
+        return spaces.size()+"";
+    }
 }
 
 

@@ -1,0 +1,30 @@
+{{#if myFavoriteSpaceList}}
+    {{#each myFavoriteSpaceList}}
+    <div class="best-qna-item">
+        <div>
+            <span class="label label-primary">Spring</span>
+            <span class="label label-success">JAVA</span>
+            <strong> 스프링 AOP에 대해서 설명 좀 해주...</strong>
+        </div>
+        <div class="media">
+            <a class="pull-left" href="#">
+                <div class="user-profile">
+                    <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                </div>
+            </a>
+            <div class="media-body">
+                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
+                <div class="pull-right"><span class="badge">291</span></div>
+            </div>
+            <div class="user-profile-sm">
+                <span class="nickname">용퓌</span>
+            </div>
+            <div class="pull-right">2014-04-05 12:12</div>
+        </div>
+    </div>
+    {{/each}}
+{{^}}
+    <div class="best-qna-item">
+        즐겨찾기 공간이 없습니다.
+    </div>
+{{/if}}

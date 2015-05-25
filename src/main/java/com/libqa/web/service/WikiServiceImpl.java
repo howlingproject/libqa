@@ -116,5 +116,9 @@ public class WikiServiceImpl implements WikiService {
         return list;
     }
 
+    @Override
+    public List<Wiki> findByAllCondition(boolean isDeleted) {
+        return wikiRepository.findAllByIsDeleted(PageUtil.sortId("ASC", "wikiId"), isDeleted);
+    }
 
 }

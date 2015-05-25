@@ -1,11 +1,13 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.dto.FileDto;
+import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.DateUtil;
 import com.libqa.application.util.FileUtil;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.KeywordList;
+import com.libqa.web.domain.Space;
 import com.libqa.web.service.KeywordListService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,6 +184,21 @@ public class CommonController {
         } catch (Exception e) {
             return ResponseData.createFailResult(keywordList);
         }
+    }
+
+
+    @RequestMapping(value = "/keyword/count", method = RequestMethod.GET)
+    @ResponseBody
+    public String keywordCount() {
+        List<KeywordList> keywordLists = keywordListService.findByKeywordType(KeywordTypeEnum.SPACE.getCode(), false);
+
+        int keywordSize = 0;
+
+        for (KeywordList keywordList : keywordLists) {
+            keywordSize += keywordList.getKeywordCount();
+        }
+
+        return keywordSize + "";
     }
 
 }

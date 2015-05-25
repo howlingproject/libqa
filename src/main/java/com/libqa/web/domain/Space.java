@@ -46,21 +46,31 @@ public class Space implements Serializable {
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isDeleted;
 
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "insertDate", nullable = true, columnDefinition = "datetime(6)")
     private Date insertDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updateDate", nullable = true, columnDefinition = "datetime(6)")
     private Date updateDate;
 
     @Column(nullable = false)
     private Integer insertUserId;
 
+    @Column(length = 40)
+    private String insertUserNick;
+
     @Column
     private Integer updateUserId;
 
+    @Column(length = 40)
+    private String updateUserNick;
+
     @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
     private List<SpaceAccessUser> spaceAccessUsers;
+
+
 
     @Transient
     private String keywords;
