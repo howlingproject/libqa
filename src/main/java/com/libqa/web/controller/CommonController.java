@@ -170,9 +170,9 @@ public class CommonController {
         }
     }
 
-    @RequestMapping(value = "/common/getKeywordList", method = RequestMethod.POST)
+    @RequestMapping(value = "/common/findKeywordList", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<KeywordList> getKeywordlist(@RequestParam("keywordType") String keywordType){
+    public ResponseData<KeywordList> findKeywordList(@RequestParam("keywordType") String keywordType){
         boolean isDeleted = false;
         List<KeywordList> keywordList = new ArrayList<KeywordList>();
 
