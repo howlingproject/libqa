@@ -47,7 +47,5 @@ public class UserFavorite {
 
     @Temporal(TemporalType.DATE)
     private Date updateDate;
-    
-    @Column(nullable = false)
-    private FavoriteTypeEnum favoriteType;
+
 }
