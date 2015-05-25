@@ -2,6 +2,8 @@ package com.libqa.web.domain;
 
 import com.libqa.application.enums.SocialChannelTypeEnum;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -10,9 +12,11 @@ import java.util.List;
 
 @Data
 @Entity
+@EqualsAndHashCode(of = "feedId")
+@ToString(exclude = {"feedReplies", "feedFiles", "feedLikeUsers"})
 public class Feed {
     @Id
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long feedId;
 
@@ -72,13 +76,11 @@ public class Feed {
     @Column
     private Integer updateUserId;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feedId", referencedColumnName = "feedId")
+    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
     @Where(clause = "is_deleted = 0")
     private List<FeedReply> feedReplies;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feedId", referencedColumnName = "feedId")
+    
+    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
     @Where(clause = "is_deleted = 0")
     private List<FeedFile> feedFiles;
 

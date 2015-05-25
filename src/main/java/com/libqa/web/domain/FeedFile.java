@@ -1,13 +1,18 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.libqa.application.enums.FileTypeEnum;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
 @Entity
+@EqualsAndHashCode(of = "feedFileId")
+@ToString
 public class FeedFile {
     @Id
     @Column(nullable = false)
@@ -49,7 +54,9 @@ public class FeedFile {
     @Column(nullable = false)
     private Integer insertUserId;
 
-    private Long feedId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Feed feed;
 
     public boolean isFileType() {
         return FileTypeEnum.FILE == this.fileType;

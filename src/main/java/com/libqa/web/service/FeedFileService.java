@@ -13,14 +13,4 @@ public class FeedFileService {
     public void save(FeedFile feedFile) {
         repository.save(feedFile);
     }
-
-    public void deleteByFeedId(Long feedId) {
-        FeedFile feedFile = repository.findByFeedId(feedId);
-        if(feedFile == null) {
-            return;
-        }
-        
-        feedFile.setDeleted(true);
-        repository.save(feedFile);          // TODO 영속성 체크
-    }
 }

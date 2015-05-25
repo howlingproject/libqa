@@ -25,10 +25,10 @@
     </form>
 
     <div class="btn-group pull-right">
-        <a href="/space/spaces" class="btn btn-primary">개설된 공간수(200)</a>
-        <a href="/space/wikis" class="btn btn-primary">생성된 위키수(3000)</a>
-        <a href="/space/keywords" class="btn btn-primary">등록된 키워드수(11200)</a>
-        <a href="/space/form" class="btn btn-primary">공간 생성</a>
+        <a href="/space/spaces" class="btn btn-primary" id="spaceCount"></a>
+        <a href="/space/wikis" class="btn btn-primary" id="wikiCount"></a>
+        <a href="/space/keywords" class="btn btn-primary" id="keywordCount"></a>
+        <a href="/space/form" class="btn btn-primary">공간 생성하기</a>
     </div>
 
 </div>
@@ -59,422 +59,21 @@
         -->
         </div>
 
-        <div class="best-qna-item">
-            <div>
-                <strong> 공간 명이 출력됩니다.</strong>
-                <div class="pull-right">
-                    <span class="label label-default">Spring</span>
-                    <span class="label label-success">JAVA</span>
-                    <span class="label label-warning">JavaScript</span>
-                </div>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="pull-left"><span class="nickname">공간오너 : sjune</span></div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <strong> 공간 명이 출력됩니다.</strong>
-                <div class="pull-right">
-                    <span class="label label-primary">Spring</span>
-                    <span class="label label-danger">JAVA</span>
-                    <span class="label label-info">JavaScript</span>
-                </div>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="pull-left"><span class="nickname">공간오너 : sjune</span></div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <strong> 공간 명이 출력됩니다.</strong>
-                <div class="pull-right">
-                    <span class="label label-primary">Spring</span>
-                    <span class="label label-success">JAVA</span>
-                    <span class="label label-warning">JavaScript</span>
-                </div>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="pull-left"><span class="nickname">공간오너 : sjune</span></div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <strong> 공간 명이 출력됩니다.</strong>
-                <div class="pull-right">
-                    <span class="label label-primary">Spring</span>
-                    <span class="label label-success">JAVA</span>
-                    <span class="label label-warning">JavaScript</span>
-                </div>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="pull-left"><span class="nickname">공간오너 : sjune</span></div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <strong> 공간 명이 출력됩니다.</strong>
-                <div class="pull-right">
-                    <span class="label label-primary">Spring</span>
-                    <span class="label label-success">JAVA</span>
-                    <span class="label label-warning">JavaScript</span>
-                </div>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="pull-left"><span class="nickname">공간오너 : sjune</span></div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <strong> 공간 명이 출력됩니다.</strong>
-                <div class="pull-right">
-                    <span class="label label-primary">Spring</span>
-                    <span class="label label-success">JAVA</span>
-                    <span class="label label-warning">JavaScript</span>
-                </div>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="pull-left"><span class="nickname">공간오너 : sjune</span></div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <strong> 공간 명이 출력됩니다.</strong>
-                <div class="pull-right">
-                    <span class="label label-primary">Spring</span>
-                    <span class="label label-success">JAVA</span>
-                    <span class="label label-warning">JavaScript</span>
-                </div>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="pull-left"><span class="nickname">공간오너 : sjune</span></div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <strong> 공간 명이 출력됩니다.</strong>
-                <div class="pull-right">
-                    <span class="label label-primary">Spring</span>
-                    <span class="label label-success">JAVA</span>
-                    <span class="label label-warning">JavaScript</span>
-                </div>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="pull-left"><span class="nickname">공간오너 : sjune</span></div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <strong> 공간 명이 출력됩니다.</strong>
-                <div class="pull-right">
-                    <span class="label label-primary">Spring</span>
-                    <span class="label label-success">JAVA</span>
-                    <span class="label label-warning">JavaScript</span>
-                </div>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...위키를 추가...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="pull-left"><span class="nickname">공간오너 : sjune</span></div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
+        {{> space/template/_allSpaceList}}
+        <br>
+        <p class="lead text-right" ><button class="btn btn-default">Read More</button></p>
         <!--// 전체 공간 -->
     </div>
 
     <div class="col-md-4">
         <!-- 내 즐겨찾기 -->
         <div class="nav-tabs-header">내 즐겨찾기 공간</div>
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀 해주...</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">용퓌</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
+        {{> space/template/_myfavoriteList}}
 
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-warning">JavaScript</span>
-                <strong> 자바스크립트 AOP 설명좀 </strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">
-                    그런거 없습니다.그런거 없습니다.그런거 없습니다.그런거 없습니다.그런거 없습..
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">선준</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">Quick</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">손간지</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <!-- 최근 위키  -->
         <div class="top-buffer">&nbsp;</div>
         <div class="nav-tabs-header">최근 위키</div>
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">용퓌</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-warning">JavaScript</span>
-                <strong> 자바스크립트 AOP 설명좀 </strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">
-                    그런거 없습니다.그런거 없습니다.그런거 없습니다.그런거 없습니다.그런거 없습..
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">선준</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">Quick</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">손간지</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile"><img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <div class="pull-right"><span class="badge">291</span></div>
-                </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">용퓌</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-
+        {{> space/template/_recentWikiList}}
         <!--// BEST Q&A -->
-
     </div>
 </div>
 <!--// contents -->
@@ -490,10 +89,13 @@
         var Space = {
             init : function(){
                 this.renderKeywordList();
+                this.spaceCount();
+                this.wikiCount();
+                this.keywordCount();
             },
             renderKeywordList : function(keywordName){
                 $.ajax({
-                    url: "/common/getKeywordList",
+                    url: "/common/findKeywordList",
                     type: "POST",
                     data: { keywordType : 'SPACE', keywordName : Space.selectedKeyword(keywordName) },
                     success : function(data){
@@ -526,12 +128,45 @@
                 $('#categorizeKeywordListArea').find('li').click(function(){
                     // Space.renderKeywordList(this.getAttribute('value'));
                 });
+            },
+            spaceCount : function() {
+                $.ajax({
+                    url: "/space/count",
+                    type: "GET",
+                    success : function(data){
+                        $("#spaceCount").text("개설된 공간수(" + data +")");
+                    },
+                    error : function(req){
+                        alert('전체 공간 수 조회 에러. 에러코드 [' + req.status + ']');
+                    }
+                })
+            },
+            wikiCount : function() {
+                $.ajax({
+                    url: "/wiki/count",
+                    type: "GET",
+                    success : function(data){
+                        $("#wikiCount").text("생성된 위키수(" + data +")");
+                    },
+                    error : function(req){
+                        alert('생성된 위키 수 조회 에러. 에러코드 [' + req.status + ']');
+                    }
+                })
+            },
+            keywordCount : function() {
+                $.ajax({
+                    url: "/keyword/count",
+                    type: "GET",
+                    success : function(data){
+                        $("#keywordCount").text("등록된 키워드수(" + data + ")");
+                    },
+                    error : function(req){
+                        alert('키워드 수 조회 에러. 에러코드 [' + req.status + ']');
+                    }
+                })
             }
         };
     </script>
 {{/partial}}
-
-
-
 
 {{> template/base}}

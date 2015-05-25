@@ -21,7 +21,6 @@ To change this template use File | Settings | File Templates.
             </div>
         </div>
     </div>
-
 </div>
 
 <!--// contents -->
@@ -29,25 +28,17 @@ To change this template use File | Settings | File Templates.
 
 <div class="container components">
     <h1 class="page-header">{{space.title}}
-        <small class="pull-right">2014.12.31 Yion 생성 </small>
+        <small class="pull-right">{{space.insertDate}} Yion 생성 </small>
     </h1>
 
     <div class="row" style="padding-bottom: 20px">
 
         <div class="col-md-4">
-            <img src="/resource/public/images/icons/cameras.png" width="300">
+            <img src="{{space.titleImagePath}}/{{space.titleImage}}" width="300">
         </div>
 
         <div class="col-md-8">
-            <h3>Project Description</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-            <h3>Project Details</h3>
-            <ul>
-                <li>Lorem Ipsum</li>
-                <li>Dolor Sit Amet</li>
-                <li>Consectetur</li>
-                <li>Adipiscing Elit</li>
-            </ul>
+            {{{space.description}}}
         </div>
 
     </div>

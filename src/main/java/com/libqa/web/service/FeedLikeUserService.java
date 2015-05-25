@@ -6,10 +6,8 @@ import com.libqa.web.repository.FeedLikeUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
-import java.util.List;
 
 import static com.libqa.application.enums.FeedLikeTypeEnum.FEED;
 
@@ -19,10 +17,12 @@ public class FeedLikeUserService {
     @Autowired
     private FeedLikeUserRepository feedLikeUserRepository;
 
-    public boolean isNotLike(Feed feed) {
-        List<FeedLikeUser> feedLikeUsers = feedLikeUserRepository.findByFeedIdAndUserIdAndFeedLikeType(feed.getFeedId(), feed.getUserId(), FEED);
-        log.debug("feedLikeUsers : {}", feedLikeUsers);
-        return CollectionUtils.isEmpty(feedLikeUsers);
+    public boolean isLikable(Feed feed) {
+//        List<FeedLikeUser> feedLikeUsers = feedLikeUserRepository.findByFeedIdAndUserIdAndFeedLikeType(feed.getFeedId(), feed.getUserId(), FEED);
+        
+//        log.debug("feedLikeUsers : {}", feedLikeUsers);
+//        return CollectionUtils.isEmpty(feedLikeUsers);
+        return true;
     }
 
     public void saveByFeed(Feed feed, boolean isCanceled) {

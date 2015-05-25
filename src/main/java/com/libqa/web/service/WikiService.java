@@ -20,4 +20,6 @@ public interface WikiService {
     List<Wiki> findByBestWiki(int startIdx, int endIdx);
 
     List<Wiki> findByRecentWiki(int userId, int startIdx, int endIdx);
+
+    List<Wiki> findByAllCondition(boolean isDeleted);
 }
