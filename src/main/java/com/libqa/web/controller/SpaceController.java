@@ -126,6 +126,10 @@ public class SpaceController {
     @RequestMapping(value = "/space/{spaceId}", method = RequestMethod.GET)
     public ModelAndView spaceDetail(@PathVariable Integer spaceId) {
         Space space = spaceService.findOne(spaceId);
+
+        // 최근 수정된 위키 목록
+        List<Wiki> wikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
+
         // Space 생성시 선택한 Layout 옵션의 View를 보여준다.
         String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
 
@@ -135,6 +139,7 @@ public class SpaceController {
         mav.addObject("space", space);
         return mav;
     }
+
 
     @RequestMapping(value = "/space/count", method = RequestMethod.GET)
     @ResponseBody

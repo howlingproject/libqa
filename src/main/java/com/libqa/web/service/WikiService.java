@@ -21,7 +21,9 @@ public interface WikiService {
 
     List<Wiki> findByRecentWiki(int userId, int startIdx, int endIdx);
 
-    List<Wiki> findByAllCondition(boolean isDeleted);
+    List<Wiki> findAllByCondition();
 
     List<Wiki> findBySpaceId(Integer spaceId);
+
+    List<Wiki> findSortAndModifiedBySpaceId(Integer spaceId, int startIdx, int endIdx);
 }

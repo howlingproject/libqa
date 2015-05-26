@@ -16,4 +16,6 @@ public interface WikiRepository extends JpaRepository<Wiki, Integer> {
     List<Wiki> findAllByUserIdAndIsDeleted(Integer userId, Sort orders, boolean isDeleted);
 
     List<Wiki> findBySpaceIdAndIsDeleted(Integer spaceId, boolean isDeleted);
+
+    List<Wiki> findSortBySpaceId(Integer spaceId, boolean isDeleted, Sort sort);
 }

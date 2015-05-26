@@ -175,7 +175,7 @@ public class WikiController {
     @RequestMapping(value = "wiki/count", method = RequestMethod.GET)
     @ResponseBody
     public String wikiCount() {
-        List<Wiki> wikis = wikiService.findByAllCondition(false);
+        List<Wiki> wikis = wikiService.findAllByCondition();
 
         return wikis.size() + "";
     }
