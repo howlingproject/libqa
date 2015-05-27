@@ -1,5 +1,5 @@
 {{#each data}}
-    <div class="media qna-item">
+    <div class="media qna-item" value="{{qaContent.qaId}}" onclick="location.href='/qa/{{qaContent.qaId}}';">
         <a class="pull-left" href="#">
             <div class="user-profile">
                 <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
