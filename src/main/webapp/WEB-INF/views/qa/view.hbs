@@ -91,27 +91,28 @@
                             답변 {{qaReplyCnt}}
                         </h3>
                     </div>
-                    <ul class="list-group">
+                    <ul id="qaReplyList" class="list-group">
                         {{#each qaReplyList}}
                             <li class="list-group-item">
                                 <div class="row">
                                     <div class="qna-main-top col-xs-10 col-sm-10 col-md-10 col-lg-10">
                                         <div class="media-body">
                                             <div style="margin-left: 5px; margin-bottom: 10px;">
-                                                <div class="avatar avatar-medium clearfix ">
+                                                <div class="avatar avatar-medium clearfix">
                                                     <div class="user-profile-sm">
                                                         <span class="nickname">sjune</span>
                                                         <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                                                        <span class="qna-reply-title">{{title}}</span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            {{title}}
+                                            {{{contents}}}
                                         </div>
                                     </div>
                                     <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-qna-rating">
-                                        <ul class="qna-reply">
-                                            <li class="fa fa-thumbs-o-up fa-2x"><span class="like-count">({{voteUpCount}})</span></li>
-                                            <li class="fa fa-thumbs-o-down fa-2x"><span class="claim-count">({{voteDownCount}})</span></li>
+                                        <ul class="qna-reply" value="{{replyId}}">
+                                            <li class="fa fa-thumbs-o-up fa-2x" value="UP"><span class="like-count">({{voteUpCount}})</span></li>
+                                            <li class="fa fa-thumbs-o-down fa-2x" value="DOWN"><span class="claim-count">({{voteDownCount}})</span></li>
                                             {{#if isChoice}}
                                                 <li class="fa fa-check fa-2x"></li>
                                             {{/if}}
@@ -130,13 +131,15 @@
                                 </div>
                             </div>
                             <!-- 댓글작성 Bootstrap Live Editor -->
+                            <div class="row" style="margin-left: 5px; margin-bottom: 10px; width: 90%">
+                                <input type="text" class="form-control" id="title" name="title" placeholder="title">
+                            </div>
                             <div id="editor" class="form-group">
                                 <input type="hidden" id="contents" name="contents" />
                                 <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
                                 <input type="hidden" id="orderIdx" name="orderIdx" value="1" />   <!-- 답변 계층 -->
                                 <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
                                 <input type="hidden" id="parentsId" name="parentsId" value="3" />   <!-- 답변 계층 -->
-                                <input type="hidden" id="parentsId" name="title" value="답변에 title?" />   <!-- 답변 계층 -->
                             </div>
                             <!--// 댓글작성 Bootstrap Live Editor -->
                         </li>
@@ -194,6 +197,7 @@
             bindEvent : function(){
                 this.formEvent();
                 this.buttonEvent();
+                this.saveVoteEvent();
             },
             formEvent : function(){
                 $("#cancelButton").on("click", this.cancelContents);
@@ -253,6 +257,35 @@
             },
             unbindDeleteEventFileList : function(){
                 $('.fileDiv').find('[href=#fileDiv]').remove();
+            },
+            saveVoteEvent : function(){
+                $('.qna-reply > li').click(function(){
+                    Qa.saveVote(this);
+                });
+            },
+            saveVote : function(voteLiObj){
+                var replyId = $(voteLiObj).parent().attr('value');
+                var voteType = $(voteLiObj).attr('value');
+                var url = '';
+                if(voteType = 'UP'){
+                    url = '/qa/saveVoteUp';
+                } else if(voteType = 'DOWN'){
+                    url = '/qa/saveVoteDown';
+                }
+                $.ajax({
+                    type : 'POST',
+                    data : {qaId : $('[name=qaId]').val(),
+                            replyId : replyId},
+                    url : url,
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            ConfirmDialog.successConfirm();
+                        }
+                    },
+                    error : function(XMLHttpRequest,textStatus,errorThrown){
+                        alert(errorThrown);
+                    }
+                });
             }
         }
 
