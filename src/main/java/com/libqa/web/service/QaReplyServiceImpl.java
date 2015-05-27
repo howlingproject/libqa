@@ -18,8 +18,28 @@ public class QaReplyServiceImpl implements QaReplyService {
     @Autowired
     QaReplyRepository qaReplyRepository;
 
+    @Autowired
+    VoteService voteService;
+
     @Override
     public QaReply saveWithQaContent(QaReply qaReply) {
         return qaReplyRepository.save(qaReply);
     }
+
+    @Override
+    public QaReply saveVoteUp(QaReply paramQaReply, Integer userId) {
+        boolean isDeleted = false;
+        QaReply qaReply = qaReplyRepository.findByReplyId(paramQaReply.getReplyId(), isDeleted);
+
+        boolean notVote = voteService.isNotVote(qaReply, userId);
+        if(!notVote){
+            voteService.saveByQaReply(qaReply, userId);
+        }
+        qaReply.setVoteUpCount(qaReply.getVoteUpCount() + 1);
+
+        qaReplyRepository.save(qaReply);
+
+        return qaReply;
+    }
+
 }

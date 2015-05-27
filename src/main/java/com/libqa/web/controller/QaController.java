@@ -168,4 +168,12 @@ public class QaController {
             return ResponseData.createFailResult(displayQaList);
         }
     }
+
+    @RequestMapping(value = "/qa/saveVoteUp", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<QaReply> saveVoteUp(@ModelAttribute QaReply paramQaReply){
+        QaReply qareply = qaReplyService.saveVoteUp(paramQaReply, 1); // TODO 로그인 처리
+
+        return ResponseData.createSuccessResult(qareply);
+    }
 }

@@ -9,4 +9,6 @@ import com.libqa.web.domain.QaReply;
  */
 public interface QaReplyService {
     QaReply saveWithQaContent(QaReply qaReply);
+
+    QaReply saveVoteUp(QaReply paramQaReply, Integer userId);
 }
