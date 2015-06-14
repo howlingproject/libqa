@@ -4,6 +4,12 @@
   Date: 2014. 9. 22.
   Time: 오후 10:57
 -->
+
+{{#partial "style"}}
+{{!-- 여기에 사용자 css 정의 --}}
+    <link href="/resource/app/js/DualEditor/css/DualEditor.css" rel="stylesheet">
+{{/partial}}
+
 {{#partial "script-header"}}
     <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
 {{/partial}}
@@ -11,149 +17,187 @@
 {{# partial "content" }}
     <!-- 메뉴 -->
     <div class="container contents-container">
-        <form id="qaForm">
         <!-- contents -->
         <div class="col-md-12">
-            <!-- 관련키워드 -->
-            <div class="row top-buffer">
-                <span class="col-md-12 pull-left section-category qna-alert-info">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#">관련 키워드</a></li>
-                        <li class="pull-left readCnt">
-                            {{#each keywordList}}
-                                <span class="label label-primary">{{keywordName}}</span>
-                            {{/each}}
-                        </li>
-                        <li class="pull-right">
-                            <div class="user-profile-sm">
-                                <span class="nickname">sjune</span>
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </li>
-                    </ul>
-                </span>
-            </div>
-            <!--// 관련키워드 -->
-            <div class="media form-group top-buffer">
-                <!-- 본문 제목, 내용 -->
-                <div class="alert alert-info">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <span class="qna-alert-title">{{qaContent.title}}</span>
-                            <span class="badge">{{qaReplyCnt}}</span>
-                        </div>
-                        <div class="col-md-4 text-right">
-                            <span class="qna-alert-title">{{qaContent.insertDate}}</span>
-                            <span class="readCnt qna-alert-title">조회수 : {{qaContent.viewCount}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <p>
-                            {{{qaContent.contents}}}
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div id="uploadFilesArea">
-                        <span class="glyphicon glyphicon-paperclip btn-m"></span>
-                        <span>Attachments</span>
-                        <div id="uploadfileList" class="alert alert-success attachment-thumbnail">
-                        </div>
-                    </div>
-                    <input name="uploadType" value="Qa" type="hidden">
-                    <input name="uploadFilePath" id="uploadFilePath" type="hidden">
-                    <input id="file-attachment" name="uploadfile" type="file" style="display:none">
-                    <p class="help-block"></p>
-                </div>
-                <input type="hidden" name="qaId" value="{{qaContent.qaId}}">
-                <input type="hidden" name="wikiId">
-            </div>
-            <!--// 본문 제목, 내용 -->
-            <div>
-                <div class="text-left">
-                    <i class="fa fa-thumbs-o-up"><span class="like-count">({{qaContent.recommandCount}})</span></i>
-                    <i class="fa fa-share-alt"><span class="claim-count">(0)</span></i>
-                </div>
-                <div class="text-right">
-                    <button id="editButton" type="button" class="btn btn-primary btn-sm">수정</button>
-                    <button id="deleteButton" type="button" class="btn btn-danger btn-sm">삭제</button>
-                    <button id="listButton" type="button" class="btn btn-primary btn-sm">목록</button>
-                </div>
-            </div>
-
-            <!-- 댓글 list -->
-            <div class="top-buffer">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
-                            답변 {{qaReplyCnt}}
-                        </h3>
-                    </div>
-                    <ul id="qaReplyList" class="list-group">
-                        {{#each qaReplyList}}
-                            <li class="list-group-item">
-                                <div class="row">
-                                    <div class="qna-main-top col-xs-10 col-sm-10 col-md-10 col-lg-10">
-                                        <div class="media-body">
-                                            <div style="margin-left: 5px; margin-bottom: 10px;">
-                                                <div class="avatar avatar-medium clearfix">
-                                                    <div class="user-profile-sm">
-                                                        <span class="nickname">sjune</span>
-                                                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                                                        <span class="qna-reply-title">{{title}}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{{contents}}}
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 my-qna-rating">
-                                        <ul class="qna-reply" value="{{replyId}}">
-                                            <li class="fa fa-thumbs-o-up fa-2x" value="UP"><span class="like-count">({{voteUpCount}})</span></li>
-                                            <li class="fa fa-thumbs-o-down fa-2x" value="DOWN"><span class="claim-count">({{voteDownCount}})</span></li>
-                                            {{#if isChoice}}
-                                                <li class="fa fa-check fa-2x"></li>
-                                            {{/if}}
-                                        </ul>
-                                    </div>
+            <form id="qaForm">
+                <!-- 관련키워드 -->
+                <div class="row top-buffer">
+                    <span class="col-md-12 pull-left section-category qna-alert-info">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#">관련 키워드</a></li>
+                            <li class="pull-left readCnt">
+                                {{#each keywordList}}
+                                    <span class="label label-primary">{{keywordName}}</span>
+                                {{/each}}
+                            </li>
+                            <li class="pull-right">
+                                <div class="user-profile-sm">
+                                    <span class="nickname">sjune</span>
+                                    <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                                 </div>
                             </li>
-                        {{/each}}
-                        <li class="list-group-item">
-                            <div style="margin-left: 5px; margin-bottom: 10px;">
-                                <div class="avatar avatar-medium clearfix ">
-                                    <div class="user-profile-sm">
-                                        <span class="nickname">sjune</span>
-                                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                                    </div>
+                        </ul>
+                    </span>
+                </div>
+                <!--// 관련키워드 -->
+                <div class="media form-group top-buffer">
+                    <!-- 본문 제목, 내용 -->
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <span class="qna-alert-title">{{qaContent.title}}</span>
+                                <span class="badge">{{qaReplyCnt}}</span>
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <span class="qna-alert-title">{{qaContent.insertDate}}</span>
+                                <span class="readCnt qna-alert-title">조회수 : {{qaContent.viewCount}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <p>
+                                {{{qaContent.contents}}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="uploadFilesArea">
+                            <span class="glyphicon glyphicon-paperclip btn-m"></span>
+                            <span>Attachments</span>
+                            <div id="uploadfileList" class="alert alert-success attachment-thumbnail">
+                            </div>
+                        </div>
+                        <input name="uploadType" value="Qa" type="hidden">
+                        <input name="uploadFilePath" id="uploadFilePath" type="hidden">
+                        <input id="file-attachment" name="uploadfile" type="file" style="display:none">
+                        <p class="help-block"></p>
+                    </div>
+                    <input type="hidden" name="qaId" value="{{qaContent.qaId}}">
+                    <input type="hidden" name="wikiId">
+                </div>
+                <!--// 본문 제목, 내용 -->
+                <div>
+                    <div class="text-left">
+                        <i class="fa fa-thumbs-o-up"><span class="like-count">({{qaContent.recommandCount}})</span></i>
+                        <i class="fa fa-share-alt"><span class="claim-count">(0)</span></i>
+                    </div>
+                    <div class="text-right">
+                        <button id="editButton" type="button" class="btn btn-primary btn-sm">수정</button>
+                        <button id="deleteButton" type="button" class="btn btn-danger btn-sm">삭제</button>
+                        <button id="listButton" type="button" class="btn btn-primary btn-sm">목록</button>
+                    </div>
+                </div>
+
+                <!-- 덧글 작성 -->
+                <div class="feed feed-write well top-buffer">
+                    <div class="feed-write-top">
+                        <div class="action-buttons text-right">
+                            <input type="text" class="form-control" id="title" name="title" placeholder="title">
+                        </div>
+                    </div>
+                    <ul>
+                        <li>
+                            <div class="author">
+                                <div class="user-profile">
+                                    <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                                 </div>
                             </div>
-                            <!-- 댓글작성 Bootstrap Live Editor -->
-                            <div class="row" style="margin-left: 5px; margin-bottom: 10px; width: 90%">
-                                <input type="text" class="form-control" id="title" name="title" placeholder="title">
+                            <div class="modal-body">
+                                <div id="editor" class="form-group">
+                                    <input type="hidden" id="contents" name="contents" />
+                                    <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
+                                    <input type="hidden" id="orderIdx" name="orderIdx" value="1" />   <!-- 답변 계층 -->
+                                    <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
+                                    <input type="hidden" id="parentsId" name="parentsId" value="3" />   <!-- 답변 계층 -->
+                                </div>
                             </div>
-                            <div id="editor" class="form-group">
-                                <input type="hidden" id="contents" name="contents" />
-                                <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
-                                <input type="hidden" id="orderIdx" name="orderIdx" value="1" />   <!-- 답변 계층 -->
-                                <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
-                                <input type="hidden" id="parentsId" name="parentsId" value="3" />   <!-- 답변 계층 -->
+                            <div class="attachmentArea">
+                                <div class="images text-left"></div>
+                                <div class="files">&nbsp;</div>
                             </div>
-                            <!--// 댓글작성 Bootstrap Live Editor -->
                         </li>
                     </ul>
+                    <div class="feed-write-bottom text-right">
+                        <button id="saveReplyButton" type="button" class="btn btn-primary btn-default">저장</button>
+                    </div>
                 </div>
+            </form>
+
+            <!-- 댓글 list -->
+            {{#each qaReplyList}}
+            <div class="bg-info qna-reply-title"><span class="qna-reply-title">{{title}}</span></div>
+            <div class="feed well">
+                <ul>
+                    <li class="thread">
+                        <div class="author">
+                            <div class="user-profile">
+                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                            </div>
+                        </div>
+                        <div class="name">{{userNick}}</div>
+                        <div class="date">{{insertDate}}</div>
+                        <div class="config"><i class="fa fa-check popover-config" data-container="body" data-toggle="popover" data-placement="right"></i></div>
+
+                        <div class="thread-message-box">
+                            <div class="message">
+                                {{{contents}}}
+                            </div>
+                            <div class="action-buttons">
+                                <i class="fa fa-thumbs-o-up"><span class="like-count">({{voteUpCount}})</span></i>
+                                <i class="fa fa-bullhorn"><span class="claim-count">({{voteDownCount}})</span></i>
+                            </div>
+                        </div>
+
+                        <!--<ul>-->
+                            <!--{{#replies}}-->
+                                <!--<li>-->
+                                    <!--<div class="author">-->
+                                        <!--<div class="user-profile-sm">-->
+                                            <!--<img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="name">{{userNick}}</div>-->
+                                    <!--<div class="date">{{insertDate}}</div>-->
+                                    <!--<div class="config"><i class="fa fa-close feedReplyDeleteBtn" data-feed-reply-id="{{feedReplyId}}"></i></div>-->
+                                    <!--<div class="message-box">-->
+                                        <!--<div class="message">{{feedReplyContent}}</div>-->
+                                        <!--<div class="action-buttons">-->
+                                            <!--<i class="fa fa-thumbs-o-up"><span class="like-count">(30)</span></i>-->
+                                            <!--<i class="fa fa-bullhorn"><span class="claim-count">(0)</span></i>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</li>-->
+                            <!--{{/replies}}-->
+                        <!--</ul>-->
+
+                        <ul>
+                            <li>
+                                <div class="row">
+                                    <form name="qaReplyForm" onsubmit="return false;">
+                                        <input type="hidden" name="qa.qaId" value="{{replyId}}" />
+                                        <input type="hidden" id="orderIdx" name="orderIdx" value="1" />   <!-- 답변 계층 -->
+                                        <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
+                                        <input type="hidden" id="parentsId" name="parentsId" value="3" />   <!-- 답변 계층 -->
+
+                                        <div class="col-xs-9 col-md-10">
+                                            <input type="text" name="feedReplyContent" class="form-control input-sm" placeholder="댓글 입력">
+                                        </div>
+                                        <div class="col-xs-3 col-md-2 feed-comment">
+                                            <button class="btn btn-sm btn-info" name="saveReply" type="button">저장</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
+            {{/each}}
+
             <!--// 댓글 list -->
 
-            <div class="text-center">
-                <button id="saveReplyButton" type="button" class="btn btn-primary btn-default">저장</button>
-            </div>
-
         </div>
-        </form>
     </div>
 
 {{/partial}}
