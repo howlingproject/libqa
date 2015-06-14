@@ -49,5 +49,6 @@ public class FeedLikeUser {
     private Integer updateUserId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "feedId", referencedColumnName = "feedId", nullable = false)
     private Feed feed;
 }

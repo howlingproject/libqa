@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.google.common.collect.Iterables;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedLikeUser;
 import com.libqa.web.repository.FeedLikeUserRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 import static com.libqa.application.enums.FeedLikeTypeEnum.FEED;
 
@@ -15,17 +17,35 @@ import static com.libqa.application.enums.FeedLikeTypeEnum.FEED;
 @Service
 public class FeedLikeUserService {
     @Autowired
-    private FeedLikeUserRepository feedLikeUserRepository;
+    private FeedLikeUserRepository repository;
 
-    public boolean isLikable(Feed feed) {
-//        List<FeedLikeUser> feedLikeUsers = feedLikeUserRepository.findByFeedIdAndUserIdAndFeedLikeType(feed.getFeedId(), feed.getUserId(), FEED);
-        
-//        log.debug("feedLikeUsers : {}", feedLikeUsers);
-//        return CollectionUtils.isEmpty(feedLikeUsers);
-        return true;
+    public void likeOrUnlike(Feed feed) {
+        List<FeedLikeUser> feedLikeUsers = repository.findByFeedAndUserIdAndFeedLikeType(feed, feed.getUserId(), FEED);
+        FeedLikeUser latestFeedLikeUser = getLatestFeedLikeUser(feedLikeUsers);
+        if (isLikable(latestFeedLikeUser)) {
+            like(feed);
+        } else {
+            disLike(feed);
+        }
     }
 
-    public void saveByFeed(Feed feed, boolean isCanceled) {
+    private boolean isLikable(FeedLikeUser latestFeedLikeUser) {
+        return latestFeedLikeUser == null || latestFeedLikeUser.isCanceled();
+    }
+
+    private FeedLikeUser getLatestFeedLikeUser(List<FeedLikeUser> feedLikeUsers) {
+        return Iterables.getLast(feedLikeUsers, null);
+    }
+
+    private void like(Feed feed) {
+        saveByFeed(feed, false);
+    }
+
+    private void disLike(Feed feed) {
+        saveByFeed(feed, true);
+    }
+
+    private void saveByFeed(Feed feed, boolean isCanceled) {
         FeedLikeUser feedLikeUser = new FeedLikeUser();
         feedLikeUser.setFeedLikeType(FEED);
         feedLikeUser.setReplyId(-1l);
@@ -37,6 +57,6 @@ public class FeedLikeUserService {
         feedLikeUser.setInsertUserId(feed.getUserId());
         feedLikeUser.setUpdateUserId(feed.getUserId());
         feedLikeUser.setFeed(feed);
-        feedLikeUserRepository.save(feedLikeUser);
+        repository.save(feedLikeUser);
     }
 }

@@ -101,12 +101,9 @@ public class FeedService {
     @Transactional
     public void likeOrUnlike(long feedId, Integer userId) {
         Feed feed = feedRepository.findByFeedIdAndUserId(feedId, userId);
+        feedLikeUserService.likeOrUnlike(feed);
 
-        boolean likable = feedLikeUserService.isLikable(feed);
-        int likeCount = (likable) ? feed.getLikeCount() + 1 : feed.getLikeCount() - 1;
-        feed.setLikeCount(likeCount);
-
-        feedLikeUserService.saveByFeed(feed, !likable);
+        // COUNT 처리
     }
 
 }

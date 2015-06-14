@@ -13,5 +13,5 @@ import spock.lang.Specification
 @ActiveProfiles("integration-test")
 @WebAppConfiguration
 @ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application.class)
-abstract class LibQaSpecification extends Specification {
+abstract class LibQaRepositorySpecSuppoort extends Specification {
 }
