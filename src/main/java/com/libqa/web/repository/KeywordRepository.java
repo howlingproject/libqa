@@ -18,4 +18,6 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
     List<Keyword> findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum keywordType, String keywordName, boolean isDeleted);
 
     List<Keyword> findAllByWikiIdAndIsDeleted(Integer wikiId, boolean isDeleted);
+
+    List<Keyword> findAllByKeywordIdAndIsDeleted(Integer keywordId, boolean isDeleted);
 }

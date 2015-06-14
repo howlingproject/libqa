@@ -20,4 +20,6 @@ public interface KeywordService {
 
     List<Keyword> findByWikiId(Integer wikiId, boolean isDeleted);
 
+    List<Keyword> findBykeywordId(Integer keywordId, boolean isDeleted);
+
 }

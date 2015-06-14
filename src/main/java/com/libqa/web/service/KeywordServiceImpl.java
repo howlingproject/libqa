@@ -49,6 +49,11 @@ public class KeywordServiceImpl implements KeywordService {
         return keywordRepository.findAllByWikiIdAndIsDeleted(wikiId, isDeleted);
     }
 
+    @Override
+    public List<Keyword> findBykeywordId(Integer keywordId, boolean isDeleted) {
+        return keywordRepository.findAllByKeywordIdAndIsDeleted(keywordId, isDeleted);
+    }
+
     /**
 	 * 키워드를 저장한 후 통계 데이터를 생성한다.
 	 * 키워드 리스트는 객체 (Space, Wiki, QaContent)의 List 타입으로 넘어온다)
