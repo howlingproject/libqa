@@ -1,0 +1,35 @@
+{{# partial "content" }}
+
+    <!--  메뉴  -->
+    <div class="container qna-top-search">
+        <div class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <a class="form-control btn btn-primary" href="/wiki/write">
+                위키생성
+            </a>
+        </div>
+        <div class="btn-group pull-right">
+            <a href="#" class="btn btn-primary">총 질문(200)</a>
+            <a href="#" class="btn btn-primary">총 답변(3000)</a>
+            <a href="#" class="btn btn-primary">총 키워드(11200)</a>
+            <a href="#" class="btn btn-primary">답변을 기다리는 Q & A(3000)</a>
+        </div>
+    </div>
+
+    <!-- 상단 컨텐츠 -->
+    <div class="container contents-container top-buffer wiki-main">
+        <div class="col-md-12">
+            <!-- 전체 위키 -->
+            <div id="allWikiList">
+                {{> wiki/template/_allList}}
+            </div>
+            <!--// 위키 -->
+
+        </div>
+    </div>
+
+{{/partial}}
+
+{{> template/base}}

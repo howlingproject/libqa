@@ -1,9 +1,12 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.StringUtil;
+import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;
 import com.libqa.web.domain.Wiki;
 import com.libqa.web.service.KeywordListService;
+import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.SpaceService;
 import com.libqa.web.service.WikiService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +37,9 @@ public class WikiController {
     @Autowired
     KeywordListService keywordListService;
 
+    @Autowired
+    KeywordService keywordService;
+
     @RequestMapping("wiki/main")
     public ModelAndView main(Model model){
         ModelAndView mav = new ModelAndView("wiki/main");
@@ -47,6 +54,23 @@ public class WikiController {
 
         List<Wiki> bestWiki = wikiService.findByBestWiki(0, 5);
         mav.addObject("bestWiki", bestWiki);
+
+        return mav;
+    }
+
+    @RequestMapping("wiki/list")
+    public ModelAndView list(HttpServletRequest request){
+        ModelAndView mav = new ModelAndView("wiki/list");
+        List<Wiki> allWiki = null;
+        String keyword = StringUtil.convertString(request.getParameter("keyword"), "0");
+        Integer keywordId = Integer.parseInt(keyword);
+        List<Keyword> keywordList = keywordService.findBykeywordId(keywordId, false);
+        if( keywordList != null && keywordList.size() > 0 ){
+
+        }
+
+        allWiki = wikiService.findByAllWiki(0, 10);
+        mav.addObject("allWiki", allWiki);
 
         return mav;
     }
@@ -70,6 +94,37 @@ public class WikiController {
         space.setSpaceId(1);
         space.setTitle("테스트");
         mav.addObject("space", space);
+
+        return mav;
+    }
+
+    @RequestMapping("wiki/update")
+    public ModelAndView update(@ModelAttribute Space modelSpace, @PathVariable Integer wikiId){
+        ModelAndView mav = new ModelAndView("wiki/wirte");
+        log.info("# spaceId : {}", modelSpace.getSpaceId());
+        /*
+        if( modelSpace.getSpaceId() == null ){
+            boolean isDeleted = false;    // 삭제 하지 않은 것
+            List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
+            mav.addObject("spaceList", spaceList);
+        }else{
+            Space space = spaceService.findOne(modelSpace.getSpaceId());
+            mav.addObject("space", space);
+        }
+        */
+        //임시 공간영역 하드코딩
+        Space space = new Space();
+        space.setSpaceId(1);
+        space.setTitle("테스트");
+        mav.addObject("space", space);
+
+        //유저 하드코딩
+        int userId = 1;
+        Wiki wiki = wikiService.findById(wikiId);
+        mav.addObject("wiki", wiki);
+
+        List<Keyword> keywordList = keywordService.findByWikiId(wikiId, false);
+        mav.addObject("keywordList", keywordList);
 
         return mav;
     }
