@@ -1,9 +1,7 @@
 package com.libqa.web.domain;
 
 import com.libqa.application.enums.SocialChannelTypeEnum;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -11,8 +9,11 @@ import java.util.Date;
 import java.util.List;
 
 @Data
+@Builder
 @Entity
 @EqualsAndHashCode(of = "feedId")
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString(exclude = {"feedReplies", "feedFiles", "feedLikeUsers"})
 public class Feed {
     @Id
