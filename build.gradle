@@ -51,12 +51,12 @@ dependencies {
     compile('org.codehaus.groovy:groovy-all:2.3.7')
     compile('com.github.jknack:handlebars-springmvc:2.0.0')
     compile('org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc3:1.16')
-    compile('com.google.collections:google-collections:1.0-rc5')
     compile('com.google.guava:guava:18.0')
     compile('javax.inject:javax.inject:1')
     testCompile('com.jayway.restassured:spring-mock-mvc:2.4.0')
     testCompile('org.spockframework:spock-core:0.7-groovy-2.0')
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    testCompile('cglib:cglib:2.2')
 }
 
 task wrapper(type: Wrapper) {
