@@ -45,11 +45,23 @@ public class HandlebarsHelper {
         return html;
     }
 
+    public int getLengths(String text, Options options) {
+        if (text != null) {
+            return text.length();
+        }
+
+        return 0;
+    }
+
     public String nl2br(String str, Options options) {
         return null;
     }
 
     public String xif(String str, Options options) {
+        return null;
+    }
+
+    public String length(String str, Options options) {
         return null;
     }
 }

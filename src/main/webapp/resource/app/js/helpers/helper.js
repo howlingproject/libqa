@@ -26,3 +26,7 @@ Handlebars.registerHelper('xif', function (v1, operator, v2, options) {
             return options.inverse(this);
     }
 });
+
+Handlebars.registerHelper('length', function (str) {
+    return str.length;
+});

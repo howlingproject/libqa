@@ -20,4 +20,6 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
     List<Keyword> findAllByWikiIdAndIsDeleted(Integer wikiId, boolean isDeleted);
 
     List<Keyword> findAllByKeywordIdAndIsDeleted(Integer keywordId, boolean isDeleted);
+
+    List<Keyword> findAllBySpaceIdAndIsDeleted(Integer spaceId, boolean isDeleted);
 }

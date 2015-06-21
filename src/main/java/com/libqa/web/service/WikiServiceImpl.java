@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -135,11 +136,15 @@ public class WikiServiceImpl implements WikiService {
 
     @Override
     public List<Wiki> findSortAndModifiedBySpaceId(Integer spaceId, int startIdx, int endIdx) {
-        return wikiRepository.findSortBySpaceId(
-               spaceId,
-               isDeleted,
-               PageUtil.sortPageable(startIdx, endIdx, PageUtil.sortId("DESC", "updateDate")).getSort()
-        );
+        List wikis = new ArrayList<>();
+        try {
+            wikis = wikiRepository.findAllBySpaceIdAndIsDeleted(spaceId, isDeleted,
+                    PageUtil.sortPageable(startIdx, endIdx, PageUtil.sortId("DESC", "updateDate")).getSort());
+        } catch (Exception e) {
+            e.getMessage();
+        }
+
+        return wikis;
     }
 
 }

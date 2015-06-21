@@ -2,6 +2,7 @@ package com.libqa.web.controller;
 
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.StringUtil;
+import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;
 import com.libqa.web.domain.SpaceAccessUser;
 import com.libqa.web.domain.Wiki;
@@ -70,7 +71,8 @@ public class SpaceController {
         for (Space space : spaces) {
             Integer spaceId = space.getSpaceId();
             List<Wiki> wikis = wikiService.findBySpaceId(spaceId);
-            SpaceMain spaceMain = new SpaceMain(space, wikis.size());
+            List<Keyword> keywords = keywordService.findBySpaceId(spaceId, false);
+            SpaceMain spaceMain = new SpaceMain(space, wikis.size(), keywords);
             spaceMainList.add(spaceMain);
         }
 
@@ -115,12 +117,18 @@ public class SpaceController {
         return ResponseData.createSuccessResult(result);
     }
 
+    /**
+     * 공간 메인 조회
+     * @param spaceId
+     * @return
+     */
     @RequestMapping(value = "/space/{spaceId}", method = RequestMethod.GET)
     public ModelAndView spaceDetail(@PathVariable Integer spaceId) {
         Space space = spaceService.findOne(spaceId);
 
         // 최근 수정된 위키 목록
-        List<Wiki> wikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
+        List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
+        List<Wiki> spaceWikis = wikiService.findBySpaceId(spaceId);
 
         // Space 생성시 선택한 Layout 옵션의 View를 보여준다.
         String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
@@ -128,11 +136,16 @@ public class SpaceController {
         log.info("# view : {}", view);
         ModelAndView mav = new ModelAndView(view);
 
+        mav.addObject("spaceWikis", spaceWikis);
+        mav.addObject("updatedWikis", updatedWikis);
         mav.addObject("space", space);
         return mav;
     }
 
-
+    /**
+     * 개설된 공간 수 조회
+     * @return
+     */
     @RequestMapping(value = "/space/count", method = RequestMethod.GET)
     @ResponseBody
     public String spaceCount() {

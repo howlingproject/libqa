@@ -4,9 +4,21 @@
         <div>
             <strong><a href="/space/{{space.spaceId}}">{{space.title}}</a></strong>
             <div class="pull-right">
-                <span class="label label-default">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <span class="label label-warning">JavaScript</span>
+                <!--
+                <span class="label label-default">default</span>
+                <span class="label label-primary">primary</span>
+                <span class="label label-success">success</span>
+                <span class="label label-info">info</span>
+                <span class="label label-warning">warning</span>
+                <span class="label label-danger">danger</span>
+                <span class="label label-tag">Tag</span>
+                <span class="label label-focus">focus</span>
+                -->
+                {{#each keywords}}
+                    <span class="label label-default">{{length keywordName}}</span>
+                    <span class="label label-default">{{keywordName}}</span>
+                {{/each}}
+
             </div>
         </div>
         <div class="media">
