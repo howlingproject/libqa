@@ -264,3 +264,13 @@ a.label:focus {
 .label-tag[href]:focus {
     background-color: #8e44ad;
 }
+
+.label-alert {
+    color: #8d94a2;
+    background-color: #9af599;
+}
+.label-alert[href]:hover,
+.label-alert[href]:focus {
+    color: #8d94a2;
+    background-color: #9af599;
+}

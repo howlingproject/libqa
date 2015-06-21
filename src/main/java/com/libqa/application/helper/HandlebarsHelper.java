@@ -1,8 +1,13 @@
 package com.libqa.application.helper;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Options;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,6 +15,7 @@ import java.util.regex.Pattern;
 /**
  * Created by songanji on 2015. 4. 5..
  */
+@Slf4j
 public class HandlebarsHelper {
 
     public String formatDate(Date date, String pattern) {
@@ -45,24 +51,23 @@ public class HandlebarsHelper {
         return html;
     }
 
-    public int getLengths(String text, Options options) {
-        if (text != null) {
-            return text.length();
-        }
-
-        return 0;
+    public String length(String str, Options options) {
+        return str.length()+"";
     }
 
     public String nl2br(String str, Options options) {
         return null;
     }
 
-    public String xif(String str, Options options) {
-        return null;
+    public String xif(String v1, String operator, String v2, Options options) {
+        switch (operator) {
+            case "==":
+                return String.valueOf((v1.equals(v2)) ? Boolean.TRUE : null);
+
+            default:
+                return null;
+        }
     }
 
-    public String length(String str, Options options) {
-        return null;
-    }
 }
 

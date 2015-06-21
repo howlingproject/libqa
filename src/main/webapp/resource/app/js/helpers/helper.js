@@ -8,8 +8,6 @@ Handlebars.registerHelper('xif', function (v1, operator, v2, options) {
     switch (operator) {
         case '==':
             return (v1 == v2) ? options.fn(this) : options.inverse(this);
-        case '===':
-            return (v1 === v2) ? options.fn(this) : options.inverse(this);
         case '<':
             return (v1 < v2) ? options.fn(this) : options.inverse(this);
         case '<=':
@@ -27,6 +25,7 @@ Handlebars.registerHelper('xif', function (v1, operator, v2, options) {
     }
 });
 
-Handlebars.registerHelper('length', function (str) {
-    return str.length;
+Handlebars.registerHelper('length', function(str) {
+    if( str.length ) return str.length;
+    else return 0;
 });

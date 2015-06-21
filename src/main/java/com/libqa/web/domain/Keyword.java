@@ -2,6 +2,8 @@ package com.libqa.web.domain;
 
 import com.libqa.application.enums.KeywordTypeEnum;
 import lombok.Data;
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -43,4 +45,5 @@ public class Keyword {
     private Date updateDate;
 
     private int keywordGroupCount;
+
 }
