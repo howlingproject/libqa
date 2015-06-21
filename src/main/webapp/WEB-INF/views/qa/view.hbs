@@ -90,36 +90,41 @@
                 </div>
 
                 <!-- 덧글 작성 -->
-                <div class="feed feed-write well top-buffer">
-                    <div class="feed-write-top">
-                        <div class="action-buttons text-right">
-                            <input type="text" class="form-control" id="title" name="title" placeholder="title">
+                <div class="top-buffer">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                답변 {{qaReplyCnt}}
+                            </h3>
                         </div>
-                    </div>
-                    <ul>
-                        <li>
-                            <div class="author">
-                                <div class="user-profile">
-                                    <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        <ul id="qaReplyList" class="list-group">
+                            <li class="list-group-item">
+                                <div style="margin-left: 5px; margin-bottom: 10px;">
+                                    <div class="avatar avatar-medium clearfix ">
+                                        <div class="user-profile-sm">
+                                            <span class="nickname">sjune</span>
+                                            <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="modal-body">
+                                <!-- 댓글작성 Bootstrap Live Editor -->
+                                <div class="row" style="margin-left: 5px; margin-bottom: 10px; width: 90%">
+                                    <input type="text" class="form-control" id="title" name="title" placeholder="title">
+                                </div>
                                 <div id="editor" class="form-group">
                                     <input type="hidden" id="contents" name="contents" />
                                     <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
-                                    <input type="hidden" id="orderIdx" name="orderIdx" value="1" />   <!-- 답변 계층 -->
                                     <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
-                                    <input type="hidden" id="parentsId" name="parentsId" value="3" />   <!-- 답변 계층 -->
+                                    <input type="hidden" id="parentsId" name="parentsId" value="0" />   <!-- 답변 계층 -->
                                 </div>
-                            </div>
-                            <div class="attachmentArea">
-                                <div class="images text-left"></div>
-                                <div class="files">&nbsp;</div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="feed-write-bottom text-right">
-                        <button id="saveReplyButton" type="button" class="btn btn-primary btn-default">저장</button>
+                                <!--// 댓글작성 Bootstrap Live Editor -->
+
+                                <!-- 댓글작성 저장 button -->
+                                <div class="feed-write-bottom text-right">
+                                    <button id="saveReplyButton" type="button" class="btn btn-primary btn-default">저장</button>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </form>
@@ -184,7 +189,7 @@
                                             <input type="text" name="feedReplyContent" class="form-control input-sm" placeholder="댓글 입력">
                                         </div>
                                         <div class="col-xs-3 col-md-2 feed-comment">
-                                            <button class="btn btn-sm btn-info" name="saveReply" type="button">저장</button>
+                                            <button class="btn btn-sm btn-info" name="saveChildReplyButton" type="button">저장</button>
                                         </div>
                                     </form>
                                 </div>
@@ -246,6 +251,7 @@
             formEvent : function(){
                 $("#cancelButton").on("click", this.cancelContents);
                 $("#saveReplyButton").on("click", this.saveReply);
+                $('button[name=saveChildReplyButton]').on("click", this.saveChildReply);
             },
             cancelContents : function(){
                 location.href = '/qa/main';
@@ -271,6 +277,22 @@
                     type : 'POST',
                     data : $('#qaForm').serialize(),
                     url : '/qa/saveReply',
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            location.href = "/qa/" + data.data.qaId;
+                        }
+                    },
+                    error : function(XMLHttpRequest,textStatus,errorThrown){
+                        alert(errorThrown);
+                    }
+                });
+            },
+            saveChildReply: function() {
+                var data = $(this).closest('form').serialize();
+                $.ajax({
+                    type : 'POST',
+                    data : data,
+                    url : '/qa/saveChildReply',
                     success : function(data){
                         if(data.resultCode == 1) {
                             location.href = "/qa/" + data.data.qaId;

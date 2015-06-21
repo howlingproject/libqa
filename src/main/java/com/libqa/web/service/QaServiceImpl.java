@@ -50,7 +50,6 @@ public class QaServiceImpl implements QaService {
         return newQaContent;
     }
 
-
     @Override
     public boolean deleteWithKeyword(Integer qaId) {
         boolean result = false;
@@ -63,6 +62,17 @@ public class QaServiceImpl implements QaService {
             result = false;
         }
         return result;
+    }
+
+    @Override
+    public void saveIsReplyed(Integer qaId, boolean b) {
+        QaContent targetQaContent = findByQaId(qaId, false);
+//        entityManager.getTransaction().begin();
+        // TODO List 차후 로그인으로 변경
+        targetQaContent.setReplyed(b);
+        targetQaContent.setUpdateUserId(1);
+        targetQaContent.setUpdateDate(new Date());
+        qaRepository.flush();
     }
 
     void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
@@ -167,5 +177,6 @@ public class QaServiceImpl implements QaService {
         }
         return qaIds;
     }
+
 
 }
