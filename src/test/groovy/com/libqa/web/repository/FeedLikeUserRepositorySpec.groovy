@@ -13,10 +13,9 @@ class FeedLikeUserRepositorySpec extends LibQaRepositorySpecSuppoort {
     @Test
     def "특정 feed의 like한 목록 조회"() {
         given:
-        def feed = new Feed('feedId': -1)
-        def userId = 1
+        def feed = new Feed('feedId': -1, 'userId': -1)
         when:
-        def response = repository.findByFeedAndUserIdAndFeedLikeType(feed, userId, FEED)
+        def response = repository.findByFeedAndUserIdAndFeedLikeType(feed, feed.getUserId(), FEED)
         then:
         response.size() == 0
     }

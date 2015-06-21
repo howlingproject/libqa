@@ -15,6 +15,8 @@ public class DisplayFeed {
     private String feedContent;
     private String userNick;
     private Date insertDate;
+    private int likeCount;
+    private int claimCount;
     private List<FeedFile> files = Lists.newArrayList();
     private List<FeedFile> images = Lists.newArrayList();
     private List<FeedReply> replies = Lists.newArrayList();
@@ -23,6 +25,8 @@ public class DisplayFeed {
         this.feedId = feed.getFeedId();
         this.userNick = feed.getUserNick();
         this.insertDate = feed.getInsertDate();
+        this.likeCount = feed.getLikeCount();
+        this.claimCount = feed.getClaimCount();
         this.feedContent = feed.getFeedContent();
         this.replies = feed.getFeedReplies();
 

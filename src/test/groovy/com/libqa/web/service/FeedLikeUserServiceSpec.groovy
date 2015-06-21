@@ -9,52 +9,47 @@ import static com.libqa.application.enums.FeedLikeTypeEnum.FEED
 
 class FeedLikeUserServiceSpec extends Specification {
     FeedLikeUserRepository repository
-    FeedLikeUserService service
-    Feed feed = new Feed('feedId': -1, userId: -1)
+    FeedLikeUserService sut
+    Integer USER_ID = -1
+    Feed feed
 
     def setup() {
         repository = Mock(FeedLikeUserRepository)
-        service = new FeedLikeUserService(repository: repository)
+        sut = new FeedLikeUserService(repository: repository)
+        feed = new Feed('feedId': -1, userId: USER_ID)
     }
-
-    def "like를 한 적이 없다면 like"() {
-        given:
-        repository.findByFeedAndUserIdAndFeedLikeType(feed, feed.getUserId(), FEED) >> []
+    
+    def "좋아요/좋아요 취소를 한 적이 있으면 다시 좋아요를 할 수 있다."() {
         when:
-        service.likeOrUnlike(feed)
+        def response = sut.isLikable(null)
         then:
-        1 * repository.save(_) >> { FeedLikeUser feedLikeUser ->
-            assert feedLikeUser.isCanceled() == false
-        }
+        response
     }
 
-    def "가장 최근에 disLike를 했다면 like"() {
+    def "좋아요 취소한 적이 있으면 다시 좋아요를 할 수 있다."() {
+        when:        
+        def response = sut.isLikable(FeedLikeUser.newInstance(isCanceled: true))
+        then:
+        response
+    }
+
+    def "좋아요를 한 적이 있으면 좋아요를 할 수 없다."() {
+        when:
+        def response = sut.isLikable(FeedLikeUser.newInstance(isCanceled: false))
+        then:
+        !response
+    }
+
+    def "가장 최근의 좋아요/좋아요취소를 가져온다."() {
         given:
-        repository.findByFeedAndUserIdAndFeedLikeType(feed, feed.getUserId(), FEED) >> [
-                new FeedLikeUser(feedLikeUserId: 1, isCanceled: false),
-                new FeedLikeUser(feedLikeUserId: 2, isCanceled: true)
+        repository.findByFeedAndUserIdAndFeedLikeType(feed, USER_ID, FEED) >> [
+                new FeedLikeUser(feedLikeUserId: 1, isCanceled: false, userId: USER_ID),
+                new FeedLikeUser(feedLikeUserId: 2, isCanceled: true, userId: USER_ID),
+                new FeedLikeUser(feedLikeUserId: 3, isCanceled: false, userId: USER_ID),
         ]
         when:
-        service.likeOrUnlike(feed)
+        def response = sut.getRecentlyFeedLikeUserBy(feed)
         then:
-        1 * repository.save(_) >> { FeedLikeUser feedLikeUser ->
-            assert feedLikeUser.isCanceled() == false
-        }
+        response.feedLikeUserId == 3
     }
-
-    def "가장 최근에 like를 했다면 disLike"() {
-        given:
-        repository.findByFeedAndUserIdAndFeedLikeType(feed, feed.getUserId(), FEED) >> [
-                new FeedLikeUser(feedLikeUserId: 1, isCanceled: false),
-                new FeedLikeUser(feedLikeUserId: 2, isCanceled: true),
-                new FeedLikeUser(feedLikeUserId: 3, isCanceled: false),
-        ]
-        when:
-        service.likeOrUnlike(feed)
-        then:
-        1 * repository.save(_) >> { FeedLikeUser feedLikeUser ->
-            assert feedLikeUser.isCanceled() == true
-        }
-    }
-
 }
