@@ -34,7 +34,8 @@ public class FeedLikeUserService {
     }
 
     private FeedLikeUser getLatestFeedLikeUser(List<FeedLikeUser> feedLikeUsers) {
-        return Iterables.getLast(feedLikeUsers, null);
+//        return Iterables.getLast(feedLikeUsers, null);
+        return Iterables.getLast(feedLikeUsers);
     }
 
     private void like(Feed feed) {
