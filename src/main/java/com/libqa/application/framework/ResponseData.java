@@ -1,7 +1,9 @@
 package com.libqa.application.framework;
 
-import com.libqa.application.enums.StatusCodeEnum;
 import lombok.Data;
+
+import static com.libqa.application.enums.StatusCodeEnum.FAIL;
+import static com.libqa.application.enums.StatusCodeEnum.SUCCESS;
 
 /**
  * 응답 결과를 반환한다.
@@ -14,6 +16,9 @@ public class ResponseData<T> {
     private String comment;
     private Object data;
 
+    public ResponseData() {
+    }
+
     public ResponseData(int code, String comment, T data) {
         init(code, comment, data);
     }
@@ -23,8 +28,12 @@ public class ResponseData<T> {
         this.comment = comment;
         this.data = data;
     }
-
-    public ResponseData() {
+    
+    public ResponseData(int code, String comment, Number number) {
+        this.resultCode = code;
+        this.comment = comment;
+        this.data = number;
+        
     }
 
     private void init(int code, String comment, T data) {
@@ -38,19 +47,23 @@ public class ResponseData<T> {
     }
 
     public static <T> ResponseData<T> createSuccessResult(T data) {
-        return new ResponseData<>(StatusCodeEnum.SUCCESS.getCode(), StatusCodeEnum.SUCCESS.getComment(), data);
+        return new ResponseData<>(SUCCESS.getCode(), SUCCESS.getComment(), data);
     }
 
     public static <T> ResponseData<T> createSuccessResult(Iterable<T> data) {
-        return new ResponseData<>(StatusCodeEnum.SUCCESS.getCode(), StatusCodeEnum.SUCCESS.getComment(), data);
+        return new ResponseData<>(SUCCESS.getCode(), SUCCESS.getComment(), data);
     }
 
     public static <T> ResponseData<T> createFailResult(T data) {
-        return new ResponseData<>(StatusCodeEnum.FAIL.getCode(), StatusCodeEnum.FAIL.getComment(), data);
+        return new ResponseData<>(FAIL.getCode(), FAIL.getComment(), data);
     }
 
     public static <T> ResponseData<T> createFailResult(Iterable<T> data) {
-        return new ResponseData<>(StatusCodeEnum.FAIL.getCode(), StatusCodeEnum.FAIL.getComment(), data);
+        return new ResponseData<>(FAIL.getCode(), FAIL.getComment(), data);
+    }
+
+    public static <T> ResponseData<T> createSuccessResult(Number number) {
+        return new ResponseData<>(SUCCESS.getCode(), SUCCESS.getComment(), number);
     }
 
     public ResponseData<T> setResultCode(int code) {

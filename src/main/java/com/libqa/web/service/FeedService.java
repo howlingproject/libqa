@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedFile;
+import com.libqa.web.domain.FeedLikeUser;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.repository.FeedFileRepository;
 import com.libqa.web.repository.FeedReplyRepository;
@@ -32,15 +33,13 @@ public class FeedService {
     @Autowired
     private FeedRepository feedRepository;
     @Autowired
-    private FeedReplyService feedReplyService;
-    @Autowired
     private FeedFileService feedFileService;
-    @Autowired
-    private FeedLikeUserService feedLikeUserService;
     @Autowired
     private FeedReplyRepository feedReplyRepository;
     @Autowired
     private FeedFileRepository feedFileRepository;
+    @Autowired
+    private FeedLikeUserService feedLikeUserService;
 
     public List<DisplayFeed> search(int startIdx, int endIdx) {
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
@@ -99,11 +98,23 @@ public class FeedService {
     }
 
     @Transactional
-    public void likeOrUnlike(long feedId, Integer userId) {
+    public int likeOrUnlike(long feedId, Integer userId) {
         Feed feed = feedRepository.findByFeedIdAndUserId(feedId, userId);
-        feedLikeUserService.likeOrUnlike(feed);
+        FeedLikeUser recentlyFeedLikeUser = feedLikeUserService.getRecentlyFeedLikeUserBy(feed);
 
-        // COUNT 처리
+        boolean liked = likeOrUnlike(recentlyFeedLikeUser);
+        feed.setLikeCount(liked ? feed.getLikeCount() + 1 : feed.getLikeCount() - 1);
+        return feed.getLikeCount();
+    }
+
+    private boolean likeOrUnlike(FeedLikeUser feedLikeUser) {
+        boolean likable = feedLikeUserService.isLikable(feedLikeUser);
+        if (likable) {
+            feedLikeUserService.like(feedLikeUser);
+        } else {
+            feedLikeUserService.disLike(feedLikeUser);
+        }
+        return likable;
     }
 
 }

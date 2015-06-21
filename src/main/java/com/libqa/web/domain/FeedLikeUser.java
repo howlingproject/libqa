@@ -1,19 +1,16 @@
 package com.libqa.web.domain;
 
 import com.libqa.application.enums.FeedLikeTypeEnum;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
 @Entity
-@EqualsAndHashCode(of = "feedLikeUserId")
 @ToString
+@EqualsAndHashCode(of = "feedLikeUserId")
 public class FeedLikeUser {
-
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -51,4 +48,18 @@ public class FeedLikeUser {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feedId", referencedColumnName = "feedId", nullable = false)
     private Feed feed;
+    
+    @Transient
+    public static FeedLikeUser createNew(Feed feed, FeedLikeTypeEnum type) {
+        FeedLikeUser feedLikeUser = new FeedLikeUser();
+        feedLikeUser.setFeed(feed);
+        feedLikeUser.setCanceled(true);
+        feedLikeUser.setFeedLikeType(type);
+        feedLikeUser.setReplyId(-1L);
+        feedLikeUser.setUserId(feed.getUserId());
+        feedLikeUser.setUserNick(feed.getUserNick());
+        feedLikeUser.setInsertUserId(feed.getUserId());
+        feedLikeUser.setUpdateUserId(feed.getUserId());
+        return feedLikeUser;
+    }
 }

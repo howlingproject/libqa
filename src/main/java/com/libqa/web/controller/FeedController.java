@@ -85,11 +85,12 @@ public class FeedController {
     @RequestMapping(value = "like/{feedId}", method = GET)
     public ResponseData<Long> like(@PathVariable long feedId) {
         try {
-            feedService.likeOrUnlike(feedId, 1234); // TODO 로그인 처리
-            return createSuccessResult(feedId);
+            Integer userId = 1234; // TODO 로그인 처리
+            Integer likeCount = feedService.likeOrUnlike(feedId, userId);
+            return createSuccessResult(likeCount);
         } catch (Exception e) {
             log.error("like feed error : {}", e);
-            return createFailResult(feedId);
+            return createFailResult(-1L);
         }
     }
 
