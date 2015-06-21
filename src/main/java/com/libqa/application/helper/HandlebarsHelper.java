@@ -49,5 +49,8 @@ public class HandlebarsHelper {
         return null;
     }
 
+    public String xif(String str, Options options) {
+        return null;
+    }
 }
 
