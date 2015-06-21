@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by yong on 2015-04-12.
  *
@@ -16,14 +18,25 @@ import org.springframework.stereotype.Service;
 public class QaReplyServiceImpl implements QaReplyService {
 
     @Autowired
+    QaService qaService;
+
+    @Autowired
     QaReplyRepository qaReplyRepository;
 
     @Autowired
     VoteService voteService;
 
     @Override
-    public QaReply saveWithQaContent(QaReply qaReply) {
-        return qaReplyRepository.save(qaReply);
+    public QaReply saveWithQaContent(QaReply paramQaReply) {
+        boolean isDeleted = false;
+        List<QaReply> parentQaReplyList = qaReplyRepository.findAllByQaIdAndIsDeletedOrderByDepthIdxDesc(paramQaReply.getQaId(), isDeleted);
+        QaReply parentQaReply = parentQaReplyList.get(0);
+        paramQaReply.setOrderIdx(parentQaReply.getOrderIdx()+1);
+        QaReply newQaReply = qaReplyRepository.save(paramQaReply);
+        newQaReply.setParentsId(newQaReply.getReplyId());
+        qaReplyRepository.flush();
+        qaService.saveIsReplyed(paramQaReply.getQaId(), true);
+        return newQaReply;
     }
 
     @Override

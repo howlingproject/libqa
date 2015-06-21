@@ -19,4 +19,6 @@ public interface QaService {
     List<QaContent> findByIsReplyedAndDayType(QaDto qaDto);
 
     boolean deleteWithKeyword(Integer qaId);
+
+    void saveIsReplyed(Integer qaId, boolean b);
 }
