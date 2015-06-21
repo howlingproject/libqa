@@ -82,7 +82,7 @@ public class WikiServiceImpl implements WikiService {
                 ,isDeleted);
         if( list != null && list.size() > 0 ){
             for( Wiki wiki : list ){
-                long replyCount = wikiReplyService.countByWikiWikiId(wiki.getWikiId());
+                int replyCount = wikiReplyService.countByWiki(wiki.getWikiId());
                 wiki.setReplyCount(replyCount);
                 wiki.setKeywordList(keywordService.findByWikiId(wiki.getWikiId(), isDeleted));
             }
@@ -97,7 +97,7 @@ public class WikiServiceImpl implements WikiService {
                 ,isDeleted);
         if( list != null && list.size() > 0 ){
             for( Wiki wiki : list ){
-                long replyCount = wikiReplyService.countByWikiWikiId(wiki.getWikiId());
+                int replyCount = wikiReplyService.countByWiki(wiki.getWikiId());
                 wiki.setReplyCount(replyCount);
                 wiki.setKeywordList(keywordService.findByWikiId(wiki.getWikiId(), isDeleted));
             }

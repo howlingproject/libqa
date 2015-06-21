@@ -42,7 +42,6 @@
         <!-- 분류키워드 list start -->
         <div id="categorizeKeywordListArea"></div>
         <!-- 분류키워드 list end -->
-
     </div>
     <!--// lnb -->
 
@@ -110,10 +109,6 @@
                     },
                     error : function(req){
                         // Handle upload error
-                        alert('req : ' + req);
-                        console.log('req : ' + req.status);
-                        console.log('req : ' + req.readyState);
-
                         alert('키워드 목록 조회에서 에러가 발생하였습니다. 에러코드 [' + req.status + ']');
                     }
                 });

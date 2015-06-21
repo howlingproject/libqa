@@ -1,8 +1,8 @@
-{{#if spaceList}}
-    {{#each spaceList}}
+{{#if spaceMainList}}
+    {{#each spaceMainList}}
     <div class="best-qna-item">
         <div>
-            <strong><a href="/space/{{spaceId}}">{{title}}</a></strong>
+            <strong><a href="/space/{{space.spaceId}}">{{space.title}}</a></strong>
             <div class="pull-right">
                 <span class="label label-default">Spring</span>
                 <span class="label label-success">JAVA</span>
@@ -12,18 +12,16 @@
         <div class="media">
             <a class="pull-left" href="#">
                 <div class="user-profile">
-                    <img alt="avatar" class="profile-image" src="{{titleImagePath}}/{{titleImage}}" />
+                    <img alt="avatar" class="profile-image" src="{{space.titleImagePath}}/{{space.titleImage}}" />
                 </div>
             </a>
-            <div class="media-body">{{subString (htmlDelete description) 0 100 }}
+            <div class="media-body">{{subString (htmlDelete space.description) 0 100 }}
                 <div class="pull-right"><span class="badge">
-                    {{#each wikiCountMap}}
-                        {{@key}} / {{this}}
-                    {{/each}}
+                    {{wikiCount}}
                 </span></div>
             </div>
-            <div class="pull-left"><span class="nickname">공간오너 : {{insertUserNick}}</span></div>
-            <div class="pull-right">{{insertDate}}</div>
+            <div class="pull-left"><span class="nickname">공간오너 : {{space.insertUserNick}}</span></div>
+            <div class="pull-right">{{space.insertDate}}</div>
         </div>
     </div>
     {{/each}}

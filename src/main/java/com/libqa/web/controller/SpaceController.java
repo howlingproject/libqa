@@ -8,6 +8,7 @@ import com.libqa.web.domain.Wiki;
 import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.SpaceService;
 import com.libqa.web.service.WikiService;
+import com.libqa.web.view.SpaceMain;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,22 +61,17 @@ public class SpaceController {
          * 전체 space 목록 조회
          */
         boolean isDeleted = false;
-        List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
-        Map<Integer, Integer> wikiCountMap = new HashMap<>();
+        List<Space> spaces = spaceService.findAllByCondition(isDeleted);
 
         /**
          * Space 접근 가능 사용자 목록 조회
          */
-        List<SpaceAccessUser> spaceAccessUserList = new ArrayList<>();
-        for (Space space : spaceList) {
+        List<SpaceMain> spaceMainList = new ArrayList<>();
+        for (Space space : spaces) {
             Integer spaceId = space.getSpaceId();
             List<Wiki> wikis = wikiService.findBySpaceId(spaceId);
-            wikiCountMap.put(spaceId, wikis.size());
-
-            if (space.isPrivate() == true) {
-                List<SpaceAccessUser> accessUser = space.getSpaceAccessUsers();
-                spaceAccessUserList.addAll(accessUser);
-            }
+            SpaceMain spaceMain = new SpaceMain(space, wikis.size());
+            spaceMainList.add(spaceMain);
         }
 
         /**
@@ -89,15 +85,11 @@ public class SpaceController {
         List<Wiki> updateWikiList = wikiService.findByAllWiki(0, 10);
 
 
-        log.info("# spaceList.size = {}", spaceList.size());
-        log.info("# spaceAccessUserList.size = {}", spaceAccessUserList.size());
-
         ModelAndView mav = new ModelAndView("/space/main");
-        mav.addObject("spaceList", spaceList);
-        mav.addObject("wikiCountMap", wikiCountMap);
+        mav.addObject("spaceMainList", spaceMainList);
         mav.addObject("myFavoriteSpaceList", myFavoriteSpaceList);
         mav.addObject("updateWikiList", updateWikiList);
-        mav.addObject("spaceAccessUserList", spaceAccessUserList);
+
         return mav;
     }
 

@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.libqa.web.domain.Wiki;
 import com.libqa.web.repository.WikiReplyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,13 @@ public class WikiReplyServiceImpl implements WikiReplyService {
     @Autowired
     WikiReplyRepository wikiReplyRepository;
 
+
     @Override
-    public long countByWikiWikiId(Integer wikiId) {
-        return wikiReplyRepository.countByWikiWikiId(wikiId);
+    public int countByWiki(Integer wikiId) {
+        Wiki wiki = new Wiki();
+        wiki.setWikiId(wikiId);
+        return wikiReplyRepository.countByWiki(wiki);
+
     }
+
 }

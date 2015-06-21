@@ -45,7 +45,7 @@ public class Wiki {
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isLock = false;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 40)
     private String passwd;
 
     @Column(nullable = false, length = 40)
@@ -98,7 +98,7 @@ public class Wiki {
     private String keywords;
 
     @Transient
-    private long replyCount;
+    private int replyCount;
 
     @Transient
     private List<Keyword> keywordList;

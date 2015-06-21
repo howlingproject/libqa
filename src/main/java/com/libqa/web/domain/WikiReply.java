@@ -42,6 +42,4 @@ public class WikiReply{
     @Temporal(TemporalType.DATE)
     private Date updateDate;
 
-
-
 }

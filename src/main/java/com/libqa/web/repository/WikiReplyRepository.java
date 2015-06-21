@@ -1,5 +1,6 @@
 package com.libqa.web.repository;
 
+import com.libqa.web.domain.Wiki;
 import com.libqa.web.domain.WikiReply;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,5 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface WikiReplyRepository extends JpaRepository<WikiReply, Integer>{
 
-    Long countByWikiWikiId(Integer wikiId);
+    int countByWiki(Wiki wiki);
+
 }
