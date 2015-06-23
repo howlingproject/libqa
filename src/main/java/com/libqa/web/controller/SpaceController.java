@@ -88,6 +88,7 @@ public class SpaceController {
 
 
         ModelAndView mav = new ModelAndView("/space/main");
+        mav.addObject("readMoreCount", spaces.size());
         mav.addObject("spaceMainList", spaceMainList);
         mav.addObject("myFavoriteSpaceList", myFavoriteSpaceList);
         mav.addObject("updateWikiList", updateWikiList);
