@@ -8,6 +8,7 @@ import com.libqa.web.domain.QaFile;
 import com.libqa.web.domain.QaReply;
 import com.libqa.web.service.*;
 import com.libqa.web.view.DisplayQa;
+import com.libqa.web.view.DisplayQaReply;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.*;
+
+import static com.libqa.application.framework.ResponseData.createFailResult;
+import static com.libqa.application.framework.ResponseData.createSuccessResult;
 
 /**
  * Created by yong on 2015-02-08.
@@ -61,10 +65,9 @@ public class QaController {
 
         QaContent qaContent =  qaService.findByQaId(qaId, isDeleted);
         List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
+
         ModelAndView mav = new ModelAndView("qa/view");
         mav.addObject("qaContent", qaContent);
-        mav.addObject("qaReplyList", qaContent.getQaReplys());
-        mav.addObject("qaReplyCnt", qaContent.getQaReplys().size());
         mav.addObject("keywordList", keywordList);
         return mav;
     }
@@ -103,9 +106,9 @@ public class QaController {
         paramQaContent.setInsertDate(new Date());
         try {
             qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles);
-            return resultData.createSuccessResult(qaContent);
+            return createSuccessResult(qaContent);
         } catch (Exception e) {
-            return resultData.createFailResult(qaContent);
+            return createFailResult(qaContent);
         }
     }
 
@@ -117,9 +120,9 @@ public class QaController {
         QaContent qaContent = new QaContent();
         try {
             qaService.deleteWithKeyword(qaId);
-            return resultData.createSuccessResult(qaContent);
+            return createSuccessResult(qaContent);
         } catch (Exception e) {
-            return resultData.createFailResult(qaContent);
+            return createFailResult(qaContent);
         }
     }
 
@@ -134,7 +137,7 @@ public class QaController {
         qaReply.setUserNick("용퓌");
 
         QaReply newQaReply = qaReplyService.saveWithQaContent(qaReply);
-        return ResponseData.createSuccessResult(newQaReply);
+        return createSuccessResult(newQaReply);
     }
 
     @RequestMapping(value ="/qa/saveChildReply", method = RequestMethod.POST)
@@ -147,8 +150,8 @@ public class QaController {
         qaReply.setUserId(1);
         qaReply.setUserNick("용퓌");
 
-        QaReply newQaReply = qaReplyService.saveWithQaContent(qaReply);
-        return ResponseData.createSuccessResult(newQaReply);
+        QaReply newQaReply = qaReplyService.saveChildReply(qaReply);
+        return createSuccessResult(newQaReply);
     }
 
     @RequestMapping(value = "/qa/fileList", method = RequestMethod.GET)
@@ -159,10 +162,10 @@ public class QaController {
         try {
             QaContent qaContent = qaService.findByQaId(qaId, isDeleted);
             qaFileList = qaContent.getQaFiles();
-            return ResponseData.createSuccessResult(qaFileList);
+            return createSuccessResult(qaFileList);
         }catch (Exception e){
             e.printStackTrace();
-            return ResponseData.createFailResult(qaFileList);
+            return createFailResult(qaFileList);
         }
     }
 
@@ -177,9 +180,9 @@ public class QaController {
             for(QaContent qaContent : qaContentList) {
                 displayQaList.add(new DisplayQa(qaContent, keywordService.findByQaId(qaContent.getQaId(), isDeleted)));
             }
-            return ResponseData.createSuccessResult(displayQaList);
+            return createSuccessResult(displayQaList);
         }catch(Exception e){
-            return ResponseData.createFailResult(displayQaList);
+            return createFailResult(displayQaList);
         }
     }
 
@@ -188,6 +191,30 @@ public class QaController {
     public ResponseData<QaReply> saveVoteUp(@ModelAttribute QaReply paramQaReply){
         QaReply qareply = qaReplyService.saveVoteUp(paramQaReply, 1); // TODO 로그인 처리
 
-        return ResponseData.createSuccessResult(qareply);
+        return createSuccessResult(qareply);
+    }
+
+    @RequestMapping(value="/qa/replyList", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<DisplayQaReply> replyList(@RequestParam("qaId") Integer qaId){
+        List<DisplayQaReply> qaReplyList = new ArrayList<>();
+        List<QaReply> qaReplyFirstDepthList = qaReplyService.findByQaIdAndDepthIdx(qaId, 1);
+        for (QaReply qaReply : qaReplyFirstDepthList) {
+            List<QaReply> qaReplies = qaReplyService.findByQaIdAndParentsIdAndDepthIdx(qaReply.getQaId(), qaReply.getReplyId(), 2);
+            qaReplyList.add(new DisplayQaReply(qaReply, qaReplies));
+        }
+        return createSuccessResult(qaReplyList);
+    }
+
+    @RequestMapping(value="/qa/reply/delete/{replyId}", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<Integer> deleteReply(@PathVariable Integer replyId){
+        try {
+            qaReplyService.delete(replyId);
+            return createSuccessResult(replyId);
+        } catch (Exception e) {
+            log.error("save reply error : {}", e);
+            return createFailResult(replyId);
+        }
     }
 }
