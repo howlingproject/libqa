@@ -24,4 +24,14 @@ public class StringUtil extends StringUtils {
         return (String)object;
     }
 
+    public static String nullToString(String str){
+        return nullToString(str, "");
+    }
+    public static String nullToString(String str, String defaultStr){
+        if( str == null ){
+            return defaultStr;
+        }
+        return str;
+    }
+
 }
