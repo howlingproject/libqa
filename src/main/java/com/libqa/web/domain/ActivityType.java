@@ -33,8 +33,7 @@ public class ActivityType {
     @Column
     private Integer activityTableId;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "insertDate", nullable = true, columnDefinition = "datetime(6)")
+    @Temporal(TemporalType.DATE)
     private Date insertDate;
 
 
