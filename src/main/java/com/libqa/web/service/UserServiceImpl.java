@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
             // 인증 메일 보내기
             if (loginType.equals(SocialChannelTypeEnum.WEB.name())) {
-                sendAuthMail(createUser);
+                //sendAuthMail(createUser);
             }
 
         } catch (Exception e) {

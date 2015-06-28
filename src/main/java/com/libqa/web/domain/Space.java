@@ -47,12 +47,10 @@ public class Space implements Serializable {
     private boolean isDeleted;
 
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "insertDate", nullable = true, columnDefinition = "datetime(6)")
+    @Temporal(TemporalType.DATE)
     private Date insertDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updateDate", nullable = true, columnDefinition = "datetime(6)")
+    @Temporal(TemporalType.DATE)
     private Date updateDate;
 
     @Column(nullable = false)
