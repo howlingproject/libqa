@@ -154,6 +154,14 @@ public class SpaceController {
 
         return spaces.size()+"";
     }
+
+
+    @RequestMapping("/space/list")
+    public ModelAndView list(Model model) {
+        ModelAndView mav = new ModelAndView("/space/list");
+
+        return mav;
+    }
 }
 
 
