@@ -115,7 +115,7 @@ $(function(){
                 }
 
                 var feedReplyId = $(this).attr('data-feed-reply-id');
-                $.post('/feed/reply/delete/' + feedReplyId)
+                $.post('/feed/reply/' + feedReplyId + '/delete')
                     .done(function (response) {
                         if (response.resultCode != 1) {
                             alert(response.comment);

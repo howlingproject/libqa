@@ -480,7 +480,7 @@
                 }
                 var popoverId = $(el).closest('.popover').attr('id');
                 var feedId = $('.thread .config').find('[aria-describedby='+ popoverId +']').closest('.thread').attr('data-feed-id');
-                $.post('/feed/delete/' + feedId)
+                $.post('/feed/' + feedId + '/delete/')
                     .done(function (response) {
                         if (response.resultCode != 1) {
                             alert(response.comment);
