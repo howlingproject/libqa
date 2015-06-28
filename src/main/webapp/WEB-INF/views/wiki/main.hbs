@@ -9,12 +9,6 @@
                 위키생성
             </a>
         </div>
-        <div class="btn-group pull-right">
-            <a href="#" class="btn btn-primary">총 질문(200)</a>
-            <a href="#" class="btn btn-primary">총 답변(3000)</a>
-            <a href="#" class="btn btn-primary">총 키워드(11200)</a>
-            <a href="#" class="btn btn-primary">답변을 기다리는 Q & A(3000)</a>
-        </div>
     </div>
 
 
@@ -24,7 +18,7 @@
         <div class="col-md-12 col-lg-12">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">베스트 위키</h3>
+                    <h3 class="panel-title"><a href="/wiki/list/best">베스트 위키</a></h3>
                 </div>
                 <!-- BEST 위키 컨텐츠 -->
                 <div class="panel-body" id="bestWikiList">
@@ -50,6 +44,7 @@
 
                 <!-- 전체 위키 -->
                 <div id="allWikiList">
+                    <div class="nav-tabs-header"><a href="/wiki/list/all">전체 위키</a></div>
                     {{> wiki/template/_allList}}
                 </div>
                 <!--// 위키 -->
@@ -58,7 +53,7 @@
 
             <div class="col-md-3" style="padding-right: 0px;">
                 <!-- 최근 활동 -->
-                <div class="nav-tabs-header">최근 활동</div>
+                <div class="nav-tabs-header"><a href="/wiki/list/recent">최근 활동</a></div>
                 <div id="recentWikiList">
                     {{> wiki/template/_recentList}}
                 </div>
@@ -74,6 +69,7 @@
 {{# partial "script-page" }}
 {{embedded "common/keywordList"}}
     <script>
+        var imsi ;
         $(document).ready(function() {
             Wiki.renderKeywordList();
         });
@@ -84,6 +80,7 @@
                     type: "POST",
                     data: { keywordType : 'WIKI', keywordName : Wiki.selectedKeyword(keywordName) },
                     success : function(data){
+                        imsi = data;
                         if(data.resultCode == 1) {
                             var source = $('#common-keywordList-hbs').html();
                             var template = Handlebars.compile(source);

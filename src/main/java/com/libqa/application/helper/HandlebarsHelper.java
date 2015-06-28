@@ -71,5 +71,15 @@ public class HandlebarsHelper {
         }
     }
 
+    public String keywordLink(String keywordType, String keywordName) {
+        if (keywordType == null) {
+            return "#";
+        }else if( "WIKI".equals(keywordType) ){
+            return "/wiki/list/keyword/"+keywordName;
+        }
+
+        return "#";
+    }
+
 }
 

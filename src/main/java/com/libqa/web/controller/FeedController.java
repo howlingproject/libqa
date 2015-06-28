@@ -60,7 +60,7 @@ public class FeedController {
         }
     }
 
-    @RequestMapping(value = "delete/{feedId}", method = POST)
+    @RequestMapping(value = "{feedId}/delete", method = POST)
     public ResponseData<Long> delete(@PathVariable Long feedId) {
         try {
             feedService.delete(feedId);
@@ -71,7 +71,7 @@ public class FeedController {
         }
     }
 
-    @RequestMapping(value = "reply/delete/{feedReplyId}", method = POST)
+    @RequestMapping(value = "reply/{feedReplyId}/delete", method = POST)
     public ResponseData<Long> deleteReply(@PathVariable Long feedReplyId) {
         try {
             feedReplyService.delete(feedReplyId);
@@ -82,7 +82,7 @@ public class FeedController {
         }
     }
 
-    @RequestMapping(value = "like/{feedId}", method = GET)
+    @RequestMapping(value = "{feedId}/like", method = GET)
     public ResponseData<Long> like(@PathVariable long feedId) {
         try {
             Integer userId = 1234; // TODO 로그인 처리

@@ -22,4 +22,6 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
     List<Keyword> findAllByKeywordIdAndIsDeleted(Integer keywordId, boolean isDeleted);
 
     List<Keyword> findAllBySpaceIdAndIsDeleted(Integer spaceId, boolean isDeleted);
+
+
 }

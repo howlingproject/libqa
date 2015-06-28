@@ -1,30 +1,30 @@
 package com.libqa.web.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.libqa.application.enums.FeedActionTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
-@Table(indexes = {@Index(columnList = "isDeleted")})
-@EqualsAndHashCode(of = "feedReplyId")
 @ToString
-public class FeedReply {
+@Table(indexes = {@Index(columnList = "isCanceled"), @Index(name = "idxFeedActionType", columnList = "feedActionType")})
+@EqualsAndHashCode(of = "feedActionId")
+public class FeedAction {
     @Id
-    @Column(name = "feedReplyId", nullable = false)
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long feedReplyId;
+    private Long feedActionId;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String feedReplyContent;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private FeedActionTypeEnum feedActionType;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean isDeleted;
+    private boolean isCanceled;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
@@ -45,13 +45,9 @@ public class FeedReply {
     @Column
     private Integer updateUserId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feedId", referencedColumnName = "feedId")
-    @JsonIgnore
-    private Feed feed;
+    @Column
+    private Long feedId;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feedReplyId", referencedColumnName = "feedReplyId")
-    private List<FeedAction> feedActions;
+    @Column
+    private Long feedReplyId;
 }
-

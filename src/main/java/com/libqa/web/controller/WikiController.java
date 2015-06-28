@@ -58,7 +58,7 @@ public class WikiController {
 
         return mav;
     }
-
+/*
     @RequestMapping("wiki/list")
     public ModelAndView list(HttpServletRequest request){
         ModelAndView mav = new ModelAndView("wiki/list");
@@ -74,7 +74,7 @@ public class WikiController {
         mav.addObject("allWiki", allWiki);
 
         return mav;
-    }
+    }*/
 
     @RequestMapping("wiki/write")
     public ModelAndView write(@ModelAttribute Space modelSpace){
@@ -236,30 +236,43 @@ public class WikiController {
         return wikis.size() + "";
     }
 
-    @RequestMapping(value = {"wiki/list/{listType}","wiki/list/keyword/{keyword}"}, method = RequestMethod.GET)
-    public ModelAndView wikiList(@PathVariable("listType") String listType,
-                                 @PathVariable("keyword") String keyword) {
+    @RequestMapping(value = "wiki/list/{listType}", method = RequestMethod.GET)
+    public ModelAndView wikiList(@PathVariable("listType") String listType) {
         ModelAndView mav = new ModelAndView("wiki/list");
 
         listType = StringUtil.nullToString(listType);
-        keyword = StringUtil.nullToString(keyword);
 
-        if( ListTypeEnum.ALL.toString().equals(listType) ){
+        if( ListTypeEnum.ALL.getName().equals(listType) ){
             List<Wiki> allWiki = wikiService.findByAllWiki(0, 15);
-            mav.addObject("allWiki", allWiki);
+            mav.addObject("listWiki", allWiki);
+            mav.addObject("listTitle","전체 위키 List");
 
-        }else if( ListTypeEnum.BEST.toString().equals(listType) ){
+        }else if( ListTypeEnum.BEST.getName().equals(listType)){
             List<Wiki> bestWiki = wikiService.findByBestWiki(0, 15);
-            mav.addObject("bestWiki", bestWiki);
+            mav.addObject("listWiki", bestWiki);
+            mav.addObject("listTitle","베스트 위키 List");
 
-        }else if( ListTypeEnum.RESENT.toString().equals(listType) ){
+        }else if( ListTypeEnum.RESENT.getName().equals(listType) ){
             //유저 하드코딩
             int userId = 1;
             List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 15);
-            mav.addObject("resecntWiki", resecntWiki);
+            mav.addObject("listWiki", resecntWiki);
+            mav.addObject("listTitle","최근 활동 위키 List");
+        }else{
+            // 에러 처리
+
         }
 
         return mav;
     }
+
+    @RequestMapping(value = "wiki/list/keyword/{keywordNm}", method = RequestMethod.GET)
+    public ModelAndView keywordWikiList(@PathVariable String keywordNm) {
+        ModelAndView mav = new ModelAndView("wiki/list");
+
+        mav.addObject("listTitle","Keyworld 위키 List");
+        return mav;
+    }
+
 
 }
