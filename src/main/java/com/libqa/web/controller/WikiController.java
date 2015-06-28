@@ -1,5 +1,6 @@
 package com.libqa.web.controller;
 
+import com.libqa.application.enums.ListTypeEnum;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.Keyword;
@@ -79,6 +80,7 @@ public class WikiController {
     public ModelAndView write(@ModelAttribute Space modelSpace){
         ModelAndView mav = new ModelAndView("wiki/write");
         log.info("# spaceId : {}", modelSpace.getSpaceId());
+
         /*
         if( modelSpace.getSpaceId() == null ){
             boolean isDeleted = false;    // 삭제 하지 않은 것
@@ -89,6 +91,7 @@ public class WikiController {
             mav.addObject("space", space);
         }
         */
+
         //임시 공간영역 하드코딩
         Space space = new Space();
         space.setSpaceId(1);
@@ -227,12 +230,35 @@ public class WikiController {
 
 
 
-    @RequestMapping(value = "wiki/count", method = RequestMethod.GET)
-    @ResponseBody
-    public String wikiCount() {
-        List<Wiki> wikis = wikiService.findAllByCondition();
+    @RequestMapping(value = {"wiki/list/{listType}","wiki/list/keyword/{keyword}"}, method = RequestMethod.GET)
+    public ModelAndView wikiList(@PathVariable("listType") String listType,
+                                 @PathVariable("keyword") String keyword) {
+        ModelAndView mav = new ModelAndView("wiki/list");
 
-        return wikis.size() + "";
+        listType = StringUtil.nullToString(listType);
+        keyword = StringUtil.nullToString(keyword);
+
+        if( ListTypeEnum.ALL.toString().equals(listType) ){
+
+        }else if( ListTypeEnum.BEST.toString().equals(listType) ){
+
+        }else if( ListTypeEnum.RESENT.toString().equals(listType) ){
+
+        }
+
+        List<Wiki> allWiki = wikiService.findByAllWiki(0, 5);
+        mav.addObject("allWiki", allWiki);
+
+        //유저 하드코딩
+        int userId = 1;
+        List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
+        mav.addObject("resecntWiki", resecntWiki);
+
+        List<Wiki> bestWiki = wikiService.findByBestWiki(0, 5);
+        mav.addObject("bestWiki", bestWiki);
+
+
+        return mav;
     }
 
 }

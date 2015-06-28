@@ -1,35 +1,129 @@
 {{# partial "content" }}
+    <!-- contents -->
+    <!-- 메뉴 -->
+    <div class="container contents-container top-buffer">
+        <!-- keyword -->
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
 
-    <!--  메뉴  -->
-    <div class="container qna-top-search">
-        <div class="navbar-form navbar-left" role="search">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
+            <div class="nav-tabs-header">분류키워드</div>
+            <!-- 분류키워드 list start -->
+
+            <div id="categorizeKeywordListArea">
+                <div class="media qna-item">
+                    <ul class="nav nav-pills nav-stacked cat-keyword">
+
+                    </ul>
+                </div>
+
             </div>
-            <a class="form-control btn btn-primary" href="/wiki/write">
-                위키생성
-            </a>
+            <!-- 분류키워드 list end -->
         </div>
-        <div class="btn-group pull-right">
-            <a href="#" class="btn btn-primary">총 질문(200)</a>
-            <a href="#" class="btn btn-primary">총 답변(3000)</a>
-            <a href="#" class="btn btn-primary">총 키워드(11200)</a>
-            <a href="#" class="btn btn-primary">답변을 기다리는 Q & A(3000)</a>
+        <!--// lnb -->
+
+        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+            <!-- 전체 공간 -->
+            <div class="nav-tabs-header">현재 Keyword</div>
+
+            <div class="best-qna-item">
+                <div>
+                    <strong><a href="/">제목이 들어갑니다.</a></strong>
+                    <div class="pull-right">
+                        <span class="label label-default">default</span>
+                        <span class="label label-primary">primary</span>
+                    </div>
+                </div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <div class="user-profile">
+                            <img alt="avatar" class="profile-image" src="/resource/temp/1/201506218709078220196.png">
+                        </div>
+                    </a>
+                    <div class="media-body">마크업 테스트 굵게 굵게 기울임 기울임 밑줄 취소선 필드셋 타이틀 필드셋 경고 안내 아래첨자 위첨자 대신에 두줄로 가야 하고 두번째 내용의 일부분이 말 줄임표로 가야 하며 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구...
+                        <div class="pull-right"><span class="badge">
+                            11
+                        </span></div>
+                    </div>
+                    <div class="pull-left"><span class="nickname">공간오너 : 유저 닉네임</span></div>
+                    <div class="pull-right">2015-05-25 00:00:00</div>
+                </div>
+            </div>
+
+            <div class="best-qna-item">
+                <div>
+                    <strong><a href="/">제목이 들어갑니다.</a></strong>
+                    <div class="pull-right">
+                        <span class="label label-default">default</span>
+                        <span class="label label-primary">primary</span>
+                    </div>
+                </div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <div class="user-profile">
+                            <img alt="avatar" class="profile-image" src="/resource/temp/1/201506218709078220196.png">
+                        </div>
+                    </a>
+                    <div class="media-body">마크업 테스트 굵게 굵게 기울임 기울임 밑줄 취소선 필드셋 타이틀 필드셋 경고 안내 아래첨자 위첨자 대신에 두줄로 가야 하고 두번째 내용의 일부분이 말 줄임표로 가야 하며 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구...
+                        <div class="pull-right"><span class="badge">
+                            11
+                        </span></div>
+                    </div>
+                    <div class="pull-left"><span class="nickname">공간오너 : 유저 닉네임</span></div>
+                    <div class="pull-right">2015-05-25 00:00:00</div>
+                </div>
+            </div>
+            <br>
+            <p class="lead text-right" ><button class="btn btn-default">Read More</button></p>
+            <!--// 전체 공간 -->
         </div>
     </div>
+    <!--// contents -->
+{{/partial}}
 
-    <!-- 상단 컨텐츠 -->
-    <div class="container contents-container top-buffer wiki-main">
-        <div class="col-md-12">
-            <!-- 전체 위키 -->
-            <div id="allWikiList">
-                {{> wiki/template/_allList}}
-            </div>
-            <!--// 위키 -->
+{{#partial "script-page"}}
+    {{embedded "common/keywordList"}}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            Wiki.renderKeywordList();
+        });
+        var Wiki = {
+            renderKeywordList : function(keywordName){
+                $.ajax({
+                    url: "/common/findKeywordList",
+                    type: "POST",
+                    data: { keywordType : 'WIKI', keywordName : Wiki.selectedKeyword(keywordName) },
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            var source = $('#common-keywordList-hbs').html();
+                            var template = Handlebars.compile(source);
 
-        </div>
-    </div>
+                            var html = template(data);
+                            $('#categorizeKeywordListArea').html(html);
+                            Wiki.bindKeywordListEvent();
+                        }
+                    },
+                    error : function(req){
+                        // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
 
+                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                    }
+                });
+            },
+            selectedKeyword : function(keywordName){
+                if(!keywordName){
+                    keywordName = '';
+                }
+                return keywordName;
+            },
+            bindKeywordListEvent : function(){
+                $('#categorizeKeywordListArea').find('li').click(function(){
+                    Wiki.renderKeywordList(this.getAttribute('value'));
+                });
+            }
+        }
+    </script>
 {{/partial}}
 
 {{> template/base}}

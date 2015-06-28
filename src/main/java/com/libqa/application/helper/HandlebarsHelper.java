@@ -26,11 +26,11 @@ public class HandlebarsHelper {
         return sdf.format(date);
     }
 
-    public String nullToNumber(String num, Options options) {
+    public String nullToNumber(Integer num, Options options) {
         if (num == null) {
             return "0";
         }
-        return num;
+        return num.toString();
     }
 
     public String htmlDelete(String html, Options options) {
