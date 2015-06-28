@@ -81,7 +81,7 @@ public class WikiController {
         ModelAndView mav = new ModelAndView("wiki/write");
         log.info("# spaceId : {}", modelSpace.getSpaceId());
 
-        /*
+
         if( modelSpace.getSpaceId() == null ){
             boolean isDeleted = false;    // 삭제 하지 않은 것
             List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
@@ -90,13 +90,13 @@ public class WikiController {
             Space space = spaceService.findOne(modelSpace.getSpaceId());
             mav.addObject("space", space);
         }
-        */
+
 
         //임시 공간영역 하드코딩
-        Space space = new Space();
-        space.setSpaceId(1);
-        space.setTitle("테스트");
-        mav.addObject("space", space);
+        //Space space = new Space();
+        //space.setSpaceId(1);
+        //space.setTitle("테스트");
+        //mav.addObject("space", space);
 
         return mav;
     }
