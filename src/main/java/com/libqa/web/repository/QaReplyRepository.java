@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by yong on 15. 2. 8..
  */
-public interface QaReplyRepository extends JpaRepository<QaReply, Long> {
+public interface QaReplyRepository extends JpaRepository<QaReply, Integer> {
     QaReply findByReplyId(Integer replyId, boolean isDeleted);
 
     List<QaReply> findAllByQaIdAndIsDeletedOrderByDepthIdxDesc(Integer qaId, boolean isDeleted);

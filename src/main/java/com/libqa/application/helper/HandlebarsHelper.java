@@ -52,7 +52,9 @@ public class HandlebarsHelper {
     }
 
     public String length(String str, Options options) {
-        return str.length()+"";
+
+        System.out.println("############### length ############### ");
+        return str.length() + "";
     }
 
     public String nl2br(String str, Options options) {

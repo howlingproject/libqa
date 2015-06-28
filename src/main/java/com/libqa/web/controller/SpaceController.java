@@ -135,6 +135,7 @@ public class SpaceController {
         String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
 
         log.info("# view : {}", view);
+        log.info("# spaceWikis : {}", spaceWikis);
         ModelAndView mav = new ModelAndView(view);
 
         mav.addObject("spaceWikis", spaceWikis);

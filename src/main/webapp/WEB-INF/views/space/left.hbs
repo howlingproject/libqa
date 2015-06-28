@@ -16,16 +16,16 @@ To change this template use File | Settings | File Templates.
         <div style="padding-bottom: 45px;">
             <div class="btn-group" data-toggle="buttons" style="float: right">
                 <a href="/space/edit/{{space.spaceId}}" class="btn btn-primary">공간 정보수정</a>
-                <a href="/space/{{space.spaceId}}/wiki" class="btn btn-primary">위키 생성</a>
+                <a href="#" class="btn btn-primary" id="createWiki">위키 생성</a>
                 <a href="#" class="btn btn-primary">첨부파일 목록</a>
             </div>
         </div>
     </div>
 </div>
-
+<form name="space" id="space">
+    <input type="hidden" name="spaceId" id="spaceId" value="{{space.spaceId}}">
+</form>
 <!--// contents -->
-
-
 <div class="container components">
     <h1 class="page-header">{{space.title}}
         <small class="pull-right">{{space.insertDate}} {{space.insertUserNick}} 생성 </small>
@@ -47,6 +47,15 @@ To change this template use File | Settings | File Templates.
 
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
             <div class="well sidebar-nav">
+            {{#if spaceWikis}}
+                {{#each spaceWikis}}
+                    {{title}} <BR>
+                {{/each}}
+            {{^}}
+                생성된 위키가 없습니다.
+            {{/if}}
+
+                <!--
                 <h4>h4. Heading 4 <span class="badge">19</span></h4>
                 <h5 style="margin-left:10px">- h5. Heading 5 <span class="badge">11</span></h5>
                 <h5 style="margin-left:20px">- h5. Heading 5 <span class="badge">23</span></h5>
@@ -66,6 +75,7 @@ To change this template use File | Settings | File Templates.
                 <h5 style="margin-left:10px">- h5. Heading 5 <span class="badge">11</span></h5>
                 <h5 style="margin-left:20px">- h5. Heading 5 <span class="badge">23</span></h5>
                 <h5 style="margin-left:30px">- h5. Heading 5 <span class="badge">33</span></h5>
+                -->
             </div><!--/.well -->
         </div><!--/span-->
 
@@ -193,6 +203,10 @@ To change this template use File | Settings | File Templates.
     <script type="text/javascript">
         // bind the on-change event
         $(document).ready(function() {
+
+            $('#createWiki').on('click', function () {
+                $('#space').attr({action:'/wiki/write', method:'post'}).submit();
+            });
 
         });
     </script>
