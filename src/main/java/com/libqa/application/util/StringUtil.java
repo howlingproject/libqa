@@ -27,6 +27,7 @@ public class StringUtil extends StringUtils {
     public static String nullToString(String str){
         return nullToString(str, "");
     }
+
     public static String nullToString(String str, String defaultStr){
         if( str == null ){
             return defaultStr;
