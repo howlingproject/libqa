@@ -11,9 +11,10 @@ import java.util.List;
 @Data
 @Builder
 @Entity
-@EqualsAndHashCode(of = "feedId")
+@Table(indexes = {@Index(columnList = "isDeleted")})
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "feedId")
 @ToString(exclude = {"feedReplies", "feedFiles", "feedLikeUsers"})
 public class Feed {
     @Id
@@ -56,7 +57,7 @@ public class Feed {
     private boolean isSharedGp;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean isDeleted;   // TODO index 추가 필요
+    private boolean isDeleted;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
@@ -80,11 +81,12 @@ public class Feed {
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
     @Where(clause = "is_deleted = 0")
     private List<FeedReply> feedReplies;
-    
+
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
     @Where(clause = "is_deleted = 0")
     private List<FeedFile> feedFiles;
 
-    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
-    private List<FeedLikeUser> feedLikeUsers;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "feedId", referencedColumnName = "feedId")
+    private List<FeedAction> feedActions;
 }

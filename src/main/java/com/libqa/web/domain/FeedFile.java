@@ -11,8 +11,9 @@ import java.util.Date;
 
 @Data
 @Entity
-@EqualsAndHashCode(of = "feedFileId")
 @ToString
+@Table(indexes = {@Index(columnList = "isDeleted")})
+@EqualsAndHashCode(of = "feedFileId")
 public class FeedFile {
     @Id
     @Column(nullable = false)
@@ -31,15 +32,15 @@ public class FeedFile {
     @Column(nullable = false)
     private Integer fileSize;
 
-    @Column(nullable = true, length = 10)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = true, length = 10)
     private FileTypeEnum fileType;
 
     @Column
     private Integer downloadCount = 0;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean isDeleted;  // TODO index 추가 필요
+    private boolean isDeleted;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
@@ -54,8 +55,9 @@ public class FeedFile {
     @Column(nullable = false)
     private Integer insertUserId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "feedId", referencedColumnName = "feedId")
     private Feed feed;
 
     public boolean isFileType() {
