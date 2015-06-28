@@ -37,16 +37,11 @@ public class Activity {
     @Column(length = 100)
     private String activityLink;
 
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "insertDate", nullable = true, columnDefinition = "datetime(6)")
+    @Temporal(TemporalType.DATE)
     private Date insertDate;
 
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "confirmDate", nullable = true, columnDefinition = "datetime(6)")
+    @Temporal(TemporalType.DATE)
     private Date confirmDate;
-
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isConfirmed;
