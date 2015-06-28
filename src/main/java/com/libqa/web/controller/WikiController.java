@@ -228,7 +228,13 @@ public class WikiController {
         return mav;
     }
 
+    @RequestMapping(value = "wiki/count", method = RequestMethod.GET)
+    @ResponseBody
+    public String wikiCount() {
+        List<Wiki> wikis = wikiService.findAllByCondition();
 
+        return wikis.size() + "";
+    }
 
     @RequestMapping(value = {"wiki/list/{listType}","wiki/list/keyword/{keyword}"}, method = RequestMethod.GET)
     public ModelAndView wikiList(@PathVariable("listType") String listType,
@@ -239,24 +245,19 @@ public class WikiController {
         keyword = StringUtil.nullToString(keyword);
 
         if( ListTypeEnum.ALL.toString().equals(listType) ){
+            List<Wiki> allWiki = wikiService.findByAllWiki(0, 15);
+            mav.addObject("allWiki", allWiki);
 
         }else if( ListTypeEnum.BEST.toString().equals(listType) ){
+            List<Wiki> bestWiki = wikiService.findByBestWiki(0, 15);
+            mav.addObject("bestWiki", bestWiki);
 
         }else if( ListTypeEnum.RESENT.toString().equals(listType) ){
-
+            //유저 하드코딩
+            int userId = 1;
+            List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 15);
+            mav.addObject("resecntWiki", resecntWiki);
         }
-
-        List<Wiki> allWiki = wikiService.findByAllWiki(0, 5);
-        mav.addObject("allWiki", allWiki);
-
-        //유저 하드코딩
-        int userId = 1;
-        List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
-        mav.addObject("resecntWiki", resecntWiki);
-
-        List<Wiki> bestWiki = wikiService.findByBestWiki(0, 5);
-        mav.addObject("bestWiki", bestWiki);
-
 
         return mav;
     }
