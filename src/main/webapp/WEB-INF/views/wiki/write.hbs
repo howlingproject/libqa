@@ -19,7 +19,7 @@
                                 <input type="text" class="form-control" id="space_title" placeholder="{{space.title}}">
                                 <input type="hidden" id="spaceId" name="spaceId" value="{{space.spaceId}}">
                             {{else}}
-                                <select class="form-control" id="spaceId">
+                                <select class="form-control" id="spaceId" name="spaceId">
                                     {{#each spaceList}}
                                     <option value="{{spaceId}}">{{title}}</option>
                                     {{/each}}
