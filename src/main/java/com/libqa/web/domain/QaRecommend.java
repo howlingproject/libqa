@@ -1,6 +1,5 @@
 package com.libqa.web.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,12 +10,12 @@ import java.util.Date;
  */
 @Entity
 @Data
-public class QaRecommand {
+public class QaRecommend {
 
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer qaRecommandId;
+    private Integer qaRecommendId;
 
     @Column(nullable = false)
     private Integer qaId;
@@ -28,7 +27,7 @@ public class QaRecommand {
     private String userNick;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean isCommand;
+    private boolean isCommend;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)

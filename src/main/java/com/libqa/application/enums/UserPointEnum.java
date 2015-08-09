@@ -6,7 +6,7 @@ package com.libqa.application.enums;
 public enum UserPointEnum {
     WRITE_WIKI("위키 글쓰기"),
     QA_REPLY("QA 답변"),
-    QA_RECOMMAND("QA 추천"),
+    QA_RECOMMEND("QA 추천"),
     SHARE_COUNT("공유 갯수"),
     LOGIN_COUNT("로그인 횟수"),
     WRITE_FEED("FEED 쓰기"),
