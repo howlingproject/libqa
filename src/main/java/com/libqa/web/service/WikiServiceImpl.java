@@ -2,6 +2,7 @@ package com.libqa.web.service;
 
 import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.application.util.PageUtil;
+import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Wiki;
 import com.libqa.web.domain.WikiFile;
 import com.libqa.web.repository.KeywordRepository;
@@ -145,6 +146,53 @@ public class WikiServiceImpl implements WikiService {
         }
 
         return wikis;
+    }
+
+    @Override
+    public List<Wiki> findWikiListByKeyword(String keywordNm, int page, int size) {
+        List<Keyword> keywordList = keywordRepository.findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum.WIKI, keywordNm, false);
+        List<Integer> wikiIds = getWikiIdByKeyworld(keywordList);
+
+        List<Wiki> list = wikiRepository.findAllByWikiIdAndIsDeleted(
+                wikiIds
+                , PageUtil.sortPageable(
+                        page
+                        , size
+                        , PageUtil.sortId("DESC", "insertDate")
+                ).getSort()
+                , isDeleted);
+        if( list != null && list.size() > 0 ){
+            for( Wiki wiki : list ){
+                wiki.setKeywordList(keywordService.findByWikiId(wiki.getWikiId(), isDeleted));
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<Wiki> findWikiListByContentsMarkup(String searchText, int page, int size) {
+        List<Wiki> list = wikiRepository.findAllByContentsMarkupContainingAndIsDeleted(
+                searchText
+                , PageUtil.sortPageable(
+                        page
+                        , size
+                        , PageUtil.sortId("DESC", "insertDate")
+                ).getSort()
+                , isDeleted);
+        if( list != null && list.size() > 0 ){
+            for( Wiki wiki : list ){
+                wiki.setKeywordList(keywordService.findByWikiId(wiki.getWikiId(), isDeleted));
+            }
+        }
+        return list;
+    }
+
+    private List<Integer> getWikiIdByKeyworld(List<Keyword> keywords){
+        List<Integer> wikiIds = new ArrayList<>();
+        for( Keyword keyword : keywords ){
+            wikiIds.add(keyword.getWikiId());
+        }
+        return wikiIds;
     }
 
 }

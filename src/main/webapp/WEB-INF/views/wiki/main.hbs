@@ -3,8 +3,13 @@
     <div class="container qna-top-search">
         <div class="navbar-form navbar-left" role="search">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
+                <input type="text" data-linkval="searchText" class="form-control" placeholder="Search">
             </div>
+            <span class="form-control btn btn-primary" data-link="/wiki/search" data-linktype="search">
+                위키검색
+            </span>
+        </div>
+        <div class="btn-group pull-right">
             <a class="form-control btn btn-primary" href="/wiki/write">
                 위키생성
             </a>
@@ -69,7 +74,6 @@
 {{# partial "script-page" }}
 {{embedded "common/keywordList"}}
     <script>
-        var imsi ;
         $(document).ready(function() {
             Wiki.renderKeywordList();
         });
@@ -80,7 +84,6 @@
                     type: "POST",
                     data: { keywordType : 'WIKI', keywordName : Wiki.selectedKeyword(keywordName) },
                     success : function(data){
-                        imsi = data;
                         if(data.resultCode == 1) {
                             var source = $('#common-keywordList-hbs').html();
                             var template = Handlebars.compile(source);

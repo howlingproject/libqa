@@ -1,4 +1,21 @@
 {{# partial "content" }}
+    <!--  메뉴  -->
+    <div class="container qna-top-search">
+        <div class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search" value="{{searchText}}">
+            </div>
+            <a class="form-control btn btn-primary" href="/wiki/search">
+                위키검색
+            </a>
+        </div>
+        <div class="btn-group pull-right">
+            <a class="form-control btn btn-primary" href="/wiki/write">
+                위키생성
+            </a>
+        </div>
+    </div>
+
     <!-- contents -->
     <!-- 메뉴 -->
     <div class="container contents-container top-buffer">
@@ -62,7 +79,7 @@
     {{embedded "common/keywordList"}}
     <script type="text/javascript">
         $(document).ready(function() {
-            Wiki.renderKeywordList();
+            Wiki.renderKeywordList('{{selectKeywordName}}');
         });
         var Wiki = {
             renderKeywordList : function(keywordName){
