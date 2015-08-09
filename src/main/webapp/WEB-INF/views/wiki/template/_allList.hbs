@@ -16,7 +16,11 @@
                             {{/each}}
                         </div>
                     </div>
-                    <div>{{subString (htmlDelete contents) 0 100 }}</div>
+                    <div>
+                        <a class="form" href="/wiki/{{wikiId}}">
+                        {{subString (htmlDelete contents) 0 100 }}
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="col-md-2 my-qna-rating">

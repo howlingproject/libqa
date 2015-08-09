@@ -69,7 +69,7 @@
             </form>
         </div>
         <div class="form-actions text-center">
-            <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+            <button type="button" class="btn btn-default" id="cancel" >취소</button>
             <button type="button" class="btn btn-primary" id="saveWiki">저장</button>
         </div>
 
@@ -108,6 +108,9 @@
 
         $("#saveWiki").on("click", function(e){
             Wiki.save();
+        });
+        $("#cancel").on("click", function(e){
+            history.go(-1);
         });
 
         var Wiki = {

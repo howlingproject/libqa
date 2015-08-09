@@ -153,7 +153,7 @@ public class WikiServiceImpl implements WikiService {
         List<Keyword> keywordList = keywordRepository.findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum.WIKI, keywordNm, false);
         List<Integer> wikiIds = getWikiIdByKeyworld(keywordList);
 
-        List<Wiki> list = wikiRepository.findAllByWikiIdAndIsDeleted(
+        List<Wiki> list = wikiRepository.findAllByWikiIdInAndIsDeleted(
                 wikiIds
                 , PageUtil.sortPageable(
                         page
