@@ -10,6 +10,7 @@ import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.SpaceService;
 import com.libqa.web.service.WikiService;
 import com.libqa.web.view.SpaceMain;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -116,6 +117,16 @@ public class SpaceController {
         Space result = spaceService.saveWithKeyword(space);
         log.debug("#result : [{}]", result);
         return ResponseData.createSuccessResult(result);
+    }
+
+    @RequestMapping(value = "/space/edit/{spaceId}", method = RequestMethod.GET)
+    public ModelAndView editSpace(@PathVariable Integer spaceId) {
+        Space space = spaceService.findOne(spaceId);
+        List<Keyword> keywords = keywordService.findBySpaceId(spaceId, false);
+        ModelAndView mav = new ModelAndView("/space/edit");
+        mav.addObject("space", space);
+        mav.addObject("keywords", keywords);
+        return mav;
     }
 
     /**

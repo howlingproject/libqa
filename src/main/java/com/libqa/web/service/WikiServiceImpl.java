@@ -50,14 +50,14 @@ public class WikiServiceImpl implements WikiService {
     }
 
     private void saveWikiFileAndList(Wiki wiki) {
-        List<WikiFile> wikiFiles= wiki.getWikiFiles();
+        List<WikiFile> wikiFiles = wiki.getWikiFiles();
         Wiki tempWiki = new Wiki();
         tempWiki.setWikiId(wiki.getWikiId());
-        if( wikiFiles != null && wikiFiles.size() > 0){
-            for( WikiFile wikiFile : wikiFiles ){
-                wikiFile.setInsertDate( wiki.getInsertDate());
-                wikiFile.setUserId(wiki.getUserId() );
-                wikiFile.setWikiId( wiki.getWikiId() );
+        if (wikiFiles != null && wikiFiles.size() > 0) {
+            for (WikiFile wikiFile : wikiFiles) {
+                wikiFile.setInsertDate(wiki.getInsertDate());
+                wikiFile.setUserId(wiki.getUserId());
+                wikiFile.setWikiId(wiki.getWikiId());
                 wikiFileService.saveWikiFileAndList(wikiFile);
             }
         }
@@ -80,9 +80,9 @@ public class WikiServiceImpl implements WikiService {
     public List<Wiki> findByAllWiki(int page, int size) {
         List<Wiki> list = wikiRepository.findAllByIsDeleted(
                 PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "insertDate")).getSort()
-                ,isDeleted);
-        if( list != null && list.size() > 0 ){
-            for( Wiki wiki : list ){
+                , isDeleted);
+        if (list != null && list.size() > 0) {
+            for (Wiki wiki : list) {
                 int replyCount = wikiReplyService.countByWiki(wiki.getWikiId());
                 wiki.setReplyCount(replyCount);
                 wiki.setKeywordList(keywordService.findByWikiId(wiki.getWikiId(), isDeleted));
@@ -95,9 +95,9 @@ public class WikiServiceImpl implements WikiService {
     public List<Wiki> findByBestWiki(int page, int size) {
         List<Wiki> list = wikiRepository.findAllByIsDeleted(
                 PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "likeCount")).getSort()
-                ,isDeleted);
-        if( list != null && list.size() > 0 ){
-            for( Wiki wiki : list ){
+                , isDeleted);
+        if (list != null && list.size() > 0) {
+            for (Wiki wiki : list) {
                 int replyCount = wikiReplyService.countByWiki(wiki.getWikiId());
                 wiki.setReplyCount(replyCount);
                 wiki.setKeywordList(keywordService.findByWikiId(wiki.getWikiId(), isDeleted));
@@ -116,8 +116,8 @@ public class WikiServiceImpl implements WikiService {
                         , PageUtil.sort(PageUtil.order("DESC", "userId"), PageUtil.order("DESC", "insertDate"))
                 ).getSort()
                 , isDeleted);
-        if( list != null && list.size() > 0 ){
-            for( Wiki wiki : list ){
+        if (list != null && list.size() > 0) {
+            for (Wiki wiki : list) {
                 wiki.setKeywordList(keywordService.findByWikiId(wiki.getWikiId(), isDeleted));
             }
         }

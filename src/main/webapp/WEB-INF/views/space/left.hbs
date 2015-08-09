@@ -14,10 +14,10 @@ To change this template use File | Settings | File Templates.
 <div class="container">
     <div class="col-md" >
         <div style="padding-bottom: 45px;">
-            <div class="btn-group" data-toggle="buttons" style="float: right">
-                <a href="/space/edit/{{space.spaceId}}" class="btn btn-primary">공간 정보수정</a>
+            <div class="btn-group" style="float: right">
                 <a href="#" class="btn btn-primary" id="createWiki">위키 생성</a>
                 <a href="#" class="btn btn-primary">첨부파일 목록</a>
+                <a href="/space/edit/{{space.spaceId}}" class="btn btn-primary">공간 정보수정</a>
             </div>
         </div>
     </div>
@@ -49,7 +49,7 @@ To change this template use File | Settings | File Templates.
             <div class="well sidebar-nav">
             {{#if spaceWikis}}
                 {{#each spaceWikis}}
-                    {{title}} <BR>
+                    <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
                 {{/each}}
             {{^}}
                 생성된 위키가 없습니다.
@@ -88,46 +88,26 @@ To change this template use File | Settings | File Templates.
                 </div>
                 <blockquote class="pull-right">
 
-                    <div class="media">
-                        <div class="media-body">
-                            <h4 class="media-heading" id="media-heading">Media heading<a class="anchorjs-link" href="#media-heading"><span class="anchorjs-icon"></span></a></h4>
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-                        </div>
-                        <div class="media-right">
-                            <a href="#">
-                                <div class="user-profile">
-                                    <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png" />
+                    {{#if updatedWikis}}
+                        {{#each updatedWikis}}
+                            <div class="media">
+                                <div class="media-body">
+                                    <h4 class="media-heading" id="media-heading">{{title}}<a class="anchorjs-link" href="#media-heading"><span class="anchorjs-icon"></span></a></h4>
+                                    <div class="text-left">{{subString (htmlDelete contents) 0 250 }}</div>
                                 </div>
-                            </a>
-                        </div>
-                    </div>
+                                <div class="media-right">
+                                    <a href="#">
+                                        <div class="user-profile">
+                                            <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png" />
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {{/each}}
+                    {{^}}
+                        생성된 위키가 없습니다.
+                    {{/if}}
 
-                    <div class="media">
-                        <div class="media-body">
-                            <h4 class="media-heading" id="media-heading">Media heading<a class="anchorjs-link" href="#media-heading"><span class="anchorjs-icon"></span></a></h4>
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-                        </div>
-                        <div class="media-right">
-                            <a href="#">
-                                <div class="user-profile">
-                                    <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png" />
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="media">
-                        <div class="media-body">
-                            <h4 class="media-heading" id="media-heading">Media heading<a class="anchorjs-link" href="#media-heading"><span class="anchorjs-icon"></span></a></h4>
-                            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-                        </div>
-                        <div class="media-right">
-                            <a href="#">
-                                <div class="user-profile">
-                                    <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png" />
-                                </div>
-                            </a>
-                        </div>
-                    </div>
 
 
                     <small><cite title="Source Title">더보기</cite></small>

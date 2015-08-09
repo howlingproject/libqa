@@ -55,7 +55,7 @@ public class LoginHandler implements AuthenticationSuccessHandler {
 
             if (values != null) {
                 for (int i = 0; i < values.length; i++) {
-                    System.out.println("** " + name + "( " + i + " )" + values[i]);
+                    System.out.println("** " + name + "( " + i + " ) " + values[i]);
                 }
             }
         }

@@ -32,18 +32,18 @@ public class Activity {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    private ActivityTypeEnum activityTypeEnum;
+    private ActivityTypeEnum activityType;
 
-    @Column(nullable = false)
-    private Integer seqId;
+    @Column(nullable = true)
+    private Integer spaceId;
+
+    @Column(nullable = true)
+    private Integer wikiId;
+
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
+    private boolean isDeleted;
 
     @Temporal(TemporalType.DATE)
     private Date insertDate;
-
-    @Temporal(TemporalType.DATE)
-    private Date confirmDate;
-
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
-    private boolean isConfirmed;
 
 }

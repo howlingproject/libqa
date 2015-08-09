@@ -1,17 +1,20 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.Exception.UserNotCreateException;
+import com.libqa.application.dto.SecurityUserDto;
 import com.libqa.application.enums.StatusCodeEnum;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.RequestUtil;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.UserService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -34,10 +37,28 @@ public class UserController {
     private UserService userService;
 
 
-    @RequestMapping(value = "/user/view", method = RequestMethod.GET)
-    public String printWelcome(ModelMap model) {
+    @RequestMapping(value = "/myInfo", method = RequestMethod.GET)
+    public ModelAndView myInfo(ModelAndView modelAndView) throws UserNotCreateException {
 
-        return "/user/view";
+        SecurityUserDto securityUserDto = (SecurityUserDto) modelAndView.getModel().get("loginUserInfo");
+
+        log.info("### security : {} ", securityUserDto);
+//        try {
+//            Assert.notNull(loginUser.getUserId(), "로그인 정보가 존재하지 않습니다.");
+//        } catch (Exception e) {
+//            mav = new ModelAndView("/common/403");
+//            mav.addObject("msg", "사용자 정보가 존재하지 않습니다.");
+//            return mav;
+//        }
+        /*8
+        String targetUrl = RequestUtil.refererUrl(request, "/myInfo");
+
+        log.info("/login = {}", targetUrl);
+        log.info("# userEmail = {}", loginUser.getUserEmail());
+        log.info("# userPass = {}", new BCryptPasswordEncoder().encode(loginUser.getUserPass()));
+        */
+
+        return modelAndView;
     }
 
 

@@ -77,10 +77,10 @@ To change this template use File | Settings | File Templates.
                         <div class="control-group">
                             <div class="controls">
                                 <label class="checkbox-inline">
-                                    <input type="radio" name="isPrivateYn" id="inlineCheckbox1" value="true" checked> 공개
+                                    <input type="radio" name="isPrivateYn" id="inlineCheckbox1" value="Y" checked> 공개
                                 </label>
                                 <label class="checkbox-inline">
-                                    <input type="radio" name="isPrivateYn" id="inlineCheckbox2" value="false"> 비공개
+                                    <input type="radio" name="isPrivateYn" id="inlineCheckbox2" value="N"> 비공개
                                 </label>
                                 <input type="hidden" id="private" name="private" value=""/>
                             </div>
@@ -302,10 +302,10 @@ To change this template use File | Settings | File Templates.
         $("#description").val(DualEditor.getMarkupConvertToHtml());
         $("#descriptionMarkup").val(DualEditor.getMarkupEditHtml());
 
-        if ($(':radio[name="isPrivateYn"]:checked').val() == 'true') {
-            $("#private").val(0);   // 공개
+        if ($(':radio[name="isPrivateYn"]:checked').val() == 'Y') {
+            $("#private").val(1);   // 공개
         } else {
-            $("#private").val(1);   // 비공개
+            $("#private").val(0);   // 비공개
         }
         var data = $("#spaceCreateForm").serialize();
         if (checkValidation()) {
