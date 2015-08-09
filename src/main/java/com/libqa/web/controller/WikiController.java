@@ -103,7 +103,7 @@ public class WikiController {
 
     @RequestMapping("wiki/update/{wikiId}")
     public ModelAndView update(@ModelAttribute Space modelSpace, @PathVariable Integer wikiId){
-        ModelAndView mav = new ModelAndView("wiki/wirte");
+        ModelAndView mav = new ModelAndView("wiki/write");
         log.info("# spaceId : {}", modelSpace.getSpaceId());
         /*
         if( modelSpace.getSpaceId() == null ){
