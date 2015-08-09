@@ -14,6 +14,7 @@ import java.util.List;
 public class DisplayQaReply {
     private QaReply qaReply;
     private List<QaReply> qaReplies;
+//    private boolean
 
     public DisplayQaReply(QaReply qaReply, List<QaReply> qaReplies){
         this.qaReply = qaReply;

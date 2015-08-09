@@ -12,6 +12,7 @@
                     <div style="margin-left: 5px; margin-bottom: 10px;">
                         <div class="avatar avatar-medium clearfix ">
                             <div class="user-profile-sm">
+                                <!-- 세션에서 userNick 가져와야함 -->
                                 <span class="nickname">sjune</span>
                                 <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                             </div>
@@ -42,7 +43,7 @@
     <div class="bg-info qna-reply-title"><span class="qna-reply-title">{{qaReply.title}}</span></div>
     <div class="feed well">
         <ul>
-            <li class="thread">
+            <li class="thread" data-qa-reply-id="{{qaReply.replyId}}">
                 <div class="author">
                     <div class="user-profile">
                         <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
@@ -72,7 +73,7 @@
                             </div>
                             <div class="name">{{userNick}}</div>
                             <div class="date">{{insertDate}}</div>
-                            <div class="config"><i class="fa fa-close qaReplyDeleteBtn" data-qa-reply-id="{{replyId}}"></i></div>
+                            <div class="config"><i class="fa fa-close qaReplyDeleteBtn" data-qa_child-reply-id="{{replyId}}"></i></div>
                             <div class="message-box">
                                 <div class="message">{{contents}}</div>
                                 <div class="action-buttons">
@@ -127,7 +128,7 @@
             },
             bindDelete: function() {
                 $('.qaReplyDeleteBtn').click(function () {
-                    Qa.qaReplyDelete(this);
+                    Qa.qaReplyDelete($(this).attr('data-qa_child-reply-id'));
                 });
             }
         }

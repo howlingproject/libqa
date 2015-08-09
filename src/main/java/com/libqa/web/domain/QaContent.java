@@ -42,7 +42,10 @@ public class QaContent {
     private int viewCount = 0;
 
     @Column(nullable = false, columnDefinition = "int DEFAULT 0")
-    private int recommandCount = 0;
+    private int recommendCount = 0;
+
+    @Column(nullable = false, columnDefinition = "int DEFAULT 0")
+    private int nonrecommendCount = 0;
 
     @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
@@ -77,7 +80,7 @@ public class QaContent {
     private List<QaReply> qaReplys;
 
     @OneToMany(mappedBy = "qaId", fetch = FetchType.LAZY)
-    private List<QaRecommand> qaRecommands;
+    private List<QaRecommend> qaRecommends;
 
     @OneToMany(mappedBy = "qaId", fetch = FetchType.LAZY)
     private List<QaFile> qaFiles;

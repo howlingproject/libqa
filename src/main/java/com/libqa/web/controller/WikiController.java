@@ -101,9 +101,9 @@ public class WikiController {
         return mav;
     }
 
-    @RequestMapping("wiki/update")
+    @RequestMapping("wiki/update/{wikiId}")
     public ModelAndView update(@ModelAttribute Space modelSpace, @PathVariable Integer wikiId){
-        ModelAndView mav = new ModelAndView("wiki/wirte");
+        ModelAndView mav = new ModelAndView("wiki/write");
         log.info("# spaceId : {}", modelSpace.getSpaceId());
         /*
         if( modelSpace.getSpaceId() == null ){
@@ -258,7 +258,7 @@ public class WikiController {
             List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 15);
             mav.addObject("listWiki", resecntWiki);
             mav.addObject("listTitle","최근 활동 위키 List");
-        }else{
+        }else {
             // 에러 처리
 
         }
@@ -270,7 +270,24 @@ public class WikiController {
     public ModelAndView keywordWikiList(@PathVariable String keywordNm) {
         ModelAndView mav = new ModelAndView("wiki/list");
 
-        mav.addObject("listTitle","Keyworld 위키 List");
+        List<Wiki> keyworldsWiki = wikiService.findWikiListByKeyword(keywordNm, 0, 15);
+        mav.addObject("listWiki", keyworldsWiki);
+        mav.addObject("selectKeywordName", keywordNm);
+        mav.addObject("listTitle",keywordNm+" 위키 List");
+
+        return mav;
+    }
+
+    @RequestMapping(value = "wiki/search", method = RequestMethod.GET)
+    public ModelAndView searchWikiList(@RequestParam String text) {
+        ModelAndView mav = new ModelAndView("wiki/list");
+        log.info("# searchWikiList : {}", text);
+
+        List<Wiki> keyworldsWiki = wikiService.findWikiListByContentsMarkup(text, 0, 15);
+        mav.addObject("listWiki", keyworldsWiki);
+        mav.addObject("searchText", text);
+        mav.addObject("listTitle",text+" 위키 List");
+
         return mav;
     }
 

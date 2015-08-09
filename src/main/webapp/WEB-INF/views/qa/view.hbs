@@ -32,7 +32,7 @@
                             </li>
                             <li class="pull-right">
                                 <div class="user-profile-sm">
-                                    <span class="nickname">sjune</span>
+                                    <span class="nickname">{{qaContent.userNick}}</span>
                                     <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
                                 </div>
                             </li>
@@ -78,7 +78,7 @@
                 <!--// 본문 제목, 내용 -->
                 <div>
                     <div class="text-left">
-                        <i class="fa fa-thumbs-o-up"><span class="like-count">({{qaContent.recommandCount}})</span></i>
+                        <i class="fa fa-thumbs-o-up"><span class="like-count">({{qaContent.recommendCount}})</span></i>
                         <i class="fa fa-share-alt"><span class="claim-count">(0)</span></i>
                     </div>
                     <div class="text-right">
@@ -99,7 +99,7 @@
     <!-- popover-config start -->
     <div id="popover-config-content" style="display: none;">
         <div class="button"><a href="#">수정</a></div>
-        <div class="button"><a href="javascript:void(0);" onclick="QaReply.qaReplyDelete(this);">삭제</a></div>
+        <div class="button"><a href="javascript:void(0);" onclick="Qa.getQaReplyId(this);">삭제</a></div>
     </div>
 
 {{/partial}}
@@ -267,22 +267,26 @@
                     }
                 });
             },
-            qaReplyDelete : function(obj){
+            getQaReplyId : function(obj){
+                var popoverId = $(obj).closest('.popover').attr('id');
+                var qaReplyId = $('.thread .config').find('[aria-describedby='+ popoverId +']').closest('.thread').attr('data-qa-reply-id');
+                this.qaReplyDelete(qaReplyId);
+            },
+            qaReplyDelete : function(qaReplyId){
                 if (!confirm("댓글을 삭제하시겠습니까?")) {
                     return;
                 }
 
-                var qaReplyId = $(obj).attr('data-qa-reply-id');
                 $.post('/qa/reply/delete/' + qaReplyId)
-                        .done(function (response) {
-                            if (response.resultCode != 1) {
-                                alert(response.comment);
-                                return;
-                            }
-                            Qa.searchList();
-                        }).fail(function () {
-                            alert('Error delete feed Reply');
-                        });
+                    .done(function (response) {
+                        if (response.resultCode != 1) {
+                            alert(response.comment);
+                            return;
+                        }
+                        Qa.searchList();
+                    }).fail(function () {
+                        alert('Error delete Qa Reply');
+                    });
             }
         }
 

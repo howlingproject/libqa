@@ -59,5 +59,20 @@
 {{#block "script-body"}}{{/block}}
 
 {{#block "script-page"}}{{/block}}
+<script type="text/javascript">
+    var imsi;
+    $(document).ready(function() {
+        $("*").click(function(){
+            if( $(this).data("linktype") == "search" ){
+                $("input").each(function(){
+                    if( $(this).data("linkval") == "searchText" ){
+                        location.href = "/wiki/search?text="+$(this).val();
+                    }
+                });
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
