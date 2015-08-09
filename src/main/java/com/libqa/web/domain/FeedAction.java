@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 @Entity
 @ToString
-@Table(indexes = {@Index(columnList = "isCanceled"), @Index(name = "idxFeedActionType", columnList = "feedActionType")})
+@Table(indexes = {@Index(columnList = "isCanceled"), @Index(columnList = "userId")})
 @EqualsAndHashCode(of = "feedActionId")
 public class FeedAction {
     @Id

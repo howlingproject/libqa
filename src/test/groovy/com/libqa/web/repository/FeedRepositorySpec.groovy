@@ -1,5 +1,5 @@
 package com.libqa.web.repository
-import com.libaqa.testsupport.LibQaRepositorySpecSuppoort
+import com.libaqa.testsupport.LibQaRepositorySpecSupport
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort
 import static org.springframework.data.domain.Sort.Direction.DESC
 import static org.springframework.data.domain.Sort.Order
 
-class FeedRepositorySpec extends LibQaRepositorySpecSuppoort {
+class FeedRepositorySpec extends LibQaRepositorySpecSupport {
     @Autowired
     FeedRepository feedRepository
 

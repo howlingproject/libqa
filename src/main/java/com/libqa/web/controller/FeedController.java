@@ -44,7 +44,7 @@ public class FeedController {
             feedService.save(feed);
             return createSuccessResult(feed);
         } catch (Exception e) {
-            log.error("save feed error : {}", e);
+            log.error("save feed error.", e);
             return createFailResult(feed);
         }
     }
@@ -55,7 +55,7 @@ public class FeedController {
             feedReplyService.save(feedReply);
             return createSuccessResult(feedReply);
         } catch (Exception e) {
-            log.error("save reply error : {}", e);
+            log.error("save reply error.", e);
             return createFailResult(feedReply);
         }
     }
@@ -66,7 +66,7 @@ public class FeedController {
             feedService.delete(feedId);
             return createSuccessResult(feedId);
         } catch (Exception e) {
-            log.error("save reply error : {}", e);
+            log.error("save reply error.", e);
             return createFailResult(feedId);
         }
     }
@@ -77,21 +77,8 @@ public class FeedController {
             feedReplyService.delete(feedReplyId);
             return createSuccessResult(feedReplyId);
         } catch (Exception e) {
-            log.error("save reply error : {}", e);
+            log.error("save reply error.", e);
             return createFailResult(feedReplyId);
         }
     }
-
-    @RequestMapping(value = "{feedId}/like", method = GET)
-    public ResponseData<Long> like(@PathVariable long feedId) {
-        try {
-            Integer userId = 1234; // TODO 로그인 처리
-            Integer likeCount = feedService.likeOrUnlike(feedId, userId);
-            return createSuccessResult(likeCount);
-        } catch (Exception e) {
-            log.error("like feed error : {}", e);
-            return createFailResult(-1L);
-        }
-    }
-
 }

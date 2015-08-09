@@ -39,6 +39,12 @@ public class FeedReply {
     @Column(nullable = false, length = 40)
     private String userNick;
 
+    @Column
+    private Integer likeCount = 0;
+
+    @Column
+    private Integer claimCount = 0;
+
     @Column(nullable = false)
     private Integer insertUserId;
 

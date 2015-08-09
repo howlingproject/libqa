@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedFile;
-import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.repository.FeedFileRepository;
 import com.libqa.web.repository.FeedReplyRepository;
@@ -38,8 +37,6 @@ public class FeedService {
     private FeedReplyRepository feedReplyRepository;
     @Autowired
     private FeedFileRepository feedFileRepository;
-    @Autowired
-    private FeedActionService feedActionService;
 
     public List<DisplayFeed> search(int startIdx, int endIdx) {
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
@@ -95,26 +92,6 @@ public class FeedService {
             each.setFeed(feed);
             feedFileService.save(each);
         }
-    }
-
-    @Transactional
-    public int likeOrUnlike(long feedId, Integer userId) {
-        Feed feed = feedRepository.findByFeedIdAndUserId(feedId, userId);
-        FeedAction recentlyFeedAction = feedActionService.getRecentlyFeedLikeUserBy(feed);
-
-        boolean liked = likeOrUnlike(recentlyFeedAction);
-        feed.setLikeCount(liked ? feed.getLikeCount() + 1 : feed.getLikeCount() - 1);
-        return feed.getLikeCount();
-    }
-
-    private boolean likeOrUnlike(FeedAction feedAction) {
-        boolean likable = feedActionService.isLikable(feedAction);
-        if (likable) {
-            feedActionService.like(feedAction);
-        } else {
-            feedActionService.disLike(feedAction);
-        }
-        return likable;
     }
 
 }

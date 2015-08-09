@@ -15,5 +15,5 @@ import spock.lang.Specification
 @WebAppConfiguration
 @ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application.class)
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
-abstract class LibQaRepositorySpecSuppoort extends Specification {
+abstract class LibQaRepositorySpecSupport extends Specification {
 }

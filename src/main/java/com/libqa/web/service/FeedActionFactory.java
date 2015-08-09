@@ -3,35 +3,54 @@ package com.libqa.web.service;
 import com.libqa.application.enums.FeedActionTypeEnum;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedAction;
-
-import java.util.Date;
+import com.libqa.web.domain.FeedReply;
 
 public class FeedActionFactory {
-    
+
     public static FeedAction createLike(Feed feed) {
+        FeedAction feedAction = createFeedAction(feed);
+        feedAction.setFeedActionType(FeedActionTypeEnum.LIKE);
+        return feedAction;
+    }
+
+    public static FeedAction createClaim(Feed feed) {
+        FeedAction feedAction = createFeedAction(feed);
+        feedAction.setFeedActionType(FeedActionTypeEnum.CLAIM);
+        return feedAction;
+    }
+
+    public static FeedAction createLike(FeedReply feedReply) {
+        FeedAction feedAction = createFeedAction(feedReply);
+        feedAction.setFeedActionType(FeedActionTypeEnum.LIKE);
+        return feedAction;
+    }
+
+    public static FeedAction createClaim(FeedReply feedReply) {
+        FeedAction feedAction = createFeedAction(feedReply);
+        feedAction.setFeedActionType(FeedActionTypeEnum.CLAIM);
+        return feedAction;
+    }
+
+    private static FeedAction createFeedAction(Feed feed) {
         FeedAction feedAction = new FeedAction();
         feedAction.setFeedId(feed.getFeedId());
-        feedAction.setCanceled(true);
-        feedAction.setFeedActionType(FeedActionTypeEnum.LIKE);
         feedAction.setUserId(feed.getUserId());
         feedAction.setUserNick(feed.getUserNick());
         feedAction.setInsertUserId(feed.getUserId());
         feedAction.setUpdateUserId(feed.getUserId());
+        feedAction.setCanceled(false);
         return feedAction;
     }
 
-    public static FeedAction createBy(FeedAction origin) {
-        FeedAction target = new FeedAction();
-        target.setFeedActionType(origin.getFeedActionType());
-        target.setUserId(origin.getUserId());
-        target.setUserNick(origin.getUserNick());
-        target.setFeedId(origin.getFeedId());
-        target.setFeedReplyId(origin.getFeedReplyId());
-        target.setCanceled(origin.isCanceled());
-        target.setInsertDate(new Date());
-        target.setUpdateDate(new Date());
-        target.setInsertUserId(origin.getUserId());
-        target.setUpdateUserId(origin.getUpdateUserId());
-        return target;
+    private static FeedAction createFeedAction(FeedReply feedReply) {
+        FeedAction feedAction = new FeedAction();
+        feedAction.setFeedId(feedReply.getFeed().getFeedId());
+        feedAction.setFeedReplyId(feedReply.getFeedReplyId());
+        feedAction.setUserId(feedReply.getUserId());
+        feedAction.setUserNick(feedReply.getUserNick());
+        feedAction.setInsertUserId(feedReply.getUserId());
+        feedAction.setUpdateUserId(feedReply.getUserId());
+        feedAction.setCanceled(false);
+        return feedAction;
     }
 }

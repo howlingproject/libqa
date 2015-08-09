@@ -1,9 +1,9 @@
 package com.libqa.web.repository
-import com.libaqa.testsupport.LibQaRepositorySpecSuppoort
+import com.libaqa.testsupport.LibQaRepositorySpecSupport
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-class FeedReplyRepositoryTest extends LibQaRepositorySpecSuppoort {
+class FeedReplyRepositorySpec extends LibQaRepositorySpecSupport {
     @Autowired
     FeedReplyRepository repository
 
