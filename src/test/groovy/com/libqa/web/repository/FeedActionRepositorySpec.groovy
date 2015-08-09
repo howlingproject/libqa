@@ -10,7 +10,7 @@ class FeedActionRepositorySpec extends LibQaRepositorySpecSupport {
     @Test
     def "feedId와 userId로 목록 조회"() {
         given:
-        def feedId = -1L
+        def feedId = 1
         def userId = 1234
         when:
         def response = repository.findByFeedIdAndUserId(feedId, userId)
@@ -21,7 +21,7 @@ class FeedActionRepositorySpec extends LibQaRepositorySpecSupport {
     @Test
     def "feedReplyId와 userId로 목록 조회"() {
         given:
-        def feedReplyId = -1L
+        def feedReplyId = 1
         def userId = 1234
         when:
         def response = repository.findByFeedReplyIdAndUserId(feedReplyId, userId)

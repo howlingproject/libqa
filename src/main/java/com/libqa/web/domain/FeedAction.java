@@ -17,7 +17,7 @@ public class FeedAction {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long feedActionId;
+    private Integer feedActionId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
@@ -46,8 +46,8 @@ public class FeedAction {
     private Integer updateUserId;
 
     @Column
-    private Long feedId;
+    private Integer feedId;
 
     @Column
-    private Long feedReplyId;
+    private Integer feedReplyId;
 }

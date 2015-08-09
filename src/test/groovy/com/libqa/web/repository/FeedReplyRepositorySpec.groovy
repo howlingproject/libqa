@@ -10,7 +10,7 @@ class FeedReplyRepositorySpec extends LibQaRepositorySpecSupport {
     @Test
     def "id로 reply 조회"() {
         when:
-        def response = repository.findOne(-1L)
+        def response = repository.findOne(-1)
         then:
         response == null
     }

@@ -30,60 +30,60 @@ public class FeedActionService {
     @Autowired
     private FeedReplyRepository feedReplyRepository;
 
-    public void likeFeed(long feedId) {
+    public void likeFeed(Integer feedId) {
         Feed feed = findFeed(feedId);
         FeedAction feedAction = FeedActionFactory.createLike(feed);
         feedActionRepository.save(feedAction);
     }
 
-    public void claimFeed(long feedId) {
+    public void claimFeed(Integer feedId) {
         Feed feed = findFeed(feedId);
         FeedAction feedAction = FeedActionFactory.createClaim(feed);
         feedActionRepository.save(feedAction);
     }
 
-    public void likeFeedReply(long feedReplyId) {
+    public void likeFeedReply(Integer feedReplyId) {
         FeedReply feedReply = getFeedReply(feedReplyId);
         FeedAction feedAction = FeedActionFactory.createLike(feedReply);
         feedActionRepository.save(feedAction);
     }
 
-    public void claimFeedReply(long feedReplyId) {
+    public void claimFeedReply(Integer feedReplyId) {
         FeedReply feedReply = getFeedReply(feedReplyId);
         FeedAction feedAction = FeedActionFactory.createClaim(feedReply);
         feedActionRepository.save(feedAction);
     }
 
-    public void cancel(long feedActionId) {
+    public void cancel(Integer feedActionId) {
         FeedAction feedAction = feedActionRepository.findOne(feedActionId);
         feedAction.setCanceled(true);
     }
 
-    public boolean hasLikedFeed(long feedId, Integer userId) {
+    public boolean hasLikedFeed(Integer feedId, Integer userId) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedIdAndUserId(feedId, userId);
         return Iterables.tryFind(feedActions, PREDICATE_IS_LIKE).isPresent();
     }
     
-    public boolean hasClaimFeed(long feedId, Integer userId) {
+    public boolean hasClaimFeed(Integer feedId, Integer userId) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedIdAndUserId(feedId, userId);
         return Iterables.tryFind(feedActions, PREDICATE_IS_CLAIM).isPresent();
     }
 
-    public boolean hasLikedFeedReply(long feedReplyId, Integer userId) {
+    public boolean hasLikedFeedReply(Integer feedReplyId, Integer userId) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedReplyIdAndUserId(feedReplyId, userId);
         return Iterables.tryFind(feedActions, PREDICATE_IS_LIKE).isPresent();
     }
 
-    public boolean hasClaimFeedReply(long feedReplyId, Integer userId) {
+    public boolean hasClaimFeedReply(Integer feedReplyId, Integer userId) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedReplyIdAndUserId(feedReplyId, userId);
         return Iterables.tryFind(feedActions, PREDICATE_IS_CLAIM).isPresent();
     }
 
-    private Feed findFeed(long feedId) {
+    private Feed findFeed(Integer feedId) {
         return feedRepository.findOne(feedId);
     }
 
-    private FeedReply getFeedReply(long feedReplyId) {
+    private FeedReply getFeedReply(Integer feedReplyId) {
         return feedReplyRepository.findOne(feedReplyId);
     }
 

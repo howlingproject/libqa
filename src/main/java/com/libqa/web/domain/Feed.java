@@ -20,7 +20,7 @@ public class Feed {
     @Id
     @Column(nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long feedId;
+    private Integer feedId;
 
     @Column(nullable = true, length = 80)
     private String sharedResponseId;

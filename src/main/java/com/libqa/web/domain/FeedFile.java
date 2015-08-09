@@ -18,7 +18,7 @@ public class FeedFile {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long feedFileId;
+    private Integer feedFileId;
 
     @Column(nullable = false, length = 40)
     private String realName;

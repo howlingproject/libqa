@@ -61,7 +61,7 @@ public class FeedController {
     }
 
     @RequestMapping(value = "{feedId}/delete", method = POST)
-    public ResponseData<Long> delete(@PathVariable Long feedId) {
+    public ResponseData<Integer> delete(@PathVariable Integer feedId) {
         try {
             feedService.delete(feedId);
             return createSuccessResult(feedId);
@@ -72,7 +72,7 @@ public class FeedController {
     }
 
     @RequestMapping(value = "reply/{feedReplyId}/delete", method = POST)
-    public ResponseData<Long> deleteReply(@PathVariable Long feedReplyId) {
+    public ResponseData<Integer> deleteReply(@PathVariable Integer feedReplyId) {
         try {
             feedReplyService.delete(feedReplyId);
             return createSuccessResult(feedReplyId);

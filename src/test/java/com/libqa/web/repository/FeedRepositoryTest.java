@@ -15,7 +15,7 @@ public class FeedRepositoryTest extends LibQaIntegrationTest {
     
     @Test
     public void testFindOne() {
-        Feed actual = feedRepository.findOne(-1L);
+        Feed actual = feedRepository.findOne(-1);
         assertNull(actual);
     }
 

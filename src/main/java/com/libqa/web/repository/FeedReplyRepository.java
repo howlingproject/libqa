@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface FeedReplyRepository extends JpaRepository<FeedReply, Long> {
-    List<FeedReply> findByFeedFeedId(Long feedId);
+public interface FeedReplyRepository extends JpaRepository<FeedReply, Integer> {
+    List<FeedReply> findByFeedFeedId(Integer feedId);
 }

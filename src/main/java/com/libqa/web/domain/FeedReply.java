@@ -18,7 +18,7 @@ public class FeedReply {
     @Id
     @Column(name = "feedReplyId", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long feedReplyId;
+    private Integer feedReplyId;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String feedReplyContent;
