@@ -55,7 +55,7 @@ public class QaServiceImpl implements QaService {
         boolean result = false;
         try{
             delete(qaId);
-            // TODO List reply, file, recommand, keyword, keywordList 처리 확인
+            // TODO List reply, file, recommend, keyword, keywordList 처리 확인
             result = true;
         } catch (Exception e) {
             log.error("삭제시 오류 발생", e);
