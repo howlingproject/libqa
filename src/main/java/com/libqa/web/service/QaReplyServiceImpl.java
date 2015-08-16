@@ -1,8 +1,10 @@
 package com.libqa.web.service;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.libqa.web.domain.QaReply;
 import com.libqa.web.repository.QaReplyRepository;
+import com.libqa.web.view.DisplayQaReply;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,14 +52,13 @@ public class QaReplyServiceImpl implements QaReplyService {
     @Override
     public QaReply saveVoteUp(QaReply paramQaReply, Integer userId) {
         boolean isDeleted = false;
-        QaReply qaReply = qaReplyRepository.findByReplyId(paramQaReply.getReplyId(), isDeleted);
+        QaReply qaReply = qaReplyRepository.findByReplyIdAndIsDeleted(paramQaReply.getReplyId(), isDeleted);
 
         boolean notVote = voteService.isNotVote(qaReply, userId);
-        if(!notVote){
+        if(notVote){
             voteService.saveByQaReply(qaReply, userId);
         }
         qaReply.setVoteUpCount(qaReply.getVoteUpCount() + 1);
-
         qaReplyRepository.save(qaReply);
 
         return qaReply;
@@ -75,12 +76,34 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     @Override
-    public List<QaReply> findByQaIdAndDepthIdx(Integer qaId, int depthIdx) {
+    public List<DisplayQaReply> findByQaIdAndDepthIdx(Integer qaId, int depthIdx) {
         boolean isDeleted = false;
-        return qaReplyRepository.findAllByQaIdAndDepthIdxAndIsDeletedOrderByReplyIdAsc(qaId, depthIdx, isDeleted);
+        boolean isCancel = false;
+        boolean vote = true;
+        boolean notVote = false;
+        int qaReplyDepth = 1;
+        List<QaReply> qaReplyList = qaReplyRepository.findAllByQaIdAndDepthIdxAndIsDeletedOrderByReplyIdAsc(qaId, depthIdx, isDeleted);
+        return makeDisplayQaReply(qaReplyList, qaReplyDepth);
     }
 
-    @Override
+    public List<DisplayQaReply> makeDisplayQaReply(List<QaReply> qaReplyList, int qaReplyDepth){
+        boolean isDeleted = false;
+        boolean isCanceled = false;
+        boolean vote = true;
+        boolean notVote = false;
+        List<DisplayQaReply> displayQaReplyList = Lists.newArrayList();
+        List<QaReply> qaReplies = Lists.newArrayList();
+        for(QaReply qaReply : qaReplyList){
+            boolean selfRecommend = voteService.findByReplyIdAndUserIdAndIsVoteAndIsCancel(qaReply.getReplyId(), 1, vote, isCanceled);
+            boolean selfNonrecommend = voteService.findByReplyIdAndUserIdAndIsVoteAndIsCancel(qaReply.getReplyId(), 1, notVote, isCanceled);
+            if(1 == qaReplyDepth) {
+                qaReplies = findByQaIdAndParentsIdAndDepthIdx(qaReply.getQaId(), qaReply.getReplyId(), 2);
+            }
+            displayQaReplyList.add(new DisplayQaReply(qaReply, qaReplies, selfRecommend, selfNonrecommend));
+        }
+        return displayQaReplyList;
+    }
+
     public List<QaReply> findByQaIdAndParentsIdAndDepthIdx(Integer qaId, Integer replyId, int depthIdx) {
         boolean isDeleted = false;
         return qaReplyRepository.findAllByQaIdAndParentsIdAndDepthIdxAndIsDeletedOrderByOrderIdxAsc(qaId, replyId, depthIdx, isDeleted);

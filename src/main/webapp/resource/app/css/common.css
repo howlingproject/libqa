@@ -162,6 +162,8 @@ span.qna-reply-title {font-size: 15px; font-weight: bold; margin-left: 20px;}
 
 .form-group .readCnt{margin-left: 10px}
 
+.qa div.action-buttons i { padding: 3px; cursor: pointer; }
+.qa div.action-buttons span.like-count, .qa div.action-buttons span.claim-count{ padding-left:3px; color: #2682C4; font-weight: bold;}
 
 /**
 *   Wiki

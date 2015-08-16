@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,8 +35,17 @@ public class VoteServiceImpl implements VoteService {
     public void saveByQaReply(QaReply qaReply, Integer userId) {
         Vote vote = new Vote();
         vote.setReplyId(qaReply.getReplyId());
+        vote.setInsertDate(new Date());
+        vote.setUserNick("용퓌");
+        vote.setVote(true);
         vote.setUserId(userId);
 
         voteRepository.save(vote);
+    }
+
+    @Override
+    public boolean findByReplyIdAndUserIdAndIsVoteAndIsCancel(Integer replyId, int userId, boolean isVoted, boolean isCanceled) {
+        List<Vote> voteList = voteRepository.findByReplyIdAndUserIdAndIsVoteAndIsCancel(replyId, userId, isVoted, isCanceled);
+        return !CollectionUtils.isEmpty(voteList);
     }
 }

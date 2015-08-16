@@ -197,12 +197,7 @@ public class QaController {
     @RequestMapping(value="/qa/replyList", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData<DisplayQaReply> replyList(@RequestParam("qaId") Integer qaId){
-        List<DisplayQaReply> qaReplyList = new ArrayList<>();
-        List<QaReply> qaReplyFirstDepthList = qaReplyService.findByQaIdAndDepthIdx(qaId, 1);
-        for (QaReply qaReply : qaReplyFirstDepthList) {
-            List<QaReply> qaReplies = qaReplyService.findByQaIdAndParentsIdAndDepthIdx(qaReply.getQaId(), qaReply.getReplyId(), 2);
-            qaReplyList.add(new DisplayQaReply(qaReply, qaReplies));
-        }
+        List<DisplayQaReply> qaReplyList = qaReplyService.findByQaIdAndDepthIdx(qaId, 1);
         return createSuccessResult(qaReplyList);
     }
 

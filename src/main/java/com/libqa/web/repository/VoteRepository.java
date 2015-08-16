@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface VoteRepository extends JpaRepository<Vote, Long> {
     List<Vote> findByReplyIdAndUserIdAndIsCancel(Integer replyId, Integer userId, boolean isCancel);
+
+    List<Vote> findByReplyIdAndUserIdAndIsVoteAndIsCancel(Integer replyId, int userId, boolean isVoted, boolean isCanceled);
 }

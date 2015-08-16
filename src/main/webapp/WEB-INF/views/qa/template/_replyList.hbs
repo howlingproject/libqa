@@ -57,15 +57,15 @@
                     <div class="message">
                         {{{qaReply.contents}}}
                     </div>
-                    <div class="action-buttons">
-                        <i class="fa fa-thumbs-o-up"><span class="like-count">({{qaReply.voteUpCount}})</span></i>
-                        <i class="fa fa-bullhorn"><span class="claim-count">({{qaReply.voteDownCount}})</span></i>
+                    <div class="action-buttons qna-reply">
+                        <i class="fa fa-thumbs-o-up {{#xif selfRecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="UP"><span class="like-count">({{qaReply.voteUpCount}})</span></i>
+                        <i class="fa fa-bullhorn" data-qa-vote-type="DOWN"><span class="claim-count">({{qaReply.voteDownCount}})</span></i>
                     </div>
                 </div>
 
                 <ul>
                     {{#each qaReplies}}
-                        <li>
+                        <li class="thread" data-qa-reply-id="{{replyId}}">
                             <div class="author">
                                 <div class="user-profile-sm">
                                     <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
@@ -73,12 +73,12 @@
                             </div>
                             <div class="name">{{userNick}}</div>
                             <div class="date">{{insertDate}}</div>
-                            <div class="config"><i class="fa fa-close qaReplyDeleteBtn" data-qa_child-reply-id="{{replyId}}"></i></div>
+                            <div class="config"><i class="fa fa-close qaReplyDeleteBtn" data-qa-reply-id="{{replyId}}"></i></div>
                             <div class="message-box">
                                 <div class="message">{{contents}}</div>
-                                <div class="action-buttons">
-                                    <i class="fa fa-thumbs-o-up"><span class="like-count">({{voteUpCount}})</span></i>
-                                    <i class="fa fa-bullhorn"><span class="claim-count">({{voteDownCount}})</span></i>
+                                <div class="action-buttons qna-reply">
+                                    <i class="fa fa-thumbs-o-up" data-qa-vote-type="UP"><span class="like-count">({{voteUpCount}})</span></i>
+                                    <i class="fa fa-bullhorn" data-qa-vote-type="DOWN"><span class="claim-count">({{voteDownCount}})</span></i>
                                 </div>
                             </div>
                         </li>
@@ -125,10 +125,11 @@
                 this.bindDelete();
                 Qa.makeEditor();
                 Qa.saveReplyEvent();
+                Qa.saveVoteEvent();
             },
             bindDelete: function() {
                 $('.qaReplyDeleteBtn').click(function () {
-                    Qa.qaReplyDelete($(this).attr('data-qa_child-reply-id'));
+                    Qa.qaReplyDelete($(this).closest('.thread').attr('data-qa-reply-id'));
                 });
             }
         }

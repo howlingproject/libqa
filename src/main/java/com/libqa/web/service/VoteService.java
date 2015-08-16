@@ -11,4 +11,6 @@ public interface VoteService {
     boolean isNotVote(QaReply qaReply, Integer userId);
 
     void saveByQaReply(QaReply qaReply, Integer userId);
+
+    boolean findByReplyIdAndUserIdAndIsVoteAndIsCancel(Integer replyId, int userId, boolean isVoted, boolean isCanceled);
 }
