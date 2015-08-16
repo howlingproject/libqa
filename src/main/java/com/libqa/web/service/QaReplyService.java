@@ -1,6 +1,7 @@
 package com.libqa.web.service;
 
 import com.libqa.web.domain.QaReply;
+import com.libqa.web.view.DisplayQaReply;
 
 import java.util.List;
 
@@ -16,9 +17,7 @@ public interface QaReplyService {
 
     QaReply saveChildReply(QaReply qaReply);
 
-    List<QaReply> findByQaIdAndDepthIdx(Integer qaId, int depthIdx);
-
-    List<QaReply> findByQaIdAndParentsIdAndDepthIdx(Integer qaId, Integer replyId, int depthIdx);
+    List<DisplayQaReply> findByQaIdAndDepthIdx(Integer qaId, int depthIdx);
 
     void delete(Integer replyId);
 }

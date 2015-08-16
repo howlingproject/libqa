@@ -9,7 +9,7 @@ import java.util.List;
  * Created by yong on 15. 2. 8..
  */
 public interface QaReplyRepository extends JpaRepository<QaReply, Integer> {
-    QaReply findByReplyId(Integer replyId, boolean isDeleted);
+    QaReply findByReplyIdAndIsDeleted(Integer replyId, boolean isDeleted);
 
     List<QaReply> findAllByQaIdAndIsDeletedOrderByOrderIdxDesc(Integer qaId, boolean isDeleted);
 
@@ -18,4 +18,5 @@ public interface QaReplyRepository extends JpaRepository<QaReply, Integer> {
     List<QaReply> findAllByQaIdAndDepthIdxAndIsDeletedOrderByReplyIdAsc(Integer qaId, int depthIdx, boolean isDeleted);
 
     List<QaReply> findAllByQaIdAndParentsIdAndDepthIdxAndIsDeletedOrderByOrderIdxAsc(Integer qaId, Integer replyId, int depthIdx, boolean isDeleted);
+
 }

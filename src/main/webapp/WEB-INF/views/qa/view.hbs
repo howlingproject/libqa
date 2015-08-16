@@ -76,10 +76,10 @@
                     <input type="hidden" name="qaId" value="{{qaContent.qaId}}">
                 </div>
                 <!--// 본문 제목, 내용 -->
-                <div>
-                    <div class="text-left">
-                        <i class="fa fa-thumbs-o-up"><span class="like-count">({{qaContent.recommendCount}})</span></i>
-                        <i class="fa fa-share-alt"><span class="claim-count">(0)</span></i>
+                <div class="qa">
+                    <div class="action-buttons qna-reply">
+                        <i class="fa fa-thumbs-o-up" data-qa-vote-type="UP"><span class="like-count">({{qaContent.recommendCount}})</span></i>
+                        <i class="fa fa-bullhorn" data-qa-vote-type="DOWN"><span class="claim-count">({{qaContent.nonrecommendCount}})</span></i>
                     </div>
                     <div class="text-right">
                         <button id="editButton" type="button" class="btn btn-primary btn-sm">수정</button>
@@ -157,7 +157,7 @@
             bindEvent : function(){
                 this.cancleEvent();
                 this.buttonEvent();
-                this.saveVoteEvent();
+//                this.saveVoteEvent();
                 this.saveReplyEvent();
             },
             saveReplyEvent : function(){
@@ -239,17 +239,17 @@
                 $('.fileDiv').find('[href=#fileDiv]').remove();
             },
             saveVoteEvent : function(){
-                $('.qna-reply > li').click(function(){
+                $('.qna-reply > i').click(function(){
                     Qa.saveVote(this);
                 });
             },
             saveVote : function(voteLiObj){
-                var replyId = $(voteLiObj).parent().attr('value');
-                var voteType = $(voteLiObj).attr('value');
+                var replyId = $(voteLiObj).closest('.thread').attr('data-qa-reply-id');
+                var voteType = $(voteLiObj).attr('data-qa-vote-type');
                 var url = '';
-                if(voteType = 'UP'){
+                if(voteType == 'UP'){
                     url = '/qa/saveVoteUp';
-                } else if(voteType = 'DOWN'){
+                } else if(voteType == 'DOWN'){
                     url = '/qa/saveVoteDown';
                 }
                 $.ajax({
@@ -259,7 +259,7 @@
                     url : url,
                     success : function(data){
                         if(data.resultCode == 1) {
-                            ConfirmDialog.successConfirm();
+                            Qa.searchList();
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
@@ -276,7 +276,6 @@
                 if (!confirm("댓글을 삭제하시겠습니까?")) {
                     return;
                 }
-
                 $.post('/qa/reply/delete/' + qaReplyId)
                     .done(function (response) {
                         if (response.resultCode != 1) {
