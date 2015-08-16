@@ -18,7 +18,7 @@ public class WikiReply{
     private Integer replyId;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName="wikiId",  nullable = false)
+    @JoinColumn(name="wikiId", referencedColumnName = "wikiId", nullable=false)
     private Wiki wiki;
 
     @Column(length = 100, nullable = false)

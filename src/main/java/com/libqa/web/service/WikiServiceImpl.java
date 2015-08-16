@@ -83,11 +83,11 @@ public class WikiServiceImpl implements WikiService {
                 PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "insertDate")).getSort()
                 , isDeleted);
         if (list != null && list.size() > 0) {
-            for (Wiki wiki : list) {
+            /*for (Wiki wiki : list) {
                 int replyCount = wikiReplyService.countByWiki(wiki.getWikiId());
                 wiki.setReplyCount(replyCount);
                 wiki.setKeywordList(keywordService.findByWikiId(wiki.getWikiId(), isDeleted));
-            }
+            }*/
         }
         return list;
     }
@@ -98,11 +98,11 @@ public class WikiServiceImpl implements WikiService {
                 PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "likeCount")).getSort()
                 , isDeleted);
         if (list != null && list.size() > 0) {
-            for (Wiki wiki : list) {
+            /*for (Wiki wiki : list) {
                 int replyCount = wikiReplyService.countByWiki(wiki.getWikiId());
                 wiki.setReplyCount(replyCount);
                 wiki.setKeywordList(keywordService.findByWikiId(wiki.getWikiId(), isDeleted));
-            }
+            }*/
         }
         return list;
     }

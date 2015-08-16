@@ -58,29 +58,11 @@ public class WikiController {
 
         return mav;
     }
-/*
-    @RequestMapping("wiki/list")
-    public ModelAndView list(HttpServletRequest request){
-        ModelAndView mav = new ModelAndView("wiki/list");
-        List<Wiki> allWiki = null;
-        String keyword = StringUtil.convertString(request.getParameter("keyword"), "0");
-        Integer keywordId = Integer.parseInt(keyword);
-        List<Keyword> keywordList = keywordService.findBykeywordId(keywordId, false);
-        if( keywordList != null && keywordList.size() > 0 ){
-
-        }
-
-        allWiki = wikiService.findByAllWiki(0, 10);
-        mav.addObject("allWiki", allWiki);
-
-        return mav;
-    }*/
 
     @RequestMapping("wiki/write")
     public ModelAndView write(@ModelAttribute Space modelSpace){
         ModelAndView mav = new ModelAndView("wiki/write");
         log.info("# spaceId : {}", modelSpace.getSpaceId());
-
 
         if( modelSpace.getSpaceId() == null ){
             boolean isDeleted = false;    // 삭제 하지 않은 것

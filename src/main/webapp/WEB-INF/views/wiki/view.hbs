@@ -26,7 +26,7 @@
             </div>
 
             <div class="col-md-3">
-                <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
+                <div class="bs-docs-sidebar navigation" >
                     <ul class="nav bs-docs-sidenav">
                         <li class="active">
                             <a href="#type">Typography</a>
@@ -66,48 +66,51 @@
                         </li>
 
                     </ul>
+                    <div>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>작성자</th>
+                                <th>{{wiki.userNick}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>작성일</td>
+                                <td>{{formatDate wiki.insertDate "yyyy.MM.dd HH:mm:SS"}}</td>
+                            </tr>
+                            <tr>
+                                <td>수정일</td>
+                                <td>{{formatDate wiki.updateDate "yyyy.MM.dd HH:mm:SS"}}</td>
+                            </tr>
+                            <tr>
+                                <td>조회수</td>
+                                <td>{{nullToNumber wiki.viewCount}}</td>
+                            </tr>
+                            <tr>
+                                <td>공감수</td>
+                                <td>{{nullToNumber wiki.likeCount}}</td>
+                            </tr>
+                            <tr>
+                                <td>글상태</td>
+                                <td>기본</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a href="#" class="btn btn-primary">추천하기</a>
+                        <a href="#" class="btn btn-primary">인쇄하기</a>
+                    </div>
+                </div>
+                <div>
 
                 </div>
 
-                <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>작성자</th>
-                            <th>{{wiki.userNick}}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>작성일</td>
-                            <td>{{formatDate wiki.insertDate "yyyy.MM.dd HH:mm:SS"}}</td>
-                        </tr>
-                        <tr>
-                            <td>수정일</td>
-                            <td>{{formatDate wiki.updateDate "yyyy.MM.dd HH:mm:SS"}}</td>
-                        </tr>
-                        <tr>
-                            <td>조회수</td>
-                            <td>{{nullToNumber wiki.viewCount}}</td>
-                        </tr>
-                        <tr>
-                            <td>공감수</td>
-                            <td>{{nullToNumber wiki.likeCount}}</td>
-                        </tr>
-                        <tr>
-                            <td>글상태</td>
-                            <td>기본</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <a href="#" class="btn btn-primary">추천하기</a>
-                    <a href="#" class="btn btn-primary">인쇄하기</a>
-                </div>
             </div>
         </div>
 
 
         <div class="col-md">
+            {{#if wiki.linkList}}
             <div style="padding-bottom: 5px">
                 링크목록
                 <ul>
@@ -115,13 +118,18 @@
                     <li>2. 다운로드 - http://son.com</li>
                 </ul>
             </div>
+            {{/if}}
+            {{#if wiki.keywordList}}
             <div style="padding-bottom: 10px">
                 관련키워드
                 <div>
-                    <span class="label label-primary">Spring</span>
-                    <span class="label label-success">JAVA</span>
+                    {{#each wiki.keywordList}}
+                    <span class="label label-primary">{{keywordName}}</span>
+                    {{/each}}
                 </div>
             </div>
+            {{/if}}
+            {{#if wiki.commentList}}
             <div style="padding-bottom: 5px">
                 주석
                 <ul>
@@ -129,6 +137,8 @@
                     <li>glider.js : 설명~~~</li>
                 </ul>
             </div>
+            {{/if}}
+            {{#if wiki.wikiFiles}}
             <div style="padding-bottom: 5px">
                 첨부파일
                 <div>
@@ -137,6 +147,7 @@
                     <i class="fa fa-file">압축파일.zip</i>
                 </div>
             </div>
+            {{/if}}
         </div>
 
         <div class="col-md text-center">
@@ -165,6 +176,7 @@
             </div>
         </div>
 
+        {{#if wiki.wikiReplies}}
         <div class="col-md">
             <div class="nav-tabs-header">10개의 댓글</div>
 
@@ -244,6 +256,7 @@
             </div>
 
         </div>
+        {{/if}}
         <br>
 
         <div class="col-md">

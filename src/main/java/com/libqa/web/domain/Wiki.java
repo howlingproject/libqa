@@ -97,9 +97,16 @@ public class Wiki {
     @Transient
     private String keywords;
 
+    //추후에 삭제대상
     @Transient
     private int replyCount;
 
-    @Transient
+    @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    //@Transient
     private List<Keyword> keywordList;
+
+    @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)
+    //@Transient
+    private List<WikiReply> wikiReplies;
 }
