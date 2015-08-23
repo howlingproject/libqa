@@ -1,6 +1,7 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.enums.ListTypeEnum;
+import com.libqa.application.enums.WikiRevisionActionTypeEnum;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.Keyword;
@@ -156,6 +157,34 @@ public class WikiController {
             wiki.setInsertDate(new Date());
 
             Wiki result = wikiService.saveWithKeyword(wiki);
+
+
+            log.info("####### WIKI SAVE After INFO ########");
+            log.info("result = {}", result);
+
+            return ResponseData.createSuccessResult(result);
+        }catch(Exception e){
+            e.printStackTrace();
+            log.error(e.toString());
+            return ResponseData.createFailResult(wiki);
+        }
+
+    }
+
+    @RequestMapping(value = "wiki/update", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<?> update(@ModelAttribute Wiki wiki){
+        try{
+            log.info("####### WIKI SAVE Begin INFO ########");
+            log.info("wiki = {}", wiki);
+            log.info("wiki.wikiFile = {}", wiki.getWikiFiles());
+            wiki.setPasswd("1234");
+            wiki.setUserNick("하이");
+            wiki.setUserId(1);
+            wiki.setInsertDate(new Date());
+
+            Wiki result = wikiService.updateWithKeyword(wiki, WikiRevisionActionTypeEnum.UPDATE_WIKI);
+
 
             log.info("####### WIKI SAVE After INFO ########");
             log.info("result = {}", result);

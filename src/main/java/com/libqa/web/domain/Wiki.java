@@ -30,10 +30,10 @@ public class Wiki {
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(columnDefinition = "int default 0")
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer orderIdx;
 
-    @Column(columnDefinition = "int default 0")
+    @Column(nullable = false, columnDefinition = "int default 0")
     private Integer depthIdx;
 
     @Column(columnDefinition = "Text", nullable = false)

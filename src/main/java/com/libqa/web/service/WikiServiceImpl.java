@@ -1,15 +1,20 @@
 package com.libqa.web.service;
 
 import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.WikiRevisionActionTypeEnum;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Wiki;
 import com.libqa.web.domain.WikiFile;
+import com.libqa.web.domain.WikiSnapShot;
 import com.libqa.web.repository.KeywordRepository;
 import com.libqa.web.repository.WikiRepository;
+import com.libqa.web.repository.WikiSnapShotRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +27,9 @@ import java.util.List;
 public class WikiServiceImpl implements WikiService {
     @Autowired
     WikiRepository wikiRepository;
+
+    @Autowired
+    WikiSnapShotRepository wikiSnapShotRepository;
 
     @Autowired
     KeywordRepository keywordRepository;
@@ -43,10 +51,31 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
+    @Transactional
     public Wiki saveWithKeyword(Wiki wiki) {
         Wiki result = save(wiki);
         saveWikiFileAndList(result);
         saveKeywordAndList(wiki, result);
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public Wiki updateWithKeyword(Wiki wiki, WikiRevisionActionTypeEnum revisionActionTypeEnum) {
+        Wiki snapShotwiki = findById(wiki.getWikiId());
+        WikiSnapShot wikiSnapShot = new WikiSnapShot();
+        BeanUtils.copyProperties(wiki, wikiSnapShot);
+
+        wikiSnapShot.setWiki( snapShotwiki );
+        wikiSnapShot.setParentsId(snapShotwiki.getParentsId());
+        wikiSnapShot.setRevisionActionType(revisionActionTypeEnum);
+        wikiSnapShotRepository.save(wikiSnapShot);
+
+        Wiki result = save(wiki);
+        // 아래는 버그가 있는듯. 확인해서 다시 정상화하도록.
+        //saveWikiFileAndList(result);
+        //saveKeywordAndList(wiki, result);
+
         return result;
     }
 
@@ -164,6 +193,42 @@ public class WikiServiceImpl implements WikiService {
             wikiIds.add(keyword.getWikiId());
         }
         return wikiIds;
+    }
+
+
+    private WikiSnapShot saveSnapShot(Wiki wiki, WikiRevisionActionTypeEnum revisionActionTypeEnum) {
+
+        WikiSnapShot wikiSnapShot = new WikiSnapShot();
+        BeanUtils.copyProperties(wiki, wikiSnapShot);
+        wikiSnapShot.setRevisionActionType(revisionActionTypeEnum);
+
+//
+//        wikiSnapShot.setSpaceId(wiki.getSpaceId());
+//        wikiSnapShot.setParentsId(wiki.getParentsId());
+//        wikiSnapShot.setTitle(wiki.getTitle());
+//        wikiSnapShot.setOrderIdx(wiki.getOrderIdx());
+//        wikiSnapShot.setDepthIdx(wiki.getDepthIdx());
+//        wikiSnapShot.setContentsMarkup(wiki.getContentsMarkup());
+//        wikiSnapShot.setContents(wiki.getContents());
+//        wikiSnapShot.setLock(wiki.isLock());
+//        wikiSnapShot.setPasswd(wiki.getPasswd());
+//        wikiSnapShot.setUserNick(wiki.getUserNick());
+//        wikiSnapShot.setUserId(wiki.getUserId());
+//        wikiSnapShot.setViewCount(wiki.getViewCount());
+//        wikiSnapShot.setLikeCount(wiki.getLikeCount());
+//        wikiSnapShot.setReportCount(wiki.getReportCount());
+//        wikiSnapShot.setFixed(wiki.isFixed());
+//        wikiSnapShot.setWikiUrl(wiki.getWikiUrl());
+//        wikiSnapShot.setCurrentIp(wiki.getCurrentIp());
+//        wikiSnapShot.setEditReason(wiki.getEditReason());
+//        wikiSnapShot.setRevision(wiki.getRevision());
+//        wikiSnapShot.setDeleted(wiki.isDeleted());
+//        wikiSnapShot.setInsertDate(wiki.getInsertDate());
+//        wikiSnapShot.setUpdateDate(wiki.getUpdateDate());
+//        wikiSnapShot.setRevisionActionType(revisionActionTypeEnum);
+
+
+        return wikiSnapShotRepository.save(wikiSnapShot);
     }
 
 }

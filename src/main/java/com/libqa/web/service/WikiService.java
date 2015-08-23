@@ -1,7 +1,9 @@
 package com.libqa.web.service;
 
+import com.libqa.application.enums.WikiRevisionActionTypeEnum;
 import com.libqa.web.domain.Wiki;
 import com.libqa.web.domain.WikiFile;
+import com.libqa.web.domain.WikiSnapShot;
 
 import java.util.List;
 
@@ -12,6 +14,8 @@ public interface WikiService {
     Wiki save(Wiki wiki);
 
     Wiki saveWithKeyword(Wiki wiki);
+
+    Wiki updateWithKeyword(Wiki wiki, WikiRevisionActionTypeEnum revisionActionTypeEnum);
 
     Wiki findById(Integer wikiId);
 
