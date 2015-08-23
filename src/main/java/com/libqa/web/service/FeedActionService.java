@@ -31,27 +31,22 @@ public class FeedActionService {
         return feedAction;
     }
 
+    public FeedAction like(FeedReply feedReply, User user) {
+        FeedAction feedAction = FeedActionFactory.createLike(feedReply, user);
+        feedActionRepository.save(feedAction);
+        return feedAction;
+    }
+    
     public FeedAction claim(Feed feed, User user) {
         FeedAction feedAction = FeedActionFactory.createClaim(feed, user);
         feedActionRepository.save(feedAction);
         return feedAction;
     }
 
-    public FeedAction likeFeedReply(FeedReply feedReply, User user) {
-        FeedAction feedAction = FeedActionFactory.createLike(feedReply, user);
-        feedActionRepository.save(feedAction);
-        return feedAction;
-    }
-
-    public FeedAction claimFeedReply(FeedReply feedReply, User user) {
+    public FeedAction claim(FeedReply feedReply, User user) {
         FeedAction feedAction = FeedActionFactory.createClaim(feedReply, user);
         feedActionRepository.save(feedAction);
         return feedAction;
-    }
-
-    public void cancel(Integer feedActionId) {
-        FeedAction feedAction = feedActionRepository.findOne(feedActionId);
-        feedAction.setCanceled(true);
     }
 
     public boolean hasLikedFeed(Integer feedId, Integer userId) {
@@ -74,6 +69,11 @@ public class FeedActionService {
         return Iterables.tryFind(feedActions, PREDICATE_IS_CLAIM).isPresent();
     }
     
+    public void cancel(Integer feedActionId) {
+        FeedAction feedAction = feedActionRepository.findOne(feedActionId);
+        feedAction.setCanceled(true);
+    }
+
     public FeedAction getLiked(Feed feed, User user) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
         return Iterables.tryFind(feedActions, PREDICATE_IS_LIKE).orNull();
@@ -81,6 +81,16 @@ public class FeedActionService {
 
     public FeedAction getClaimed(Feed feed, User user) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
+        return Iterables.tryFind(feedActions, PREDICATE_IS_CLAIM).orNull();
+    }
+
+    public FeedAction getLiked(FeedReply feedReply, User user) {
+        List<FeedAction> feedActions = feedActionRepository.findByFeedReplyIdAndUserId(feedReply.getFeedReplyId(), user.getUserId());
+        return Iterables.tryFind(feedActions, PREDICATE_IS_LIKE).orNull();
+    }
+
+    public FeedAction getClaimed(FeedReply feedReply, User user) {
+        List<FeedAction> feedActions = feedActionRepository.findByFeedReplyIdAndUserId(feedReply.getFeedReplyId(), user.getUserId());
         return Iterables.tryFind(feedActions, PREDICATE_IS_CLAIM).orNull();
     }
 }

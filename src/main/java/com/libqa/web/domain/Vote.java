@@ -26,7 +26,7 @@ public class Vote {
     private String userNick;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean isVote;
+    private Boolean isVote;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isCancel;

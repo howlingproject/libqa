@@ -64,6 +64,7 @@ public class QaReplyServiceImpl implements QaReplyService {
         boolean isDeleted = false;
         boolean isCancel = false;
         boolean isVote;
+        boolean saveVoteValid = true;
         QaReply qaReply = qaReplyRepository.findByReplyIdAndIsDeleted(paramQaReply.getReplyId(), isDeleted);
 
         Vote vote = voteService.findByReplyIdAndUserIdAndIsCancel(paramQaReply.getReplyId(), userId, isCancel);
@@ -72,7 +73,7 @@ public class QaReplyServiceImpl implements QaReplyService {
 
         if(vote != null){
             voteService.deleteByQaReply(qaReply, userId);
-            if(vote.isVote()){
+            if(vote.getIsVote()){
                 voteUpCount -= 1;
             } else {
                 voteDownCount -= 1;
@@ -86,7 +87,6 @@ public class QaReplyServiceImpl implements QaReplyService {
             isVote = false;
             voteDownCount += 1;
         }
-
         voteService.saveByQaReply(qaReply, userId, isVote);
 
         qaReply.setVoteUpCount(voteUpCount);
@@ -119,15 +119,11 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     public List<DisplayQaReply> makeDisplayQaReply(List<QaReply> qaReplyList, int qaReplyDepth){
-        boolean isDeleted = false;
-        boolean isCanceled = false;
-        boolean vote = true;
-        boolean notVote = false;
         List<DisplayQaReply> displayQaReplyList = Lists.newArrayList();
         List<QaReply> qaReplies = Lists.newArrayList();
         for(QaReply qaReply : qaReplyList){
-            boolean selfRecommend = voteService.findByReplyIdAndUserIdAndIsVoteAndIsCancel(qaReply.getReplyId(), 1, vote, isCanceled);
-            boolean selfNonrecommend = voteService.findByReplyIdAndUserIdAndIsVoteAndIsCancel(qaReply.getReplyId(), 1, notVote, isCanceled);
+            boolean selfRecommend = voteService.hasRecommendUser(qaReply.getReplyId(), 1);
+            boolean selfNonrecommend = voteService.hasNonRecommendUser(qaReply.getReplyId(), 1);
             if(1 == qaReplyDepth) {
                 qaReplies = findByQaIdAndParentsIdAndDepthIdx(qaReply.getQaId(), qaReply.getReplyId(), 2);
             }
@@ -159,5 +155,4 @@ public class QaReplyServiceImpl implements QaReplyService {
             qaReplyRepository.flush();
         }
     }
-
 }

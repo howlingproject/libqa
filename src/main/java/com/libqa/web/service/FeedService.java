@@ -92,10 +92,10 @@ public class FeedService {
         FeedAction feedAction = feedActionService.getLiked(feed, user);
         if (feedAction == null) {
             feedAction = feedActionService.like(feed, user);
-            feed.setLikeCount(feed.getLikeCount() + 1);
+            feed.increaseLikeCount();
         } else {
             feedAction.cancel();
-            feed.setLikeCount(feed.getLikeCount() - 1);
+            feed.decreaseLikeCount();
         }
         return feedAction;
     }
@@ -107,10 +107,10 @@ public class FeedService {
         FeedAction feedAction = feedActionService.getClaimed(feed, user);
         if (feedAction == null) {
             feedAction = feedActionService.claim(feed, user);
-            feed.setClaimCount(feed.getClaimCount() + 1);
+            feed.increaseClaimCount();
         } else {
             feedAction.cancel();
-            feed.setClaimCount(feed.getClaimCount() - 1);
+            feed.decreaseClaimCount();
         }
         return feedAction;
     }
