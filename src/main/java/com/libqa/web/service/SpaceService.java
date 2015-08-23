@@ -37,4 +37,6 @@ public interface SpaceService {
 	 * @return
 	 */
 	Integer addSpaceFavorite(Integer spaceId, Integer userId, boolean isDeleted);
+
+	Integer cancelSpaceFavorite(Integer spaceId, Integer userId, boolean isDeleted);
 }

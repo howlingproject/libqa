@@ -233,7 +233,7 @@ public class SpaceController {
             return "0";
         }
         // 즐겨 찾기 추가는 isDeleted를 false 로 넘김
-        Integer result = spaceService.addSpaceFavorite(spaceId, user.getUserId(), true);
+        Integer result = spaceService.cancelSpaceFavorite(spaceId, user.getUserId(), true);
 
         return result.toString();
     }

@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface UserFavoriteRepository extends JpaRepository<UserFavorite, Integer>{
 
+    List<UserFavorite> findBySpaceIdAndUserId(Integer spaceId, Integer userId);
+
     List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteTypeEnum favoriteTypeEnum, Integer userId);
 
     List<UserFavorite> findBySpaceIdAndUserIdAndIsDeleted(Integer spaceId, Integer userId, boolean isDeleted);

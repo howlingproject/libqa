@@ -28,6 +28,11 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     }
 
     @Override
+    public List<UserFavorite> findBySpaceIdAndUserId(Integer spaceId, Integer userId) {
+        return userFavoriteRepository.findBySpaceIdAndUserId(spaceId, userId);
+    }
+
+    @Override
     public List<UserFavorite> findBySpaceIdAndUserIdAndIsDeleted(Integer spaceId, Integer userId, boolean isDeleted) {
         return userFavoriteRepository.findBySpaceIdAndUserIdAndIsDeleted(spaceId, userId, isDeleted);
     }

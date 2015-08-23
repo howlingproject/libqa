@@ -89,25 +89,18 @@ public class SpaceServiceImpl implements SpaceService {
 	public Integer addSpaceFavorite(Integer spaceId, Integer userId, boolean isDeleted) {
 		int result = 0;
 
-		List<UserFavorite> userFavorites = userFavoriteService.findBySpaceIdAndUserIdAndIsDeleted(spaceId, userId, false);
+		// 즐겨 찾기가 있는지 조회
+		List<UserFavorite> userFavorites = userFavoriteService.findBySpaceIdAndUserId(spaceId, userId);
 
 		UserFavorite userFavorite = Iterables.getFirst(userFavorites, null);
 		try {
-			if (isDeleted) { // 즐겨 찾기 취소
-				userFavorite.setDeleted(true);
-				userFavorite.setUpdateDate(new Date());
+			if (userFavorite == null) {	// insert
+				userFavorite = bindUserFavorite(spaceId, userId, isDeleted);
 				userFavoriteService.save(userFavorite);
-
-				result = 1;
-			} else {  // 즐겨 찾기 추가
-				if (userFavorite == null) {
-					userFavorite = bindUserFavorite(spaceId, userId);
-					userFavoriteService.save(userFavorite);
-					result = 1;
-				} else {
-					result = 2;
-				}
+			} else {	// update
+				updateFavorite(userFavorite, false);
 			}
+			return 1;
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = -1;
@@ -116,16 +109,44 @@ public class SpaceServiceImpl implements SpaceService {
 		return result;
 	}
 
-	public UserFavorite bindUserFavorite(Integer spaceId, Integer userId) {
+
+	@Override
+	public Integer cancelSpaceFavorite(Integer spaceId, Integer userId, boolean isDeleted) {
+		int result = 0;
+
+		// 즐겨 찾기가 있는지 조회
+		List<UserFavorite> userFavorites = userFavoriteService.findBySpaceIdAndUserIdAndIsDeleted(spaceId, userId, false);
+
+		UserFavorite userFavorite = Iterables.getFirst(userFavorites, null);
+		try {
+			if (userFavorite != null) {    // 즐겨 찾기가 이미 있을 경우 수정
+				updateFavorite(userFavorite, true);
+				return 1;
+			} // 없는 경우에는 즐겨찾기 삭제를 할 수 없음
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = -1;
+		}
+
+		return result;
+	}
+
+
+	public UserFavorite bindUserFavorite(Integer spaceId, Integer userId, boolean isDeleted) {
 		UserFavorite userFavorite;
 		userFavorite = new UserFavorite();
 		userFavorite.setFavoriteType(FavoriteTypeEnum.SPACE);
 		userFavorite.setUserId(userId);
 		userFavorite.setInsertDate(new Date());
 		userFavorite.setSpaceId(spaceId);
-		userFavorite.setDeleted(false);
+		userFavorite.setDeleted(isDeleted);
 		return userFavorite;
 	}
 
+	public void updateFavorite(UserFavorite userFavorite, boolean isDeleted) {
+		userFavorite.setDeleted(isDeleted);
+		userFavorite.setUpdateDate(new Date());
+		userFavoriteService.save(userFavorite);
+	}
 
 }
