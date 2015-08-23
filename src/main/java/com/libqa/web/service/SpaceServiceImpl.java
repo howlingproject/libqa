@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.google.common.collect.Iterables;
 import com.libqa.application.enums.FavoriteTypeEnum;
 import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.application.enums.SpaceViewEnum;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -81,6 +83,48 @@ public class SpaceServiceImpl implements SpaceService {
 		}
 
 		return mySpaceList;
+	}
+
+	@Override
+	public Integer addSpaceFavorite(Integer spaceId, Integer userId, boolean isDeleted) {
+		int result = 0;
+
+		List<UserFavorite> userFavorites = userFavoriteService.findBySpaceIdAndUserIdAndIsDeleted(spaceId, userId, false);
+
+		UserFavorite userFavorite = Iterables.getFirst(userFavorites, null);
+		try {
+			if (isDeleted) { // 즐겨 찾기 취소
+				userFavorite.setDeleted(true);
+				userFavorite.setUpdateDate(new Date());
+				userFavoriteService.save(userFavorite);
+
+				result = 1;
+			} else {  // 즐겨 찾기 추가
+				if (userFavorite == null) {
+					userFavorite = bindUserFavorite(spaceId, userId);
+					userFavoriteService.save(userFavorite);
+					result = 1;
+				} else {
+					result = 2;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = -1;
+		}
+
+		return result;
+	}
+
+	public UserFavorite bindUserFavorite(Integer spaceId, Integer userId) {
+		UserFavorite userFavorite;
+		userFavorite = new UserFavorite();
+		userFavorite.setFavoriteType(FavoriteTypeEnum.SPACE);
+		userFavorite.setUserId(userId);
+		userFavorite.setInsertDate(new Date());
+		userFavorite.setSpaceId(spaceId);
+		userFavorite.setDeleted(false);
+		return userFavorite;
 	}
 
 

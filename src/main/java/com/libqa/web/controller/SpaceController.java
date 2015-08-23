@@ -1,19 +1,22 @@
 package com.libqa.web.controller;
 
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
+import com.libqa.application.enums.FavoriteTypeEnum;
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
-import com.libqa.web.service.ActivityService;
-import com.libqa.web.service.KeywordService;
-import com.libqa.web.service.SpaceService;
-import com.libqa.web.service.WikiService;
+import com.libqa.web.service.*;
 import com.libqa.web.view.SpaceMain;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -43,6 +46,12 @@ public class SpaceController {
     @Autowired
     private ActivityService activityService;
 
+    @Autowired
+    private UserFavoriteService userFavoriteService;
+
+
+    @Autowired
+    private LoggedUser loggedUser;
 
     @RequestMapping("/space/fileUpload")
     public ModelAndView fileUpload(Model model) {
@@ -147,6 +156,14 @@ public class SpaceController {
         List<Activity> activities = activityService.findBySpaceId(spaceId);
 
 
+        User user = loggedUser.get();
+        UserFavorite userFavorite = null;
+        if (!user.isGuest()) {
+            List<UserFavorite> userFavorites = userFavoriteService.findBySpaceIdAndUserIdAndIsDeleted(spaceId, user.getUserId(), false);
+            userFavorite = Iterables.getFirst(userFavorites, null);
+        }
+
+
         // Space 생성시 선택한 Layout 옵션의 View를 보여준다.
         String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
 
@@ -157,6 +174,7 @@ public class SpaceController {
         mav.addObject("spaceWikis", spaceWikis);
         mav.addObject("updatedWikis", updatedWikis);
         mav.addObject("space", space);
+        mav.addObject("userFavorite", userFavorite);
         return mav;
     }
 
@@ -173,12 +191,63 @@ public class SpaceController {
     }
 
 
+    /**
+     * 공간 즐겨찾기 추가
+     * 0 사용자 정보 없음
+     * -1 트랜잭션 실패
+     * 1 성공
+     * @param spaceId
+     * @return
+     */
+    @RequestMapping(value = "/space/addFavorite", method = RequestMethod.GET)
+    @ResponseBody
+    public String addFavorite(@RequestParam Integer spaceId) {
+
+        User user = loggedUser.get();
+
+        log.info("### user = {}", user);
+
+        if (user.isGuest()) {
+            log.info("# 로그인 사용자 정보가 존재하지 않습니다.");
+            return "0";
+        }
+        // 즐겨 찾기 추가는 isDeleted를 false 로 넘김
+        Integer result = spaceService.addSpaceFavorite(spaceId, user.getUserId(), false);
+
+        return result.toString();
+    }
+
+    /**
+     * 공간 즐겨 찾기 취소
+     * @param spaceId
+     * @return
+     */
+    @RequestMapping(value = "/space/cancelFavorite", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('USER')")
+    @ResponseBody
+    public String cancelFavorite(@RequestParam Integer spaceId) {
+
+        User user = loggedUser.get();
+        if (user.isGuest()) {
+            log.info("# 로그인 사용자 정보가 존재하지 않습니다.");
+            return "0";
+        }
+        // 즐겨 찾기 추가는 isDeleted를 false 로 넘김
+        Integer result = spaceService.addSpaceFavorite(spaceId, user.getUserId(), true);
+
+        return result.toString();
+    }
+
+
     @RequestMapping("/space/list")
     public ModelAndView list(Model model) {
         ModelAndView mav = new ModelAndView("/space/list");
 
         return mav;
     }
+
+
+
 }
 
 
