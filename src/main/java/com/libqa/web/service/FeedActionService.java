@@ -5,9 +5,8 @@ import com.google.common.collect.Iterables;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.FeedReply;
+import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedActionRepository;
-import com.libqa.web.repository.FeedReplyRepository;
-import com.libqa.web.repository.FeedRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,38 +19,34 @@ import static com.libqa.application.enums.FeedActionTypeEnum.LIKE;
 @Slf4j
 @Service
 public class FeedActionService {
-    private static final Predicate<FeedAction> PREDICATE_IS_LIKE = input -> LIKE == input.getFeedActionType();
-    private static final Predicate<FeedAction> PREDICATE_IS_CLAIM = input -> CLAIM == input.getFeedActionType();
-    
+    private static final Predicate<FeedAction> PREDICATE_IS_LIKE = input -> LIKE == input.getFeedActionType() && input.isNotCanceled();
+    private static final Predicate<FeedAction> PREDICATE_IS_CLAIM = input -> CLAIM == input.getFeedActionType() && input.isNotCanceled();
+
     @Autowired
     private FeedActionRepository feedActionRepository;
-    @Autowired
-    private FeedRepository feedRepository;
-    @Autowired
-    private FeedReplyRepository feedReplyRepository;
 
-    public void likeFeed(Integer feedId) {
-        Feed feed = findFeed(feedId);
-        FeedAction feedAction = FeedActionFactory.createLike(feed);
+    public FeedAction like(Feed feed, User user) {
+        FeedAction feedAction = FeedActionFactory.createLike(feed, user);
         feedActionRepository.save(feedAction);
+        return feedAction;
     }
 
-    public void claimFeed(Integer feedId) {
-        Feed feed = findFeed(feedId);
-        FeedAction feedAction = FeedActionFactory.createClaim(feed);
+    public FeedAction claim(Feed feed, User user) {
+        FeedAction feedAction = FeedActionFactory.createClaim(feed, user);
         feedActionRepository.save(feedAction);
+        return feedAction;
     }
 
-    public void likeFeedReply(Integer feedReplyId) {
-        FeedReply feedReply = getFeedReply(feedReplyId);
-        FeedAction feedAction = FeedActionFactory.createLike(feedReply);
+    public FeedAction likeFeedReply(FeedReply feedReply, User user) {
+        FeedAction feedAction = FeedActionFactory.createLike(feedReply, user);
         feedActionRepository.save(feedAction);
+        return feedAction;
     }
 
-    public void claimFeedReply(Integer feedReplyId) {
-        FeedReply feedReply = getFeedReply(feedReplyId);
-        FeedAction feedAction = FeedActionFactory.createClaim(feedReply);
+    public FeedAction claimFeedReply(FeedReply feedReply, User user) {
+        FeedAction feedAction = FeedActionFactory.createClaim(feedReply, user);
         feedActionRepository.save(feedAction);
+        return feedAction;
     }
 
     public void cancel(Integer feedActionId) {
@@ -63,7 +58,7 @@ public class FeedActionService {
         List<FeedAction> feedActions = feedActionRepository.findByFeedIdAndUserId(feedId, userId);
         return Iterables.tryFind(feedActions, PREDICATE_IS_LIKE).isPresent();
     }
-    
+
     public boolean hasClaimFeed(Integer feedId, Integer userId) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedIdAndUserId(feedId, userId);
         return Iterables.tryFind(feedActions, PREDICATE_IS_CLAIM).isPresent();
@@ -78,13 +73,14 @@ public class FeedActionService {
         List<FeedAction> feedActions = feedActionRepository.findByFeedReplyIdAndUserId(feedReplyId, userId);
         return Iterables.tryFind(feedActions, PREDICATE_IS_CLAIM).isPresent();
     }
-
-    private Feed findFeed(Integer feedId) {
-        return feedRepository.findOne(feedId);
+    
+    public FeedAction getLiked(Feed feed, User user) {
+        List<FeedAction> feedActions = feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
+        return Iterables.tryFind(feedActions, PREDICATE_IS_LIKE).orNull();
     }
 
-    private FeedReply getFeedReply(Integer feedReplyId) {
-        return feedReplyRepository.findOne(feedReplyId);
+    public FeedAction getClaimed(Feed feed, User user) {
+        List<FeedAction> feedActions = feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
+        return Iterables.tryFind(feedActions, PREDICATE_IS_CLAIM).orNull();
     }
-
 }

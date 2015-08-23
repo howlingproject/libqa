@@ -41,4 +41,16 @@ public class LoggedUser {
     private boolean isInvalidUser(String userEmail) {
         return StringUtils.isBlank(userEmail) || "anonymousUser".equals(userEmail);
     }
+
+    /**
+     * 테스트용. 추후 제거예정
+     * @return
+     */
+    public User getDummyUser() {
+        User user = new User();
+        user.setUserId(12345);
+        user.setUserNick("testUserNick");
+        return user;
+    }
+
 }
