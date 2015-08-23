@@ -51,11 +51,11 @@ public class PopulateGlobalAttrInterceptor implements HandlerInterceptor {
             List<GrantedAuthority> grantedAuths = (List<GrantedAuthority>) authentication.getAuthorities();
             System.out.println("### grantedAuthority = " + grantedAuths.get(0));
 
-            log.info("PopulateGlobalAttrInterceptor user info = {}", email);
-            log.info("PopulateGlobalAttrInterceptor authentication.isAuthenticated() = {}", authentication.isAuthenticated());
-            log.info("PopulateGlobalAttrInterceptor authentication.getDetails().toString() = {}", authentication.getDetails().toString());
-            log.info("PopulateGlobalAttrInterceptor authentication.getDetails().getName() = {}", authentication.getName());
-            log.info("PopulateGlobalAttrInterceptor authentication.gerRole() = {}", grantedAuths.get(0));
+            log.info("# PopulateGlobalAttrInterceptor user info = {}", email);
+            log.info("# PopulateGlobalAttrInterceptor authentication.isAuthenticated() = {}", authentication.isAuthenticated());
+            log.info("# PopulateGlobalAttrInterceptor authentication.getDetails().toString() = {}", authentication.getDetails().toString());
+            log.info("# PopulateGlobalAttrInterceptor authentication.getDetails().getName() = {}", authentication.getName());
+            log.info("# PopulateGlobalAttrInterceptor authentication.gerRole() = {}", grantedAuths.get(0));
             SecurityUserDto securityUserDto = new SecurityUserDto();
             securityUserDto.setUserEmail(email);
             securityUserDto.setRole(grantedAuths.get(0).toString());

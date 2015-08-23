@@ -2,10 +2,8 @@ package com.libqa.web.controller;
 
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.StringUtil;
-import com.libqa.web.domain.Keyword;
-import com.libqa.web.domain.Space;
-import com.libqa.web.domain.SpaceAccessUser;
-import com.libqa.web.domain.Wiki;
+import com.libqa.web.domain.*;
+import com.libqa.web.service.ActivityService;
 import com.libqa.web.service.KeywordService;
 import com.libqa.web.service.SpaceService;
 import com.libqa.web.service.WikiService;
@@ -41,6 +39,9 @@ public class SpaceController {
 
     @Autowired
     private WikiService wikiService;
+
+    @Autowired
+    private ActivityService activityService;
 
 
     @RequestMapping("/space/fileUpload")
@@ -141,6 +142,10 @@ public class SpaceController {
         // 최근 수정된 위키 목록
         List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
         List<Wiki> spaceWikis = wikiService.findBySpaceId(spaceId);
+
+        // 이 공간의 활동 내역을 조회한다.
+        List<Activity> activities = activityService.findBySpaceId(spaceId);
+
 
         // Space 생성시 선택한 Layout 옵션의 View를 보여준다.
         String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
