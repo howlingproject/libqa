@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ public class WikiController {
 
     @Autowired
     KeywordService keywordService;
+
+
 
     @RequestMapping("wiki/main")
     public ModelAndView main(Model model){
@@ -73,40 +76,32 @@ public class WikiController {
             mav.addObject("space", space);
         }
 
+        return mav;
+    }
 
-        //임시 공간영역 하드코딩
-        //Space space = new Space();
-        //space.setSpaceId(1);
-        //space.setTitle("테스트");
-        //mav.addObject("space", space);
+    @RequestMapping(value = "/wiki/{wikiId}", method = RequestMethod.GET)
+    public ModelAndView wikiDetail(@PathVariable Integer wikiId) {
+        ModelAndView mav = new ModelAndView("wiki/view");
 
+        Wiki wiki = wikiService.findById(wikiId);
+        log.info("# view : {}", wiki);
+
+        mav.addObject("wiki", wiki);
         return mav;
     }
 
     @RequestMapping("wiki/update/{wikiId}")
-    public ModelAndView update(@ModelAttribute Space modelSpace, @PathVariable Integer wikiId){
+    public ModelAndView update(@PathVariable Integer wikiId){
         ModelAndView mav = new ModelAndView("wiki/write");
-        log.info("# spaceId : {}", modelSpace.getSpaceId());
-        /*
-        if( modelSpace.getSpaceId() == null ){
-            boolean isDeleted = false;    // 삭제 하지 않은 것
-            List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
-            mav.addObject("spaceList", spaceList);
-        }else{
-            Space space = spaceService.findOne(modelSpace.getSpaceId());
-            mav.addObject("space", space);
-        }
-        */
-        //임시 공간영역 하드코딩
-        Space space = new Space();
-        space.setSpaceId(1);
-        space.setTitle("테스트");
-        mav.addObject("space", space);
+        log.info("# wikiId : {}", wikiId);
 
         //유저 하드코딩
         int userId = 1;
         Wiki wiki = wikiService.findById(wikiId);
         mav.addObject("wiki", wiki);
+
+        Space space = spaceService.findOne(wiki.getSpaceId());
+        mav.addObject("space", space);
 
         List<Keyword> keywordList = keywordService.findByWikiId(wikiId, false);
         mav.addObject("keywordList", keywordList);
@@ -114,15 +109,38 @@ public class WikiController {
         return mav;
     }
 
-    @RequestMapping(value = "/wiki/{wikiId}", method = RequestMethod.GET)
-    public ModelAndView spaceDetail(@PathVariable Integer wikiId) {
+    @RequestMapping(value = "/wiki/delete/{wikiId}", method = RequestMethod.GET)
+    public ModelAndView wikiDelete(@PathVariable Integer wikiId) {
+        log.info("# wikiId : {}", wikiId);
+        //유저 하드코딩
+        int userId = 1;
         Wiki wiki = wikiService.findById(wikiId);
 
-        log.info("# view : {}", wiki);
-        ModelAndView mav = new ModelAndView("wiki/view");
+        //위키만든 유저만 삭제가능
+        if( wiki.getUserId() == userId ){
+            wiki.setDeleted(true);
+            wikiService.save(wiki);
+        }
+        RedirectView rv = new RedirectView("/wiki/main");
+        rv.setExposeModelAttributes(false);
+        return new ModelAndView(rv);
+    }
 
-        mav.addObject("wiki", wiki);
-        return mav;
+    @RequestMapping(value = "/wiki/lock/{wikiId}", method = RequestMethod.GET)
+    public ModelAndView wikiLock(@PathVariable Integer wikiId) {
+        log.info("# wikiId : {}", wikiId);
+        //유저 하드코딩
+        int userId = 1;
+        Wiki wiki = wikiService.findById(wikiId);
+
+        //위키만든 유저만 삭제가능
+        if( wiki.getUserId() == userId ){
+            wiki.setLock(true);
+            wikiService.save(wiki);
+        }
+        RedirectView rv = new RedirectView("/wiki/"+wikiId);
+        rv.setExposeModelAttributes(false);
+        return new ModelAndView(rv);
     }
 
     @RequestMapping(value = "wiki/save", method = RequestMethod.POST)
