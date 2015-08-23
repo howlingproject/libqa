@@ -25,6 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by yion on 2015. 3. 23..
@@ -85,12 +87,21 @@ public class UserController {
      *
      * @return
      */
-    @RequestMapping("/user/signup")
+    @RequestMapping("/login")
+    public ModelAndView login(HttpServletRequest request) {
+        return this.signUp(request);
+    }
+
+    @RequestMapping("/user/signUp")
     public ModelAndView signUp(HttpServletRequest request) {
         String targetUrl = RequestUtil.refererUrl(request, "/index");
         request.getSession().setAttribute("targetUrl", targetUrl);
 
         ModelAndView mav = new ModelAndView("/user/form");
+
+        log.info("#### properties = {}", mav.getModelMap());
+
+
         mav.addObject("targetUrl", targetUrl);
         return mav;
     }
@@ -113,7 +124,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("/userInfo")
     public ModelAndView userInfo(Model model) {
-
+        log.info("### USER Info!");
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 

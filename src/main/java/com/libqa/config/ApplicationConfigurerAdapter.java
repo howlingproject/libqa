@@ -2,8 +2,7 @@ package com.libqa.config;
 
 import com.github.jknack.handlebars.springmvc.HandlebarsViewResolver;
 import com.libqa.application.helper.HandlebarsHelper;
-import com.libqa.config.security.PopulateGlobalAttrInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
@@ -13,25 +12,20 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
 
 @Configuration
 @EnableWebMvc
+@Slf4j
 public class ApplicationConfigurerAdapter extends WebMvcConfigurerAdapter {
     @Value("${environment.viewResolver.cached}")
     private boolean viewResolverCached;
 
-    @Bean
-    public PopulateGlobalAttrInterceptor populateGlobalAttrInterceptor() {
-        return new PopulateGlobalAttrInterceptor();
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(populateGlobalAttrInterceptor());
-    }
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
