@@ -24,28 +24,35 @@ public class VoteServiceImpl implements VoteService {
     VoteRepository voteRepository;
 
     @Override
-    public boolean isNotVote(QaReply qaReply, Integer userId) {
-        boolean isCancel = false;
-        List<Vote> voteList = voteRepository.findByReplyIdAndUserIdAndIsCancel(qaReply.getReplyId(), userId, isCancel);
-
-        return CollectionUtils.isEmpty(voteList);
+    public Vote findByReplyIdAndUserIdAndIsCancel(Integer replyId, Integer userId, boolean isCancel) {
+        return voteRepository.findByReplyIdAndUserIdAndIsCancel(replyId, userId, isCancel);
     }
 
     @Override
-    public void saveByQaReply(QaReply qaReply, Integer userId) {
+    public void saveByQaReply(QaReply qaReply, Integer userId, boolean isVote) {
         Vote vote = new Vote();
         vote.setReplyId(qaReply.getReplyId());
         vote.setInsertDate(new Date());
         vote.setUserNick("용퓌");
-        vote.setVote(true);
+        vote.setVote(isVote);
         vote.setUserId(userId);
 
         voteRepository.save(vote);
     }
 
     @Override
-    public boolean findByReplyIdAndUserIdAndIsVoteAndIsCancel(Integer replyId, int userId, boolean isVoted, boolean isCanceled) {
-        List<Vote> voteList = voteRepository.findByReplyIdAndUserIdAndIsVoteAndIsCancel(replyId, userId, isVoted, isCanceled);
+    public void deleteByQaReply(QaReply qaReply, Integer userId) {
+        boolean isCancel = false;
+        Vote targetVote = voteRepository.findByReplyIdAndUserIdAndIsCancel(qaReply.getReplyId(), userId, isCancel);
+        targetVote.setUpdateDate(new Date());
+        targetVote.setCancel(true);
+        voteRepository.flush();
+    }
+
+
+    @Override
+    public boolean findByReplyIdAndUserIdAndIsVoteAndIsCancel(Integer replyId, int userId, boolean isVote, boolean isCanceled) {
+        List<Vote> voteList = voteRepository.findByReplyIdAndUserIdAndIsVoteAndIsCancel(replyId, userId, isVote, isCanceled);
         return !CollectionUtils.isEmpty(voteList);
     }
 }

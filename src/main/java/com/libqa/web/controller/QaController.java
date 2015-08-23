@@ -194,6 +194,14 @@ public class QaController {
         return createSuccessResult(qareply);
     }
 
+    @RequestMapping(value = "/qa/saveVoteDown", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<QaReply> saveVoteDown(@ModelAttribute QaReply paramQaReply){
+        QaReply qareply = qaReplyService.saveVoteDown(paramQaReply, 1); // TODO 로그인 처리
+
+        return createSuccessResult(qareply);
+    }
+
     @RequestMapping(value="/qa/replyList", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData<DisplayQaReply> replyList(@RequestParam("qaId") Integer qaId){
