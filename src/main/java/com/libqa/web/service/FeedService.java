@@ -2,9 +2,7 @@ package com.libqa.web.service;
 
 import com.google.common.collect.Lists;
 import com.libqa.application.util.LoggedUser;
-import com.libqa.web.domain.Feed;
-import com.libqa.web.domain.FeedFile;
-import com.libqa.web.domain.FeedReply;
+import com.libqa.web.domain.*;
 import com.libqa.web.repository.FeedFileRepository;
 import com.libqa.web.repository.FeedReplyRepository;
 import com.libqa.web.repository.FeedRepository;
@@ -37,6 +35,8 @@ public class FeedService {
     private FeedReplyRepository feedReplyRepository;
     @Autowired
     private FeedFileRepository feedFileRepository;
+    @Autowired
+    private FeedActionService feedActionService;
 
     public List<DisplayFeed> search(int startIdx, int endIdx) {
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
@@ -50,14 +50,10 @@ public class FeedService {
 
     @Transactional
     public void save(Feed feed) {
-//        User user = loggedUser.get(); // TODO 개발 완료후 로그인 기능 추가할 예정.
-
-//        feed.setUserNick(user.getUserNick());
-//        feed.setUserId(user.getUserId());
-//        feed.setInsertUserId(user.getUserId());
-        feed.setUserId(1234);
-        feed.setUserNick("testerNick");
-        feed.setInsertUserId(1234);
+        User user = loggedUser.getDummyUser(); // TODO fix to realuser
+        feed.setUserNick(user.getUserNick());
+        feed.setUserId(user.getUserId());
+        feed.setInsertUserId(user.getUserId());
         feed.setInsertDate(new Date());
         feedRepository.save(feed);
         saveFeedFiles(feed);
@@ -79,6 +75,46 @@ public class FeedService {
         }
     }
 
+    public Integer getLikeCount(Integer feedId) {
+        Feed feed = feedRepository.findOne(feedId);
+        return feed.getLikeCount();
+    }
+
+    public Integer getClaimCount(Integer feedId) {
+        Feed feed = feedRepository.findOne(feedId);
+        return feed.getClaimCount();
+    }    
+    
+    @Transactional
+    public FeedAction like(Integer feedId) {
+        User user = loggedUser.getDummyUser(); // TODO fix to realuser
+        Feed feed = feedRepository.findOne(feedId);
+        FeedAction feedAction = feedActionService.getLiked(feed, user);
+        if (feedAction == null) {
+            feedAction = feedActionService.like(feed, user);
+            feed.increaseLikeCount();
+        } else {
+            feedAction.cancel();
+            feed.decreaseLikeCount();
+        }
+        return feedAction;
+    }
+
+    @Transactional
+    public FeedAction claim(Integer feedId) {
+        User user = loggedUser.getDummyUser(); // TODO fix to realuser
+        Feed feed = feedRepository.findOne(feedId);
+        FeedAction feedAction = feedActionService.getClaimed(feed, user);
+        if (feedAction == null) {
+            feedAction = feedActionService.claim(feed, user);
+            feed.increaseClaimCount();
+        } else {
+            feedAction.cancel();
+            feed.decreaseClaimCount();
+        }
+        return feedAction;
+    }
+    
     private void saveFeedFiles(Feed feed) {
         if (CollectionUtils.isEmpty(feed.getFeedFiles())) {
             return;
@@ -93,5 +129,4 @@ public class FeedService {
             feedFileService.save(each);
         }
     }
-
 }

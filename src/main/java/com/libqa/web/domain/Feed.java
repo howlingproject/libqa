@@ -78,6 +78,26 @@ public class Feed {
     @Column
     private Integer updateUserId;
 
+    @Transient
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    @Transient
+    public void decreaseLikeCount() {
+        this.likeCount--;
+    }
+
+    @Transient
+    public void increaseClaimCount() {
+        this.claimCount++;
+    }
+
+    @Transient
+    public void decreaseClaimCount() {
+        this.claimCount--;
+    }
+
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
     @Where(clause = "is_deleted = 0")
     private List<FeedReply> feedReplies;

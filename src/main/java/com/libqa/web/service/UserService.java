@@ -55,4 +55,5 @@ public interface UserService {
      */
     User findByEmailAndIsCertification(String email);
 
+    User findOne(Integer userId);
 }

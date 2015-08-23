@@ -2,10 +2,12 @@ package com.libqa.web.controller;
 
 import com.libqa.application.framework.ResponseData;
 import com.libqa.web.domain.Feed;
+import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.service.FeedReplyService;
 import com.libqa.web.service.FeedService;
 import com.libqa.web.view.DisplayFeed;
+import com.libqa.web.view.DisplayFeedAction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -81,4 +83,53 @@ public class FeedController {
             return createFailResult(feedReplyId);
         }
     }
+
+    @RequestMapping(value = "{feedId}/like", method = POST)
+    public ResponseData<DisplayFeedAction> likeFeed(@PathVariable Integer feedId) {
+        try {
+            FeedAction feedAction = feedService.like(feedId);
+            Integer likeCount = feedService.getLikeCount(feedId);
+            return createSuccessResult(new DisplayFeedAction(feedAction, likeCount));
+        } catch (Exception e) {
+            log.error("like feed error.", e);
+            return createFailResult(null);
+        }
+    }
+
+    @RequestMapping(value = "{feedId}/claim", method = POST)
+    public ResponseData<DisplayFeedAction> claimFeed(@PathVariable Integer feedId) {
+        try {
+            FeedAction feedAction = feedService.claim(feedId);
+            Integer claimCount = feedService.getClaimCount(feedId);
+            return createSuccessResult(new DisplayFeedAction(feedAction, claimCount));
+        } catch (Exception e) {
+            log.error("claim feed error.", e);
+            return createFailResult(null);
+        }
+    }
+    
+    @RequestMapping(value = "reply/{feedReplyId}/like", method = POST)
+    public ResponseData<DisplayFeedAction> likeFeedReply(@PathVariable Integer feedReplyId) {
+        try {
+            FeedAction feedAction = feedReplyService.like(feedReplyId);
+            Integer likeCount = feedReplyService.getLikeCount(feedReplyId);
+            return createSuccessResult(new DisplayFeedAction(feedAction, likeCount));
+        } catch (Exception e) {
+            log.error("like feedReply error.", e);
+            return createFailResult(null);
+        }
+    }
+
+    @RequestMapping(value = "reply/{feedReplyId}/claim", method = POST)
+    public ResponseData<DisplayFeedAction> claimFeedReply(@PathVariable Integer feedReplyId) {
+        try {
+            FeedAction feedAction = feedReplyService.claim(feedReplyId);
+            Integer claimCount = feedReplyService.getClaimCount(feedReplyId);
+            return createSuccessResult(new DisplayFeedAction(feedAction, claimCount));
+        } catch (Exception e) {
+            log.error("claim feedReply error.", e);
+            return createFailResult(null);
+        }
+    }
+
 }

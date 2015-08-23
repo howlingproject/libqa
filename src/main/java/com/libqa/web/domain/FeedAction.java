@@ -50,4 +50,14 @@ public class FeedAction {
 
     @Column
     private Integer feedReplyId;
+
+    @Transient
+    public boolean isNotCanceled() {
+        return !this.isCanceled();
+    }
+
+    public void cancel() {
+        this.setCanceled(true);
+        this.setUpdateDate(new Date());
+    }
 }

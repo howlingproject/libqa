@@ -126,5 +126,10 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public User findOne(Integer userId) {
+        return userRepository.findOne(userId);
+    }
+
 
 }

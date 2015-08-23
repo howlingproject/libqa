@@ -28,4 +28,15 @@ public interface SpaceService {
 	 * @return
 	 */
 	List<Space> findUserFavoriteSpace(Integer userId);
+
+	/**
+	 * 즐겨 찾기 추가 (삭제)
+	 * @param spaceId
+	 * @param userId
+	 * @param isDeleted
+	 * @return
+	 */
+	Integer addSpaceFavorite(Integer spaceId, Integer userId, boolean isDeleted);
+
+	Integer cancelSpaceFavorite(Integer spaceId, Integer userId, boolean isDeleted);
 }
