@@ -37,31 +37,6 @@ public class UserController {
     private UserService userService;
 
 
-    @RequestMapping(value = "/myInfo", method = RequestMethod.GET)
-    public ModelAndView myInfo(ModelAndView modelAndView) throws UserNotCreateException {
-
-        SecurityUserDto securityUserDto = (SecurityUserDto) modelAndView.getModel().get("loginUserInfo");
-
-        log.info("### security : {} ", securityUserDto);
-//        try {
-//            Assert.notNull(loginUser.getUserId(), "로그인 정보가 존재하지 않습니다.");
-//        } catch (Exception e) {
-//            mav = new ModelAndView("/common/403");
-//            mav.addObject("msg", "사용자 정보가 존재하지 않습니다.");
-//            return mav;
-//        }
-        /*8
-        String targetUrl = RequestUtil.refererUrl(request, "/myInfo");
-
-        log.info("/login = {}", targetUrl);
-        log.info("# userEmail = {}", loginUser.getUserEmail());
-        log.info("# userPass = {}", new BCryptPasswordEncoder().encode(loginUser.getUserPass()));
-        */
-
-        return modelAndView;
-    }
-
-
 //    @RequestMapping(value="/user/view", method = RequestMethod.GET)
 //    public String printWelcome(ModelMap model, Principal principal ) {
 //        String name = principal.getName();
