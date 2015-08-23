@@ -40,6 +40,13 @@ public class Activity {
     @Column(nullable = true)
     private Integer wikiId;
 
+    @Column(nullable = true)
+    private Integer qaId;
+
+    // wiki나 qa의 댓글의 번호
+    @Column(nullable = true)
+    private Integer replyId;
+
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isDeleted;
 

@@ -15,9 +15,10 @@ To change this template use File | Settings | File Templates.
     <div class="col-md" >
         <div style="padding-bottom: 45px;">
             <div class="btn-group" style="float: right">
-                <a href="#" class="btn btn-primary" id="createWiki">위키 생성</a>
-                <a href="#" class="btn btn-primary">첨부파일 목록</a>
-                <a href="/space/edit/{{space.spaceId}}" class="btn btn-primary">공간 정보수정</a>
+                <a href="#" class="btn btn-primary" id="addFavorite"><i class="fa fa-heart"></i> 즐겨찾기 추가</a>
+                <a href="#" class="btn btn-primary" id="createWiki"><i class="fa fa-pencil"></i> 위키 생성</a>
+                <a href="#" class="btn btn-primary"><i class="fa fa-file-text"></i> 첨부파일 목록</a>
+                <a href="/space/edit/{{space.spaceId}}" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i>  공간 정보수정</a>
             </div>
         </div>
     </div>
@@ -92,8 +93,8 @@ To change this template use File | Settings | File Templates.
                         {{#each updatedWikis}}
                             <div class="media">
                                 <div class="media-body">
-                                    <h4 class="media-heading" id="media-heading">{{title}}<a class="anchorjs-link" href="#media-heading"><span class="anchorjs-icon"></span></a></h4>
-                                    <div class="text-left">{{subString (htmlDelete contents) 0 250 }}</div>
+                                    <h4 class="media-heading" id="media-heading"><a href="/wiki/{{wikiId}}">{{title}}</a><a class="anchorjs-link" href="#media-heading"><span class="anchorjs-icon"></span></a></h4>
+                                    <div class="text-left"><a href="/wiki/{{wikiId}}" class="text">{{subString (htmlDelete contents) 0 250 }}</a></div>
                                 </div>
                                 <div class="media-right">
                                     <a href="#">
@@ -108,9 +109,7 @@ To change this template use File | Settings | File Templates.
                         생성된 위키가 없습니다.
                     {{/if}}
 
-
-
-                    <small><cite title="Source Title">더보기</cite></small>
+                    <small><cite title="Source Title" id="getMoreWiki" style="cursor:pointer">더보기</cite></small>
 
                 </blockquote>
 
@@ -188,6 +187,9 @@ To change this template use File | Settings | File Templates.
                 $('#space').attr({action:'/wiki/write', method:'post'}).submit();
             });
 
+            $('#getMoreWiki').on('click', function () {
+                alert('더 가져오기');
+            });
         });
     </script>
 {{/partial}}

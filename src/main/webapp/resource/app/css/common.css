@@ -199,6 +199,19 @@ a.label:focus {
     text-decoration: none;
     cursor: pointer;
 }
+
+a.text:link,
+a.text:hover,
+a.text:visited,
+a.text:active,
+a.text:focus {
+    color: #2F2F2F;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
 .label:empty {
     display: none;
 }
