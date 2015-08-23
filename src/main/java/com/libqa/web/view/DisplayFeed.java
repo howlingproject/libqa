@@ -16,7 +16,7 @@ public class DisplayFeed {
     private String userNick;
     private Date insertDate;
     private int likeCount;
-    private int claimCount;
+    private int claimCount;                      
     private List<FeedFile> files = Lists.newArrayList();
     private List<FeedFile> images = Lists.newArrayList();
     private List<FeedReply> replies = Lists.newArrayList();
