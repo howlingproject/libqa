@@ -63,9 +63,6 @@ public class SpaceServiceImpl implements SpaceService {
 
 	@Override
 	public List<Space> findUserFavoriteSpace(Integer userId) {
-		if (userId == null || userId == 0) {
-			return null;
-		}
 
 		List<UserFavorite> userFavoriteList = new ArrayList<>();
 

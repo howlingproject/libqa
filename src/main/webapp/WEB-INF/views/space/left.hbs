@@ -85,8 +85,7 @@ To change this template use File | Settings | File Templates.
         <div class="col-xs-12 col-sm-9">
             <div class="row">
                 <div style="padding-left:15px">
-                <h3>최근 수정된 위키 목록</h3>
-                <hr>
+                <h3>최근 수정된 위키 목록</h3><hr>
                 </div>
                 <blockquote class="pull-right">
 
@@ -106,11 +105,15 @@ To change this template use File | Settings | File Templates.
                                 </div>
                             </div>
                         {{/each}}
-                    {{^}}
-                        생성된 위키가 없습니다.
-                    {{/if}}
 
-                    <small><cite title="Source Title" id="getMoreWiki" style="cursor:pointer">더보기</cite></small>
+                        <small><cite title="Source Title" id="getMoreWiki" style="cursor:pointer">더보기</cite></small>
+                    {{^}}
+                        <div class="media">
+                            <div class="media-body">
+                            생성된 위키가 없습니다.
+                            </div>
+                        </div>
+                    {{/if}}
 
                 </blockquote>
 
