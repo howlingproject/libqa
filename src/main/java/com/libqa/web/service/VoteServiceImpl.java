@@ -6,10 +6,8 @@ import com.libqa.web.repository.VoteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by yong on 2015-05-25.
@@ -34,7 +32,7 @@ public class VoteServiceImpl implements VoteService {
         vote.setReplyId(qaReply.getReplyId());
         vote.setInsertDate(new Date());
         vote.setUserNick("용퓌");
-        vote.setVote(isVote);
+        vote.setIsVote(isVote);
         vote.setUserId(userId);
 
         voteRepository.save(vote);
@@ -51,8 +49,19 @@ public class VoteServiceImpl implements VoteService {
 
 
     @Override
-    public boolean findByReplyIdAndUserIdAndIsVoteAndIsCancel(Integer replyId, int userId, boolean isVote, boolean isCanceled) {
-        List<Vote> voteList = voteRepository.findByReplyIdAndUserIdAndIsVoteAndIsCancel(replyId, userId, isVote, isCanceled);
-        return !CollectionUtils.isEmpty(voteList);
+    public Vote findByReplyIdAndUserIdAndIsVoteAndIsCancel(Integer replyId, int userId, boolean isVote, boolean isCanceled) {
+        return voteRepository.findByReplyIdAndUserIdAndIsVoteAndIsCancel(replyId, userId, isVote, isCanceled);
+    }
+
+    @Override
+    public boolean hasRecommendUser(Integer replyId, Integer userId) {
+        Vote vote = voteRepository.findByReplyIdAndUserIdAndIsVoteAndIsCancel(replyId, userId, true, false);
+        return null != vote;
+    }
+
+    @Override
+    public boolean hasNonRecommendUser(Integer replyId, Integer userId) {
+        Vote vote = voteRepository.findByReplyIdAndUserIdAndIsVoteAndIsCancel(replyId, userId, false, false);
+        return null != vote;
     }
 }

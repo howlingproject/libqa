@@ -79,7 +79,7 @@
                 <div class="qa">
                     <div class="action-buttons qna-reply">
                         <i class="fa fa-thumbs-o-up" data-qa-vote-type="UP"><span class="like-count">({{qaContent.recommendCount}})</span></i>
-                        <i class="fa fa-bullhorn" data-qa-vote-type="DOWN"><span class="claim-count">({{qaContent.nonrecommendCount}})</span></i>
+                        <i class="fa fa-thumbs-o-down" data-qa-vote-type="DOWN"><span class="claim-count">({{qaContent.nonrecommendCount}})</span></i>
                     </div>
                     <div class="text-right">
                         <button id="editButton" type="button" class="btn btn-primary btn-sm">수정</button>
@@ -145,7 +145,7 @@
             buttonEvent : function(){
                 var that = this;
                 $('#editButton').on("click", function(){
-                    location.href = "/qa/edit/" + data.data.qaId;
+                    location.href = "/qa/edit/" + $('[name=qaId]').val();
                 });
                 $('#deleteButton').on("click",function(){
                     ConfirmDialog.deleteConfirm();
@@ -157,7 +157,6 @@
             bindEvent : function(){
                 this.cancleEvent();
                 this.buttonEvent();
-//                this.saveVoteEvent();
                 this.saveReplyEvent();
             },
             saveReplyEvent : function(){
@@ -240,7 +239,36 @@
             },
             saveVoteEvent : function(){
                 $('.qna-reply > i').click(function(){
-                    Qa.saveVote(this);
+                    Qa.checkSaveVote(this);
+                });
+            },
+            checkSaveVote : function(voteLiObj){
+                var replyId = $(voteLiObj).closest('.thread').attr('data-qa-reply-id');
+                var voteType = $(voteLiObj).attr('data-qa-vote-type');
+                var isVote;
+                if( voteType == 'UP' ){
+                    isVote = true;
+                } else {
+                    isVote = false;
+                }
+                $.ajax({
+                    type : 'POST',
+                    data : { qaId : $('[name=qaId]').val(),
+                             replyId : replyId,
+                             isVote : isVote},
+                    url : '/qa/reply/vote',
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            if(data.data == null){
+                                Qa.saveVote(voteLiObj);
+                            } else {
+                                alert("이미 추천/비추천 하셨습니다.");
+                            }
+                        }
+                    },
+                    error : function(XMLHttpRequest,textStatus,errorThrown){
+                        alert(errorThrown);
+                    }
                 });
             },
             saveVote : function(voteLiObj){
