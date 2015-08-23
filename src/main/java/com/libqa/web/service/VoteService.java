@@ -1,6 +1,7 @@
 package com.libqa.web.service;
 
 import com.libqa.web.domain.QaReply;
+import com.libqa.web.domain.Vote;
 
 /**
  * Created by yong on 2015-05-25.
@@ -8,9 +9,12 @@ import com.libqa.web.domain.QaReply;
  * @author yong
  */
 public interface VoteService {
-    boolean isNotVote(QaReply qaReply, Integer userId);
+    Vote findByReplyIdAndUserIdAndIsCancel(Integer replyId, Integer userId, boolean isCancel);
 
-    void saveByQaReply(QaReply qaReply, Integer userId);
+    void saveByQaReply(QaReply qaReply, Integer userId, boolean isVote);
 
-    boolean findByReplyIdAndUserIdAndIsVoteAndIsCancel(Integer replyId, int userId, boolean isVoted, boolean isCanceled);
+    void deleteByQaReply(QaReply qaReply, Integer userId);
+
+    boolean findByReplyIdAndUserIdAndIsVoteAndIsCancel(Integer replyId, int userId, boolean isVote, boolean isCancel);
+
 }
