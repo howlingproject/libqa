@@ -3,6 +3,7 @@ package com.libqa.web.service;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.libqa.web.domain.QaReply;
+import com.libqa.web.domain.Vote;
 import com.libqa.web.repository.QaReplyRepository;
 import com.libqa.web.view.DisplayQaReply;
 import lombok.extern.slf4j.Slf4j;
@@ -51,14 +52,45 @@ public class QaReplyServiceImpl implements QaReplyService {
 
     @Override
     public QaReply saveVoteUp(QaReply paramQaReply, Integer userId) {
+        return saveVote(paramQaReply, userId, "UP");
+    }
+
+    @Override
+    public QaReply saveVoteDown(QaReply paramQaReply, Integer userId) {
+        return saveVote(paramQaReply, userId, "DOWN");
+    }
+
+    public QaReply saveVote(QaReply paramQaReply, Integer userId, String voteType){
         boolean isDeleted = false;
+        boolean isCancel = false;
+        boolean isVote;
         QaReply qaReply = qaReplyRepository.findByReplyIdAndIsDeleted(paramQaReply.getReplyId(), isDeleted);
 
-        boolean notVote = voteService.isNotVote(qaReply, userId);
-        if(notVote){
-            voteService.saveByQaReply(qaReply, userId);
+        Vote vote = voteService.findByReplyIdAndUserIdAndIsCancel(paramQaReply.getReplyId(), userId, isCancel);
+        int voteUpCount = qaReply.getVoteUpCount();
+        int voteDownCount = qaReply.getVoteDownCount();
+
+        if(vote != null){
+            voteService.deleteByQaReply(qaReply, userId);
+            if(vote.isVote()){
+                voteUpCount -= 1;
+            } else {
+                voteDownCount -= 1;
+            }
         }
-        qaReply.setVoteUpCount(qaReply.getVoteUpCount() + 1);
+
+        if("UP".equals(voteType)){
+            isVote = true;
+            voteUpCount += 1;
+        } else {
+            isVote = false;
+            voteDownCount += 1;
+        }
+
+        voteService.saveByQaReply(qaReply, userId, isVote);
+
+        qaReply.setVoteUpCount(voteUpCount);
+        qaReply.setVoteDownCount(voteDownCount);
         qaReplyRepository.save(qaReply);
 
         return qaReply;

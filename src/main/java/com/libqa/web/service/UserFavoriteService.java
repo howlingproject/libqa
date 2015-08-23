@@ -18,4 +18,18 @@ public interface UserFavoriteService {
      * @return
      */
     List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteTypeEnum typeEnum, Integer userId);
+
+
+    /**
+     * 사용자가 추가한 공간 즐겨 찾기 조회
+     * @param spaceId
+     * @param userId
+     * @return
+     */
+    List<UserFavorite> findBySpaceIdAndUserId(Integer spaceId, Integer userId);
+
+    List<UserFavorite> findBySpaceIdAndUserIdAndIsDeleted(Integer spaceId, Integer userId, boolean isDeleted);
+
+    void save(UserFavorite userFavorite);
+
 }

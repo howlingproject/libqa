@@ -106,4 +106,13 @@ public class User {
 
         return user;
     }
+
+    public boolean isGuest() {
+
+        if (this.role == RoleEnum.GUEST || this.role == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

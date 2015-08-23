@@ -15,9 +15,12 @@ public interface QaReplyService {
 
     QaReply saveVoteUp(QaReply paramQaReply, Integer userId);
 
+    QaReply saveVoteDown(QaReply paramQaReply, Integer userId);
+
     QaReply saveChildReply(QaReply qaReply);
 
     List<DisplayQaReply> findByQaIdAndDepthIdx(Integer qaId, int depthIdx);
 
     void delete(Integer replyId);
+
 }
