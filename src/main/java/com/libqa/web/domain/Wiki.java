@@ -31,10 +31,10 @@ public class Wiki {
     private String title;
 
     @Column(nullable = false, columnDefinition = "int default 0")
-    private Integer orderIdx;
+    private Integer orderIdx = 0;
 
     @Column(nullable = false, columnDefinition = "int default 0")
-    private Integer depthIdx;
+    private Integer depthIdx = 0;
 
     @Column(columnDefinition = "Text", nullable = false)
     private String contents;
