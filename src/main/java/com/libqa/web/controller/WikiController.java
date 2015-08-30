@@ -87,6 +87,7 @@ public class WikiController {
             Space space = spaceService.findOne(modelSpace.getSpaceId());
             mav.addObject("space", space);
         }
+        mav.addObject("parentsId",wikiId);
 
         return mav;
     }
@@ -166,6 +167,9 @@ public class WikiController {
             wiki.setUserNick("하이");
             wiki.setUserId(1);
             wiki.setInsertDate(new Date());
+            if( wiki.getParentsId() == null  ){
+                wiki.setDepthIdx(1);
+            }
 
             Wiki result = wikiService.saveWithKeyword(wiki);
 
