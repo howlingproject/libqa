@@ -24,14 +24,14 @@
             </div>
         </div>
         <div class="action-buttons">
-            <i class="fa fa-thumbs-o-up"><span class="like-count">({{likeCount}})</span></i>
-            <i class="fa fa-bullhorn"><span class="claim-count">(0)</span></i>
+            <i class="fa fa-thumbs-o-up" onclick="Feed.like(this)"><span class="like-count">({{likeCount}})</span></i>
+            <i class="fa fa-bullhorn" onclick="Feed.claim(this)"><span class="claim-count">({{claimCount}})</span></i>
         </div>
     </div>
 
     <ul>
         {{#replies}}
-        <li>
+        <li class="reply-thread" data-feed-reply-id="{{feedReplyId}}">
             <div class="author">
                 <div class="user-profile-sm">
                     <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
@@ -39,12 +39,12 @@
             </div>
             <div class="name">{{userNick}}</div>
             <div class="date">{{insertDate}}</div>
-            <div class="config"><i class="fa fa-close feedReplyDeleteBtn" data-feed-reply-id="{{feedReplyId}}"></i></div>
+            <div class="config"><i class="fa fa-close feedReplyDeleteBtn"></i></div>
             <div class="message-box">
                 <div class="message">{{feedReplyContent}}</div>
                 <div class="action-buttons">
-                    <i class="fa fa-thumbs-o-up"><span class="like-count">(30)</span></i>
-                    <i class="fa fa-bullhorn"><span class="claim-count">(0)</span></i>
+                    <i class="fa fa-thumbs-o-up" onclick="FeedReply.like(this)"><span class="like-count">({{likeCount}})</span></i>
+                    <i class="fa fa-bullhorn" onclick="FeedReply.claim(this)"><span class="claim-count">({{claimCount}})</span></i>
                 </div>
             </div>
         </li>
@@ -72,63 +72,7 @@
 
 <script type="text/javascript">
 $(function(){
-    $('.popover-config').popover({
-        trigger: 'click',
-        html: true,
-        content: function () {
-            return $('#popover-config-content').html();
-        }
-    });
-
-    $('.popover-feed-image').popover({
-        trigger: 'click',
-        html: true,
-        content: function () {
-            return $('#popover-feed-image-content').html();
-        }
-    });
-
-    var FeedReply = {
-        init: function(){
-            this.bindSave();
-            this.bindDelete();
-        },
-        bindSave: function() {
-            $('button[name=saveReply]').click(function () {
-                var data = $(this).closest('form').serialize();
-                $.post('/feed/reply/save', data)
-                    .done(function (response) {
-                        if (response.resultCode != 1) {
-                            alert(response.comment);
-                            return;
-                        }
-                        Feed.searchList();
-                    }).fail(function () {
-                        alert('Error saving feed Reply');
-                    });
-            });
-        },
-        bindDelete: function() {
-            $('.feedReplyDeleteBtn').click(function () {
-                if (!confirm("댓글을 삭제하시겠습니까?")) {
-                    return;
-                }
-
-                var feedReplyId = $(this).attr('data-feed-reply-id');
-                $.post('/feed/reply/' + feedReplyId + '/delete')
-                    .done(function (response) {
-                        if (response.resultCode != 1) {
-                            alert(response.comment);
-                            return;
-                        }
-                        Feed.searchList();
-                    }).fail(function () {
-                        alert('Error delete feed Reply');
-                    });
-            });
-        }
-    };
-
+    FeedUtil.bindPopOver();
     FeedReply.init();
 });
 </script>

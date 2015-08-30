@@ -89,30 +89,30 @@ public class FeedService {
     public FeedAction like(Integer feedId) {
         User user = loggedUser.getDummyUser(); // TODO fix to realuser
         Feed feed = feedRepository.findOne(feedId);
-        FeedAction feedAction = feedActionService.getLiked(feed, user);
-        if (feedAction == null) {
-            feedAction = feedActionService.like(feed, user);
+        FeedAction likedFeedAction = feedActionService.getLiked(feed, user);
+        if (likedFeedAction == null) {
+            likedFeedAction = feedActionService.like(feed, user);
             feed.increaseLikeCount();
         } else {
-            feedAction.cancel();
+            likedFeedAction.cancel();
             feed.decreaseLikeCount();
         }
-        return feedAction;
+        return likedFeedAction;
     }
 
     @Transactional
     public FeedAction claim(Integer feedId) {
         User user = loggedUser.getDummyUser(); // TODO fix to realuser
         Feed feed = feedRepository.findOne(feedId);
-        FeedAction feedAction = feedActionService.getClaimed(feed, user);
-        if (feedAction == null) {
-            feedAction = feedActionService.claim(feed, user);
+        FeedAction claimedFeedAction = feedActionService.getClaimed(feed, user);
+        if (claimedFeedAction == null) {
+            claimedFeedAction = feedActionService.claim(feed, user);
             feed.increaseClaimCount();
         } else {
-            feedAction.cancel();
+            claimedFeedAction.cancel();
             feed.decreaseClaimCount();
         }
-        return feedAction;
+        return claimedFeedAction;
     }
     
     private void saveFeedFiles(Feed feed) {
