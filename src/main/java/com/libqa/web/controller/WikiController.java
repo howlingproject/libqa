@@ -63,8 +63,25 @@ public class WikiController {
         return mav;
     }
 
-    @RequestMapping("wiki/write")
-    public ModelAndView write(@ModelAttribute Space modelSpace){
+    @RequestMapping("wiki/write" )
+    public ModelAndView write(@ModelAttribute Space modelSpace, @PathVariable Integer wikiId){
+        ModelAndView mav = new ModelAndView("wiki/write");
+        log.info("# spaceId : {}", modelSpace.getSpaceId());
+
+        if( modelSpace.getSpaceId() == null ){
+            boolean isDeleted = false;    // 삭제 하지 않은 것
+            List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
+            mav.addObject("spaceList", spaceList);
+        }else{
+            Space space = spaceService.findOne(modelSpace.getSpaceId());
+            mav.addObject("space", space);
+        }
+
+        return mav;
+    }
+
+    @RequestMapping("wiki/write/{wikiId}" )
+    public ModelAndView writeSub(@ModelAttribute Space modelSpace, @PathVariable Integer wikiId){
         ModelAndView mav = new ModelAndView("wiki/write");
         log.info("# spaceId : {}", modelSpace.getSpaceId());
 
