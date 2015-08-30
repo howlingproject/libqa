@@ -103,8 +103,33 @@ public class FeedController {
             Integer claimCount = feedService.getClaimCount(feedId);
             return createSuccessResult(new DisplayFeedAction(feedAction, claimCount));
         } catch (Exception e) {
-            log.error("like feed error.", e);
+            log.error("claim feed error.", e);
             return createFailResult(null);
         }
     }
+    
+    @RequestMapping(value = "reply/{feedReplyId}/like", method = POST)
+    public ResponseData<DisplayFeedAction> likeFeedReply(@PathVariable Integer feedReplyId) {
+        try {
+            FeedAction feedAction = feedReplyService.like(feedReplyId);
+            Integer likeCount = feedReplyService.getLikeCount(feedReplyId);
+            return createSuccessResult(new DisplayFeedAction(feedAction, likeCount));
+        } catch (Exception e) {
+            log.error("like feedReply error.", e);
+            return createFailResult(null);
+        }
+    }
+
+    @RequestMapping(value = "reply/{feedReplyId}/claim", method = POST)
+    public ResponseData<DisplayFeedAction> claimFeedReply(@PathVariable Integer feedReplyId) {
+        try {
+            FeedAction feedAction = feedReplyService.claim(feedReplyId);
+            Integer claimCount = feedReplyService.getClaimCount(feedReplyId);
+            return createSuccessResult(new DisplayFeedAction(feedAction, claimCount));
+        } catch (Exception e) {
+            log.error("claim feedReply error.", e);
+            return createFailResult(null);
+        }
+    }
+
 }

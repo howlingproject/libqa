@@ -15,6 +15,9 @@ public interface VoteService {
 
     void deleteByQaReply(QaReply qaReply, Integer userId);
 
-    boolean findByReplyIdAndUserIdAndIsVoteAndIsCancel(Integer replyId, int userId, boolean isVote, boolean isCancel);
+    Vote findByReplyIdAndUserIdAndIsVoteAndIsCancel(Integer replyId, int userId, boolean isVote, boolean isCancel);
 
+    boolean hasRecommendUser(Integer replyId, Integer userId);
+
+    boolean hasNonRecommendUser(Integer replyId, Integer userId);
 }

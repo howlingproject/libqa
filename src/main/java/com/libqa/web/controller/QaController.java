@@ -2,10 +2,7 @@ package com.libqa.web.controller;
 
 import com.libqa.application.dto.QaDto;
 import com.libqa.application.framework.ResponseData;
-import com.libqa.web.domain.Keyword;
-import com.libqa.web.domain.QaContent;
-import com.libqa.web.domain.QaFile;
-import com.libqa.web.domain.QaReply;
+import com.libqa.web.domain.*;
 import com.libqa.web.service.*;
 import com.libqa.web.view.DisplayQa;
 import com.libqa.web.view.DisplayQaReply;
@@ -17,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static com.libqa.application.framework.ResponseData.createFailResult;
 import static com.libqa.application.framework.ResponseData.createSuccessResult;
@@ -45,6 +44,9 @@ public class QaController {
 
     @Autowired
     KeywordListService keywordListService;
+
+    @Autowired
+    VoteService voteService;
 
     @RequestMapping("/qa")
     public String qa() {
@@ -219,5 +221,13 @@ public class QaController {
             log.error("save reply error : {}", e);
             return createFailResult(replyId);
         }
+    }
+
+    @RequestMapping(value="/qa/reply/vote", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<Vote> voteDetail(@ModelAttribute Vote paramVote){
+        boolean isCancel = false;
+        Vote vote = voteService.findByReplyIdAndUserIdAndIsVoteAndIsCancel(paramVote.getReplyId(), 1, paramVote.getIsVote(), isCancel);
+        return createSuccessResult(vote);
     }
 }
