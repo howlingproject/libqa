@@ -134,7 +134,6 @@ public class FeedService {
             List<DisplayFeedReply> displayFeedReplies = convertToDisplayFeedReplies(feed.getFeedId(), feed.getFeedReplies());
             DisplayFeedAction likeFeedAction = new DisplayFeedAction(feed.getLikeCount(), false);
             DisplayFeedAction claimFeedAction = new DisplayFeedAction(feed.getClaimCount(), false);
-
             displayFeeds.add(new DisplayFeed(feed, likeFeedAction, claimFeedAction, displayFeedReplies));
         }
         return displayFeeds;

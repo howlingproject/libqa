@@ -413,6 +413,9 @@
                     $('#feedList').html(html);
                 });
             },
+            getId: function($target) {
+                return $target.closest('.thread').attr('data-feed-id');
+            },
             bindSave : function() {
                 var that = this;
                 $('#feedSave').click(function(){
@@ -463,7 +466,7 @@
                             FeedFile.add(req.data);
                             $('#fileUploadModal').modal('hide');
                         },
-                        error: function (req) {
+                        error: function () {
                             alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
                         }
                     });
@@ -479,8 +482,8 @@
                     return;
                 }
                 var popoverId = $(el).closest('.popover').attr('id');
-                var feedId = $('.thread .config').find('[aria-describedby='+ popoverId +']').closest('.thread').attr('data-feed-id');
-                $.post('/feed/' + feedId + '/delete')
+                var $popOverBody = $('.thread .config').find('[aria-describedby='+ popoverId +']');
+                $.post('/feed/' + this.getId($popOverBody) + '/delete')
                     .done(function (response) {
                         if (response.resultCode != 1) {
                             alert(response.comment);
@@ -493,8 +496,7 @@
                     });
             },
             like: function(el) {
-                var feedId = $(el).closest('.thread').attr('data-feed-id');
-                $.post('/feed/' + feedId + '/like')
+                $.post('/feed/' + this.getId($(el)) + '/like')
                     .done(function (response) {
                         if (response.resultCode != 1) {
                             alert(response.comment);
@@ -506,8 +508,7 @@
                     });
             },
             claim: function(el) {
-                var feedId = $(el).closest('.thread').attr('data-feed-id');
-                $.post('/feed/' + feedId + '/claim')
+                $.post('/feed/' + this.getId($(el)) + '/claim')
                     .done(function (response) {
                         if (response.resultCode != 1) {
                             alert(response.comment);
@@ -565,6 +566,9 @@
             this.bindSave();
             this.bindDelete();
         },
+        getId: function($target){
+            return $target.closest('.reply-thread').attr('data-feed-reply-id');
+        },
         bindSave: function() {
             $('button[name=saveReply]').click(function () {
                 var data = $(this).closest('form').serialize();
@@ -581,13 +585,13 @@
             });
         },
         bindDelete: function() {
+            var that = this;
             $('.feedReplyDeleteBtn').click(function () {
                 if (!confirm("댓글을 삭제하시겠습니까?")) {
                     return;
                 }
 
-                var feedReplyId = $(this).closest('.reply-thread').attr('data-feed-reply-id');
-                $.post('/feed/reply/' + feedReplyId + '/delete')
+                $.post('/feed/reply/' + that.getId($(this)) + '/delete')
                     .done(function (response) {
                         if (response.resultCode != 1) {
                             alert(response.comment);
@@ -600,8 +604,7 @@
             });
         },
         like: function(el) {
-            var feedRelyId = $(el).closest('.reply-thread').attr('data-feed-reply-id');
-            $.post('/feed/reply/' + feedRelyId + '/like')
+            $.post('/feed/reply/' + this.getId($(el)) + '/like')
                 .done(function (response) {
                     if (response.resultCode != 1) {
                         alert(response.comment);
@@ -613,8 +616,7 @@
                 });
         },
         claim: function(el) {
-            var feedRelyId = $(el).closest('.reply-thread').attr('data-feed-reply-id');
-            $.post('/feed/reply/' + feedRelyId + '/claim')
+            $.post('/feed/reply/' + this.getId($(el)) + '/claim')
                 .done(function (response) {
                     if (response.resultCode != 1) {
                         alert(response.comment);
