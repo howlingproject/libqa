@@ -24,8 +24,12 @@
             </div>
         </div>
         <div class="action-buttons">
-            <i class="fa fa-thumbs-o-up" onclick="Feed.like(this)"><span class="like-count">({{likeCount}})</span></i>
-            <i class="fa fa-bullhorn" onclick="Feed.claim(this)"><span class="claim-count">({{claimCount}})</span></i>
+            <i class="fa fa-thumbs-o-up {{#if likeFeedAction.hasViewerAction}}hasViewerAction{{/if}}" onclick="Feed.like(this)">
+                <span class="like-count">({{likeFeedAction.count}})</span>
+            </i>
+            <i class="fa fa-bullhorn {{#if claimFeedAction.hasViewerAction}}hasViewerAction{{/if}}" onclick="Feed.claim(this)">
+                <span class="claim-count">({{claimFeedAction.count}})</span>
+            </i>
         </div>
     </div>
 
@@ -43,8 +47,12 @@
             <div class="message-box">
                 <div class="message">{{feedReplyContent}}</div>
                 <div class="action-buttons">
-                    <i class="fa fa-thumbs-o-up" onclick="FeedReply.like(this)"><span class="like-count">({{likeCount}})</span></i>
-                    <i class="fa fa-bullhorn" onclick="FeedReply.claim(this)"><span class="claim-count">({{claimCount}})</span></i>
+                    <i class="fa fa-thumbs-o-up {{#if likeFeedAction.hasViewerAction}}hasViewerAction{{/if}}" onclick="FeedReply.like(this)">
+                        <span class="like-count">({{likeFeedAction.count}})</span>
+                    </i>
+                    <i class="fa fa-bullhorn {{#if claimFeedAction.hasViewerAction}}hasViewerAction{{/if}}" onclick="FeedReply.claim(this)">
+                        <span class="claim-count">({{claimFeedAction.count}})</span>
+                    </i>
                 </div>
             </div>
         </li>

@@ -1,15 +1,14 @@
 package com.libqa.web.view;
 
-import com.libqa.web.domain.FeedAction;
 import lombok.Getter;
 
 @Getter
 public class DisplayFeedAction {
-    private boolean hasViewerAction = false;
     private Integer count = 0;
+    private boolean hasViewerAction = false;
 
-    public DisplayFeedAction(FeedAction feedAction, Integer count) {
-        this.hasViewerAction = feedAction.isNotCanceled();
+    public DisplayFeedAction(Integer count, boolean hasViewerAction) {
         this.count = count;
+        this.hasViewerAction = hasViewerAction;
     }
 }

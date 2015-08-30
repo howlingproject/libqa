@@ -6,22 +6,23 @@ import lombok.Getter;
 import java.util.Date;
 
 @Getter
-public class DisplayFeedReply {                       
+public class DisplayFeedReply {
     private final long feedId;
     private final long feedReplyId;
     private String feedReplyContent;
     private String userNick;
     private Date insertDate;
-    private int likeCount;
-    private int claimCount;                 
+    private DisplayFeedAction likeFeedAction;
+    private DisplayFeedAction claimFeedAction;
 
-    public DisplayFeedReply(Integer feedId, FeedReply feedReply) {
+    public DisplayFeedReply(Integer feedId, FeedReply feedReply, 
+                            DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction) {
         this.feedId = feedId;
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
         this.insertDate = feedReply.getInsertDate();
-        this.likeCount = feedReply.getLikeCount();
-        this.claimCount = feedReply.getClaimCount();
+        this.likeFeedAction = likeFeedAction;
+        this.claimFeedAction = claimFeedAction;
         this.feedReplyContent = feedReply.getFeedReplyContent();
     }
 }
