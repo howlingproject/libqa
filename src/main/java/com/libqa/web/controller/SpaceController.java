@@ -1,9 +1,8 @@
 package com.libqa.web.controller;
 
-import com.google.common.collect.Collections2;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
-import com.libqa.application.enums.FavoriteTypeEnum;
-import com.libqa.application.enums.SpaceViewEnum;
+import com.google.common.collect.Lists;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.StringUtil;
@@ -11,7 +10,6 @@ import com.libqa.web.domain.*;
 import com.libqa.web.service.*;
 import com.libqa.web.view.SpaceMain;
 import com.libqa.web.view.WikiList;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +20,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @Author : yion
@@ -103,15 +103,23 @@ public class SpaceController {
              * 내 즐겨찾기 공간 정보 조회
              */
             List<Space> myFavoriteSpaceList = spaceService.findUserFavoriteSpace(user.getUserId());
-            List<SpaceMain> favoriteSpaces = new ArrayList<>();
-            for (Space space : myFavoriteSpaceList) {
-                Integer spaceId = space.getSpaceId();
-                List<Wiki> wikis = wikiService.findBySpaceId(spaceId);
-                List<Keyword> keywords = keywordService.findBySpaceId(spaceId, false);
-                SpaceMain spaceMain = new SpaceMain(space, wikis.size(), keywords);
-                favoriteSpaces.add(spaceMain);
+            List<SpaceMain> favoriteSpaces = Lists.newArrayList();
+
+
+            if (CollectionUtils.isEmpty(myFavoriteSpaceList)) {
+                log.info("## 즐겨찾기 공간이 없습니다.");
+                mav.addObject("myFavoriteSpaceList", null);
+            } else {
+                for (Space space : myFavoriteSpaceList) {
+                    Integer spaceId = space.getSpaceId();
+                    List<Wiki> wikis = wikiService.findBySpaceId(spaceId);
+                    List<Keyword> keywords = keywordService.findBySpaceId(spaceId, false);
+                    SpaceMain spaceMain = new SpaceMain(space, wikis.size(), keywords);
+                    favoriteSpaces.add(spaceMain);
+                }
+                mav.addObject("myFavoriteSpaceList", favoriteSpaces);
             }
-            mav.addObject("myFavoriteSpaceList", favoriteSpaces);
+
         }
 
         /**
@@ -136,6 +144,7 @@ public class SpaceController {
         return mav;
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("/space/form")
     public ModelAndView form(Model model) {
         log.info("# message : {}", message);
@@ -146,12 +155,23 @@ public class SpaceController {
     }
 
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/space/add", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<Space> saveSpace(@ModelAttribute Space space) {
+    public ResponseData<Space> saveSpace(@ModelAttribute Space space) throws IllegalAccessException {
+        User user = loggedUser.get();
+
+        if (user == null) {
+            throw new IllegalAccessException("로그인 정보가 필요합니다.");
+        }
+
+        log.info("##### user  = {}", user);
+
+
         // TODO List 차후 로그인으로 변경
         space.setInsertDate(new Date());
-        space.setInsertUserId(1);
+        space.setInsertUserId(user.getUserId());
+        space.setInsertUserNick(user.getUserNick());
 
         Space result = spaceService.saveWithKeyword(space);
         log.debug("#result : [{}]", result);
@@ -170,6 +190,7 @@ public class SpaceController {
 
     /**
      * 공간 메인 조회
+     *
      * @param spaceId
      * @return
      */
@@ -209,6 +230,7 @@ public class SpaceController {
 
     /**
      * 개설된 공간 수 조회
+     *
      * @return
      */
     @RequestMapping(value = "/space/count", method = RequestMethod.GET)
@@ -216,7 +238,7 @@ public class SpaceController {
     public String spaceCount() {
         List<Space> spaces = spaceService.findAllByCondition(false);
 
-        return spaces.size()+"";
+        return spaces.size() + "";
     }
 
 
@@ -225,6 +247,7 @@ public class SpaceController {
      * 0 사용자 정보 없음
      * -1 트랜잭션 실패
      * 1 성공
+     *
      * @param spaceId
      * @return
      */
@@ -248,6 +271,7 @@ public class SpaceController {
 
     /**
      * 공간 즐겨 찾기 취소
+     *
      * @param spaceId
      * @return
      */
@@ -274,7 +298,6 @@ public class SpaceController {
 
         return mav;
     }
-
 
 
 }

@@ -38,7 +38,7 @@
                     <a aria-expanded="true" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-2x"></i></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile {{isLogin}}</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
@@ -48,7 +48,7 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="/logoutUser"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                             <a href="#" data-toggle="modal" data-target="#loginLayer"><i class="fa fa-fw fa-gear"></i> Log in</a>
                         </li>
                     </ul>
@@ -67,7 +67,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <div class="bootstrap-dialog-title" id="modal-title" style="font-size: 16px;color: #ffffff">Sign in</div>
+                <div class="bootstrap-dialog-title" id="modal-title" style="font-size: 16px;color: #ffffff">Log in</div>
             </div>
 
             <div class="modal-body" style="height: 260px">
@@ -98,7 +98,7 @@
                             </label>
                         </div>
                         <div class="col-xs-4" >
-                            <button type="button" class="btn btn-primary" id="loginBtn">Sign in</button>
+                            <button type="button" class="btn btn-primary" id="loginBtn">Log in</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </div>
 
@@ -150,7 +150,7 @@
             }
 
             var data = $("#loginForm").serialize();
-            $.post('/login', data).done(function(response){
+            $.post('/loginPage', data).done(function(response){
                 var result = jQuery.parseJSON(response);
 
                 if (result.status == true) {

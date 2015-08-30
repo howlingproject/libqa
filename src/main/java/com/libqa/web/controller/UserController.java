@@ -23,10 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by yion on 2015. 3. 23..
@@ -87,9 +84,23 @@ public class UserController {
      *
      * @return
      */
-    @RequestMapping("/login")
-    public ModelAndView login(HttpServletRequest request) {
-        return this.signUp(request);
+    @RequestMapping("/loginPage")
+    public ModelAndView loginPage(HttpServletRequest request) {
+        String returnUrl = RequestUtil.refererUrl(request, "/index");
+
+        log.info("###################### loginPage : {}", returnUrl);
+
+        Enumeration params = request.getParameterNames();
+        while(params.hasMoreElements()){
+            String paramName = (String)params.nextElement();
+            System.out.println("# Attribute Name - "+paramName+", Value - "+request.getParameter(paramName));
+        }
+        ModelAndView mav = new ModelAndView("/user/loginPage");
+
+        // 실제 로그인 페이지가 아니라 권한으로 강제 이동 된 페이지에서는 returnUrl을 세팅해서 내려주고, hbs에서 강제로 url 이동 처리함.
+        mav.addObject("returnUrl", returnUrl);
+        log.info("### 로그인 정보 페이지로 이동");
+        return mav;
     }
 
     @RequestMapping("/user/signUp")
@@ -123,7 +134,8 @@ public class UserController {
     // hasRole(‘admin’) and hasIpAddress(‘192.168.1.0/24’)
     @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("/userInfo")
-    public ModelAndView userInfo(Model model) {
+    public ModelAndView userInfo(HttpServletRequest request) {
+        String returnUrl = RequestUtil.refererUrl(request, "/index");
         log.info("### USER Info!");
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
@@ -144,6 +156,7 @@ public class UserController {
         log.info("authentication.gerRole() = {}", grantedAuths.get(0));
 
         ModelAndView mav = new ModelAndView("/user/info");
+        mav.addObject("returnUrl", returnUrl);
         mav.addObject("userEmail", email);
         mav.addObject("auth", authentication.isAuthenticated());
         return mav;

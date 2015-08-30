@@ -12,10 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 
 import javax.sql.DataSource;
 
@@ -26,6 +23,11 @@ public class ApplicationConfigurerAdapter extends WebMvcConfigurerAdapter {
     @Value("${environment.viewResolver.cached}")
     private boolean viewResolverCached;
 
+
+    @Override
+    public void addInterceptors(final InterceptorRegistry resistry) {
+        resistry.addInterceptor(new LoginUserInterceptor()).addPathPatterns("/**");
+    }
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
