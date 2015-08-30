@@ -63,8 +63,8 @@ public class WikiController {
         return mav;
     }
 
-    @RequestMapping("wiki/write" )
-    public ModelAndView write(@ModelAttribute Space modelSpace, @PathVariable Integer wikiId){
+    @RequestMapping("wiki/write")
+    public ModelAndView write(@ModelAttribute Space modelSpace){
         ModelAndView mav = new ModelAndView("wiki/write");
         log.info("# spaceId : {}", modelSpace.getSpaceId());
 
