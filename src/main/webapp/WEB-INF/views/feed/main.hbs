@@ -414,7 +414,7 @@
                 });
             },
             getId: function($target) {
-                return $target.closest('.thread').attr('data-feed-id');
+                return $target.closest('.thread').data('feedId');
             },
             bindSave : function() {
                 var that = this;
@@ -567,7 +567,7 @@
             this.bindDelete();
         },
         getId: function($target){
-            return $target.closest('.reply-thread').attr('data-feed-reply-id');
+            return $target.closest('.reply-thread').data('feedReplyId');
         },
         bindSave: function() {
             $('button[name=saveReply]').click(function () {
