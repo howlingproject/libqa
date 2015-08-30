@@ -11,16 +11,16 @@ import java.util.List;
 
 @Getter
 public class DisplayFeed {
-    private final long feedId;
+    private final Integer feedId;
     private String feedContent;
     private String userNick;
     private Date insertDate;
     private int likeCount;
     private int claimCount;                      
+    private List<DisplayFeedReply> replies = Lists.newArrayList();
     private List<FeedFile> files = Lists.newArrayList();
     private List<FeedFile> images = Lists.newArrayList();
-    private List<FeedReply> replies = Lists.newArrayList();
-
+    
     public DisplayFeed(Feed feed) {
         this.feedId = feed.getFeedId();
         this.userNick = feed.getUserNick();
@@ -28,9 +28,18 @@ public class DisplayFeed {
         this.likeCount = feed.getLikeCount();
         this.claimCount = feed.getClaimCount();
         this.feedContent = feed.getFeedContent();
-        this.replies = feed.getFeedReplies();
+        setReplies(feed.getFeedReplies());
+        setFiles(feed.getFeedFiles());
+    }
 
-        for (FeedFile each : feed.getFeedFiles()) {
+    private void setReplies(List<FeedReply> feedReplies) {
+        for (FeedReply feedReply : feedReplies) {
+          this.replies.add(new DisplayFeedReply(feedId, feedReply));
+        }
+    }
+
+    private void setFiles(List<FeedFile> feedFiles) {
+        for (FeedFile each : feedFiles) {
             if (each.isFileType()) {
                 this.files.add(each);
             }
