@@ -93,7 +93,9 @@ public class SpaceController {
         }
 
         User user = loggedUser.get();
-        if (user.isGuest()) {
+
+        log.info("##### user  = {}", user);
+        if (user == null || user.isGuest()) {
             log.info("# 로그인 사용자 정보가 존재하지 않습니다.");
             mav.addObject("myFavoriteSpaceList", null);
         } else {
