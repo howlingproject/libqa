@@ -36,7 +36,7 @@
 
         <!-- feed 글 목록 start -->
         <div class="feed well">
-            <ul id="feedList"></ul>
+            <ul id="feedList">로딩 중...</ul>
         </div>
         <!-- feed 글 목록 end -->
         
@@ -413,6 +413,9 @@
                     $('#feedList').html(html);
                 });
             },
+            getId: function($target) {
+                return $target.closest('.thread').data('feedId');
+            },
             bindSave : function() {
                 var that = this;
                 $('#feedSave').click(function(){
@@ -463,7 +466,7 @@
                             FeedFile.add(req.data);
                             $('#fileUploadModal').modal('hide');
                         },
-                        error: function (req) {
+                        error: function () {
                             alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
                         }
                     });
@@ -479,8 +482,8 @@
                     return;
                 }
                 var popoverId = $(el).closest('.popover').attr('id');
-                var feedId = $('.thread .config').find('[aria-describedby='+ popoverId +']').closest('.thread').attr('data-feed-id');
-                $.post('/feed/' + feedId + '/delete/')
+                var $popOverBody = $('.thread .config').find('[aria-describedby='+ popoverId +']');
+                $.post('/feed/' + this.getId($popOverBody) + '/delete')
                     .done(function (response) {
                         if (response.resultCode != 1) {
                             alert(response.comment);
@@ -490,6 +493,30 @@
                         $('#' + popoverId).remove();
                     }).fail(function () {
                         alert('Error delete feed');
+                    });
+            },
+            like: function(el) {
+                $.post('/feed/' + this.getId($(el)) + '/like')
+                    .done(function (response) {
+                        if (response.resultCode != 1) {
+                            alert(response.comment);
+                            return;
+                        }
+                        FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewerAction);
+                    }).fail(function () {
+                        alert('Error like feed');
+                    });
+            },
+            claim: function(el) {
+                $.post('/feed/' + this.getId($(el)) + '/claim')
+                    .done(function (response) {
+                        if (response.resultCode != 1) {
+                            alert(response.comment);
+                            return;
+                        }
+                        FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewerAction);
+                    }).fail(function () {
+                        alert('Error claim feed');
                     });
             }
         };
@@ -534,12 +561,108 @@
             }
         };
         
+    var FeedReply = {
+        init: function(){
+            this.bindSave();
+            this.bindDelete();
+        },
+        getId: function($target){
+            return $target.closest('.reply-thread').data('feedReplyId');
+        },
+        bindSave: function() {
+            $('button[name=saveReply]').click(function () {
+                var data = $(this).closest('form').serialize();
+                $.post('/feed/reply/save', data)
+                    .done(function (response) {
+                        if (response.resultCode != 1) {
+                            alert(response.comment);
+                            return;
+                        }
+                        Feed.searchList();
+                    }).fail(function () {
+                        alert('Error saving feed Reply');
+                    });
+            });
+        },
+        bindDelete: function() {
+            var that = this;
+            $('.feedReplyDeleteBtn').click(function () {
+                if (!confirm("댓글을 삭제하시겠습니까?")) {
+                    return;
+                }
+
+                $.post('/feed/reply/' + that.getId($(this)) + '/delete')
+                    .done(function (response) {
+                        if (response.resultCode != 1) {
+                            alert(response.comment);
+                            return;
+                        }
+                        Feed.searchList();
+                    }).fail(function () {
+                        alert('Error delete feed Reply');
+                    });
+            });
+        },
+        like: function(el) {
+            $.post('/feed/reply/' + this.getId($(el)) + '/like')
+                .done(function (response) {
+                    if (response.resultCode != 1) {
+                        alert(response.comment);
+                        return;
+                    }
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewerAction);
+                }).fail(function () {
+                    alert('Error like feed');
+                });
+        },
+        claim: function(el) {
+            $.post('/feed/reply/' + this.getId($(el)) + '/claim')
+                .done(function (response) {
+                    if (response.resultCode != 1) {
+                        alert(response.comment);
+                        return;
+                    }
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewerAction);
+                }).fail(function () {
+                    alert('Error claim feed');
+                });
+        }
+    };
+        
+    var FeedUtil = {
+        'bindPopOver': function() {
+            $('.popover-config').popover({
+                trigger: 'click',
+                html: true,
+                content: function () {
+                    return $('#popover-config-content').html();
+                }
+            });
+
+            $('.popover-feed-image').popover({
+                trigger: 'click',
+                html: true,
+                content: function () {
+                    return $('#popover-feed-image-content').html();
+                }
+            });
+        },
+        'toggleCount': function(el, count, hasViewerAction) {
+            el.find('span').html('('+count+')');
+            if(hasViewerAction) {
+                el.addClass('hasViewerAction');
+            }  else {
+                el.removeClass('hasViewerAction');
+            }
+        }
+    };
+        
     $(function(){
         Feed.init();
 //        $('#right-panel-link').panelslider({side: 'right', clickClose: true, duration: 200 });
     });
     </script>
-    <script src="/resource/public/js/jquery/plugin/jquery-panelslider/jquery.panelslider.min.js"></script>
+    <!--<script src="/resource/public/js/jquery/plugin/jquery-panelslider/jquery.panelslider.min.js"></script>-->
 {{/partial}}
 
 {{> template/base}}

@@ -47,6 +47,7 @@ div.user-profile-sm span.nickname { font-size: 14px;}
 div.user-profile-xs span.nickname { font-size: 12px;}
 label.error-label {color: #EC6459;}
 label.error-label.hide {display: none;}
+div.action-buttons i.hasViewerAction {color : #2682C4; font-weight: bold;}
 
 /**
 * Components
@@ -72,7 +73,7 @@ label.error-label.hide {display: none;}
 .feed ul li .author { float: left; left: -80px; position: absolute; top: 0; width: 60px; z-index: 1; }
 .feed ul li .action-buttons { margin-bottom: 3px; padding-right: 15px; text-align: right; }
 .feed ul li .action-buttons i { padding: 3px; cursor: pointer; }
-.feed ul li .action-buttons span.like-count, .feed ul li .action-buttons span.claim-count{ padding-left:3px; color: #2682C4; font-weight: bold;}
+.feed ul li .action-buttons span.like-count, .feed ul li .action-buttons span.claim-count{ padding-left:3px;}
 .feed ul li .threaad-message-box {margin-bottom: 10px}
 .feed ul li .message { margin: 20px -10px 0; padding: 20px; }
 .feed ul li .message .feed-url { padding-top:50px; height:150px; }
@@ -159,11 +160,12 @@ span.qna-reply-title {font-size: 15px; font-weight: bold; margin-left: 20px;}
 .cat-keyword li{line-height: 0.7;}
 
 .readCnt{margin-left: 30px}
+li.qa-view-keyowrdList{margin-top: 8px; margin-left: 30px}
 
 .form-group .readCnt{margin-left: 10px}
 
 .qa div.action-buttons i { padding: 3px; cursor: pointer; }
-.qa div.action-buttons span.like-count, .qa div.action-buttons span.claim-count{ padding-left:3px; color: #2682C4; font-weight: bold;}
+.qa div.action-buttons span.like-count, .qa div.action-buttons span.claim-count{ padding-left:3px;}
 
 /**
 *   Wiki
