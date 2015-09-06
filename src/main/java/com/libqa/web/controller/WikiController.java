@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -102,8 +100,8 @@ public class WikiController {
 
         Wiki wiki = wikiService.findById(wikiId);
         log.info("# view : {}", wiki);
-        List<Wiki> subWikiList = wikiService.findByIdParentId(wiki.getParentsId());
-        Wiki parentWiki = wikiService.findByParentId(wiki.getWikiId());
+        Wiki parentWiki = wikiService.findByParentId(wiki.getParentsId());
+        List<Wiki> subWikiList = wikiService.findBySubWikiId(wiki.getWikiId());
 
         mav.addObject("wiki", wiki);
         mav.addObject("subWikiList", subWikiList);

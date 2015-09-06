@@ -13,16 +13,16 @@ import java.util.List;
 @Getter
 public class DisplayQaReply {
     private QaReply qaReply;
-    private List<QaReply> qaReplies;
+    private List<DisplayQaReply> qaReplies;
     private boolean selfRecommend;
     private boolean selfNonrecommend;
 
-    public DisplayQaReply(QaReply qaReply, List<QaReply> qaReplies){
+    public DisplayQaReply(QaReply qaReply, List<DisplayQaReply> qaReplies){
         this.qaReply = qaReply;
         this.qaReplies = qaReplies;
     }
 
-    public DisplayQaReply(QaReply qaReply, List<QaReply> qaReplies, boolean selfRecommend, boolean selfNonrecommend){
+    public DisplayQaReply(QaReply qaReply, List<DisplayQaReply> qaReplies, boolean selfRecommend, boolean selfNonrecommend){
         this.qaReply = qaReply;
         this.qaReplies = qaReplies;
         this.selfRecommend = selfRecommend;

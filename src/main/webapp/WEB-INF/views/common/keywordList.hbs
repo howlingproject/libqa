@@ -2,7 +2,7 @@
     <ul class="nav nav-pills nav-stacked cat-keyword">
         <li class="active" value="" style="text-align: center;"><a href="#">전체</a></li>
         {{#each data}}
-            <li value="{{keywordListId}}"><a href="{{keywordLink keywordType keywordName}}">{{keywordName}}({{keywordCount}})</a></li>
+            <li data-keywordList-name="{{keywordName}}"><a href="{{keywordLink keywordType keywordName}}">{{keywordName}}({{keywordCount}})</a></li>
         {{/each}}
     </ul>
 </div>
