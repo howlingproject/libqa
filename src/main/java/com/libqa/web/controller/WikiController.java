@@ -3,9 +3,11 @@ package com.libqa.web.controller;
 import com.libqa.application.enums.ListTypeEnum;
 import com.libqa.application.enums.WikiRevisionActionTypeEnum;
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;
+import com.libqa.web.domain.User;
 import com.libqa.web.domain.Wiki;
 import com.libqa.web.service.KeywordListService;
 import com.libqa.web.service.KeywordService;
@@ -43,7 +45,8 @@ public class WikiController {
     @Autowired
     KeywordService keywordService;
 
-
+    @Autowired
+    private LoggedUser loggedUser;
 
     @RequestMapping("wiki/main")
     public ModelAndView main(Model model){
@@ -52,7 +55,8 @@ public class WikiController {
         List<Wiki> allWiki = wikiService.findByAllWiki(0, 5);
         mav.addObject("allWiki", allWiki);
 
-        //유저 하드코딩
+        User user = loggedUser.get();
+        //int userId = user.getUserId();
         int userId = 1;
         List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
         mav.addObject("resecntWiki", resecntWiki);
@@ -98,8 +102,12 @@ public class WikiController {
 
         Wiki wiki = wikiService.findById(wikiId);
         log.info("# view : {}", wiki);
+        List<Wiki> subWikiList = wikiService.findByIdParentId(wiki.getParentsId());
+        Wiki parentWiki = wikiService.findByParentId(wiki.getWikiId());
 
         mav.addObject("wiki", wiki);
+        mav.addObject("subWikiList", subWikiList);
+        mav.addObject("parentWiki", parentWiki);
         return mav;
     }
 
@@ -125,10 +133,11 @@ public class WikiController {
     @RequestMapping(value = "/wiki/delete/{wikiId}", method = RequestMethod.GET)
     public ModelAndView wikiDelete(@PathVariable Integer wikiId) {
         log.info("# wikiId : {}", wikiId);
-        //유저 하드코딩
-        int userId = 1;
-        Wiki wiki = wikiService.findById(wikiId);
 
+        Wiki wiki = wikiService.findById(wikiId);
+        User user = loggedUser.get();
+        //int userId = user.getUserId();
+        int userId = 1;
         //위키만든 유저만 삭제가능
         if( wiki.getUserId() == userId ){
             wiki.setDeleted(true);
@@ -142,8 +151,11 @@ public class WikiController {
     @RequestMapping(value = "/wiki/lock/{wikiId}", method = RequestMethod.GET)
     public ModelAndView wikiLock(@PathVariable Integer wikiId) {
         log.info("# wikiId : {}", wikiId);
-        //유저 하드코딩
+
+        User user = loggedUser.get();
+        //int userId = user.getUserId();
         int userId = 1;
+
         Wiki wiki = wikiService.findById(wikiId);
 
         //위키만든 유저만 삭제가능
@@ -163,9 +175,13 @@ public class WikiController {
             log.info("####### WIKI SAVE Begin INFO ########");
             log.info("wiki = {}", wiki);
             log.info("wiki.wikiFile = {}", wiki.getWikiFiles());
+            User user = loggedUser.get();
+            //int userId = user.getUserId();
+
             wiki.setPasswd("1234");
             wiki.setUserNick("하이");
             wiki.setUserId(1);
+
             wiki.setInsertDate(new Date());
             if( wiki.getParentsId() == null  ){
                 wiki.setDepthIdx(1);
@@ -193,6 +209,10 @@ public class WikiController {
             log.info("####### WIKI SAVE Begin INFO ########");
             log.info("wiki = {}", wiki);
             log.info("wiki.wikiFile = {}", wiki.getWikiFiles());
+
+            User user = loggedUser.get();
+            //int userId = user.getUserId();
+
             wiki.setPasswd("1234");
             wiki.setUserNick("하이");
             wiki.setUserId(1);
@@ -213,70 +233,10 @@ public class WikiController {
 
     }
 
-    @RequestMapping("wiki/bestList")
-    @Deprecated
-    public ModelAndView bestList(Model model){
-        ModelAndView mav = new ModelAndView("wiki/template/_bestList");
-
-        List<Wiki> list = new ArrayList<Wiki>();
-        for(int i=0; i<5; i++){
-            Wiki wiki = new Wiki();
-            wiki.setUserNick("테스트"+i);
-            wiki.setInsertDate(new Date());
-            wiki.setLikeCount(i);
-            wiki.setContents("지금은 "+i+" 베스트위키 테스트중");
-            list.add(wiki);
-        }
-        mav.addObject("bestList",list);
-
-        return mav;
-    }
-
-    @RequestMapping("wiki/allList")
-    @Deprecated
-    public ModelAndView allList(Model model){
-        ModelAndView mav = new ModelAndView("wiki/template/_allList");
-
-        List<Wiki> list = new ArrayList<Wiki>();
-        for(int i=0; i<5; i++){
-            Wiki wiki = new Wiki();
-            wiki.setUserNick("테스트"+i);
-            wiki.setInsertDate(new Date());
-            wiki.setLikeCount(i);
-            wiki.setContents("지금은 "+i+" 모든위키 테스트중");
-            list.add(wiki);
-        }
-        mav.addObject("allList",list);
-
-        return mav;
-    }
-
-    @RequestMapping("wiki/recentList")
-    @Deprecated
-    public ModelAndView recentList(Model model){
-        ModelAndView mav = new ModelAndView("wiki/template/_recentList");
-
-        List<Wiki> list = new ArrayList<Wiki>();
-        for(int i=0; i<5; i++){
-            Wiki wiki = new Wiki();
-            wiki.setUserNick("테스트"+i);
-            wiki.setTitle("위키 타이틀");
-            wiki.setInsertDate(new Date());
-            wiki.setLikeCount(i);
-            wiki.setContents("지금은 "+i+" 최근활동위키 테스트중");
-            list.add(wiki);
-        }
-        mav.addObject("recentList",list);
-
-
-        return mav;
-    }
-
     @RequestMapping(value = "wiki/count", method = RequestMethod.GET)
     @ResponseBody
     public String wikiCount() {
         List<Wiki> wikis = wikiService.findAllByCondition();
-
         return wikis.size() + "";
     }
 
@@ -298,6 +258,8 @@ public class WikiController {
 
         }else if( ListTypeEnum.RESENT.getName().equals(listType) ){
             //유저 하드코딩
+            User user = loggedUser.get();
+            //int userId = user.getUserId();
             int userId = 1;
             List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 15);
             mav.addObject("listWiki", resecntWiki);
@@ -334,6 +296,5 @@ public class WikiController {
 
         return mav;
     }
-
 
 }

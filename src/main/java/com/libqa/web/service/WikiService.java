@@ -19,6 +19,10 @@ public interface WikiService {
 
     Wiki findById(Integer wikiId);
 
+    Wiki findByParentId(Integer wikiId);
+
+    List<Wiki> findByIdParentId(Integer parentId);
+
     List<Wiki> findByAllWiki(int startIdx, int endIdx);
 
     List<Wiki> findByBestWiki(int startIdx, int endIdx);

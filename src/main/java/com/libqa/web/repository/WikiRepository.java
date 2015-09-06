@@ -23,5 +23,7 @@ public interface WikiRepository extends JpaRepository<Wiki, Integer> {
 
     List<Wiki> findAllByContentsMarkupContainingAndIsDeleted(String contentsMarkup, Sort sort, boolean isDeleted);
 
+    List<Wiki> findAllByWikiIdInAndIsDeleted(Integer parentId, boolean isDeleted);
 
+    Wiki findOneByParentsIdAndIsDeleted(Integer wikiId, boolean isDeleted);
 }

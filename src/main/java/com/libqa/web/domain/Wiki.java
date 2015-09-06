@@ -101,6 +101,15 @@ public class Wiki {
     @Transient
     private int replyCount;
 
+//    @OneToMany(mappedBy = "parentsId", fetch = FetchType.LAZY)
+//    @JsonManagedReference
+    //private List<Wiki> subWikiList;
+
+//    @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+//    @JoinColumn(name="parentsId", referencedColumnName = "wikiId", nullable = false, unique = true, insertable = false, updatable = false)
+//    @JsonManagedReference
+    //private Wiki parentWiki;
+
     @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
     @JsonManagedReference
     //@Transient
