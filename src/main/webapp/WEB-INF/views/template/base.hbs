@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">LibQA</a>
+            <a class="navbar-brand" href="/index">LibQA</a>
         </div>
 
         <nav role="navigation" class="navbar-collapse bs-navbar-collapse collapse">
@@ -38,30 +38,11 @@
                     <a aria-expanded="true" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-2x"></i></a>
                     <ul class="dropdown-menu">
                         {{#compareTo isLogin '1'}}
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                        </li>
-                        {{/compareTo}}
-                        {{#compareTo isLogin '1'}}
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                        </li>
+                            {{> template/login}}
                         {{/compareTo}}
                         {{#compareTo isLogin '0'}}
-                        <li>
-                            <a href="/user/signUp"><i class="fa fa-fw fa-user-plus"></i> Sign Up {{isLogin}}</a>
-                        </li>
-                        <li class="divider"></li>
+                            {{> template/guest}}
                         {{/compareTo}}
-                        <li>
-                            {{#compareTo isLogin '1'}}
-                                <a href="/logoutUser"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                            {{/compareTo}}
-
-                            {{#compareTo isLogin '0'}}
-                                <a href="#" data-toggle="modal" data-target="#loginLayer"><i class="fa fa-fw fa-gear"></i> Log in</a>
-                            {{/compareTo}}
-                        </li>
                     </ul>
                 </li>
                 <li class="messenger"><a href="#"><i class="fa fa-weixin fa-2x"></i></a></li>

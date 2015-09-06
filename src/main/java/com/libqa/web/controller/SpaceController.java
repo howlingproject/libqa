@@ -20,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,7 +71,7 @@ public class SpaceController {
     }
 
     @RequestMapping("/space/main")
-    public ModelAndView spaceMain(Model model) {
+    public ModelAndView spaceMain(HttpServletRequest request) {
         log.info("## /main");
         ModelAndView mav = new ModelAndView("/space/main");
 

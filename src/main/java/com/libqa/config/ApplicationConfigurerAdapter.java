@@ -23,10 +23,9 @@ public class ApplicationConfigurerAdapter extends WebMvcConfigurerAdapter {
     @Value("${environment.viewResolver.cached}")
     private boolean viewResolverCached;
 
-
     @Override
     public void addInterceptors(final InterceptorRegistry resistry) {
-        resistry.addInterceptor(new LoginUserInterceptor()).addPathPatterns("/**");
+        resistry.addInterceptor(new LoginUserInterceptor()).addPathPatterns("", "/*", "/**", "/*/**");
     }
 
     @Override

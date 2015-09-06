@@ -86,19 +86,25 @@ public class UserController {
      */
     @RequestMapping("/loginPage")
     public ModelAndView loginPage(HttpServletRequest request) {
+
+        log.info("request.get = {}", request.getAttribute("isLogin"));
+        log.info("request.get = {}", request.getAttribute("userEmail"));
+        log.info("request.get = {}", request.getAttribute("userRole"));
         String returnUrl = RequestUtil.refererUrl(request, "/index");
         // 이전 페이지 결정 (로그인 및 가입일 경우 index로 이동)
         returnUrl = checkReturnUrl(returnUrl);
 
         Enumeration params = request.getParameterNames();
-        while(params.hasMoreElements()){
-            String paramName = (String)params.nextElement();
-            System.out.println("# Attribute Name - "+paramName+", Value - "+request.getParameter(paramName));
+        while (params.hasMoreElements()) {
+            String paramName = (String) params.nextElement();
+            System.out.println("# Attribute Name - " + paramName + ", Value - " + request.getParameter(paramName));
         }
         ModelAndView mav = new ModelAndView("/user/loginPage");
 
         // 실제 로그인 페이지가 아니라 권한으로 강제 이동 된 페이지에서는 returnUrl을 세팅해서 내려주고, hbs에서 강제로 url 이동 처리함.
         mav.addObject("returnUrl", returnUrl);
+        mav.addObject("isLogin", request.getAttribute("isLogin"));
+
         log.info("### 로그인 정보 페이지로 이동");
         return mav;
     }
@@ -155,10 +161,7 @@ public class UserController {
                 SecurityContextHolder.getContext().getAuthentication();
 
         String email = (String) authentication.getPrincipal();
-        String password = (String) authentication.getCredentials();
-        Collection<? extends GrantedAuthority> auths = authentication.getAuthorities();
 
-//        Iterables.getFirst(
         List<GrantedAuthority> grantedAuths = (List<GrantedAuthority>) authentication.getAuthorities();
         System.out.println("### grantedAuthority = " + grantedAuths.get(0));
 
