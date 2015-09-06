@@ -48,8 +48,9 @@ public class LoggedUser {
      */
     public User getDummyUser() {
         User user = new User();
-        user.setUserId(12345);
-        user.setUserNick("testUserNick");
+        user.setUserId(1);
+        user.setUserNick("user1");
+        user.setUserEmail("user1@email.com");
         return user;
     }
 

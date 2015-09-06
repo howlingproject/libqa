@@ -1,5 +1,6 @@
 package com.libqa.web.service
 
+import com.libqa.application.enums.FeedActionTypeEnum
 import com.libqa.web.domain.Feed
 import com.libqa.web.domain.FeedAction
 import com.libqa.web.domain.FeedReply
@@ -7,8 +8,7 @@ import com.libqa.web.domain.User
 import com.libqa.web.repository.FeedActionRepository
 import spock.lang.Specification
 
-import static com.libqa.application.enums.FeedActionTypeEnum.CLAIM
-import static com.libqa.application.enums.FeedActionTypeEnum.LIKE
+import static com.libqa.application.enums.FeedActionTypeEnum.*
 
 class FeedActionServiceSpec extends Specification {
     FeedActionRepository feedActionRepository
@@ -16,9 +16,7 @@ class FeedActionServiceSpec extends Specification {
 
     def setup() {
         feedActionRepository = Mock(FeedActionRepository)
-        sut = new FeedActionService(
-            feedActionRepository: feedActionRepository
-        )
+        sut = new FeedActionService(feedActionRepository: feedActionRepository)
     }
 
     def "피드에 좋아요를 할 수 있다."() {
@@ -64,7 +62,7 @@ class FeedActionServiceSpec extends Specification {
     def "좋아요/신고하기를 취소할 수 있다."() {
         given:
         def feedActionId = 1
-        def feedAction = feedLikeActionFixture()
+        def feedAction = feedActionFixture(FEED_LIKE)
         feedActionRepository.findOne(feedActionId) >> feedAction
         when:
         sut.cancel(feedActionId);
@@ -77,7 +75,7 @@ class FeedActionServiceSpec extends Specification {
         def feedId = 1
         def userId = 1
         feedActionRepository.findByFeedIdAndUserId(feedId, userId) >> [
-            feedLikeActionFixture()
+                feedActionFixture(FEED_LIKE)
         ]
         when:
         def response = sut.hasLikedFeed(feedId, userId)
@@ -90,7 +88,7 @@ class FeedActionServiceSpec extends Specification {
         def feedId = 1
         def userId = 1
         feedActionRepository.findByFeedIdAndUserId(feedId, userId) >> [
-            feedClaimActionFixture()
+                feedActionFixture(FEED_REPLY_CLAIM)
         ]
         when:
         def response = sut.hasLikedFeed(feedId, userId)
@@ -103,7 +101,7 @@ class FeedActionServiceSpec extends Specification {
         def feedId = 1
         def userId = 1
         feedActionRepository.findByFeedIdAndUserId(feedId, userId) >> [
-            feedClaimActionFixture()
+                feedActionFixture(FEED_CLAIM)
         ]
         when:
         def response = sut.hasClaimFeed(feedId, userId)
@@ -122,13 +120,12 @@ class FeedActionServiceSpec extends Specification {
         response == false
     }
 
-
     def "특정 FEED의 댓글에 자신이 좋아요를 한 적이 있다."() {
         given:
         def feedId = 1
         def userId = 1
         feedActionRepository.findByFeedReplyIdAndUserId(feedId, userId) >> [
-            feedLikeActionFixture()
+                feedActionFixture(FEED_REPLY_LIKE)
         ]
         when:
         def response = sut.hasLikedFeedReply(feedId, userId)
@@ -141,7 +138,8 @@ class FeedActionServiceSpec extends Specification {
         def feedId = 1
         def userId = 1
         feedActionRepository.findByFeedReplyIdAndUserId(feedId, userId) >> [
-            feedClaimActionFixture()
+                feedActionFixture(FEED_LIKE),
+                feedActionFixture(FEED_REPLY_CLAIM)
         ]
         when:
         def response = sut.hasLikedFeedReply(feedId, userId)
@@ -154,7 +152,7 @@ class FeedActionServiceSpec extends Specification {
         def feedId = 1
         def userId = 1
         feedActionRepository.findByFeedReplyIdAndUserId(feedId, userId) >> [
-            feedClaimActionFixture()
+                feedActionFixture(FEED_REPLY_CLAIM)
         ]
         when:
         def response = sut.hasClaimFeedReply(feedId, userId)
@@ -185,26 +183,18 @@ class FeedActionServiceSpec extends Specification {
         user.userEmail = "test@test.com"
         return user
     }
-    
+
     def feedReplyFixture() {
         def feedReply = new FeedReply()
         feedReply.feed = feedFixture()
         feedReply.feedReplyId = 1
         return feedReply
     }
-    
-    def feedLikeActionFixture() {
+
+    def feedActionFixture(FeedActionTypeEnum feedActionType) {
         def feedAction = new FeedAction()
         feedAction.feedActionId = 1
-        feedAction.feedActionType = LIKE
+        feedAction.feedActionType = feedActionType
         return feedAction
     }
-    
-    def feedClaimActionFixture() {
-        def feedAction = new FeedAction()
-        feedAction.feedActionId = 1
-        feedAction.feedActionType = CLAIM
-        return feedAction
-    }    
-    
 }
