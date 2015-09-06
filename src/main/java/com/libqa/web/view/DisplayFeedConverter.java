@@ -25,15 +25,15 @@ public class DisplayFeedConverter {
             boolean hasLike = feedActionService.hasLike(feed, user);
             boolean hasClaim = feedActionService.hasClaim(feed, user);
             
-            DisplayFeedAction likedFeedAction = toFeedAction(feed.getLikeCount(), hasLike);
-            DisplayFeedAction claimedFeedAction = toFeedAction(feed.getClaimCount(), hasClaim);
+            DisplayFeedAction likedFeedAction = toFeedAction(hasLike, feed.getLikeCount());
+            DisplayFeedAction claimedFeedAction = toFeedAction(hasClaim, feed.getClaimCount());
             displayFeeds.add(new DisplayFeed(feed, likedFeedAction, claimedFeedAction, toDisplayFeedReplies(feed.getFeedId(), feed.getFeedReplies())));
         }
         return displayFeeds;
     }
 
-    public DisplayFeedAction toFeedAction(Integer count, boolean hasViewerAction) {
-        return new DisplayFeedAction(count, hasViewerAction);
+    public DisplayFeedAction toFeedAction(boolean hasViewer, Integer actionCount) {
+        return new DisplayFeedAction(hasViewer, actionCount);
     }
 
     private List<DisplayFeedReply> toDisplayFeedReplies(Integer feedId, List<FeedReply> feedReplies) {
@@ -43,8 +43,8 @@ public class DisplayFeedConverter {
             boolean hasLike = feedActionService.hasLike(feedReply, user);
             boolean hasClaim = feedActionService.hasClaim(feedReply, user);
 
-            DisplayFeedAction likedFeedAction = toFeedAction(feedReply.getLikeCount(), hasLike);
-            DisplayFeedAction claimedFeedAction = toFeedAction(feedReply.getClaimCount(), hasClaim);
+            DisplayFeedAction likedFeedAction = toFeedAction(hasLike, feedReply.getLikeCount());
+            DisplayFeedAction claimedFeedAction = toFeedAction(hasClaim, feedReply.getClaimCount());
             displayFeedReplies.add(new DisplayFeedReply(feedId, feedReply, likedFeedAction, claimedFeedAction));
         }
         return displayFeedReplies;

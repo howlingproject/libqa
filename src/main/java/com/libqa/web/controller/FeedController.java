@@ -95,7 +95,7 @@ public class FeedController {
         try {
             FeedAction feedAction = feedService.like(feedId);
             Integer likeCount = feedService.getLikeCount(feedId);
-            return createSuccessResult(displayFeedConverter.toFeedAction(likeCount, feedAction.isNotCanceled()));
+            return createSuccessResult(displayFeedConverter.toFeedAction(feedAction.isNotCanceled(), likeCount));
         } catch (Exception e) {
             log.error("like feed error.", e);
             return createFailResult(null);
@@ -107,7 +107,7 @@ public class FeedController {
         try {
             FeedAction feedAction = feedService.claim(feedId);
             Integer claimCount = feedService.getClaimCount(feedId);
-            return createSuccessResult(displayFeedConverter.toFeedAction(claimCount, feedAction.isNotCanceled()));
+            return createSuccessResult(displayFeedConverter.toFeedAction(feedAction.isNotCanceled(), claimCount));
         } catch (Exception e) {
             log.error("claim feed error.", e);
             return createFailResult(null);
@@ -119,7 +119,7 @@ public class FeedController {
         try {
             FeedAction feedAction = feedReplyService.like(feedReplyId);
             Integer likeCount = feedReplyService.getLikeCount(feedReplyId);
-            return createSuccessResult(displayFeedConverter.toFeedAction(likeCount, feedAction.isNotCanceled()));
+            return createSuccessResult(displayFeedConverter.toFeedAction(feedAction.isNotCanceled(), likeCount));
         } catch (Exception e) {
             log.error("like feedReply error.", e);
             return createFailResult(null);
@@ -131,7 +131,7 @@ public class FeedController {
         try {
             FeedAction feedAction = feedReplyService.claim(feedReplyId);
             Integer claimCount = feedReplyService.getClaimCount(feedReplyId);
-            return createSuccessResult(displayFeedConverter.toFeedAction(claimCount, feedAction.isNotCanceled()));
+            return createSuccessResult(displayFeedConverter.toFeedAction(feedAction.isNotCanceled(), claimCount));
         } catch (Exception e) {
             log.error("claim feedReply error.", e);
             return createFailResult(null);

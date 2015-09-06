@@ -502,7 +502,7 @@
                             alert(response.comment);
                             return;
                         }
-                        FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewerAction);
+                        FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
                     }).fail(function () {
                         alert('Error like feed');
                     });
@@ -514,7 +514,7 @@
                             alert(response.comment);
                             return;
                         }
-                        FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewerAction);
+                        FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
                     }).fail(function () {
                         alert('Error claim feed');
                     });
@@ -610,7 +610,7 @@
                         alert(response.comment);
                         return;
                     }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewerAction);
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
                 }).fail(function () {
                     alert('Error like feed');
                 });
@@ -622,7 +622,7 @@
                         alert(response.comment);
                         return;
                     }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewerAction);
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
                 }).fail(function () {
                     alert('Error claim feed');
                 });
@@ -647,12 +647,12 @@
                 }
             });
         },
-        'toggleCount': function(el, count, hasViewerAction) {
+        'toggleCount': function(el, count, hasViewer) {
             el.find('span').html('('+count+')');
-            if(hasViewerAction) {
-                el.addClass('hasViewerAction');
+            if(hasViewer) {
+                el.addClass('hasViewer');
             }  else {
-                el.removeClass('hasViewerAction');
+                el.removeClass('hasViewer');
             }
         }
     };
