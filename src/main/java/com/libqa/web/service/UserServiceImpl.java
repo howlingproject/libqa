@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.google.common.base.Preconditions;
 import com.libqa.application.Exception.UserNotCreateException;
 import com.libqa.application.enums.SocialChannelTypeEnum;
 import com.libqa.web.domain.User;
@@ -129,6 +130,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findOne(Integer userId) {
         return userRepository.findOne(userId);
+    }
+
+
+    /**
+     * 최종 방문일 수정
+     * @param email
+     */
+    @Override
+    public void updateUserLastVisitDate(String email) {
+        User user = this.findByEmail(email);
+
+        user.setLastVisiteDate(new Date());
+        user.increaseVisit();
+        userRepository.save(user);
     }
 
 

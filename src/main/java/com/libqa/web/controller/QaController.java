@@ -97,17 +97,22 @@ public class QaController {
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaContent> save(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles) {
-        ResponseData resultData = new ResponseData();
-
         QaContent qaContent = new QaContent();
-
-        // TODO List 차후 로그인으로 변경
-        paramQaContent.setUserId(1);
-        paramQaContent.setUserNick("용퓌");
-        paramQaContent.setInsertUserId(1);
-        paramQaContent.setInsertDate(new Date());
         try {
             qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles);
+            return createSuccessResult(qaContent);
+        } catch (Exception e) {
+            return createFailResult(qaContent);
+        }
+    }
+
+    @RequestMapping(value = "/qa/update", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<QaContent> update(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles) {
+        QaContent qaContent = new QaContent();
+
+        try {
+            qaContent = qaService.updateWithKeyword(paramQaContent, paramQaFiles);
             return createSuccessResult(qaContent);
         } catch (Exception e) {
             return createFailResult(qaContent);

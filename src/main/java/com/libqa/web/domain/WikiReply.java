@@ -1,5 +1,6 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,8 +18,9 @@ public class WikiReply{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer replyId;
 
-    @ManyToOne
-    @JoinColumn(name="wikiId", referencedColumnName = "wikiId", nullable=false)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wikiId", referencedColumnName = "wikiId")
     private Wiki wiki;
 
     @Column(length = 100, nullable = false)

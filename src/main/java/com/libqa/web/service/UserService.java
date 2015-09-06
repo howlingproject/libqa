@@ -56,4 +56,10 @@ public interface UserService {
     User findByEmailAndIsCertification(String email);
 
     User findOne(Integer userId);
+
+    /**
+     * 최종 방문일 수정
+     * @param email
+     */
+    void updateUserLastVisitDate(String email);
 }

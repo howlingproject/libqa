@@ -253,7 +253,7 @@ To change this template use File | Settings | File Templates.
     $('#btnSave').on('click', function () {
         $.confirm({
             title: '확인',
-            content: '공간을 생성 하겠습니까?<BR>11',
+            content: '공간을 생성 하겠습니까?',
             confirmButton: '공간생성',
             cancelButton: '취소',
             confirmButtonClass: 'btn-info',
@@ -303,9 +303,9 @@ To change this template use File | Settings | File Templates.
         $("#descriptionMarkup").val(DualEditor.getMarkupEditHtml());
 
         if ($(':radio[name="isPrivateYn"]:checked').val() == 'Y') {
-            $("#private").val(1);   // 공개
+            $("#private").val(0);   // 공개
         } else {
-            $("#private").val(0);   // 비공개
+            $("#private").val(1);   // 비공개
         }
         var data = $("#spaceCreateForm").serialize();
         if (checkValidation()) {

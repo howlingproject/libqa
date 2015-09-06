@@ -32,6 +32,10 @@ public class QaFileServiceImpl implements QaFileService {
     @Autowired
     CommonController commonController;
 
+    public QaFile findByQaFileId(Integer qaFileId){
+        return qaFileRepository.findOne(qaFileId);
+    }
+
     @Override
     @Transactional
     public boolean moveQaFilesToProductAndSave(Integer qaId, QaFile paramQaFiles) {
@@ -39,10 +43,18 @@ public class QaFileServiceImpl implements QaFileService {
         try {
             if (paramQaFiles.getRealNames() != null) {
                 for (int qaFileIndex = 0; qaFileIndex < paramQaFiles.getRealNames().size(); qaFileIndex++) {
-                    ResponseData<?> resultFile = moveQaFileToProduct(paramQaFiles, qaFileIndex);
+                    ResponseData<?> resultFile = new ResponseData<>();
+                    if("".equals((java.lang.String)paramQaFiles.getFileIds().get(qaFileIndex))) {
+                        resultFile = moveQaFileToProduct(paramQaFiles, qaFileIndex);
+                    }
                     if (1 == resultFile.getResultCode()) {
                         makeQaFileInstance(qaId, resultFile);
                     }
+                }
+            }
+            if(paramQaFiles.getDeleteFiles().size() > 0){
+                for(int deleteFileIndex = 0; deleteFileIndex < paramQaFiles.getDeleteFiles().size(); deleteFileIndex++){
+                    deleteQaFile((Integer) paramQaFiles.getDeleteFiles().get(deleteFileIndex));
                 }
             }
         }catch(Exception e){
@@ -56,12 +68,12 @@ public class QaFileServiceImpl implements QaFileService {
         ResponseData<?> resultFile = new ResponseData<>();
         FileDto fileDto = new FileDto();
         try {
-            fileDto.setRealName((String) paramQaFiles.getRealNames().get(qaFileIndex));
-            fileDto.setSavedName((String) paramQaFiles.getSavedNames().get(qaFileIndex));
-            fileDto.setFilePath((String) paramQaFiles.getFilePaths().get(qaFileIndex));
+            fileDto.setRealName((java.lang.String) paramQaFiles.getRealNames().get(qaFileIndex));
+            fileDto.setSavedName((java.lang.String) paramQaFiles.getSavedNames().get(qaFileIndex));
+            fileDto.setFilePath((java.lang.String) paramQaFiles.getFilePaths().get(qaFileIndex));
             fileDto.setRootPath(StringUtil.defaultString(servletContext.getRealPath(FileUtil.SEPARATOR)));
-            fileDto.setFileSize(Integer.parseInt((String)paramQaFiles.getFileSizes().get(qaFileIndex)));
-            fileDto.setFileExtendType((String) paramQaFiles.getFileTypes().get(qaFileIndex));
+            fileDto.setFileSize(Integer.parseInt((java.lang.String)paramQaFiles.getFileSizes().get(qaFileIndex)));
+            fileDto.setFileExtendType((java.lang.String) paramQaFiles.getFileTypes().get(qaFileIndex));
             resultFile = commonController.moveFileToProduct(fileDto);
         }catch(Exception e){
             log.error("### moveQaFileToProduct Exception = {}", e);
@@ -84,5 +96,10 @@ public class QaFileServiceImpl implements QaFileService {
 
     public void saveQaFile(QaFile qaFileInstance) {
         qaFileRepository.save(qaFileInstance);
+    }
+
+    public void deleteQaFile(Integer qaFileId){
+        QaFile qaFile = findByQaFileId(qaFileId);
+        qaFile.setDeleted(true);
     }
 }

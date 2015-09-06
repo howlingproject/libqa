@@ -37,12 +37,19 @@ public class QaServiceImpl implements QaService {
 
     @Override
     @Transactional
-    public QaContent saveWithKeyword(QaContent qaContent, QaFile qaFiles){
+    public QaContent saveWithKeyword(QaContent paramQaContent, QaFile qaFiles){
         QaContent newQaContent = new QaContent();
         try {
-            newQaContent = save(qaContent);
+
+            // TODO List 차후 로그인으로 변경
+            paramQaContent.setUserId(1);
+            paramQaContent.setUserNick("용퓌");
+            paramQaContent.setInsertUserId(1);
+            paramQaContent.setInsertDate(new Date());
+
+            newQaContent = save(paramQaContent);
             moveQaFilesToProductAndSave(newQaContent.getQaId(), qaFiles);
-            saveKeywordAndList(newQaContent.getQaId(), qaContent.getKeywords());
+            saveKeywordAndList(newQaContent.getQaId(), paramQaContent.getKeywords());
         }catch(Exception e){
             log.error("### moveQaFilesToProductAndSave Exception = {}", e);
             throw new RuntimeException("moveQaFilesToProductAndSave Exception");
@@ -75,13 +82,36 @@ public class QaServiceImpl implements QaService {
         qaRepository.flush();
     }
 
+    @Override
+    public QaContent updateWithKeyword(QaContent paramQaContent, QaFile paramQaFiles) {
+        QaContent updateQaContent = new QaContent();
+
+        // TODO List 차후 로그인으로 변경
+        paramQaContent.setUpdateUserId(1);
+        paramQaContent.setUpdateDate(new Date());
+
+        try {
+            updateQaContent = save(paramQaContent);
+            moveQaFilesToProductAndSave(updateQaContent.getQaId(), paramQaFiles);
+//            saveKeywordAndList(updateQaContent.getQaId(), paramQaContent.getKeywords(), paramQaContent.getDeleteKeywords());
+        }catch(Exception e){
+            log.error("### moveQaFilesToProductAndSave Exception = {}", e);
+            throw new RuntimeException("moveQaFilesToProductAndSave Exception");
+        }
+        return updateQaContent;
+    }
+
     void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
         qaFileService.moveQaFilesToProductAndSave(qaId, qaFiles);
     }
 
     void saveKeywordAndList(Integer qaId, String keywords) {
+//    void saveKeywordAndList(Integer qaId, String keywords, List deleteKeywords) {
         if (qaId != 0) {
+            // todo deleteKeywords String 배열로 만들어서 keywordService에서 공통으로 입력, 수정, 삭제 처리 구현
             String[] keywordArrays = keywords.split(",");
+//            int keywordListSize = deleteKeywords.size();
+//            String [] keywordArrays = (String[]) qaContentInstance.getKeyword().toArray(new String[keywordListSize]);
             log.info(" keywordArrays : {}", keywordArrays.length);
             if (keywordArrays.length > 0) {
                 keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.QA, qaId);
