@@ -50,26 +50,6 @@ public class FeedReply {
 
     @Column
     private Integer updateUserId;
-    
-    @Transient
-    public void increaseLikeCount() {
-        this.likeCount++;
-    }
-
-    @Transient
-    public void decreaseLikeCount() {
-        this.likeCount--;
-    }
-    
-    @Transient
-    public void increaseClaimCount() {
-        this.claimCount++;
-    }
-    
-    @Transient
-    public void decreaseClaimCount() {
-        this.claimCount--;
-    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feedId", referencedColumnName = "feedId")

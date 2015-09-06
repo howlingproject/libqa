@@ -75,11 +75,10 @@ public class FeedService {
         FeedAction likedFeedAction = feedActionService.getLiked(feed, user);
         if (likedFeedAction == null) {
             feedActionService.like(feed, user);
-            feed.increaseLikeCount();     // FIXME db에 직접 읽어서 카운팅하게 바꿔야함.
         } else {
             likedFeedAction.cancel();
-            feed.decreaseLikeCount();     // FIXME db에 직접 읽어서 카운팅하게 바꿔야함.
         }
+        feed.setLikeCount(feedActionService.getLikeCount(feed));
         return feed;
     }
 
@@ -90,11 +89,10 @@ public class FeedService {
         FeedAction claimedFeedAction = feedActionService.getClaimed(feed, user);
         if (claimedFeedAction == null) {
             feedActionService.claim(feed, user);
-            feed.increaseClaimCount();
         } else {
             claimedFeedAction.cancel();
-            feed.decreaseClaimCount();
         }
+        feed.setClaimCount(feedActionService.getClaimCount(feed));
         return feed;
     }
 

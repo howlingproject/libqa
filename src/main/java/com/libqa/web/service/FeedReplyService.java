@@ -43,11 +43,10 @@ public class FeedReplyService {
         FeedAction feedAction = feedActionService.getLiked(feedReply, user);
         if (feedAction == null) {
             feedActionService.like(feedReply, user);
-            feedReply.increaseLikeCount();
         } else {
             feedAction.cancel();
-            feedReply.decreaseLikeCount();
         }
+        feedReply.setLikeCount(feedActionService.getLikeCount(feedReply));
         return feedReply;
     }
 
@@ -58,11 +57,10 @@ public class FeedReplyService {
         FeedAction feedAction = feedActionService.getClaimed(feedReply, user);
         if (feedAction == null) {
             feedActionService.claim(feedReply, user);
-            feedReply.increaseClaimCount();
         } else {
             feedAction.cancel();
-            feedReply.decreaseClaimCount();
         }
+        feedReply.setClaimCount(feedActionService.getClaimCount(feedReply));
         return feedReply;
     }
 

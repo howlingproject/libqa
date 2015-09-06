@@ -92,4 +92,19 @@ public class FeedActionService {
         return Iterables.tryFind(feedActions, TO_NORMAL(feedActionType)).orNull();
     }
 
+    public Integer getLikeCount(Feed feed) {
+        return feedActionRepository.countByFeedIdAndFeedActionTypeAndIsCanceled(feed.getFeedId(), FEED_LIKE, false);
+    }
+
+    public Integer getClaimCount(Feed feed) {
+        return feedActionRepository.countByFeedIdAndFeedActionTypeAndIsCanceled(feed.getFeedId(), FEED_CLAIM, false);
+    }
+    
+    public Integer getLikeCount(FeedReply feedReply) {
+        return feedActionRepository.countByFeedReplyIdAndFeedActionTypeAndIsCanceled(feedReply.getFeedReplyId(), FEED_REPLY_LIKE, false);
+    }
+
+    public Integer getClaimCount(FeedReply feedReply) {
+        return feedActionRepository.countByFeedReplyIdAndFeedActionTypeAndIsCanceled(feedReply.getFeedReplyId(), FEED_REPLY_CLAIM, false);
+    }
 }
