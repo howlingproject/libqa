@@ -20,9 +20,7 @@ public class DisplayFeed {
     private List<FeedFile> files = Lists.newArrayList();
     private List<FeedFile> images = Lists.newArrayList();
 
-    public DisplayFeed(Feed feed,
-                       DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction, 
-                       List<DisplayFeedReply> replies) {
+    public DisplayFeed(Feed feed, DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction, List<DisplayFeedReply> replies) {
         this.feedId = feed.getFeedId();
         this.userNick = feed.getUserNick();
         this.feedContent = feed.getFeedContent();
