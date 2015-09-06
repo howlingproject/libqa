@@ -102,8 +102,8 @@ public class WikiController {
 
         Wiki wiki = wikiService.findById(wikiId);
         log.info("# view : {}", wiki);
-        List<Wiki> subWikiList = wikiService.findByIdParentId(wiki.getParentsId());
-        Wiki parentWiki = wikiService.findByParentId(wiki.getWikiId());
+        Wiki parentWiki = wikiService.findByParentId(wiki.getParentsId());
+        List<Wiki> subWikiList = wikiService.findBySubWikiId(wiki.getWikiId());
 
         mav.addObject("wiki", wiki);
         mav.addObject("subWikiList", subWikiList);

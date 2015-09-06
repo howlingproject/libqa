@@ -107,16 +107,16 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-    public Wiki findByParentId(Integer wikiId) {
-        return wikiRepository.findOneByParentsIdAndIsDeleted(wikiId, isDeleted);
-    }
-
-    @Override
-    public List<Wiki> findByIdParentId(Integer parentId) {
+    public Wiki findByParentId(Integer parentId) {
         if( parentId == null  ){
             return  null;
         }
-        return wikiRepository.findAllByWikiIdInAndIsDeleted(parentId, isDeleted);
+        return wikiRepository.findOneByWikiIdAndIsDeleted(parentId, isDeleted);
+    }
+
+    @Override
+    public List<Wiki> findBySubWikiId(Integer wikiId) {
+        return wikiRepository.findAllByParentsIdAndIsDeleted(wikiId, isDeleted);
     }
 
     @Override

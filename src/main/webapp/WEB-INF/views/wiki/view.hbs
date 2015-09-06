@@ -15,7 +15,9 @@
                 <a href="/wiki/update/{{wiki.wikiId}}" class="btn btn-primary">편집</a>
                 <a href="/wiki/delete/{{wiki.wikiId}}" class="btn btn-primary">삭제</a>
                 <a href="/wiki/lock/{{wiki.wikiId}}" class="btn btn-primary">잠금</a>
-                <a href="/wiki/write/{{wiki.wikiId}}" class="btn btn-primary">자식위키생성</a>
+                {{#unless parentWiki}}
+                    <a href="/wiki/write/{{wiki.wikiId}}" class="btn btn-primary">자식위키생성</a>
+                {{/unless}}
                 <a href="/space/main" class="btn btn-primary">공간메인</a>
             </div>
         </div>
@@ -172,12 +174,12 @@
             </div>
         </div>
 
-        {{#ifWikiRelation wiki.parentWiki wiki.subWikiList}}
+        {{#ifWikiRelation parentWiki subWikiList}}
         <div class="col-md">
             <div class="nav-tabs-header">관련 위키</div>
 
             <div class="my-qna-item">
-                {{#if wiki.parentWiki}}
+                {{#if parentWiki}}
                 <div class="media">
                     <div class="media-left">
                         <div class="user-profile">
@@ -187,12 +189,12 @@
                     <div class="media-body">
                         <div class="media-heading">
 
-                            {{formatDate wiki.parentWiki.insertDate "yyyy.MM.dd"}}
-                            <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{wiki.parentWiki.userNick}}</span>
+                            {{formatDate parentWiki.insertDate "yyyy.MM.dd"}}
+                            <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{parentWiki.userNick}}</span>
 
                         </div>
-                        <a class="form" href="/wiki/{{wiki.parentWiki.wikiId}}">
-                            {{subString (htmlDelete wiki.parentWiki.contents) 0 300 }}
+                        <a class="form" href="/wiki/{{parentWiki.wikiId}}">
+                            {{subString (htmlDelete parentWiki.contents) 0 300 }}
                         </a>
                 {{/if}}
 
@@ -210,7 +212,7 @@
                         <a class="form" href="/wiki/{{wiki.wikiId}}">
                             {{subString (htmlDelete wiki.contents) 0 300 }}
                         </a>
-                        {{#each wiki.subWikiList}}
+                        {{#each subWikiList}}
                             <div class="media">
                                 <div class="media-left">
                                     <div class="user-profile">
@@ -231,7 +233,7 @@
                     </div>
                 </div>
 
-                {{#if wiki.parentWiki}}
+                {{#if parentWiki}}
                     </div>
                 </div>
                 {{/if}}
