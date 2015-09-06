@@ -80,15 +80,15 @@ public class UserController {
     */
 
     /**
-     * 회원 가입 form
+     * 회원 로그인 form
      *
      * @return
      */
     @RequestMapping("/loginPage")
     public ModelAndView loginPage(HttpServletRequest request) {
         String returnUrl = RequestUtil.refererUrl(request, "/index");
-
-        log.info("###################### loginPage : {}", returnUrl);
+        // 이전 페이지 결정 (로그인 및 가입일 경우 index로 이동)
+        returnUrl = checkReturnUrl(returnUrl);
 
         Enumeration params = request.getParameterNames();
         while(params.hasMoreElements()){
@@ -103,35 +103,49 @@ public class UserController {
         return mav;
     }
 
+    private String checkReturnUrl(String returnUrl) {
+
+        int subPoint = returnUrl.lastIndexOf("/");
+        String subUrl = returnUrl.substring(subPoint, returnUrl.length());
+
+        log.info("###################### subUrl : {}", subUrl);
+
+
+        if (subUrl.equals("/") || subUrl.equals("/loginPage") || subUrl.equals("/signUp")) {
+            returnUrl = "/index";
+        }
+
+        return returnUrl;
+    }
+
     @RequestMapping("/user/signUp")
     public ModelAndView signUp(HttpServletRequest request) {
-        String targetUrl = RequestUtil.refererUrl(request, "/index");
-        request.getSession().setAttribute("targetUrl", targetUrl);
+        String returnUrl = RequestUtil.refererUrl(request, "/index");
+        // 이전 페이지 결정 (로그인 및 가입일 경우 index로 이동)
+        returnUrl = checkReturnUrl(returnUrl);
+
 
         ModelAndView mav = new ModelAndView("/user/form");
 
-        log.info("#### properties = {}", mav.getModelMap());
-
-
-        mav.addObject("targetUrl", targetUrl);
+        mav.addObject("returnUrl", returnUrl);
         return mav;
     }
 
+
+    // @PreAuthorize("hasAuthority('ADMIN')")
+    // hasAnyRole('USER', 'ADMIN')
+    // isFullyAuthenticated() and hasAnyRole(‘customer’, ‘admin’)
+    // hasIpAddress(‘127.0.0.1’)
+    // hasRole(‘admin’) and hasIpAddress(‘192.168.1.0/24’)
 
     /**
      * hasAnyAuthority() or hasAnyRole() ('authority' and 'role' are synonyms in Spring Security lingo!) - checks whether the current user has one of the GrantedAuthority in the list.
      * hasAuthority() or hasRole() - as above, but for just one.
      * isAuthenticated() or isAnonymous() - whether the current user is authenticated or not.
      * isRememberMe() or isFullyAuthenticated() - whether the current user is authenticated by 'remember me' token or not.
-     *
-     * @param model
+     * @param request
      * @return
      */
-    // @PreAuthorize("hasAuthority('ADMIN')")
-    // hasAnyRole('USER', 'ADMIN')
-    // isFullyAuthenticated() and hasAnyRole(‘customer’, ‘admin’)
-    // hasIpAddress(‘127.0.0.1’)
-    // hasRole(‘admin’) and hasIpAddress(‘192.168.1.0/24’)
     @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("/userInfo")
     public ModelAndView userInfo(HttpServletRequest request) {
@@ -178,6 +192,9 @@ public class UserController {
         try {
             User duplicateEmail = userService.findByEmail(loginUserMail);   // 이메일 중복 체크
             User duplicateNick = userService.findByNick(loginUserNick);      // 닉네임 중복 체크
+
+            log.info("## duplicateEmail = {}", duplicateEmail);
+            log.info("## duplicateNick = {}", duplicateNick);
 
             if (duplicateEmail == null && duplicateNick == null) {
                 user = userService.createUser(loginUserMail, loginUserNick, loginUserPass, loginType);

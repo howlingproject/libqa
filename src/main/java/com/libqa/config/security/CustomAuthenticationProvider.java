@@ -34,6 +34,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
         String principal = (String) authentication.getPrincipal();
 
+
         log.info("### CustomAuthenticationProvider email = {}", email);
         log.info("### CustomAuthenticationProvider password = {}", password);
         log.info("### CustomAuthenticationProvider principal = {}", principal);

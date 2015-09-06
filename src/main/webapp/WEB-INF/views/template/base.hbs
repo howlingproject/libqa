@@ -37,19 +37,30 @@
                 <li class="dropdown">
                     <a aria-expanded="true" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-2x"></i></a>
                     <ul class="dropdown-menu">
+                        {{#compareTo isLogin '1'}}
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile {{isLogin}}</a>
+                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
                         </li>
+                        {{/compareTo}}
+                        {{#compareTo isLogin '1'}}
                         <li>
                             <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
                         </li>
+                        {{/compareTo}}
+                        {{#compareTo isLogin '0'}}
                         <li>
-                            <a href="/user/signUp"><i class="fa fa-fw fa-user-plus"></i> Sign Up</a>
+                            <a href="/user/signUp"><i class="fa fa-fw fa-user-plus"></i> Sign Up {{isLogin}}</a>
                         </li>
                         <li class="divider"></li>
+                        {{/compareTo}}
                         <li>
-                            <a href="/logoutUser"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                            <a href="#" data-toggle="modal" data-target="#loginLayer"><i class="fa fa-fw fa-gear"></i> Log in</a>
+                            {{#compareTo isLogin '1'}}
+                                <a href="/logoutUser"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            {{/compareTo}}
+
+                            {{#compareTo isLogin '0'}}
+                                <a href="#" data-toggle="modal" data-target="#loginLayer"><i class="fa fa-fw fa-gear"></i> Log in</a>
+                            {{/compareTo}}
                         </li>
                     </ul>
                 </li>
@@ -154,7 +165,7 @@
                 var result = jQuery.parseJSON(response);
 
                 if (result.status == true) {
-                    $(location).attr('href', result.returnUrl);
+                    $(location).attr('href', "{{returnUrl}}");
                 }
             }).fail(function(response){
                 console.log("# ERROR login : " + response.status);

@@ -37,7 +37,7 @@ Time: 16:20
                         <form id="loginFormArea" name="loginFormArea" method="post" class="form-horizontal">
                             <div class="row" style="height: 40px">
                                 <div class="col-xs-4 text-left">
-                                    <span style="color: #428bca;"><a href="#">Forgot password?</a></span>
+                                    <span style="color: #428bca;"><a href="#">Forgot password? {{isLogin}}</a></span>
                                 </div>
                             </div>
                             <div class="input-group">
@@ -107,7 +107,6 @@ Time: 16:20
                     },
                     error:function(req){
                         console.log("# ERROR login : " + response.status);
-
                         $("#loginInfo").show(0).delay(5000).hide(0);
                     }});
                 /*
