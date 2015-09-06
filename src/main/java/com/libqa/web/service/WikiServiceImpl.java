@@ -1,12 +1,10 @@
 package com.libqa.web.service;
 
+import com.libqa.application.enums.ActivityTypeEnum;
 import com.libqa.application.enums.KeywordTypeEnum;
 import com.libqa.application.enums.WikiRevisionActionTypeEnum;
 import com.libqa.application.util.PageUtil;
-import com.libqa.web.domain.Keyword;
-import com.libqa.web.domain.Wiki;
-import com.libqa.web.domain.WikiFile;
-import com.libqa.web.domain.WikiSnapShot;
+import com.libqa.web.domain.*;
 import com.libqa.web.repository.KeywordRepository;
 import com.libqa.web.repository.WikiRepository;
 import com.libqa.web.repository.WikiSnapShotRepository;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,6 +42,9 @@ public class WikiServiceImpl implements WikiService {
     @Autowired
     private WikiReplyService wikiReplyService;
 
+    @Autowired
+    private ActivityService activityService;
+
     final boolean isDeleted = false;
 
     @Override
@@ -56,22 +58,37 @@ public class WikiServiceImpl implements WikiService {
         Wiki result = save(wiki);
         saveWikiFileAndList(result);
         saveKeywordAndList(wiki, result);
+        saveWikiActivity(result, ActivityTypeEnum.INSERT_WIKI);
         return result;
+    }
+
+    private void saveWikiActivity(Wiki result, ActivityTypeEnum ActivityTypeEnum) {
+        String message = result.getUserNick()+"님이 "+ ActivityTypeEnum.getCode();
+        Activity activity = new Activity();
+        activity.setInsertDate(new Date());
+        activity.setDeleted(false);
+        activity.setActivityDesc(message);
+        activity.setActivityType(ActivityTypeEnum);
+        activity.setUserId(result.getUserId());
+        activity.setUserNick(result.getUserNick());
+        activity.setWikiId(result.getWikiId());
+        activityService.saveActivity(activity);
     }
 
     @Override
     @Transactional
     public Wiki updateWithKeyword(Wiki wiki, WikiRevisionActionTypeEnum revisionActionTypeEnum) {
-        Wiki snapShotwiki = findById(wiki.getWikiId());
         WikiSnapShot wikiSnapShot = new WikiSnapShot();
         BeanUtils.copyProperties(wiki, wikiSnapShot);
 
-        wikiSnapShot.setWiki( snapShotwiki );
-        wikiSnapShot.setParentsId(snapShotwiki.getParentsId());
+        wikiSnapShot.setWiki(wiki);
         wikiSnapShot.setRevisionActionType(revisionActionTypeEnum);
         wikiSnapShotRepository.save(wikiSnapShot);
 
         Wiki result = save(wiki);
+
+        saveWikiActivity(wiki, ActivityTypeEnum.UPDATE_WIKI);
+
         // 아래는 버그가 있는듯. 확인해서 다시 정상화하도록.
         //saveWikiFileAndList(result);
         //saveKeywordAndList(wiki, result);
@@ -107,16 +124,16 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-    public Wiki findByParentId(Integer wikiId) {
-        return wikiRepository.findOneByParentsIdAndIsDeleted(wikiId, isDeleted);
-    }
-
-    @Override
-    public List<Wiki> findByIdParentId(Integer parentId) {
+    public Wiki findByParentId(Integer parentId) {
         if( parentId == null  ){
             return  null;
         }
-        return wikiRepository.findAllByWikiIdInAndIsDeleted(parentId, isDeleted);
+        return wikiRepository.findOneByWikiIdAndIsDeleted(parentId, isDeleted);
+    }
+
+    @Override
+    public List<Wiki> findBySubWikiId(Integer wikiId) {
+        return wikiRepository.findAllByParentsIdAndIsDeleted(wikiId, isDeleted);
     }
 
     @Override

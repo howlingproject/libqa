@@ -1,14 +1,10 @@
 package com.libqa.web.service;
 
-import com.google.common.collect.Lists;
 import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.*;
 import com.libqa.web.repository.FeedFileRepository;
 import com.libqa.web.repository.FeedReplyRepository;
 import com.libqa.web.repository.FeedRepository;
-import com.libqa.web.view.DisplayFeed;
-import com.libqa.web.view.DisplayFeedAction;
-import com.libqa.web.view.DisplayFeedReply;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -40,10 +36,9 @@ public class FeedService {
     @Autowired
     private FeedActionService feedActionService;
 
-    public List<DisplayFeed> search(int startIdx, int endIdx) {
+    public List<Feed> search(int startIdx, int endIdx) {
         PageRequest pageRequest = new PageRequest(startIdx, endIdx, new Sort(new Order(DESC, "feedId")));
-        List<Feed> feeds = feedRepository.findByIsDeleted(false, pageRequest);
-        return convertToDisplayFeed(feeds);
+        return feedRepository.findByIsDeleted(false, pageRequest);
     }
 
     @Transactional
@@ -128,24 +123,4 @@ public class FeedService {
         }
     }
 
-    private List<DisplayFeed> convertToDisplayFeed(List<Feed> feeds) {
-        List<DisplayFeed> displayFeeds = Lists.newArrayList();
-        for (Feed feed : feeds) {
-            List<DisplayFeedReply> displayFeedReplies = convertToDisplayFeedReplies(feed.getFeedId(), feed.getFeedReplies());
-            DisplayFeedAction likeFeedAction = new DisplayFeedAction(feed.getLikeCount(), false);
-            DisplayFeedAction claimFeedAction = new DisplayFeedAction(feed.getClaimCount(), false);
-            displayFeeds.add(new DisplayFeed(feed, likeFeedAction, claimFeedAction, displayFeedReplies));
-        }
-        return displayFeeds;
-    }
-
-    private List<DisplayFeedReply> convertToDisplayFeedReplies(Integer feedId, List<FeedReply> feedReplies) {
-        List<DisplayFeedReply> displayFeedReplies = Lists.newArrayList();
-        for (FeedReply feedReply : feedReplies) {
-            DisplayFeedAction likeFeedAction = new DisplayFeedAction(feedReply.getLikeCount(), false);
-            DisplayFeedAction claimFeedAction = new DisplayFeedAction(feedReply.getClaimCount(), false);
-            displayFeedReplies.add(new DisplayFeedReply(feedId, feedReply, likeFeedAction, claimFeedAction));
-        }
-        return displayFeedReplies;
-    }
 }

@@ -1,15 +1,11 @@
 package com.libqa.application.helper;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Options;
-import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.Wiki;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -60,6 +56,12 @@ public class HandlebarsHelper {
         return str.length() + "";
     }
 
+    public String size(List<Object> list, Options options) {
+
+        System.out.println("############### length ############### ");
+        return list.size()+"";
+    }
+
     public String nl2br(String str, Options options) {
         return null;
     }
@@ -97,6 +99,8 @@ public class HandlebarsHelper {
         }
         return options.inverse();
     }
+
+
 
 
 }

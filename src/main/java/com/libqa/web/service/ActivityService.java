@@ -14,4 +14,6 @@ public interface ActivityService {
     Activity saveActivity(Activity activity);
 
     List<Activity> findBySpaceId(Integer spaceId);
+
+    List<Activity> findByWikiId(Integer wikiId);
 }

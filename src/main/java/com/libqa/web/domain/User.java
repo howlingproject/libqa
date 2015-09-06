@@ -52,15 +52,15 @@ public class User {
     @Column(nullable = false, columnDefinition = "int default 0")
     private int visiteCount;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date lastVisiteDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date insertDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
     @Column(nullable = false, columnDefinition = "int default 0")
@@ -90,6 +90,11 @@ public class User {
     @Transient
     private String targetUrl;
 
+    @Transient
+    public void increaseVisit() {
+        this.visiteCount++;
+    }
+
     public static User createUser(String userEmail, String userNick, String password, String channelType) {
         Date now = new Date();
         User user = new User();
@@ -115,4 +120,6 @@ public class User {
             return false;
         }
     }
+
+
 }

@@ -23,10 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by yion on 2015. 3. 23..
@@ -83,56 +80,88 @@ public class UserController {
     */
 
     /**
-     * 회원 가입 form
+     * 회원 로그인 form
      *
      * @return
      */
-    @RequestMapping("/login")
-    public ModelAndView login(HttpServletRequest request) {
-        return this.signUp(request);
+    @RequestMapping("/loginPage")
+    public ModelAndView loginPage(HttpServletRequest request) {
+
+        log.info("request.get = {}", request.getAttribute("isLogin"));
+        log.info("request.get = {}", request.getAttribute("userEmail"));
+        log.info("request.get = {}", request.getAttribute("userRole"));
+        String returnUrl = RequestUtil.refererUrl(request, "/index");
+        // 이전 페이지 결정 (로그인 및 가입일 경우 index로 이동)
+        returnUrl = checkReturnUrl(returnUrl);
+
+        Enumeration params = request.getParameterNames();
+        while (params.hasMoreElements()) {
+            String paramName = (String) params.nextElement();
+            System.out.println("# Attribute Name - " + paramName + ", Value - " + request.getParameter(paramName));
+        }
+        ModelAndView mav = new ModelAndView("/user/loginPage");
+
+        // 실제 로그인 페이지가 아니라 권한으로 강제 이동 된 페이지에서는 returnUrl을 세팅해서 내려주고, hbs에서 강제로 url 이동 처리함.
+        mav.addObject("returnUrl", returnUrl);
+        mav.addObject("isLogin", request.getAttribute("isLogin"));
+
+        log.info("### 로그인 정보 페이지로 이동");
+        return mav;
+    }
+
+    private String checkReturnUrl(String returnUrl) {
+
+        int subPoint = returnUrl.lastIndexOf("/");
+        String subUrl = returnUrl.substring(subPoint, returnUrl.length());
+
+        log.info("###################### subUrl : {}", subUrl);
+
+
+        if (subUrl.equals("/") || subUrl.equals("/loginPage") || subUrl.equals("/signUp")) {
+            returnUrl = "/index";
+        }
+
+        return returnUrl;
     }
 
     @RequestMapping("/user/signUp")
     public ModelAndView signUp(HttpServletRequest request) {
-        String targetUrl = RequestUtil.refererUrl(request, "/index");
-        request.getSession().setAttribute("targetUrl", targetUrl);
+        String returnUrl = RequestUtil.refererUrl(request, "/index");
+        // 이전 페이지 결정 (로그인 및 가입일 경우 index로 이동)
+        returnUrl = checkReturnUrl(returnUrl);
+
 
         ModelAndView mav = new ModelAndView("/user/form");
 
-        log.info("#### properties = {}", mav.getModelMap());
-
-
-        mav.addObject("targetUrl", targetUrl);
+        mav.addObject("returnUrl", returnUrl);
         return mav;
     }
 
+
+    // @PreAuthorize("hasAuthority('ADMIN')")
+    // hasAnyRole('USER', 'ADMIN')
+    // isFullyAuthenticated() and hasAnyRole(‘customer’, ‘admin’)
+    // hasIpAddress(‘127.0.0.1’)
+    // hasRole(‘admin’) and hasIpAddress(‘192.168.1.0/24’)
 
     /**
      * hasAnyAuthority() or hasAnyRole() ('authority' and 'role' are synonyms in Spring Security lingo!) - checks whether the current user has one of the GrantedAuthority in the list.
      * hasAuthority() or hasRole() - as above, but for just one.
      * isAuthenticated() or isAnonymous() - whether the current user is authenticated or not.
      * isRememberMe() or isFullyAuthenticated() - whether the current user is authenticated by 'remember me' token or not.
-     *
-     * @param model
+     * @param request
      * @return
      */
-    // @PreAuthorize("hasAuthority('ADMIN')")
-    // hasAnyRole('USER', 'ADMIN')
-    // isFullyAuthenticated() and hasAnyRole(‘customer’, ‘admin’)
-    // hasIpAddress(‘127.0.0.1’)
-    // hasRole(‘admin’) and hasIpAddress(‘192.168.1.0/24’)
     @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("/userInfo")
-    public ModelAndView userInfo(Model model) {
+    public ModelAndView userInfo(HttpServletRequest request) {
+        String returnUrl = RequestUtil.refererUrl(request, "/index");
         log.info("### USER Info!");
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
         String email = (String) authentication.getPrincipal();
-        String password = (String) authentication.getCredentials();
-        Collection<? extends GrantedAuthority> auths = authentication.getAuthorities();
 
-//        Iterables.getFirst(
         List<GrantedAuthority> grantedAuths = (List<GrantedAuthority>) authentication.getAuthorities();
         System.out.println("### grantedAuthority = " + grantedAuths.get(0));
 
@@ -144,6 +173,7 @@ public class UserController {
         log.info("authentication.gerRole() = {}", grantedAuths.get(0));
 
         ModelAndView mav = new ModelAndView("/user/info");
+        mav.addObject("returnUrl", returnUrl);
         mav.addObject("userEmail", email);
         mav.addObject("auth", authentication.isAuthenticated());
         return mav;
@@ -165,6 +195,9 @@ public class UserController {
         try {
             User duplicateEmail = userService.findByEmail(loginUserMail);   // 이메일 중복 체크
             User duplicateNick = userService.findByNick(loginUserNick);      // 닉네임 중복 체크
+
+            log.info("## duplicateEmail = {}", duplicateEmail);
+            log.info("## duplicateNick = {}", duplicateNick);
 
             if (duplicateEmail == null && duplicateNick == null) {
                 user = userService.createUser(loginUserMail, loginUserNick, loginUserPass, loginType);
