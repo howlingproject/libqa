@@ -91,19 +91,13 @@ public class HandlebarsHelper {
         return options.fn();
     }
 
-    public CharSequence compareTo(String str1, String str2, Options options) throws IOException {
+    public CharSequence compareTo(Object str1, Object str2, Options options) throws IOException {
         if( str2.equals(str1) ){
             return options.fn();
         }
         return options.inverse();
     }
 
-    public CharSequence compareTo(int str1, int str2, Options options) throws IOException {
-        if( str1 == str2 ){
-            return options.fn();
-        }
-        return options.inverse();
-    }
 
 }
 
