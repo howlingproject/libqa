@@ -2,6 +2,7 @@ package com.libqa.web.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @Entity
 @Data
 @Slf4j
+@ToString(exclude = {"wikiSnapShots", "wikiReplies"})
 public class Wiki {
 
     @Id
@@ -87,13 +89,6 @@ public class Wiki {
     @Temporal(TemporalType.DATE)
     private Date updateDate;
 
-    @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<WikiFile> wikiFiles;
-
-    @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)
-    private List<WikiSnapShot> wikiSnapShots;
-
     @Transient
     private String keywords;
 
@@ -101,21 +96,19 @@ public class Wiki {
     @Transient
     private int replyCount;
 
-//    @OneToMany(mappedBy = "parentsId", fetch = FetchType.LAZY)
-//    @JsonManagedReference
-    //private List<Wiki> subWikiList;
+    @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<WikiFile> wikiFiles;
 
-//    @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
-//    @JoinColumn(name="parentsId", referencedColumnName = "wikiId", nullable = false, unique = true, insertable = false, updatable = false)
-//    @JsonManagedReference
-    //private Wiki parentWiki;
+    @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<WikiSnapShot> wikiSnapShots;
 
     @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
     @JsonManagedReference
-    //@Transient
     private List<Keyword> keywordList;
 
     @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)
-    //@Transient
+    @JsonManagedReference
     private List<WikiReply> wikiReplies;
 }

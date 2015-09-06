@@ -20,15 +20,20 @@ public class ActivityServiceImpl implements ActivityService {
     @Autowired
     private ActivityRepository activityRepository;
 
-
-
     @Override
     public Activity saveActivity(Activity activity) {
-        return null;
+        return activityRepository.save(activity);
     }
 
     @Override
     public List<Activity> findBySpaceId(Integer spaceId) {
         return activityRepository.findBySpaceId(spaceId);
     }
+
+    @Override
+    public List<Activity> findByWikiId(Integer wikiId) {
+        return activityRepository.findByWikiId(wikiId);
+    }
+
+
 }

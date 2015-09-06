@@ -59,114 +59,103 @@ class FeedActionServiceSpec extends Specification {
         1 * feedActionRepository.save(_)
     }
 
-    def "좋아요/신고하기를 취소할 수 있다."() {
-        given:
-        def feedActionId = 1
-        def feedAction = feedActionFixture(FEED_LIKE)
-        feedActionRepository.findOne(feedActionId) >> feedAction
-        when:
-        sut.cancel(feedActionId);
-        then:
-        feedAction.canceled == true
-    }
-
     def "특정 FEED에 자신이 좋아요를 한 적이 있다."() {
         given:
-        def feedId = 1
-        def userId = 1
-        feedActionRepository.findByFeedIdAndUserId(feedId, userId) >> [
+        def feed = feedFixture()
+        def user = userFixture()
+        feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId()) >> [
                 feedActionFixture(FEED_LIKE)
         ]
         when:
-        def response = sut.hasLikedFeed(feedId, userId)
+        def response = sut.hasLike(feed, user)
         then:
         response == true
     }
 
     def "특정 FEED에 자신이 좋아요를 한 적이 없다."() {
         given:
-        def feedId = 1
-        def userId = 1
-        feedActionRepository.findByFeedIdAndUserId(feedId, userId) >> [
+        def feed = feedFixture()
+        def user = userFixture()
+        feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId()) >> [
                 feedActionFixture(FEED_REPLY_CLAIM)
         ]
         when:
-        def response = sut.hasLikedFeed(feedId, userId)
+        def response = sut.hasLike(feed, user)
         then:
         response == false
     }
 
     def "특정 FEED에 자신이 신고하기를 한 적이 있다."() {
         given:
-        def feedId = 1
-        def userId = 1
-        feedActionRepository.findByFeedIdAndUserId(feedId, userId) >> [
+        def feed = feedFixture()
+        def user = userFixture()
+        feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId()) >> [
                 feedActionFixture(FEED_CLAIM)
         ]
         when:
-        def response = sut.hasClaimFeed(feedId, userId)
+        def response = sut.hasClaim(feed, user)
         then:
         response == true
     }
 
     def "특정 FEED에 자신이 신고하기를 한 적이 없다."() {
         given:
-        def feedId = 1
-        def userId = 1
-        feedActionRepository.findByFeedIdAndUserId(feedId, userId) >> []
+        def feed = feedFixture()
+        def user = userFixture()
+        feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId()) >> []
         when:
-        def response = sut.hasClaimFeed(feedId, userId)
+        def response = sut.hasClaim(feed, user)
         then:
         response == false
     }
 
     def "특정 FEED의 댓글에 자신이 좋아요를 한 적이 있다."() {
         given:
-        def feedId = 1
-        def userId = 1
-        feedActionRepository.findByFeedReplyIdAndUserId(feedId, userId) >> [
+        def feedReply = feedReplyFixture()
+        def user = userFixture()
+        feedActionRepository.findByFeedReplyIdAndUserId(feedReply.getFeedReplyId(), user.getUserId()) >> [
                 feedActionFixture(FEED_REPLY_LIKE)
         ]
         when:
-        def response = sut.hasLikedFeedReply(feedId, userId)
+        def response = sut.hasLike(feedReply, user)
         then:
         response == true
     }
 
     def "특정 FEED의 댓글에 자신이 좋아요를 한 적이 없다."() {
         given:
-        def feedId = 1
-        def userId = 1
-        feedActionRepository.findByFeedReplyIdAndUserId(feedId, userId) >> [
+        def feedReply = feedReplyFixture()
+        def user = userFixture()
+        feedActionRepository.findByFeedReplyIdAndUserId(feedReply.getFeedReplyId(), user.getUserId()) >> [
                 feedActionFixture(FEED_LIKE),
                 feedActionFixture(FEED_REPLY_CLAIM)
         ]
         when:
-        def response = sut.hasLikedFeedReply(feedId, userId)
+        def response = sut.hasLike(feedReply, user)
         then:
         response == false
     }
 
     def "특정 FEED의 댓글에 자신이 신고하기를 한 적이 있다."() {
         given:
-        def feedId = 1
-        def userId = 1
-        feedActionRepository.findByFeedReplyIdAndUserId(feedId, userId) >> [
+        def feedReply = feedReplyFixture()
+        def user = userFixture()
+        feedActionRepository.findByFeedReplyIdAndUserId(feedReply.getFeedReplyId(), user.getUserId()) >> [
                 feedActionFixture(FEED_REPLY_CLAIM)
         ]
         when:
-        def response = sut.hasClaimFeedReply(feedId, userId)
+        def response = sut.hasClaim(feedReply, user)
         then:
         response == true
     }
 
     def "특정 FEED의 댓글에 자신이 신고하기를 한 적이 없다."() {
         given:
-        def feedId = 1
-        def userId = 1
-        feedActionRepository.findByFeedReplyIdAndUserId(feedId, userId) >> []
+        def feedReply = feedReplyFixture()
+        def user = userFixture()
+        feedActionRepository.findByFeedReplyIdAndUserId(feedReply.getFeedReplyId(), user.getUserId()) >> []
         when:
-        def response = sut.hasClaimFeedReply(feedId, userId)
+        def response = sut.hasClaim(feedReply, user)
         then:
         response == false
     }
