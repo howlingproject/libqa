@@ -3,12 +3,15 @@ package com.libqa.application.helper;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Options;
+import com.libqa.application.util.StringUtil;
+import com.libqa.web.domain.Wiki;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,6 +83,21 @@ public class HandlebarsHelper {
 
         return "#";
     }
+
+    public CharSequence ifWikiRelation(Wiki obj1, List<Wiki> obj2, Options options) throws IOException {
+        if( obj1 == null && obj2 == null ){
+            return options.inverse();
+        }
+        return options.fn();
+    }
+
+    public CharSequence compareTo(Object str1, Object str2, Options options) throws IOException {
+        if( str2.equals(str1) ){
+            return options.fn();
+        }
+        return options.inverse();
+    }
+
 
 }
 

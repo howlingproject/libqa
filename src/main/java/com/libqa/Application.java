@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -14,7 +13,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.servlet.Filter;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 
 import static com.libqa.web.service.UserServiceImpl.USER_EMAIL_CACHE;
 
@@ -27,13 +25,7 @@ import static com.libqa.web.service.UserServiceImpl.USER_EMAIL_CACHE;
 public class Application {
 
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(Application.class, args);
-
-        String[] beanNames = ctx.getBeanDefinitionNames();
-        Arrays.sort(beanNames);
-        for (String beanName : beanNames) {
-            System.out.println("#### " + beanName);
-        }
+        SpringApplication.run(Application.class, args);
     }
 
     @Bean

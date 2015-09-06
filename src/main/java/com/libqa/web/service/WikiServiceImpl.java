@@ -107,6 +107,19 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
+    public Wiki findByParentId(Integer wikiId) {
+        return wikiRepository.findOneByParentsIdAndIsDeleted(wikiId, isDeleted);
+    }
+
+    @Override
+    public List<Wiki> findByIdParentId(Integer parentId) {
+        if( parentId == null  ){
+            return  null;
+        }
+        return wikiRepository.findAllByWikiIdInAndIsDeleted(parentId, isDeleted);
+    }
+
+    @Override
     public List<Wiki> findByAllWiki(int page, int size) {
         List<Wiki> list = wikiRepository.findAllByIsDeleted(
                 PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "insertDate")).getSort()

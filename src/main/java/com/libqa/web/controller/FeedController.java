@@ -89,7 +89,7 @@ public class FeedController {
         try {
             FeedAction feedAction = feedService.like(feedId);
             Integer likeCount = feedService.getLikeCount(feedId);
-            return createSuccessResult(new DisplayFeedAction(feedAction, likeCount));
+            return createSuccessResult(new DisplayFeedAction(likeCount, feedAction.isNotCanceled()));
         } catch (Exception e) {
             log.error("like feed error.", e);
             return createFailResult(null);
@@ -101,7 +101,7 @@ public class FeedController {
         try {
             FeedAction feedAction = feedService.claim(feedId);
             Integer claimCount = feedService.getClaimCount(feedId);
-            return createSuccessResult(new DisplayFeedAction(feedAction, claimCount));
+            return createSuccessResult(new DisplayFeedAction(claimCount, feedAction.isNotCanceled()));
         } catch (Exception e) {
             log.error("claim feed error.", e);
             return createFailResult(null);
@@ -113,7 +113,7 @@ public class FeedController {
         try {
             FeedAction feedAction = feedReplyService.like(feedReplyId);
             Integer likeCount = feedReplyService.getLikeCount(feedReplyId);
-            return createSuccessResult(new DisplayFeedAction(feedAction, likeCount));
+            return createSuccessResult(new DisplayFeedAction(likeCount, feedAction.isNotCanceled()));
         } catch (Exception e) {
             log.error("like feedReply error.", e);
             return createFailResult(null);
@@ -125,7 +125,7 @@ public class FeedController {
         try {
             FeedAction feedAction = feedReplyService.claim(feedReplyId);
             Integer claimCount = feedReplyService.getClaimCount(feedReplyId);
-            return createSuccessResult(new DisplayFeedAction(feedAction, claimCount));
+            return createSuccessResult(new DisplayFeedAction(claimCount, feedAction.isNotCanceled()));
         } catch (Exception e) {
             log.error("claim feedReply error.", e);
             return createFailResult(null);
