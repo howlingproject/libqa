@@ -41,6 +41,9 @@ public class QaFile {
     private Integer userId;
 
     @Transient
+    private List fileIds;
+
+    @Transient
     private List realNames;
 
     @Transient
@@ -54,4 +57,7 @@ public class QaFile {
 
     @Transient
     private List fileTypes;
+
+    @Transient
+    private List deleteFiles;
 }

@@ -88,4 +88,8 @@ public class QaContent {
     @Transient
     private String keywords;
 
+    @Transient
+    private List deleteKeywords;
+
+
 }

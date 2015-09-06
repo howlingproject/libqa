@@ -9,5 +9,4 @@ import com.libqa.web.domain.QaFile;
  */
 public interface QaFileService {
     boolean moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles);
-
 }

@@ -21,4 +21,6 @@ public interface QaService {
     boolean deleteWithKeyword(Integer qaId);
 
     void saveIsReplyed(Integer qaId, boolean b);
+
+    QaContent updateWithKeyword(QaContent paramQaContent, QaFile paramQaFiles);
 }
