@@ -1,9 +1,10 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;
-import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.FeedReply;
+import com.libqa.web.service.FeedActionService;
 import com.libqa.web.service.FeedReplyService;
 import com.libqa.web.service.FeedService;
 import com.libqa.web.view.DisplayFeed;
@@ -28,9 +29,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/feed")
 public class FeedController {
     @Autowired
+    private LoggedUser loggedUser;
+    @Autowired
     private FeedService feedService;
     @Autowired
     private FeedReplyService feedReplyService;
+    @Autowired
+    private FeedActionService feedActionService;
     @Autowired
     private DisplayFeedConverter displayFeedConverter;
 
@@ -43,7 +48,7 @@ public class FeedController {
     @RequestMapping(value = "list", method = GET)
     public ResponseData<DisplayFeed> list() {
         List<Feed> feeds = feedService.search(0, 10);
-        return createSuccessResult(displayFeedConverter.toDisplayFeed(feeds));
+        return createSuccessResult(displayFeedConverter.toDisplayFeeds(feeds));
     }
 
     @RequestMapping(value = "save", method = POST)
@@ -93,9 +98,9 @@ public class FeedController {
     @RequestMapping(value = "{feedId}/like", method = POST)
     public ResponseData<DisplayFeedAction> likeFeed(@PathVariable Integer feedId) {
         try {
-            FeedAction feedAction = feedService.like(feedId);
-            Integer likeCount = feedService.getLikeCount(feedId);
-            return createSuccessResult(displayFeedConverter.toFeedAction(feedAction.isNotCanceled(), likeCount));
+            Feed feed = feedService.like(feedId);
+            boolean hasLike = feedActionService.hasLike(feed, loggedUser.getDummyUser());
+            return createSuccessResult(displayFeedConverter.toDisplayFeedAction(feed.getLikeCount(), hasLike));
         } catch (Exception e) {
             log.error("like feed error.", e);
             return createFailResult(null);
@@ -105,9 +110,9 @@ public class FeedController {
     @RequestMapping(value = "{feedId}/claim", method = POST)
     public ResponseData<DisplayFeedAction> claimFeed(@PathVariable Integer feedId) {
         try {
-            FeedAction feedAction = feedService.claim(feedId);
-            Integer claimCount = feedService.getClaimCount(feedId);
-            return createSuccessResult(displayFeedConverter.toFeedAction(feedAction.isNotCanceled(), claimCount));
+            Feed feed = feedService.claim(feedId);
+            boolean hasClaim = feedActionService.hasClaim(feed, loggedUser.getDummyUser());
+            return createSuccessResult(displayFeedConverter.toDisplayFeedAction(feed.getClaimCount(), hasClaim));
         } catch (Exception e) {
             log.error("claim feed error.", e);
             return createFailResult(null);
@@ -117,9 +122,9 @@ public class FeedController {
     @RequestMapping(value = "reply/{feedReplyId}/like", method = POST)
     public ResponseData<DisplayFeedAction> likeFeedReply(@PathVariable Integer feedReplyId) {
         try {
-            FeedAction feedAction = feedReplyService.like(feedReplyId);
-            Integer likeCount = feedReplyService.getLikeCount(feedReplyId);
-            return createSuccessResult(displayFeedConverter.toFeedAction(feedAction.isNotCanceled(), likeCount));
+            FeedReply feedReply = feedReplyService.like(feedReplyId);
+            boolean hasLike = feedActionService.hasLike(feedReply, loggedUser.getDummyUser());
+            return createSuccessResult(displayFeedConverter.toDisplayFeedAction(feedReply.getLikeCount(), hasLike));
         } catch (Exception e) {
             log.error("like feedReply error.", e);
             return createFailResult(null);
@@ -129,9 +134,9 @@ public class FeedController {
     @RequestMapping(value = "reply/{feedReplyId}/claim", method = POST)
     public ResponseData<DisplayFeedAction> claimFeedReply(@PathVariable Integer feedReplyId) {
         try {
-            FeedAction feedAction = feedReplyService.claim(feedReplyId);
-            Integer claimCount = feedReplyService.getClaimCount(feedReplyId);
-            return createSuccessResult(displayFeedConverter.toFeedAction(feedAction.isNotCanceled(), claimCount));
+            FeedReply feedReply = feedReplyService.claim(feedReplyId);
+            boolean hasClaim = feedActionService.hasClaim(feedReply, loggedUser.getDummyUser());
+            return createSuccessResult(displayFeedConverter.toDisplayFeedAction(feedReply.getClaimCount(), hasClaim));
         } catch (Exception e) {
             log.error("claim feedReply error.", e);
             return createFailResult(null);

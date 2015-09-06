@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
     public User findByEmailAndIsCertification(String email) {
         User user = this.findByEmail(email);
 
-        if (user.isCertification() == false) {
+        if (!user.isCertification()) {
             return null;
         }
 

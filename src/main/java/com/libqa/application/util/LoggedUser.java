@@ -1,6 +1,5 @@
 package com.libqa.application.util;
 
-import com.libqa.application.enums.RoleEnum;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +18,7 @@ public class LoggedUser {
 
     /**
      * 로그인 사용자 정보를 조회한다.
+     *
      * @return logged user
      */
     public User get() {
@@ -29,13 +29,10 @@ public class LoggedUser {
         log.info("### isInvalidUser(userEmail)  = {}", isInvalidUser(userEmail));
 
         if (isInvalidUser(userEmail)) {
-            User user = new User();
-            user.setRole(RoleEnum.GUEST);
-            return user;
-        } else {
-            return userService.findByEmail(userEmail);
+            User.createGuest();
         }
 
+        return userService.findByEmail(userEmail);
     }
 
     private boolean isInvalidUser(String userEmail) {
@@ -44,6 +41,7 @@ public class LoggedUser {
 
     /**
      * 테스트용. 추후 제거예정
+     *
      * @return
      */
     public User getDummyUser() {

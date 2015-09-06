@@ -68,44 +68,34 @@ public class FeedService {
         }
     }
 
-    public Integer getLikeCount(Integer feedId) {
-        Feed feed = feedRepository.findOne(feedId);
-        return feed.getLikeCount();
-    }
-
-    public Integer getClaimCount(Integer feedId) {
-        Feed feed = feedRepository.findOne(feedId);
-        return feed.getClaimCount();
-    }
-
     @Transactional
-    public FeedAction like(Integer feedId) {
+    public Feed like(Integer feedId) {
         User user = loggedUser.getDummyUser(); // TODO fix to realuser
         Feed feed = feedRepository.findOne(feedId);
         FeedAction likedFeedAction = feedActionService.getLiked(feed, user);
         if (likedFeedAction == null) {
-            likedFeedAction = feedActionService.like(feed, user);
-            feed.increaseLikeCount();
+            feedActionService.like(feed, user);
+            feed.increaseLikeCount();     // FIXME db에 직접 읽어서 카운팅하게 바꿔야함.
         } else {
             likedFeedAction.cancel();
-            feed.decreaseLikeCount();
+            feed.decreaseLikeCount();     // FIXME db에 직접 읽어서 카운팅하게 바꿔야함.
         }
-        return likedFeedAction;
+        return feed;
     }
 
     @Transactional
-    public FeedAction claim(Integer feedId) {
+    public Feed claim(Integer feedId) {
         User user = loggedUser.getDummyUser(); // TODO fix to realuser
         Feed feed = feedRepository.findOne(feedId);
         FeedAction claimedFeedAction = feedActionService.getClaimed(feed, user);
         if (claimedFeedAction == null) {
-            claimedFeedAction = feedActionService.claim(feed, user);
+            feedActionService.claim(feed, user);
             feed.increaseClaimCount();
         } else {
             claimedFeedAction.cancel();
             feed.decreaseClaimCount();
         }
-        return claimedFeedAction;
+        return feed;
     }
 
     private void saveFeedFiles(Feed feed) {

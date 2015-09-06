@@ -19,8 +19,8 @@ import static com.libqa.application.enums.FeedActionTypeEnum.*;
 @Slf4j
 @Service
 public class FeedActionService {
-    private static Predicate<FeedAction> IS_ACTION_TYPE(final FeedActionTypeEnum feedActionType) {
-        return input -> feedActionType == input.getFeedActionType() && input.isNotCanceled();
+    private static Predicate<FeedAction> TO_NORMAL(final FeedActionTypeEnum feedActionType) {
+        return input -> input.isNotCanceled() && input.getFeedActionType() == feedActionType;
     }
 
     @Autowired
@@ -43,7 +43,7 @@ public class FeedActionService {
         feedActionRepository.save(feedAction);
         return feedAction;
     }
-    
+
     public FeedAction claim(FeedReply feedReply, User user) {
         FeedAction feedAction = FeedActionFactory.createClaim(feedReply, user);
         feedActionRepository.save(feedAction);
@@ -84,12 +84,12 @@ public class FeedActionService {
 
     private FeedAction findFeedAction(Feed feed, User user, FeedActionTypeEnum feedActionType) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
-        return Iterables.tryFind(feedActions, IS_ACTION_TYPE(feedActionType)).orNull();
+        return Iterables.tryFind(feedActions, TO_NORMAL(feedActionType)).orNull();
     }
 
     private FeedAction findFeedAction(FeedReply feedReply, User user, FeedActionTypeEnum feedActionType) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedReplyIdAndUserId(feedReply.getFeedReplyId(), user.getUserId());
-        return Iterables.tryFind(feedActions, IS_ACTION_TYPE(feedActionType)).orNull();
+        return Iterables.tryFind(feedActions, TO_NORMAL(feedActionType)).orNull();
     }
 
 }

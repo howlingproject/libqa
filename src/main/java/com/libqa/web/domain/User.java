@@ -77,7 +77,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    @Column(name = "channelType", length = 20,  nullable = true)
+    @Column(name = "channelType", length = 20, nullable = true)
     @Enumerated(EnumType.STRING)
     private SocialChannelTypeEnum channelType;
 
@@ -103,7 +103,12 @@ public class User {
         user.setRole(RoleEnum.USER);
         user.setCertificationKey(String.valueOf(System.nanoTime()).substring(0, 5));
         user.setChannelType(SocialChannelTypeEnum.valueOf(channelType));
+        return user;
+    }
 
+    public static User createGuest() {
+        User user = new User();
+        user.setRole(RoleEnum.GUEST);
         return user;
     }
 

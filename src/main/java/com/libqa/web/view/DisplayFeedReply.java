@@ -15,8 +15,7 @@ public class DisplayFeedReply {
     private DisplayFeedAction likeFeedAction;
     private DisplayFeedAction claimFeedAction;
 
-    public DisplayFeedReply(Integer feedId, FeedReply feedReply, 
-                            DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction) {
+    public DisplayFeedReply(Integer feedId, FeedReply feedReply, DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction) {
         this.feedId = feedId;
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
