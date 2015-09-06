@@ -5,14 +5,8 @@ import com.libqa.application.enums.WikiRevisionActionTypeEnum;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.StringUtil;
-import com.libqa.web.domain.Keyword;
-import com.libqa.web.domain.Space;
-import com.libqa.web.domain.User;
-import com.libqa.web.domain.Wiki;
-import com.libqa.web.service.KeywordListService;
-import com.libqa.web.service.KeywordService;
-import com.libqa.web.service.SpaceService;
-import com.libqa.web.service.WikiService;
+import com.libqa.web.domain.*;
+import com.libqa.web.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -42,6 +36,9 @@ public class WikiController {
 
     @Autowired
     KeywordService keywordService;
+
+    @Autowired
+    private ActivityService activityService;
 
     @Autowired
     private LoggedUser loggedUser;
@@ -103,9 +100,12 @@ public class WikiController {
         Wiki parentWiki = wikiService.findByParentId(wiki.getParentsId());
         List<Wiki> subWikiList = wikiService.findBySubWikiId(wiki.getWikiId());
 
+        List<Activity> activityList = activityService.findByWikiId(wikiId);
+
         mav.addObject("wiki", wiki);
         mav.addObject("subWikiList", subWikiList);
         mav.addObject("parentWiki", parentWiki);
+        mav.addObject("activityList", activityList);
         return mav;
     }
 
@@ -202,21 +202,29 @@ public class WikiController {
 
     @RequestMapping(value = "wiki/update", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<?> update(@ModelAttribute Wiki wiki){
+    public ResponseData<?> update(@ModelAttribute Wiki paramWiki){
         try{
             log.info("####### WIKI SAVE Begin INFO ########");
-            log.info("wiki = {}", wiki);
-            log.info("wiki.wikiFile = {}", wiki.getWikiFiles());
+            log.info("wiki = {}", paramWiki);
+            log.info("wiki.wikiFile = {}", paramWiki.getWikiFiles());
 
             User user = loggedUser.get();
             //int userId = user.getUserId();
+            Integer wikiId = paramWiki.getWikiId();
 
-            wiki.setPasswd("1234");
-            wiki.setUserNick("하이");
-            wiki.setUserId(1);
-            wiki.setInsertDate(new Date());
+            Wiki currentWiki = wikiService.findById(wikiId);
+            currentWiki.setKeywords(paramWiki.getKeywords());
+            currentWiki.setWikiFiles(paramWiki.getWikiFiles());
+            currentWiki.setTitle(paramWiki.getTitle());
+            currentWiki.setContents(paramWiki.getContents());
+            currentWiki.setContentsMarkup(paramWiki.getContentsMarkup());
 
-            Wiki result = wikiService.updateWithKeyword(wiki, WikiRevisionActionTypeEnum.UPDATE_WIKI);
+            currentWiki.setPasswd("1234");
+            currentWiki.setUserNick("하이");
+            currentWiki.setUserId(1);
+            currentWiki.setUpdateDate(new Date());
+
+            Wiki result = wikiService.updateWithKeyword(currentWiki, WikiRevisionActionTypeEnum.UPDATE_WIKI);
 
 
             log.info("####### WIKI SAVE After INFO ########");
@@ -226,7 +234,7 @@ public class WikiController {
         }catch(Exception e){
             e.printStackTrace();
             log.error(e.toString());
-            return ResponseData.createFailResult(wiki);
+            return ResponseData.createFailResult(paramWiki);
         }
 
     }

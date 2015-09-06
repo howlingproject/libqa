@@ -1,5 +1,6 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.libqa.application.enums.WikiRevisionActionTypeEnum;
 import lombok.Data;
 
@@ -18,8 +19,9 @@ public class WikiSnapShot{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer wikiBackId;
 
-    @ManyToOne
-    @JoinColumn(name="wikiId", referencedColumnName = "wikiId", nullable=false)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wikiId", referencedColumnName = "wikiId")
     private Wiki wiki;
 
     @Column(nullable = false)

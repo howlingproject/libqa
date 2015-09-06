@@ -56,6 +56,12 @@ public class HandlebarsHelper {
         return str.length() + "";
     }
 
+    public String size(List<Object> list, Options options) {
+
+        System.out.println("############### length ############### ");
+        return list.size()+"";
+    }
+
     public String nl2br(String str, Options options) {
         return null;
     }
@@ -93,6 +99,8 @@ public class HandlebarsHelper {
         }
         return options.inverse();
     }
+
+
 
 
 }
