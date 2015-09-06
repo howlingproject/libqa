@@ -37,8 +37,7 @@ public class FeedReplyService {
     }
 
     @Transactional
-    public FeedReply like(Integer feedReplyId) {
-        User user = loggedUser.getDummyUser(); // TODO fix to realuser
+    public FeedReply like(Integer feedReplyId, User user) {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         FeedAction feedAction = feedActionService.getLiked(feedReply, user);
         if (feedAction == null) {
@@ -51,8 +50,7 @@ public class FeedReplyService {
     }
 
     @Transactional
-    public FeedReply claim(Integer feedReplyId) {
-        User user = loggedUser.getDummyUser(); // TODO fix to realuser
+    public FeedReply claim(Integer feedReplyId, User user) {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         FeedAction feedAction = feedActionService.getClaimed(feedReply, user);
         if (feedAction == null) {

@@ -4,6 +4,7 @@ import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedReply;
+import com.libqa.web.domain.User;
 import com.libqa.web.service.FeedActionService;
 import com.libqa.web.service.FeedReplyService;
 import com.libqa.web.service.FeedService;
@@ -54,7 +55,7 @@ public class FeedController {
     @RequestMapping(value = "save", method = POST)
     public ResponseData<Feed> save(Feed feed) {
         try {
-            feedService.save(feed);
+            feedService.save(feed, loggedUser.getDummyUser());
             return createSuccessResult(feed);
         } catch (Exception e) {
             log.error("save feed error.", e);
@@ -98,8 +99,9 @@ public class FeedController {
     @RequestMapping(value = "{feedId}/like", method = POST)
     public ResponseData<DisplayFeedAction> likeFeed(@PathVariable Integer feedId) {
         try {
-            Feed feed = feedService.like(feedId);
-            boolean hasLike = feedActionService.hasLike(feed, loggedUser.getDummyUser());
+            User user = loggedUser.getDummyUser();
+            Feed feed = feedService.like(feedId, user);
+            boolean hasLike = feedActionService.hasLike(feed, user);
             return createSuccessResult(displayFeedConverter.toDisplayFeedAction(feed.getLikeCount(), hasLike));
         } catch (Exception e) {
             log.error("like feed error.", e);
@@ -110,8 +112,9 @@ public class FeedController {
     @RequestMapping(value = "{feedId}/claim", method = POST)
     public ResponseData<DisplayFeedAction> claimFeed(@PathVariable Integer feedId) {
         try {
-            Feed feed = feedService.claim(feedId);
-            boolean hasClaim = feedActionService.hasClaim(feed, loggedUser.getDummyUser());
+            User user = loggedUser.getDummyUser();
+            Feed feed = feedService.claim(feedId, user);
+            boolean hasClaim = feedActionService.hasClaim(feed, user);
             return createSuccessResult(displayFeedConverter.toDisplayFeedAction(feed.getClaimCount(), hasClaim));
         } catch (Exception e) {
             log.error("claim feed error.", e);
@@ -122,8 +125,9 @@ public class FeedController {
     @RequestMapping(value = "reply/{feedReplyId}/like", method = POST)
     public ResponseData<DisplayFeedAction> likeFeedReply(@PathVariable Integer feedReplyId) {
         try {
-            FeedReply feedReply = feedReplyService.like(feedReplyId);
-            boolean hasLike = feedActionService.hasLike(feedReply, loggedUser.getDummyUser());
+            User user = loggedUser.getDummyUser();
+            FeedReply feedReply = feedReplyService.like(feedReplyId, user);
+            boolean hasLike = feedActionService.hasLike(feedReply, user);
             return createSuccessResult(displayFeedConverter.toDisplayFeedAction(feedReply.getLikeCount(), hasLike));
         } catch (Exception e) {
             log.error("like feedReply error.", e);
@@ -134,8 +138,9 @@ public class FeedController {
     @RequestMapping(value = "reply/{feedReplyId}/claim", method = POST)
     public ResponseData<DisplayFeedAction> claimFeedReply(@PathVariable Integer feedReplyId) {
         try {
-            FeedReply feedReply = feedReplyService.claim(feedReplyId);
-            boolean hasClaim = feedActionService.hasClaim(feedReply, loggedUser.getDummyUser());
+            User user = loggedUser.getDummyUser();
+            FeedReply feedReply = feedReplyService.claim(feedReplyId, user);
+            boolean hasClaim = feedActionService.hasClaim(feedReply, user);
             return createSuccessResult(displayFeedConverter.toDisplayFeedAction(feedReply.getClaimCount(), hasClaim));
         } catch (Exception e) {
             log.error("claim feedReply error.", e);

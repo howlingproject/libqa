@@ -1,6 +1,5 @@
 package com.libqa.web.service;
 
-import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.*;
 import com.libqa.web.repository.FeedFileRepository;
 import com.libqa.web.repository.FeedReplyRepository;
@@ -22,9 +21,6 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @Slf4j
 @Service
 public class FeedService {
-
-    @Autowired
-    private LoggedUser loggedUser;
     @Autowired
     private FeedRepository feedRepository;
     @Autowired
@@ -42,8 +38,7 @@ public class FeedService {
     }
 
     @Transactional
-    public void save(Feed feed) {
-        User user = loggedUser.getDummyUser(); // TODO fix to realuser
+    public void save(Feed feed, User user) {
         feed.setUserNick(user.getUserNick());
         feed.setUserId(user.getUserId());
         feed.setInsertUserId(user.getUserId());
@@ -69,8 +64,7 @@ public class FeedService {
     }
 
     @Transactional
-    public Feed like(Integer feedId) {
-        User user = loggedUser.getDummyUser(); // TODO fix to realuser
+    public Feed like(Integer feedId, User user) {
         Feed feed = feedRepository.findOne(feedId);
         FeedAction likedFeedAction = feedActionService.getLiked(feed, user);
         if (likedFeedAction == null) {
@@ -83,8 +77,7 @@ public class FeedService {
     }
 
     @Transactional
-    public Feed claim(Integer feedId) {
-        User user = loggedUser.getDummyUser(); // TODO fix to realuser
+    public Feed claim(Integer feedId, User user) {
         Feed feed = feedRepository.findOne(feedId);
         FeedAction claimedFeedAction = feedActionService.getClaimed(feed, user);
         if (claimedFeedAction == null) {

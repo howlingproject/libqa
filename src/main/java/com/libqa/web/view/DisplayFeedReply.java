@@ -7,7 +7,6 @@ import java.util.Date;
 
 @Getter
 public class DisplayFeedReply {
-    private final long feedId;
     private final long feedReplyId;
     private String feedReplyContent;
     private String userNick;
@@ -15,8 +14,7 @@ public class DisplayFeedReply {
     private DisplayFeedAction likeFeedAction;
     private DisplayFeedAction claimFeedAction;
 
-    public DisplayFeedReply(Integer feedId, FeedReply feedReply, DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction) {
-        this.feedId = feedId;
+    public DisplayFeedReply(FeedReply feedReply, DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction) {
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
         this.insertDate = feedReply.getInsertDate();
