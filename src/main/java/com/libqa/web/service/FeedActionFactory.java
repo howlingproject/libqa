@@ -8,33 +8,27 @@ import com.libqa.web.domain.User;
 
 import java.util.Date;
 
+import static com.libqa.application.enums.FeedActionTypeEnum.*;
+
 public class FeedActionFactory {
 
     public static FeedAction createLike(Feed feed, User user) {
-        FeedAction feedAction = createFeedAction(feed, user);
-        feedAction.setFeedActionType(FeedActionTypeEnum.LIKE);
-        return feedAction;
+        return createFeedAction(feed, user, FEED_LIKE);
     }
 
     public static FeedAction createClaim(Feed feed, User user) {
-        FeedAction feedAction = createFeedAction(feed, user);
-        feedAction.setFeedActionType(FeedActionTypeEnum.CLAIM);
-        return feedAction;
+        return createFeedAction(feed, user, FEED_CLAIM);
     }
 
     public static FeedAction createLike(FeedReply feedReply, User user) {
-        FeedAction feedAction = createFeedAction(feedReply, user);
-        feedAction.setFeedActionType(FeedActionTypeEnum.LIKE);
-        return feedAction;
+        return createFeedAction(feedReply, user, FEED_REPLY_LIKE);
     }
 
     public static FeedAction createClaim(FeedReply feedReply, User user) {
-        FeedAction feedAction = createFeedAction(feedReply, user);
-        feedAction.setFeedActionType(FeedActionTypeEnum.CLAIM);
-        return feedAction;
+        return createFeedAction(feedReply, user, FEED_REPLY_CLAIM);
     }
 
-    private static FeedAction createFeedAction(Feed feed, User user) {
+    private static FeedAction createFeedAction(Feed feed, User user, FeedActionTypeEnum feedActionType) {
         FeedAction feedAction = new FeedAction();
         feedAction.setFeedId(feed.getFeedId());
         feedAction.setUserId(user.getUserId());
@@ -44,10 +38,11 @@ public class FeedActionFactory {
         feedAction.setCanceled(false);
         feedAction.setInsertDate(new Date());
         feedAction.setUpdateDate(new Date());
+        feedAction.setFeedActionType(feedActionType);
         return feedAction;
     }
 
-    private static FeedAction createFeedAction(FeedReply feedReply, User user) {
+    private static FeedAction createFeedAction(FeedReply feedReply, User user, FeedActionTypeEnum feedActionType) {
         FeedAction feedAction = new FeedAction();
         feedAction.setFeedId(feedReply.getFeed().getFeedId());
         feedAction.setFeedReplyId(feedReply.getFeedReplyId());
@@ -58,6 +53,7 @@ public class FeedActionFactory {
         feedAction.setCanceled(false);
         feedAction.setInsertDate(new Date());
         feedAction.setUpdateDate(new Date());
+        feedAction.setFeedActionType(feedActionType);
         return feedAction;
     }
 }

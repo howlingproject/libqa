@@ -20,7 +20,7 @@ public class FeedAction {
     private Integer feedActionId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 50)
     private FeedActionTypeEnum feedActionType;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
