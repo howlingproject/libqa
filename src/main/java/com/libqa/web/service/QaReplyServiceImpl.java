@@ -120,21 +120,23 @@ public class QaReplyServiceImpl implements QaReplyService {
 
     public List<DisplayQaReply> makeDisplayQaReply(List<QaReply> qaReplyList, int qaReplyDepth){
         List<DisplayQaReply> displayQaReplyList = Lists.newArrayList();
-        List<QaReply> qaReplies = Lists.newArrayList();
+        List<DisplayQaReply> displaySubQaReplyList = Lists.newArrayList();
         for(QaReply qaReply : qaReplyList){
             boolean selfRecommend = voteService.hasRecommendUser(qaReply.getReplyId(), 1);
             boolean selfNonrecommend = voteService.hasNonRecommendUser(qaReply.getReplyId(), 1);
             if(1 == qaReplyDepth) {
-                qaReplies = findByQaIdAndParentsIdAndDepthIdx(qaReply.getQaId(), qaReply.getReplyId(), 2);
+                displaySubQaReplyList = findByQaIdAndParentsIdAndDepthIdx(qaReply.getQaId(), qaReply.getReplyId(), 2);
             }
-            displayQaReplyList.add(new DisplayQaReply(qaReply, qaReplies, selfRecommend, selfNonrecommend));
+            displayQaReplyList.add(new DisplayQaReply(qaReply, displaySubQaReplyList, selfRecommend, selfNonrecommend));
         }
         return displayQaReplyList;
     }
 
-    public List<QaReply> findByQaIdAndParentsIdAndDepthIdx(Integer qaId, Integer replyId, int depthIdx) {
+    public List<DisplayQaReply> findByQaIdAndParentsIdAndDepthIdx(Integer qaId, Integer replyId, int depthIdx) {
         boolean isDeleted = false;
-        return qaReplyRepository.findAllByQaIdAndParentsIdAndDepthIdxAndIsDeletedOrderByOrderIdxAsc(qaId, replyId, depthIdx, isDeleted);
+        List<QaReply> qaReplyList = qaReplyRepository.findAllByQaIdAndParentsIdAndDepthIdxAndIsDeletedOrderByOrderIdxAsc(qaId, replyId, depthIdx, isDeleted);
+        int qaReplyDepth = 2;
+        return makeDisplayQaReply(qaReplyList, qaReplyDepth);
     }
 
     @Override
