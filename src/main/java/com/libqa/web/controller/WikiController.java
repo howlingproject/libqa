@@ -168,7 +168,7 @@ public class WikiController {
 
     @RequestMapping(value = "wiki/save", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<?> save(@ModelAttribute Wiki wiki){
+    public ResponseData<?> save(@ModelAttribute Wiki wiki, @ModelAttribute Keyword keyword){
         try{
             log.info("####### WIKI SAVE Begin INFO ########");
             log.info("wiki = {}", wiki);
@@ -185,7 +185,7 @@ public class WikiController {
                 wiki.setDepthIdx(1);
             }
 
-            Wiki result = wikiService.saveWithKeyword(wiki);
+            Wiki result = wikiService.saveWithKeyword(wiki, keyword);
 
 
             log.info("####### WIKI SAVE After INFO ########");
@@ -202,7 +202,7 @@ public class WikiController {
 
     @RequestMapping(value = "wiki/update", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<?> update(@ModelAttribute Wiki paramWiki){
+    public ResponseData<?> update(@ModelAttribute Wiki paramWiki, @ModelAttribute Keyword paramKeyword){
         try{
             log.info("####### WIKI SAVE Begin INFO ########");
             log.info("wiki = {}", paramWiki);
@@ -213,7 +213,7 @@ public class WikiController {
             Integer wikiId = paramWiki.getWikiId();
 
             Wiki currentWiki = wikiService.findById(wikiId);
-            currentWiki.setKeywords(paramWiki.getKeywords());
+//            currentWiki.setKeywords(paramKeyword.getKeywords());
             currentWiki.setWikiFiles(paramWiki.getWikiFiles());
             currentWiki.setTitle(paramWiki.getTitle());
             currentWiki.setContents(paramWiki.getContents());
@@ -224,7 +224,7 @@ public class WikiController {
             currentWiki.setUserId(1);
             currentWiki.setUpdateDate(new Date());
 
-            Wiki result = wikiService.updateWithKeyword(currentWiki, WikiRevisionActionTypeEnum.UPDATE_WIKI);
+            Wiki result = wikiService.updateWithKeyword(currentWiki, paramKeyword, WikiRevisionActionTypeEnum.UPDATE_WIKI);
 
 
             log.info("####### WIKI SAVE After INFO ########");

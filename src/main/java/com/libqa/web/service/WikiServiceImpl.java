@@ -54,10 +54,10 @@ public class WikiServiceImpl implements WikiService {
 
     @Override
     @Transactional
-    public Wiki saveWithKeyword(Wiki wiki) {
+    public Wiki saveWithKeyword(Wiki wiki, Keyword keyword) {
         Wiki result = save(wiki);
         saveWikiFileAndList(result);
-        saveKeywordAndList(wiki, result);
+        saveKeywordAndList(keyword, result);
         saveWikiActivity(result, ActivityTypeEnum.INSERT_WIKI);
         return result;
     }
@@ -77,7 +77,7 @@ public class WikiServiceImpl implements WikiService {
 
     @Override
     @Transactional
-    public Wiki updateWithKeyword(Wiki wiki, WikiRevisionActionTypeEnum revisionActionTypeEnum) {
+    public Wiki updateWithKeyword(Wiki wiki, Keyword keyword, WikiRevisionActionTypeEnum revisionActionTypeEnum) {
         WikiSnapShot wikiSnapShot = new WikiSnapShot();
         BeanUtils.copyProperties(wiki, wikiSnapShot);
 
@@ -110,11 +110,18 @@ public class WikiServiceImpl implements WikiService {
         }
     }
 
-    private void saveKeywordAndList(Wiki wiki, Wiki result) {
-        String[] keywordArrays = wiki.getKeywords().split(",");
+    private void saveKeywordAndList(Keyword keyword, Wiki result) {
+        String[] keywordArrays = new String[0];
+        String[] deleteKeywordArrays = new String[0];
+        if(keyword.getKeywords() != null){
+            keywordArrays = keyword.getKeywords().split(",");
+        }
+        if(keyword.getDeleteKeywords() != null){
+            deleteKeywordArrays = keyword.getDeleteKeywords().split(",");
+        }
         log.info(" keywordArrays : {}", keywordArrays.length);
         if (keywordArrays.length > 0) {
-            keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.WIKI, result.getWikiId());
+            keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordTypeEnum.WIKI, result.getWikiId());
         }
     }
 

@@ -44,7 +44,7 @@ public class QaFileServiceImpl implements QaFileService {
             if (paramQaFiles.getRealNames() != null) {
                 for (int qaFileIndex = 0; qaFileIndex < paramQaFiles.getRealNames().size(); qaFileIndex++) {
                     ResponseData<?> resultFile = new ResponseData<>();
-                    if("".equals((java.lang.String)paramQaFiles.getFileIds().get(qaFileIndex))) {
+                    if(paramQaFiles.getFileIds().isEmpty()) {
                         resultFile = moveQaFileToProduct(paramQaFiles, qaFileIndex);
                     }
                     if (1 == resultFile.getResultCode()) {
@@ -52,7 +52,7 @@ public class QaFileServiceImpl implements QaFileService {
                     }
                 }
             }
-            if(paramQaFiles.getDeleteFiles().size() > 0){
+            if(paramQaFiles.getDeleteFiles() != null){
                 for(int deleteFileIndex = 0; deleteFileIndex < paramQaFiles.getDeleteFiles().size(); deleteFileIndex++){
                     deleteQaFile((Integer) paramQaFiles.getDeleteFiles().get(deleteFileIndex));
                 }

@@ -96,10 +96,10 @@ public class QaController {
 
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaContent> save(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles) {
+    public ResponseData<QaContent> save(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles, @ModelAttribute Keyword paramKeywords) {
         QaContent qaContent = new QaContent();
         try {
-            qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles);
+            qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles, paramKeywords);
             return createSuccessResult(qaContent);
         } catch (Exception e) {
             return createFailResult(qaContent);

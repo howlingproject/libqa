@@ -3,8 +3,8 @@ package com.libqa.web.service;
 import com.google.common.collect.Iterables;
 import com.libqa.application.enums.FavoriteTypeEnum;
 import com.libqa.application.enums.KeywordTypeEnum;
-import com.libqa.application.enums.SpaceViewEnum;
 import com.libqa.application.util.PageUtil;
+import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;
 import com.libqa.web.domain.UserFavorite;
 import com.libqa.web.repository.SpaceRepository;
@@ -49,13 +49,20 @@ public class SpaceServiceImpl implements SpaceService {
 	}
 
 	@Override
-	public Space saveWithKeyword(Space space) {
+	public Space saveWithKeyword(Space space, Keyword keyword) {
 		Space result = save(space);
 
-		String[] keywordArrays = space.getKeywords().split(",");
+		String[] keywordArrays = new String[0];
+		String[] deleteKeywordArrays = new String[0];
+		if(keyword.getKeywords() != null){
+			keywordArrays = keyword.getKeywords().split(",");
+		}
+		if(keyword.getDeleteKeywords() != null){
+			deleteKeywordArrays = keyword.getDeleteKeywords().split(",");
+		}
 		log.info(" keywordArrays : {}", keywordArrays.length);
 		if (keywordArrays.length > 0) {
-			keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.SPACE, result.getSpaceId());
+			keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordTypeEnum.SPACE, result.getSpaceId());
 		}
 
 		return result;

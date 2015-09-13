@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by yong on 15. 2. 8..
  */
-public interface KeywordRepository extends JpaRepository<Keyword, Long> {
+public interface KeywordRepository extends JpaRepository<Keyword, Integer> {
 
     List<Keyword> findAllByQaIdAndIsDeleted(Integer qaId, boolean isDeleted);
 

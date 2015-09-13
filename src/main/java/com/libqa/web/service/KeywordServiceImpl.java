@@ -68,13 +68,19 @@ public class KeywordServiceImpl implements KeywordService {
 	 */
 	@Override
 	@Transactional
-	public boolean saveKeywordAndList(String[] keywordParams, KeywordTypeEnum keywordType, Integer entityId) {
+	public boolean saveKeywordAndList(String[] keywordParams, String[] deleteKeywordParams, KeywordTypeEnum keywordType, Integer entityId) {
 		Assert.notNull(keywordParams, "키워드가 존재하지 않습니다.");
 		Assert.notNull(keywordType, "키워드 타입이 존재하지 않습니다.");
 		Assert.notNull(entityId, "키 값이 존재하지 않습니다.");
 		boolean result = false;
 
 		try {
+			for (int i = 0; i < deleteKeywordParams.length; i++) {
+				log.info("@ param : {}", deleteKeywordParams[i]);
+				String keywordName = deleteKeyword(deleteKeywordParams[i]);
+				deleteKeywordList(keywordName, keywordType);
+			}
+
 			for (int i = 0; i < keywordParams.length; i++) {
 				log.info("@ param : {}", keywordParams[i]);
 				saveKeyword(keywordParams[i], keywordType, entityId);
@@ -86,6 +92,32 @@ public class KeywordServiceImpl implements KeywordService {
 			result = false;
 		}
 		return result;
+	}
+
+	private void deleteKeywordList(String keywordName, KeywordTypeEnum keywordType) {
+		Assert.notNull(StringUtil.defaultString(keywordName, null), "키워드 값이 존재하지 않습니다.");
+		List<KeywordList> keywordList = keywordListRepository.findByKeywordNameAndKeywordType(keywordName, keywordType);
+
+		if (!keywordList.isEmpty()) {
+			for (KeywordList keys : keywordList) {
+				int count = keys.getKeywordCount() - 1;
+				if(count == 0){
+					keys.setDeleted(true);
+				}
+				keys.setKeywordCount(count);
+				// update
+				keywordListRepository.save(keywordList);
+			}
+		}
+	}
+
+	public String deleteKeyword(String deleteKeywordId) {
+		Assert.notNull(StringUtil.defaultString(deleteKeywordId, null), "키워드 값이 존재하지 않습니다.");
+		Keyword keyword = keywordRepository.findOne(Integer.valueOf(deleteKeywordId));
+		String keywordName = keyword.getKeywordName();
+		keyword.setDeleted(true);
+		keyword.setUpdateDate(new Date());
+		return keywordName;
 	}
 
 
@@ -131,6 +163,9 @@ public class KeywordServiceImpl implements KeywordService {
 			keywordListRepository.save(keyword);
 		} else {
 			for (KeywordList keys : keywordList) {
+				if(keys.isDeleted()){
+					keys.setDeleted(false);
+				}
 				int count = keys.getKeywordCount() + 1;
 				keys.setKeywordCount(count);
 				// update

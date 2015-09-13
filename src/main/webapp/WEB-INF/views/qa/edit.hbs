@@ -103,13 +103,15 @@
             $('#contents').val(DualEditor.getMarkupConvertToHtml());
             $('#contentsMarkup').val(DualEditor.getMarkupEditHtml());
             $('#tag-cloud').find('li').each(function(){
-                $('#qaForm').append('<input type="hidden" name="keywords" value="'+this.innerHTML+'">');
+                if(!$(this).attr('data-keyword-name-id')) {
+                    $('#qaForm').append('<input type="hidden" name="keywords" value="' + this.innerHTML + '">');
+                }
             });
             $(Qa.deleteFileData).each(function(idx){
-                $('#qaForm').append('<input type="hidden" name="deleteFiles" value="'+this[idx]+'">');
+                $('#qaForm').append('<input type="hidden" name="deleteFiles" value="'+Qa.deleteFileData[idx]+'">');
             });
             $(Qa.deleteKeywordData).each(function(idx){
-                $('#qaForm').append('<input type="hidden" name="deleteKeywords" value="'+this[idx]+'">');
+                $('#qaForm').append('<input type="hidden" name="deleteKeywords" value="'+Qa.deleteKeywordData[idx]+'">');
             });
         }
 

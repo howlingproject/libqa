@@ -89,9 +89,6 @@ public class Wiki {
     @Temporal(TemporalType.DATE)
     private Date updateDate;
 
-    @Transient
-    private String keywords;
-
     //추후에 삭제대상
     @Transient
     private int replyCount;

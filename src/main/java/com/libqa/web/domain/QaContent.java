@@ -85,11 +85,4 @@ public class QaContent {
     @OneToMany(mappedBy = "qaId", fetch = FetchType.LAZY)
     private List<QaFile> qaFiles;
 
-    @Transient
-    private String keywords;
-
-    @Transient
-    private List deleteKeywords;
-
-
 }

@@ -1,6 +1,5 @@
 package com.libqa.web.controller;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.libqa.application.framework.ResponseData;
@@ -159,7 +158,7 @@ public class SpaceController {
     @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/space/add", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<Space> saveSpace(@ModelAttribute Space space) throws IllegalAccessException {
+    public ResponseData<Space> saveSpace(@ModelAttribute Space space, @ModelAttribute Keyword keyword) throws IllegalAccessException {
         User user = loggedUser.get();
 
         if (user == null) {
@@ -174,7 +173,7 @@ public class SpaceController {
         space.setInsertUserId(user.getUserId());
         space.setInsertUserNick(user.getUserNick());
 
-        Space result = spaceService.saveWithKeyword(space);
+        Space result = spaceService.saveWithKeyword(space, keyword);
         log.debug("#result : [{}]", result);
         return ResponseData.createSuccessResult(result);
     }

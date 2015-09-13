@@ -37,7 +37,7 @@ public class QaServiceImpl implements QaService {
 
     @Override
     @Transactional
-    public QaContent saveWithKeyword(QaContent paramQaContent, QaFile qaFiles){
+    public QaContent saveWithKeyword(QaContent paramQaContent, QaFile qaFiles, Keyword keyword){
         QaContent newQaContent = new QaContent();
         try {
 
@@ -49,7 +49,7 @@ public class QaServiceImpl implements QaService {
 
             newQaContent = save(paramQaContent);
             moveQaFilesToProductAndSave(newQaContent.getQaId(), qaFiles);
-            saveKeywordAndList(newQaContent.getQaId(), paramQaContent.getKeywords());
+            saveKeywordAndList(newQaContent.getQaId(), keyword.getKeywords(), keyword.getDeleteKeywords());
         }catch(Exception e){
             log.error("### moveQaFilesToProductAndSave Exception = {}", e);
             throw new RuntimeException("moveQaFilesToProductAndSave Exception");
@@ -105,16 +105,24 @@ public class QaServiceImpl implements QaService {
         qaFileService.moveQaFilesToProductAndSave(qaId, qaFiles);
     }
 
-    void saveKeywordAndList(Integer qaId, String keywords) {
-//    void saveKeywordAndList(Integer qaId, String keywords, List deleteKeywords) {
+    void saveKeywordAndList(Integer qaId, String keywords, String deleteKeywords) {
         if (qaId != 0) {
             // todo deleteKeywords String 배열로 만들어서 keywordService에서 공통으로 입력, 수정, 삭제 처리 구현
-            String[] keywordArrays = keywords.split(",");
+
+            String[] keywordArrays = new String[0];
+            String[] deleteKeywordArrays = new String[0];
+            if(keywords != null){
+                keywordArrays = keywords.split(",");
+            }
+            if(deleteKeywords != null){
+                deleteKeywordArrays = deleteKeywords.split(",");
+            }
 //            int keywordListSize = deleteKeywords.size();
 //            String [] keywordArrays = (String[]) qaContentInstance.getKeyword().toArray(new String[keywordListSize]);
             log.info(" keywordArrays : {}", keywordArrays.length);
-            if (keywordArrays.length > 0) {
-                keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.QA, qaId);
+            log.info(" deleteKeywordArrays : {}", deleteKeywordArrays.length);
+            if (keywordArrays.length > 0 || deleteKeywordArrays.length > 0) {
+                keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordTypeEnum.QA, qaId);
             }
         }
     }

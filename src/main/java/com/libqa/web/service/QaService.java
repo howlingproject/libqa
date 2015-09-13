@@ -1,6 +1,7 @@
 package com.libqa.web.service;
 
 import com.libqa.application.dto.QaDto;
+import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author yong
  */
 public interface QaService {
-    QaContent saveWithKeyword(QaContent qaContent, QaFile qaFiles)throws Exception;
+    QaContent saveWithKeyword(QaContent qaContent, QaFile qaFiles, Keyword keyword)throws Exception;
 
     QaContent findByQaId(Integer qaId, boolean isDeleted);
 

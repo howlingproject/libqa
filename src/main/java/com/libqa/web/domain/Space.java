@@ -68,8 +68,5 @@ public class Space implements Serializable {
     @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
     private List<SpaceAccessUser> spaceAccessUsers;
 
-    @Transient
-    private String keywords;
-
 }
 
