@@ -26,25 +26,25 @@ public class FeedActionService {
     @Autowired
     private FeedActionRepository feedActionRepository;
 
-    public FeedAction like(Feed feed, User user) {
+    public FeedAction newLike(Feed feed, User user) {
         FeedAction feedAction = FeedActionFactory.createLike(feed, user);
         feedActionRepository.save(feedAction);
         return feedAction;
     }
 
-    public FeedAction claim(Feed feed, User user) {
+    public FeedAction newClaim(Feed feed, User user) {
         FeedAction feedAction = FeedActionFactory.createClaim(feed, user);
         feedActionRepository.save(feedAction);
         return feedAction;
     }
 
-    public FeedAction like(FeedReply feedReply, User user) {
+    public FeedAction newLike(FeedReply feedReply, User user) {
         FeedAction feedAction = FeedActionFactory.createLike(feedReply, user);
         feedActionRepository.save(feedAction);
         return feedAction;
     }
 
-    public FeedAction claim(FeedReply feedReply, User user) {
+    public FeedAction newClaim(FeedReply feedReply, User user) {
         FeedAction feedAction = FeedActionFactory.createClaim(feedReply, user);
         feedActionRepository.save(feedAction);
         return feedAction;
@@ -93,18 +93,18 @@ public class FeedActionService {
     }
 
     public Integer getLikeCount(Feed feed) {
-        return feedActionRepository.countByFeedIdAndFeedActionTypeAndIsCanceled(feed.getFeedId(), FEED_LIKE, false);
+        return feedActionRepository.countByFeedIdAndFeedActionTypeAndIsCanceledFalse(feed.getFeedId(), FEED_LIKE);
     }
 
     public Integer getClaimCount(Feed feed) {
-        return feedActionRepository.countByFeedIdAndFeedActionTypeAndIsCanceled(feed.getFeedId(), FEED_CLAIM, false);
+        return feedActionRepository.countByFeedIdAndFeedActionTypeAndIsCanceledFalse(feed.getFeedId(), FEED_CLAIM);
     }
-    
+
     public Integer getLikeCount(FeedReply feedReply) {
-        return feedActionRepository.countByFeedReplyIdAndFeedActionTypeAndIsCanceled(feedReply.getFeedReplyId(), FEED_REPLY_LIKE, false);
+        return feedActionRepository.countByFeedReplyIdAndFeedActionTypeAndIsCanceledFalse(feedReply.getFeedReplyId(), FEED_REPLY_LIKE);
     }
 
     public Integer getClaimCount(FeedReply feedReply) {
-        return feedActionRepository.countByFeedReplyIdAndFeedActionTypeAndIsCanceled(feedReply.getFeedReplyId(), FEED_REPLY_CLAIM, false);
+        return feedActionRepository.countByFeedReplyIdAndFeedActionTypeAndIsCanceledFalse(feedReply.getFeedReplyId(), FEED_REPLY_CLAIM);
     }
 }

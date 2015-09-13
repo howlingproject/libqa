@@ -73,7 +73,7 @@ public class FeedService {
         Feed feed = feedRepository.findOne(feedId);
         FeedAction likedFeedAction = feedActionService.getLiked(feed, user);
         if (likedFeedAction == null) {
-            feedActionService.like(feed, user);
+            feedActionService.newLike(feed, user);
         } else {
             likedFeedAction.cancel();
         }
@@ -86,7 +86,7 @@ public class FeedService {
         Feed feed = feedRepository.findOne(feedId);
         FeedAction claimedFeedAction = feedActionService.getClaimed(feed, user);
         if (claimedFeedAction == null) {
-            feedActionService.claim(feed, user);
+            feedActionService.newClaim(feed, user);
         } else {
             claimedFeedAction.cancel();
         }

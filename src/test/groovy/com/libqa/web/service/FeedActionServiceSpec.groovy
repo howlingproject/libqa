@@ -24,7 +24,7 @@ class FeedActionServiceSpec extends Specification {
         def feed = feedFixture()
         def user = userFixture()
         when:
-        sut.like(feed, user);
+        sut.newLike(feed, user);
         then:
         1 * feedActionRepository.save(_)
     }
@@ -34,7 +34,7 @@ class FeedActionServiceSpec extends Specification {
         def feed = feedFixture()
         def user = userFixture()
         when:
-        sut.claim(feed, user);
+        sut.newClaim(feed, user);
         then:
         1 * feedActionRepository.save(_)
     }
@@ -44,7 +44,7 @@ class FeedActionServiceSpec extends Specification {
         def feedReply = feedReplyFixture()
         def user = userFixture()
         when:
-        sut.like(feedReply, user);
+        sut.newLike(feedReply, user);
         then:
         1 * feedActionRepository.save(_)
     }
@@ -54,7 +54,7 @@ class FeedActionServiceSpec extends Specification {
         def feedReply = feedReplyFixture()
         def user = userFixture()
         when:
-        sut.claim(feedReply, user);
+        sut.newClaim(feedReply, user);
         then:
         1 * feedActionRepository.save(_)
     }

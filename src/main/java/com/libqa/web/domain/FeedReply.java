@@ -7,7 +7,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
@@ -56,8 +55,5 @@ public class FeedReply {
     @JsonIgnore
     private Feed feed;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feedReplyId", referencedColumnName = "feedReplyId")
-    private List<FeedAction> feedActions;
 }
 
