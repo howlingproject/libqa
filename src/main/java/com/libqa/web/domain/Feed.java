@@ -86,7 +86,4 @@ public class Feed {
     @Where(clause = "is_deleted = 0")
     private List<FeedFile> feedFiles;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feedId", referencedColumnName = "feedId")
-    private List<FeedAction> feedActions;
 }
