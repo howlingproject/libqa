@@ -1,6 +1,6 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.KeywordType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,12 +28,12 @@ public class KeywordList {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private KeywordTypeEnum keywordType;
+    private KeywordType keywordType;
 
     @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
-    public KeywordList(String keywordName, KeywordTypeEnum keywordType, Integer keywordCount) {
+    public KeywordList(String keywordName, KeywordType keywordType, Integer keywordCount) {
         this.keywordName = keywordName;
         this.keywordType = keywordType;
         this.keywordCount = keywordCount;

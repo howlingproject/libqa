@@ -3,7 +3,7 @@ package com.libqa.application.enums;
 /**
  * Created by yion on 2015. 2. 1..
  */
-public enum UserPointEnum {
+public enum UserPoint {
     WRITE_WIKI("위키 글쓰기"),
     QA_REPLY("QA 답변"),
     QA_RECOMMEND("QA 추천"),
@@ -18,7 +18,7 @@ public enum UserPointEnum {
 
     private String type;
 
-    private UserPointEnum(String type) {
+    private UserPoint(String type) {
         this.type = type;
     }
 

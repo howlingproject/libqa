@@ -1,8 +1,8 @@
 package com.libqa.web.service;
 
 import com.libqa.application.dto.QaDto;
-import com.libqa.application.enums.DayTypeEnum;
-import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.DayType;
+import com.libqa.application.enums.KeywordType;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
@@ -122,7 +122,7 @@ public class QaServiceImpl implements QaService {
             log.info(" keywordArrays : {}", keywordArrays.length);
             log.info(" deleteKeywordArrays : {}", deleteKeywordArrays.length);
             if (keywordArrays.length > 0 || deleteKeywordArrays.length > 0) {
-                keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordTypeEnum.QA, qaId);
+                keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordType.QA, qaId);
             }
         }
     }
@@ -196,9 +196,9 @@ public class QaServiceImpl implements QaService {
     public Date getFromDate(String dayType){
         Date now = new Date();
         Date returnDate;
-        if(DayTypeEnum.WEEK.getCode().equals(dayType)){
+        if(DayType.WEEK.getCode().equals(dayType)){
             returnDate = DateUtils.addDays(now, -7);
-        } else if(DayTypeEnum.ALL.getCode().equals(dayType)){
+        } else if(DayType.ALL.getCode().equals(dayType)){
             returnDate = null;
         } else{
             returnDate = now;
@@ -209,7 +209,7 @@ public class QaServiceImpl implements QaService {
     public List<Integer> getQaIdByKeyword(String keywordName){
         boolean isDeleted = false;
         List<Integer> qaIds = new ArrayList();
-        List<Keyword> keywords = keywordService.findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum.QA, keywordName, isDeleted);
+        List<Keyword> keywords = keywordService.findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordType.QA, keywordName, isDeleted);
         for(Keyword keyword : keywords){
             qaIds.add(keyword.getQaId());
         }

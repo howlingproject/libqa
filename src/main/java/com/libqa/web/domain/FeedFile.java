@@ -1,7 +1,7 @@
 package com.libqa.web.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.libqa.application.enums.FileTypeEnum;
+import com.libqa.application.enums.FileType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -34,7 +34,7 @@ public class FeedFile {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true, length = 10)
-    private FileTypeEnum fileType;
+    private FileType fileType;
 
     @Column
     private Integer downloadCount = 0;
@@ -61,10 +61,10 @@ public class FeedFile {
     private Feed feed;
 
     public boolean isFileType() {
-        return FileTypeEnum.FILE == this.fileType;
+        return FileType.FILE == this.fileType;
     }
 
     public boolean isImageType() {
-        return FileTypeEnum.IMAGE == this.fileType;
+        return FileType.IMAGE == this.fileType;
     }
 }

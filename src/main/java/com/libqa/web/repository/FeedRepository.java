@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FeedRepository extends JpaRepository<Feed, Integer> {
-
-    List<Feed> findByIsDeleted(boolean isDeleted, Pageable pageable);
+    List<Feed> findByIsDeletedFalse(Pageable pageable);
+    List<Feed> findByFeedIdLessThanAndIsDeletedFalse(int lastFeedId, Pageable pageable);
 }

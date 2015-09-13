@@ -1,8 +1,9 @@
 package com.libqa.web.service;
 
 import com.google.common.collect.Iterables;
-import com.libqa.application.enums.FavoriteTypeEnum;
-import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.FavoriteType;
+import com.libqa.application.enums.KeywordType;
+import com.libqa.application.enums.SpaceView;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;
@@ -62,7 +63,7 @@ public class SpaceServiceImpl implements SpaceService {
 		}
 		log.info(" keywordArrays : {}", keywordArrays.length);
 		if (keywordArrays.length > 0) {
-			keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordTypeEnum.SPACE, result.getSpaceId());
+			keywordService.saveKeywordAndList(keywordArrays, KeywordType.SPACE, result.getSpaceId());
 		}
 
 		return result;
@@ -73,7 +74,7 @@ public class SpaceServiceImpl implements SpaceService {
 
 		List<UserFavorite> userFavoriteList = new ArrayList<>();
 
-		userFavoriteList = userFavoriteService.findByFavoriteTypeAndUserId(FavoriteTypeEnum.SPACE, userId);
+		userFavoriteList = userFavoriteService.findByFavoriteTypeAndUserId(FavoriteType.SPACE, userId);
 
 		if (userFavoriteList.isEmpty()) {
 			return null;
@@ -139,7 +140,7 @@ public class SpaceServiceImpl implements SpaceService {
 	public UserFavorite bindUserFavorite(Integer spaceId, Integer userId, boolean isDeleted) {
 		UserFavorite userFavorite;
 		userFavorite = new UserFavorite();
-		userFavorite.setFavoriteType(FavoriteTypeEnum.SPACE);
+		userFavorite.setFavoriteType(FavoriteType.SPACE);
 		userFavorite.setUserId(userId);
 		userFavorite.setInsertDate(new Date());
 		userFavorite.setSpaceId(spaceId);

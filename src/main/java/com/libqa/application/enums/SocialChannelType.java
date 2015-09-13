@@ -8,7 +8,7 @@ import lombok.Getter;
  * @Date : 2015. 4. 12.
  * @Description :
  */
-public enum SocialChannelTypeEnum {
+public enum SocialChannelType {
     WEB("Web"),
     Mobile("Mobile"),
     FACEBOOK("Facebook"),
@@ -19,7 +19,7 @@ public enum SocialChannelTypeEnum {
     @Getter
     private String name;
 
-    private SocialChannelTypeEnum(final String name) {
+    private SocialChannelType(final String name) {
         this.name = name;
     }
 }

@@ -1,6 +1,6 @@
 package com.libqa.web.service;
 
-import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.KeywordType;
 import com.libqa.web.domain.KeywordList;
 import com.libqa.web.repository.KeywordListRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class KeywordListServiceImpl implements KeywordListService {
     KeywordListRepository keywordListRepository;
 
     @Override
-    public boolean saveKeywordList(Object obj, KeywordTypeEnum keywordType) {
+    public boolean saveKeywordList(Object obj, KeywordType keywordType) {
         boolean successType = true;
 
 //        Keyword keywordInstance = modelMapper.map(obj, Keyword.class);
@@ -52,7 +52,7 @@ public class KeywordListServiceImpl implements KeywordListService {
     public List<KeywordList> findByKeywordType(String keywordType, boolean isDeleted) {
         log.info("### keywordType = {}", keywordType);
         List<KeywordList> keywordList = new ArrayList<>();
-        KeywordTypeEnum paramEnum = KeywordTypeEnum.valueOf(keywordType);
+        KeywordType paramEnum = KeywordType.valueOf(keywordType);
 
         keywordList = keywordListRepository.findByKeywordTypeAndIsDeleted(paramEnum, isDeleted);
 

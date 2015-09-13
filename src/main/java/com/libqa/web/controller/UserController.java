@@ -1,23 +1,18 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.Exception.UserNotCreateException;
-import com.libqa.application.dto.SecurityUserDto;
-import com.libqa.application.enums.StatusCodeEnum;
+import com.libqa.application.enums.StatusCode;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.RequestUtil;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.UserService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -189,7 +184,7 @@ public class UserController {
                 resultData = new ResponseData();
                 resultData.setComment("가입정보의 이메일 혹은 닉네임이 이미 존재합니다. 다른 정보로 가입하세요.");
                 resultData.setData(user);
-                resultData.setResultCode(StatusCodeEnum.DUPLICATE.getCode());
+                resultData.setResultCode(StatusCode.DUPLICATE.getCode());
             }
 
         } catch (UserNotCreateException e) {

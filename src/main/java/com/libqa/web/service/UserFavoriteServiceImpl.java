@@ -1,6 +1,6 @@
 package com.libqa.web.service;
 
-import com.libqa.application.enums.FavoriteTypeEnum;
+import com.libqa.application.enums.FavoriteType;
 import com.libqa.web.domain.UserFavorite;
 import com.libqa.web.repository.UserFavoriteRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +23,8 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     private UserFavoriteRepository userFavoriteRepository;
 
     @Override
-    public List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteTypeEnum favoriteTypeEnum, Integer userId) {
-        return userFavoriteRepository.findByFavoriteTypeAndUserId(favoriteTypeEnum, userId);
+    public List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteType favoriteType, Integer userId) {
+        return userFavoriteRepository.findByFavoriteTypeAndUserId(favoriteType, userId);
     }
 
     @Override

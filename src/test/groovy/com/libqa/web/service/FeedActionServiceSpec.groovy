@@ -1,6 +1,6 @@
 package com.libqa.web.service
 
-import com.libqa.application.enums.FeedActionTypeEnum
+import com.libqa.application.enums.FeedActionType
 import com.libqa.web.domain.Feed
 import com.libqa.web.domain.FeedAction
 import com.libqa.web.domain.FeedReply
@@ -8,7 +8,7 @@ import com.libqa.web.domain.User
 import com.libqa.web.repository.FeedActionRepository
 import spock.lang.Specification
 
-import static com.libqa.application.enums.FeedActionTypeEnum.*
+import static FeedActionType.*
 
 class FeedActionServiceSpec extends Specification {
     FeedActionRepository feedActionRepository
@@ -24,7 +24,7 @@ class FeedActionServiceSpec extends Specification {
         def feed = feedFixture()
         def user = userFixture()
         when:
-        sut.like(feed, user);
+        sut.newLike(feed, user);
         then:
         1 * feedActionRepository.save(_)
     }
@@ -34,7 +34,7 @@ class FeedActionServiceSpec extends Specification {
         def feed = feedFixture()
         def user = userFixture()
         when:
-        sut.claim(feed, user);
+        sut.newClaim(feed, user);
         then:
         1 * feedActionRepository.save(_)
     }
@@ -44,7 +44,7 @@ class FeedActionServiceSpec extends Specification {
         def feedReply = feedReplyFixture()
         def user = userFixture()
         when:
-        sut.like(feedReply, user);
+        sut.newLike(feedReply, user);
         then:
         1 * feedActionRepository.save(_)
     }
@@ -54,7 +54,7 @@ class FeedActionServiceSpec extends Specification {
         def feedReply = feedReplyFixture()
         def user = userFixture()
         when:
-        sut.claim(feedReply, user);
+        sut.newClaim(feedReply, user);
         then:
         1 * feedActionRepository.save(_)
     }
@@ -180,7 +180,7 @@ class FeedActionServiceSpec extends Specification {
         return feedReply
     }
 
-    def feedActionFixture(FeedActionTypeEnum feedActionType) {
+    def feedActionFixture(FeedActionType feedActionType) {
         def feedAction = new FeedAction()
         feedAction.feedActionId = 1
         feedAction.feedActionType = feedActionType

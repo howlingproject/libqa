@@ -7,13 +7,12 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
+@ToString
 @Table(indexes = {@Index(columnList = "isDeleted")})
 @EqualsAndHashCode(of = "feedReplyId")
-@ToString
 public class FeedReply {
     @Id
     @Column(name = "feedReplyId", nullable = false)
@@ -56,8 +55,5 @@ public class FeedReply {
     @JsonIgnore
     private Feed feed;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feedReplyId", referencedColumnName = "feedReplyId")
-    private List<FeedAction> feedActions;
 }
 

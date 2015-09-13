@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -47,8 +48,8 @@ public class FeedController {
     }
 
     @RequestMapping(value = "list", method = GET)
-    public ResponseData<DisplayFeed> list() {
-        List<Feed> feeds = feedService.search(0, 10);
+    public ResponseData<DisplayFeed> list(@RequestParam(required = false) Integer lastFeedId) {
+        List<Feed> feeds = feedService.search(lastFeedId);
         return createSuccessResult(displayFeedConverter.toDisplayFeeds(feeds));
     }
 

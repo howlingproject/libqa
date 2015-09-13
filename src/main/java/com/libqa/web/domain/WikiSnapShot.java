@@ -1,7 +1,7 @@
 package com.libqa.web.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.libqa.application.enums.WikiRevisionActionTypeEnum;
+import com.libqa.application.enums.WikiRevisionActionType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -92,5 +92,5 @@ public class WikiSnapShot{
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private WikiRevisionActionTypeEnum revisionActionType;
+    private WikiRevisionActionType revisionActionType;
 }

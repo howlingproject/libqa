@@ -5,7 +5,7 @@ import lombok.Getter;
 /**
  * Created by songanji on 2015. 6. 28..
  */
-public enum ListTypeEnum {
+public enum ListType {
     BEST("best"),
     ALL("all"),
     RESENT("resent"),
@@ -15,7 +15,7 @@ public enum ListTypeEnum {
     @Getter
     private String name;
 
-    private ListTypeEnum(final String name) {
+    private ListType(final String name) {
         this.name = name;
     }
     ;

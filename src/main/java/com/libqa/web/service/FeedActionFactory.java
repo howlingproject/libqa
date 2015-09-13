@@ -1,6 +1,6 @@
 package com.libqa.web.service;
 
-import com.libqa.application.enums.FeedActionTypeEnum;
+import com.libqa.application.enums.FeedActionType;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.FeedReply;
@@ -8,7 +8,7 @@ import com.libqa.web.domain.User;
 
 import java.util.Date;
 
-import static com.libqa.application.enums.FeedActionTypeEnum.*;
+import static com.libqa.application.enums.FeedActionType.*;
 
 public class FeedActionFactory {
 
@@ -28,7 +28,7 @@ public class FeedActionFactory {
         return createFeedAction(feedReply, user, FEED_REPLY_CLAIM);
     }
 
-    private static FeedAction createFeedAction(Feed feed, User user, FeedActionTypeEnum feedActionType) {
+    private static FeedAction createFeedAction(Feed feed, User user, FeedActionType feedActionType) {
         FeedAction feedAction = new FeedAction();
         feedAction.setFeedId(feed.getFeedId());
         feedAction.setUserId(user.getUserId());
@@ -42,7 +42,7 @@ public class FeedActionFactory {
         return feedAction;
     }
 
-    private static FeedAction createFeedAction(FeedReply feedReply, User user, FeedActionTypeEnum feedActionType) {
+    private static FeedAction createFeedAction(FeedReply feedReply, User user, FeedActionType feedActionType) {
         FeedAction feedAction = new FeedAction();
         feedAction.setFeedId(feedReply.getFeed().getFeedId());
         feedAction.setFeedReplyId(feedReply.getFeedReplyId());

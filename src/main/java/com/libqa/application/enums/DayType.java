@@ -7,7 +7,7 @@ import lombok.Getter;
  *
  * @author yong
  */
-public enum DayTypeEnum {
+public enum DayType {
     TODAY("TODAY"),  // 오늘
     WEEK("WEEK"), // 일주일
     ALL("ALL");  // 전체
@@ -15,7 +15,7 @@ public enum DayTypeEnum {
     @Getter
     private String code;
 
-    private DayTypeEnum(final String code) {
+    private DayType(final String code) {
         this.code = code;
     }
 }

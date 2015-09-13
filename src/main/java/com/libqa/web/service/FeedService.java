@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.repository.FeedFileRepository;
 import com.libqa.web.repository.FeedReplyRepository;
@@ -8,13 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
@@ -32,9 +33,13 @@ public class FeedService {
     @Autowired
     private FeedActionService feedActionService;
 
-    public List<Feed> search(int startIdx, int endIdx) {
-        PageRequest pageRequest = new PageRequest(startIdx, endIdx, new Sort(new Order(DESC, "feedId")));
-        return feedRepository.findByIsDeleted(false, pageRequest);
+    public List<Feed> search(Integer lastFeedId) {
+        PageRequest pageRequest = PageUtil.sortPageable(new Sort(DESC, "feedId"));
+        Optional<Integer> lastFeedIdOptional = Optional.ofNullable(lastFeedId);
+        if (lastFeedIdOptional.isPresent()) {
+            return feedRepository.findByFeedIdLessThanAndIsDeletedFalse(lastFeedId, pageRequest);
+        }
+        return feedRepository.findByIsDeletedFalse(pageRequest);
     }
 
     @Transactional
@@ -68,7 +73,7 @@ public class FeedService {
         Feed feed = feedRepository.findOne(feedId);
         FeedAction likedFeedAction = feedActionService.getLiked(feed, user);
         if (likedFeedAction == null) {
-            feedActionService.like(feed, user);
+            feedActionService.newLike(feed, user);
         } else {
             likedFeedAction.cancel();
         }
@@ -81,7 +86,7 @@ public class FeedService {
         Feed feed = feedRepository.findOne(feedId);
         FeedAction claimedFeedAction = feedActionService.getClaimed(feed, user);
         if (claimedFeedAction == null) {
-            feedActionService.claim(feed, user);
+            feedActionService.newClaim(feed, user);
         } else {
             claimedFeedAction.cancel();
         }

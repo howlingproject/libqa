@@ -1,6 +1,6 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.SocialChannelTypeEnum;
+import com.libqa.application.enums.SocialChannelType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -55,7 +55,7 @@ public class QaContent {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private SocialChannelTypeEnum sharedContentsType;
+    private SocialChannelType sharedContentsType;
 
     @Column(nullable = true)
     private Integer sharedResponseId;

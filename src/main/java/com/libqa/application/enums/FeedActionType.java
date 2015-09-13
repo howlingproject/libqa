@@ -1,6 +1,6 @@
 package com.libqa.application.enums;
 
-public enum FeedActionTypeEnum {
+public enum FeedActionType {
     FEED_LIKE, 
     FEED_CLAIM,
     FEED_REPLY_LIKE,

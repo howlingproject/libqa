@@ -1,6 +1,6 @@
 package com.libqa.web.repository;
 
-import com.libqa.application.enums.FavoriteTypeEnum;
+import com.libqa.application.enums.FavoriteType;
 import com.libqa.web.domain.UserFavorite;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,7 +13,7 @@ public interface UserFavoriteRepository extends JpaRepository<UserFavorite, Inte
 
     List<UserFavorite> findBySpaceIdAndUserId(Integer spaceId, Integer userId);
 
-    List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteTypeEnum favoriteTypeEnum, Integer userId);
+    List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteType favoriteType, Integer userId);
 
     List<UserFavorite> findBySpaceIdAndUserIdAndIsDeleted(Integer spaceId, Integer userId, boolean isDeleted);
 

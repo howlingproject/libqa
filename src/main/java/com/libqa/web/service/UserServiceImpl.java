@@ -1,8 +1,7 @@
 package com.libqa.web.service;
 
-import com.google.common.base.Preconditions;
 import com.libqa.application.Exception.UserNotCreateException;
-import com.libqa.application.enums.SocialChannelTypeEnum;
+import com.libqa.application.enums.SocialChannelType;
 import com.libqa.web.domain.User;
 import com.libqa.web.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User createUser(String userEmail, String userNick, String password, String loginType) throws UserNotCreateException {
         // LoginType 에 따라 소셜 연동 여부를 결정 짓는다.
-        loginType = SocialChannelTypeEnum.WEB.name();
+        loginType = SocialChannelType.WEB.name();
         User createUser = null;
         try {
             User user = User.createUser(userEmail, userNick, new BCryptPasswordEncoder().encode(password), loginType);
@@ -50,7 +49,7 @@ public class UserServiceImpl implements UserService {
             log.info("### createUser = {}", createUser);
 
             // 인증 메일 보내기
-            if (loginType.equals(SocialChannelTypeEnum.WEB.name())) {
+            if (loginType.equals(SocialChannelType.WEB.name())) {
                 //sendAuthMail(createUser);
             }
 
