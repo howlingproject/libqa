@@ -5,7 +5,7 @@ import lombok.Getter;
 /**
  * Created by yion on 2015. 2. 20..
  */
-public enum StatusCodeEnum {
+public enum StatusCode {
     FAIL(-1, "FAIL"),
     NONE(0, "NA"),
     SUCCESS(1, "SUCCESS"),
@@ -22,7 +22,7 @@ public enum StatusCodeEnum {
     @Getter
     private final String comment;
 
-    private StatusCodeEnum(final int code, final String comment) {
+    private StatusCode(final int code, final String comment) {
         this.code = code;
         this.comment = comment;
     }

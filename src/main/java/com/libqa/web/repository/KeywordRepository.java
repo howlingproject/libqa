@@ -1,6 +1,6 @@
 package com.libqa.web.repository;
 
-import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.KeywordType;
 import com.libqa.web.domain.Keyword;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,9 +13,9 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
 
     List<Keyword> findAllByQaIdAndIsDeleted(Integer qaId, boolean isDeleted);
 
-    List<Keyword> findAllByKeywordTypeAndIsDeleted(KeywordTypeEnum keywordType, boolean isDeleted);
+    List<Keyword> findAllByKeywordTypeAndIsDeleted(KeywordType keywordType, boolean isDeleted);
 
-    List<Keyword> findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum keywordType, String keywordName, boolean isDeleted);
+    List<Keyword> findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordType keywordType, String keywordName, boolean isDeleted);
 
     List<Keyword> findAllByWikiIdAndIsDeleted(Integer wikiId, boolean isDeleted);
 

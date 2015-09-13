@@ -2,8 +2,8 @@ package com.libqa.application.framework;
 
 import lombok.Data;
 
-import static com.libqa.application.enums.StatusCodeEnum.FAIL;
-import static com.libqa.application.enums.StatusCodeEnum.SUCCESS;
+import static com.libqa.application.enums.StatusCode.FAIL;
+import static com.libqa.application.enums.StatusCode.SUCCESS;
 
 /**
  * 응답 결과를 반환한다.

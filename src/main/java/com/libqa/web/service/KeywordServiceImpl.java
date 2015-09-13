@@ -1,6 +1,6 @@
 package com.libqa.web.service;
 
-import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.KeywordType;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.KeywordList;
@@ -36,7 +36,7 @@ public class KeywordServiceImpl implements KeywordService {
 	}
 
 	@Override
-	public List<Keyword> findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum keywordType, String keywordName, boolean isDeleted) {
+	public List<Keyword> findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordType keywordType, String keywordName, boolean isDeleted) {
 		if("".equals(keywordName) || null == keywordName){
 			return keywordRepository.findAllByKeywordTypeAndIsDeleted(keywordType, isDeleted);
 		} else {
@@ -68,7 +68,7 @@ public class KeywordServiceImpl implements KeywordService {
 	 */
 	@Override
 	@Transactional
-	public boolean saveKeywordAndList(String[] keywordParams, KeywordTypeEnum keywordType, Integer entityId) {
+	public boolean saveKeywordAndList(String[] keywordParams, KeywordType keywordType, Integer entityId) {
 		Assert.notNull(keywordParams, "키워드가 존재하지 않습니다.");
 		Assert.notNull(keywordType, "키워드 타입이 존재하지 않습니다.");
 		Assert.notNull(entityId, "키 값이 존재하지 않습니다.");
@@ -96,13 +96,13 @@ public class KeywordServiceImpl implements KeywordService {
 	 * @param entityId
 	 */
 	@Transactional
-	public void saveKeyword(String param, KeywordTypeEnum keywordType, Integer entityId) {
+	public void saveKeyword(String param, KeywordType keywordType, Integer entityId) {
 		Assert.notNull(StringUtil.defaultString(param, null), "키워드 값이 존재하지 않습니다.");
 		Keyword keyword = new Keyword();
 
-		if (keywordType.equals(KeywordTypeEnum.SPACE)) {
+		if (keywordType.equals(KeywordType.SPACE)) {
 			keyword.setSpaceId(entityId);
-		} else if (keywordType.equals(KeywordTypeEnum.WIKI)) {
+		} else if (keywordType.equals(KeywordType.WIKI)) {
 			keyword.setWikiId(entityId);
 		} else {
 			keyword.setQaId(entityId);
@@ -121,7 +121,7 @@ public class KeywordServiceImpl implements KeywordService {
 	 */
 
 	@Transactional
-	public void saveKeywordList(String param, KeywordTypeEnum keywordType) {
+	public void saveKeywordList(String param, KeywordType keywordType) {
 		Assert.notNull(StringUtil.defaultString(param, null), "키워드 값이 존재하지 않습니다.");
 		List<KeywordList> keywordList = keywordListRepository.findByKeywordNameAndKeywordType(param, keywordType);
 

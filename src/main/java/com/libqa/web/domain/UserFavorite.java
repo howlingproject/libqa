@@ -1,6 +1,6 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.FavoriteTypeEnum;
+import com.libqa.application.enums.FavoriteType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,7 +30,7 @@ public class UserFavorite {
 
     @Column(name = "favoriteType", nullable = false)
     @Enumerated(EnumType.STRING)
-    private FavoriteTypeEnum favoriteType;
+    private FavoriteType favoriteType;
 
     @Column(nullable = true)
     private Integer qaId;

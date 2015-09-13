@@ -1,6 +1,6 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.FeedActionTypeEnum;
+import com.libqa.application.enums.FeedActionType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -26,7 +26,7 @@ public class FeedAction {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
-    private FeedActionTypeEnum feedActionType;
+    private FeedActionType feedActionType;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isCanceled;

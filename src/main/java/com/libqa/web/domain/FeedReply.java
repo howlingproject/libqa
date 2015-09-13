@@ -10,9 +10,9 @@ import java.util.Date;
 
 @Data
 @Entity
+@ToString
 @Table(indexes = {@Index(columnList = "isDeleted")})
 @EqualsAndHashCode(of = "feedReplyId")
-@ToString
 public class FeedReply {
     @Id
     @Column(name = "feedReplyId", nullable = false)

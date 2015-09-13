@@ -1,7 +1,7 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.ActivityTypeEnum;
-import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.ActivityType;
+import com.libqa.application.enums.KeywordType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -33,11 +33,11 @@ public class Activity {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    private ActivityTypeEnum activityType;
+    private ActivityType activityType;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private KeywordTypeEnum activityKeyword;    // QA, WIKI, SPACE
+    private KeywordType activityKeyword;    // QA, WIKI, SPACE
 
     @Column(nullable = true)
     private Integer spaceId;

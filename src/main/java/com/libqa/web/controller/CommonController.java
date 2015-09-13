@@ -1,13 +1,12 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.dto.FileDto;
-import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.KeywordType;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.DateUtil;
 import com.libqa.application.util.FileUtil;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.KeywordList;
-import com.libqa.web.domain.Space;
 import com.libqa.web.service.KeywordListService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,8 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.libqa.application.enums.FileTypeEnum.FILE;
-import static com.libqa.application.enums.FileTypeEnum.IMAGE;
+import static com.libqa.application.enums.FileType.FILE;
+import static com.libqa.application.enums.FileType.IMAGE;
 
 /**
  * Created by yion on 2015. 3. 1..
@@ -190,7 +189,7 @@ public class CommonController {
     @RequestMapping(value = "/keyword/count", method = RequestMethod.GET)
     @ResponseBody
     public String keywordCount() {
-        List<KeywordList> keywordLists = keywordListService.findByKeywordType(KeywordTypeEnum.SPACE.getCode(), false);
+        List<KeywordList> keywordLists = keywordListService.findByKeywordType(KeywordType.SPACE.getCode(), false);
 
         int keywordSize = 0;
 

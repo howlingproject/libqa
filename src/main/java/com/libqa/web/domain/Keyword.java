@@ -1,8 +1,7 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.KeywordType;
 import lombok.Data;
-import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -32,7 +31,7 @@ public class Keyword {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private KeywordTypeEnum keywordType;
+    private KeywordType keywordType;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;

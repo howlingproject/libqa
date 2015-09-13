@@ -1,6 +1,6 @@
 package com.libqa.web.service;
 
-import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.KeywordType;
 import com.libqa.web.domain.KeywordList;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * @author yong
  */
 public interface KeywordListService {
-    boolean saveKeywordList(Object obj, KeywordTypeEnum keywordType);
+    boolean saveKeywordList(Object obj, KeywordType keywordType);
 
     List<KeywordList> findByKeywordType(String keywordType, boolean isDeleted);
 }

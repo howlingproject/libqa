@@ -1,8 +1,8 @@
 package com.libqa.web.service;
 
-import com.libqa.application.enums.ActivityTypeEnum;
-import com.libqa.application.enums.KeywordTypeEnum;
-import com.libqa.application.enums.WikiRevisionActionTypeEnum;
+import com.libqa.application.enums.ActivityType;
+import com.libqa.application.enums.KeywordType;
+import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.repository.KeywordRepository;
@@ -58,17 +58,17 @@ public class WikiServiceImpl implements WikiService {
         Wiki result = save(wiki);
         saveWikiFileAndList(result);
         saveKeywordAndList(wiki, result);
-        saveWikiActivity(result, ActivityTypeEnum.INSERT_WIKI);
+        saveWikiActivity(result, ActivityType.INSERT_WIKI);
         return result;
     }
 
-    private void saveWikiActivity(Wiki saveWiki, ActivityTypeEnum ActivityTypeEnum) {
+    private void saveWikiActivity(Wiki saveWiki, ActivityType ActivityType) {
 
         Activity activity = new Activity();
         activity.setInsertDate(new Date());
         activity.setDeleted(false);
 
-        activity.setActivityType(ActivityTypeEnum);
+        activity.setActivityType(ActivityType);
         activity.setUserId(saveWiki.getUserId());
         activity.setUserNick(saveWiki.getUserNick());
         activity.setWikiId(saveWiki.getWikiId());
@@ -77,7 +77,7 @@ public class WikiServiceImpl implements WikiService {
 
     @Override
     @Transactional
-    public Wiki updateWithKeyword(Wiki wiki, WikiRevisionActionTypeEnum revisionActionTypeEnum) {
+    public Wiki updateWithKeyword(Wiki wiki, WikiRevisionActionType revisionActionTypeEnum) {
         WikiSnapShot wikiSnapShot = new WikiSnapShot();
         BeanUtils.copyProperties(wiki, wikiSnapShot);
 
@@ -87,7 +87,7 @@ public class WikiServiceImpl implements WikiService {
 
         Wiki result = save(wiki);
 
-        saveWikiActivity(wiki, ActivityTypeEnum.UPDATE_WIKI);
+        saveWikiActivity(wiki, ActivityType.UPDATE_WIKI);
 
         // 아래는 버그가 있는듯. 확인해서 다시 정상화하도록.
         //saveWikiFileAndList(result);
@@ -114,7 +114,7 @@ public class WikiServiceImpl implements WikiService {
         String[] keywordArrays = wiki.getKeywords().split(",");
         log.info(" keywordArrays : {}", keywordArrays.length);
         if (keywordArrays.length > 0) {
-            keywordService.saveKeywordAndList(keywordArrays, KeywordTypeEnum.WIKI, result.getWikiId());
+            keywordService.saveKeywordAndList(keywordArrays, KeywordType.WIKI, result.getWikiId());
         }
     }
 
@@ -190,7 +190,7 @@ public class WikiServiceImpl implements WikiService {
 
     @Override
     public List<Wiki> findWikiListByKeyword(String keywordNm, int page, int size) {
-        List<Keyword> keywordList = keywordRepository.findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum.WIKI, keywordNm, false);
+        List<Keyword> keywordList = keywordRepository.findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordType.WIKI, keywordNm, false);
         List<Integer> wikiIds = getWikiIdByKeyworld(keywordList);
 
         List<Wiki> list = wikiRepository.findAllByWikiIdInAndIsDeleted(
@@ -226,7 +226,7 @@ public class WikiServiceImpl implements WikiService {
     }
 
 
-    private WikiSnapShot saveSnapShot(Wiki wiki, WikiRevisionActionTypeEnum revisionActionTypeEnum) {
+    private WikiSnapShot saveSnapShot(Wiki wiki, WikiRevisionActionType revisionActionTypeEnum) {
 
         WikiSnapShot wikiSnapShot = new WikiSnapShot();
         BeanUtils.copyProperties(wiki, wikiSnapShot);

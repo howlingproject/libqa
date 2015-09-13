@@ -1,8 +1,7 @@
 package com.libqa.web.service;
 
-import com.libqa.application.enums.ActivityTypeEnum;
+import com.libqa.application.enums.ActivityType;
 import com.libqa.web.domain.Activity;
-import com.libqa.web.domain.Space;
 import com.libqa.web.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,48 +49,48 @@ public class ActivityServiceImpl implements ActivityService {
         String desc = "";
         switch (activity.getActivityType()) {
             case CREATE_SPACE:
-                desc = activity.getUserNick() + "님이 " + title + ActivityTypeEnum.CREATE_SPACE.name();
+                desc = activity.getUserNick() + "님이 " + title + ActivityType.CREATE_SPACE.name();
                 break;
 
             case UPDATE_SPACE:
-                desc = activity.getUserNick() + "님이 " + title + ActivityTypeEnum.UPDATE_SPACE.name();
+                desc = activity.getUserNick() + "님이 " + title + ActivityType.UPDATE_SPACE.name();
                 break;
 
             case ADD_SPACE_FAVORITE:
-                desc = activity.getUserNick() + "님이 " + title + ActivityTypeEnum.ADD_SPACE_FAVORITE.name();
+                desc = activity.getUserNick() + "님이 " + title + ActivityType.ADD_SPACE_FAVORITE.name();
                 break;
 
             case INSERT_WIKI:
-                desc = activity.getUserNick() + "님이 " + title + ActivityTypeEnum.INSERT_WIKI.name();
+                desc = activity.getUserNick() + "님이 " + title + ActivityType.INSERT_WIKI.name();
                 break;
 
             case UPDATE_WIKI:
-                desc = activity.getUserNick() + "님이 " + title + ActivityTypeEnum.UPDATE_WIKI.name();
+                desc = activity.getUserNick() + "님이 " + title + ActivityType.UPDATE_WIKI.name();
                 break;
 
             case INSERT_REPLY_WIKI:
-                desc = activity.getUserNick() + "님이 " + title + ActivityTypeEnum.INSERT_REPLY_WIKI.name();
+                desc = activity.getUserNick() + "님이 " + title + ActivityType.INSERT_REPLY_WIKI.name();
                 break;
 
             case ADD_WIKI_FAVORITE:
-                desc = activity.getUserNick() + "님이 " + title + ActivityTypeEnum.ADD_WIKI_FAVORITE.name();
+                desc = activity.getUserNick() + "님이 " + title + ActivityType.ADD_WIKI_FAVORITE.name();
                 break;
 
             case INSERT_REPLY_QA:
-                desc = activity.getUserNick() + "님이 " + title + ActivityTypeEnum.INSERT_REPLY_QA.name();
+                desc = activity.getUserNick() + "님이 " + title + ActivityType.INSERT_REPLY_QA.name();
                 break;
 
             case ADD_VOTE_YES:
-                desc = activity.getUserNick() + "님이 " + title + ActivityTypeEnum.ADD_VOTE_YES.name();
+                desc = activity.getUserNick() + "님이 " + title + ActivityType.ADD_VOTE_YES.name();
                 break;
 
             case ADD_VOTE_NO:
-                desc = activity.getUserNick() + "님이 " + title + ActivityTypeEnum.ADD_VOTE_NO.name();
+                desc = activity.getUserNick() + "님이 " + title + ActivityType.ADD_VOTE_NO.name();
                 break;
 
 
             case ADD_REPLY_RECOMMEND:
-                desc = activity.getUserNick() + "님이 " + title + ActivityTypeEnum.ADD_REPLY_RECOMMEND.name();
+                desc = activity.getUserNick() + "님이 " + title + ActivityType.ADD_REPLY_RECOMMEND.name();
                 break;
         }
         return desc;

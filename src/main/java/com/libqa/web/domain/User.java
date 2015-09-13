@@ -1,7 +1,7 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.RoleEnum;
-import com.libqa.application.enums.SocialChannelTypeEnum;
+import com.libqa.application.enums.Role;
+import com.libqa.application.enums.SocialChannelType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -75,11 +75,11 @@ public class User {
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private RoleEnum role;
+    private Role role;
 
     @Column(name = "channelType", length = 20, nullable = true)
     @Enumerated(EnumType.STRING)
-    private SocialChannelTypeEnum channelType;
+    private SocialChannelType channelType;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserKeyword> userKeywords;
@@ -105,21 +105,21 @@ public class User {
         user.setCertification(false);
         user.setLastVisiteDate(now);
         user.setInsertDate(now);
-        user.setRole(RoleEnum.USER);
+        user.setRole(Role.USER);
         user.setCertificationKey(String.valueOf(System.nanoTime()).substring(0, 5));
-        user.setChannelType(SocialChannelTypeEnum.valueOf(channelType));
+        user.setChannelType(SocialChannelType.valueOf(channelType));
         return user;
     }
 
     public static User createGuest() {
         User user = new User();
-        user.setRole(RoleEnum.GUEST);
+        user.setRole(Role.GUEST);
         return user;
     }
 
     public boolean isGuest() {
 
-        if (this.role == RoleEnum.GUEST || this.role == null) {
+        if (this.role == Role.GUEST || this.role == null) {
             return true;
         } else {
             return false;

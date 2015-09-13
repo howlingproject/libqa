@@ -2,7 +2,6 @@ package com.libqa.web.domain;
 
 
 
-import com.libqa.application.enums.UserPointEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -29,7 +28,7 @@ public class UserPoint {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private UserPointEnum pointType;
+    private com.libqa.application.enums.UserPoint pointType;
 
 
     @Temporal(TemporalType.DATE)

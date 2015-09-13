@@ -1,7 +1,7 @@
 package com.libqa.web.controller;
 
-import com.libqa.application.enums.ListTypeEnum;
-import com.libqa.application.enums.WikiRevisionActionTypeEnum;
+import com.libqa.application.enums.ListType;
+import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.StringUtil;
@@ -224,7 +224,7 @@ public class WikiController {
             currentWiki.setUserId(1);
             currentWiki.setUpdateDate(new Date());
 
-            Wiki result = wikiService.updateWithKeyword(currentWiki, WikiRevisionActionTypeEnum.UPDATE_WIKI);
+            Wiki result = wikiService.updateWithKeyword(currentWiki, WikiRevisionActionType.UPDATE_WIKI);
 
 
             log.info("####### WIKI SAVE After INFO ########");
@@ -252,17 +252,17 @@ public class WikiController {
 
         listType = StringUtil.nullToString(listType);
 
-        if( ListTypeEnum.ALL.getName().equals(listType) ){
+        if( ListType.ALL.getName().equals(listType) ){
             List<Wiki> allWiki = wikiService.findByAllWiki(0, 15);
             mav.addObject("listWiki", allWiki);
             mav.addObject("listTitle","전체 위키 List");
 
-        }else if( ListTypeEnum.BEST.getName().equals(listType)){
+        }else if( ListType.BEST.getName().equals(listType)){
             List<Wiki> bestWiki = wikiService.findByBestWiki(0, 15);
             mav.addObject("listWiki", bestWiki);
             mav.addObject("listTitle","베스트 위키 List");
 
-        }else if( ListTypeEnum.RESENT.getName().equals(listType) ){
+        }else if( ListType.RESENT.getName().equals(listType) ){
             //유저 하드코딩
             User user = loggedUser.get();
             //int userId = user.getUserId();

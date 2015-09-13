@@ -1,6 +1,6 @@
 package com.libqa.web.service;
 
-import com.libqa.application.enums.FavoriteTypeEnum;
+import com.libqa.application.enums.FavoriteType;
 import com.libqa.web.domain.UserFavorite;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public interface UserFavoriteService {
      * @param userId
      * @return
      */
-    List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteTypeEnum typeEnum, Integer userId);
+    List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteType typeEnum, Integer userId);
 
 
     /**

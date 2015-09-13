@@ -1,6 +1,6 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.SpaceViewEnum;
+import com.libqa.application.enums.SpaceView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -38,7 +38,7 @@ public class Space implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
-    private SpaceViewEnum layoutType;
+    private SpaceView layoutType;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isPrivate;

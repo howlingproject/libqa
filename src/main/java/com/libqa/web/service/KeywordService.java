@@ -1,6 +1,6 @@
 package com.libqa.web.service;
 
-import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.KeywordType;
 import com.libqa.web.domain.Keyword;
 
 import java.util.List;
@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface KeywordService {
 
-    boolean saveKeywordAndList(String[] keywordNames, KeywordTypeEnum keywordType, Integer entityId);
+    boolean saveKeywordAndList(String[] keywordNames, KeywordType keywordType, Integer entityId);
 
     List<Keyword> findByQaId(Integer qaId, boolean isDeleted);
 
-    List<Keyword> findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordTypeEnum keywordType, String keywordName, boolean isDeleted);
+    List<Keyword> findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordType keywordType, String keywordName, boolean isDeleted);
 
     List<Keyword> findByWikiId(Integer wikiId, boolean isDeleted);
 

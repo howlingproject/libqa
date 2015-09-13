@@ -2,7 +2,7 @@ package com.libqa.web.service;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.libqa.application.enums.FeedActionTypeEnum;
+import com.libqa.application.enums.FeedActionType;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.FeedReply;
@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.libqa.application.enums.FeedActionTypeEnum.*;
+import static com.libqa.application.enums.FeedActionType.*;
 
 @Slf4j
 @Service
 public class FeedActionService {
-    private static Predicate<FeedAction> TO_NORMAL(final FeedActionTypeEnum feedActionType) {
+    private static Predicate<FeedAction> TO_NORMAL(final FeedActionType feedActionType) {
         return input -> input.isNotCanceled() && input.getFeedActionType() == feedActionType;
     }
 
@@ -82,12 +82,12 @@ public class FeedActionService {
         return getClaimed(feedReply, user) != null;
     }
 
-    private FeedAction findFeedAction(Feed feed, User user, FeedActionTypeEnum feedActionType) {
+    private FeedAction findFeedAction(Feed feed, User user, FeedActionType feedActionType) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
         return Iterables.tryFind(feedActions, TO_NORMAL(feedActionType)).orNull();
     }
 
-    private FeedAction findFeedAction(FeedReply feedReply, User user, FeedActionTypeEnum feedActionType) {
+    private FeedAction findFeedAction(FeedReply feedReply, User user, FeedActionType feedActionType) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedReplyIdAndUserId(feedReply.getFeedReplyId(), user.getUserId());
         return Iterables.tryFind(feedActions, TO_NORMAL(feedActionType)).orNull();
     }

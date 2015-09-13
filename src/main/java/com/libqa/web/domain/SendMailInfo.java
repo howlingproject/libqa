@@ -1,6 +1,6 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.KeywordTypeEnum;
+import com.libqa.application.enums.KeywordType;
 import com.libqa.application.enums.ProcessType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,7 +41,7 @@ public class SendMailInfo {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = true)
-    private KeywordTypeEnum mailType;
+    private KeywordType mailType;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = true)

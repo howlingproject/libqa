@@ -1,6 +1,6 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.SocialChannelTypeEnum;
+import com.libqa.application.enums.SocialChannelType;
 import lombok.*;
 import org.hibernate.annotations.Where;
 
@@ -11,11 +11,11 @@ import java.util.List;
 @Data
 @Builder
 @Entity
-@Table(indexes = {@Index(columnList = "isDeleted")})
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "feedId")
-@ToString(exclude = {"feedReplies", "feedFiles", "feedLikeUsers"})
+@Table(indexes = {@Index(columnList = "isDeleted")})
+@ToString(exclude = {"feedReplies", "feedFiles"})
 public class Feed {
     @Id
     @Column(nullable = false, updatable = false)
@@ -27,7 +27,7 @@ public class Feed {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true, length = 20)
-    private SocialChannelTypeEnum sharedContentsType;
+    private SocialChannelType sharedContentsType;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String feedContent;
