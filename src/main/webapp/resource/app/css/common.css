@@ -64,8 +64,8 @@ div.action-buttons i.hasViewer {color : #2682C4; font-weight: bold;}
 **/
 .feed-write {margin-bottom: 20px;}
 .feed-write .write-box { height:150px;}
-.feed-write .feed-write-top {margin-bottom:10px;}
-.feed-write .feed-write-top, .feed-write .feed-write-bottom {margin-right:50px;}
+.feed-write .btn-feed-image {margin-left:80px;}
+.feed-write .btn-feed-save {margin-right:40px;}
 
 .feed ul { list-style: none outside none; margin: 0; padding: 0; }
 .feed ul li { background: none repeat scroll 0 0 white; border: 1px solid #dbdee0; margin: 0 40px 20px 80px; padding: 10px; position: relative; }

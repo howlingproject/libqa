@@ -6,11 +6,6 @@
         <!-- feed 글 쓰기 start -->
         <form id="feedForm">
         <div class="feed feed-write well">
-            <div class="feed-write-top">
-                <div class="action-buttons text-right">
-                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#fileUploadModal">이미지 및 파일첨부</button>
-                </div>
-            </div>
             <ul>
                 <li>
                     <div class="author">
@@ -27,8 +22,10 @@
                     </div>
                 </li>
             </ul>
-            <div class="feed-write-bottom text-right">
-                <button class="btn btn-info" type="button" id="feedSave">저장</button>
+
+            <div class="feed-write-bottom">
+                <button class="btn btn-primary btn-feed-image" type="button" data-toggle="modal" data-target="#fileUploadModal">이미지 및 파일첨부</button>
+                <button class="btn btn-info pull-right btn-feed-save" type="button" id="feedSave">저장</button>
             </div>
         </div>
         </form>
