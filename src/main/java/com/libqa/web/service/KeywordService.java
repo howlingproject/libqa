@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface KeywordService {
 
-    boolean saveKeywordAndList(String[] keywordNames, KeywordType keywordType, Integer entityId);
+    boolean saveKeywordAndList(String[] keywordNames, String[] deleteKeywordParams, KeywordType keywordType, Integer entityId);
 
     List<Keyword> findByQaId(Integer qaId, boolean isDeleted);
 

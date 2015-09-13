@@ -68,7 +68,7 @@ public class KeywordServiceImpl implements KeywordService {
 	 */
 	@Override
 	@Transactional
-	public boolean saveKeywordAndList(String[] keywordParams, KeywordType keywordType, Integer entityId) {
+	public boolean saveKeywordAndList(String[] keywordParams, String[] deleteKeywordParams, KeywordType keywordType, Integer entityId) {
 		Assert.notNull(keywordParams, "키워드가 존재하지 않습니다.");
 		Assert.notNull(keywordType, "키워드 타입이 존재하지 않습니다.");
 		Assert.notNull(entityId, "키 값이 존재하지 않습니다.");
@@ -94,7 +94,7 @@ public class KeywordServiceImpl implements KeywordService {
 		return result;
 	}
 
-	private void deleteKeywordList(String keywordName, KeywordTypeEnum keywordType) {
+	private void deleteKeywordList(String keywordName, KeywordType keywordType) {
 		Assert.notNull(StringUtil.defaultString(keywordName, null), "키워드 값이 존재하지 않습니다.");
 		List<KeywordList> keywordList = keywordListRepository.findByKeywordNameAndKeywordType(keywordName, keywordType);
 
