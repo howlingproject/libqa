@@ -1,6 +1,7 @@
 package com.libqa.web.domain;
 
 import com.libqa.application.enums.ActivityTypeEnum;
+import com.libqa.application.enums.KeywordTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -34,6 +35,10 @@ public class Activity {
     @Column(length = 20, nullable = false)
     private ActivityTypeEnum activityType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private KeywordTypeEnum activityKeyword;    // QA, WIKI, SPACE
+
     @Column(nullable = true)
     private Integer spaceId;
 
@@ -46,6 +51,7 @@ public class Activity {
     // wiki나 qa의 댓글의 번호
     @Column(nullable = true)
     private Integer replyId;
+
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isDeleted;

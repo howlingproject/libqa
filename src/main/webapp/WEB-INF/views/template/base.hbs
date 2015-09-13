@@ -37,12 +37,16 @@
                 <li class="dropdown">
                     <a aria-expanded="true" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-2x"></i></a>
                     <ul class="dropdown-menu">
-                        {{#compareTo isLogin '1'}}
-                            {{> template/login}}
-                        {{/compareTo}}
-                        {{#compareTo isLogin '0'}}
+                        {{#if isLogin}}
+                            {{#compareTo isLogin '1'}}
+                                {{> template/login}}
+                            {{/compareTo}}
+                            {{#compareTo isLogin '0'}}
+                                {{> template/guest}}
+                            {{/compareTo}}
+                        {{^}}
                             {{> template/guest}}
-                        {{/compareTo}}
+                        {{/if}}
                     </ul>
                 </li>
                 <li class="messenger"><a href="#"><i class="fa fa-weixin fa-2x"></i></a></li>
@@ -86,7 +90,7 @@
                     <div style="padding-top:10px;border-top: 1px solid #e5e5e5">
                         <div class="col-xs-4">
                             <label class="checkbox">
-                                <input type="checkbox" id="remember-me" value="remember-me">Remember Me
+                                <input type="checkbox" id="remember-me" name="remember-me" value="Y">Save ID
                             </label>
                         </div>
                         <div class="col-xs-4" >

@@ -62,17 +62,17 @@ public class WikiServiceImpl implements WikiService {
         return result;
     }
 
-    private void saveWikiActivity(Wiki result, ActivityTypeEnum ActivityTypeEnum) {
-        String message = result.getUserNick()+"님이 "+ ActivityTypeEnum.getCode();
+    private void saveWikiActivity(Wiki saveWiki, ActivityTypeEnum ActivityTypeEnum) {
+
         Activity activity = new Activity();
         activity.setInsertDate(new Date());
         activity.setDeleted(false);
-        activity.setActivityDesc(message);
+
         activity.setActivityType(ActivityTypeEnum);
-        activity.setUserId(result.getUserId());
-        activity.setUserNick(result.getUserNick());
-        activity.setWikiId(result.getWikiId());
-        activityService.saveActivity(activity);
+        activity.setUserId(saveWiki.getUserId());
+        activity.setUserNick(saveWiki.getUserNick());
+        activity.setWikiId(saveWiki.getWikiId());
+        activityService.saveActivity(activity, saveWiki.getTitle());
     }
 
     @Override

@@ -87,18 +87,15 @@ public class UserController {
     @RequestMapping("/loginPage")
     public ModelAndView loginPage(HttpServletRequest request) {
 
-        log.info("request.get = {}", request.getAttribute("isLogin"));
-        log.info("request.get = {}", request.getAttribute("userEmail"));
-        log.info("request.get = {}", request.getAttribute("userRole"));
+        log.info("# loginPage request.get = {}", request.getAttribute("isLogin"));
+        log.info("# loginPage request.get = {}", request.getAttribute("userEmail"));
+        log.info("# loginPage request.get = {}", request.getAttribute("userRole"));
         String returnUrl = RequestUtil.refererUrl(request, "/index");
-        // 이전 페이지 결정 (로그인 및 가입일 경우 index로 이동)
-        returnUrl = checkReturnUrl(returnUrl);
 
-        Enumeration params = request.getParameterNames();
-        while (params.hasMoreElements()) {
-            String paramName = (String) params.nextElement();
-            System.out.println("# Attribute Name - " + paramName + ", Value - " + request.getParameter(paramName));
-        }
+        // 이전 페이지 결정 (로그인 및 가입일 경우 index로 이동)
+        returnUrl = RequestUtil.checkReturnUrl(returnUrl);
+        RequestUtil.printRequest(request, "UserController.loginPage");
+
         ModelAndView mav = new ModelAndView("/user/loginPage");
 
         // 실제 로그인 페이지가 아니라 권한으로 강제 이동 된 페이지에서는 returnUrl을 세팅해서 내려주고, hbs에서 강제로 url 이동 처리함.
@@ -109,28 +106,11 @@ public class UserController {
         return mav;
     }
 
-    private String checkReturnUrl(String returnUrl) {
-
-        int subPoint = returnUrl.lastIndexOf("/");
-        String subUrl = returnUrl.substring(subPoint, returnUrl.length());
-
-        log.info("###################### subUrl : {}", subUrl);
-
-
-        if (subUrl.equals("/") || subUrl.equals("/loginPage") || subUrl.equals("/signUp")) {
-            returnUrl = "/index";
-        }
-
-        return returnUrl;
-    }
-
     @RequestMapping("/user/signUp")
     public ModelAndView signUp(HttpServletRequest request) {
         String returnUrl = RequestUtil.refererUrl(request, "/index");
-        // 이전 페이지 결정 (로그인 및 가입일 경우 index로 이동)
-        returnUrl = checkReturnUrl(returnUrl);
 
-
+        returnUrl = RequestUtil.checkReturnUrl(returnUrl);
         ModelAndView mav = new ModelAndView("/user/form");
 
         mav.addObject("returnUrl", returnUrl);
@@ -157,8 +137,7 @@ public class UserController {
     public ModelAndView userInfo(HttpServletRequest request) {
         String returnUrl = RequestUtil.refererUrl(request, "/index");
         log.info("### USER Info!");
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String email = (String) authentication.getPrincipal();
 
@@ -252,21 +231,6 @@ public class UserController {
         mav.addObject("msg", msg);
         return mav;
     }
-
-    /**
-     * 로그인 하기 전의 요청했던 URL을 알아낸다.
-     *
-     * @param request
-     * @param response
-     * @return private String getReturnUrl(HttpServletRequest request, HttpServletResponse response) {
-    RequestCache requestCache = new HttpSessionRequestCache();
-    SavedRequest savedRequest = requestCache.getRequest(request, response);
-    if (savedRequest == null) {
-    return request.getSession().getServletContext().getContextPath();
-    }
-    return savedRequest.getRedirectUrl();
-    }
-     */
 
 }
 

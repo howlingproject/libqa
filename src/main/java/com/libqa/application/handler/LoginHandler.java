@@ -2,11 +2,13 @@ package com.libqa.application.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.libqa.application.util.RequestUtil;
+import com.libqa.application.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,7 +19,7 @@ import java.util.Map;
 
 /**
  * 로그인 후 이전 URL로 핸들링 한다.
- *
+ * 사용자 아이디의 저장 유무를 확인하여 Cookie를 세팅한다.
  * @Author : yion
  * @Date : 2015. 4. 12.
  * @Description :
@@ -30,8 +32,13 @@ public class LoginHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        // 여기서 회원 정보 어노테이션 추가함
-        printRequest(request);
+        String cookieMe = StringUtil.nullToString(request.getParameter("remember-me"), "N");
+        String userEmail = StringUtil.nullToString(request.getParameter("userEmail"), "");
+
+        setUserIdCookies(response, cookieMe, userEmail);
+
+
+        RequestUtil.printRequest(request, "LoginHandler");
         String returnUrl = RequestUtil.refererUrl(request, DEFAULT_URL);
         ObjectMapper om = new ObjectMapper();
 
@@ -47,20 +54,12 @@ public class LoginHandler implements AuthenticationSuccessHandler {
         out.write(jsonString.getBytes());
     }
 
-    private void printRequest(HttpServletRequest request) {
-        Enumeration enumer = request.getParameterNames();
-        while (enumer.hasMoreElements()) {
-            String name = (String) enumer.nextElement();
-            String values[] = request.getParameterValues(name);
-
-            if (values != null) {
-                for (int i = 0; i < values.length; i++) {
-                    System.out.println("** " + name + "( " + i + " ) " + values[i]);
-                }
-            }
+    public void setUserIdCookies(HttpServletResponse response, String cookieMe, String userEmail) {
+        if (cookieMe.equals("Y")) {
+            Cookie cookie = new Cookie("SaveID", userEmail);
+            cookie.setMaxAge(30 * 24 * 60 * 60);    // 30일
+            response.addCookie(cookie);
         }
-
     }
-
 
 }

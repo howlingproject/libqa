@@ -1,5 +1,6 @@
 package com.libqa.config;
 
+import com.libqa.application.util.RequestUtil;
 import com.libqa.application.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -20,12 +22,12 @@ import java.util.List;
  * @Description :
  */
 @Slf4j
-public class LoginUserInterceptor implements HandlerInterceptor {
+public class LoginUserHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        RequestUtil.printRequest(request, "LoginUserHandlerInterceptor ");
 
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String login = "0";
         String userEmail = "";
@@ -40,7 +42,7 @@ public class LoginUserInterceptor implements HandlerInterceptor {
 
             if (!isInvalidUser(userEmail)) {
                 List<GrantedAuthority> grantedAuths = (List<GrantedAuthority>) authentication.getAuthorities();
-                System.out.println("### grantedAuthority = " + grantedAuths.get(0));
+                log.info("### grantedAuthority = {}", grantedAuths.get(0));
 
                 log.info("@Interceptor authentication.isAuthenticated() = {}", authentication.isAuthenticated());
                 log.info("@Interceptor authentication.getDetails().toString() = {}", authentication.getDetails().toString());
@@ -63,9 +65,9 @@ public class LoginUserInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        log.info("# postHandle  request.get = {}", request.getAttribute("isLogin"));
-        log.info("# postHandle  request.get = {}", request.getAttribute("userEmail"));
-        log.info("# postHandle  request.get = {}", request.getAttribute("userRole"));
+        log.info("# postHandle  request.get isLogin = {}", request.getAttribute("isLogin"));
+        log.info("# postHandle  request.get userEmail = {}", request.getAttribute("userEmail"));
+        log.info("# postHandle  request.get userRole = {}", request.getAttribute("userRole"));
 
         String isLogin = (String) request.getAttribute("isLogin");
 
@@ -75,6 +77,8 @@ public class LoginUserInterceptor implements HandlerInterceptor {
                 log.info("#### modelandview 가 널임 ");
             } else {
                 modelAndView.addObject("isLogin", request.getAttribute("isLogin"));
+                modelAndView.addObject("userEmail", request.getAttribute("userEmail"));
+                modelAndView.addObject("userRole", request.getAttribute("userRole"));
             }
         }
 

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface ActivityService {
 
-    Activity saveActivity(Activity activity);
+    Activity saveActivity(Activity activity, String title);
 
     List<Activity> findBySpaceId(Integer spaceId);
 

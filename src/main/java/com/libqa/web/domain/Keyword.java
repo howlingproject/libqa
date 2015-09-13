@@ -31,7 +31,7 @@ public class Keyword {
     private String keywordName;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 10)
     private KeywordTypeEnum keywordType;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
