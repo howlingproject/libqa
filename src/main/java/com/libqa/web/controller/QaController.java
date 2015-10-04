@@ -61,6 +61,14 @@ public class QaController {
         return mav;
     }
 
+    @RequestMapping("/qa/my")
+    public ModelAndView my(Model model){
+        boolean isDeleted = false;
+
+        ModelAndView mav = new ModelAndView("qa/my");
+        return mav;
+    }
+
     @RequestMapping("/qa/{qaId}")
     public ModelAndView view(@PathVariable Integer qaId) {
         boolean isDeleted = false;
@@ -185,7 +193,7 @@ public class QaController {
         try {
             qaContentList = qaService.findByIsReplyedAndDayType(qaDto);
             for(QaContent qaContent : qaContentList) {
-                displayQaList.add(new DisplayQa(qaContent, keywordService.findByQaId(qaContent.getQaId(), isDeleted)));
+                displayQaList.add(new DisplayQa(qaContent, keywordService.findByQaId(qaContent.getQaId(), isDeleted), qaReplyService.findByQaId(qaContent.getQaId()) ));
             }
             return createSuccessResult(displayQaList);
         }catch(Exception e){
