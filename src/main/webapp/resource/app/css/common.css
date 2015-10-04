@@ -6,7 +6,7 @@
 /**
 *  layout
 **/
-html {position: relative; min-height: 100%; min-width: 480px;}
+html {position: relative; min-height: 100%; min-width: 1024px; width: auto !important;}
 body { font-family: 'verdana', 'tohoma', 'nanumgothic', '나눔고딕'; font-size:14px; margin-bottom: 100px; }
 img { vertical-align: middle; border: 0 none; }
 .wrap { margin-left:0; margin-right:0; }
@@ -91,6 +91,7 @@ div.action-buttons i.hasViewer {color : #2682C4; font-weight: bold;}
 .feed ul li ul li .message { border-bottom: 0 none; }
 .feed ul li ul li .config { background: none repeat scroll 0 0 transparent; right: 10px; }
 .feed ul li .feed-comment button{ margin-left:-15px;}
+.feed .btn-feed-more {width:100%; margin-left: auto; margin-right: auto; display:none;}
 
 .best-feed { max-height: 600px; overflow-y:scroll;}
 .best-feed .media-body {cursor: pointer;}

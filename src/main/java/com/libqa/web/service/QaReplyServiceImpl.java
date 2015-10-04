@@ -149,6 +149,11 @@ public class QaReplyServiceImpl implements QaReplyService {
         qaReply.setUpdateDate(new Date());
     }
 
+    @Override
+    public List<QaReply> findByQaId(Integer qaId) {
+        return qaReplyRepository.findByQaId(qaId);
+    }
+
     public void updateOrderIdx(QaReply paramQaReply){
         boolean isDeleted = false;
         List<QaReply> updateTargetQaReplyList = qaReplyRepository.findAllByQaIdAndIsDeletedAndOrderIdxGreaterThanOrderByOrderIdxAsc(paramQaReply.getQaId(), isDeleted, paramQaReply.getOrderIdx());

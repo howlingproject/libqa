@@ -19,32 +19,32 @@ import static com.libqa.application.enums.FeedActionType.*;
 @Slf4j
 @Service
 public class FeedActionService {
-    private static Predicate<FeedAction> TO_NORMAL(final FeedActionType feedActionType) {
+    private static Predicate<FeedAction> IS_NOT_CANCEL(final FeedActionType feedActionType) {
         return input -> input.isNotCanceled() && input.getFeedActionType() == feedActionType;
     }
 
     @Autowired
     private FeedActionRepository feedActionRepository;
 
-    public FeedAction newLike(Feed feed, User user) {
+    public FeedAction createLike(Feed feed, User user) {
         FeedAction feedAction = FeedActionFactory.createLike(feed, user);
         feedActionRepository.save(feedAction);
         return feedAction;
     }
 
-    public FeedAction newClaim(Feed feed, User user) {
+    public FeedAction createClaim(Feed feed, User user) {
         FeedAction feedAction = FeedActionFactory.createClaim(feed, user);
         feedActionRepository.save(feedAction);
         return feedAction;
     }
 
-    public FeedAction newLike(FeedReply feedReply, User user) {
+    public FeedAction createLike(FeedReply feedReply, User user) {
         FeedAction feedAction = FeedActionFactory.createLike(feedReply, user);
         feedActionRepository.save(feedAction);
         return feedAction;
     }
 
-    public FeedAction newClaim(FeedReply feedReply, User user) {
+    public FeedAction createClaim(FeedReply feedReply, User user) {
         FeedAction feedAction = FeedActionFactory.createClaim(feedReply, user);
         feedActionRepository.save(feedAction);
         return feedAction;
@@ -84,12 +84,12 @@ public class FeedActionService {
 
     private FeedAction findFeedAction(Feed feed, User user, FeedActionType feedActionType) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId());
-        return Iterables.tryFind(feedActions, TO_NORMAL(feedActionType)).orNull();
+        return Iterables.tryFind(feedActions, IS_NOT_CANCEL(feedActionType)).orNull();
     }
 
     private FeedAction findFeedAction(FeedReply feedReply, User user, FeedActionType feedActionType) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedReplyIdAndUserId(feedReply.getFeedReplyId(), user.getUserId());
-        return Iterables.tryFind(feedActions, TO_NORMAL(feedActionType)).orNull();
+        return Iterables.tryFind(feedActions, IS_NOT_CANCEL(feedActionType)).orNull();
     }
 
     public Integer getLikeCount(Feed feed) {

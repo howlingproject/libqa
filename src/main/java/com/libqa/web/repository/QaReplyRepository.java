@@ -19,4 +19,5 @@ public interface QaReplyRepository extends JpaRepository<QaReply, Integer> {
 
     List<QaReply> findAllByQaIdAndParentsIdAndDepthIdxAndIsDeletedOrderByOrderIdxAsc(Integer qaId, Integer replyId, int depthIdx, boolean isDeleted);
 
+    List<QaReply> findByQaId(Integer qaId);
 }

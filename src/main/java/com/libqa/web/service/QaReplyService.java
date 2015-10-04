@@ -23,4 +23,5 @@ public interface QaReplyService {
 
     void delete(Integer replyId);
 
+    List<QaReply> findByQaId(Integer qaId);
 }

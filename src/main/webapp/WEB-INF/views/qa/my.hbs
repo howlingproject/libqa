@@ -1,12 +1,13 @@
-<%--
+<!--
   Created by IntelliJ IDEA.
   User: yong
   Date: 2014. 9. 22.
   Time: 오후 10:57
---%>
+-->
 
-<%@ page contentType="text/html;charset=UTF-8" %>
-<g:render template="/include/indicator"/>
+{{# partial "content" }}
+
+<!-- contents -->
 <!-- qna top contents -->
 <div class="container qna-top-search">
     <form class="navbar-form navbar-left" role="search">
@@ -15,13 +16,13 @@
         </div>
         <a href="#" class="form-control btn btn-primary">검색</a>
     </form>
-
-    <div class="btn-group pull-right" data-toggle="buttons">
+    <div class="btn-group pull-right">
         <a href="#" class="btn btn-primary">총 질문(123)</a>
         <a href="#" class="btn btn-primary">총 답변(123)</a>
         <a href="#" class="btn btn-primary">총 키워드(123)</a>
         <a href="#" class="btn btn-primary">답변을 기다리는 Q&A(123)</a>
-        <g:link controller="qa" action="create" class="btn btn-primary">질문하기</g:link>
+        <a href="/qa" class="btn btn-primary">Q&A</a>
+        <a href="/qa/form" class="btn btn-primary">질문하기</a>
     </div>
 </div>
 <!--// qna top contents -->
@@ -47,7 +48,7 @@
         <div class="my-qna-item">
             <a class="pull-left" href="#">
                 <div class="user-profile">
-                    <img alt="avatar" class="profile-image" src="../images/avatar.png"/>
+                    <img alt="avatar" class="profile-image" src="/resource/images/avatar.png"/>
                 </div>
             </a>
 
@@ -99,7 +100,7 @@
             <div class="my-qna-item">
             <a class="pull-left" href="#">
                 <div class="user-profile">
-                    <img alt="avatar" class="profile-image" src="../images/avatar.png"/>
+                    <img alt="avatar" class="profile-image" src="/resource/images/avatar.png"/>
                 </div>
             </a>
 
@@ -142,44 +143,144 @@
     <!--// 내가 답변한 Q&A -->
 </div>
 
+{{/partial}}
+
+{{#partial "script-page"}}
 <script type="text/javascript">
-    $(function(){
-        Qa.renderKeywordList();
-        Qa.renderMyWriteQaList();
-        Qa.renderMyReplyQaList();
+    $(document).ready(function(){
+        Qa.init();
     });
 
     var Qa = {
+        init : function(){
+            this.renderKeywordList();
+            this.renderRecentQaList();
+            this.renderWaitReplyQaList();
+            this.renderDayType($('#recentQaDayTypeUl'));
+            this.renderDayType($('#waitReplyQaDayTypeUl'));
+            this.bindDayTypeEvent();
+        },
         renderKeywordList : function(){
             $.ajax({
-                url: '${createLink(controller:'keywordList',action:'categorizeKeywordList')}',
-                data : {keywordType : 'QA'},
-                failure: function(){ },
-                success: function(response) {
-                    $('#categorizeKeywordListArea').html(response);
+                url: "/common/findKeywordList",
+                type: "POST",
+                data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName() },
+                success : function(data){
+                    if(data.resultCode == 1) {
+                        var source = $('#common-_keywordList-hbs').html();
+                        var template = Handlebars.compile(source);
+
+                        var html = template(data);
+                        $('#categorizeKeywordListArea').html(html);
+                        Qa.bindKeywordListEvent();
+                    }
+                },
+                error : function(req){
+                    // Handle upload error
+                    alert('req : ' + req);
+                    console.log('req : ' + req.status);
+                    console.log('req : ' + req.readyState);
+
+                    alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
                 }
             });
         },
         renderMyWriteQaList : function(){
 //            var test = $('#categorizeKeywordListArea').find('li.active').attr('value');
+//            $.ajax({
+//                url: '${createLink(controller:'qa',action:'renderMyQaList')}',
+//                data : {keywordType : 'QA', keywordName : 'JAVA', viewType : 'myWrite'},
+//                failure: function(){ },
+//                success: function(response) {
+//                    $('#myWriteQaListArea').html(response);
+//                }
+//            });
             $.ajax({
-                url: '${createLink(controller:'qa',action:'renderMyQaList')}',
-                data : {keywordType : 'QA', keywordName : 'JAVA', viewType : 'myWrite'},
-                failure: function(){ },
-                success: function(response) {
-                    $('#myWriteQaListArea').html(response);
+                url: "/qa/myList",
+                type: "POST",
+                data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName()},
+                success : function(data){
+                    if(data.resultCode == 1) {
+                        var source = $('#qa-template-_list-hbs').html();
+                        var template = Handlebars.compile(source);
+
+                        var html = template(data);
+                        $('#recentQaListArea').html(html);
+                    }
+                },
+                error : function(req){
+                    // Handle upload error
+                    alert('req : ' + req);
+                    console.log('req : ' + req.status);
+                    console.log('req : ' + req.readyState);
+
+                    alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
                 }
             });
         },
         renderMyReplyQaList : function(){
+//            $.ajax({
+//                url: '${createLink(controller:'qa',action:'renderMyQaList')}',
+//                data : {keywordType : 'QA', keywordName : 'JAVA', viewType : 'myReply'},
+//                failure: function(){ },
+//                success: function(response) {
+//                    $('#myReplyQaListArea').html(response);
+//                }
+//            });
             $.ajax({
-                url: '${createLink(controller:'qa',action:'renderMyQaList')}',
-                data : {keywordType : 'QA', keywordName : 'JAVA', viewType : 'myReply'},
-                failure: function(){ },
-                success: function(response) {
-                    $('#myReplyQaListArea').html(response);
+                url: "/qa/myList",
+                type: "POST",
+                data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName()},
+                success : function(data){
+                    if(data.resultCode == 1) {
+                        var source = $('#qa-template-_list-hbs').html();
+                        var template = Handlebars.compile(source);
+
+                        var html = template(data);
+                        $('#recentQaListArea').html(html);
+                    }
+                },
+                error : function(req){
+                    // Handle upload error
+                    alert('req : ' + req);
+                    console.log('req : ' + req.status);
+                    console.log('req : ' + req.readyState);
+
+                    alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
                 }
+            });
+        },
+        selectedKeywordName : function(){
+            var keywordName = $('#categorizeKeywordListArea').find('li.active').attr('data-keywordList-name');
+            return keywordName;
+        },
+        bindKeywordListEvent : function(){
+            $('#categorizeKeywordListArea').find('li').click(function(){
+                KeywordList.findKeywordList(this);
             });
         }
     };
+
+    var KeywordList = {
+        findKeywordList : function(keywordListObj){
+            var ulObj = $(keywordListObj).parent();
+            ulObj.find('li').removeClass('active');
+            var keywordListValue = keywordListObj.getAttribute('data-keywordList-name');
+            if(keywordListValue == ''){
+                ulObj.find('li[data-keywordList-name=""]').addClass('active');
+            } else {
+                ulObj.find('li[data-keywordList-name=' + keywordListValue + ']').addClass('active');
+            }
+            // keyword 해당되는 질문 전체 목록 List up
+            // 화면 분할? 같이? 고민
+            Qa.renderDayType($('#recentQaDayTypeUl'));
+            Qa.renderDayType($('#waitReplyQaDayTypeUl'));
+            Qa.renderRecentQaList();
+            Qa.renderWaitReplyQaList();
+        }
+    }
+
 </script>
+{{/partial}}
+
+{{> template/base}}

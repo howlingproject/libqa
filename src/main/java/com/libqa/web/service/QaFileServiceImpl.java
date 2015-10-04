@@ -54,7 +54,7 @@ public class QaFileServiceImpl implements QaFileService {
             }
             if(paramQaFiles.getDeleteFiles() != null){
                 for(int deleteFileIndex = 0; deleteFileIndex < paramQaFiles.getDeleteFiles().size(); deleteFileIndex++){
-                    deleteQaFile((Integer) paramQaFiles.getDeleteFiles().get(deleteFileIndex));
+                    deleteQaFile(Integer.valueOf((String)paramQaFiles.getDeleteFiles().get(deleteFileIndex)));
                 }
             }
         }catch(Exception e){

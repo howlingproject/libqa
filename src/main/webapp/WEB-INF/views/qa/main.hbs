@@ -7,7 +7,6 @@
 
 {{# partial "content" }}
 
-<!--<g:render template="/include/indicator"/>-->
 <!-- contents -->
 <!-- qna top contents -->
 <div class="container qna-top-search">
@@ -22,8 +21,8 @@
         <a href="#" class="btn btn-primary">총 답변(123)</a>
         <a href="#" class="btn btn-primary">총 키워드(123)</a>
         <a href="#" class="btn btn-primary">답변을 기다리는 Q&A(123)</a>
+        <a href="/qa/my" class="btn btn-primary">myQ&A</a>
         <a href="/qa/form" class="btn btn-primary">질문하기</a>
-        <!--<g:link controller="qa" action="createLike" class="btn btn-primary">질문하기</g:link>-->
     </div>
 </div>
 <!--// qna top contents -->
@@ -309,8 +308,8 @@
 {{/partial}}
 
 {{#partial "script-page"}}
-{{embedded "common/keywordList"}}
-{{embedded "qa/list"}}
+{{embedded "common/_keywordList"}}
+{{embedded "qa/template/_list"}}
     <script type="text/javascript">
         $(document).ready(function(){
             Qa.init();
@@ -332,7 +331,7 @@
                     data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName() },
                     success : function(data){
                         if(data.resultCode == 1) {
-                            var source = $('#common-keywordList-hbs').html();
+                            var source = $('#common-_keywordList-hbs').html();
                             var template = Handlebars.compile(source);
 
                             var html = template(data);
@@ -357,7 +356,7 @@
                     data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName(), dayType : dayType },
                     success : function(data){
                         if(data.resultCode == 1) {
-                            var source = $('#qa-list-hbs').html();
+                            var source = $('#qa-template-_list-hbs').html();
                             var template = Handlebars.compile(source);
 
                             var html = template(data);
@@ -381,7 +380,7 @@
                     data : {keywordType : 'QA', keywordName : Qa.selectedKeywordName(), waitReply : 'Y', dayType : dayType},
                     success : function(data){
                         if(data.resultCode == 1) {
-                            var source = $('#qa-list-hbs').html();
+                            var source = $('#qa-template-_list-hbs').html();
                             var template = Handlebars.compile(source);
 
                             var html = template(data);
