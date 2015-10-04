@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -72,7 +71,7 @@ public class FeedService {
         Feed feed = feedRepository.findOne(feedId);
         FeedAction likedFeedAction = feedActionService.getLiked(feed, user);
         if (likedFeedAction == null) {
-            feedActionService.newLike(feed, user);
+            feedActionService.createLike(feed, user);
         } else {
             likedFeedAction.cancel();
         }
@@ -85,7 +84,7 @@ public class FeedService {
         Feed feed = feedRepository.findOne(feedId);
         FeedAction claimedFeedAction = feedActionService.getClaimed(feed, user);
         if (claimedFeedAction == null) {
-            feedActionService.newClaim(feed, user);
+            feedActionService.createClaim(feed, user);
         } else {
             claimedFeedAction.cancel();
         }
@@ -94,21 +93,19 @@ public class FeedService {
     }
 
     private void saveFeedFiles(Feed feed) {
-        if (CollectionUtils.isEmpty(feed.getFeedFiles())) { // TODO check
-            return;
-        }
-
-        for (FeedFile each : feed.getFeedFiles()) {
-            each.setUserNick(feed.getUserNick());
-            each.setUserId(feed.getUserId());
-            each.setInsertUserId(feed.getInsertUserId());
-            each.setInsertDate(new Date());
-            each.setFeed(feed);
-            feedFileService.save(each);
-        }
+        Optional.ofNullable(feed.getFeedFiles()).ifPresent(list -> list.forEach(
+                feedFile -> {
+                    feedFile.setUserNick(feed.getUserNick());
+                    feedFile.setUserId(feed.getUserId());
+                    feedFile.setInsertUserId(feed.getInsertUserId());
+                    feedFile.setInsertDate(new Date());
+                    feedFile.setFeed(feed);
+                    feedFileService.save(feedFile);
+                }
+        ));
     }
 
-    private static final PageRequest getPageRequest() {
+    private static PageRequest getPageRequest() {
         return PageUtil.sortPageable(new Sort(DESC, "feedId"));
     }
 }
