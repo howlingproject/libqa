@@ -309,8 +309,8 @@
 {{/partial}}
 
 {{#partial "script-page"}}
-{{embedded "common/keywordList"}}
-{{embedded "qa/list"}}
+{{embedded "common/_keywordList"}}
+{{embedded "qa/template/_list"}}
     <script type="text/javascript">
         $(document).ready(function(){
             Qa.init();
@@ -332,7 +332,7 @@
                     data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName() },
                     success : function(data){
                         if(data.resultCode == 1) {
-                            var source = $('#common-keywordList-hbs').html();
+                            var source = $('#common-_keywordList-hbs').html();
                             var template = Handlebars.compile(source);
 
                             var html = template(data);
@@ -357,7 +357,7 @@
                     data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName(), dayType : dayType },
                     success : function(data){
                         if(data.resultCode == 1) {
-                            var source = $('#qa-list-hbs').html();
+                            var source = $('#qa-template-_list-hbs').html();
                             var template = Handlebars.compile(source);
 
                             var html = template(data);
@@ -381,7 +381,7 @@
                     data : {keywordType : 'QA', keywordName : Qa.selectedKeywordName(), waitReply : 'Y', dayType : dayType},
                     success : function(data){
                         if(data.resultCode == 1) {
-                            var source = $('#qa-list-hbs').html();
+                            var source = $('#qa-template-_list-hbs').html();
                             var template = Handlebars.compile(source);
 
                             var html = template(data);
