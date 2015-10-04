@@ -34,12 +34,11 @@ public class FeedService {
     private FeedActionService feedActionService;
 
     public List<Feed> search(Integer lastFeedId) {
-        PageRequest pageRequest = PageUtil.sortPageable(new Sort(DESC, "feedId"));
         Optional<Integer> lastFeedIdOptional = Optional.ofNullable(lastFeedId);
         if (lastFeedIdOptional.isPresent()) {
-            return feedRepository.findByFeedIdLessThanAndIsDeletedFalse(lastFeedId, pageRequest);
+            return feedRepository.findByFeedIdLessThanAndIsDeletedFalse(lastFeedId, getPageRequest());
         }
-        return feedRepository.findByIsDeletedFalse(pageRequest);
+        return feedRepository.findByIsDeletedFalse(getPageRequest());
     }
 
     @Transactional
@@ -53,7 +52,7 @@ public class FeedService {
     }
 
     @Transactional
-    public void delete(Integer feedId) {
+    public void deleteByFeedId(Integer feedId) {
         Feed feed = feedRepository.findOne(feedId);
         feed.setDeleted(true);
 
@@ -95,7 +94,7 @@ public class FeedService {
     }
 
     private void saveFeedFiles(Feed feed) {
-        if (CollectionUtils.isEmpty(feed.getFeedFiles())) {
+        if (CollectionUtils.isEmpty(feed.getFeedFiles())) { // TODO check
             return;
         }
 
@@ -109,4 +108,7 @@ public class FeedService {
         }
     }
 
+    private static final PageRequest getPageRequest() {
+        return PageUtil.sortPageable(new Sort(DESC, "feedId"));
+    }
 }
