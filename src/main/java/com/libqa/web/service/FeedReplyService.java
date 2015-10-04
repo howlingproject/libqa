@@ -41,7 +41,7 @@ public class FeedReplyService {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         FeedAction feedAction = feedActionService.getLiked(feedReply, user);
         if (feedAction == null) {
-            feedActionService.newLike(feedReply, user);
+            feedActionService.createLike(feedReply, user);
         } else {
             feedAction.cancel();
         }
@@ -54,7 +54,7 @@ public class FeedReplyService {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         FeedAction feedAction = feedActionService.getClaimed(feedReply, user);
         if (feedAction == null) {
-            feedActionService.newClaim(feedReply, user);
+            feedActionService.createClaim(feedReply, user);
         } else {
             feedAction.cancel();
         }

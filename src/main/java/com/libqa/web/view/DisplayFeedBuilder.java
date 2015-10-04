@@ -23,7 +23,7 @@ public class DisplayFeedBuilder {
     }
 
     public List<DisplayFeed> buildFeeds(List<Feed> feeds) {
-        User user = loggedUser.getDummyUser(); // TODO fix to realuser
+        User user = loggedUser.getDummyUser();
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
         for (Feed feed : feeds) {
             DisplayFeedAction likedFeedAction = buildFeedAction(feed.getLikeCount(), feedActionService.hasLike(feed, user));
@@ -34,7 +34,7 @@ public class DisplayFeedBuilder {
     }
 
     private List<DisplayFeedReply> buildFeedReplies(List<FeedReply> feedReplies) {
-        User user = loggedUser.getDummyUser(); // TODO fix to realuser
+        User user = loggedUser.getDummyUser();
         List<DisplayFeedReply> displayFeedReplies = Lists.newArrayList();
         for (FeedReply feedReply : feedReplies) {
             DisplayFeedAction likedFeedAction = buildFeedAction(feedReply.getLikeCount(), feedActionService.hasLike(feedReply, user));
