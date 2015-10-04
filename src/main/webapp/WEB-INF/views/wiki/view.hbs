@@ -99,7 +99,7 @@
                             </tr>
                             </tbody>
                         </table>
-                        <a href="#" class="btn btn-primary">추천하기</a>
+                        <a href="#" class="btn btn-primary" id="recommend">추천하기</a>
                         <a href="#" class="btn btn-primary">인쇄하기</a>
                     </div>
                 </div>
@@ -398,13 +398,12 @@
         </div>
     </div>
 </div>
-
+<input type="hidden" id="wikiId" value="{{wiki.wikiId}}">
 {{/partial}}
 
 
 {{# partial "style" }}
     <link href="/resource/app/js/DualEditor/css/DualEditor.css" rel="stylesheet">
-    <link href="http://getbootstrap.com/assets/css/docs.min.css" rel="stylesheet">
 {{/partial}}
 
 {{#partial "plugin-style"}}
@@ -424,6 +423,34 @@
             var href = $(this).attr("href");
             location.href = href;
         });
+
+        $("#recommend").on("click", function(){
+            Wiki.recommend("WIKI",$("#wikiId").val());
+        });
+
+        var Wiki = {
+            recommend : function(type,num){
+                $.ajax({
+                    url: "/wiki/saveRecommend",
+                    type: "POST",
+                    data: { type : type, num : num },
+                    success : function(data){
+                        console.info(data);
+//                        if(data.resultCode == 1) {
+//
+//                        }
+                    },
+                    error : function(req){
+                        // Handle upload error
+                        alert('req : ' + req);
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
+
+                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                    }
+                });
+            }
+        }
     </script>
 {{/partial}}
 

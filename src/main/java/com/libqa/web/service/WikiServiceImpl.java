@@ -2,6 +2,7 @@ package com.libqa.web.service;
 
 import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.KeywordType;
+import com.libqa.application.enums.WikiRecommendType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.*;
@@ -222,6 +223,20 @@ public class WikiServiceImpl implements WikiService {
                 ).getSort()
                 , isDeleted);
         return list;
+    }
+
+    @Override
+    public Integer updateRecommend(WikiRecommendType type, Integer recommendId) {
+        Integer result = 0;
+        if( type == WikiRecommendType.WIKI ){
+            Wiki wiki = new Wiki();
+            wiki.setWikiId(recommendId);
+            wiki = wikiRepository.findOne(recommendId);
+            wiki.setLikeCount(wiki.getLikeCount() + 1 );
+            wikiRepository.save(wiki);
+            result = 1;
+        }
+        return result;
     }
 
     private List<Integer> getWikiIdByKeyworld(List<Keyword> keywords){

@@ -1,6 +1,7 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.enums.ListType;
+import com.libqa.application.enums.WikiRecommendType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUser;
@@ -300,6 +301,22 @@ public class WikiController {
         mav.addObject("listTitle",text+" 위키 List");
 
         return mav;
+    }
+
+    @RequestMapping(value = "/wiki/saveRecommend", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<Integer> saveRecommend(
+            @RequestParam("type") WikiRecommendType type, @RequestParam("num") int num) {
+        log.info("# type : {}", type);
+        log.info("# num : {}", num);
+
+        Integer recommend = 0;
+        try{
+            recommend = wikiService.updateRecommend(type,num);
+            return ResponseData.createSuccessResult(recommend);
+        }catch(Exception e){
+            return ResponseData.createSuccessResult(recommend);
+        }
     }
 
 }

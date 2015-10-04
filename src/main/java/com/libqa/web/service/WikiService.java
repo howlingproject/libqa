@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.libqa.application.enums.WikiRecommendType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Wiki;
@@ -37,4 +38,6 @@ public interface WikiService {
     List<Wiki> findWikiListByKeyword(String keywordNm, int page, int size);
 
     List<Wiki> findWikiListByContentsMarkup(String searchText, int page, int size);
+
+    Integer updateRecommend(WikiRecommendType type, Integer recommendId);
 }
