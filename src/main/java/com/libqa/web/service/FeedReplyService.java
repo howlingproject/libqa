@@ -31,7 +31,7 @@ public class FeedReplyService {
     }
 
     @Transactional
-    public void delete(Integer feedReplyId) {
+    public void deleteByFeedReplyId(Integer feedReplyId) {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         feedReply.setDeleted(true);
     }

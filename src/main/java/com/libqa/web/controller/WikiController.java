@@ -51,15 +51,19 @@ public class WikiController {
         mav.addObject("allWiki", allWiki);
 
         User user = loggedUser.get();
-        //int userId = user.getUserId();
-        int userId = 1;
-        List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
-        mav.addObject("resecntWiki", resecntWiki);
-
+        if(isUser(user)){
+            int userId = user.getUserId();
+            List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
+            mav.addObject("resecntWiki", resecntWiki);
+        }
         List<Wiki> bestWiki = wikiService.findByBestWiki(0, 5);
         mav.addObject("bestWiki", bestWiki);
 
         return mav;
+    }
+
+    private boolean isUser(User user) {
+        return user != null;
     }
 
     @RequestMapping("wiki/write")
@@ -114,8 +118,6 @@ public class WikiController {
         ModelAndView mav = new ModelAndView("wiki/write");
         log.info("# wikiId : {}", wikiId);
 
-        //유저 하드코딩
-        int userId = 1;
         Wiki wiki = wikiService.findById(wikiId);
         mav.addObject("wiki", wiki);
 
@@ -134,8 +136,7 @@ public class WikiController {
 
         Wiki wiki = wikiService.findById(wikiId);
         User user = loggedUser.get();
-        //int userId = user.getUserId();
-        int userId = 1;
+        int userId = user.getUserId();
         //위키만든 유저만 삭제가능
         if( wiki.getUserId() == userId ){
             wiki.setDeleted(true);
@@ -151,8 +152,7 @@ public class WikiController {
         log.info("# wikiId : {}", wikiId);
 
         User user = loggedUser.get();
-        //int userId = user.getUserId();
-        int userId = 1;
+        int userId = user.getUserId();
 
         Wiki wiki = wikiService.findById(wikiId);
 
@@ -174,11 +174,10 @@ public class WikiController {
             log.info("wiki = {}", wiki);
             log.info("wiki.wikiFile = {}", wiki.getWikiFiles());
             User user = loggedUser.get();
-            //int userId = user.getUserId();
 
-            wiki.setPasswd("1234");
-            wiki.setUserNick("하이");
-            wiki.setUserId(1);
+            wiki.setPasswd(user.getUserPass());
+            wiki.setUserNick(user.getUserNick());
+            wiki.setUserId(user.getUserId());
 
             wiki.setInsertDate(new Date());
             if( wiki.getParentsId() == null  ){
@@ -209,7 +208,6 @@ public class WikiController {
             log.info("wiki.wikiFile = {}", paramWiki.getWikiFiles());
 
             User user = loggedUser.get();
-            //int userId = user.getUserId();
             Integer wikiId = paramWiki.getWikiId();
 
             Wiki currentWiki = wikiService.findById(wikiId);
@@ -219,9 +217,9 @@ public class WikiController {
             currentWiki.setContents(paramWiki.getContents());
             currentWiki.setContentsMarkup(paramWiki.getContentsMarkup());
 
-            currentWiki.setPasswd("1234");
-            currentWiki.setUserNick("하이");
-            currentWiki.setUserId(1);
+            currentWiki.setPasswd(user.getUserPass());
+            currentWiki.setUserNick(user.getUserNick());
+            currentWiki.setUserId(user.getUserId());
             currentWiki.setUpdateDate(new Date());
 
             Wiki result = wikiService.updateWithKeyword(currentWiki, paramKeyword, WikiRevisionActionType.UPDATE_WIKI);
@@ -263,10 +261,11 @@ public class WikiController {
             mav.addObject("listTitle","베스트 위키 List");
 
         }else if( ListType.RESENT.getName().equals(listType) ){
-            //유저 하드코딩
             User user = loggedUser.get();
-            //int userId = user.getUserId();
-            int userId = 1;
+            int userId = 0;
+            if(isUser(user)){
+                userId = user.getUserId();
+            }
             List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 15);
             mav.addObject("listWiki", resecntWiki);
             mav.addObject("listTitle","최근 활동 위키 List");

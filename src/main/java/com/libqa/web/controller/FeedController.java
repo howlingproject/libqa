@@ -64,36 +64,36 @@ public class FeedController {
         }
     }
 
+    @RequestMapping(value = "{feedId}/delete", method = POST)
+    public ResponseData<Integer> deleteByFeedId(@PathVariable Integer feedId) {
+        try {
+            feedService.deleteByFeedId(feedId);
+            return createSuccessResult(feedId);
+        } catch (Exception e) {
+            log.error("delete feed error.", e);
+            return createFailResult(feedId);
+        }
+    }
+
+    @RequestMapping(value = "reply/{feedReplyId}/delete", method = POST)
+    public ResponseData<Integer> deleteFeedReply(@PathVariable Integer feedReplyId) {
+        try {
+            feedReplyService.deleteByFeedReplyId(feedReplyId);
+            return createSuccessResult(feedReplyId);
+        } catch (Exception e) {
+            log.error("delete reply error.", e);
+            return createFailResult(feedReplyId);
+        }
+    }
+
     @RequestMapping(value = "reply/save", method = POST)
-    public ResponseData<FeedReply> saveReply(FeedReply feedReply) {
+    public ResponseData<FeedReply> saveFeedReply(FeedReply feedReply) {
         try {
             feedReplyService.save(feedReply);
             return createSuccessResult(feedReply);
         } catch (Exception e) {
             log.error("save reply error.", e);
             return createFailResult(feedReply);
-        }
-    }
-
-    @RequestMapping(value = "{feedId}/delete", method = POST)
-    public ResponseData<Integer> delete(@PathVariable Integer feedId) {
-        try {
-            feedService.delete(feedId);
-            return createSuccessResult(feedId);
-        } catch (Exception e) {
-            log.error("save reply error.", e);
-            return createFailResult(feedId);
-        }
-    }
-
-    @RequestMapping(value = "reply/{feedReplyId}/delete", method = POST)
-    public ResponseData<Integer> deleteReply(@PathVariable Integer feedReplyId) {
-        try {
-            feedReplyService.delete(feedReplyId);
-            return createSuccessResult(feedReplyId);
-        } catch (Exception e) {
-            log.error("save reply error.", e);
-            return createFailResult(feedReplyId);
         }
     }
 
@@ -148,5 +148,4 @@ public class FeedController {
             return createFailResult(null);
         }
     }
-
 }
