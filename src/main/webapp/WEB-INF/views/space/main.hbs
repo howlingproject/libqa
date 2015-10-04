@@ -79,7 +79,7 @@
 {{/partial}}
 
 {{#partial "script-page"}}
-    {{embedded "common/keywordList"}}
+    {{embedded "common/_keywordList"}}
     <script type="text/javascript">
         $(document).ready(function(){
             Space.init();
@@ -99,7 +99,7 @@
                     data: { keywordType : 'SPACE', keywordName : Space.selectedKeyword(keywordName) },
                     success : function(data){
                         if(data.resultCode == 1) {
-                            var source = $('#common-keywordList-hbs').html();
+                            var source = $('#common-_keywordList-hbs').html();
                             var template = Handlebars.compile(source);
 
                             var html = template(data);

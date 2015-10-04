@@ -71,7 +71,7 @@
 {{/partial}}
 
 {{# partial "script-page" }}
-{{embedded "common/keywordList"}}
+{{embedded "common/_keywordList"}}
     <script>
         $(document).ready(function() {
             Wiki.renderKeywordList();
@@ -84,7 +84,7 @@
                     data: { keywordType : 'WIKI', keywordName : Wiki.selectedKeyword(keywordName) },
                     success : function(data){
                         if(data.resultCode == 1) {
-                            var source = $('#common-keywordList-hbs').html();
+                            var source = $('#common-_keywordList-hbs').html();
                             var template = Handlebars.compile(source);
 
                             var html = template(data);
