@@ -4,13 +4,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.libqa.application.util.RequestUtil;
 import com.libqa.application.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.swing.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Enumeration;
@@ -29,14 +39,13 @@ public class LoginHandler implements AuthenticationSuccessHandler {
 
     private static final String DEFAULT_URL = "/index";
 
+    @Autowired
+    protected AuthenticationManager authenticationManager;
+
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        String cookieMe = StringUtil.nullToString(request.getParameter("remember-me"), "N");
-        String userEmail = StringUtil.nullToString(request.getParameter("userEmail"), "");
-
-        setUserIdCookies(response, cookieMe, userEmail);
-
 
         RequestUtil.printRequest(request, "LoginHandler");
         String returnUrl = RequestUtil.refererUrl(request, DEFAULT_URL);
@@ -54,12 +63,5 @@ public class LoginHandler implements AuthenticationSuccessHandler {
         out.write(jsonString.getBytes());
     }
 
-    public void setUserIdCookies(HttpServletResponse response, String cookieMe, String userEmail) {
-        if (cookieMe.equals("Y")) {
-            Cookie cookie = new Cookie("SaveID", userEmail);
-            cookie.setMaxAge(30 * 24 * 60 * 60);    // 30일
-            response.addCookie(cookie);
-        }
-    }
 
 }

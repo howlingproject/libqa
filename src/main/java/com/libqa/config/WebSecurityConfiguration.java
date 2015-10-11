@@ -14,7 +14,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.sql.DataSource;
 
 /**
  * @Author : yion
@@ -23,13 +27,17 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  */
 @Slf4j
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @EnableWebSecurity
 @EnableWebMvcSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomAuthenticationProvider customAuthenticationProvider;
+
+    @Autowired
+    DataSource dataSource;
+
 
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {
@@ -45,7 +53,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         httpSecurity
                 .authorizeRequests()
-                .antMatchers("/user/**", "/space", "/space/**", "/feed/**", "/qa", "/qa/**", "/qa/save", "/wiki/**", "/common/**").permitAll()
+                .antMatchers("/index", "/user/**", "/space", "/space/**", "/feed/**", "/qa", "/qa/**", "/qa/save", "/wiki/**", "/common/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .and()
                 .formLogin()
@@ -54,12 +62,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error")
                 .permitAll()
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logoutUser")).logoutSuccessUrl("/index")
+                .rememberMe().tokenRepository(persistentTokenRepository()).tokenValiditySeconds(604800)
+                .and()
+                .logout().deleteCookies("remember-me").logoutRequestMatcher(new AntPathRequestMatcher("/logoutUser")).logoutSuccessUrl("/index")
                 .and()
                 .exceptionHandling().accessDeniedPage("/access?error")
                 .and()
                 .authenticationProvider(customAuthenticationProvider)
-
         ;
 
         //.logout().logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
@@ -71,4 +80,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         log.info("#### login Success handler #####");
         return new LoginHandler();
     }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepositoryImpl = new JdbcTokenRepositoryImpl();
+        tokenRepositoryImpl.setDataSource(dataSource);
+        return tokenRepositoryImpl;
+    }
+
 }

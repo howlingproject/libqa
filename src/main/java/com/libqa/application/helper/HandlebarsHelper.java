@@ -51,14 +51,10 @@ public class HandlebarsHelper {
     }
 
     public String length(String str, Options options) {
-
-        System.out.println("############### length ############### ");
         return str.length() + "";
     }
 
     public String size(List<Object> list, Options options) {
-
-        System.out.println("############### length ############### ");
         return list.size()+"";
     }
 

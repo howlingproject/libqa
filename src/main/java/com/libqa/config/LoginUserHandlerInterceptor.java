@@ -1,17 +1,34 @@
 package com.libqa.config;
 
+import com.libqa.application.handler.LoginHandler;
 import com.libqa.application.util.RequestUtil;
 import com.libqa.application.util.StringUtil;
+import com.libqa.web.domain.User;
+import com.libqa.web.repository.UserRepository;
+import com.libqa.web.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.inject.Inject;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
@@ -23,15 +40,31 @@ import java.util.List;
  */
 @Slf4j
 public class LoginUserHandlerInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    protected AuthenticationManager authenticationManager;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
         RequestUtil.printRequest(request, "LoginUserHandlerInterceptor ");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String login = "0";
-        String userEmail = "";
         String role = "";
+        String userEmail = "";
+
+        /*
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                log.info("@@@@ cookie name : {}", cookies[i].getName());
+                log.info("@@@@ cookie value : {}", cookies[i].getValue());
+            }
+        }
+        */
 
         log.info("#### interceptor authentication : {} ", authentication);
         if (authentication == null) {
@@ -54,6 +87,7 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
             }
             log.info("### LoginUserInterceptor userEmail  = {}", userEmail);
             log.info("### LoginUserInterceptor isInvalidUser(userEmail)  = {}", isInvalidUser(userEmail));
+
         }
 
         request.setAttribute("isLogin", login);
@@ -92,4 +126,6 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         log.info("#### interceptor afterCompletion ");
     }
+
+
 }
