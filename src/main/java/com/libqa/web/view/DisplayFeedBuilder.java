@@ -9,10 +9,14 @@ import com.libqa.web.service.FeedActionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Component
 public class DisplayFeedBuilder {
+    private static final String DATE_FORAMT = "yyyy/MM/dd";
+
     @Autowired
     private LoggedUser loggedUser;
     @Autowired
@@ -50,6 +54,10 @@ public class DisplayFeedBuilder {
 
     private DisplayFeedReply buildFeedReply(FeedReply feedReply, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
         return new DisplayFeedReply(feedReply, likedFeedAction, claimedFeedAction);
+    }
+
+    public static String toDisplayDate(Date date) {
+        return new SimpleDateFormat(DATE_FORAMT).format(date);
     }
 
 }

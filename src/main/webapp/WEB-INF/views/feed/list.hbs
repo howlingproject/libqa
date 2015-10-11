@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <ul>
+    <ul id="feed-replies">
         {{#replies}}
         <li class="reply-thread" data-feed-reply-id="{{feedReplyId}}">
             <div class="author">
@@ -43,7 +43,7 @@
             </div>
             <div class="name">{{userNick}}</div>
             <div class="date">{{insertDate}}</div>
-            <div class="config"><i class="fa fa-close feedReplyDeleteBtn"></i></div>
+            <div class="config" onclick="FeedReply.removeItem(this)"><i class="fa fa-close feedReplyDeleteBtn"></i></div>
             <div class="message-box">
                 <div class="message">{{feedReplyContent}}</div>
                 <div class="action-buttons">
@@ -69,7 +69,7 @@
                         <input type="text" name="feedReplyContent" class="form-control input-sm" placeholder="댓글 입력">
                     </div>
                     <div class="col-xs-3 col-md-2 feed-comment">
-                        <button class="btn btn-sm btn-info" name="saveReply" type="button">저장</button>
+                        <button class="btn btn-sm btn-info" name="saveReply" type="submit">저장</button>
                     </div>
                 </form>
             </div>

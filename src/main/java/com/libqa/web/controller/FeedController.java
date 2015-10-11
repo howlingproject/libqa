@@ -11,6 +11,7 @@ import com.libqa.web.service.FeedService;
 import com.libqa.web.view.DisplayFeed;
 import com.libqa.web.view.DisplayFeedAction;
 import com.libqa.web.view.DisplayFeedBuilder;
+import com.libqa.web.view.DisplayFeedReply;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -87,13 +88,13 @@ public class FeedController {
     }
 
     @RequestMapping(value = "reply/save", method = POST)
-    public ResponseData<FeedReply> saveFeedReply(FeedReply feedReply) {
+    public ResponseData<DisplayFeedReply> saveFeedReply(FeedReply feedReply) {
         try {
             feedReplyService.save(feedReply);
-            return createSuccessResult(feedReply);
+            return createSuccessResult(new DisplayFeedReply(feedReply));
         } catch (Exception e) {
             log.error("save reply error.", e);
-            return createFailResult(feedReply);
+            return createFailResult(null);
         }
     }
 

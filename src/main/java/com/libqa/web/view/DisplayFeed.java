@@ -5,7 +5,6 @@ import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedFile;
 import lombok.Getter;
 
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -13,7 +12,7 @@ public class DisplayFeed {
     private final Integer feedId;
     private String feedContent;
     private String userNick;
-    private Date insertDate;
+    private String insertDate;
     private DisplayFeedAction likeFeedAction;
     private DisplayFeedAction claimFeedAction;
     private List<DisplayFeedReply> replies = Lists.newArrayList();
@@ -24,7 +23,7 @@ public class DisplayFeed {
         this.feedId = feed.getFeedId();
         this.userNick = feed.getUserNick();
         this.feedContent = feed.getFeedContent();
-        this.insertDate = feed.getInsertDate();
+        this.insertDate = DisplayFeedBuilder.toDisplayDate(feed.getInsertDate());
         this.likeFeedAction = likeFeedAction;
         this.claimFeedAction = claimFeedAction;
         this.replies = replies;

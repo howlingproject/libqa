@@ -34,7 +34,7 @@
         <!-- feed 글 목록 start -->
         <div class="feed well">
             <ul id="feedList">로딩 중...</ul>
-            <button class="btn btn-default form-control btn-feed-more" type="button" id="feedMoreBtn"><strong>more</strong></button>
+            <button class="btn btn-default form-control btn-feed-more" type="button" id="feedMoreBtn">more</button>
         </div>
         <!-- feed 글 목록 end -->
         
@@ -102,29 +102,27 @@
 {{/partial}}
 
 {{# partial "script-page" }}
-{{embedded "feed/list"}}
     <script type="text/javascript">
         var Feed = {
-            init : function() {
+            'init' : function() {
                 this.initModal();
                 this.bindSave();
                 this.bindAttachment();
                 this.loadList();
             },
-            loadList: function() {
+            'loadList' : function() {
                 this._callList("/feed/list", function(html, itemSize) {
                     $('#feedList').html(html);
                     FeedPager.init(itemSize);
                 });
             },
-            moreList: function() {
-                console.log(this.getLastFeedId());
+            'moreList' : function() {
                 this._callList("/feed/list?lastFeedId=" + this.getLastFeedId(), function(html, itemSize) {
                     $('#feedList').append(html);
                     FeedPager.loaded(itemSize);
                 });
             },
-            _callList : function(url, resultHandleCallback) {
+            '_callList' : function(url, resultHandleCallback) {
                 $.get(url, function (response) {
                     if(response.resultCode != 1) {
                         alert(response.comment);
@@ -136,35 +134,34 @@
                     resultHandleCallback(html, response.data.length);
                 });
             },
-            getId: function($target) {
+            'getId': function($target) {
                 return $target.closest('.thread').data('feedId');
             },
-            bindSave : function() {
-                var that = this;
+            'bindSave' : function() {
+                var me = this;
                 $('#feedSave').click(function(){
-                    if(!that.checkValidate()) {
-                        return false;
+                    if(!me.checkValidate()) {
+                        return;
                     }
-                    var data = $('#feedForm').serialize();
-                    $.post('/feed/save', data)
+                    $.post('/feed/save', $('#feedForm').serialize())
                         .done(function(response){
                             if(response.resultCode != 1) {
                                 alert(response.comment);
                                 return;
                             }
 
-                            that.loadList();
-                            that.clearForm();
+                            me.loadList();
+                            me.clearForm();
                             FeedFile.clear();
                         }).fail(function(){
                             alert('Error saving feed');
                         });
                 });
             },
-            clearForm: function() {
+            'clearForm' : function() {
                 $('#feedForm').find('textarea').val('');
             },
-            checkValidate: function() {
+            'checkValidate' : function() {
                 var $frm = $('#feedForm');
                 if (!$frm.find('textarea[name=feedContent]').val().trim().length) {
                     alert('feed를 입력해주세요!');
@@ -172,7 +169,7 @@
                 }
                 return true;
             },
-            bindAttachment: function () {
+            'bindAttachment': function () {
                 $('#uploadfile').change(function(){
                     $('#fileAttachmentInput').val($('#uploadfile').val());
                     
@@ -195,30 +192,31 @@
                     });
                 });
             },
-            initModal: function() {
+            'initModal': function() {
                 $('#fileUploadModal').on('show.bs.modal', function () {
                     $('#fileAttachmentInput').val('');
                 });
             },
-            removeItem: function(el) {
+            'removeItem': function(el) {
                 if (!confirm("FEED를 삭제하시겠습니까?")) {
                     return;
                 }
                 var popoverId = $(el).closest('.popover').attr('id');
                 var $popOverBody = $('.thread .config').find('[aria-describedby='+ popoverId +']');
-                $.post('/feed/' + this.getId($popOverBody) + '/delete')
+                var feedId =  this.getId($popOverBody);
+                $.post('/feed/' + feedId + '/delete')
                     .done(function (response) {
                         if (response.resultCode != 1) {
                             alert(response.comment);
                             return;
                         }
-                        Feed.loadList();
                         $('#' + popoverId).remove();
+                        $('#feedList li.thread[data-feed-id="'+feedId+'"]').remove();
                     }).fail(function () {
                         alert('Error delete feed');
                     });
             },
-            like: function(el) {
+            'like': function(el) {
                 $.post('/feed/' + this.getId($(el)) + '/like')
                     .done(function (response) {
                         if (response.resultCode != 1) {
@@ -230,7 +228,7 @@
                         alert('Error like feed');
                     });
             },
-            claim: function(el) {
+            'claim': function(el) {
                 $.post('/feed/' + this.getId($(el)) + '/claim')
                     .done(function (response) {
                         if (response.resultCode != 1) {
@@ -242,7 +240,7 @@
                         alert('Error claim feed');
                     });
             },
-            getLastFeedId: function() {
+            'getLastFeedId': function() {
                 return $('#feedList li.thread').last().data('feedId');
             }
         };
@@ -290,44 +288,64 @@
         var FeedReply = {
             'init' : function(){
                 this.bindSave();
-                this.bindRemove();
             },
             'getId' : function($target){
                 return $target.closest('.reply-thread').data('feedReplyId');
             },
             'bindSave' : function() {
-                $('button[name=saveReply]').click(function () {
-                    var data = $(this).closest('form').serialize();
-                    $.post('/feed/reply/save', data)
+                var me = this;
+                $('button[name=saveReply]').on('click',function () {
+                    var $frm = $(this).closest('form');
+                    if(!me.checkValidate($frm)) {
+                        return;
+                    }
+                    $.post('/feed/reply/save', $frm.serialize())
                         .done(function (response) {
                             if (response.resultCode != 1) {
                                 alert(response.comment);
                                 return;
                             }
-                            Feed.loadList();
+
+                            me.clearForm($frm);
+                            me.loadItem(response.data);
                         }).fail(function () {
                             alert('Error saving feed Reply');
                         });
                 });
             },
-            'bindRemove' : function() {
-                var that = this;
-                $('.feedReplyDeleteBtn').click(function () {
-                    if (!confirm("댓글을 삭제하시겠습니까?")) {
-                        return;
-                    }
+            'loadItem': function(data){
+                var source = $('#feed-reply-hbs').html();
+                var template = Handlebars.compile(source);
+                var html = template(data);
+                $('#feed-replies').append(html);
+            },
+            'checkValidate': function($frm) {
+                if (!$frm.find('input[name=feedReplyContent]').val().trim().length) {
+                    alert('댓글을 입력해주세요!');
+                    return false;
+                }
+                return true;
+            },
+            'clearForm': function($frm) {
+                $frm.find('input[name=feedReplyContent]').val('');
+            },
+            'removeItem' : function(el) {
+                if (!confirm("댓글을 삭제하시겠습니까?")) {
+                    return;
+                }
 
-                    $.post('/feed/reply/' + that.getId($(this)) + '/delete')
-                        .done(function (response) {
-                            if (response.resultCode != 1) {
-                                alert(response.comment);
-                                return;
-                            }
-                            Feed.loadList();
-                        }).fail(function () {
-                            alert('Error delete feed Reply');
-                        });
-                });
+                var feedReplyId = this.getId($(el));
+                var $target = $(el).closest('.reply-thread');
+                $.post('/feed/reply/' + feedReplyId + '/delete')
+                    .done(function (response) {
+                        if (response.resultCode != 1) {
+                            alert(response.comment);
+                            return;
+                        }
+                        $target.remove();
+                    }).fail(function () {
+                        alert('Error delete feed Reply');
+                    });
             },
             'like' : function(el) {
                 $.post('/feed/reply/' + this.getId($(el)) + '/like')
@@ -401,12 +419,22 @@
             'hideBtn' : function() {
                 this.$button.hide();
             },
+            'toggleLoadingText': function(loading) {
+                if(loading) {
+                    this.$button.prop('disabled', true).html('로딩 중...');
+                } else {
+                    this.$button.prop('disabled', false).html('more');
+                }
+            },
             'bindLoading': function() {
+                var me = this;
                 this.$button.on('click', function(){
+                    me.toggleLoadingText(true);
                     Feed.moreList();
                 });
             },
             'loaded': function(itemSize) {
+                this.toggleLoadingText(false);
                 if(itemSize < this.PAGE_SIZE) {
                     this.hideBtn();
                 }
@@ -418,5 +446,8 @@
     });
     </script>
 {{/partial}}
+
+{{embedded "feed/list"}}
+{{embedded "feed/reply"}}
 
 {{> template/base}}
