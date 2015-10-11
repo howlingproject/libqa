@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface WikiReplyRepository extends JpaRepository<WikiReply, Integer>{
 
-    int countByWiki(Wiki wiki);
+    int countByWikiId(Integer wiki);
 
 }

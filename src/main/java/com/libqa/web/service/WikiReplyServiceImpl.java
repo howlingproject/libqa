@@ -19,9 +19,7 @@ public class WikiReplyServiceImpl implements WikiReplyService {
 
     @Override
     public int countByWiki(Integer wikiId) {
-        Wiki wiki = new Wiki();
-        wiki.setWikiId(wikiId);
-        return wikiReplyRepository.countByWiki(wiki);
+        return wikiReplyRepository.countByWikiId(wikiId);
 
     }
 

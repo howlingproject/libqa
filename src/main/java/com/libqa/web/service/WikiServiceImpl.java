@@ -2,11 +2,11 @@ package com.libqa.web.service;
 
 import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.KeywordType;
-import com.libqa.application.enums.WikiRecommendType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.repository.KeywordRepository;
+import com.libqa.web.repository.WikiLikeRepository;
 import com.libqa.web.repository.WikiRepository;
 import com.libqa.web.repository.WikiSnapShotRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +45,9 @@ public class WikiServiceImpl implements WikiService {
 
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private WikiLikeRepository wikiLikeRepository;
 
     final boolean isDeleted = false;
 
@@ -226,15 +229,17 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-    public Integer updateRecommend(WikiRecommendType type, Integer recommendId) {
+    public Integer updateLike(WikiLike like) {
         Integer result = 0;
-        if( type == WikiRecommendType.WIKI ){
-            Wiki wiki = new Wiki();
-            wiki.setWikiId(recommendId);
-            wiki = wikiRepository.findOne(recommendId);
-            wiki.setLikeCount(wiki.getLikeCount() + 1 );
-            wikiRepository.save(wiki);
-            result = 1;
+        try{
+            WikiLike dupLike;
+            dupLike = wikiLikeRepository.findOneByUserIdAndWikiId(like.getUserId(), like.getWikiId());
+            if( dupLike == null ){
+                wikiLikeRepository.save(like);
+                result = 1;
+            }
+        }catch(Exception e){
+            e.getMessage();
         }
         return result;
     }

@@ -1,9 +1,9 @@
 package com.libqa.web.service;
 
-import com.libqa.application.enums.WikiRecommendType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Wiki;
+import com.libqa.web.domain.WikiLike;
 
 import java.util.List;
 
@@ -39,5 +39,5 @@ public interface WikiService {
 
     List<Wiki> findWikiListByContentsMarkup(String searchText, int page, int size);
 
-    Integer updateRecommend(WikiRecommendType type, Integer recommendId);
+    Integer updateLike(WikiLike likes);
 }

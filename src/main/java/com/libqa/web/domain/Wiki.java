@@ -6,6 +6,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -15,8 +16,8 @@ import java.util.List;
 @Entity
 @Data
 @Slf4j
-@ToString(exclude = {"wikiSnapShots", "wikiReplies"})
-public class Wiki {
+@ToString(exclude = {"wikiSnapShots"})
+public class Wiki implements Serializable{
 
     @Id
     @Column(nullable = false)
@@ -105,7 +106,14 @@ public class Wiki {
     @JsonManagedReference
     private List<Keyword> keywordList;
 
-    @OneToMany(mappedBy = "wiki", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<WikiReply> wikiReplies;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(name = "userId", referencedColumnName = "userId"),
+            @JoinColumn(name = "wikiId", referencedColumnName = "wikiId")
+    })
+    private List<WikiLike> wikiLikes;
 }
