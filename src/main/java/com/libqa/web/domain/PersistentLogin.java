@@ -22,7 +22,7 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(name = "persistent_logins")
+@Table(name = "persistent_login")
 @Slf4j
 @EqualsAndHashCode
 public class PersistentLogin {
@@ -42,7 +42,7 @@ public class PersistentLogin {
 
 
     public PersistentLogin(PersistentRememberMeToken persistentRememberMeToken) {
-        log.info("########## PersistentLogins : {}", persistentRememberMeToken.toString());
+        log.info("########## PersistentLogin : {}", persistentRememberMeToken.toString());
         this.username = persistentRememberMeToken.getUsername();
         this.series = persistentRememberMeToken.getSeries();
         this.lastUsed = persistentRememberMeToken.getDate();
