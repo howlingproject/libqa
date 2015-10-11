@@ -8,7 +8,6 @@ import com.libqa.web.domain.User
 import com.libqa.web.repository.FeedActionRepository
 import spock.lang.Specification
 
-import static FeedActionType.*
 
 class FeedActionServiceSpec extends Specification {
     FeedActionRepository feedActionRepository
@@ -64,7 +63,7 @@ class FeedActionServiceSpec extends Specification {
         def feed = feedFixture()
         def user = userFixture()
         feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId()) >> [
-                feedActionFixture(FEED_LIKE)
+                feedActionFixture(FeedActionType.FEED_LIKE)
         ]
         when:
         def response = sut.hasLike(feed, user)
@@ -77,7 +76,7 @@ class FeedActionServiceSpec extends Specification {
         def feed = feedFixture()
         def user = userFixture()
         feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId()) >> [
-                feedActionFixture(FEED_REPLY_CLAIM)
+                feedActionFixture(FeedActionType.FEED_REPLY_CLAIM)
         ]
         when:
         def response = sut.hasLike(feed, user)
@@ -90,7 +89,7 @@ class FeedActionServiceSpec extends Specification {
         def feed = feedFixture()
         def user = userFixture()
         feedActionRepository.findByFeedIdAndUserId(feed.getFeedId(), user.getUserId()) >> [
-                feedActionFixture(FEED_CLAIM)
+                feedActionFixture(FeedActionType.FEED_CLAIM)
         ]
         when:
         def response = sut.hasClaim(feed, user)
@@ -114,7 +113,7 @@ class FeedActionServiceSpec extends Specification {
         def feedReply = feedReplyFixture()
         def user = userFixture()
         feedActionRepository.findByFeedReplyIdAndUserId(feedReply.getFeedReplyId(), user.getUserId()) >> [
-                feedActionFixture(FEED_REPLY_LIKE)
+                feedActionFixture(FeedActionType.FEED_REPLY_LIKE)
         ]
         when:
         def response = sut.hasLike(feedReply, user)
@@ -127,8 +126,8 @@ class FeedActionServiceSpec extends Specification {
         def feedReply = feedReplyFixture()
         def user = userFixture()
         feedActionRepository.findByFeedReplyIdAndUserId(feedReply.getFeedReplyId(), user.getUserId()) >> [
-                feedActionFixture(FEED_LIKE),
-                feedActionFixture(FEED_REPLY_CLAIM)
+                feedActionFixture(FeedActionType.FEED_LIKE),
+                feedActionFixture(FeedActionType.FEED_REPLY_CLAIM)
         ]
         when:
         def response = sut.hasLike(feedReply, user)
@@ -141,7 +140,7 @@ class FeedActionServiceSpec extends Specification {
         def feedReply = feedReplyFixture()
         def user = userFixture()
         feedActionRepository.findByFeedReplyIdAndUserId(feedReply.getFeedReplyId(), user.getUserId()) >> [
-                feedActionFixture(FEED_REPLY_CLAIM)
+                feedActionFixture(FeedActionType.FEED_REPLY_CLAIM)
         ]
         when:
         def response = sut.hasClaim(feedReply, user)
