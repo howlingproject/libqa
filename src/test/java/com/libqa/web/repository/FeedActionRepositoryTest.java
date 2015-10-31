@@ -19,7 +19,7 @@ public class FeedActionRepositoryTest extends LibqaRepositoryTest {
     public void findByFeedIdAndUserId() {
         final Integer feedId = -1;
         final Integer userId = 1234;
-        List<FeedAction> actual = repository.findByFeedIdAndUserId(feedId, userId);
+        List<FeedAction> actual = repository.findByFeedActorIdAndUserId(feedId, userId);
         assertThat(actual.size(), is(0));
     }
 
@@ -28,7 +28,7 @@ public class FeedActionRepositoryTest extends LibqaRepositoryTest {
         final Integer feedReplyId = -1;
         final Integer userId = 1234;
 
-        List<FeedAction> actual = repository.findByFeedReplyIdAndUserId(feedReplyId, userId);
+        List<FeedAction> actual = repository.findByFeedActorIdAndUserId(feedReplyId, userId);
         assertThat(actual.size(), is(0));
     }
 }

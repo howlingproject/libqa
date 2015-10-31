@@ -1,11 +1,8 @@
 package com.libqa.web.view;
 
 import com.google.common.collect.Lists;
-import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedReply;
-import com.libqa.web.domain.User;
-import com.libqa.web.service.FeedActionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,36 +10,30 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static com.libqa.application.enums.FeedActionType.*;
+
 @Component
 public class DisplayFeedBuilder {
     private static final String DATE_FORAMT = "yyyy/MM/dd";
 
     @Autowired
-    private LoggedUser loggedUser;
-    @Autowired
-    private FeedActionService feedActionService;
-
-    public DisplayFeedAction buildFeedAction(Integer actionCount, boolean hasViewer) {
-        return new DisplayFeedAction(actionCount, hasViewer);
-    }
+    private DisplayFeedActionBuilder displayFeedActionBuilder;
 
     public List<DisplayFeed> buildFeeds(List<Feed> feeds) {
-        User user = loggedUser.getDummyUser();
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
         for (Feed feed : feeds) {
-            DisplayFeedAction likedFeedAction = buildFeedAction(feed.getLikeCount(), feedActionService.hasLike(feed, user));
-            DisplayFeedAction claimedFeedAction = buildFeedAction(feed.getClaimCount(), feedActionService.hasClaim(feed, user));
+            DisplayFeedAction likedFeedAction = displayFeedActionBuilder.build(feed.getLikeCount(), feed.getFeedId(), FEED_LIKE);
+            DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.build(feed.getClaimCount(), feed.getFeedId(), FEED_CLAIM);
             displayFeeds.add(buildFeed(feed, likedFeedAction, claimedFeedAction));
         }
         return displayFeeds;
     }
 
     private List<DisplayFeedReply> buildFeedReplies(List<FeedReply> feedReplies) {
-        User user = loggedUser.getDummyUser();
         List<DisplayFeedReply> displayFeedReplies = Lists.newArrayList();
         for (FeedReply feedReply : feedReplies) {
-            DisplayFeedAction likedFeedAction = buildFeedAction(feedReply.getLikeCount(), feedActionService.hasLike(feedReply, user));
-            DisplayFeedAction claimedFeedAction = buildFeedAction(feedReply.getClaimCount(), feedActionService.hasClaim(feedReply, user));
+            DisplayFeedAction likedFeedAction = displayFeedActionBuilder.build(feedReply.getLikeCount(), feedReply.getFeedReplyId(), FEED_REPLY_LIKE);
+            DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.build(feedReply.getClaimCount(), feedReply.getFeedReplyId(), FEED_REPLY_CLAIM);
             displayFeedReplies.add(buildFeedReply(feedReply, likedFeedAction, claimedFeedAction));
         }
         return displayFeedReplies;

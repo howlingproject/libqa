@@ -15,14 +15,18 @@ import java.util.Date;
 @Table(indexes = {
         @Index(columnList = "isCanceled"),
         @Index(columnList = "feedActionType"),
-        @Index(columnList = "userId,feedId"),
-        @Index(columnList = "userId,feedReplyId")
+        @Index(columnList = "feedActorId,userId")
 })
 public class FeedAction {
+    private static FeedAction NOT_YET = new FeedAction();
+
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer feedActionId;
+
+    @Column(nullable = false)
+    private Integer feedActorId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
@@ -50,19 +54,25 @@ public class FeedAction {
     @Column
     private Integer updateUserId;
 
-    @Column
-    private Integer feedId;
-
-    @Column
-    private Integer feedReplyId;
-
-    @Transient
     public boolean isNotCanceled() {
-        return !this.isCanceled();
+        return !this.isCanceled;
     }
 
     public void cancel() {
         this.setCanceled(true);
         this.setUpdateDate(new Date());
     }
+
+    public static FeedAction notYet() {
+        return NOT_YET;
+    }
+
+    public boolean isNotYet() {
+        return this == NOT_YET;
+    }
+
+    public boolean isActed() {
+        return !isNotYet();
+    }
+
 }

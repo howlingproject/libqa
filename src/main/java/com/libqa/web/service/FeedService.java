@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.libqa.application.enums.FeedActionType.FEED_CLAIM;
+import static com.libqa.application.enums.FeedActionType.FEED_LIKE;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Slf4j
@@ -69,26 +71,26 @@ public class FeedService {
     @Transactional
     public Feed like(Integer feedId, User user) {
         Feed feed = feedRepository.findOne(feedId);
-        FeedAction likedFeedAction = feedActionService.getLiked(feed, user);
-        if (likedFeedAction == null) {
-            feedActionService.createLike(feed, user);
+        FeedAction feedAction = feedActionService.getFeedAction(feed.getFeedId(), user.getUserId(), FEED_LIKE);
+        if (feedAction.isNotYet()) {
+            feedActionService.create(feed.getFeedId(), user.getUserId(), user.getUserNick(), FEED_LIKE);
         } else {
-            likedFeedAction.cancel();
+            feedAction.cancel();
         }
-        feed.setLikeCount(feedActionService.getLikeCount(feed));
+        feed.setLikeCount(feedActionService.getCount(feed.getFeedId(), FEED_LIKE));
         return feed;
     }
 
     @Transactional
     public Feed claim(Integer feedId, User user) {
         Feed feed = feedRepository.findOne(feedId);
-        FeedAction claimedFeedAction = feedActionService.getClaimed(feed, user);
-        if (claimedFeedAction == null) {
-            feedActionService.createClaim(feed, user);
+        FeedAction feedAction = feedActionService.getFeedAction(feed.getFeedId(), user.getUserId(), FEED_CLAIM);
+        if (feedAction.isNotYet()) {
+            feedActionService.create(feed.getFeedId(), user.getUserId(), user.getUserNick(), FEED_CLAIM);
         } else {
-            claimedFeedAction.cancel();
+            feedAction.cancel();
         }
-        feed.setClaimCount(feedActionService.getClaimCount(feed));
+        feed.setClaimCount(feedActionService.getCount(feed.getFeedId(), FEED_CLAIM));
         return feed;
     }
 

@@ -29,7 +29,7 @@ public class LoggedUser {
         log.info("### isInvalidUser(userEmail)  = {}", isInvalidUser(userEmail));
 
         if (isInvalidUser(userEmail)) {
-            User.createGuest();
+            return User.createGuest();
         }
 
         return userService.findByEmail(userEmail);
