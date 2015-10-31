@@ -4,7 +4,6 @@ import com.libqa.application.util.PageUtil;
 import com.libqa.testsupport.LibqaRepositoryTest;
 import com.libqa.web.domain.Feed;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
@@ -13,10 +12,8 @@ import java.util.List;
 import static junit.framework.Assert.assertNull;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
-public class FeedRepositoryTest extends LibqaRepositoryTest {
-    @Autowired
-    private FeedRepository repository;
-    
+public class FeedRepositoryTest extends LibqaRepositoryTest<FeedRepository> {
+
     @Test
     public void findOne() {
         Feed actual = repository.findOne(-1);

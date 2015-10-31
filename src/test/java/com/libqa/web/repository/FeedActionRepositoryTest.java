@@ -3,17 +3,13 @@ package com.libqa.web.repository;
 import com.libqa.testsupport.LibqaRepositoryTest;
 import com.libqa.web.domain.FeedAction;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class FeedActionRepositoryTest extends LibqaRepositoryTest {
-
-    @Autowired
-    FeedActionRepository repository;
+public class FeedActionRepositoryTest extends LibqaRepositoryTest<FeedActionRepository> {
 
     @Test
     public void findByFeedIdAndUserId() {
