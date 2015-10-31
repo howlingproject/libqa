@@ -15,10 +15,6 @@ import java.util.List;
 @Slf4j
 @Service
 public class FeedActionService {
-    private static Predicate<FeedAction> IS_NOT_CANCEL(final FeedActionType feedActionType) {
-        return input -> input.isNotCanceled() && input.getFeedActionType() == feedActionType;
-    }
-
     @Autowired
     private FeedActionRepository feedActionRepository;
 
@@ -51,8 +47,10 @@ public class FeedActionService {
 
     private FeedAction findFeedAction(int actorId, int userId, FeedActionType actionType) {
         List<FeedAction> feedActions = feedActionRepository.findByFeedActorIdAndUserId(actorId, userId);
-        return Iterables.tryFind(feedActions, IS_NOT_CANCEL(actionType)).orNull();
+        return Iterables.tryFind(feedActions, IS_CANCEL(actionType)).orNull();
     }
 
-
+    private static Predicate<FeedAction> IS_CANCEL(FeedActionType actionType) {
+        return input -> input.isNotCanceled() && input.getFeedActionType() == actionType;
+    }
 }

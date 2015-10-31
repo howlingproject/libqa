@@ -58,6 +58,7 @@ dependencies {
     testCompile('org.spockframework:spock-spring:0.7-groovy-2.0')
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     testCompile('cglib:cglib:2.2')
+    testCompile('org.easytesting:fest-assert:1.4')
 }
 
 task wrapper(type: Wrapper) {
