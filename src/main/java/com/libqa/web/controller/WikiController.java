@@ -109,12 +109,12 @@ public class WikiController {
         Wiki parentWiki = wikiService.findByParentId(wiki.getParentsId());
         List<Wiki> subWikiList = wikiService.findBySubWikiId(wiki.getWikiId());
 
-        List<Activity> activityList = activityService.findByWikiId(wikiId);
+        //List<Activity> activityList = activityService.findByWikiId(wikiId);
 
         mav.addObject("wiki", wiki);
         mav.addObject("subWikiList", subWikiList);
         mav.addObject("parentWiki", parentWiki);
-        mav.addObject("activityList", activityList);
+        //mav.addObject("activityList", activityList);
 
 
 
@@ -183,7 +183,6 @@ public class WikiController {
             log.info("wiki.wikiFile = {}", wiki.getWikiFiles());
             User user = loggedUser.get();
 
-            wiki.setPasswd(user.getUserPass());
             wiki.setUserNick(user.getUserNick());
             wiki.setUserId(user.getUserId());
 
@@ -225,7 +224,6 @@ public class WikiController {
             currentWiki.setContents(paramWiki.getContents());
             currentWiki.setContentsMarkup(paramWiki.getContentsMarkup());
 
-            currentWiki.setPasswd(user.getUserPass());
             currentWiki.setUserNick(user.getUserNick());
             currentWiki.setUserId(user.getUserId());
             currentWiki.setUpdateDate(new Date());

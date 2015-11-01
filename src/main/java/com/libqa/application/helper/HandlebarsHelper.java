@@ -83,7 +83,7 @@ public class HandlebarsHelper {
     }
 
     public CharSequence ifWikiRelation(Wiki obj1, List<Wiki> obj2, Options options) throws IOException {
-        if( obj1 == null && obj2 == null ){
+        if( obj1 == null && (obj2 == null || obj2.size() == 0) ){
             return options.inverse();
         }
         return options.fn();

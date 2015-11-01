@@ -48,7 +48,7 @@ public class WikiSnapShot{
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isLock = false;
 
-    @Column(nullable = false, length = 10)
+    @Column(length = 10)
     private String passwd;
 
     @Column(nullable = false, length = 40)
