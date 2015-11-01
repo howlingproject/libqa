@@ -73,6 +73,8 @@ public class WikiServiceImpl implements WikiService {
         activity.setDeleted(false);
 
         activity.setActivityType(ActivityType);
+        activity.setActivityDesc(ActivityType.getCode());
+        activity.setActivityKeyword(KeywordType.WIKI);
         activity.setUserId(saveWiki.getUserId());
         activity.setUserNick(saveWiki.getUserNick());
         activity.setWikiId(saveWiki.getWikiId());

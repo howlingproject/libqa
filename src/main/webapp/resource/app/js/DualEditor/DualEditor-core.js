@@ -13,6 +13,14 @@ var DualEditor = (function(){
     };
 
     DualEditor.markup = function(contents){
+        contents = DualEditor.markup.FIELD( contents );
+        contents = DualEditor.markup.ALERT( contents );
+        contents = DualEditor.markup.INFO( contents );
+        contents = DualEditor.markup.LINK( contents );
+        contents = DualEditor.markup.TABLE( contents );
+        contents = DualEditor.markup.ORDERLIST( contents );
+        contents = DualEditor.markup.UNORDERLIST( contents );
+
         contents = DualEditor.markup.H1( contents );
         contents = DualEditor.markup.HR( contents );
         contents = DualEditor.markup.LAYOUT( contents );
@@ -22,19 +30,11 @@ var DualEditor = (function(){
         contents = DualEditor.markup.FONTSTYLE( contents );
         contents = DualEditor.markup.ALIGN( contents );
         contents = DualEditor.markup.BOLD( contents );
-        contents = DualEditor.markup.ITALIC( contents );
+        //contents = DualEditor.markup.ITALIC( contents );
         contents = DualEditor.markup.DEL( contents );
         contents = DualEditor.markup.UNDERLINING( contents );
         contents = DualEditor.markup.SUPERSCRIPT( contents );
         contents = DualEditor.markup.SUBERSCRIPT( contents );
-
-        contents = DualEditor.markup.FIELD( contents );
-        contents = DualEditor.markup.ALERT( contents );
-        contents = DualEditor.markup.INFO( contents );
-        contents = DualEditor.markup.LINK( contents );
-        contents = DualEditor.markup.TABLE( contents );
-        contents = DualEditor.markup.ORDERLIST( contents );
-        contents = DualEditor.markup.UNORDERLIST( contents );
 
         return contents;
     };

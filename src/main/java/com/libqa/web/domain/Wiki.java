@@ -48,7 +48,7 @@ public class Wiki implements Serializable{
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isLock = false;
 
-    @Column(nullable = false, length = 40)
+    @Column(length = 40)
     private String passwd;
 
     @Column(nullable = false, length = 40)
