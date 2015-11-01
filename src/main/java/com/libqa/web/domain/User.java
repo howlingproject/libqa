@@ -90,6 +90,10 @@ public class User {
     @Transient
     private String targetUrl;
 
+    // 회원 정보 수정시 닉네임 중복확인 여부
+    @Transient
+    private String checkDupNickname;
+
     @Transient
     public void increaseVisit() {
         this.visitCount++;

@@ -42,7 +42,7 @@ public class PersistentLogin {
     private Date lastUsed;
 
     public PersistentLogin(PersistentRememberMeToken persistentRememberMeToken) {
-
+        log.info("########## PersistentLogin : {}", persistentRememberMeToken.toString());
         this.username = persistentRememberMeToken.getUsername();
         this.series = persistentRememberMeToken.getSeries();
         this.lastUsed = persistentRememberMeToken.getDate();

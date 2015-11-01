@@ -3,6 +3,7 @@ package com.libqa.web.controller;
 import com.libqa.application.Exception.UserNotCreateException;
 import com.libqa.application.enums.StatusCode;
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.RequestUtil;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;
@@ -31,6 +32,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LoggedUser loggedUser;
 
 
 //    @RequestMapping(value="/user/view", method = RequestMethod.GET)
@@ -133,28 +137,21 @@ public class UserController {
     @RequestMapping("/user/profile")
     public ModelAndView userProfile(HttpServletRequest request) {
         String returnUrl = RequestUtil.refererUrl(request, "/index");
-        log.info("### USER Info!");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = loggedUser.get();
 
-        String email = (String) authentication.getPrincipal();
+        if (user == null || user.isGuest()) {
+            log.info("# 로그인 사용자 정보가 존재하지 않습니다.");
+            return sendAccessDenied();
+        }
 
-        List<GrantedAuthority> grantedAuths = (List<GrantedAuthority>) authentication.getAuthorities();
-        System.out.println("### grantedAuthority = " + grantedAuths.get(0));
+        User entity = userService.findOne(user.getUserId());
 
-
-        log.info("user info = {}", email);
-        log.info("authentication.isAuthenticated() = {}", authentication.isAuthenticated());
-        log.info("authentication.getDetails().toString() = {}", authentication.getDetails().toString());
-        log.info("authentication.getDetails().getName() = {}", authentication.getName());
-        log.info("authentication.gerRole() = {}", grantedAuths.get(0));
-
-        User user = userService.findByEmail(email);
 
         ModelAndView mav = new ModelAndView("/user/profile");
         mav.addObject("returnUrl", returnUrl);
-        mav.addObject("userEmail", email);
-        mav.addObject("user", user);
-        mav.addObject("auth", authentication.isAuthenticated());
+        mav.addObject("userEmail", user.getUserEmail());
+        mav.addObject("user", entity);
+        mav.addObject("auth", "true");
         return mav;
     }
 
@@ -174,7 +171,9 @@ public class UserController {
     @RequestMapping(value = "/user/updateProfile", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<User> updateProfile(@ModelAttribute User user, @ModelAttribute Keyword keyword) throws IllegalAccessException {
-        User result = userService.updateUserProfile(user);
+        log.info("### user = {}", user);
+        log.info("### keyword = {}", keyword);
+        User result = userService.updateUserProfile(user, keyword);
         return ResponseData.createSuccessResult(result);
     }
 
@@ -250,6 +249,13 @@ public class UserController {
         ModelAndView mav = new ModelAndView("/user/auth");
         mav.addObject("result", result);
         mav.addObject("msg", msg);
+        return mav;
+    }
+
+    public ModelAndView sendAccessDenied() {
+        ModelAndView mav = new ModelAndView("/common/403");
+        mav.addObject("msg", "Hi " + ", you do not have permission to access this page!");
+
         return mav;
     }
 

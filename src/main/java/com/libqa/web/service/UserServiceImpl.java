@@ -2,6 +2,8 @@ package com.libqa.web.service;
 
 import com.libqa.application.Exception.UserNotCreateException;
 import com.libqa.application.enums.SocialChannelType;
+import com.libqa.application.util.StringUtil;
+import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.User;
 import com.libqa.web.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -146,8 +148,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserProfile(User user) {
-        return userRepository.save(user);
+    public User updateUserProfile(User user, Keyword keyword) {
+        log.info("### updateUserProfile = {}", user);
+
+        User entity = userRepository.findOne(user.getUserId());
+
+        log.info("### entity = {}", entity);
+
+
+        if (StringUtil.nullToString(user.getCheckDupNickname(), "").equals("Y")) {
+            entity.setUserNick(user.getUserNick());
+        }
+
+        entity.setUserImageName(user.getUserImageName());
+        entity.setUserImagePath(user.getUserImagePath());
+
+
+        entity.setUserThumbnailImageName(user.getUserThumbnailImageName());
+        entity.setUserThumbnailImagePath(user.getUserThumbnailImagePath());
+
+        entity.setUserSite(user.getUserSite());
+        entity.setUpdateDate(new Date());
+        entity = userRepository.save(entity);
+
+        saveUserKeyword(entity, keyword);
+
+        return entity;
+    }
+
+    private void saveUserKeyword(User entity, Keyword keyword) {
+
     }
 
 

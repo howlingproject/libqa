@@ -32,7 +32,7 @@ To change this template use File | Settings | File Templates.
                 <label for="inputEmail" class="col-sm-2 control-label">이메일</label>
 
                 <div class="col-sm-5 col-md-5">
-                    <input type="text" class="form-control" id="userEmail" placeholder="Email" value="{{userEmail}}" disabled/>
+                    <input type="text" class="form-control" id="userEmail" name="userEmail" placeholder="Email" value="{{userEmail}}" disabled/>
                 </div>
             </div>
             <div class="form-group">
@@ -82,7 +82,7 @@ To change this template use File | Settings | File Templates.
                 <label for="homepage" class="col-sm-2 control-label">홈페이지</label>
 
                 <div class="col-sm-5 col-md-5">
-                    <input type="text" class="form-control" id="homepage" placeholder="Homepage" value="{{user.userSite}}"/>
+                    <input type="text" class="form-control" name="userSite" id="userSite" placeholder="Homepage" value="{{user.userSite}}"/>
                 </div>
             </div>
 
@@ -90,12 +90,12 @@ To change this template use File | Settings | File Templates.
                 <label for="profile_image" class="col-sm-2 control-label">이미지</label>
                 <div class="col-sm-1 col-md-1">
                     <div class="user-profile" id="imagePreviewArea">
-                    <img alt="avatar" class="profile-image" width="64" src="{{user.userThumbnailImageName}}/{{user.userThumbnailImageName}}" onerror='this.src="/resource/images/avatar.png"' id="image-preview" />
+                    <img alt="avatar" class="profile-image" width="64" src="{{user.userThumbnailImagePath}}/{{user.userThumbnailImageName}}" onerror='this.src="/resource/images/avatar.png"' id="image-preview" />
                     </div>
                 </div>
                 <div class="col-sm-5 col-md-5">
                     <input name="checkDupNickname" id="checkDupNickname" value="" type="hidden">
-                    <input id="userId" value="{{user.userId}}" type="hidden">
+                    <input name="userId" id="userId" value="{{user.userId}}" type="hidden">
                     <input id="uploadType" value="User" type="hidden">
                     <input id="thumbNail" type="hidden">
                     <input name="userImagePath" id="userImagePath" type="hidden">
@@ -413,10 +413,6 @@ To change this template use File | Settings | File Templates.
     function checkValidation() {
         // 에러가 발생할 경우 false 를 리턴한다.
         var userId = $("#userId").val();
-        var title = $("#title").val();
-
-        var description = $("#wikiEditor").val();
-
 
         if (userId == null || userId.length == 0) {
             $.alert({
@@ -426,25 +422,7 @@ To change this template use File | Settings | File Templates.
             });
             return false;
         }
-        if (title == null || title.length == 0) {
-            $.alert({
-                title: '정보',
-                confirmButton: '확인',
-                icon: 'fa fa-info',
-                content: '공간 제목을 입력하세요.'
-            });
-            return false;
-        }
 
-        if (description == null || description.length == 0) {
-            $.alert({
-                title: '정보',
-                confirmButton: '확인',
-                icon: 'fa fa-info',
-                content: '공간 설명은 필수값입니다.'
-            });
-            return false;
-        }
         return true;
     }
 

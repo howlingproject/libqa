@@ -1,6 +1,7 @@
 package com.libqa.web.service;
 
 import com.libqa.application.Exception.UserNotCreateException;
+import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.User;
 
 /**
@@ -68,5 +69,5 @@ public interface UserService {
      * @param user
      * @return
      */
-    User updateUserProfile(User user);
+    User updateUserProfile(User user, Keyword keyword);
 }

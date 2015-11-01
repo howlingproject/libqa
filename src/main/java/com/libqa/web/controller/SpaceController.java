@@ -176,8 +176,6 @@ public class SpaceController {
         }
 
         log.info("##### user  = {}", user);
-
-
         // TODO List 차후 로그인으로 변경
         space.setInsertDate(new Date());
         space.setInsertUserId(user.getUserId());
