@@ -17,4 +17,8 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     List<QaContent> findAllByQaIdInAndInsertDateBetweenAndIsDeleted(List<Integer> qaIds, Date fromDate, Date today, boolean isDeleted);
 
     List<QaContent> findAllByQaIdInAndIsReplyedAndIsDeleted(List<Integer> qaIds, boolean isReplyed, boolean isDeleted);
+
+    List<QaContent> findByUserIdAndIsDeleted(Integer userId, boolean isDeleted);
+
+    List<QaContent> findByQaIdInAndIsDeletedOrderByQaIdDesc(List<Integer> qaIds, boolean isDeleted);
 }
