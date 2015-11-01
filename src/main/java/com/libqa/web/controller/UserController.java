@@ -148,7 +148,7 @@ public class UserController {
 
         User user = userService.findByEmail(email);
 
-        ModelAndView mav = new ModelAndView("/user/info");
+        ModelAndView mav = new ModelAndView("/user/profile");
         mav.addObject("returnUrl", returnUrl);
         mav.addObject("userEmail", email);
         mav.addObject("user", user);
