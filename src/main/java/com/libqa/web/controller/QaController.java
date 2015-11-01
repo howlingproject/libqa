@@ -2,6 +2,7 @@ package com.libqa.web.controller;
 
 import com.libqa.application.dto.QaDto;
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.*;
 import com.libqa.web.view.DisplayQa;
@@ -29,6 +30,9 @@ import static com.libqa.application.framework.ResponseData.createSuccessResult;
 @Slf4j
 @Controller
 public class QaController {
+
+    @Autowired
+    LoggedUser loggedUser;
 
     @Autowired
     QaService qaService;
@@ -67,6 +71,40 @@ public class QaController {
 
         ModelAndView mav = new ModelAndView("qa/my");
         return mav;
+    }
+
+    @RequestMapping(value = "/qa/myWriteQaList", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<DisplayQa> myQaList(@ModelAttribute QaDto qaDto){
+        boolean isDeleted = false;
+        List<QaContent> qaContentList = new ArrayList<>();
+        List<DisplayQa> displayQaList = new ArrayList<>();
+        try {
+            qaContentList = qaService.findByUserId(loggedUser.get().getUserId());
+            for(QaContent qaContent : qaContentList) {
+                displayQaList.add(new DisplayQa(qaContent, keywordService.findByQaId(qaContent.getQaId(), isDeleted), qaReplyService.findByQaId(qaContent.getQaId()) ));
+            }
+            return createSuccessResult(displayQaList);
+        }catch(Exception e){
+            return createFailResult(displayQaList);
+        }
+    }
+
+    @RequestMapping(value = "/qa/myReplyQaList", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<DisplayQa> myReplyQaList(@ModelAttribute QaDto qaDto){
+        boolean isDeleted = false;
+        List<QaContent> qaContentList = new ArrayList<>();
+        List<DisplayQa> displayQaList = new ArrayList<>();
+        try {
+            qaContentList = qaReplyService.findByUserId(loggedUser.get().getUserId());
+            for(QaContent qaContent : qaContentList) {
+                displayQaList.add(new DisplayQa(qaContent, keywordService.findByQaId(qaContent.getQaId(), isDeleted), qaReplyService.findByQaId(qaContent.getQaId()) ));
+            }
+            return createSuccessResult(displayQaList);
+        }catch(Exception e){
+            return createFailResult(displayQaList);
+        }
     }
 
     @RequestMapping("/qa/{qaId}")

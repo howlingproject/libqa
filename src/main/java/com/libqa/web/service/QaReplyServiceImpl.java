@@ -2,6 +2,7 @@ package com.libqa.web.service;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaReply;
 import com.libqa.web.domain.Vote;
 import com.libqa.web.repository.QaReplyRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -152,6 +154,17 @@ public class QaReplyServiceImpl implements QaReplyService {
     @Override
     public List<QaReply> findByQaId(Integer qaId) {
         return qaReplyRepository.findByQaId(qaId);
+    }
+
+    @Override
+    public List<QaContent> findByUserId(Integer userId) {
+        List<Integer> qaIds = new ArrayList<Integer>();
+        List <QaReply> qaReplyList = qaReplyRepository.findByUserIdAndIsDeleted(userId, false);
+        for(QaReply qaReply : qaReplyList){
+            qaIds.add(qaReply.getQaId());
+        }
+
+        return qaService.findByQaIdIn(qaIds);
     }
 
     public void updateOrderIdx(QaReply paramQaReply){

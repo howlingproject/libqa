@@ -101,6 +101,16 @@ public class QaServiceImpl implements QaService {
         return updateQaContent;
     }
 
+    @Override
+    public List<QaContent> findByUserId(Integer userId) {
+        return qaRepository.findByUserIdAndIsDeleted(userId, false);
+    }
+
+    @Override
+    public List<QaContent> findByQaIdIn(List<Integer> qaIds) {
+        return qaRepository.findByQaIdInAndIsDeletedOrderByQaIdDesc(qaIds, false);
+    }
+
     void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
         qaFileService.moveQaFilesToProductAndSave(qaId, qaFiles);
     }
