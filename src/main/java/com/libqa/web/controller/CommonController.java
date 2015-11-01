@@ -3,10 +3,7 @@ package com.libqa.web.controller;
 import com.libqa.application.dto.FileDto;
 import com.libqa.application.enums.KeywordType;
 import com.libqa.application.framework.ResponseData;
-import com.libqa.application.util.DateUtil;
-import com.libqa.application.util.FileUtil;
-import com.libqa.application.util.LoggedUser;
-import com.libqa.application.util.StringUtil;
+import com.libqa.application.util.*;
 import com.libqa.web.domain.KeywordList;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.KeywordListService;
@@ -20,7 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -124,6 +123,115 @@ public class CommonController {
         }
     }
 
+    /**
+     * 프로필 이미지 업로드 - 사용자 아이디로 폴더를 만들고 그 하위에 프로필 이미지를 적재한다. 단, 파일이 쌓이는 것을 방지 하기 위해
+     * 해당 폴더는 삭제 후에 다시 생성한다. (/resource/profile/1/xxx.png)
+     *
+     * @param uploadfile
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/common/userProfileImage", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<?> userProfileImage(@RequestParam("uploadfile") MultipartFile uploadfile,
+                                            HttpServletRequest request) {
+        String viewType = request.getParameter("viewType");
+        FileDto fileDto = new FileDto();
+        String serverPath = StringUtil.defaultString(request.getServletContext().getRealPath(FileUtil.SEPARATOR));
+
+        // 이미지 파일일 경우 ContentType 검사
+        FileUtil.checkImageUpload(uploadfile, viewType);
+
+        log.info("#### request ####");
+        log.info("# request getServletContext().getRealPath = {}", request.getServletContext().getRealPath(FileUtil.SEPARATOR));
+        log.info("# request getServletPath = {} ", request.getServletPath());
+
+        try {
+            // /resource/profile/userId/yyyyMMdd/ 에 일단 저장 후 차후 userId/파일명 으로 이동 후 삭제해야 한다.
+            User user = loggedUser.get();
+
+            Integer userId = user.getUserId();
+            String localDir = "/resource/profile/" + userId;
+            String directory = serverPath + localDir;  // 서버 저장 경로
+
+            // 프로필 이미지 일단 삭제
+            File deleteDir = new File(directory);
+
+            File[] files = deleteDir.listFiles();
+
+            if (files.length > 0) {
+                for (File file : files) {
+                    file.delete();
+                }
+            }
+
+
+            // 폴더 생성
+            File baseDir = new File(directory);
+            if (!baseDir.exists() || !baseDir.isDirectory()) {
+                baseDir.mkdirs();
+            } else {
+                log.debug("##### " + directory + "위치에 디렉토리가 존재합니다.");
+            }
+
+            // 파일 정보 추출
+            fileDto = FileUtil.extractFileInfo(uploadfile, localDir);
+            fileDto.setFilePath(localDir);
+            fileDto.setFileType(FileUtil.checkImageFile(uploadfile) ? IMAGE : FILE);
+
+            String filePath = Paths.get(serverPath, localDir, fileDto.getSavedName()).toString();
+
+            String saveThumbFileName = "thumb_" + fileDto.getSavedName();
+
+            String thumbTargetPath = directory + "/" + saveThumbFileName;
+
+            log.debug("## filePath : {}", filePath);
+
+            // 파일 업로드 스트림
+            FileUtil.fileUpload(uploadfile, filePath);
+
+            //원본 파일
+            File orgFile = new File(filePath);
+
+            //썸네일 파일 생성
+            File thumbFile = new File(thumbTargetPath);
+
+            fileDto = createThumbFile(orgFile, thumbFile, fileDto, localDir, saveThumbFileName);
+
+            log.info("####### FILE SAVE INFO ########");
+            log.info("fileDto = {}", fileDto);
+            return ResponseData.createSuccessResult(fileDto);
+        } catch (Exception e) {
+            log.error("# File Upload Error : {}", e);
+            return ResponseData.createFailResult(fileDto);
+        }
+    }
+
+    private FileDto createThumbFile(File orgFile, File thumbFile, FileDto fileDto, String localDir, String saveThumbFileName) throws IOException {
+        BufferedImage biImg = ImageIO.read(orgFile);
+
+        int width = biImg.getWidth();
+        int height = biImg.getHeight();
+
+        log.debug("### 이미지의 원본 크기 : " + width + "/ " + height);
+        int maxWidth = 32;
+        if (width > maxWidth) {
+            int y = (height * maxWidth) / width;
+            width = maxWidth;
+            height = y;
+            log.debug("##이미지리사이징 후 : " + width + " / " + height);
+        }
+
+        GetThumbImage getThumbImage = new GetThumbImage();
+        getThumbImage.resizeImage(orgFile, thumbFile, width, height);
+
+        fileDto.setThumbPath(localDir);
+        fileDto.setThumbName(saveThumbFileName);
+
+        return fileDto;
+
+    }
+
     public ResponseData<?> moveFileToProduct(FileDto fileDto) throws Exception {
         String serverPath = fileDto.getRootPath();
         String savedDirectory = serverPath + fileDto.getFilePath();
@@ -158,6 +266,7 @@ public class CommonController {
         }
     }
 
+
     @RequestMapping(value = "/common/deleteFile", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<?> deleteFile(HttpServletRequest request) {
@@ -184,7 +293,7 @@ public class CommonController {
 
     @RequestMapping(value = "/common/findKeywordList", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<KeywordList> findKeywordList(@RequestParam("keywordType") String keywordType){
+    public ResponseData<KeywordList> findKeywordList(@RequestParam("keywordType") String keywordType) {
         boolean isDeleted = false;
         List<KeywordList> keywordList = new ArrayList<>();
 

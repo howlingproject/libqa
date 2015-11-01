@@ -26,7 +26,7 @@ To change this template use File | Settings | File Templates.
     <div class="container">
         <h3 class="page-header">회원 정보 수정</h3>
         <!-- form start -->
-        <form name="spaceCreateForm" id="spaceCreateForm" class="form-horizontal well" role="form" method="post">
+        <form name="userProfileForm" id="userProfileForm" class="form-horizontal well" role="form" method="post">
 
             <div class="form-group">
                 <label for="inputEmail" class="col-sm-2 control-label">이메일</label>
@@ -68,8 +68,8 @@ To change this template use File | Settings | File Templates.
 
                 <div class="col-sm-5 col-md-5">
                     <div id="tag-info" class="form-inline">
-                    <input type="text" class="form-control" id="nickname" placeholder="Nickname" value="{{user.userNick}}"/>
-                        <a class="btn btn-warning" href="#"><i class="fa fa-check"></i> 중복확인</a>
+                    <input type="text" class="form-control" name="userNick" id="userNick" value="{{user.userNick}}"/>
+                        <a class="btn btn-warning" id="checkUserNick"><i class="fa fa-check"></i> 중복확인</a>
                     </div>
                 </div>
                 <div class="col-sm-5 col-md-5">
@@ -94,11 +94,14 @@ To change this template use File | Settings | File Templates.
                     </div>
                 </div>
                 <div class="col-sm-5 col-md-5">
+                    <input name="checkDupNickname" id="checkDupNickname" value="" type="hidden">
                     <input id="userId" value="{{user.userId}}" type="hidden">
                     <input id="uploadType" value="User" type="hidden">
                     <input id="thumbNail" type="hidden">
                     <input name="userImagePath" id="userImagePath" type="hidden">
                     <input name="userImageName" id="userImageName" type="hidden">
+                    <input name="userThumbnailImageName" id="userThumbnailImageName" type="hidden">
+                    <input name="userThumbnailImagePath" id="userThumbnailImagePath" type="hidden">
                     <input id="viewType" name="viewType" value="Image" type="hidden" />
                     <input id="file-attachment" type="file" name="uploadfile" accept="*" />
                 </div>
@@ -124,8 +127,8 @@ To change this template use File | Settings | File Templates.
 
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <button type="button" class="btn btn-info">저장</button>
-                    <button type="button" class="btn btn-default">메인으로</button>
+                    <button type="button" class="btn btn-info" id="btnSave">저장</button>
+                    <button type="button" class="btn btn-default" id="btnCancel">메인으로</button>
                 </div>
             </div>
         </form>
@@ -141,6 +144,58 @@ To change this template use File | Settings | File Templates.
     // bind the on-change event
     $(document).ready(function() {
         $("#file-attachment").on("change", uploadFile);
+    });
+
+    $("#checkUserNick").click(function () {
+        var userNick = $("#userNick").val();
+
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            data: { userNick : userNick},
+            url: "/user/checkDupNick",
+            cache: false,
+            success: function (req) {
+                if (req == '1') {
+                    $.alert({
+                        title: '확인',
+                        content: '사용할 수 있는 닉네임 입니다.',
+                        confirmButton: 'OK',
+                        confirmButtonClass: 'btn-primary',
+                        icon: 'fa fa-info',
+                        animation: 'zoom',
+                        confirm: function () {
+                        }
+                    });
+                    $("#checkDupNickname").val("Y");
+                } else {
+                    $("#checkDupNickname").val("N");
+                    $.alert({
+                        title: '확인',
+                        content: '중복된 닉네임입니다. 다른 닉네임을 선택하세요.',
+                        confirmButton: 'OK',
+                        confirmButtonClass: 'btn-primary',
+                        icon: 'fa fa-info',
+                        animation: 'zoom',
+                        confirm: function () {
+                        }
+                    });
+                }
+            },
+            error: function (req) {
+                $("#checkDupNickname").val("N");
+                $.alert({
+                    title: '확인',
+                    content: '닉네임 중복 확인중 에러가 발생했습니다. 다시 시도하세요.',
+                    confirmButton: 'OK',
+                    confirmButtonClass: 'btn-primary',
+                    icon: 'fa fa-info',
+                    animation: 'zoom',
+                    confirm: function () {
+                    }
+                });
+            }
+        });
     });
 
     var keywordData = [];
@@ -183,12 +238,12 @@ To change this template use File | Settings | File Templates.
     $('#btnSave').on('click', function () {
         $.confirm({
             title: '확인',
-            content: '공간을 생성 하겠습니까?',
-            confirmButton: '공간생성',
+            content: '프로필을 수정하겠습니까?',
+            confirmButton: '프로필 수정',
             cancelButton: '취소',
             confirmButtonClass: 'btn-info',
             confirm: function () {
-                create();
+                updateProfile();
             },
             cancel: function(){
 
@@ -199,7 +254,7 @@ To change this template use File | Settings | File Templates.
     $('#btnCancel').on(function () {
         $.confirm({
             title: '확인',
-            content: '공간 생성을 취소하겠습니까?',
+            content: '메인 화면으로 이동합니다. ',
             confirmButton: '확인',
             cancelButton: '취소',
             confirm: function () {
@@ -225,41 +280,47 @@ To change this template use File | Settings | File Templates.
     });
 
     /**
-     * Save the Space
+     * Save the updateProfile
      */
-    function create() {
-        $("#keywords").val(keywordData);
-        $("#description").val(DualEditor.getMarkupConvertToHtml());
-        $("#descriptionMarkup").val(DualEditor.getMarkupEditHtml());
+    function updateProfile() {
+        var nickChange = $("#checkDupNickname").val();
 
-        if ($(':radio[name="isPrivateYn"]:checked').val() == 'Y') {
-            $("#private").val(0);   // 공개
-        } else {
-            $("#private").val(1);   // 비공개
+        if (nickChange == "N") {
+            $.alert({
+                title: '확인',
+                content: '닉네임 중복 검사가 제대로 되지 않았습니다. 닉네임 변경시 중복검사를 실행해주세요.',
+                confirmButton: 'OK',
+                confirmButtonClass: 'btn-primary',
+                icon: 'fa fa-info',
+                animation: 'zoom',
+                confirm: function () {
+                }
+            });
+            return;
         }
-        var data = $("#spaceCreateForm").serialize();
+
+        $("#keywords").val(keywordData);
+
+        var data = $("#userProfileForm").serialize();
         if (checkValidation()) {
             $.ajax({
                 type: "post",
                 dataType: "json",
                 data: data,
-                url: "/space/add",
+                url: "/user/updateProfile",
                 cache: false,
                 success: function (req) {
                     if (req.resultCode == 1) {
-                        $.confirm({
-                            title: '완료',
-                            content: '공간 정보를 저장하였습니다. 공간 메인 화면으로 이동하겠습니까?',
-                            confirmButton: '이동',
-                            cancelButton: '취소',
-                            confirmButtonClass: 'btn-info',
-                            icon: 'fa fa-question-circle',
-                            animation: 'top',
+                        $.alert({
+                            title: '확인',
+                            content: '프로필 정보가 수정 되었습니다.',
+                            confirmButton: 'OK',
+                            confirmButtonClass: 'btn-primary',
+                            icon: 'fa fa-info',
+                            animation: 'zoom',
                             confirm: function () {
-                                $(location).attr('href', req.data.spaceId);
                             }
                         });
-
                     }
                 },
                 error: function (req) {
@@ -278,7 +339,7 @@ To change this template use File | Settings | File Templates.
         if (condition) {
             $.alert({
                 title: '확인',
-                content: '공간 정보 저장중 에러가 발생했습니다.',
+                content: '프로필 수정 중 에러가 발생했습니다.',
                 confirmButton: 'OK',
                 confirmButtonClass: 'btn-primary',
                 icon: 'fa fa-info',
@@ -289,7 +350,7 @@ To change this template use File | Settings | File Templates.
         } else {
             $.alert({
                 title: '확인',
-                content: '공간 정보 저장중 에러가 발생했습니다. 에러코드 [' + status + ']',
+                content: '프로필 수정 중 에러가 발생했습니다. 에러코드 [' + status + ']',
                 confirmButton: 'OK',
                 confirmButtonClass: 'btn-primary',
                 icon: 'fa fa-info',
@@ -307,9 +368,9 @@ To change this template use File | Settings | File Templates.
         var field = $("#file-attachment").val();
         if (field != '') {
             $.ajax({
-                url: "/common/uploadFile",
+                url: "/common/userProfileImage",
                 type: "POST",
-                data: new FormData($("#spaceCreateForm")[0]),
+                data: new FormData($("#userProfileForm")[0]),
                 enctype: 'multipart/form-data',
                 processData: false,
                 contentType: false,
@@ -324,6 +385,8 @@ To change this template use File | Settings | File Templates.
                             $("#imagePreviewArea").html("<img src='" + req.data.filePath + "/" + req.data.savedName + "' width=\"64\" class=\"profile-image image-preview\" id=\"image-preview\">");
                             $("#userImagePath").val(req.data.filePath);
                             $("#userImageName").val(req.data.savedName);
+                            $("#userThumbnailImageName").val(req.data.thumbName);
+                            $("#userThumbnailImagePath").val(req.data.thumbPath);
                             $("#thumbNail").val("Y");
                         }
                     }

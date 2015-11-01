@@ -62,4 +62,11 @@ public interface UserService {
      * @param email
      */
     void updateUserLastVisitDate(String email);
+
+    /**
+     * 회원 정보 수정
+     * @param user
+     * @return
+     */
+    User updateUserProfile(User user);
 }
