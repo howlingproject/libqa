@@ -67,8 +67,10 @@ div.action-buttons i.hasViewer {color : #2682C4; font-weight: bold;}
 .feed-write .btn-feed-image {margin-left:80px;}
 .feed-write .btn-feed-save {margin-right:40px;}
 
+.feed-contents-box {  word-wrap: break-word; width: 100%;}
 .feed-modify {display:none; margin-bottom: 20px;}
-.feed-modify .feed-modify-bottom button {margin: 5px 5px 0 0; }
+.feed-modify .feed-modify-bottom {margin-bottom:25px;}
+.feed-modify .feed-modify-bottom button {margin: 5px 5px 5px 0; }
 
 .feed ul { list-style: none outside none; margin: 0; padding: 0; }
 .feed ul li { background: none repeat scroll 0 0 white; border: 1px solid #dbdee0; margin: 0 40px 20px 80px; padding: 10px; position: relative; }
