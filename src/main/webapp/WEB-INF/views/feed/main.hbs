@@ -87,12 +87,8 @@
 
 <!-- popover-config start -->
 <div id="popover-config-content" style="display: none;">
-    <div class="button"><a href="#">수정</a></div>
+    <div class="button"><a href="javascript:void(0);" onclick="Feed.modifyItem(this);">수정</a></div>
     <div class="button"><a href="javascript:void(0);" onclick="Feed.removeItem(this);">삭제</a></div>
-</div>
-<div id="popover-feed-image-content" style="display: none;">
-    <div class="file_upload"><a href="#">파일 업로드</a></div>
-    <div class="web_link"><a href="#">웹 링크</a></div>
 </div>
 <!-- popover-config end -->
 {{/partial}}
@@ -135,11 +131,12 @@
             },
             'bindSave' : function() {
                 var me = this;
+                var $frm = $('#feedForm');
                 $('#feedSave').click(function(){
-                    if(!me.checkValidate()) {
+                    if(!me.checkValidate($frm)) {
                         return;
                     }
-                    $.post('/feed/save', $('#feedForm').serialize())
+                    $.post('/feed/save', $frm.serialize())
                         .done(function(response){
                             if(response.resultCode != 1) {
                                 alert(response.comment);
@@ -157,8 +154,7 @@
             'clearForm' : function() {
                 $('#feedForm').find('textarea').val('');
             },
-            'checkValidate' : function() {
-                var $frm = $('#feedForm');
+            'checkValidate' : function($frm) {
                 if (!$frm.find('textarea[name=feedContent]').val().trim().length) {
                     alert('feed를 입력해주세요!');
                     return false;
@@ -193,24 +189,66 @@
                     $('#fileAttachmentInput').val('');
                 });
             },
+            'getFeedIdByPopOver': function(el) {
+                var popoverId = $(el).closest('.popover').attr('id');
+                var $popOverBody =  $('.thread .config').find('[aria-describedby='+ popoverId +']');
+                return this.getId($popOverBody);
+            },
+            'getFeedBodyByFeedId': function(feedId) {
+                return $('#feedList li.thread[data-feed-id="'+feedId+'"]');;
+            },
             'removeItem': function(el) {
                 if (!confirm("FEED를 삭제하시겠습니까?")) {
                     return;
                 }
-                var popoverId = $(el).closest('.popover').attr('id');
-                var $popOverBody = $('.thread .config').find('[aria-describedby='+ popoverId +']');
-                var feedId =  this.getId($popOverBody);
+                var me = this;
+                var feedId =  me.getFeedIdByPopOver(el);
+                var $feedBody = me.getFeedBodyByFeedId(feedId);
                 $.post('/feed/' + feedId + '/delete')
                     .done(function (response) {
                         if (response.resultCode != 1) {
                             alert(response.comment);
                             return;
                         }
-                        $('#' + popoverId).remove();
-                        $('#feedList li.thread[data-feed-id="'+feedId+'"]').remove();
+                        FeedUtil.hidePopOver();
+                        $feedBody.remove();
                     }).fail(function () {
                         alert('Error delete feed');
                     });
+            },
+            'modifyItem' : function(el) {
+                var me = this;
+                var feedId =  me.getFeedIdByPopOver(el);
+
+                var $feedBody = me.getFeedBodyByFeedId(feedId);
+                var $feedContents = $feedBody.find('.feed-contents-box');
+                var $modify = $feedBody.find('.feed-modify');
+                var $frm = $modify.find('.feed-modify-form');
+                $modify
+                    .find('.modifyBtn').off('click').on('click', function () {
+                        if(!me.checkValidate($frm)) {
+                            return;
+                        }
+                        $.post('/feed/modify', $frm.serialize())
+                            .done(function (response) {
+                                if (response.resultCode != 1) {
+                                    alert(response.comment);
+                                    return;
+                                }
+                                $modify.hide();
+                                var contents = response.data.feedContent.replace(/(\r\n|\n|\r)/gm, '<br>');
+                                $feedContents.html(contents).show();
+                            }).fail(function () {
+                                alert('Error modify feed');
+                            });
+                    }).end().find('.cancelBtn').off('click').on('click', function () {
+                        $modify.hide();
+                        $feedContents.show();
+                    });
+
+                $modify.show();
+                $feedContents.hide();
+                FeedUtil.hidePopOver();
             },
             'like': function(el) {
                 $.post('/feed/' + this.getId($(el)) + '/like')
@@ -273,11 +311,11 @@
             },
             'removePreviewInForm': function() {
                 $('#feedForm .attachmentArea .files').empty();
-                $('#feedForm .attachmentArea .images').empty();
-                $('#feedForm input[name^=feedFiles]').remove();
+                $('#feedWriteForm .attachmentArea .images').empty();
+                $('#feedWriteForm input[name^=feedFiles]').remove();
             },
             'removeHiddenTagsInForm': function() {
-                $('#feedForm input[name^=feedFiles]').remove();
+                $('#feedWriteForm input[name^=feedFiles]').remove();
             }
         };
 
@@ -380,14 +418,9 @@
                         return $('#popover-config-content').html();
                     }
                 });
-
-                $('.popover-feed-image').popover({
-                    trigger: 'click',
-                    html: true,
-                    content: function () {
-                        return $('#popover-feed-image-content').html();
-                    }
-                });
+            },
+            'hidePopOver' : function() {
+                $('.popover-config').popover('hide');
             },
             'toggleCount': function(el, count, hasViewer) {
                 el.find('span').html('('+count+')');

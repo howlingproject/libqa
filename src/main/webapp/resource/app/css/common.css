@@ -67,6 +67,9 @@ div.action-buttons i.hasViewer {color : #2682C4; font-weight: bold;}
 .feed-write .btn-feed-image {margin-left:80px;}
 .feed-write .btn-feed-save {margin-right:40px;}
 
+.feed-modify {display:none; margin-bottom: 20px;}
+.feed-modify .feed-modify-bottom button {margin: 5px 5px 0 0; }
+
 .feed ul { list-style: none outside none; margin: 0; padding: 0; }
 .feed ul li { background: none repeat scroll 0 0 white; border: 1px solid #dbdee0; margin: 0 40px 20px 80px; padding: 10px; position: relative; }
 .feed ul li:before { background: url("http://bootstrapmaster.com/live/genius/assets/img/disc-arrow.png") no-repeat scroll 0 0 / 20px 20px rgba(0, 0, 0, 0); content: ""; height: 20px; left: -20px; position: absolute; top: 15px; width: 20px; }
@@ -104,12 +107,6 @@ div.action-buttons i.hasViewer {color : #2682C4; font-weight: bold;}
 #fileUploadModal .image-options {display:none;}
 #fileUploadModal .modal-dialog { width: 550px;}
 #fileUploadModal .image-preview {height:100px;}
-
-#right-panel-indicator { position: absolute; right: 2%; top: 10%; }
-.indicator-panel { display: none; width: 230px; padding: 20px; background-color: #F5F5F5;    box-shadow: inset 0 0 1px 1px #DDDDDD;}
-
-#right-panel-container { position: absolute; right: -5%; top: 0; }
-.right-panel { display: none; width: 230px; padding: 20px; background-color: #F5F5F5;    box-shadow: inset 0 0 1px 1px #DDDDDD;}
 
 .btn-file {
     position: relative;

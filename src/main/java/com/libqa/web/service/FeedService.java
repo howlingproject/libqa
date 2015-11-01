@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.libqa.application.dto.FeedRequestDto;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.repository.FeedFileRepository;
@@ -91,6 +92,13 @@ public class FeedService {
             feedAction.cancel();
         }
         feed.setClaimCount(feedActionService.getCount(feed.getFeedId(), FEED_CLAIM));
+        return feed;
+    }
+
+    @Transactional
+    public Feed modify(FeedRequestDto dto) {
+        Feed feed = feedRepository.findOne(dto.getFeedId());
+        feed.setFeedContent(dto.getFeedContent());
         return feed;
     }
 

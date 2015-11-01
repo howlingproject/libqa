@@ -1,5 +1,6 @@
 package com.libqa.web.controller;
 
+import com.libqa.application.dto.FeedRequestDto;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;
@@ -10,10 +11,7 @@ import com.libqa.web.service.FeedService;
 import com.libqa.web.view.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -59,6 +57,18 @@ public class FeedController {
         } catch (Exception e) {
             log.error("save feed error.", e);
             return createFailResult(feed);
+        }
+    }
+
+    @RequestMapping(value = "/modify", method = POST)
+    public ResponseData<Feed> modify(FeedRequestDto dto) {
+        try {
+            log.debug("FeedRequestDto : {}", dto);
+            Feed feed = feedService.modify(dto);
+            return createSuccessResult(feed);
+        } catch (Exception e) {
+            log.error("delete feed error.", e);
+            return createFailResult(null);
         }
     }
 
