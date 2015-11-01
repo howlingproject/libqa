@@ -10,19 +10,27 @@ import lombok.Data;
 @Data
 public class FileDto {
 
-    private String realName;
+    private String realName;    // 실제 파일명
 
-    private String savedName;
+    private String savedName;   // 저장 파일 명
 
-    private String rootPath;
+    private String rootPath;    // 경로
 
-    private String filePath;
+    private String filePath;    // 파일 경로
 
-    private double fileSize;
+    private double fileSize;    // 파일 사이즈
 
-    private String fileExtendType;
+    private String fileExtendType;  // 확장자 타입
 
-    private String uploadType;
+    private String uploadType;  // 업로드 타입
 
-    private FileType fileType;
+    private FileType fileType;  // 파일 타입
+
+    private String thumbYn;		 // 섬네일 유무
+
+    private String thumbPath;	 // 섬네일 패스
+
+    private String thumbName;	 // 섬네일 파일 명
+
+
 }

@@ -1,5 +1,6 @@
 package com.libqa.web.service;
 
+import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaReply;
 import com.libqa.web.view.DisplayQaReply;
 
@@ -24,4 +25,6 @@ public interface QaReplyService {
     void delete(Integer replyId);
 
     List<QaReply> findByQaId(Integer qaId);
+
+    List<QaContent> findByUserId(Integer userId);
 }

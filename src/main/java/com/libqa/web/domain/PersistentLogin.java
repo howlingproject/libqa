@@ -26,6 +26,7 @@ import java.util.Date;
 @Slf4j
 @EqualsAndHashCode
 public class PersistentLogin {
+
     @Id
     @Column(length = 64, nullable = false)
     private String series;
@@ -40,9 +41,8 @@ public class PersistentLogin {
     @Column(nullable = false)
     private Date lastUsed;
 
-
     public PersistentLogin(PersistentRememberMeToken persistentRememberMeToken) {
-        log.info("########## PersistentLogin : {}", persistentRememberMeToken.toString());
+
         this.username = persistentRememberMeToken.getUsername();
         this.series = persistentRememberMeToken.getSeries();
         this.lastUsed = persistentRememberMeToken.getDate();

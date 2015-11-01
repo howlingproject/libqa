@@ -11,7 +11,17 @@
 
     <div class="thread-message-box">
         <div class="message">
-            {{nl2br feedContent}}
+            <div class="feed-contents-box">{{nl2br feedContent}}</div>
+            <div class="feed-modify well">
+                <form class="feed-modify-form">
+                    <input type="hidden" name="feedId" value="{{feedId}}" />
+                    <textarea class="form-control" name="feedContent" rows="6">{{feedContent}}</textarea>
+                    <div class="feed-modify-bottom">
+                        <button class="btn btn-xs btn-info pull-right modifyBtn" type="button">수정</button>
+                        <button class="btn btn-xs btn-default pull-right cancelBtn" type="button">취소</button>
+                    </div>
+                </form>
+            </div>
             <div class="images text-center">
                 {{#images}}
                     <a href="{{filePath}}/{{savedName}}" target="_blank"><img width="190" class="img-thumbnail" src="{{filePath}}/{{savedName}}" /></a>
@@ -33,7 +43,7 @@
         </div>
     </div>
 
-    <ul id="feed-replies">
+    <ul class="feed-replies">
         {{#replies}}
         <li class="reply-thread" data-feed-reply-id="{{feedReplyId}}">
             <div class="author">

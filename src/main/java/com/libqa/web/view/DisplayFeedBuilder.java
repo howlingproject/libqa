@@ -14,7 +14,7 @@ import static com.libqa.application.enums.FeedActionType.*;
 
 @Component
 public class DisplayFeedBuilder {
-    private static final String DATE_FORAMT = "yyyy/MM/dd";
+    private static final String DATE_FORAMT = "yyyy-MM-dd hh:mm:ss";
 
     @Autowired
     private DisplayFeedActionBuilder displayFeedActionBuilder;

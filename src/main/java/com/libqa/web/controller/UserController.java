@@ -4,6 +4,8 @@ import com.libqa.application.Exception.UserNotCreateException;
 import com.libqa.application.enums.StatusCode;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.RequestUtil;
+import com.libqa.web.domain.Keyword;
+import com.libqa.web.domain.Space;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -155,6 +157,27 @@ public class UserController {
         mav.addObject("auth", authentication.isAuthenticated());
         return mav;
     }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @RequestMapping(value = "/user/checkDupNick", method = RequestMethod.POST)
+    @ResponseBody
+    public String checkUserNick(@RequestParam String userNick) {
+        User user = userService.findByNick(userNick);
+
+        if (user == null) {
+            return "1";
+        }
+        return "0";
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @RequestMapping(value = "/user/updateProfile", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<User> updateProfile(@ModelAttribute User user, @ModelAttribute Keyword keyword) throws IllegalAccessException {
+        User result = userService.updateUserProfile(user);
+        return ResponseData.createSuccessResult(result);
+    }
+
 
     @RequestMapping("/user/createUser")
     @ResponseBody
