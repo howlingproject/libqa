@@ -14,14 +14,14 @@ import java.util.List;
  */
 
 @Getter
-public class WikiList {
+public class SpaceWikiList {
 
     private Wiki wiki;
     private User user;
     private List<Keyword> keywords;
     private int replyCount;
 
-    public WikiList(Wiki wiki, User user, List keywords, int replyCount) {
+    public SpaceWikiList(Wiki wiki, User user, List keywords, int replyCount) {
         this.wiki = wiki;
         this.user = user;
         this.keywords = keywords;

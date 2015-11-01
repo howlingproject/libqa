@@ -47,7 +47,7 @@ To change this template use File | Settings | File Templates.
 
                             <div class="col-lg-8">
                                 <div class="col-xs-8 col-md-8">
-                                    <input id="userId" value="1" type="hidden">
+                                    <input id="userId" value="{{user.userId}}" type="hidden">
                                     <input id="uploadType" value="Space" type="hidden">
                                     <input name="titleImagePath" id="titleImagePath" type="hidden">
                                     <input name="titleImage" id="titleImage" type="hidden">
@@ -390,7 +390,7 @@ To change this template use File | Settings | File Templates.
                         if (req.data.uploadType === 'image') {
                             $("#image-preview").remove();
                             $("#titleImagePath").val("");
-                            $("#imagePreviewArea").html("<img src='" + req.data.filePath + "/" + req.data.savedName + "' id=\"uploadPreviewImg\" width=\"200\" class=\"img-thumbnail image-preview\" id=\"image-preview\">");
+                            $("#imagePreviewArea").html("<img src='" + req.data.filePath + "/" + req.data.savedName + "' width=\"200\" class=\"img-thumbnail image-preview\" id=\"image-preview\">");
                             $("#titleImagePath").val(req.data.filePath);
                             $("#titleImage").val(req.data.savedName);
                         }

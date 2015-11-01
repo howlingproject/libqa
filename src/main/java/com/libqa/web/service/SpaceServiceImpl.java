@@ -69,11 +69,11 @@ public class SpaceServiceImpl implements SpaceService {
 	}
 
 	@Override
-	public List<Space> findUserFavoriteSpace(Integer userId) {
+	public List<Space> findUserFavoriteSpace(Integer userId, boolean isDeleted) {
 
 		List<UserFavorite> userFavoriteList = new ArrayList<>();
 
-		userFavoriteList = userFavoriteService.findByFavoriteTypeAndUserId(FavoriteType.SPACE, userId);
+		userFavoriteList = userFavoriteService.findByFavoriteTypeAndUserIdAndIsDeleted(FavoriteType.SPACE, userId, isDeleted);
 
 		if (userFavoriteList.isEmpty()) {
 			return null;

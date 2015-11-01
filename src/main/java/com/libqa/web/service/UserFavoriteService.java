@@ -17,7 +17,7 @@ public interface UserFavoriteService {
      * @param userId
      * @return
      */
-    List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteType typeEnum, Integer userId);
+    List<UserFavorite> findByFavoriteTypeAndUserIdAndIsDeleted(FavoriteType typeEnum, Integer userId, boolean isDeleted);
 
 
     /**

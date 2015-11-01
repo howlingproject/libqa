@@ -1,6 +1,6 @@
 <!-- 최근 위키  -->
-{{#if wikiLists}}
-    {{#each wikiLists}}
+{{#if spaceWikiLists}}
+    {{#each spaceWikiLists}}
 
     <div class="best-qna-item">
         <div>
@@ -18,7 +18,7 @@
                 <div class="pull-right"><span class="badge">{{replyCount}}</span></div>
             </div>
             <div class="user-profile-sm">
-                <span class="nickname">{{wiki.userNick}}</span>
+                <span class="nickname">작성자 : {{wiki.userNick}}</span>
             </div>
             <div class="pull-right">{{formatDate wiki.insertDate "yyyy/MM/dd hh:MM"}}</div>
         </div>

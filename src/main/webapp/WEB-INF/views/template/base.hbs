@@ -14,7 +14,7 @@
 
         <nav role="navigation" class="navbar-collapse bs-navbar-collapse collapse">
             <ul class="nav navbar-nav navi-menu">
-                <li class="active">
+                <li>
                     <a href="/feed">Feeds</a>
                 </li>
                 <li>
@@ -26,8 +26,19 @@
                 <li>
                     <a href="/wiki/main">Wiki</a>
                 </li>
-                <li>
-                    <a href="/userInfo">My Info</a>
+                <li class="dropdown">
+                    <a href="#" id="dropdownMenu1" class="dropdown-toggle" data-toggle="dropdown">My Info</a>
+                    <ul class="dropdown-menu text-left">
+                        <li style="width: 100%;text-align:left">
+                            <a href="#">내 Feed 목록</a>
+                        </li>
+                        <li style="width: 100%;text-align:left">
+                            <a href="#">내 QA 목록</a>
+                        </li>
+                        <li style="width: 100%;text-align:left">
+                            <a href="#">내 즐겨찾기</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="/admin">Admin</a>
