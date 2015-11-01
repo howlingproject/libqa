@@ -63,11 +63,11 @@ public class QaContent {
     @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
     private boolean isReplyed;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date insertDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
     @Column(nullable = false)
