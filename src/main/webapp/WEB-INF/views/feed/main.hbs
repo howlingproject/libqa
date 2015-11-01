@@ -293,7 +293,7 @@
                 $('button[name=saveReply]').on('click',function () {
                     var $frm = $(this).closest('form');
                     var $replies = $(this).closest('.thread').find('.feed-replies');
-                    
+
                     if(!me.checkValidate($frm)) {
                         return;
                     }

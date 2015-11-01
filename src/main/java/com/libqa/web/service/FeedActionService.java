@@ -22,6 +22,7 @@ public class FeedActionService {
         FeedAction feedAction = new FeedAction();
         feedAction.setFeedActorId(actorId);
         feedAction.setFeedActionType(feedActionType);
+        feedAction.setFeedThreadType(feedActionType.getThreadType());
         feedAction.setUserId(userId);
         feedAction.setUserNick(userNick);
         feedAction.setInsertUserId(userId);

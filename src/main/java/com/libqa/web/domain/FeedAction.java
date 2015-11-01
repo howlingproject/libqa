@@ -1,6 +1,7 @@
 package com.libqa.web.domain;
 
 import com.libqa.application.enums.FeedActionType;
+import com.libqa.application.enums.FeedThreadType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -29,7 +30,11 @@ public class FeedAction {
     private Integer feedActorId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 30)
+    private FeedThreadType feedThreadType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
     private FeedActionType feedActionType;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
