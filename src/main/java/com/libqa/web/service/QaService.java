@@ -24,4 +24,8 @@ public interface QaService {
     void saveIsReplyed(Integer qaId, boolean b);
 
     QaContent updateWithKeyword(QaContent paramQaContent, QaFile paramQaFiles);
+
+    List<QaContent> findByUserId(Integer userId);
+
+    List<QaContent> findByQaIdIn(List<Integer> qaIds);
 }

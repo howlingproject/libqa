@@ -30,7 +30,7 @@
 <!-- 메뉴 -->
 <div class="container contents-container top-buffer">
     <!-- keyword -->
-    <div class="col-md-2">
+    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
         <div class="nav-tabs-header">분류키워드</div>
         <!-- 분류키워드 list start -->
         <div id="categorizeKeywordListArea"></div>
@@ -38,7 +38,7 @@
     </div>
     <!--// lnb -->
 
-    <div class="col-md-10">
+    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
         <!-- 내가 작성한 Q&A -->
         <div class="nav-tabs-header">내가 작성한 Q&A</div>
 
@@ -139,13 +139,15 @@
                 </div>
             </div>
         </div>
-
-    <!--// 내가 답변한 Q&A -->
+        <!-- 내가 답변한 Q&A -->
+    </div>
 </div>
 
 {{/partial}}
 
 {{#partial "script-page"}}
+{{embedded "common/_keywordList"}}
+{{embedded "qa/template/_list"}}
 <script type="text/javascript">
     $(document).ready(function(){
         Qa.init();
@@ -154,11 +156,8 @@
     var Qa = {
         init : function(){
             this.renderKeywordList();
-            this.renderRecentQaList();
-            this.renderWaitReplyQaList();
-            this.renderDayType($('#recentQaDayTypeUl'));
-            this.renderDayType($('#waitReplyQaDayTypeUl'));
-            this.bindDayTypeEvent();
+            this.renderMyWriteQaList();
+            this.renderMyReplyQaList();
         },
         renderKeywordList : function(){
             $.ajax({
@@ -186,17 +185,8 @@
             });
         },
         renderMyWriteQaList : function(){
-//            var test = $('#categorizeKeywordListArea').find('li.active').attr('value');
-//            $.ajax({
-//                url: '${createLink(controller:'qa',action:'renderMyQaList')}',
-//                data : {keywordType : 'QA', keywordName : 'JAVA', viewType : 'myWrite'},
-//                failure: function(){ },
-//                success: function(response) {
-//                    $('#myWriteQaListArea').html(response);
-//                }
-//            });
             $.ajax({
-                url: "/qa/myList",
+                url: "/qa/myWriteQaList",
                 type: "POST",
                 data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName()},
                 success : function(data){
@@ -205,7 +195,7 @@
                         var template = Handlebars.compile(source);
 
                         var html = template(data);
-                        $('#recentQaListArea').html(html);
+                        $('#myWriteQaListArea').html(html);
                     }
                 },
                 error : function(req){
@@ -219,16 +209,8 @@
             });
         },
         renderMyReplyQaList : function(){
-//            $.ajax({
-//                url: '${createLink(controller:'qa',action:'renderMyQaList')}',
-//                data : {keywordType : 'QA', keywordName : 'JAVA', viewType : 'myReply'},
-//                failure: function(){ },
-//                success: function(response) {
-//                    $('#myReplyQaListArea').html(response);
-//                }
-//            });
             $.ajax({
-                url: "/qa/myList",
+                url: "/qa/myReplyQaList",
                 type: "POST",
                 data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName()},
                 success : function(data){
@@ -237,7 +219,7 @@
                         var template = Handlebars.compile(source);
 
                         var html = template(data);
-                        $('#recentQaListArea').html(html);
+                        $('#myReplyQaListArea').html(html);
                     }
                 },
                 error : function(req){
@@ -271,12 +253,8 @@
             } else {
                 ulObj.find('li[data-keywordList-name=' + keywordListValue + ']').addClass('active');
             }
-            // keyword 해당되는 질문 전체 목록 List up
-            // 화면 분할? 같이? 고민
-            Qa.renderDayType($('#recentQaDayTypeUl'));
-            Qa.renderDayType($('#waitReplyQaDayTypeUl'));
-            Qa.renderRecentQaList();
-            Qa.renderWaitReplyQaList();
+            Qa.renderMyWriteQaList();
+            Qa.renderMyReplyQaList();
         }
     }
 
