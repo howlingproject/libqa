@@ -84,10 +84,10 @@ public class WikiSnapShot{
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     boolean isDeleted = false;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
     @Enumerated(EnumType.STRING)

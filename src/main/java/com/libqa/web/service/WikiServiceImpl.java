@@ -130,6 +130,7 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
+//    @Transactional(readOnly = true)
     public Wiki findById(Integer wikiId) {
         return wikiRepository.findOne(wikiId);
     }

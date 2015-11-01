@@ -84,10 +84,10 @@ public class Wiki implements Serializable{
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     boolean isDeleted = false;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
     //추후에 삭제대상
@@ -106,7 +106,7 @@ public class Wiki implements Serializable{
     @JsonManagedReference
     private List<Keyword> keywordList;
 
-    @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "wikiId", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<WikiReply> wikiReplies;
 

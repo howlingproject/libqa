@@ -17,11 +17,11 @@ public class WikiFile{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer fileId;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date insertDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
     @Column(nullable = false, length = 40)

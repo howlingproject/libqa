@@ -30,6 +30,9 @@ public class WikiController {
     WikiService wikiService;
 
     @Autowired
+    WikiReplyService wikiReplyService;
+
+    @Autowired
     private SpaceService spaceService;
 
     @Autowired
@@ -53,7 +56,7 @@ public class WikiController {
 
         User user = loggedUser.get();
         if(isUser(user)){
-            int userId = user.getUserId();
+            Integer userId = user.getUserId();
             List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
             mav.addObject("resecntWiki", resecntWiki);
         }
@@ -64,7 +67,7 @@ public class WikiController {
     }
 
     private boolean isUser(User user) {
-        return user != null;
+        return (user != null && user.getUserId() != null );
     }
 
     @RequestMapping("wiki/write")
@@ -101,6 +104,7 @@ public class WikiController {
         ModelAndView mav = new ModelAndView("wiki/view");
 
         Wiki wiki = wikiService.findById(wikiId);
+        List<WikiReply> wikiReply = wiki.getWikiReplies();
         log.info("# view : {}", wiki);
         Wiki parentWiki = wikiService.findByParentId(wiki.getParentsId());
         List<Wiki> subWikiList = wikiService.findBySubWikiId(wiki.getWikiId());
@@ -111,6 +115,9 @@ public class WikiController {
         mav.addObject("subWikiList", subWikiList);
         mav.addObject("parentWiki", parentWiki);
         mav.addObject("activityList", activityList);
+
+
+
         return mav;
     }
 
@@ -328,6 +335,32 @@ public class WikiController {
         }catch(Exception e){
             return ResponseData.createSuccessResult(recommend);
         }
+    }
+
+    @RequestMapping(value = "wiki/reply/save", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<?> ReplySave(@ModelAttribute WikiReply wikiReply){
+        try{
+            log.info("####### WIKI SAVE Begin INFO ########");
+            log.info("wiki = {}", wikiReply);
+            User user = loggedUser.get();
+
+            wikiReply.setUserNick(user.getUserNick());
+            wikiReply.setUserId(user.getUserId());
+
+            wikiReply.setInsertDate(new Date());
+            WikiReply result = wikiReplyService.save(wikiReply);
+
+            log.info("####### WIKI SAVE After INFO ########");
+            log.info("result = {}", result);
+
+            return ResponseData.createSuccessResult(result);
+        }catch(Exception e){
+            e.printStackTrace();
+            log.error(e.toString());
+            return ResponseData.createFailResult(wikiReply);
+        }
+
     }
 
 }

@@ -5,10 +5,13 @@
     <div class="col-md" >
         <div style="padding-bottom: 45px;">
             <div class="btn-group" data-toggle="buttons" style="float: left">
+                {{#if wiki.test}}
+                    <!--추후적용-->
                 <a href="#" class="btn btn-primary"><i class="fa fa-plus"></i></a>
                 <a href="#" class="btn btn-primary"><i class="fa fa-minus"></i></a>
                 <a href="#" class="btn btn-primary"><i class="fa fa-laptop"></i></a>
                 <a href="#" class="btn btn-primary"><i class="fa fa-star-o"></i></a>
+                {{/if}}
             </div>
             <div class="btn-group" data-toggle="buttons" style="float: right">
                 <a href="#" class="btn btn-primary">히스토리</a>
@@ -29,6 +32,8 @@
 
             <div class="col-md-3">
                 <div class="bs-docs-sidebar navigation" >
+                    {{#if wiki.navigation}}
+                        <!--추후적용-->
                     <ul class="nav bs-docs-sidenav">
                         <li class="active">
                             <a href="#type">Typography</a>
@@ -68,6 +73,7 @@
                         </li>
 
                     </ul>
+                    {{/if}}
                     <div>
                         <table class="table table-bordered">
                             <thead>
@@ -243,8 +249,8 @@
 
         {{#if wiki.wikiReplies}}
         <div class="col-md">
-            <div class="nav-tabs-header">10개의 댓글</div>
-
+            <div class="nav-tabs-header">{{size wiki.wikiReplies}}개의 댓글</div>
+            {{#each wiki.wikiReplies}}
             <div class="my-qna-item">
                 <a class="pull-left" href="#">
                     <div class="user-profile">
@@ -255,12 +261,11 @@
                     <div class="col-md-10">
                         <div class="my-my-qna-item-body">
                             <div class="media-heading">
-                                2014-04-05 12:12
-                                <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;이온</span>
+                                {{formatDate insertDate "yyyy.MM.dd"}}
+                                <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{this.userNick}}</span>
                                 <strong><span class="pull-right">form facebook</span></strong>
                             </div>
-                            여기서 질문을 해야 합니다. 질문은 제목만 보여주고요.내용은 일부만 보여줍니다. 첫 줄만?
-                            나머지는 디테일...  내용은 일부만 보여줍니다. 첫 줄만? 나머지는 디테일...  내용은 일부만 보여줍니다. 첫 줄
+                            {{this.contents}}
                         </div>
                     </div>
                     <div class="col-md-1 my-qna-rating pull-right">
@@ -269,57 +274,7 @@
                     </div>
                 </div>
             </div>
-
-            <div class="my-qna-item">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="my-my-qna-item-body">
-                            <div class="media-heading">
-                                2014-04-05 12:12
-                                <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;이온</span>
-                                <strong><span class="pull-right">form facebook</span></strong>
-                            </div>
-                            여기서 질문을 해야 합니다. 질문은 제목만 보여주고요.내용은 일부만 보여줍니다. 첫 줄만?
-                            나머지는 디테일...  내용은 일부만 보여줍니다. 첫 줄만? 나머지는 디테일...  내용은 일부만 보여줍니다. 첫 줄
-                        </div>
-                    </div>
-                    <div class="col-md-1 my-qna-rating pull-right">
-                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 1</button>
-                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">비추천 1</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="my-qna-item">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="my-my-qna-item-body">
-                            <div class="media-heading">
-                                2014-04-05 12:12
-                                <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;이온</span>
-                                <strong><span class="pull-right">form facebook</span></strong>
-                            </div>
-                            여기서 질문을 해야 합니다. 질문은 제목만 보여주고요.내용은 일부만 보여줍니다. 첫 줄만?
-                            나머지는 디테일...  내용은 일부만 보여줍니다. 첫 줄만? 나머지는 디테일...  내용은 일부만 보여줍니다. 첫 줄
-                        </div>
-                    </div>
-                    <div class="col-md-1 my-qna-rating pull-right">
-                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 1</button>
-                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">비추천 1</button>
-                    </div>
-                </div>
-            </div>
-
+            {{/each}}
         </div>
         {{/if}}
         <br>
@@ -362,11 +317,18 @@
                 <h4 class="modal-title" id="askModalLabel">위키에 질문하기</h4>
             </div>
             <div class="modal-body" id="askEdit">
-
+                <form role="form" id="wikiForm">
+                    <input type="hidden" name="wikiId" value="{{wiki.wikiId}}">
+                    <div class="form-group">
+                        <input type="hidden" name="contents" id="contents" />
+                        <input type="hidden" name="contentsMarkup" id="contentsMarkup" value="" />
+                        <div id="editor" class="form-group"></div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-default" id="cancel" data-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary" id="saveWiki">저장</button>
             </div>
         </div>
     </div>
@@ -419,6 +381,18 @@
 
 {{#partial "script-page" }}
     <script type="text/javascript">
+        $(document).ready(function() {
+            DualEditor.setting({
+                src : '/resource/app'
+                ,tarketId : 'editor'
+                ,type : 'mini'
+                ,width : '100%'
+                //,height : '300px'
+                ,data : $("input[name=contentsMarkup]").val()
+            });
+            $("#file-attachment").on("change", Wiki.uploadFile);
+        });
+
         $(".btn-group a").on("click", function(){
             var href = $(this).attr("href");
             location.href = href;
@@ -426,6 +400,10 @@
 
         $("#like").on("click", function(){
             Wiki.like("WIKI",$("#wikiId").val());
+        });
+
+        $("#saveWiki").on("click", function(e){
+            Wiki.save();
         });
 
         var Wiki = {
@@ -449,6 +427,30 @@
                         alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
                     }
                 });
+            },
+
+            save:function(){
+                $("#contents").val(DualEditor.getMarkupConvertToHtml());
+                $("#contentsMarkup").val(DualEditor.getMarkupEditHtml());
+                var data = $("#wikiForm").serialize();
+                jQuery.ajax({
+                    type:'POST',
+                    data:data,
+                    url:'/wiki/reply/save',
+                    success:function(req){
+                        if (req.resultCode == 1) {
+                            var href = "/wiki/"+$("#wikiId").val();
+                            location.href = href;
+                        }
+                    },
+                    error:function(req){
+                        if (req.status == 500) {
+                            error500(true, '');
+                        } else {
+                            error500(false, req.status);
+                        }
+                    }});
+                return false;
             }
         }
     </script>

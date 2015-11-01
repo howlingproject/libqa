@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 @Entity
 @Data
-public class WikiReply{
+public class WikiReply implements Serializable{
 
     @Id
     @Column(nullable = false)
@@ -21,14 +22,11 @@ public class WikiReply{
 
     private Integer wikiId;
 
-    @Column(length = 100, nullable = false)
-    private String title;
-
     @Column(columnDefinition = "Text", nullable = false)
     private String contents;
 
     @Column(nullable = false)
-    private String userId;
+    private Integer userId;
 
     @Column(nullable = false, length = 40)
     private String userNick;
@@ -36,10 +34,10 @@ public class WikiReply{
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
     @OneToMany(fetch = FetchType.LAZY)
