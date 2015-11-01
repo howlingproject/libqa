@@ -23,8 +23,8 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     private UserFavoriteRepository userFavoriteRepository;
 
     @Override
-    public List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteType favoriteType, Integer userId) {
-        return userFavoriteRepository.findByFavoriteTypeAndUserId(favoriteType, userId);
+    public List<UserFavorite> findByFavoriteTypeAndUserIdAndIsDeleted(FavoriteType favoriteType, Integer userId, boolean isDeleted) {
+        return userFavoriteRepository.findByFavoriteTypeAndUserIdAndIsDeleted(favoriteType, userId, isDeleted);
     }
 
     @Override

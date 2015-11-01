@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
         Date now = new Date();
         user.setCertification(true);
         user.setCertificationKey(certificationKey + "");
-        user.setVisiteCount(user.getVisiteCount() + 1);
+        user.setVisitCount(user.getVisitCount() + 1);
         user.setLastVisiteDate(now);
         user.setUpdateDate(now);
 

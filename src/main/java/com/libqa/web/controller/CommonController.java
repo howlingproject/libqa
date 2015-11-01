@@ -5,8 +5,10 @@ import com.libqa.application.enums.KeywordType;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.DateUtil;
 import com.libqa.application.util.FileUtil;
+import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.KeywordList;
+import com.libqa.web.domain.User;
 import com.libqa.web.service.KeywordListService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,9 @@ public class CommonController {
 
     @Autowired
     KeywordListService keywordListService;
+
+    @Autowired
+    private LoggedUser loggedUser;
 
     // 403 Access Denied
     @RequestMapping(value = "/access", method = RequestMethod.GET)
@@ -85,7 +90,9 @@ public class CommonController {
 
         try {
             // temp/userId/yyyyMMdd/ 에 일단 저장 후 차후 userId/yyyyMMdd/파일명 으로 이동 후 삭제해야 한다.
-            Integer userId = 1; // 추후 사용자 순번
+            User user = loggedUser.get();
+
+            Integer userId = user.getUserId();
             String localDir = "/resource/temp/" + userId; // 임시 저장 경로
             String directory = serverPath + localDir;  // 서버 저장 경로
 
@@ -121,7 +128,11 @@ public class CommonController {
         String serverPath = fileDto.getRootPath();
         String savedDirectory = serverPath + fileDto.getFilePath();
         String targetFileFullPath = savedDirectory + "/" + fileDto.getSavedName();
-        Integer userId = 1; // 추후 session에서 가지고 와야한다.
+
+        User user = loggedUser.get();
+
+
+        Integer userId = user.getUserId();
         String today = DateUtil.getToday();
         String localDir = "/resource/" + userId + "/" + today;  // 임시저장경로
         String movePath = serverPath + localDir;    // 파일 이동 경로

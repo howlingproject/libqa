@@ -50,7 +50,7 @@ public class User {
     private String userPass;
 
     @Column(nullable = false, columnDefinition = "int default 0")
-    private int visiteCount;
+    private int visitCount;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
@@ -92,7 +92,7 @@ public class User {
 
     @Transient
     public void increaseVisit() {
-        this.visiteCount++;
+        this.visitCount++;
     }
 
     public static User createUser(String userEmail, String userNick, String password, String channelType) {

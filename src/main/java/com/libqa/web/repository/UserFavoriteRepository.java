@@ -13,7 +13,7 @@ public interface UserFavoriteRepository extends JpaRepository<UserFavorite, Inte
 
     List<UserFavorite> findBySpaceIdAndUserId(Integer spaceId, Integer userId);
 
-    List<UserFavorite> findByFavoriteTypeAndUserId(FavoriteType favoriteType, Integer userId);
+    List<UserFavorite> findByFavoriteTypeAndUserIdAndIsDeleted(FavoriteType favoriteType, Integer userId, boolean isDeleted);
 
     List<UserFavorite> findBySpaceIdAndUserIdAndIsDeleted(Integer spaceId, Integer userId, boolean isDeleted);
 

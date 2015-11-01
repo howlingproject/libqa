@@ -128,8 +128,8 @@ public class UserController {
      * @return
      */
     @PreAuthorize("hasAuthority('USER')")
-    @RequestMapping("/userInfo")
-    public ModelAndView userInfo(HttpServletRequest request) {
+    @RequestMapping("/user/profile")
+    public ModelAndView userProfile(HttpServletRequest request) {
         String returnUrl = RequestUtil.refererUrl(request, "/index");
         log.info("### USER Info!");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -146,9 +146,12 @@ public class UserController {
         log.info("authentication.getDetails().getName() = {}", authentication.getName());
         log.info("authentication.gerRole() = {}", grantedAuths.get(0));
 
+        User user = userService.findByEmail(email);
+
         ModelAndView mav = new ModelAndView("/user/info");
         mav.addObject("returnUrl", returnUrl);
         mav.addObject("userEmail", email);
+        mav.addObject("user", user);
         mav.addObject("auth", authentication.isAuthenticated());
         return mav;
     }

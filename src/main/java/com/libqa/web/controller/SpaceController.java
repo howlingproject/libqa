@@ -7,8 +7,9 @@ import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.*;
+import com.libqa.web.view.SpaceActivityList;
 import com.libqa.web.view.SpaceMain;
-import com.libqa.web.view.WikiList;
+import com.libqa.web.view.SpaceWikiList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -102,7 +103,7 @@ public class SpaceController {
             /**
              * 내 즐겨찾기 공간 정보 조회
              */
-            List<Space> myFavoriteSpaceList = spaceService.findUserFavoriteSpace(user.getUserId());
+            List<Space> myFavoriteSpaceList = spaceService.findUserFavoriteSpace(user.getUserId(), false);
             List<SpaceMain> favoriteSpaces = Lists.newArrayList();
 
 
@@ -127,19 +128,19 @@ public class SpaceController {
          */
         List<Wiki> updateWikiList = wikiService.findByAllWiki(0, 10);
 
-        List<WikiList> wikiLists = new ArrayList<>();
+        List<SpaceWikiList> spaceWikiLists = new ArrayList<>();
         for (Wiki wiki : updateWikiList) {
             List<WikiReply> replies = wiki.getWikiReplies();
             List<Keyword> keywords = keywordService.findByWikiId(wiki.getWikiId(), false);
 
             User userInfo = userService.findOne(wiki.getUserId());
-            WikiList wikiList = new WikiList(wiki, userInfo, keywords, replies.size());
-            wikiLists.add(wikiList);
+            SpaceWikiList spaceWikiList = new SpaceWikiList(wiki, userInfo, keywords, replies.size());
+            spaceWikiLists.add(spaceWikiList);
         }
 
         mav.addObject("readMoreCount", spaces.size());
         mav.addObject("spaceMainList", spaceMainList);
-        mav.addObject("wikiLists", wikiLists);
+        mav.addObject("spaceWikiLists", spaceWikiLists);
 
         return mav;
     }
@@ -149,8 +150,17 @@ public class SpaceController {
     public ModelAndView form(Model model) {
         log.info("# message : {}", message);
 
+        User user = loggedUser.get();
+        UserFavorite userFavorite = null;
+
+        if (user == null) {
+            return sendAccessDenied();
+        }
+
+
         ModelAndView mav = new ModelAndView("/space/form");
         mav.addObject("message", message);
+        mav.addObject("user", user);
         return mav;
     }
 
@@ -198,33 +208,54 @@ public class SpaceController {
     public ModelAndView spaceDetail(@PathVariable Integer spaceId) {
         Space space = spaceService.findOne(spaceId);
 
+
+        // Space 생성시 선택한 Layout 옵션의 View를 보여준다.
+        String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
+
+        log.info("# view : {}", view);
+
+        ModelAndView mav = null;
+
+
         // 최근 수정된 위키 목록
         List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
         List<Wiki> spaceWikis = wikiService.findBySpaceId(spaceId);
 
         // 이 공간의 활동 내역을 조회한다.
         List<Activity> activities = activityService.findBySpaceId(spaceId);
+        List<SpaceActivityList> spaceActivityLists = new ArrayList<>();
 
+        for (Activity activity : activities) {
+
+            User userInfo = userService.findOne(activity.getUserId());
+            SpaceActivityList spaceActivity = new SpaceActivityList(activity, userInfo);
+
+            spaceActivityLists.add(spaceActivity);
+        }
 
         User user = loggedUser.get();
         UserFavorite userFavorite = null;
+
+        if (user == null) {
+            return sendAccessDenied();
+        }
+
+        mav = new ModelAndView(view);
+
+
+
         if (!user.isGuest()) {
             List<UserFavorite> userFavorites = userFavoriteService.findBySpaceIdAndUserIdAndIsDeleted(spaceId, user.getUserId(), false);
             userFavorite = Iterables.getFirst(userFavorites, null);
         }
-
-
-        // Space 생성시 선택한 Layout 옵션의 View를 보여준다.
-        String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
-
-        log.info("# view : {}", view);
         log.info("# spaceWikis : {}", spaceWikis);
-        ModelAndView mav = new ModelAndView(view);
 
         mav.addObject("spaceWikis", spaceWikis);
         mav.addObject("updatedWikis", updatedWikis);
         mav.addObject("space", space);
         mav.addObject("userFavorite", userFavorite);
+        mav.addObject("activities", activities);
+        mav.addObject("spaceActivityLists", spaceActivityLists);
         return mav;
     }
 
@@ -298,6 +329,15 @@ public class SpaceController {
 
         return mav;
     }
+
+
+    public ModelAndView sendAccessDenied() {
+        ModelAndView mav = new ModelAndView("/common/403");
+        mav.addObject("msg", "Hi " + ", you do not have permission to access this page!");
+
+        return mav;
+    }
+
 
 
 }

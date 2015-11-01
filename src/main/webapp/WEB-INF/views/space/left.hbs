@@ -88,33 +88,7 @@ To change this template use File | Settings | File Templates.
                 <h3>최근 수정된 위키 목록</h3><hr>
                 </div>
                 <blockquote class="pull-right">
-
-                    {{#if updatedWikis}}
-                        {{#each updatedWikis}}
-                            <div class="media">
-                                <div class="media-body">
-                                    <h4 class="media-heading" id="media-heading"><a href="/wiki/{{wikiId}}">{{title}}</a><a class="anchorjs-link" href="#media-heading"><span class="anchorjs-icon"></span></a></h4>
-                                    <div class="text-left"><a href="/wiki/{{wikiId}}" class="text">{{subString (htmlDelete contents) 0 250 }}</a></div>
-                                </div>
-                                <div class="media-right">
-                                    <a href="#">
-                                        <div class="user-profile">
-                                            <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png" />
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        {{/each}}
-
-                        <small><cite title="Source Title" id="getMoreWiki" style="cursor:pointer">더보기</cite></small>
-                    {{^}}
-                        <div class="media">
-                            <div class="media-body">
-                            생성된 위키가 없습니다.
-                            </div>
-                        </div>
-                    {{/if}}
-
+                    {{> space/template/_updateWikiList}}
                 </blockquote>
 
                 <hr>
@@ -124,55 +98,7 @@ To change this template use File | Settings | File Templates.
                 </div>
 
                 <blockquote class="pull-right">
-                    <div class="media" style="padding-left:15px">
-                        <a href="#" class="pull-left">
-                            <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png">
-                            </div>
-                        </a>
-
-                        <div class="media-body" style="font-size:13px">
-                        <span class="pull-left">
-                        <u><i>01. Spring Boot 스터디 해보기 위키에 Yion 님이 댓글을 등록했습니다.</i></u>
-                        </span>
-                        <br>
-                        : 내용은 뭐냐하면 UI 구성하기가 너무 어려우니까 생각보다 깊게 고민해봐야 할거 같고 이것저것 할게 너무 많아~~~~ 어쩌지~~ 우리...
-                        <br><span clas="pull-right">2015.02.13 14:22:39</span>
-                        </div>
-                    </div>
-                    <div class="media" style="padding-left:15px">
-                        <a href="#" class="pull-left">
-                            <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png">
-                            </div>
-                        </a>
-
-                        <div class="media-body" style="font-size:13px">
-                        <span class="pull-left">
-                        <u><i>01. Spring Boot 스터디 해보기 위키에 Yion 님이 댓글을 등록했습니다.</i></u>
-                        </span>
-                            <br>
-                            : 내용은 뭐냐하면 UI 구성하기가 너무 어려우니까 생각보다 깊게 고민해봐야 할거 같고 이것저것 할게 너무 많아~~~~ 어쩌지~~ 우리...
-                            <br><span clas="pull-right">2015.02.13 14:22:39</span>
-                        </div>
-                    </div>
-                    <div class="media" style="padding-left:15px">
-                        <a href="#" class="pull-left">
-                            <div class="user-profile-sm">
-                                <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png">
-                            </div>
-                        </a>
-
-                        <div class="media-body" style="font-size:13px">
-                        <span class="pull-left">
-                        <u><i>01. Spring Boot 스터디 해보기 위키에 Yion 님이 댓글을 등록했습니다.</i></u>
-                        </span>
-                            <br>
-                            : 내용은 뭐냐하면 UI 구성하기가 너무 어려우니까 생각보다 깊게 고민해봐야 할거 같고 이것저것 할게 너무 많아~~~~ 어쩌지~~ 우리...
-                            <br><span clas="pull-right">2015.02.13 14:22:39</span>
-                        </div>
-                    </div>
-                    <small><cite title="Source Title">더보기</cite></small>
+                    {{> space/template/_activityList}}
                 </blockquote>
 
             </div><!--/row-->

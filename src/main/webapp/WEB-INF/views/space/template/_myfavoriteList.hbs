@@ -3,7 +3,7 @@
     <div class="best-qna-item">
         <div>
             {{> common/_keywordBadge}}
-            <strong> {{space.title}}</strong>
+            <strong> <a class="form" href="/space/{{space.spaceId}}">{{space.title}}</a></strong>
         </div>
         <div class="media">
             <a class="pull-left" href="#">
@@ -12,13 +12,15 @@
                 </div>
             </a>
             <div class="media-body">
-                {{subString (htmlDelete space.description) 0 100 }}
+                {{subString (htmlDelete space.description) 0 70 }}
                 <div class="pull-right"><span class="badge">{{wikiCount}}</span></div>
             </div>
             <div class="user-profile-sm">
 
             </div>
+            <div class="pull-left"><span class="nickname">공간오너 : {{space.insertUserNick}}</span></div>
             <div class="pull-right">{{space.insertDate}}</div>
+
         </div>
     </div>
     {{/each}}
