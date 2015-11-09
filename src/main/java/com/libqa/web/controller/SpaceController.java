@@ -7,6 +7,8 @@ import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.*;
+import com.libqa.web.service.user.UserFavoriteService;
+import com.libqa.web.service.user.UserService;
 import com.libqa.web.view.SpaceActivityList;
 import com.libqa.web.view.SpaceMain;
 import com.libqa.web.view.SpaceWikiList;

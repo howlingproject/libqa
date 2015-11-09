@@ -6,22 +6,20 @@ import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.RequestUtil;
 import com.libqa.web.domain.Keyword;
-import com.libqa.web.domain.Space;
 import com.libqa.web.domain.User;
-import com.libqa.web.service.UserService;
+import com.libqa.web.domain.UserKeyword;
+import com.libqa.web.service.user.UserKeywordService;
+import com.libqa.web.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.List;
 
 /**
  * Created by yion on 2015. 3. 23..
@@ -35,6 +33,9 @@ public class UserController {
 
     @Autowired
     private LoggedUser loggedUser;
+
+    @Autowired
+    private UserKeywordService userKeywordService;
 
 
 //    @RequestMapping(value="/user/view", method = RequestMethod.GET)
@@ -147,12 +148,13 @@ public class UserController {
         }
 
         User entity = userService.findOne(user.getUserId());
-
+        List<UserKeyword> userKeywordList = userKeywordService.findByUserAndIsDeleted(entity);
 
         ModelAndView mav = new ModelAndView("/user/profile");
         mav.addObject("returnUrl", returnUrl);
         mav.addObject("userEmail", user.getUserEmail());
         mav.addObject("user", entity);
+        mav.addObject("userKeywordList", userKeywordList);
         mav.addObject("auth", "true");
         return mav;
     }
@@ -175,7 +177,7 @@ public class UserController {
     public ResponseData<User> updateProfile(@ModelAttribute User user, @ModelAttribute Keyword keyword) throws IllegalAccessException {
         log.info("### user = {}", user);
         log.info("### keyword = {}", keyword);
-        User result = userService.updateUserProfile(user, keyword);
+        User result = userService.updateUserProfileAndKeyword(user, keyword);
         return ResponseData.createSuccessResult(result);
     }
 

@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.user;
 
 import com.libqa.application.Exception.UserNotCreateException;
 import com.libqa.web.domain.Keyword;
@@ -65,9 +65,9 @@ public interface UserService {
     void updateUserLastVisitDate(String email);
 
     /**
-     * 회원 정보 수정
+     * 회원 정보 수정 및 키워드 추가
      * @param user
      * @return
      */
-    User updateUserProfile(User user, Keyword keyword);
+    User updateUserProfileAndKeyword(User user, Keyword keyword);
 }

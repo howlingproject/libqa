@@ -1,7 +1,7 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,15 +12,15 @@ import java.util.Date;
 
 @Data
 @Entity
-@EqualsAndHashCode
 public class UserKeyword {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userKeywordId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "userId", nullable = false)
+    @JsonBackReference
     private User user;
 
     @Column(length = 20)

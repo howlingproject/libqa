@@ -1,5 +1,6 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.libqa.application.enums.Role;
 import com.libqa.application.enums.SocialChannelType;
 import lombok.Data;
@@ -81,7 +82,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private SocialChannelType channelType;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<UserKeyword> userKeywords;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -93,6 +95,9 @@ public class User {
     // 회원 정보 수정시 닉네임 중복확인 여부
     @Transient
     private String checkDupNickname;
+
+    @Transient
+    private String checkImageUpload;
 
     @Transient
     public void increaseVisit() {
