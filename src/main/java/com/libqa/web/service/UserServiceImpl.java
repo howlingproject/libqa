@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void saveUserKeyword(User entity, Keyword keyword) {
-
+        // TODO user_keyword 저장로직
     }
 
 

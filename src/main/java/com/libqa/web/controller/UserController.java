@@ -136,6 +136,8 @@ public class UserController {
     @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("/user/profile")
     public ModelAndView userProfile(HttpServletRequest request) {
+
+        // TODO user_keyword 가져와야 함
         String returnUrl = RequestUtil.refererUrl(request, "/index");
         User user = loggedUser.get();
 
