@@ -24,7 +24,23 @@
             </div>
             <div class="images text-center">
                 {{#images}}
-                    <a href="{{filePath}}/{{savedName}}" target="_blank"><img width="190" class="img-thumbnail" src="{{filePath}}/{{savedName}}" /></a>
+                    <a href="#" data-toggle="modal" data-target=".image-viewer-{{../feedId}}">
+                        <img width="190" class="img-thumbnail" src="{{filePath}}/{{savedName}}" />
+                    </a>
+                    <div class="modal fade image-viewer-{{../feedId}}" tabindex="-1" role="dialog"
+                         aria-labelledby="imageModalLabel-{{../feedId}}" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                                    <h4 class="modal-title text-left" id="imageModalLabel-{{../feedId}}">이미지 보기</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <img class="img-responsive img-rounded center-block" src="{{filePath}}/{{savedName}}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {{/images}}
             </div>
             <div class="attachment">
