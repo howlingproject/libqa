@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.feed;
 
 import com.libqa.web.domain.FeedFile;
 import com.libqa.web.repository.FeedFileRepository;

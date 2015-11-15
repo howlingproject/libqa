@@ -2,6 +2,7 @@ package com.libqa.web.service;
 
 import com.libqa.web.domain.FeedFile;
 import com.libqa.web.repository.FeedFileRepository;
+import com.libqa.web.service.feed.FeedFileService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

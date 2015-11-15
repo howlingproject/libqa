@@ -10,11 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static com.libqa.application.enums.FeedActionType.*;
-
 @Component
 public class DisplayFeedBuilder {
-    private static final String DATE_FORAMT = "yyyy-MM-dd hh:mm:ss";
+    private static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
 
     @Autowired
     private DisplayFeedActionBuilder displayFeedActionBuilder;
@@ -22,8 +20,8 @@ public class DisplayFeedBuilder {
     public List<DisplayFeed> buildFeeds(List<Feed> feeds) {
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
         for (Feed feed : feeds) {
-            DisplayFeedAction likedFeedAction = displayFeedActionBuilder.build(feed.getLikeCount(), feed.getFeedId(), FEED_LIKE);
-            DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.build(feed.getClaimCount(), feed.getFeedId(), FEED_CLAIM);
+            DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feed);
+            DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaimBy(feed);
             displayFeeds.add(buildFeed(feed, likedFeedAction, claimedFeedAction));
         }
         return displayFeeds;
@@ -32,8 +30,8 @@ public class DisplayFeedBuilder {
     private List<DisplayFeedReply> buildFeedReplies(List<FeedReply> feedReplies) {
         List<DisplayFeedReply> displayFeedReplies = Lists.newArrayList();
         for (FeedReply feedReply : feedReplies) {
-            DisplayFeedAction likedFeedAction = displayFeedActionBuilder.build(feedReply.getLikeCount(), feedReply.getFeedReplyId(), FEED_REPLY_LIKE);
-            DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.build(feedReply.getClaimCount(), feedReply.getFeedReplyId(), FEED_REPLY_CLAIM);
+            DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feedReply);
+            DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaimBy(feedReply);
             displayFeedReplies.add(buildFeedReply(feedReply, likedFeedAction, claimedFeedAction));
         }
         return displayFeedReplies;
@@ -48,7 +46,7 @@ public class DisplayFeedBuilder {
     }
 
     public static String toDisplayDate(Date date) {
-        return new SimpleDateFormat(DATE_FORAMT).format(date);
+        return new SimpleDateFormat(DATE_FORMAT).format(date);
     }
 
 }
