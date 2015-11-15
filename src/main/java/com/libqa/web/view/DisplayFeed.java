@@ -23,19 +23,19 @@ public class DisplayFeed {
     public DisplayFeed(Feed feed, DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction, List<DisplayFeedReply> replies) {
         this.feedId = feed.getFeedId();
         this.userNick = feed.getUserNick();
-        this.feedContent = parseToHtml(feed.getFeedContent());
-        this.insertDate = DisplayDateParser.parseFeedDate(feed.getInsertDate());
+        this.feedContent = parseHtml(feed.getFeedContent());
+        this.insertDate = DisplayDateParser.parseForFeed(feed.getInsertDate());
         this.likeFeedAction = likeFeedAction;
         this.claimFeedAction = claimFeedAction;
         this.replies = replies;
-        setFiles(feed.getFeedFiles());
+        setFeedFiles(feed.getFeedFiles());
     }
 
-    private String parseToHtml(String feedContent) {
+    private String parseHtml(String feedContent) {
         return new HtmlContentHandler(feedContent).urlWithLink().nl2br().parse();
     }
 
-    private void setFiles(List<FeedFile> feedFiles) {
+    private void setFeedFiles(List<FeedFile> feedFiles) {
         for (FeedFile each : feedFiles) {
             if (each.isFileType()) {
                 this.files.add(each);

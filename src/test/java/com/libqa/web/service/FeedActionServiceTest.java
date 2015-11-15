@@ -44,7 +44,7 @@ public class FeedActionServiceTest {
         final int userId = 1234;
         given(feedActionRepository.findByFeedActorIdAndUserId(feedId, userId)).willReturn(feedLikeFixtures());
 
-        FeedAction actual = sut.getFeedAction(user(), FeedLike.of(feedId));
+        FeedAction actual = sut.getFeedActionByUser(user(), FeedLike.of(feedId));
 
         assertThat(actual.isActed()).isTrue();
     }
@@ -55,7 +55,7 @@ public class FeedActionServiceTest {
         final int userId = 1234;
         given(feedActionRepository.findByFeedActorIdAndUserId(feedId, userId)).willReturn(feedLikeFixturesOnlyCanceled());
 
-        FeedAction actual = sut.getFeedAction(user(), FeedLike.of(feedId));
+        FeedAction actual = sut.getFeedActionByUser(user(), FeedLike.of(feedId));
 
         assertThat(actual.isNotYet()).isTrue();
     }

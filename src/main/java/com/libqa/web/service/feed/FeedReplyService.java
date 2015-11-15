@@ -43,7 +43,7 @@ public class FeedReplyService {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         FeedReplyLike feedReplyLike = FeedReplyLike.of(feedReply.getFeedReplyId());
 
-        FeedAction feedAction = feedActionService.getFeedAction(user, feedReplyLike);
+        FeedAction feedAction = feedActionService.getFeedActionByUser(user, feedReplyLike);
         if (feedAction.isNotYet()) {
             feedActionService.create(user, feedReplyLike);
         } else {
@@ -57,7 +57,7 @@ public class FeedReplyService {
     public FeedReply claim(Integer feedReplyId, User user) {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         FeedReplyClaim feedReplyClaim = FeedReplyClaim.of(feedReply.getFeedReplyId());
-        FeedAction feedAction = feedActionService.getFeedAction(user, feedReplyClaim);
+        FeedAction feedAction = feedActionService.getFeedActionByUser(user, feedReplyClaim);
         if (feedAction.isNotYet()) {
             feedActionService.create(user, feedReplyClaim);
         } else {

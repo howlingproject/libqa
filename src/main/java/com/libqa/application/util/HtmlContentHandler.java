@@ -3,7 +3,6 @@ package com.libqa.application.util;
 import com.twitter.Autolink;
 
 public class HtmlContentHandler {
-    private static final Autolink AUTO_LINK = new Autolink();
     private String text;
 
     public HtmlContentHandler(String text) {
@@ -11,8 +10,9 @@ public class HtmlContentHandler {
     }
 
     public HtmlContentHandler urlWithLink() {
-        AUTO_LINK.setUrlTarget("_blank");
-        text = AUTO_LINK.autoLink(text);
+        Autolink autoLink = new Autolink();
+        autoLink.setUrlTarget("_blank");
+        text = autoLink.autoLink(text);
         return this;
     }
 

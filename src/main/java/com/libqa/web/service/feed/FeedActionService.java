@@ -36,7 +36,7 @@ public class FeedActionService {
         return feedAction;
     }
 
-    public FeedAction getFeedAction(User user, FeedActor feedActor) {
+    public FeedAction getFeedActionByUser(User user, FeedActor feedActor) {
         FeedAction feedAction = findFeedAction(feedActor.getFeedActorId(), user.getUserId(), feedActor.getFeedActionType());
         if (feedAction == null) {
             return FeedAction.notYet();

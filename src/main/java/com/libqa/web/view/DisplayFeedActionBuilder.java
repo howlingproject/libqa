@@ -36,7 +36,7 @@ public class DisplayFeedActionBuilder {
 
     private DisplayFeedAction build(FeedActor feedActor, int viewCount) {
         User user = loggedUser.getDummyUser();
-        FeedAction feedAction = feedActionService.getFeedAction(user, feedActor);
+        FeedAction feedAction = feedActionService.getFeedActionByUser(user, feedActor);
         return new DisplayFeedAction(viewCount, feedAction.isActed());
     }
 
