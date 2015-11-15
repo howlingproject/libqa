@@ -24,7 +24,7 @@ public class DisplayFeed {
         this.feedId = feed.getFeedId();
         this.userNick = feed.getUserNick();
         this.feedContent = parseToHtml(feed.getFeedContent());
-        this.insertDate = DisplayFeedBuilder.toDisplayDate(feed.getInsertDate());
+        this.insertDate = DisplayDateParser.parseFeedDate(feed.getInsertDate());
         this.likeFeedAction = likeFeedAction;
         this.claimFeedAction = claimFeedAction;
         this.replies = replies;

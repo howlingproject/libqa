@@ -15,7 +15,7 @@ public class DisplayFeedReply {
     public DisplayFeedReply(FeedReply feedReply) {
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
-        this.insertDate = DisplayFeedBuilder.toDisplayDate(feedReply.getInsertDate());
+        this.insertDate = DisplayDateParser.parseFeedDate(feedReply.getInsertDate());
         this.feedReplyContent = feedReply.getFeedReplyContent();
         this.likeFeedAction = new DisplayFeedAction(0, false);
         this.claimFeedAction = new DisplayFeedAction(0, false);
@@ -24,7 +24,7 @@ public class DisplayFeedReply {
     public DisplayFeedReply(FeedReply feedReply, DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction) {
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
-        this.insertDate = DisplayFeedBuilder.toDisplayDate(feedReply.getInsertDate());
+        this.insertDate = DisplayDateParser.parseFeedDate(feedReply.getInsertDate());
         this.feedReplyContent = feedReply.getFeedReplyContent();
         this.likeFeedAction = likeFeedAction;
         this.claimFeedAction = claimFeedAction;

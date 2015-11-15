@@ -6,13 +6,10 @@ import com.libqa.web.domain.FeedReply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Component
 public class DisplayFeedBuilder {
-    private static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
 
     @Autowired
     private DisplayFeedActionBuilder displayFeedActionBuilder;
@@ -43,10 +40,6 @@ public class DisplayFeedBuilder {
 
     private DisplayFeedReply buildFeedReply(FeedReply feedReply, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
         return new DisplayFeedReply(feedReply, likedFeedAction, claimedFeedAction);
-    }
-
-    public static String toDisplayDate(Date date) {
-        return new SimpleDateFormat(DATE_FORMAT).format(date);
     }
 
 }
