@@ -12,6 +12,7 @@ public enum StatusCode {
     DUPLICATE(99, "중복된 데이터"),
     SIZE_LIMIT_EXCEEDED(100, "허용 용량 초과"),
     INVALID_STATUS(102, "잘못된 상태"),
+    NEED_LOGIN(200, "로그인이 필요합니다"),
     INVALID_PARAMETER(900, "잘못된 파라미터"),
     INTERNAL(990, "내부 오류"),
     SYSTEM_ERROR(999, "시스템 오류");
@@ -22,7 +23,7 @@ public enum StatusCode {
     @Getter
     private final String comment;
 
-    private StatusCode(final int code, final String comment) {
+    StatusCode(final int code, final String comment) {
         this.code = code;
         this.comment = comment;
     }

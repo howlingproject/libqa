@@ -1,5 +1,6 @@
 package com.libqa.application.framework;
 
+import com.libqa.application.enums.StatusCode;
 import lombok.Data;
 
 import static com.libqa.application.enums.StatusCode.FAIL;
@@ -33,7 +34,11 @@ public class ResponseData<T> {
         this.resultCode = code;
         this.comment = comment;
         this.data = number;
-        
+    }
+
+    public ResponseData(int code, String comment) {
+        this.resultCode = code;
+        this.comment = comment;
     }
 
     private void init(int code, String comment, T data) {
@@ -44,6 +49,10 @@ public class ResponseData<T> {
 
     public static <T> ResponseData<T> createResult(int code, String comment, T data) {
         return new ResponseData<>(code, comment, data);
+    }
+
+    public static <T> ResponseData<T> createResult(StatusCode statusCode) {
+        return new ResponseData<>(statusCode.getCode(), statusCode.getComment());
     }
 
     public static <T> ResponseData<T> createSuccessResult(T data) {

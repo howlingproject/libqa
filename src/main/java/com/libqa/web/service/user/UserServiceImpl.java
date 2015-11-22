@@ -11,7 +11,6 @@ import com.libqa.web.repository.UserRepository;
 import com.libqa.web.service.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -114,7 +113,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = USER_EMAIL_CACHE)
     public User findByEmail(String email) {
         return userRepository.findByUserEmail(email);
     }
@@ -135,11 +133,9 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public User findOne(Integer userId) {
+    public User findByUserId(Integer userId) {
         return userRepository.findOne(userId);
     }
-
 
     /**
      * 최종 방문일 수정

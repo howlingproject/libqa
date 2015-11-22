@@ -56,7 +56,12 @@ public interface UserService {
      */
     User findByEmailAndIsCertification(String email);
 
-    User findOne(Integer userId);
+    /**
+     * userId로 사용자 조회
+     * @param userId
+     * @return
+     */
+    User findByUserId(Integer userId);
 
     /**
      * 최종 방문일 수정

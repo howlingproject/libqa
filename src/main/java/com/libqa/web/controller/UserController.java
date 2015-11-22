@@ -147,7 +147,7 @@ public class UserController {
             return sendAccessDenied();
         }
 
-        User entity = userService.findOne(user.getUserId());
+        User entity = userService.findByUserId(user.getUserId());
         List<UserKeyword> userKeywordList = userKeywordService.findByUserAndIsDeleted(entity);
 
         ModelAndView mav = new ModelAndView("/user/profile");

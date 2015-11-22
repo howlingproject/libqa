@@ -39,17 +39,4 @@ public class LoggedUser {
         return StringUtils.isBlank(userEmail) || "anonymousUser".equals(userEmail);
     }
 
-    /**
-     * 테스트용. 추후 제거예정
-     *
-     * @return
-     */
-    public User getDummyUser() {
-        User user = new User();
-        user.setUserId(1);
-        user.setUserNick("user1");
-        user.setUserEmail("user1@email.com");
-        return user;
-    }
-
 }

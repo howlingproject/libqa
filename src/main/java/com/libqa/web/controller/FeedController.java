@@ -1,6 +1,7 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.dto.FeedRequestDto;
+import com.libqa.application.enums.StatusCode;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+import static com.libqa.application.framework.ResponseData.*;
 import static com.libqa.application.framework.ResponseData.createFailResult;
 import static com.libqa.application.framework.ResponseData.createSuccessResult;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -42,6 +44,7 @@ public class FeedController {
     @RequestMapping(method = GET)
     public ModelAndView main(ModelAndView mav) {
         mav.setViewName("feed/main");
+        mav.addObject("user", loggedUser.get());
         return mav;
     }
 
@@ -53,8 +56,13 @@ public class FeedController {
 
     @RequestMapping(value = "save", method = POST)
     public ResponseData<Feed> save(Feed feed) {
+        User user = loggedUser.get();
+        if(user.isGuest()) {
+            return createResult(StatusCode.NEED_LOGIN);
+        }
+
         try {
-            feedService.save(feed, loggedUser.getDummyUser());
+            feedService.save(feed, user);
             return createSuccessResult(feed);
         } catch (Exception e) {
             log.error("save feed error.", e);
@@ -98,8 +106,13 @@ public class FeedController {
 
     @RequestMapping(value = "reply/save", method = POST)
     public ResponseData<DisplayFeedReply> saveFeedReply(FeedReply feedReply) {
+        User user = loggedUser.get();
+        if(user.isGuest()) {
+            return createResult(StatusCode.NEED_LOGIN);
+        }
+
         try {
-            feedReplyService.save(feedReply);
+            feedReplyService.save(feedReply, user);
             return createSuccessResult(new DisplayFeedReply(feedReply));
         } catch (Exception e) {
             log.error("save reply error.", e);
@@ -110,7 +123,7 @@ public class FeedController {
     @RequestMapping(value = "{feedId}/like", method = POST)
     public ResponseData<DisplayFeedAction> likeFeed(@PathVariable Integer feedId) {
         try {
-            User user = loggedUser.getDummyUser();
+            User user = loggedUser.get();
             Feed feed = feedService.like(feedId, user);
             DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildLikeBy(feed);
             return createSuccessResult(displayFeedAction);
@@ -123,7 +136,7 @@ public class FeedController {
     @RequestMapping(value = "{feedId}/claim", method = POST)
     public ResponseData<DisplayFeedAction> claimFeed(@PathVariable Integer feedId) {
         try {
-            User user = loggedUser.getDummyUser();
+            User user = loggedUser.get();
             Feed feed = feedService.claim(feedId, user);
             DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildClaimBy(feed);
             return createSuccessResult(displayFeedAction);
@@ -136,7 +149,7 @@ public class FeedController {
     @RequestMapping(value = "reply/{feedReplyId}/like", method = POST)
     public ResponseData<DisplayFeedAction> likeFeedReply(@PathVariable Integer feedReplyId) {
         try {
-            User user = loggedUser.getDummyUser();
+            User user = loggedUser.get();
             FeedReply feedReply = feedReplyService.like(feedReplyId, user);
             DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildLikeBy(feedReply);
             return createSuccessResult(displayFeedAction);
@@ -149,7 +162,7 @@ public class FeedController {
     @RequestMapping(value = "reply/{feedReplyId}/claim", method = POST)
     public ResponseData<DisplayFeedAction> claimFeedReply(@PathVariable Integer feedReplyId) {
         try {
-            User user = loggedUser.getDummyUser();
+            User user = loggedUser.get();
             FeedReply feedReply = feedReplyService.claim(feedReplyId, user);
             DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildClaimBy(feedReply);
             return createSuccessResult(displayFeedAction);

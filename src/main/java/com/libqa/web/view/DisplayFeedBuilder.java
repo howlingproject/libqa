@@ -3,6 +3,8 @@ package com.libqa.web.view;
 import com.google.common.collect.Lists;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedReply;
+import com.libqa.web.domain.User;
+import com.libqa.web.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +12,8 @@ import java.util.List;
 
 @Component
 public class DisplayFeedBuilder {
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private DisplayFeedActionBuilder displayFeedActionBuilder;
 
@@ -25,7 +28,8 @@ public class DisplayFeedBuilder {
     }
 
     private DisplayFeed buildFeed(Feed feed, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
-        return new DisplayFeed(feed, likedFeedAction, claimedFeedAction, buildFeedReplies(feed.getFeedReplies()));
+        User user = userService.findByUserId(feed.getUserId());
+        return new DisplayFeed(feed, user, likedFeedAction, claimedFeedAction, buildFeedReplies(feed.getFeedReplies()));
     }
 
     private List<DisplayFeedReply> buildFeedReplies(List<FeedReply> feedReplies) {
@@ -39,7 +43,8 @@ public class DisplayFeedBuilder {
     }
 
     private DisplayFeedReply buildFeedReply(FeedReply feedReply, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
-        return new DisplayFeedReply(feedReply, likedFeedAction, claimedFeedAction);
+        User user = userService.findByUserId(feedReply.getUserId());
+        return new DisplayFeedReply(feedReply, user, likedFeedAction, claimedFeedAction);
     }
 
 }
