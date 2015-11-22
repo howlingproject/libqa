@@ -158,15 +158,14 @@ public class CommonController {
 
             // 프로필 이미지 일단 삭제
             File deleteDir = new File(directory);
-
-            File[] files = deleteDir.listFiles();
-
-            if (files.length > 0) {
+            if (deleteDir.exists()) {
+                File[] files = deleteDir.listFiles();
                 for (File file : files) {
-                    file.delete();
+                    if (file.exists()) {
+                        file.delete();
+                    }
                 }
             }
-
 
             // 폴더 생성
             File baseDir = new File(directory);
