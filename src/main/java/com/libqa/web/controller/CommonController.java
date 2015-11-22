@@ -45,6 +45,8 @@ public class CommonController {
     @Autowired
     private LoggedUser loggedUser;
 
+    final int MAX_THUMB_SIZE = 64;
+
     // 403 Access Denied
     @RequestMapping(value = "/access", method = RequestMethod.GET)
     public ModelAndView accessDenied(Principal user) {
@@ -214,10 +216,10 @@ public class CommonController {
         int height = biImg.getHeight();
 
         log.debug("### 이미지의 원본 크기 : " + width + "/ " + height);
-        int maxWidth = 32;
-        if (width > maxWidth) {
-            int y = (height * maxWidth) / width;
-            width = maxWidth;
+
+        if (width > MAX_THUMB_SIZE) {
+            int y = (height * MAX_THUMB_SIZE) / width;
+            width = MAX_THUMB_SIZE;
             height = y;
             log.debug("##이미지리사이징 후 : " + width + " / " + height);
         }

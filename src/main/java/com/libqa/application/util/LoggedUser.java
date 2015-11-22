@@ -1,7 +1,7 @@
 package com.libqa.application.util;
 
 import com.libqa.web.domain.User;
-import com.libqa.web.service.UserService;
+import com.libqa.web.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -32,7 +32,7 @@ To change this template use File | Settings | File Templates.
                 <label for="inputEmail" class="col-sm-2 control-label">이메일</label>
 
                 <div class="col-sm-5 col-md-5">
-                    <input type="text" class="form-control" id="userEmail" placeholder="Email" value="{{userEmail}}" disabled/>
+                    <input type="text" class="form-control" id="userEmail" name="userEmail" placeholder="Email" value="{{userEmail}}" disabled/>
                 </div>
             </div>
             <div class="form-group">
@@ -82,20 +82,21 @@ To change this template use File | Settings | File Templates.
                 <label for="homepage" class="col-sm-2 control-label">홈페이지</label>
 
                 <div class="col-sm-5 col-md-5">
-                    <input type="text" class="form-control" id="homepage" placeholder="Homepage" value="{{user.userSite}}"/>
+                    <input type="text" class="form-control" name="userSite" id="userSite" placeholder="Homepage" value="{{user.userSite}}"/>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="profile_image" class="col-sm-2 control-label">이미지</label>
                 <div class="col-sm-1 col-md-1">
-                    <div class="user-profile" id="imagePreviewArea">
-                    <img alt="avatar" class="profile-image" width="64" src="{{user.userThumbnailImageName}}/{{user.userThumbnailImageName}}" onerror='this.src="/resource/images/avatar.png"' id="image-preview" />
+                    <div class="user-profile" id="imagePreviewArea" div-data="{{user.userThumbnailImagePath}}/{{user.userThumbnailImageName}}">
+                    <img alt="avatar" class="profile-image" width="64" src="{{user.userThumbnailImagePath}}/{{user.userThumbnailImageName}}" onerror='this.src="/resource/images/avatar.png"' id="image-preview" />
                     </div>
                 </div>
                 <div class="col-sm-5 col-md-5">
                     <input name="checkDupNickname" id="checkDupNickname" value="" type="hidden">
-                    <input id="userId" value="{{user.userId}}" type="hidden">
+                    <input name="checkImageUpload" id="checkImageUpload" value="" type="hidden">
+                    <input name="userId" id="userId" value="{{user.userId}}" type="hidden">
                     <input id="uploadType" value="User" type="hidden">
                     <input id="thumbNail" type="hidden">
                     <input name="userImagePath" id="userImagePath" type="hidden">
@@ -119,7 +120,15 @@ To change this template use File | Settings | File Templates.
                     </div>
                     <input type="hidden" name="keywords" id="keywords" />
                     <div class="col-sm-4 col-md-4">
-                        <ul id="tag-cloud" style="padding-left: 0px; width:100%; "></ul>
+                        <ul id="tag-cloud" style="padding-left: 0px; width:100%; ">
+                            {{#if userKeywordList}}
+                                {{#each userKeywordList}}
+                                    <li class="tag-cloud">{{keywordName}}</li>
+                                {{/each}}
+                            {{^}}
+
+                            {{/if}}
+                        </ul>
                     </div>
                 </div>
 
@@ -142,8 +151,21 @@ To change this template use File | Settings | File Templates.
 {{# partial "script-page" }}
     <script type="text/javascript">
     // bind the on-change event
+    var keywordData = [];
+
     $(document).ready(function() {
         $("#file-attachment").on("change", uploadFile);
+        var tagLength = $('.tag-cloud').length;
+
+        for (var i = 0; i < tagLength; i++) {
+            console.log("## $('.tag-cloud').eq(i) = " + $('.tag-cloud').eq(i).text());
+            keywordData.push($('.tag-cloud').eq(i).text());
+        }
+        if (tagLength == 3) {
+            $("#interesting").attr("readonly", true);
+            $("#keywordAdd").attr("disabled", true);
+        }
+
     });
 
     $("#checkUserNick").click(function () {
@@ -198,15 +220,38 @@ To change this template use File | Settings | File Templates.
         });
     });
 
-    var keywordData = [];
+
+
+    $("#interesting").keyup(function (e) {
+
+        if (e.keyCode == 13) {
+            var tagLength = $('.tag-cloud').length;
+            console.log("- tagLength :" + tagLength);
+            if (tagLength == 3) {
+                $.alert({
+                    title: 'Error',
+                    confirmButton: '확인',
+                    content: '관심분야 키워드는 3건 이상 등록할 수 없습니다.'
+                });
+            } else {
+                addUserKeyword();
+            }
+        }
+    });
+
+    $('#keywordAdd').on("click", function () {
+        addUserKeyword();
+    });
 
     /**
      * 키워드 추가
      * 키워드가 3건 이상 등록 될 경우 폼을 disabled 한다.
      * 대소문자 중복 허용하지 않는다.
      */
-    $('#keywordAdd').click(function () {
+    function addUserKeyword() {
         var keyword = $('#interesting').val();
+
+        console.log("addkey =" + keyword);
 
         if (keywordData.length == 3) {
             $.alert({
@@ -233,7 +278,7 @@ To change this template use File | Settings | File Templates.
             $("#interesting").attr("readonly", true);
             $("#keywordAdd").attr("disabled", true);
         }
-    });
+    }
 
     $('#btnSave').on('click', function () {
         $.confirm({
@@ -251,14 +296,14 @@ To change this template use File | Settings | File Templates.
         });
     });
 
-    $('#btnCancel').on(function () {
+    $('#btnCancel').on('click', function () {
         $.confirm({
             title: '확인',
             content: '메인 화면으로 이동합니다. ',
             confirmButton: '확인',
             cancelButton: '취소',
             confirm: function () {
-                $(location).attr('href', "main");
+                $(location).attr('href', "/index");
             }
         });
     });
@@ -268,8 +313,13 @@ To change this template use File | Settings | File Templates.
      * 키워드가 삭제되면 폼을 enabled 한다.
      */
     $('#tag-cloud').on('click', 'li', function (event) {
+
         var keyword = $(event.target).text();
         var index = keywordData.indexOf(keyword);
+
+        console.log("# 태그 keyword : " + keyword);
+        console.log("# 태그 index : " + index);
+
 
         if (index > -1) {
             keywordData.splice(index, 1);
@@ -366,6 +416,7 @@ To change this template use File | Settings | File Templates.
      */
     function uploadFile() {
         var field = $("#file-attachment").val();
+        $("#checkImageUpload").val("Y");
         if (field != '') {
             $.ajax({
                 url: "/common/userProfileImage",
@@ -393,14 +444,21 @@ To change this template use File | Settings | File Templates.
                 },
                 error: function (req) {
                     // Handle upload error
-                    alert('req : ' + req);
                     console.log('req : ' + req.status);
                     console.log('req : ' + req.readyState);
 
                     if (req.status == 500) {
-                        alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
+                        $.alert({
+                            title: 'Error',
+                            confirmButton: '확인',
+                            content: '업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.'
+                        });
                     } else {
-                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                        $.alert({
+                            title: 'Error',
+                            confirmButton: '확인',
+                            content: '에러가 발생하였습니다. 에러코드 [' + req.status + ']'
+                        });
                     }
 
                 }
@@ -413,10 +471,6 @@ To change this template use File | Settings | File Templates.
     function checkValidation() {
         // 에러가 발생할 경우 false 를 리턴한다.
         var userId = $("#userId").val();
-        var title = $("#title").val();
-
-        var description = $("#wikiEditor").val();
-
 
         if (userId == null || userId.length == 0) {
             $.alert({
@@ -426,25 +480,7 @@ To change this template use File | Settings | File Templates.
             });
             return false;
         }
-        if (title == null || title.length == 0) {
-            $.alert({
-                title: '정보',
-                confirmButton: '확인',
-                icon: 'fa fa-info',
-                content: '공간 제목을 입력하세요.'
-            });
-            return false;
-        }
 
-        if (description == null || description.length == 0) {
-            $.alert({
-                title: '정보',
-                confirmButton: '확인',
-                icon: 'fa fa-info',
-                content: '공간 설명은 필수값입니다.'
-            });
-            return false;
-        }
         return true;
     }
 

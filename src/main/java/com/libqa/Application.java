@@ -14,7 +14,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import javax.servlet.Filter;
 import java.nio.charset.Charset;
 
-import static com.libqa.web.service.UserServiceImpl.USER_EMAIL_CACHE;
+import static com.libqa.web.service.user.UserServiceImpl.USER_EMAIL_CACHE;
 
 /**
  * Created by yion on 2015. 1. 25..

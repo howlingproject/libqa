@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.feed;
 
 import com.libqa.application.dto.FeedRequestDto;
 import com.libqa.application.util.PageUtil;
@@ -6,6 +6,8 @@ import com.libqa.web.domain.*;
 import com.libqa.web.repository.FeedFileRepository;
 import com.libqa.web.repository.FeedReplyRepository;
 import com.libqa.web.repository.FeedRepository;
+import com.libqa.web.service.feed.actor.FeedClaim;
+import com.libqa.web.service.feed.actor.FeedLike;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -17,8 +19,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.libqa.application.enums.FeedActionType.FEED_CLAIM;
-import static com.libqa.application.enums.FeedActionType.FEED_LIKE;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Slf4j
@@ -72,26 +72,28 @@ public class FeedService {
     @Transactional
     public Feed like(Integer feedId, User user) {
         Feed feed = feedRepository.findOne(feedId);
-        FeedAction feedAction = feedActionService.getFeedAction(feed.getFeedId(), user.getUserId(), FEED_LIKE);
+        FeedLike feedLike = FeedLike.of(feed.getFeedId());
+        FeedAction feedAction = feedActionService.getFeedActionByUser(user, feedLike);
         if (feedAction.isNotYet()) {
-            feedActionService.create(feed.getFeedId(), user.getUserId(), user.getUserNick(), FEED_LIKE);
+            feedActionService.create(user, feedLike);
         } else {
             feedAction.cancel();
         }
-        feed.setLikeCount(feedActionService.getCount(feed.getFeedId(), FEED_LIKE));
+        feed.setLikeCount(feedActionService.getCount(feedLike));
         return feed;
     }
 
     @Transactional
     public Feed claim(Integer feedId, User user) {
         Feed feed = feedRepository.findOne(feedId);
-        FeedAction feedAction = feedActionService.getFeedAction(feed.getFeedId(), user.getUserId(), FEED_CLAIM);
+        FeedClaim feedClaim = FeedClaim.of(feed.getFeedId());
+        FeedAction feedAction = feedActionService.getFeedActionByUser(user, feedClaim);
         if (feedAction.isNotYet()) {
-            feedActionService.create(feed.getFeedId(), user.getUserId(), user.getUserNick(), FEED_CLAIM);
+            feedActionService.create(user, feedClaim);
         } else {
             feedAction.cancel();
         }
-        feed.setClaimCount(feedActionService.getCount(feed.getFeedId(), FEED_CLAIM));
+        feed.setClaimCount(feedActionService.getCount(feedClaim));
         return feed;
     }
 

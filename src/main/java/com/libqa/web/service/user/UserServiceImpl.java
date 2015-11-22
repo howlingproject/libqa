@@ -1,9 +1,14 @@
-package com.libqa.web.service;
+package com.libqa.web.service.user;
 
 import com.libqa.application.Exception.UserNotCreateException;
 import com.libqa.application.enums.SocialChannelType;
+import com.libqa.application.util.StringUtil;
+import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.User;
+import com.libqa.web.domain.UserKeyword;
+import com.libqa.web.repository.UserKeywordRepository;
 import com.libqa.web.repository.UserRepository;
+import com.libqa.web.service.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 회원 가입, 탈퇴, 로그인, 정보 수정
@@ -33,6 +39,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserKeywordRepository userKeywordRepository;
 
     @Autowired
     private MailService mailService;
@@ -146,8 +155,72 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserProfile(User user) {
-        return userRepository.save(user);
+    @Transactional
+    public User updateUserProfileAndKeyword(User user, Keyword keyword) {
+        User entity = null;
+
+        try {
+            entity = userRepository.findOne(user.getUserId());
+            bindProfileUpdateInfo(user, entity);
+            entity = userRepository.save(entity);
+
+            if (keyword.getKeywords() != null) {
+                saveUserKeyword(entity, keyword);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return entity;
+    }
+
+    /**
+     * 프로필 업데이트 파라미터 세팅
+     * @param user
+     * @param entity
+     */
+    public void bindProfileUpdateInfo(User user, User entity) {
+        if (StringUtil.nullToString(user.getCheckDupNickname(), "").equals("Y")) {
+            entity.setUserNick(user.getUserNick());
+        }
+
+        if (StringUtil.nullToString(user.getCheckImageUpload(), "").equals("Y")) {
+            entity.setUserImageName(user.getUserImageName());
+            entity.setUserImagePath(user.getUserImagePath());
+            entity.setUserThumbnailImageName(user.getUserThumbnailImageName());
+            entity.setUserThumbnailImagePath(user.getUserThumbnailImagePath());
+        }
+
+        if (StringUtil.nullToString(user.getUserSite(), "").equals("")) {
+            entity.setUserSite(user.getUserSite());
+        }
+
+        entity.setUpdateDate(new Date());
+    }
+
+    private void saveUserKeyword(User user, Keyword keyword) {
+        List<UserKeyword> userKeywordList = userKeywordRepository.findByUserAndIsDeleted(user, false);
+
+        Date nowDate = new Date();
+        if (!userKeywordList.isEmpty()) {
+            for (UserKeyword userKeyword : userKeywordList) {
+                userKeyword.setDeleted(true);
+                userKeyword.setUpdateDate(nowDate);
+                userKeywordRepository.save(userKeyword);
+            }
+        }
+
+        String[] keywordArrays = keyword.getKeywords().split(",");
+
+        for (int i = 0; i < keywordArrays.length; i++) {
+            UserKeyword userKeyword = new UserKeyword();
+            userKeyword.setDeleted(false);
+            userKeyword.setKeywordName(keywordArrays[i]);
+            userKeyword.setUser(user);
+            userKeyword.setInsertDate(nowDate);
+            userKeywordRepository.save(userKeyword);
+        }
+
     }
 
 

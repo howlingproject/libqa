@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.user;
 
 import com.libqa.application.enums.FavoriteType;
 import com.libqa.web.domain.UserFavorite;

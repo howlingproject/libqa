@@ -6,17 +6,19 @@ import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.User;
-import com.libqa.web.service.FeedReplyService;
-import com.libqa.web.service.FeedService;
+import com.libqa.web.service.feed.FeedReplyService;
+import com.libqa.web.service.feed.FeedService;
 import com.libqa.web.view.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-import static com.libqa.application.enums.FeedActionType.*;
 import static com.libqa.application.framework.ResponseData.createFailResult;
 import static com.libqa.application.framework.ResponseData.createSuccessResult;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -110,7 +112,8 @@ public class FeedController {
         try {
             User user = loggedUser.getDummyUser();
             Feed feed = feedService.like(feedId, user);
-            return createSuccessResult(displayFeedActionBuilder.build(feed.getLikeCount(), feed.getFeedId(), FEED_LIKE));
+            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildLikeBy(feed);
+            return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("like feed error.", e);
             return createFailResult(null);
@@ -122,7 +125,8 @@ public class FeedController {
         try {
             User user = loggedUser.getDummyUser();
             Feed feed = feedService.claim(feedId, user);
-            return createSuccessResult(displayFeedActionBuilder.build(feed.getClaimCount(), feed.getFeedId(), FEED_CLAIM));
+            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildClaimBy(feed);
+            return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("claim feed error.", e);
             return createFailResult(null);
@@ -134,7 +138,8 @@ public class FeedController {
         try {
             User user = loggedUser.getDummyUser();
             FeedReply feedReply = feedReplyService.like(feedReplyId, user);
-            return createSuccessResult(displayFeedActionBuilder.build(feedReply.getLikeCount(), feedReply.getFeedReplyId(), FEED_REPLY_LIKE));
+            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildLikeBy(feedReply);
+            return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("like feedReply error.", e);
             return createFailResult(null);
@@ -146,7 +151,8 @@ public class FeedController {
         try {
             User user = loggedUser.getDummyUser();
             FeedReply feedReply = feedReplyService.claim(feedReplyId, user);
-            return createSuccessResult(displayFeedActionBuilder.build(feedReply.getClaimCount(), feedReply.getFeedReplyId(), FEED_REPLY_CLAIM));
+            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildClaimBy(feedReply);
+            return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("claim feedReply error.", e);
             return createFailResult(null);
