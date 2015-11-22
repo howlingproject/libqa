@@ -13,15 +13,15 @@
                 <a href="#" class="btn btn-primary"><i class="fa fa-star-o"></i></a>
                 {{/if}}
             </div>
-            <div class="btn-group" data-toggle="buttons" style="float: right">
+            <div class="btn-group" id="sub_menu" data-toggle="buttons" style="float: right">
                 <a href="#" class="btn btn-primary">히스토리</a>
-                <a href="/wiki/update/{{wiki.wikiId}}" class="btn btn-primary">편집</a>
-                <a href="/wiki/delete/{{wiki.wikiId}}" class="btn btn-primary">삭제</a>
-                <a href="/wiki/lock/{{wiki.wikiId}}" class="btn btn-primary">잠금</a>
+                <a href="#" class="btn btn-primary" id="update">편집</a>
+                <a href="#" class="btn btn-primary" id="delete">삭제</a>
+                <a href="#" class="btn btn-primary" id="lock">잠금</a>
                 {{#unless parentWiki}}
-                    <a href="/wiki/write/{{wiki.wikiId}}" class="btn btn-primary">자식위키생성</a>
+                    <a href="#" class="btn btn-primary" id="write">자식위키생성</a>
                 {{/unless}}
-                <a href="/space/main" class="btn btn-primary">공간메인</a>
+                <a href="#" class="btn btn-primary" id="space">공간메인</a>
             </div>
         </div>
 
@@ -105,7 +105,8 @@
                             </tr>
                             </tbody>
                         </table>
-                        <a href="#" class="btn btn-primary" id="like">추천하기</a>
+                        <a href="#" class="fun-like btn btn-primary"
+                           data-value="{{wiki.wikiId}}" data-type="WIKI">추천하기</a>
                         <a href="#" class="btn btn-primary">인쇄하기</a>
                     </div>
                 </div>
@@ -268,7 +269,8 @@
                         </div>
                     </div>
                     <div class="col-md-1 my-qna-rating pull-right">
-                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 1</button>
+                        <button class="fun-like btn btn-sm btn-default btn-sm-fixed pull-right"
+                                data-value="{{this.replyId}}" data-type="COMMENT">추천 1</button>
                         <button class="btn btn-sm btn-default btn-sm-fixed pull-right">비추천 1</button>
                     </div>
                 </div>
@@ -397,12 +399,41 @@
             location.href = href;
         });
 
-        $("#like").on("click", function(){
-            Wiki.like("WIKI",$("#wikiId").val());
+        $(".fun-like").on("click", function(){
+            Wiki.like(this.dataset.type,this.dataset.value);
         });
 
-        $("#saveWiki").on("click", function(e){
+        $("#saveWiki").on("click", function(){
             Wiki.save();
+        });
+
+        $("#sub_menu a").on("click", function(){
+           var link = '';
+           var text = '';
+           if( this.id == 'update' ){
+               text ='이 위키를 수정를';
+               link = "/wiki/update/"+$("#wikiId").val();
+           }else if( this.id == 'delete' ){
+               text ='이 위키를 삭제를';
+               link = "/wiki/delete/"+$("#wikiId").val();
+           }else if( this.id == 'lock' ){
+               text ='이 위키를 잠금을';
+               link = "/wiki/lock/"+$("#wikiId").val();
+           }else if( this.id == 'write' ){
+               text ='자식위키를 생성';
+               link = "/wiki/write/"+$("#wikiId").val();
+           }else if( this.id == 'space' ){
+               text ='공간으로 이동';
+               link = "/wiki/space/"+$("#wikiId").val();
+           }
+           if( link != '' ){
+               if( confirm(text+" 하시겠습니까?") ){
+                   location.href = link;
+               }else{
+
+               }
+           }
+
         });
 
         var Wiki = {
