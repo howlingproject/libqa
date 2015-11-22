@@ -5,6 +5,7 @@ import com.libqa.application.enums.Role;
 import com.libqa.application.enums.SocialChannelType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,6 +17,7 @@ import java.util.List;
 @Data
 @Entity
 @EqualsAndHashCode
+@ToString(exclude = {"userKeywords", "userPoints"})
 public class User {
 
     @Id
