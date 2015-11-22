@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 public class DisplayFeed {
     private final Integer feedId;
+    private String originFeedContent;
     private String feedContent;
     private String userNick;
     private String insertDate;
@@ -23,6 +24,7 @@ public class DisplayFeed {
     public DisplayFeed(Feed feed, DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction, List<DisplayFeedReply> replies) {
         this.feedId = feed.getFeedId();
         this.userNick = feed.getUserNick();
+        this.originFeedContent = feed.getFeedContent();
         this.feedContent = parseHtml(feed.getFeedContent());
         this.insertDate = DisplayDateParser.parseForFeed(feed.getInsertDate());
         this.likeFeedAction = likeFeedAction;

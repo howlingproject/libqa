@@ -24,6 +24,10 @@ public class DisplayFeedBuilder {
         return displayFeeds;
     }
 
+    private DisplayFeed buildFeed(Feed feed, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
+        return new DisplayFeed(feed, likedFeedAction, claimedFeedAction, buildFeedReplies(feed.getFeedReplies()));
+    }
+
     private List<DisplayFeedReply> buildFeedReplies(List<FeedReply> feedReplies) {
         List<DisplayFeedReply> displayFeedReplies = Lists.newArrayList();
         for (FeedReply feedReply : feedReplies) {
@@ -32,10 +36,6 @@ public class DisplayFeedBuilder {
             displayFeedReplies.add(buildFeedReply(feedReply, likedFeedAction, claimedFeedAction));
         }
         return displayFeedReplies;
-    }
-
-    private DisplayFeed buildFeed(Feed feed, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
-        return new DisplayFeed(feed, likedFeedAction, claimedFeedAction, buildFeedReplies(feed.getFeedReplies()));
     }
 
     private DisplayFeedReply buildFeedReply(FeedReply feedReply, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
