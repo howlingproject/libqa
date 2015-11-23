@@ -4,16 +4,18 @@ import com.google.common.collect.Lists;
 import com.libqa.application.util.HtmlContentHandler;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedFile;
+import com.libqa.web.domain.User;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
 public class DisplayFeed {
-    private final Integer feedId;
+    private Integer feedId;
     private String originFeedContent;
     private String feedContent;
     private String userNick;
+    private String userImage;
     private String insertDate;
     private DisplayFeedAction likeFeedAction;
     private DisplayFeedAction claimFeedAction;
@@ -21,9 +23,11 @@ public class DisplayFeed {
     private List<FeedFile> files = Lists.newArrayList();
     private List<FeedFile> images = Lists.newArrayList();
 
-    public DisplayFeed(Feed feed, DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction, List<DisplayFeedReply> replies) {
+    public DisplayFeed(Feed feed, User user, DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction,
+                       List<DisplayFeedReply> replies) {
         this.feedId = feed.getFeedId();
         this.userNick = feed.getUserNick();
+        this.userImage = user.getUserImage();
         this.originFeedContent = feed.getFeedContent();
         this.feedContent = parseHtml(feed.getFeedContent());
         this.insertDate = DisplayDateParser.parseForFeed(feed.getInsertDate());

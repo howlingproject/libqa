@@ -6,8 +6,10 @@ import com.libqa.application.enums.SocialChannelType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +21,7 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString(exclude = {"userKeywords", "userPoints"})
 public class User {
+    private final static String DEFAULT_PROFILE_IMAGE = "/resource/images/avatar.png";
 
     @Id
     @Column(nullable = false)
@@ -124,12 +127,12 @@ public class User {
 
     public static User createGuest() {
         User user = new User();
+        user.setUserId(-1);
         user.setRole(Role.GUEST);
         return user;
     }
 
     public boolean isGuest() {
-
         if (this.role == Role.GUEST || this.role == null) {
             return true;
         } else {
@@ -137,5 +140,16 @@ public class User {
         }
     }
 
+    public String getUserImage() {
+        if (!isRegisteredProfileImage()) {
+            return DEFAULT_PROFILE_IMAGE;
+        }
 
+        return this.userImagePath + File.separator + this.userImageName;
+    }
+
+    private boolean isRegisteredProfileImage() {
+        return StringUtils.isNotBlank(this.userImagePath)
+                && StringUtils.isNotBlank(this.userImageName);
+    }
 }

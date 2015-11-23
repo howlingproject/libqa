@@ -135,7 +135,7 @@ public class SpaceController {
             List<WikiReply> replies = wiki.getWikiReplies();
             List<Keyword> keywords = keywordService.findByWikiId(wiki.getWikiId(), false);
 
-            User userInfo = userService.findOne(wiki.getUserId());
+            User userInfo = userService.findByUserId(wiki.getUserId());
             SpaceWikiList spaceWikiList = new SpaceWikiList(wiki, userInfo, keywords, replies.size());
             spaceWikiLists.add(spaceWikiList);
         }
@@ -227,7 +227,7 @@ public class SpaceController {
 
         for (Activity activity : activities) {
 
-            User userInfo = userService.findOne(activity.getUserId());
+            User userInfo = userService.findByUserId(activity.getUserId());
             SpaceActivityList spaceActivity = new SpaceActivityList(activity, userInfo);
 
             spaceActivityLists.add(spaceActivity);

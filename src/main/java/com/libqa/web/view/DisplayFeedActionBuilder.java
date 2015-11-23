@@ -4,7 +4,6 @@ import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.FeedReply;
-import com.libqa.web.domain.User;
 import com.libqa.web.service.feed.FeedActionService;
 import com.libqa.web.service.feed.actor.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,7 @@ public class DisplayFeedActionBuilder {
     }
 
     private DisplayFeedAction build(FeedActor feedActor, int viewCount) {
-        User user = loggedUser.getDummyUser();
-        FeedAction feedAction = feedActionService.getFeedActionByUser(user, feedActor);
+        FeedAction feedAction = feedActionService.getFeedActionByUser(loggedUser.get(), feedActor);
         return new DisplayFeedAction(viewCount, feedAction.isActed());
     }
 
