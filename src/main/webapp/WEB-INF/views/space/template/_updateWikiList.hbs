@@ -3,12 +3,14 @@
         <div class="media">
             <div class="media-body">
                 <h4 class="media-heading" id="media-heading"><a href="/wiki/{{wikiId}}">{{title}}</a><a class="anchorjs-link" href="#media-heading"><span class="anchorjs-icon"></span></a></h4>
-                <div class="text-left"><a href="/wiki/{{wikiId}}" class="text">{{subString (htmlDelete contents) 0 250 }}</a></div>
+                <div class="text-left"><a href="/wiki/{{wikiId}}" class="text">{{subString (htmlDelete contents) 0 240 }}</a>
+                <span class="badge">{{replyCount}}</span>
+                </div>
             </div>
             <div class="media-right">
                 <a href="#">
                     <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/public/images/avatar.png" />
+                        <img alt="avatar" class="profile-image" src="{{user.userImage}}" onerror='this.src="/resource/images/avatar.png"' />
                     </div>
                 </a>
             </div>

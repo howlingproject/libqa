@@ -182,11 +182,13 @@ public class WikiController {
             log.info("wiki = {}", wiki);
             log.info("wiki.wikiFile = {}", wiki.getWikiFiles());
             User user = loggedUser.get();
-
+            Date now = new Date();
             wiki.setUserNick(user.getUserNick());
             wiki.setUserId(user.getUserId());
 
-            wiki.setInsertDate(new Date());
+            wiki.setInsertDate(now);
+            wiki.setUpdateDate(now);
+
             if( wiki.getParentsId() == null  ){
                 wiki.setDepthIdx(1);
             }

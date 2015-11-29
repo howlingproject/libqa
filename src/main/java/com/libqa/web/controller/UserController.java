@@ -38,15 +38,6 @@ public class UserController {
     private UserKeywordService userKeywordService;
 
 
-//    @RequestMapping(value="/user/view", method = RequestMethod.GET)
-//    public String printWelcome(ModelMap model, Principal principal ) {
-//        String name = principal.getName();
-//        model.addAttribute("username", name);
-//        model.addAttribute("message", "Spring Security Custom Form example");
-//        return "/user/view";
-//    }
-
-
     /*
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     @ResponseBody
@@ -134,6 +125,7 @@ public class UserController {
      * @param request
      * @return
      */
+
     @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("/user/profile")
     public ModelAndView userProfile(HttpServletRequest request) {

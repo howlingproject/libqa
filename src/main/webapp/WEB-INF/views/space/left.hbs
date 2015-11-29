@@ -24,87 +24,52 @@ To change this template use File | Settings | File Templates.
         </div>
     </div>
 </div>
+
 <form name="space" id="space">
     <input type="hidden" name="spaceId" id="spaceId" value="{{space.spaceId}}">
 </form>
 <!--// contents -->
+
 <div class="container components">
     <h1 class="page-header">{{space.title}}
         <small class="pull-right">{{space.insertDate}} {{space.insertUserNick}} 생성 </small>
     </h1>
 
-    <div class="row" style="padding-bottom: 20px">
-
-        <div class="col-md-4">
-            <img src="{{space.titleImagePath}}/{{space.titleImage}}" width="300">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="well">
+                {{#if spaceWikis}}
+                    {{#each spaceWikis}}
+                        <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
+                    {{/each}}
+                {{^}}
+                    생성된 위키가 없습니다.
+                {{/if}}
+            </div>
         </div>
 
-        <div class="col-md-8">
-            {{{space.description}}}
+        <div class="col-lg-8">
+            <div class="jumbotron">
+                <img src="{{space.titleImagePath}}/{{space.titleImage}}" width="250">
+                <p>{{space.description}}</p>
+            </div>
+            <hr>
+
+            <h3>최근 수정된 위키 목록</h3>
+            <blockquote class="pull-right">
+                {{> space/template/_updateWikiList}}
+            </blockquote>
+
+            <hr>
+            <h3>최근 이 공간의 활동 내역 목록 </h3>
+            <blockquote class="pull-right">
+                {{> space/template/_activityList}}
+            </blockquote>
         </div>
 
-    </div>
-
-    <div class="row row-offcanvas row-offcanvas-right">
-
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-            <div class="well sidebar-nav">
-            {{#if spaceWikis}}
-                {{#each spaceWikis}}
-                    <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
-                {{/each}}
-            {{^}}
-                생성된 위키가 없습니다.
-            {{/if}}
-
-                <!--
-                <h4>h4. Heading 4 <span class="badge">19</span></h4>
-                <h5 style="margin-left:10px">- h5. Heading 5 <span class="badge">11</span></h5>
-                <h5 style="margin-left:20px">- h5. Heading 5 <span class="badge">23</span></h5>
-                <h5 style="margin-left:30px">- h5. Heading 5 <span class="badge">33</span></h5>
-
-                <h4>h4. Heading 4 <span class="badge">19</span></h4>
-                <h5 style="margin-left:10px">- h5. Heading 5 <span class="badge">11</span></h5>
-                <h5 style="margin-left:20px">- h5. Heading 5 <span class="badge">23</span></h5>
-                <h5 style="margin-left:30px">- h5. Heading 5 <span class="badge">33</span></h5>
-
-                <h4>h4. Heading 4 <span class="badge">19</span></h4>
-                <h5 style="margin-left:10px">- h5. Heading 5 <span class="badge">11</span></h5>
-                <h5 style="margin-left:20px">- h5. Heading 5 <span class="badge">23</span></h5>
-                <h5 style="margin-left:30px">- h5. Heading 5 <span class="badge">33</span></h5>
-
-                <h4>h4. Heading 4 <span class="badge">19</span></h4>
-                <h5 style="margin-left:10px">- h5. Heading 5 <span class="badge">11</span></h5>
-                <h5 style="margin-left:20px">- h5. Heading 5 <span class="badge">23</span></h5>
-                <h5 style="margin-left:30px">- h5. Heading 5 <span class="badge">33</span></h5>
-                -->
-            </div><!--/.well -->
-        </div><!--/span-->
-
-
-        <div class="col-xs-12 col-sm-9">
-            <div class="row">
-                <div style="padding-left:15px">
-                <h3>최근 수정된 위키 목록</h3><hr>
-                </div>
-                <blockquote class="pull-right">
-                    {{> space/template/_updateWikiList}}
-                </blockquote>
-
-                <hr>
-                <div style="padding-left:15px">
-                <h3>최근 이 공간의 활동 내역 목록 </h3>
-                <hr>
-                </div>
-
-                <blockquote class="pull-right">
-                    {{> space/template/_activityList}}
-                </blockquote>
-
-            </div><!--/row-->
-        </div><!--/span-->
     </div>
 </div>
+
 {{/partial}}
 
 

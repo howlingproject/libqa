@@ -1,9 +1,11 @@
 package com.libqa.web.service;
 
 import com.google.common.collect.Iterables;
+import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.FavoriteType;
 import com.libqa.application.enums.KeywordType;
 import com.libqa.application.util.PageUtil;
+import com.libqa.web.domain.Activity;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;
 import com.libqa.web.domain.UserFavorite;
@@ -33,6 +35,9 @@ public class SpaceServiceImpl implements SpaceService {
 	@Autowired
 	private UserFavoriteService userFavoriteService;
 
+	@Autowired
+	private ActivityService activityService;
+
 	@Override
 	public Space save(Space space) {
 		return spaceRepository.save(space);
@@ -50,7 +55,7 @@ public class SpaceServiceImpl implements SpaceService {
 	}
 
 	@Override
-	public Space saveWithKeyword(Space space, Keyword keyword) {
+	public Space saveWithKeyword(Space space, Keyword keyword, ActivityType activityType) {
 		Space result = save(space);
 
 		String[] keywordArrays = new String[0];
@@ -66,7 +71,23 @@ public class SpaceServiceImpl implements SpaceService {
 			keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordType.SPACE, result.getSpaceId());
 		}
 
+		// Activity 생성
+		this.saveActivities(result, activityType);
+
 		return result;
+	}
+
+	private void saveActivities(Space result, ActivityType activityType) {
+		Activity activity = new Activity();
+		activity.setSpaceId(result.getSpaceId());
+		activity.setUserNick(result.getInsertUserNick());
+		activity.setActivityType(activityType);
+		activity.setUserId(result.getInsertUserId());
+		activity.setActivityKeyword(KeywordType.SPACE);
+		activity.setInsertDate(new Date());
+
+		activityService.saveActivity(activity, result.getTitle());
+
 	}
 
 	@Override

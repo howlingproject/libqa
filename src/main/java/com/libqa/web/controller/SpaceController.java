@@ -2,6 +2,7 @@ package com.libqa.web.controller;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.libqa.application.enums.ActivityType;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.StringUtil;
@@ -15,6 +16,7 @@ import com.libqa.web.view.SpaceWikiList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -183,19 +185,72 @@ public class SpaceController {
         space.setInsertUserId(user.getUserId());
         space.setInsertUserNick(user.getUserNick());
 
-        Space result = spaceService.saveWithKeyword(space, keyword);
+        Space result = spaceService.saveWithKeyword(space, keyword, ActivityType.CREATE_SPACE);
         log.debug("#result : [{}]", result);
         return ResponseData.createSuccessResult(result);
     }
 
+    /**
+     * 수정 폼
+     * @param spaceId
+     * @return
+     */
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @RequestMapping(value = "/space/edit/{spaceId}", method = RequestMethod.GET)
-    public ModelAndView editSpace(@PathVariable Integer spaceId) {
+    public ModelAndView editSpace(@PathVariable Integer spaceId) throws IllegalAccessException {
         Space space = spaceService.findOne(spaceId);
+        User user = loggedUser.get();
+        if (space.getInsertUserId() != user.getUserId()) {
+            throw new IllegalAccessException("공간을 수정할 권한이 없습니다.");
+        }
         List<Keyword> keywords = keywordService.findBySpaceId(spaceId, false);
         ModelAndView mav = new ModelAndView("/space/edit");
+        mav.addObject("user", user);
         mav.addObject("space", space);
         mav.addObject("keywords", keywords);
         return mav;
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @RequestMapping(value = "/space/update", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<Space>  updateSpace(@ModelAttribute Space space, @ModelAttribute Keyword keyword) throws IllegalAccessException {
+        User user = loggedUser.get();
+
+        if (user == null) {
+            throw new IllegalAccessException("로그인 정보가 필요합니다.");
+        }
+
+        Space spaceEntity = spaceService.findOne(space.getSpaceId());
+
+        if (spaceEntity.getInsertUserId() != user.getUserId()) {
+            throw new IllegalAccessException("공간을 수정할 권한이 없습니다.");
+        }
+
+        bindSpaceEntity(space, user, spaceEntity);
+
+        Space result = spaceService.saveWithKeyword(spaceEntity, keyword, ActivityType.UPDATE_SPACE);
+        log.debug("#result : [{}]", result);
+        return ResponseData.createSuccessResult(result);
+    }
+
+    /**
+     * 공간 정보 수정시 원본 데이터를 바인딩 한다.
+     * @param space
+     * @param user
+     * @param spaceEntity
+     */
+    public void bindSpaceEntity(Space space, User user, Space spaceEntity) {
+        spaceEntity.setDescription(space.getDescription());
+        spaceEntity.setDescriptionMarkup(space.getDescriptionMarkup());
+        spaceEntity.setTitle(space.getTitle());
+        spaceEntity.setTitleImagePath(space.getTitleImagePath());
+        spaceEntity.setTitleImage(space.getTitleImage());
+        spaceEntity.setPrivate(space.isPrivate());
+        spaceEntity.setLayoutType(space.getLayoutType());
+        spaceEntity.setUpdateDate(new Date());
+        spaceEntity.setUpdateUserId(user.getUserId());
+        spaceEntity.setUpdateUserNick(user.getUserNick());
     }
 
     /**
@@ -241,7 +296,6 @@ public class SpaceController {
         }
 
         mav = new ModelAndView(view);
-
 
 
         if (!user.isGuest()) {

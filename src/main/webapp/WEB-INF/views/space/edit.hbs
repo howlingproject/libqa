@@ -38,7 +38,6 @@ To change this template use File | Settings | File Templates.
                             <div class="control-group">
                                 <div class="controls">
                                     <input type="text" class="form-control input-xlarge" id="title" name="title" value="{{space.title}}">
-                                    <p class="help-block" id="spaceDesc">(*) 공간 제목 입력 후 Tab 이동시 공간명 중복 검사를 합니다.</p>
                                 </div>
                             </div>
                             <p style="padding-top:20px"></p>
@@ -47,7 +46,8 @@ To change this template use File | Settings | File Templates.
 
                                 <div class="col-lg-8">
                                     <div class="col-xs-8 col-md-8">
-                                        <input id="userId" value="1" type="hidden">
+                                        <input id="spaceId" name="spaceId" value="{{space.spaceId}}" type="hidden">
+                                        <input id="userId" value="{{user.userId}}" type="hidden">
                                         <input id="uploadType" value="Space" type="hidden">
                                         <input name="titleImagePath" id="titleImagePath" type="hidden">
                                         <input name="titleImage" id="titleImage" type="hidden">
@@ -67,7 +67,7 @@ To change this template use File | Settings | File Templates.
                                 <div class="modal-body">
                                     <div id="editorArea" name="editorArea" class="form-group"></div>
                                     <input type="hidden" id="description" name="description" />
-                                    <input type="hidden" id="descriptionMarkup" name="descriptionMarkup" />
+                                    <input type="hidden" id="descriptionMarkup" name="descriptionMarkup" value="{{space.descriptionMarkup}}" />
                                     <div id="editor" class="form-group">
                                     </div>
                                     <p class="help-block">(*) 공간 메인 화면에 입력한 설명이 display 됩니다. (markdown 지원)</p>
@@ -261,7 +261,9 @@ To change this template use File | Settings | File Templates.
                 , type : 'mini'
                 , width : '100%'
                 , height : '400px;'
+                , data : $("input[name=descriptionMarkup]").val()
             });
+
             $("#file-attachment").on("change", uploadFile);
         });
 
@@ -305,12 +307,12 @@ To change this template use File | Settings | File Templates.
         $('#btnSave').on('click', function () {
             $.confirm({
                 title: '확인',
-                content: '공간을 생성 하겠습니까?<BR>11',
-                confirmButton: '공간생성',
+                content: '공간 정보를 수정 하겠습니까?',
+                confirmButton: '공간정보 업데이트',
                 cancelButton: '취소',
                 confirmButtonClass: 'btn-info',
                 confirm: function () {
-                    create();
+                    updateSpace();
                 },
                 cancel: function(){
 
@@ -349,7 +351,7 @@ To change this template use File | Settings | File Templates.
         /**
          * Save the Space
          */
-        function create() {
+        function updateSpace() {
             $("#keywords").val(keywordData);
             $("#description").val(DualEditor.getMarkupConvertToHtml());
             $("#descriptionMarkup").val(DualEditor.getMarkupEditHtml());
@@ -368,7 +370,7 @@ To change this template use File | Settings | File Templates.
                     type: "post",
                     dataType: "json",
                     data: data,
-                    url: "/space/add",
+                    url: "/space/update",
                     cache: false,
                     success: function (req) {
                         if (req.resultCode == 1) {
@@ -381,7 +383,7 @@ To change this template use File | Settings | File Templates.
                                 icon: 'fa fa-question-circle',
                                 animation: 'top',
                                 confirm: function () {
-                                    $(location).attr('href', req.data.spaceId);
+                                    $(location).attr('href', "/space/"+req.data.spaceId);
                                 }
                             });
 
