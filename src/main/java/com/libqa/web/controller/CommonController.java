@@ -6,7 +6,7 @@ import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.*;
 import com.libqa.web.domain.KeywordList;
 import com.libqa.web.domain.User;
-import com.libqa.web.service.KeywordListService;
+import com.libqa.web.service.common.KeywordListService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

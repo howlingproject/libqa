@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.space;
 
 import com.libqa.application.enums.ActivityType;
 import com.libqa.web.domain.Keyword;

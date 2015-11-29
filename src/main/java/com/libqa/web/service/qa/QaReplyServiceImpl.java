@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.qa;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;

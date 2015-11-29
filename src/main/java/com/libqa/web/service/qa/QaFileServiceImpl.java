@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.qa;
 
 import com.libqa.application.dto.FileDto;
 import com.libqa.application.framework.ResponseData;

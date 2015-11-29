@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.qa;
 
 import com.libqa.application.dto.QaDto;
 import com.libqa.application.enums.DayType;
@@ -7,6 +7,7 @@ import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
 import com.libqa.web.repository.QaContentRepository;
+import com.libqa.web.service.common.KeywordService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;

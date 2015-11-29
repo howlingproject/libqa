@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.space;
 
 import com.google.common.collect.Iterables;
 import com.libqa.application.enums.ActivityType;
@@ -10,6 +10,8 @@ import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;
 import com.libqa.web.domain.UserFavorite;
 import com.libqa.web.repository.SpaceRepository;
+import com.libqa.web.service.common.ActivityService;
+import com.libqa.web.service.common.KeywordService;
 import com.libqa.web.service.user.UserFavoriteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

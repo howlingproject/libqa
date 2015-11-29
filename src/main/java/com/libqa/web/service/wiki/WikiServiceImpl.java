@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.wiki;
 
 import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.KeywordType;
@@ -9,6 +9,8 @@ import com.libqa.web.repository.KeywordRepository;
 import com.libqa.web.repository.WikiLikeRepository;
 import com.libqa.web.repository.WikiRepository;
 import com.libqa.web.repository.WikiSnapShotRepository;
+import com.libqa.web.service.common.ActivityService;
+import com.libqa.web.service.common.KeywordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
