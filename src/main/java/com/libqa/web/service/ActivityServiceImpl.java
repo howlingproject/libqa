@@ -1,6 +1,7 @@
 package com.libqa.web.service;
 
 import com.libqa.application.enums.ActivityType;
+import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.Activity;
 import com.libqa.web.repository.*;
 import lombok.extern.slf4j.Slf4j;
@@ -98,7 +99,8 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public List<Activity> findBySpaceId(Integer spaceId) {
-        return activityRepository.findBySpaceId(spaceId);
+
+        return activityRepository.findBySpaceIdAndIsDeleted(spaceId, false, PageUtil.sortId("DESC", "insertDate"));
     }
 
     @Override

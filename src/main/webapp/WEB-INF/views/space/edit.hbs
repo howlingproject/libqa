@@ -49,6 +49,7 @@ To change this template use File | Settings | File Templates.
                                         <input id="spaceId" name="spaceId" value="{{space.spaceId}}" type="hidden">
                                         <input id="userId" value="{{user.userId}}" type="hidden">
                                         <input id="uploadType" value="Space" type="hidden">
+                                        <input name="uploadYn" id="uploadYn" value="N" type="hidden">
                                         <input name="titleImagePath" id="titleImagePath" type="hidden">
                                         <input name="titleImage" id="titleImage" type="hidden">
                                         <input id="viewType" name="viewType" value="Image" type="hidden" />
@@ -430,6 +431,7 @@ To change this template use File | Settings | File Templates.
          * Upload the file sending it via Ajax at the Spring Boot server.
          */
         function uploadFile() {
+            $("#uploadYn").val("Y");
             var field = $("#file-attachment").val();
             if (field != '') {
                 $.ajax({
@@ -478,6 +480,7 @@ To change this template use File | Settings | File Templates.
             var title = $("#title").val();
             var imagePath = $("#titleImagePath").val();
             var description = $("#wikiEditor").val();
+            var uploadYn = $("#uploadYn").val();
 
 
             if (userId == null || userId.length == 0) {
@@ -497,15 +500,7 @@ To change this template use File | Settings | File Templates.
                 });
                 return false;
             }
-            if (imagePath == null || imagePath.length == 0) {
-                $.alert({
-                    title: '정보',
-                    confirmButton: '확인',
-                    icon: 'fa fa-info',
-                    content: '공간의 이미지 정보는 필수값입니다.'
-                });
-                return false;
-            }
+
             if (description == null || description.length == 0) {
                 $.alert({
                     title: '정보',

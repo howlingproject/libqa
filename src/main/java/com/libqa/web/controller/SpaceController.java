@@ -244,8 +244,10 @@ public class SpaceController {
         spaceEntity.setDescription(space.getDescription());
         spaceEntity.setDescriptionMarkup(space.getDescriptionMarkup());
         spaceEntity.setTitle(space.getTitle());
-        spaceEntity.setTitleImagePath(space.getTitleImagePath());
-        spaceEntity.setTitleImage(space.getTitleImage());
+        if (space.getUploadYn().equals("Y")) {
+            spaceEntity.setTitleImagePath(space.getTitleImagePath());
+            spaceEntity.setTitleImage(space.getTitleImage());
+        }
         spaceEntity.setPrivate(space.isPrivate());
         spaceEntity.setLayoutType(space.getLayoutType());
         spaceEntity.setUpdateDate(new Date());
@@ -276,7 +278,7 @@ public class SpaceController {
         List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
         List<Wiki> spaceWikis = wikiService.findBySpaceId(spaceId);
 
-        // 이 공간의 활동 내역을 조회한다.
+        // 이 공간의 활동 내역을 조회한다. 저장일 역순
         List<Activity> activities = activityService.findBySpaceId(spaceId);
         List<SpaceActivityList> spaceActivityLists = new ArrayList<>();
 
