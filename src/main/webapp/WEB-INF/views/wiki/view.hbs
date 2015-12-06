@@ -231,7 +231,7 @@
                                         <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{userNick}}</span>
                                     </div>
                                     <a class="form" href="/wiki/{{wikiId}}">
-                                        {{{subString (htmlDelete contents) 0 300 }}}
+                                        {{{subString (htmlDelete contents) 0 180 }}}
                                     </a>
                                 </div>
                             </div>
@@ -270,8 +270,8 @@
                     </div>
                     <div class="col-md-1 my-qna-rating pull-right">
                         <button class="fun-like btn btn-sm btn-default btn-sm-fixed pull-right"
-                                data-value="{{this.replyId}}" data-type="COMMENT">추천 1</button>
-                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">비추천 1</button>
+                                data-value="{{this.replyId}}" data-type="COMMENT">추천 {{size this.wikiLikes }}</button>
+                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">비추천</button>
                     </div>
                 </div>
             </div>
@@ -400,7 +400,9 @@
         });
 
         $(".fun-like").on("click", function(){
-            Wiki.like(this.dataset.type,this.dataset.value);
+            if( confirm("추천 하시겠습니까?") ){
+                Wiki.like(this.dataset.type,this.dataset.value);
+            }
         });
 
         $("#saveWiki").on("click", function(){
@@ -429,8 +431,6 @@
            if( link != '' ){
                if( confirm(text+" 하시겠습니까?") ){
                    location.href = link;
-               }else{
-
                }
            }
 

@@ -8,8 +8,10 @@ import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.*;
+import com.libqa.web.view.DisplayWiki;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -51,17 +53,18 @@ public class WikiController {
     public ModelAndView main(Model model){
         ModelAndView mav = new ModelAndView("wiki/main");
 
-        List<Wiki> allWiki = wikiService.findByAllWiki(0, 5);
+        List<DisplayWiki> allWiki = wikiService.findByAllWiki(0, 5);
         mav.addObject("allWiki", allWiki);
 
         User user = loggedUser.get();
         if(isUser(user)){
             Integer userId = user.getUserId();
-            List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
+            List<DisplayWiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
             mav.addObject("resecntWiki", resecntWiki);
         }
-        List<Wiki> bestWiki = wikiService.findByBestWiki(0, 5);
+        List<DisplayWiki> bestWiki = wikiService.findByBestWiki(0, 5);
         mav.addObject("bestWiki", bestWiki);
+
 
         return mav;
     }
@@ -70,6 +73,7 @@ public class WikiController {
         return (user != null && user.getUserId() != null );
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("wiki/write")
     public ModelAndView write(@ModelAttribute Space modelSpace){
         ModelAndView mav = wikiWrite(modelSpace, null);
@@ -104,7 +108,7 @@ public class WikiController {
         ModelAndView mav = new ModelAndView("wiki/view");
 
         Wiki wiki = wikiService.findById(wikiId);
-        List<WikiReply> wikiReply = wiki.getWikiReplies();
+        //List<WikiReply> wikiReply = wiki.getWikiReplies();
         log.info("# view : {}", wiki);
         Wiki parentWiki = wikiService.findByParentId(wiki.getParentsId());
         List<Wiki> subWikiList = wikiService.findBySubWikiId(wiki.getWikiId());
@@ -257,12 +261,12 @@ public class WikiController {
         listType = StringUtil.nullToString(listType);
 
         if( ListType.ALL.getName().equals(listType) ){
-            List<Wiki> allWiki = wikiService.findByAllWiki(0, 15);
+            List<DisplayWiki> allWiki = wikiService.findByAllWiki(0, 15);
             mav.addObject("listWiki", allWiki);
             mav.addObject("listTitle","전체 위키 List");
 
         }else if( ListType.BEST.getName().equals(listType)){
-            List<Wiki> bestWiki = wikiService.findByBestWiki(0, 15);
+            List<DisplayWiki> bestWiki = wikiService.findByBestWiki(0, 15);
             mav.addObject("listWiki", bestWiki);
             mav.addObject("listTitle","베스트 위키 List");
 
@@ -272,7 +276,7 @@ public class WikiController {
             if(isUser(user)){
                 userId = user.getUserId();
             }
-            List<Wiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 15);
+            List<DisplayWiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 15);
             mav.addObject("listWiki", resecntWiki);
             mav.addObject("listTitle","최근 활동 위키 List");
         }else {

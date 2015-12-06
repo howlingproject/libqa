@@ -116,4 +116,5 @@ public class Wiki implements Serializable{
             @JoinColumn(name = "wikiId", referencedColumnName = "wikiId")
     })
     private List<WikiLike> wikiLikes;
+
 }

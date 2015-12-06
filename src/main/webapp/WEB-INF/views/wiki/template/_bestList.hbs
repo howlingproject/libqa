@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <!--{{userNick}} {{insertDate}} 사람 {{likeCount}}명 리플 0개-->
-                    {{userNick}} {{formatDate insertDate "yyyy.MM.dd"}} 사람 {{likeCount}}명 리플 {{replyCount}}개
+                    {{wiki.userNick}} {{formatDate wiki.insertDate "yyyy.MM.dd"}} 사람 {{wiki.likeCount}}명 리플 {{wiki.replyCount}}개
                 </div>
                 <div class="col-md-4 text-right">
                     페이시북 구플 트위트
@@ -17,8 +17,8 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <a class="form" href="/wiki/{{wikiId}}">
-                        {{{subString (htmlDelete contents) 0 300 }}}
+                    <a class="form" href="/wiki/{{wiki.wikiId}}">
+                        {{{subString (htmlDelete wiki.contents) 0 180 }}}
                     </a>
                 </div>
             </div>

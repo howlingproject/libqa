@@ -3,10 +3,10 @@
     <!-- 최근 활동 -->
     <div class="best-qna-item">
         <div>
-            {{#each keywordList}}
-                <span class="label label-primary">{{keywordName}}</span>
+            {{#each wiki.keywordList}}
+                <span class="label label-primary">{{wiki.keywordName}}</span>
             {{/each}}
-            <strong> {{title}}</strong>
+            <strong> {{wiki.title}}</strong>
         </div>
         <div class="media">
             <a class="pull-left" href="#">
@@ -16,8 +16,8 @@
             </a>
             <div class="media-body">
                 <div>
-                    <a class="form" href="/wiki/{{wikiId}}">
-                        {{{subString (htmlDelete contents) 0 100 }}}
+                    <a class="form" href="/wiki/{{wiki.wikiId}}">
+                        {{{subString (htmlDelete wiki.contents) 0 50 }}}
                     </a>
                 </div>
             </div>

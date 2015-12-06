@@ -2,30 +2,30 @@
     <div class="media qna-item">
         <a class="pull-left" href="#">
             <div class="user-profile">
-                <img src="/resource/images/avatar.png" class="profile-image" alt="avatar">
+                <img src="{{user.userImage}}" class="profile-image" alt="avatar">
             </div>
         </a>
         <div class="row">
             <div class="col-xs-6 col-sm-8 col-md-8">
                 <div class="media-body">
                     <div class="media-heading">
-                        <span>{{formatDate insertDate "yyyy.MM.dd HH:mm:SS"}}</span>
+                        <span>{{formatDate wiki.insertDate "yyyy.MM.dd HH:mm:SS"}}</span>
                         <div class="pull-right">
-                            {{#each keywordList}}
+                            {{#each wiki.keywordList}}
                                 <span class="label label-primary">{{keywordName}}</span>
                             {{/each}}
                         </div>
                     </div>
                     <div>
-                        <a class="form" href="/wiki/{{wikiId}}">
-                            {{{subString (htmlDelete contents) 0 100 }}}
+                        <a class="form" href="/wiki/{{wiki.wikiId}}">
+                            {{{subString (htmlDelete wiki.contents) 0 80 }}}
                         </a>
                     </div>
                 </div>
             </div>
             <div class="col-md-2 my-qna-rating">
-                <button class="btn btn-sm btn-default btn-sm-fixed">댓글 {{replyCount}}</button>
-                <button class="btn btn-sm btn-default btn-sm-fixed">추천 {{likeCount}}</button>
+                <button class="btn btn-sm btn-default btn-sm-fixed">댓글 {{wiki.replyCount}}</button>
+                <button class="btn btn-sm btn-default btn-sm-fixed">추천 {{wiki.likeCount}}</button>
             </div>
         </div>
     </div>

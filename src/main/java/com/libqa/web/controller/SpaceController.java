@@ -9,6 +9,7 @@ import com.libqa.web.domain.*;
 import com.libqa.web.service.*;
 import com.libqa.web.service.user.UserFavoriteService;
 import com.libqa.web.service.user.UserService;
+import com.libqa.web.view.DisplayWiki;
 import com.libqa.web.view.SpaceActivityList;
 import com.libqa.web.view.SpaceMain;
 import com.libqa.web.view.SpaceWikiList;
@@ -128,10 +129,11 @@ public class SpaceController {
         /**
          * 최근 수정된 위키 정보 조회 10개
          */
-        List<Wiki> updateWikiList = wikiService.findByAllWiki(0, 10);
+        List<DisplayWiki> updateWikiList = wikiService.findByAllWiki(0, 10);
 
         List<SpaceWikiList> spaceWikiLists = new ArrayList<>();
-        for (Wiki wiki : updateWikiList) {
+        for (DisplayWiki displayWiki : updateWikiList) {
+            Wiki wiki = displayWiki.getWiki();
             List<WikiReply> replies = wiki.getWikiReplies();
             List<Keyword> keywords = keywordService.findByWikiId(wiki.getWikiId(), false);
 

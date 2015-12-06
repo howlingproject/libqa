@@ -4,6 +4,7 @@ import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Wiki;
 import com.libqa.web.domain.WikiLike;
+import com.libqa.web.view.DisplayWiki;
 
 import java.util.List;
 
@@ -23,11 +24,11 @@ public interface WikiService {
 
     List<Wiki> findBySubWikiId(Integer wikiId);
 
-    List<Wiki> findByAllWiki(int startIdx, int endIdx);
+    List<DisplayWiki> findByAllWiki(int startIdx, int endIdx);
 
-    List<Wiki> findByBestWiki(int startIdx, int endIdx);
+    List<DisplayWiki> findByBestWiki(int startIdx, int endIdx);
 
-    List<Wiki> findByRecentWiki(int userId, int startIdx, int endIdx);
+    List<DisplayWiki> findByRecentWiki(int userId, int startIdx, int endIdx);
 
     List<Wiki> findAllByCondition();
 
