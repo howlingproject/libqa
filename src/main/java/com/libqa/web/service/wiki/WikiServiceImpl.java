@@ -1,6 +1,7 @@
 package com.libqa.web.service.wiki;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.KeywordType;
@@ -16,6 +17,7 @@ import com.libqa.web.service.user.UserServiceImpl;
 import com.libqa.web.view.DisplayWiki;
 import com.libqa.web.service.common.ActivityService;
 import com.libqa.web.service.common.KeywordService;
+import com.libqa.web.view.DisplayWikiLike;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,11 +166,12 @@ public class WikiServiceImpl implements WikiService {
 
     @Override
     public List<DisplayWiki> findByAllWiki(int page, int size) {
-        List<DisplayWiki> resultWiki = new ArrayList<DisplayWiki>();
+        List<DisplayWiki> resultWiki = new ArrayList<>();
         List<Wiki> list = wikiRepository.findAllByIsDeleted(
-                PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "insertDate")).getSort()
-                , isDeleted);
-        if( !MoreObjects.firstNonNull(list, ImmutableList.of()).isEmpty() ){
+                isDeleted
+                , PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "insertDate"))
+                );
+        if( !CollectionUtils.isEmpty( list )){
             for( Wiki wiki : list ){
                 resultWiki.add( new DisplayWiki(wiki, userService.findByUserId( wiki.getUserId() ) )  );
             }
@@ -180,10 +183,11 @@ public class WikiServiceImpl implements WikiService {
     public List<DisplayWiki> findByBestWiki(int page, int size) {
         List<DisplayWiki> resultWiki = new ArrayList<DisplayWiki>();
         List<Wiki> list = wikiRepository.findAllByIsDeleted(
-                PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "likeCount")).getSort()
-                , isDeleted);
+                isDeleted
+                , PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "likeCount"))
+                );
 
-        if( CollectionUtils.isEmpty( list ) ){
+        if( !CollectionUtils.isEmpty( list ) ){
             for( Wiki wiki : list ){
                 resultWiki.add( new DisplayWiki(wiki, userService.findByUserId( wiki.getUserId() ) )  );
             }
@@ -197,14 +201,15 @@ public class WikiServiceImpl implements WikiService {
         List<DisplayWiki> resultWiki = new ArrayList<DisplayWiki>();
         List<Wiki> list = wikiRepository.findAllByUserIdAndIsDeleted(
                 userId
+                , isDeleted
                 , PageUtil.sortPageable(
                         page
                         , size
                         , PageUtil.sort(PageUtil.order("DESC", "userId"), PageUtil.order("DESC", "insertDate"))
-                ).getSort()
-                , isDeleted);
+                    )
+                );
 
-        if( CollectionUtils.isEmpty( list ) ){
+        if( !CollectionUtils.isEmpty( list ) ){
             for( Wiki wiki : list ){
                 resultWiki.add( new DisplayWiki(wiki, userService.findByUserId( wiki.getUserId() ) )  );
             }
@@ -228,7 +233,7 @@ public class WikiServiceImpl implements WikiService {
         List wikis = new ArrayList<>();
         try {
             wikis = wikiRepository.findAllBySpaceIdAndIsDeleted(spaceId, isDeleted,
-                    PageUtil.sortPageable(startIdx, endIdx, PageUtil.sortId("DESC", "updateDate")).getSort());
+                    PageUtil.sortPageable(startIdx, endIdx, PageUtil.sortId("DESC", "updateDate")));
         } catch (Exception e) {
             e.getMessage();
         }
@@ -243,12 +248,13 @@ public class WikiServiceImpl implements WikiService {
 
         List<Wiki> list = wikiRepository.findAllByWikiIdInAndIsDeleted(
                 wikiIds
+                , isDeleted
                 , PageUtil.sortPageable(
                         page
                         , size
                         , PageUtil.sortId("DESC", "insertDate")
-                ).getSort()
-                , isDeleted);
+                    )
+                );
         return list;
     }
 
@@ -256,24 +262,36 @@ public class WikiServiceImpl implements WikiService {
     public List<Wiki> findWikiListByContentsMarkup(String searchText, int page, int size) {
         List<Wiki> list = wikiRepository.findAllByContentsMarkupContainingAndIsDeleted(
                 searchText
+                , isDeleted
                 , PageUtil.sortPageable(
                         page
                         , size
                         , PageUtil.sortId("DESC", "insertDate")
-                ).getSort()
-                , isDeleted);
+                )
+                );
         return list;
     }
 
     @Override
-    public Integer updateLike(WikiLike like) {
-        Integer result = 0;
+    public DisplayWikiLike updateLike(WikiLike like) {
+        DisplayWikiLike result = new DisplayWikiLike(0, null);
         try{
-            WikiLike dupLike;
-            dupLike = wikiLikeRepository.findOneByUserIdAndWikiId(like.getUserId(), like.getWikiId());
+            WikiLike dupLike = null;
+            if( like.getWikiId() != null ){
+                dupLike = wikiLikeRepository.findOneByUserIdAndWikiId(like.getUserId(), like.getWikiId());
+            }else if( like.getReplyId() != null ){
+                dupLike = wikiLikeRepository.findOneByUserIdAndReplyId(like.getUserId(), like.getReplyId());
+            }
+
             if( dupLike == null ){
+                if( like.getWikiId() != null ){
+                    Wiki wiki = findById(like.getWikiId());
+                    wiki.setLikeCount( MoreObjects.firstNonNull(wiki.getLikeCount(), 0)  + 1 );
+                    save(wiki);
+                }
                 wikiLikeRepository.save(like);
-                result = 1;
+                result.setResult(1);
+                result.setWikiLike(like);
             }
         }catch(Exception e){
             e.getMessage();

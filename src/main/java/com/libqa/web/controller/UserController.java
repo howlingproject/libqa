@@ -197,7 +197,7 @@ public class UserController {
             if (duplicateEmail == null && duplicateNick == null) {
                 user = userService.createUser(loginUserMail, loginUserNick, loginUserPass, loginType);
                 user.setTargetUrl(targetUrl);   // 이전 주소 세팅
-                resultData = resultData.createSuccessResult(user);
+                resultData = ResponseData.createSuccessResult(user);
             } else {
                 user.setUserEmail(loginUserMail);
                 user.setUserNick(loginUserNick);
@@ -212,7 +212,7 @@ public class UserController {
             e.printStackTrace();
             user.setUserEmail(loginUserMail);
             user.setUserNick(loginUserNick);
-            resultData = resultData.createFailResult(user);
+            resultData = ResponseData.createFailResult(user);
         }
 
         return resultData;

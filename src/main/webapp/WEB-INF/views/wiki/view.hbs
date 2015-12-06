@@ -97,7 +97,7 @@
                             </tr>
                             <tr>
                                 <td>공감수</td>
-                                <td>{{size wiki.wikiLikes }}</td>
+                                <td id="wikiIdLike">{{size wiki.wikiLikes }}</td>
                             </tr>
                             <tr>
                                 <td>글상태</td>
@@ -270,7 +270,7 @@
                     </div>
                     <div class="col-md-1 my-qna-rating pull-right">
                         <button class="fun-like btn btn-sm btn-default btn-sm-fixed pull-right"
-                                data-value="{{this.replyId}}" data-type="COMMENT">추천 {{size this.wikiLikes }}</button>
+                                data-value="{{this.replyId}}" data-type="COMMENT" id="replyIdLike{{this.replyId}}">추천 <span>{{size this.wikiLikes }}</span></button>
                         <button class="btn btn-sm btn-default btn-sm-fixed pull-right">비추천</button>
                     </div>
                 </div>
@@ -442,9 +442,25 @@
                     url: "/wiki/saveLike",
                     type: "POST",
                     data: { type : type, num : num },
-                    success : function(data){
-                        console.info(data);
-//                        if(data.resultCode == 1) {
+                    success : function(result){
+                        console.info(result);
+                        if( result.data != null){
+                            if( result.data.result == 1  ){
+                                $(".fun-like").each(function(){
+                                    if( result.data.wikiLike.wikiId != null && this.dataset.type == "WIKI"){
+                                        var num = Number($("#wikiIdLike").text())+1;
+                                        $("#wikiIdLike").text( num );
+                                    }else if( result.data.wikiLike.replyId != null
+                                            && this.dataset.type == "COMMENT"
+                                            && this.dataset.value == result.data.wikiLike.replyId ){
+                                        var id = "replyIdLike"+this.dataset.value;
+                                        var num = Number($("#"+id+" span").text())+1;
+                                        $("#"+id+" span").text(num);
+                                    }
+                                })
+                            }
+                        }
+//                        if(data == 1) {
 //
 //                        }
                     },

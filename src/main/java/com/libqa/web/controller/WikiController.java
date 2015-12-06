@@ -13,8 +13,8 @@ import com.libqa.web.service.common.KeywordService;
 import com.libqa.web.service.space.SpaceService;
 import com.libqa.web.service.wiki.WikiReplyService;
 import com.libqa.web.service.wiki.WikiService;
-import com.libqa.web.service.*;
 import com.libqa.web.view.DisplayWiki;
+import com.libqa.web.view.DisplayWikiLike;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -59,18 +59,17 @@ public class WikiController {
     public ModelAndView main(Model model){
         ModelAndView mav = new ModelAndView("wiki/main");
 
-        List<DisplayWiki> allWiki = wikiService.findByAllWiki(0, 5);
+        List<DisplayWiki> allWiki = wikiService.findByAllWiki(0, 10);
         mav.addObject("allWiki", allWiki);
 
         User user = loggedUser.get();
         if(isUser(user)){
             Integer userId = user.getUserId();
-            List<DisplayWiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
+            List<DisplayWiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 4);
             mav.addObject("resecntWiki", resecntWiki);
         }
-        List<DisplayWiki> bestWiki = wikiService.findByBestWiki(0, 5);
+        List<DisplayWiki> bestWiki = wikiService.findByBestWiki(0, 4);
         mav.addObject("bestWiki", bestWiki);
-
 
         return mav;
     }
@@ -125,8 +124,6 @@ public class WikiController {
         mav.addObject("subWikiList", subWikiList);
         mav.addObject("parentWiki", parentWiki);
         //mav.addObject("activityList", activityList);
-
-
 
         return mav;
     }
@@ -322,12 +319,12 @@ public class WikiController {
 
     @RequestMapping(value = "/wiki/saveLike", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<Integer> saveLike(
+    public ResponseData<DisplayWikiLike> saveLike(
             @RequestParam("type") WikiLikesType type, @RequestParam("num") int num) {
         log.info("# type : {}", type);
         log.info("# num : {}", num);
 
-        Integer recommend = 0;
+        DisplayWikiLike displayWikiLike = null;
         try{
             User user = loggedUser.get();
             if(isUser(user)){
@@ -339,11 +336,11 @@ public class WikiController {
                     wikiLike.setReplyId(num);
                 }
 
-                recommend = wikiService.updateLike(wikiLike);
+                displayWikiLike = wikiService.updateLike(wikiLike);
             }
-            return ResponseData.createSuccessResult(recommend);
+            return ResponseData.createSuccessResult(displayWikiLike);
         }catch(Exception e){
-            return ResponseData.createSuccessResult(recommend);
+            return ResponseData.createSuccessResult(displayWikiLike);
         }
     }
 

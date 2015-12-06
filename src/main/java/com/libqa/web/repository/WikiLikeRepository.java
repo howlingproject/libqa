@@ -11,4 +11,6 @@ import java.util.List;
 public interface WikiLikeRepository extends JpaRepository<WikiLike, Integer> {
 
     WikiLike findOneByUserIdAndWikiId(Integer userId, Integer wikiId);
+
+    WikiLike findOneByUserIdAndReplyId(Integer userId, Integer wikiId);
 }

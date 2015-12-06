@@ -5,6 +5,7 @@ import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Wiki;
 import com.libqa.web.domain.WikiLike;
 import com.libqa.web.view.DisplayWiki;
+import com.libqa.web.view.DisplayWikiLike;
 
 import java.util.List;
 
@@ -40,5 +41,5 @@ public interface WikiService {
 
     List<Wiki> findWikiListByContentsMarkup(String searchText, int page, int size);
 
-    Integer updateLike(WikiLike likes);
+    DisplayWikiLike updateLike(WikiLike likes);
 }

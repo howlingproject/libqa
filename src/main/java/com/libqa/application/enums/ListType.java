@@ -18,5 +18,4 @@ public enum ListType {
     private ListType(final String name) {
         this.name = name;
     }
-    ;
 }

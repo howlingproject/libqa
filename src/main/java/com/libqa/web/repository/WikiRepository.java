@@ -1,6 +1,7 @@
 package com.libqa.web.repository;
 
 import com.libqa.web.domain.Wiki;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,15 +14,17 @@ public interface WikiRepository extends JpaRepository<Wiki, Integer> {
 
     List<Wiki> findAllByIsDeleted(Sort orders, boolean isDeleted);
 
-    List<Wiki> findAllByUserIdAndIsDeleted(Integer userId, Sort orders, boolean isDeleted);
+    List<Wiki> findAllByIsDeleted(boolean isDeleted, Pageable pageable);
+
+    List<Wiki> findAllByUserIdAndIsDeleted(Integer userId, boolean isDeleted, Pageable pageable);
 
     List<Wiki> findBySpaceIdAndIsDeleted(Integer spaceId, boolean isDeleted);
 
-    List<Wiki> findAllBySpaceIdAndIsDeleted(Integer spaceId, boolean isDeleted, Sort sort);
+    List<Wiki> findAllBySpaceIdAndIsDeleted(Integer spaceId, boolean isDeleted, Pageable pageable);
 
-    List<Wiki> findAllByWikiIdInAndIsDeleted(List<Integer> wikiIds, Sort sort, boolean isDeleted);
+    List<Wiki> findAllByWikiIdInAndIsDeleted(List<Integer> wikiIds, boolean isDeleted, Pageable pageable);
 
-    List<Wiki> findAllByContentsMarkupContainingAndIsDeleted(String contentsMarkup, Sort sort, boolean isDeleted);
+    List<Wiki> findAllByContentsMarkupContainingAndIsDeleted(String contentsMarkup, boolean isDeleted, Pageable pageable);
 
     List<Wiki> findAllByParentsIdAndIsDeleted(Integer parentId, boolean isDeleted);
 

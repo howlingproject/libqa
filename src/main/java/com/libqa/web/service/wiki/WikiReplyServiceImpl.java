@@ -20,7 +20,6 @@ public class WikiReplyServiceImpl implements WikiReplyService {
     @Override
     public int countByWiki(Integer wikiId) {
         return wikiReplyRepository.countByWikiId(wikiId);
-
     }
 
     @Override
