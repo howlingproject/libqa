@@ -7,6 +7,12 @@ import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUser;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
+import com.libqa.web.service.common.ActivityService;
+import com.libqa.web.service.common.KeywordListService;
+import com.libqa.web.service.common.KeywordService;
+import com.libqa.web.service.space.SpaceService;
+import com.libqa.web.service.wiki.WikiReplyService;
+import com.libqa.web.service.wiki.WikiService;
 import com.libqa.web.service.*;
 import com.libqa.web.view.DisplayWiki;
 import lombok.extern.slf4j.Slf4j;
@@ -186,11 +192,13 @@ public class WikiController {
             log.info("wiki = {}", wiki);
             log.info("wiki.wikiFile = {}", wiki.getWikiFiles());
             User user = loggedUser.get();
-
+            Date now = new Date();
             wiki.setUserNick(user.getUserNick());
             wiki.setUserId(user.getUserId());
 
-            wiki.setInsertDate(new Date());
+            wiki.setInsertDate(now);
+            wiki.setUpdateDate(now);
+
             if( wiki.getParentsId() == null  ){
                 wiki.setDepthIdx(1);
             }

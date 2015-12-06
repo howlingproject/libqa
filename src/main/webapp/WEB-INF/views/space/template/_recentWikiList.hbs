@@ -4,13 +4,13 @@
 
     <div class="best-qna-item">
         <div>
-            {{> common/_keywordBadge}}
             <strong> <a class="form" href="/wiki/{{wiki.wikiId}}">{{wiki.title}}</a></strong>
+            <br>{{> common/_keywordBadge}}
         </div>
         <div class="media">
             <a class="pull-left" href="#">
                 <div class="user-profile">
-                    <img alt="avatar" class="profile-image" src="{{user.userThumbnailImageName}}/{{user.userThumbnailImageName}}" onerror='this.src="/resource/images/avatar.png"' />
+                    <img alt="avatar" class="profile-image" src="{{user.userImage}}" onerror='this.src="/resource/images/avatar.png"' />
                 </div>
             </a>
             <div class="media-body">

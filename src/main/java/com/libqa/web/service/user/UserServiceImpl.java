@@ -8,11 +8,8 @@ import com.libqa.web.domain.User;
 import com.libqa.web.domain.UserKeyword;
 import com.libqa.web.repository.UserKeywordRepository;
 import com.libqa.web.repository.UserRepository;
-import com.libqa.web.service.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +30,6 @@ public class UserServiceImpl implements UserService {
 
     public static final String USER_EMAIL_CACHE = "usersCache";
 
-    @Autowired
-    private JavaMailSender javaMailSender;
 
     @Autowired
     private UserRepository userRepository;
@@ -42,8 +37,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserKeywordRepository userKeywordRepository;
 
-    @Autowired
-    private MailService mailService;
 
     @Override
     @Transactional
@@ -68,20 +61,6 @@ public class UserServiceImpl implements UserService {
 
 
         return createUser;
-    }
-
-    void sendAuthMail(User createUser) {
-        log.info("### Send mail ");
-        // mailService
-
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo("someone@localhost");
-        mailMessage.setReplyTo("someone@localhost");
-        mailMessage.setFrom("someone@localhost");
-        mailMessage.setSubject("Lorem ipsum");
-        mailMessage.setText("Lorem ipsum dolor sit amet [...]");
-        javaMailSender.send(mailMessage);
-
     }
 
 

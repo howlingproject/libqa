@@ -1,6 +1,7 @@
-{{#if spaceActivityLists}}
-    {{#each spaceActivityLists}}
-        <div class="media" style="padding-left:15px">
+{{#if updatedWikis}}
+    {{#each updatedWikis}}
+
+        <div class="media">
             <a href="#" class="pull-left">
                 <div class="user-profile-sm">
                     <img alt="avatar" class="profile-image" src="{{user.userImage}}" onerror='this.src="/resource/images/avatar.png"' />
@@ -8,17 +9,18 @@
             </a>
 
             <div class="media-body" style="font-size:13px">
-                <span class="pull-left"><u><i>{{activity.activityDesc}}</i></u></span>
-                <span class="pull-right">{{formatDate activity.insertDate "yyyy/MM/dd hh:MM:ss"}}</span>
+                <a href="/wiki/{{wikiId}}" class="text">{{subString (htmlDelete contents) 0 240 }}</a>
+                <span class="badge">{{replyCount}}</span>
             </div>
         </div>
-    {{/each}}
-    <small><cite title="Source Title">더보기</cite></small>
 
+    {{/each}}
+
+    <small><cite title="Source Title" id="getMoreWiki" style="cursor:pointer">더보기</cite></small>
 {{^}}
     <div class="media">
         <div class="media-body">
-            활동 내역이 존재하지 않습니다.
+            생성된 위키가 없습니다.
         </div>
     </div>
 {{/if}}

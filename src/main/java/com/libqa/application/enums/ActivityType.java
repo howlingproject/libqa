@@ -25,12 +25,12 @@ public enum ActivityType {
     ADD_VOTE_NO("비추천에 투표 하였습니다."),
     ADD_REPLY_RECOMMEND("댓글을 추천 하였습니다.")
     ;
+
+
     @Getter
     private String code;
 
-    private ActivityType(final String code) {
+    ActivityType(String code) {
         this.code = code;
     }
-
-
 }

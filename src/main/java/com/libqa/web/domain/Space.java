@@ -47,10 +47,10 @@ public class Space implements Serializable {
     private boolean isDeleted;
 
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
     @Column(nullable = false)
@@ -68,5 +68,7 @@ public class Space implements Serializable {
     @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
     private List<SpaceAccessUser> spaceAccessUsers;
 
+    @Transient
+    private String uploadYn;
 }
 

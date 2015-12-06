@@ -1,6 +1,5 @@
-package com.libqa.web.service;
+package com.libqa.web.service.wiki;
 
-import com.libqa.web.domain.Wiki;
 import com.libqa.web.domain.WikiFile;
 import com.libqa.web.repository.WikiFileRepository;
 import lombok.extern.slf4j.Slf4j;

@@ -2,6 +2,7 @@ package com.libqa.config;
 
 import com.libqa.application.util.RequestUtil;
 import com.libqa.application.util.StringUtil;
+import com.libqa.web.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +39,6 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
         String role = "";
         String userEmail = "";
 
-        /*
-        Cookie[] cookies = request.getCookies();
-
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                log.info("@@@@ cookie name : {}", cookies[i].getName());
-                log.info("@@@@ cookie value : {}", cookies[i].getValue());
-            }
-        }
-        */
 
         log.info("#### interceptor authentication : {} ", authentication);
         if (authentication == null) {
@@ -87,14 +78,15 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
         log.info("# postHandle  request.get userRole = {}", request.getAttribute("userRole"));
 
         String isLogin = (String) request.getAttribute("isLogin");
+        String userEmail = (String) request.getAttribute("userEmail");
 
 
         if (StringUtil.nullToString(isLogin, "").equals("1")) {
             if (modelAndView == null) {
                 log.info("#### modelandview 가 널임 ");
             } else {
-                modelAndView.addObject("isLogin", request.getAttribute("isLogin"));
-                modelAndView.addObject("userEmail", request.getAttribute("userEmail"));
+                modelAndView.addObject("isLogin", isLogin);
+                modelAndView.addObject("userEmail", userEmail);
                 modelAndView.addObject("userRole", request.getAttribute("userRole"));
             }
         }

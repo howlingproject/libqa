@@ -15,9 +15,11 @@ To change this template use File | Settings | File Templates.
     <div class="col-md" >
         <div style="padding-bottom: 45px;">
             <div class="btn-group" data-toggle="buttons" style="float: right">
-                <a href="#" class="btn btn-primary">공간 정보수정</a>
-                <a href="#" class="btn btn-primary">위키 생성</a>
-                <a href="#" class="btn btn-primary">첨부파일 목록</a>
+                <a class="btn btn-primary" id="cancelFavorite" style="display: none;"><i class="fa fa-heart-o"></i> 즐겨찾기 취소</a>
+                <a class="btn btn-primary" id="addFavorite" style="display: none;"><i class="fa fa-heart"></i> 즐겨찾기 추가</a>
+                <a class="btn btn-primary" id="createWiki"><i class="fa fa-pencil"></i> 위키 생성</a>
+                <a href="#" class="btn btn-primary"><i class="fa fa-file-text"></i> 첨부파일 목록</a>
+                <a href="#" id="editSpace" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i>  공간 정보수정</a>
             </div>
         </div>
     </div>
@@ -28,184 +30,29 @@ To change this template use File | Settings | File Templates.
 
 
 <div class="container components">
-    <h1>공간의 제목이 여기에 들어가야 겠죠.</h1>
+    <h1>{{space.title}}</h1>
     <hr>
 
     <div class="col-xs-12 col-sm-9">
-        <p class="pull-right visible-xs">
-            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
-        </p>
+
         <div class="jumbotron">
-            <h3>Hello, world! 공간 설명 샘플</h3>
-            <p>This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport sizes to see it in action.</p>
+            <img src="{{space.titleImagePath}}/{{space.titleImage}}" width="250">
+            <p>{{space.description}}</p>
         </div>
 
         <div class="row row-offcanvas row-offcanvas-right">
 
-            <h3>최근 이 공간의 활동 내역 10개 출력합시다. </h3>
+            <h3>최근 수정된 위키 목록</h3>
             <blockquote class="pull-left">
-
-                <div class="media">
-                    <a href="#" class="pull-left">
-                        <div class="user-profile-sm">
-                            <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                        </div>
-                    </a>
-
-                    <div class="media-body" style="font-size:13px">
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                        fringilla. Donec lacinia congue felis in faucibus.
-                        <span class="badge">1927</span>
-                    </div>
-                </div>
-
-                <div class="media">
-                    <a href="#" class="pull-left">
-                        <div class="user-profile-sm">
-                            <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                        </div>
-                    </a>
-
-                    <div class="media-body" style="font-size:13px">
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                        fringilla. Donec lacinia congue felis in faucibus.
-                        <span class="badge">1927</span>
-                    </div>
-                </div>
-
-                <div class="media">
-                    <a href="#" class="pull-left">
-                        <div class="user-profile-sm">
-                            <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                        </div>
-                    </a>
-
-                    <div class="media-body" style="font-size:13px">
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                        fringilla. Donec lacinia congue felis in faucibus.
-                        <span class="badge">1927</span>
-                    </div>
-                </div>
-
-
-                <div class="media">
-                    <a href="#" class="pull-left">
-                        <div class="user-profile-sm">
-                            <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                        </div>
-                    </a>
-
-                    <div class="media-body" style="font-size:13px">
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                        fringilla. Donec lacinia congue felis in faucibus.
-                        <span class="badge">1927</span>
-                    </div>
-                </div>
-
-                <div class="media">
-                    <a href="#" class="pull-left">
-                        <div class="user-profile-sm">
-                            <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                        </div>
-                    </a>
-
-                    <div class="media-body" style="font-size:13px">
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                        fringilla. Donec lacinia congue felis in faucibus.
-                        <span class="badge">1927</span>
-                    </div>
-                </div>
-
-                <small><cite title="Source Title">더보기</cite></small>
-
+                {{> space/template/_updateWikiRight}}
             </blockquote>
 
             <hr>
 
 
-            <h3>이 공간의 최근 댓글을 10개 출력합시다. </h3>
+            <h3>최근 이 공간의 활동 내역 목록 </h3>
             <blockquote class="pull-left">
-                <div class="media">
-                    <a href="#" class="pull-left">
-                        <div class="user-profile-sm">
-                            <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                        </div>
-                    </a>
-
-                    <div class="media-body" style="font-size:13px">
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                        fringilla. Donec lacinia congue felis in faucibus.
-
-                    </div>
-                </div>
-                <div class="media">
-                    <a href="#" class="pull-left">
-                        <div class="user-profile-sm">
-                            <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                        </div>
-                    </a>
-
-                    <div class="media-body" style="font-size:13px">
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                        fringilla. Donec lacinia congue felis in faucibus.
-
-                    </div>
-                </div>
-
-                <div class="media">
-                    <a href="#" class="pull-left">
-                        <div class="user-profile-sm">
-                            <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                        </div>
-                    </a>
-
-                    <div class="media-body" style="font-size:13px">
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                        fringilla. Donec lacinia congue felis in faucibus.
-
-                    </div>
-                </div>
-
-                <div class="media">
-                    <a href="#" class="pull-left">
-                        <div class="user-profile-sm">
-                            <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                        </div>
-                    </a>
-
-                    <div class="media-body" style="font-size:13px">
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                        fringilla. Donec lacinia congue felis in faucibus.
-
-                    </div>
-                </div>
-
-                <div class="media">
-                    <a href="#" class="pull-left">
-                        <div class="user-profile-sm">
-                            <img alt="avatar" class="profile-image" src="../images/avatar.png" />
-                        </div>
-                    </a>
-
-                    <div class="media-body" style="font-size:13px">
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
-                        fringilla. Donec lacinia congue felis in faucibus.
-
-                    </div>
-                </div>
-
-
-                <small><cite title="Source Title">더보기</cite></small>
+                {{> space/template/_activityList}}
             </blockquote>
 
         </div><!--/row-->
@@ -213,25 +60,13 @@ To change this template use File | Settings | File Templates.
 
     <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
         <div class="well sidebar-nav">
-            <h4>h4. Heading 4 <span class="badge">19</span></h4>
-            <h5 style="margin-left:10px">- h5. Heading 5 <span class="badge">11</span></h5>
-            <h5 style="margin-left:20px">- h5. Heading 5 <span class="badge">23</span></h5>
-            <h5 style="margin-left:30px">- h5. Heading 5 <span class="badge">33</span></h5>
-
-            <h4>h4. Heading 4 <span class="badge">19</span></h4>
-            <h5 style="margin-left:10px">- h5. Heading 5 <span class="badge">11</span></h5>
-            <h5 style="margin-left:20px">- h5. Heading 5 <span class="badge">23</span></h5>
-            <h5 style="margin-left:30px">- h5. Heading 5 <span class="badge">33</span></h5>
-
-            <h4>h4. Heading 4 <span class="badge">19</span></h4>
-            <h5 style="margin-left:10px">- h5. Heading 5 <span class="badge">11</span></h5>
-            <h5 style="margin-left:20px">- h5. Heading 5 <span class="badge">23</span></h5>
-            <h5 style="margin-left:30px">- h5. Heading 5 <span class="badge">33</span></h5>
-
-            <h4>h4. Heading 4 <span class="badge">19</span></h4>
-            <h5 style="margin-left:10px">- h5. Heading 5 <span class="badge">11</span></h5>
-            <h5 style="margin-left:20px">- h5. Heading 5 <span class="badge">23</span></h5>
-            <h5 style="margin-left:30px">- h5. Heading 5 <span class="badge">33</span></h5>
+            {{#if spaceWikis}}
+                {{#each spaceWikis}}
+                    <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
+                {{/each}}
+            {{^}}
+                생성된 위키가 없습니다.
+            {{/if}}
         </div><!--/.well -->
     </div><!--/span-->
 </div>
@@ -244,7 +79,128 @@ To change this template use File | Settings | File Templates.
     <script type="text/javascript">
         // bind the on-change event
         $(document).ready(function() {
+            var userFavorite = "{{userFavorite}}";
 
+            console.log("## userFavorite = " + userFavorite);
+            if (userFavorite == '') {
+                $("#addFavorite").css("display","block");
+            } else {
+                $("#cancelFavorite").css("display","block");
+            }
+
+            $('#createWiki').on('click', function () {
+                $('#space').attr({action:'/wiki/write', method:'post'}).submit();
+            });
+
+            $('#editSpace').on('click', function () {
+                $('#space').attr({action:'/space/edit/{{space.spaceId}}', method:'get'}).submit();
+            });
+
+            $('#getMoreWiki').on('click', function () {
+                alert('더 가져오기');
+            });
+
+            $('#addFavorite').on('click', function () {
+                var spaceId = {{space.spaceId}};
+                $.ajax({
+                    url: "/space/addFavorite",
+                    data: { spaceId : spaceId },
+                    type: "GET",
+                    success : function(data){
+                        console.log("data = " + data);
+
+                        if (data == 1) {
+                            $.alert({
+                                title: '확인',
+                                content: '즐겨찾기 추가 완료',
+                                confirmButton: 'OK',
+                                confirmButtonClass: 'btn-primary',
+                                icon: 'fa fa-info',
+                                animation: 'zoom',
+                                confirm: function () {
+                                }
+                            });
+
+                            $("#addFavorite").css("display","none");
+                            $("#cancelFavorite").css("display","block");
+                        } else if (data == 0) {
+                            $.alert({
+                                title: '확인',
+                                content: '사용자 정보가 존재하지 않습니다. 로그인 후 다시 시도하세요.',
+                                confirmButton: 'OK',
+                                confirmButtonClass: 'btn-primary',
+                                icon: 'fa fa-info',
+                                animation: 'zoom',
+                                confirm: function () {
+                                }
+                            });
+                        }
+                    },
+                    error : function(req){
+                        $.alert({
+                            title: '확인',
+                            content: '즐겨찾기 추가가 되지 않았습니다. 다시 시도하세요.',
+                            confirmButton: 'OK',
+                            confirmButtonClass: 'btn-primary',
+                            icon: 'fa fa-info',
+                            animation: 'zoom',
+                            confirm: function () {
+                            }
+                        });
+                    }
+                })
+            });
+
+            $('#cancelFavorite').on('click', function () {
+                var spaceId = {{space.spaceId}};
+                $.ajax({
+                    url: "/space/cancelFavorite",
+                    data: { spaceId : spaceId },
+                    type: "GET",
+                    success : function(data){
+                        console.log("data = " + data);
+
+                        if (data == 1) {
+                            $.alert({
+                                title: '확인',
+                                content: '즐겨찾기 취소 완료',
+                                confirmButton: 'OK',
+                                confirmButtonClass: 'btn-primary',
+                                icon: 'fa fa-info',
+                                animation: 'zoom',
+                                confirm: function () {
+                                }
+                            });
+
+                            $("#addFavorite").css("display","block");
+                            $("#cancelFavorite").css("display","none");
+                        } else if (data == 0) {
+                            $.alert({
+                                title: '확인',
+                                content: '사용자 정보가 존재하지 않거나 만료 되었습니다. 다시 로그인 하세요.',
+                                confirmButton: 'OK',
+                                confirmButtonClass: 'btn-primary',
+                                icon: 'fa fa-info',
+                                animation: 'zoom',
+                                confirm: function () {
+                                }
+                            });
+                        }
+                    },
+                    error : function(req){
+                        $.alert({
+                            title: '확인',
+                            content: '즐겨찾기 취소가 되지 않았습니다. 다시 시도하세요.',
+                            confirmButton: 'OK',
+                            confirmButtonClass: 'btn-primary',
+                            icon: 'fa fa-info',
+                            animation: 'zoom',
+                            confirm: function () {
+                            }
+                        });
+                    }
+                })
+            });
         });
     </script>
 {{/partial}}

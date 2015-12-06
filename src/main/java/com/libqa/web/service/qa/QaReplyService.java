@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.qa;
 
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaReply;

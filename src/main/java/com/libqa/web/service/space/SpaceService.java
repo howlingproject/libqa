@@ -1,5 +1,6 @@
-package com.libqa.web.service;
+package com.libqa.web.service.space;
 
+import com.libqa.application.enums.ActivityType;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;
 
@@ -21,7 +22,7 @@ public interface SpaceService {
 
 	Space findOne(Integer spaceId);
 
-	Space saveWithKeyword(Space space, Keyword keyword);
+	Space saveWithKeyword(Space space, Keyword keyword, ActivityType activityType);
 
 	/**
 	 * 사용자가 추가한 즐겨찾기 공간 목록 조회

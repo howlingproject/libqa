@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.wiki;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
@@ -14,6 +14,8 @@ import com.libqa.web.repository.WikiSnapShotRepository;
 import com.libqa.web.service.user.UserService;
 import com.libqa.web.service.user.UserServiceImpl;
 import com.libqa.web.view.DisplayWiki;
+import com.libqa.web.service.common.ActivityService;
+import com.libqa.web.service.common.KeywordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -47,8 +47,8 @@
 
                 <div class="form-inline" id="tag-info">
                     <label for="keyword" class="sr-only">키워드</label>
-                    <input type="text" class="form-control" id="interesting" style="width: 50%;" placeholder="키워드를 입력하세요. (최대 5개)">
-                    <button type="button" class="btn btn-primary btn-sm" id="keywordAdd">키워드추가 <i class="glyphicon glyphicon-plus"></i></button>
+                    <input type="text" class="form-control" size="29" id="interesting" placeholder="키워드를 입력하세요. (최대 3개)">
+                    <button class="btn btn-primary" type="button" id="keywordAdd">Add <i class="glyphicon glyphicon-plus"></i></button>
                     <ul id="tag-cloud" style="padding-left: 0px; width:100%;"></ul>
                     <input type="hidden" name="keywords" id="keywords" />
                 </div>
@@ -71,8 +71,9 @@
             </form>
         </div>
         <div class="form-actions text-center">
-            <button type="button" class="btn btn-default" id="cancel" >취소</button>
             <button type="button" class="btn btn-primary" id="saveWiki">저장</button>
+            <button type="button" class="btn" id="cancel">취소</button>
+
         </div>
     </section>
 </div>

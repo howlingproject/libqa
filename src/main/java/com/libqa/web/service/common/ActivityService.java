@@ -1,4 +1,4 @@
-package com.libqa.web.service;
+package com.libqa.web.service.common;
 
 import com.libqa.web.domain.Activity;
 

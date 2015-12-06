@@ -5,6 +5,7 @@ import com.libqa.application.enums.Role;
 import com.libqa.application.enums.SocialChannelType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.util.List;
 @Data
 @Entity
 @EqualsAndHashCode
+@ToString(exclude = {"userKeywords", "userPoints"})
 public class User {
     private final static String DEFAULT_PROFILE_IMAGE = "/resource/images/avatar.png";
 
