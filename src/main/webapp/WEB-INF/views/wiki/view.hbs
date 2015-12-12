@@ -2,7 +2,7 @@
 
 {{# partial "content" }}
 <div class="container">
-    <div class="col-md" >
+    <div class="col-md" id="mainContent">
         <div style="padding-bottom: 45px;">
             <div class="btn-group" data-toggle="buttons" style="float: left">
                 {{#if wiki.test}}
@@ -27,88 +27,46 @@
 
         <div class="row">
             <div class="col-md-9" role="main" style="padding-bottom: 20px;">
+                <h1 class="page-header">{{{wiki.title}}}</h1>
                 {{{wiki.contents}}}
             </div>
 
             <div class="col-md-3">
                 <div class="bs-docs-sidebar navigation" >
-                    {{#if wiki.navigation}}
-                        <!--추후적용-->
-                    <ul class="nav bs-docs-sidenav">
-                        <li class="active">
-                            <a href="#type">Typography</a>
-                            <ul class="nav">
-                                <li class=""><a href="#type-style">스타일</a></li>
-                                <li class=""><a href="#type-headings">제목</a></li>
-                                <li class="">
-                                    <a href="#type-lnline">Inline text elements</a>
-                                    <ul class="nav">
-                                        <li class=""><a href="#type-lnline-bold">Bold</a></li>
-                                        <li class=""><a href="#type-lnline-italics">Italics</a></li>
-                                        <li class=""><a href="#type-lnline-deleted">Deleted text</a></li>
-                                        <li class=""><a href="#type-lnline-underlined">Underlined text</a></li>
-                                    </ul>
-                                </li>
-                                <li class=""><a href="#type-alignment">Alignment classes</a></li>
-                                <li class=""><a href="#type-script">subscript, supscript</a></li>
-                                <li class="">
-                                    <a href="#type-division">Division line</a>
-                                    <ul class="nav">
-                                        <li class=""><a href="#type-division-blockquote">Blockquote</a></li>
-                                    </ul>
-                                </li>
-                                <li class="">
-                                    <a href="#type-lists">Lists</a>
-                                    <ul class="nav">
-                                        <li class=""><a href="#type-lists-unordered">Unordered</a></li>
-                                        <li class=""><a href="#type-lists-ordered">Ordered</a></li>
-                                    </ul>
-                                </li>
-                                <li class=""><a href="#type-talbe">Table</a></li>
-                                <li class=""><a href="#type-link">Link</a></li>
-                                <li class=""><a href="#type-field-panels">Field Panels</a></li>
-                                <li class=""><a href="#type-alert-panels">Alert Panels</a></li>
-                                <li class=""><a href="#type-info-panels">Information Panels</a></li>
-                            </ul>
-                        </li>
-
-                    </ul>
-                    {{/if}}
-                    <div>
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>작성자</th>
-                                <th>{{wiki.userNick}}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>작성일</td>
-                                <td>{{formatDate wiki.insertDate "yyyy.MM.dd HH:mm:SS"}}</td>
-                            </tr>
-                            <tr>
-                                <td>수정일</td>
-                                <td>{{formatDate wiki.updateDate "yyyy.MM.dd HH:mm:SS"}}</td>
-                            </tr>
-                            <tr>
-                                <td>조회수</td>
-                                <td>{{nullToNumber wiki.viewCount}}</td>
-                            </tr>
-                            <tr>
-                                <td>공감수</td>
-                                <td id="wikiIdLike">{{size wiki.wikiLikes }}</td>
-                            </tr>
-                            <tr>
-                                <td>글상태</td>
-                                <td>기본</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <a href="#" class="fun-like btn btn-primary"
-                           data-value="{{wiki.wikiId}}" data-type="WIKI">추천하기</a>
-                        <a href="#" class="btn btn-primary">인쇄하기</a>
-                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>작성자</th>
+                            <th>{{wiki.userNick}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>작성일</td>
+                            <td>{{formatDate wiki.insertDate "yyyy.MM.dd HH:mm:SS"}}</td>
+                        </tr>
+                        <tr>
+                            <td>수정일</td>
+                            <td>{{formatDate wiki.updateDate "yyyy.MM.dd HH:mm:SS"}}</td>
+                        </tr>
+                        <tr>
+                            <td>조회수</td>
+                            <td>{{nullToNumber wiki.viewCount}}</td>
+                        </tr>
+                        <tr>
+                            <td>공감수</td>
+                            <td id="wikiIdLike">{{size wiki.wikiLikes }}</td>
+                        </tr>
+                        <tr>
+                            <td>글상태</td>
+                            <td>기본</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <a href="#" class="fun-like btn btn-primary"
+                       data-value="{{wiki.wikiId}}" data-type="WIKI">추천하기</a>
+                    <a href="#" class="btn btn-primary">인쇄하기</a>
+                    <!--<a href="#" id="leftMenu" class="btn btn-primary">숨김</a>-->
                 </div>
             </div>
         </div>
@@ -309,6 +267,13 @@
 
 </div>
 
+<div id="leftMenu" style='position:absolute;z-index:2;top:135px;right:0;margin-right: 15px;'>
+    <a href="#" id="leftMenu2" class="btn btn-primary">
+        숨김
+    </a>
+</div>
+
+
 
 <div class="modal fade" id="askModal" tabindex="-1" role="dialog" aria-labelledby="askModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -392,6 +357,24 @@
                 ,data : $("input[name=contentsMarkup]").val()
             });
             $("#file-attachment").on("change", Wiki.uploadFile);
+
+            $("#leftMenu").on("click", function(){
+                var div1 = $("#mainContent").children(".row").children(":first");
+                var div2 = $("#mainContent").children(".row").children(":last");
+                if( div2.css("display") == "none" ){
+                    div2.show();
+                    div1.toggleClass("col-md-12 col-md-9");
+                }else{
+                    div2.hide();
+                    div1.toggleClass("col-md-9 col-md-12");
+                }
+            });
+
+            $(window).scroll(function()
+            {
+                $('#leftMenu').animate({top:$(window).scrollTop()+135+"px" },{queue: false, duration: 0});
+            });
+
         });
 
         $(".btn-group a").on("click", function(){
