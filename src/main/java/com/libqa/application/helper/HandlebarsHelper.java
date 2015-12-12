@@ -1,11 +1,17 @@
 package com.libqa.application.helper;
 
 import com.github.jknack.handlebars.Options;
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
+import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.Wiki;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -33,6 +39,9 @@ public class HandlebarsHelper {
     }
 
     public String htmlDelete(String html, Options options) {
+        if( html == null ){
+            return html;
+        }
         Pattern pattern = Pattern.compile("(<[\\w\\W]+?>)");
         Matcher matcher = pattern.matcher(html);
 
@@ -44,6 +53,10 @@ public class HandlebarsHelper {
     }
 
     public String subString(String html, int startIdx, int endIdx){
+        if( html == null ){
+            return html;
+        }
+
         if( html.length() > endIdx ){
             return html.substring(startIdx, endIdx)+ "...";
         }
@@ -62,10 +75,10 @@ public class HandlebarsHelper {
         return null;
     }
 
-    public String xif(String v1, String operator, String v2, Options options) {
+    public String xif(String v1, String operator, String int2, Options options) {
         switch (operator) {
             case "==":
-                return String.valueOf((v1.equals(v2)) ? Boolean.TRUE : null);
+                return String.valueOf((v1.equals(int2)) ? Boolean.TRUE : null);
 
             default:
                 return null;
@@ -94,6 +107,52 @@ public class HandlebarsHelper {
             return options.fn();
         }
         return options.inverse();
+    }
+
+    public CharSequence ifIntCont(Integer int1, String operator, Integer int2, Options options) throws Exception {
+        int1 = MoreObjects.firstNonNull(int1, 0);
+        int2 = MoreObjects.firstNonNull(int2, 0);
+        operator = StringUtil.nullToString(operator);
+
+        switch (operator) {
+            case "==":
+                return (int1 == int2) ? options.fn(this) : options.inverse(this);
+            case "<":
+                return (int1 < int2) ? options.fn(this) : options.inverse(this);
+            case "<=":
+                return (int1 <= int2) ? options.fn(this) : options.inverse(this);
+            case ">":
+                return (int1 > int2) ? options.fn(this) : options.inverse(this);
+            case ">=":
+                return (int1 >= int2) ? options.fn(this) : options.inverse(this);
+
+            default:return options.inverse();
+        }
+    }
+
+    public CharSequence ifIntArrCont(List<Object> list, String operator, Integer int2, Options options) throws Exception {
+        if( Iterables.isEmpty(list) ){
+            return options.inverse();
+        }
+
+        Integer int1 = Iterables.size(list);
+        int2 = MoreObjects.firstNonNull(int2, 0);
+        operator = StringUtil.nullToString(operator);
+
+        switch (operator) {
+            case "==":
+                return (int1 == int2) ? options.fn(this) : options.inverse(this);
+            case "<":
+                return (int1 < int2) ? options.fn(this) : options.inverse(this);
+            case "<=":
+                return (int1 <= int2) ? options.fn(this) : options.inverse(this);
+            case ">":
+                return (int1 > int2) ? options.fn(this) : options.inverse(this);
+            case ">=":
+                return (int1 >= int2) ? options.fn(this) : options.inverse(this);
+
+            default:return options.inverse();
+        }
     }
 
 

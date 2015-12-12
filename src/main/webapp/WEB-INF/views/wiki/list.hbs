@@ -45,10 +45,10 @@
             {{#each listWiki}}
             <div class="best-qna-item">
                 <div>
-                    <strong><a href="/">{{title}}</a></strong>
+                    <strong><a href="/">{{wiki.title}}</a></strong>
                     <div class="pull-right">
-                        {{#each keywordList}}
-                            <span class="label label-primary">{{keywordName}}</span>
+                        {{#each wiki.keywordList}}
+                            <span class="label label-primary">{{wiki.keywordName}}</span>
                         {{/each}}
                     </div>
                 </div>
@@ -58,22 +58,45 @@
                             <img src="/resource/images/avatar.png" class="profile-image" alt="avatar">
                         </div>
                     </a>
-                    <div class="media-body">{{subString (htmlDelete contents) 0 300 }}
+                    <div class="media-body">{{subString (htmlDelete wiki.contents) 0 300 }}
                         <div class="pull-right"><span class="badge">
                             11
                         </span></div>
                     </div>
-                    <div class="pull-left"><span class="nickname">위키오너 : {{userNick}}</span></div>
-                    <div class="pull-right">{{formatDate insertDate "yyyy.MM.dd HH:mm:SS"}}</div>
+                    <div class="pull-left"><span class="nickname">위키오너 : {{user.userNick}}</span></div>
+                    <div class="pull-right">{{formatDate wiki.insertDate "yyyy.MM.dd HH:mm:SS"}}</div>
                 </div>
             </div>
             {{/each}}
             <br>
-            <p class="lead text-right" ><button class="btn btn-default">Read More</button></p>
+            <div class="text-center">
+                <ul class="pagination">
+                    {{#ifIntCont page ">" 0 }}
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {{/ifIntCont}}
+                    <li><a href="#">1</a></li>
+                    <!--<li><a href="#">2</a></li>-->
+                    <!--<li><a href="#">3</a></li>-->
+                    <!--<li><a href="#">4</a></li>-->
+                    <!--<li><a href="#">5</a></li>-->
+                    {{#ifIntArrCont listWiki "==" 15 }}
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {{/ifIntArrCont}}
+                </ul>
+            </div>
             <!--// 전체 공간 -->
         </div>
     </div>
     <!--// contents -->
+    <input type="hidden" id="page" value="{{page}}" />
 {{/partial}}
 
 {{#partial "script-page"}}
@@ -81,6 +104,9 @@
     <script type="text/javascript">
         $(document).ready(function() {
             Wiki.renderKeywordList('{{selectKeywordName}}');
+
+
+
         });
         var Wiki = {
             renderKeywordList : function(keywordName){

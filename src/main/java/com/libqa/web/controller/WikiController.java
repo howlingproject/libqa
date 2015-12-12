@@ -1,5 +1,7 @@
 package com.libqa.web.controller;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.primitives.Ints;
 import com.libqa.application.enums.ListType;
 import com.libqa.application.enums.WikiLikesType;
 import com.libqa.application.enums.WikiRevisionActionType;
@@ -260,13 +262,16 @@ public class WikiController {
     }
 
     @RequestMapping(value = "wiki/list/{listType}", method = RequestMethod.GET)
-    public ModelAndView wikiList(@PathVariable("listType") String listType) {
+    public ModelAndView wikiList(@PathVariable("listType") String listType
+                                ,@RequestParam("page") Integer page ) {
         ModelAndView mav = new ModelAndView("wiki/list");
 
         listType = StringUtil.nullToString(listType);
+        page = MoreObjects.firstNonNull(page, 0);
 
+        mav.addObject("page",page);
         if( ListType.ALL.getName().equals(listType) ){
-            List<DisplayWiki> allWiki = wikiService.findByAllWiki(0, 15);
+            List<DisplayWiki> allWiki = wikiService.findByAllWiki(page, 15);
             mav.addObject("listWiki", allWiki);
             mav.addObject("listTitle","전체 위키 List");
 
