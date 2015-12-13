@@ -25,4 +25,5 @@ tmp/
 
 #libqa
 webapp/resource/temp/
+src/main/webapp/resource/profile/
 src/main/webapp/resource/temp/

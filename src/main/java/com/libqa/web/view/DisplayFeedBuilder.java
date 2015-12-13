@@ -1,6 +1,7 @@
 package com.libqa.web.view;
 
 import com.google.common.collect.Lists;
+import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.User;
@@ -12,6 +13,8 @@ import java.util.List;
 
 @Component
 public class DisplayFeedBuilder {
+    @Autowired
+    private LoggedUser loggedUser;
     @Autowired
     private UserService userService;
     @Autowired
@@ -28,8 +31,14 @@ public class DisplayFeedBuilder {
     }
 
     private DisplayFeed buildFeed(Feed feed, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
-        User user = userService.findByUserId(feed.getUserId());
-        return new DisplayFeed(feed, user, likedFeedAction, claimedFeedAction, buildFeedReplies(feed.getFeedReplies()));
+        User writer = userService.findByUserId(feed.getUserId());
+        List<DisplayFeedReply> displayFeedReplies = buildFeedReplies(feed.getFeedReplies());
+        return new DisplayFeed(feed, writer, isWriter(writer), likedFeedAction, claimedFeedAction, displayFeedReplies);
+    }
+
+    private Boolean isWriter(User writer) {
+        User loginUser = loggedUser.get();
+        return writer.isMatchUser(loginUser.getUserId());
     }
 
     private List<DisplayFeedReply> buildFeedReplies(List<FeedReply> feedReplies) {
@@ -43,8 +52,8 @@ public class DisplayFeedBuilder {
     }
 
     private DisplayFeedReply buildFeedReply(FeedReply feedReply, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
-        User user = userService.findByUserId(feedReply.getUserId());
-        return new DisplayFeedReply(feedReply, user, likedFeedAction, claimedFeedAction);
+        User writer = userService.findByUserId(feedReply.getUserId());
+        return new DisplayFeedReply(feedReply, writer, isWriter(writer), likedFeedAction, claimedFeedAction);
     }
 
 }

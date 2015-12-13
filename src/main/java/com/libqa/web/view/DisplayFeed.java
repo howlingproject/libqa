@@ -14,26 +14,29 @@ public class DisplayFeed {
     private Integer feedId;
     private String originFeedContent;
     private String feedContent;
+    private Integer userId;
     private String userNick;
     private String userImage;
     private String insertDate;
+    private boolean writer;
     private DisplayFeedAction likeFeedAction;
     private DisplayFeedAction claimFeedAction;
     private List<DisplayFeedReply> replies = Lists.newArrayList();
     private List<FeedFile> files = Lists.newArrayList();
     private List<FeedFile> images = Lists.newArrayList();
 
-    public DisplayFeed(Feed feed, User user, DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction,
-                       List<DisplayFeedReply> replies) {
+    public DisplayFeed(Feed feed, User user, boolean writer, DisplayFeedAction likeFeedAction,
+                       DisplayFeedAction claimFeedAction, List<DisplayFeedReply> displayFeedReplies) {
         this.feedId = feed.getFeedId();
         this.userNick = feed.getUserNick();
         this.userImage = user.getUserImage();
         this.originFeedContent = feed.getFeedContent();
         this.feedContent = parseHtml(feed.getFeedContent());
         this.insertDate = DisplayDateParser.parseForFeed(feed.getInsertDate());
+        this.writer = writer;
         this.likeFeedAction = likeFeedAction;
         this.claimFeedAction = claimFeedAction;
-        this.replies = replies;
+        this.replies = displayFeedReplies;
         setFeedFiles(feed.getFeedFiles());
     }
 
