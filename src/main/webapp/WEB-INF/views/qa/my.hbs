@@ -18,8 +18,8 @@
     </form>
     <div class="btn-group pull-right">
         <a href="#" class="btn btn-primary">총 질문(123)</a>
-        <a href="#" class="btn btn-primary">총 답변(123)</a>
-        <a href="#" class="btn btn-primary">총 키워드(123)</a>
+        <!--<a href="#" class="btn btn-primary">총 답변(123)</a>-->
+        <!--<a href="#" class="btn btn-primary">총 키워드(123)</a>-->
         <a href="#" class="btn btn-primary">답변을 기다리는 Q&A(123)</a>
         <a href="/qa" class="btn btn-primary">Q&A</a>
         <a href="/qa/form" class="btn btn-primary">질문하기</a>
@@ -147,7 +147,7 @@
 
 {{#partial "script-page"}}
 {{embedded "common/_keywordList"}}
-{{embedded "qa/template/_list"}}
+{{embedded "qa/template/_myList"}}
 <script type="text/javascript">
     $(document).ready(function(){
         Qa.init();
@@ -191,7 +191,7 @@
                 data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName()},
                 success : function(data){
                     if(data.resultCode == 1) {
-                        var source = $('#qa-template-_list-hbs').html();
+                        var source = $('#qa-template-_myList-hbs').html();
                         var template = Handlebars.compile(source);
 
                         var html = template(data);
@@ -215,7 +215,7 @@
                 data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName()},
                 success : function(data){
                     if(data.resultCode == 1) {
-                        var source = $('#qa-template-_list-hbs').html();
+                        var source = $('#qa-template-_myList-hbs').html();
                         var template = Handlebars.compile(source);
 
                         var html = template(data);

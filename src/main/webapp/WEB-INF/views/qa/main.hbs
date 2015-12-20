@@ -12,14 +12,14 @@
 <div class="container qna-top-search">
     <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
+            <input name="searchName" type="text" class="form-control" placeholder="Search">
         </div>
-        <a href="#" class="form-control btn btn-primary">검색</a>
+        <a href="#" id="searchBtn" class="form-control btn btn-primary">검색</a>
     </form>
     <div class="btn-group pull-right">
         <a href="#" class="btn btn-primary">총 질문(123)</a>
-        <a href="#" class="btn btn-primary">총 답변(123)</a>
-        <a href="#" class="btn btn-primary">총 키워드(123)</a>
+        <!--<a href="#" class="btn btn-primary">총 답변(123)</a>-->
+        <!--<a href="#" class="btn btn-primary">총 키워드(123)</a>-->
         <a href="#" class="btn btn-primary">답변을 기다리는 Q&A(123)</a>
         <a href="/qa/my" class="btn btn-primary">myQ&A</a>
         <a href="/qa/form" class="btn btn-primary">질문하기</a>
@@ -309,7 +309,7 @@
 
 {{#partial "script-page"}}
 {{embedded "common/_keywordList"}}
-{{embedded "qa/template/_list"}}
+{{embedded "qa/template/_mainList"}}
     <script type="text/javascript">
         $(document).ready(function(){
             Qa.init();
@@ -323,6 +323,7 @@
                 this.renderDayType($('#recentQaDayTypeUl'));
                 this.renderDayType($('#waitReplyQaDayTypeUl'));
                 this.bindDayTypeEvent();
+                this.bindSearch();
             },
             renderKeywordList : function(){
                 $.ajax({
@@ -356,7 +357,7 @@
                     data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName(), dayType : dayType },
                     success : function(data){
                         if(data.resultCode == 1) {
-                            var source = $('#qa-template-_list-hbs').html();
+                            var source = $('#qa-template-_mainList-hbs').html();
                             var template = Handlebars.compile(source);
 
                             var html = template(data);
@@ -380,7 +381,7 @@
                     data : {keywordType : 'QA', keywordName : Qa.selectedKeywordName(), waitReply : 'Y', dayType : dayType},
                     success : function(data){
                         if(data.resultCode == 1) {
-                            var source = $('#qa-template-_list-hbs').html();
+                            var source = $('#qa-template-_mainList-hbs').html();
                             var template = Handlebars.compile(source);
 
                             var html = template(data);
@@ -418,12 +419,32 @@
             },
             changeDayType : function(dayTypeObj){
                 var ulObj = $(dayTypeObj).parent();
+                var dayTypeValue = dayTypeObj.getAttribute('value');
                 ulObj.find('li').removeClass('active');
-                ulObj.find('li[value='+dayTypeObj.getAttribute('value')+']').addClass('active');
+                ulObj.find('li[value="'+dayTypeValue+'"]').addClass('active');
             },
             renderDayType : function(targetObj){
                 targetObj.find('li').removeClass('active');
                 targetObj.find('li[value=""]').addClass('active');
+            },
+            bindSearch : function(){
+                $('#searchBtn').click(function(){
+                    Qa.search();
+                });
+                $('[name=searchName]').keydown(function(e){
+                    if(e.which == 13) {
+                        Qa.search();
+                    }
+                });
+            },
+            search : function(){
+                var searchName = $('[name=searchName]').val();
+                if(searchName == ''){
+                    alert("검색어를 입력하세요");
+                    return false;
+                } else {
+                    location.href = '/qa/search/' + searchName;
+                }
             }
         };
 

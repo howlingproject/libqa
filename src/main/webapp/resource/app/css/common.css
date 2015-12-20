@@ -138,6 +138,7 @@ span.section-category {margin-top: -7px; font-size: 12px}
 
 div.my-qna-item {border-bottom: 1px solid #eee; padding-bottom: 15px; padding-top: 15px;}
 div.qna-item {border-bottom: 1px solid #eee; padding-bottom:10px}
+div.qna-item.contents {cursor: pointer}
 
 div.best-qna-item {border-bottom: 1px solid #eee; padding-top: 15px; padding-bottom: 15px; }
 div.best-qna-item .media{}
