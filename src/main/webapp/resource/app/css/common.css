@@ -17,8 +17,11 @@ img { vertical-align: middle; border: 0 none; }
 
 /*header */
 #header .navi-menu li {width:90px; text-align: center; }
-#header .navi-info li a {padding: 10px 10px 12px 10px}
-#header ul.nav li.messenger i {color:#333433;}
+#header .navi-info li a {padding: 10px 10px 12px 10px;}
+/*#header ul.nav .alert {color:#fa3c45;}*/
+#header ul.nav li.messenger i {color: #ffffff;}
+#header ul.nav li.messenger.notification i {color:#dc0d17;}
+
 /**
 * Sticky footer styles
 **/
@@ -58,6 +61,19 @@ div.action-buttons i.hasViewer {color : #2682C4; font-weight: bold;}
 .components .user-profiles li{float: left; padding:10px; margin:5px;}
 .components .the-buttons > li {float: left; height: 80px; padding: 10px; border: 1px solid #ddd; font-size: 12px; line-height: 1.25; text-align: center; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; margin: 0 -1px -1px 0;}
 .components .the-icons li { float: left; width: 100px; height: 110px;padding: 10px; border: 1px solid #ddd; font-size: 12px; line-height: 1.25; text-align: center; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; margin: 0 auto;}
+
+/**
+* Index
+**/
+div.index-thread-box h2 {border-bottom: 1px solid #eee; padding-bottom: 8px;}
+div.index-thread-box h2 i {top:4px;}
+div.index-thread-box.first h2 {margin-top:0; margin-bottom:0;}
+div.index-thread-item {border-bottom: 1px solid #eee; padding-top: 15px; padding-bottom: 15px; }
+div.index-thread-item .title { display: inline;}
+div.index-thread-item .media-body {height:40px; padding-left:5px;}
+div.index-thread-item .nickname {padding-left:5px;}
+div.index-thread-item .media-body a {color: #0f0f0f;}
+div.index-thread-item .media-body .comments {margin-left:10px; color: #2fa4e7;}
 
 /**
 * Feed
