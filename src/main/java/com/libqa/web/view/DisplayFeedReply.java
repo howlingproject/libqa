@@ -11,6 +11,7 @@ public class DisplayFeedReply {
     private String userImage;
     private String insertDate;
     private String feedReplyContent;
+    private Boolean isWriter;
     private DisplayFeedAction likeFeedAction;
     private DisplayFeedAction claimFeedAction;
 
@@ -23,13 +24,14 @@ public class DisplayFeedReply {
         this.claimFeedAction = createNotYetFeedAction();
     }
 
-    public DisplayFeedReply(FeedReply feedReply, User user, DisplayFeedAction likeFeedAction,
-                            DisplayFeedAction claimFeedAction) {
+    public DisplayFeedReply(FeedReply feedReply, User user, Boolean isWriter,
+                            DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction) {
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
         this.userImage = user.getUserImage();
         this.insertDate = DisplayDateParser.parseForFeed(feedReply.getInsertDate());
         this.feedReplyContent = feedReply.getFeedReplyContent();
+        this.isWriter = isWriter;
         this.likeFeedAction = likeFeedAction;
         this.claimFeedAction = claimFeedAction;
     }

@@ -7,8 +7,11 @@
     </div>
     <div class="name">{{userNick}}</div>
     <div class="date">{{insertDate}}</div>
-    <div class="config"><i class="fa fa-check popover-config" data-container="body" data-toggle="popover" data-placement="right"></i></div>
-
+    {{#if writer}}
+    <div class="config">
+        <i class="fa fa-check popover-config" data-container="body" data-toggle="popover" data-placement="right"></i>
+    </div>
+    {{/if}}
     <div class="thread-message-box">
         <div class="message">
             <div class="feed-contents-box">{{{feedContent}}}</div>
@@ -69,7 +72,9 @@
             </div>
             <div class="name">{{userNick}}</div>
             <div class="date">{{insertDate}}</div>
+            {{#if writer}}
             <div class="config" onclick="FeedReply.removeItem(this)"><i class="fa fa-close feedReplyDeleteBtn"></i></div>
+            {{/if}}
             <div class="message-box">
                 <div class="message">{{feedReplyContent}}</div>
                 <div class="action-buttons">

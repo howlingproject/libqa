@@ -1,6 +1,5 @@
 package com.libqa.web.service.feed;
 
-import com.libqa.application.dto.FeedRequestDto;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.repository.FeedFileRepository;
@@ -54,16 +53,15 @@ public class FeedService {
     }
 
     @Transactional
-    public void deleteByFeedId(Integer feedId) {
-        Feed feed = feedRepository.findOne(feedId);
+    public void delete(Feed feed) {
         feed.setDeleted(true);
 
-        List<FeedReply> feedReplies = feedReplyRepository.findByFeedFeedId(feedId);
+        List<FeedReply> feedReplies = feedReplyRepository.findByFeedFeedId(feed.getFeedId());
         for (FeedReply each : feedReplies) {
             each.setDeleted(true);
         }
 
-        List<FeedFile> feedFiles = feedFileRepository.findByFeedFeedId(feedId);
+        List<FeedFile> feedFiles = feedFileRepository.findByFeedFeedId(feed.getFeedId());
         for (FeedFile each : feedFiles) {
             each.setDeleted(true);
         }
@@ -98,10 +96,13 @@ public class FeedService {
     }
 
     @Transactional
-    public Feed modify(FeedRequestDto dto) {
-        Feed feed = feedRepository.findOne(dto.getFeedId());
-        feed.setFeedContent(dto.getFeedContent());
-        return feed;
+    public Feed modify(Feed originFeed, Feed requestFeed) {
+        originFeed.setFeedContent(requestFeed.getFeedContent());
+        return originFeed;
+    }
+
+    public Feed findByFeedId(Integer feedId) {
+        return feedRepository.findOne(feedId);
     }
 
     private void saveFeedFiles(Feed feed) {

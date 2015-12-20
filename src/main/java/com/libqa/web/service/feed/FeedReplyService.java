@@ -63,4 +63,7 @@ public class FeedReplyService {
         return feedReply;
     }
 
+    public FeedReply findByFeedReplyId(Integer feedReplyId) {
+        return feedReplyRepository.findOne(feedReplyId);
+    }
 }

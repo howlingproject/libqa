@@ -6,6 +6,7 @@ import com.libqa.application.enums.SocialChannelType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
@@ -151,5 +152,13 @@ public class User {
     private boolean isRegisteredProfileImage() {
         return StringUtils.isNotBlank(this.userImagePath)
                 && StringUtils.isNotBlank(this.userImageName);
+    }
+
+    public boolean isMatchUser(Integer targetUserId) {
+        return ObjectUtils.equals(this.userId, targetUserId);
+    }
+
+    public boolean isNotMatchUser(Integer targetUserId) {
+        return !isMatchUser(targetUserId);
     }
 }
