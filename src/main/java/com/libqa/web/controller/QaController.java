@@ -116,7 +116,7 @@ public class QaController {
     public ModelAndView view(@PathVariable Integer qaId) {
         boolean isDeleted = false;
 
-        QaContent qaContent =  qaService.findByQaId(qaId, isDeleted);
+        QaContent qaContent =  qaService.view(qaId);
         List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
 
         ModelAndView mav = new ModelAndView("qa/view");

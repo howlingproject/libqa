@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -112,6 +115,14 @@ public class QaServiceImpl implements QaService {
         return qaRepository.findByQaIdInAndIsDeletedOrderByQaIdDesc(qaIds, false);
     }
 
+    @Override
+    @Transactional
+    public QaContent view(Integer qaId) {
+        QaContent qaContent = findByQaId(qaId, false);
+        qaContent.setViewCount(qaContent.getViewCount() + 1);
+        return qaContent;
+    }
+
     void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
         qaFileService.moveQaFilesToProductAndSave(qaId, qaFiles);
     }
@@ -165,7 +176,6 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public QaContent findByQaId(Integer qaId, boolean isDeleted) {
         return qaRepository.findOneByQaIdAndIsDeleted(qaId, isDeleted);
     }
@@ -204,8 +214,9 @@ public class QaServiceImpl implements QaService {
         return qaRepository.findAllByQaIdInAndInsertDateBetweenAndIsDeleted(qaIds, fromDate, today, isDeleted);
     }
 
-    public Date getFromDate(String dayType){
-        Date now = new Date();
+    public Date getFromDate(String dayType) throws ParseException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date now = dateFormat.parse(dateFormat.format(new Date()));
         Date returnDate;
         if(DayType.WEEK.getCode().equals(dayType)){
             returnDate = DateUtils.addDays(now, -7);

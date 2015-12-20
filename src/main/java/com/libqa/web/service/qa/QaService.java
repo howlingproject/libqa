@@ -28,4 +28,6 @@ public interface QaService {
     List<QaContent> findByUserId(Integer userId);
 
     List<QaContent> findByQaIdIn(List<Integer> qaIds);
+
+    QaContent view(Integer qaId);
 }
