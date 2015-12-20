@@ -1,5 +1,6 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.libqa.application.enums.SocialChannelType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -63,6 +64,7 @@ public class QaContent {
     @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
     private boolean isReplyed;
 
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date insertDate;
