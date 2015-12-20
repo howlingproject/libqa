@@ -42,4 +42,7 @@ public interface WikiService {
     List<Wiki> findWikiListByContentsMarkup(String searchText, int page, int size);
 
     DisplayWikiLike updateLike(WikiLike likes);
+
+    Long countByAllWiki();
+
 }

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -270,8 +271,22 @@ public class WikiController {
         page = MoreObjects.firstNonNull(page, 0);
 
         mav.addObject("page",page);
+        mav.addObject("pages",(page/6)+1);
         if( ListType.ALL.getName().equals(listType) ){
             List<DisplayWiki> allWiki = wikiService.findByAllWiki(page, 15);
+
+            Long countAllWiki = wikiService.countByAllWiki();
+            int AllPage = (int)( countAllWiki / 15 )+1;
+            mav.addObject("allPage", (AllPage/6)+1);
+
+            List pageIdx = new ArrayList();
+            for( int i=((page/6)+1); i<6; i++ ){
+                if( (AllPage/6)+1 >= i ){
+                    pageIdx.add(i);
+                }
+            }
+            mav.addObject("pageIdx", pageIdx);
+
             mav.addObject("listWiki", allWiki);
             mav.addObject("listTitle","전체 위키 List");
 

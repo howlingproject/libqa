@@ -180,6 +180,11 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
+    public Long countByAllWiki(){
+        return wikiRepository.countByIsDeleted(isDeleted);
+    }
+
+    @Override
     public List<DisplayWiki> findByBestWiki(int page, int size) {
         List<DisplayWiki> resultWiki = new ArrayList<DisplayWiki>();
         List<Wiki> list = wikiRepository.findAllByIsDeleted(
