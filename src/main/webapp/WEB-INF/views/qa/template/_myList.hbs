@@ -1,0 +1,44 @@
+{{#each data}}
+    <div class="my-qna-item" value="{{qaContent.qaId}}" onclick="location.href='/qa/{{qaContent.qaId}}';">
+        <a class="pull-left" href="#">
+            <div class="user-profile">
+                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+            </div>
+        </a>
+
+        <div class="row">
+            <div class="col-lg-10">
+                <div class="media-body">
+                    <div class="media-heading">
+                        <span>{{qaContent.insertDate}}</span>
+                        <span class="my-qna-writer">
+                            <div class="user-profile-xs">
+                                <span class="nickname">{{qaContent.userNick}}</span>
+                            </div>
+                        </span>
+
+                        <div class="pull-right">
+                            {{#each keywords}}
+                                {{#keywordBadge keywordName}}{{/keywordBadge}}
+                            {{/each}}
+                        </div>
+
+                        <div class="qna-title">
+                            <span>{{qaContent.title}}</span>
+                        </div>
+
+                        <div>
+                            {{{qaContent.contents}}}
+                            <span class="badge">{{replyCnt}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-1 my-qna-rating pull-right">
+                <button class="btn btn-sm btn-default btn-sm-fixed pull-right">조회 {{qaContent.viewCount}}</button>
+                <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 {{qaContent.recommendCount}}</button>
+            </div>
+        </div>
+    </div>
+{{/each}}
