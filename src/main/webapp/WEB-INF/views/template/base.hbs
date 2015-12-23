@@ -146,33 +146,42 @@
     // bind the on-change event
     $(document).ready(function () {
         $("#loginBtn").click(function() {
-            userEmail = $("#userEmail").val();
-            userPass = $("#userPass").val();
-            if (!checkValidEmail(userEmail)) {
-                alertEmail();
-                return false;
+            submitLogin();
+        });
+
+        $('#userPass').keypress(function(e) {
+            if (e.which == 13) { // 13 == enter key ascii
+                submitLogin();
             }
-
-            if (!checkLength(userPass, 4)) {
-                alertPass();
-                return false;
-            }
-
-            var data = $("#loginForm").serialize();
-            $.post('/loginPage', data).done(function(response){
-                var result = jQuery.parseJSON(response);
-
-                if (result.status == true) {
-                    $(location).attr('href', "{{returnUrl}}");
-                }
-            }).fail(function(response){
-                console.log("# ERROR login : " + response.status);
-
-                $("#loginInfo").show(0).delay(5000).hide(0);
-            });
         });
     });
 
+    function submitLogin() {
+        userEmail = $("#userEmail").val();
+        userPass = $("#userPass").val();
+        if (!checkValidEmail(userEmail)) {
+            alertEmail();
+            return false;
+        }
+
+        if (!checkLength(userPass, 4)) {
+            alertPass();
+            return false;
+        }
+
+        var data = $("#loginForm").serialize();
+        $.post('/loginPage', data).done(function(response){
+            var result = jQuery.parseJSON(response);
+
+            if (result.status == true) {
+                $(location).attr('href', "{{returnUrl}}");
+            }
+        }).fail(function(response){
+            console.log("# ERROR login : " + response.status);
+
+            $("#loginInfo").show(0).delay(5000).hide(0);
+        });
+    }
 
     /**
      * 이메일 입력 확인
