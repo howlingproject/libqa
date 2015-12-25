@@ -17,6 +17,9 @@ import java.util.List;
 @Data
 @Slf4j
 @ToString(exclude = {"wikiSnapShots"})
+@Table(indexes = {
+        @Index(name="IDX_WIKI_SPACE_ID",columnList = "spaceId")
+})
 public class Wiki implements Serializable{
 
     @Id

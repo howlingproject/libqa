@@ -66,6 +66,12 @@ public class SpaceController {
     @Autowired
     private LoggedUser loggedUser;
 
+    /**
+     * 파일 업로드 테스트용 페이지
+     * @param model
+     * @return
+     */
+    @Deprecated
     @RequestMapping("/space/fileUpload")
     public ModelAndView fileUpload(Model model) {
         ModelAndView mav = new ModelAndView("/space/ajaxUpload");
@@ -79,12 +85,10 @@ public class SpaceController {
 
     @RequestMapping("/space/main")
     public ModelAndView spaceMain(HttpServletRequest request) {
-        log.info("## /main");
+        log.debug("## /main");
         ModelAndView mav = new ModelAndView("/space/main");
 
-        /**
-         * 전체 space 목록 조회
-         */
+        // 전체 space 목록 조회
         boolean isDeleted = false;
         List<Space> spaces = spaceService.findAllByCondition(isDeleted);
 
@@ -102,9 +106,9 @@ public class SpaceController {
 
         User user = loggedUser.get();
 
-        log.info("##### user  = {}", user);
+        log.debug("##### user  = {}", user);
         if (user == null || user.isGuest()) {
-            log.info("# 로그인 사용자 정보가 존재하지 않습니다.");
+            log.debug("# 로그인 사용자 정보가 존재하지 않습니다.");
             mav.addObject("myFavoriteSpaceList", null);
         } else {
             /**
@@ -115,7 +119,7 @@ public class SpaceController {
 
 
             if (CollectionUtils.isEmpty(myFavoriteSpaceList)) {
-                log.info("## 즐겨찾기 공간이 없습니다.");
+                log.debug("## 즐겨찾기 공간이 없습니다.");
                 mav.addObject("myFavoriteSpaceList", null);
             } else {
                 for (Space space : myFavoriteSpaceList) {
@@ -156,7 +160,7 @@ public class SpaceController {
     @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("/space/form")
     public ModelAndView form(Model model) {
-        log.info("# message : {}", message);
+        log.debug("# message : {}", message);
 
         User user = loggedUser.get();
         UserFavorite userFavorite = null;
@@ -183,7 +187,7 @@ public class SpaceController {
             throw new IllegalAccessException("로그인 정보가 필요합니다.");
         }
 
-        log.info("##### user  = {}", user);
+        log.debug("##### user  = {}", user);
         // TODO List 차후 로그인으로 변경
         space.setInsertDate(new Date());
         space.setInsertUserId(user.getUserId());
@@ -273,7 +277,7 @@ public class SpaceController {
         // Space 생성시 선택한 Layout 옵션의 View를 보여준다.
         String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
 
-        log.info("# view : {}", view);
+        log.debug("# view : {}", view);
 
         ModelAndView mav = null;
 
@@ -308,7 +312,7 @@ public class SpaceController {
             List<UserFavorite> userFavorites = userFavoriteService.findBySpaceIdAndUserIdAndIsDeleted(spaceId, user.getUserId(), false);
             userFavorite = Iterables.getFirst(userFavorites, null);
         }
-        log.info("# spaceWikis : {}", spaceWikis);
+        log.debug("# spaceWikis : {}", spaceWikis);
 
         mav.addObject("spaceWikis", spaceWikis);
         mav.addObject("updatedWikis", updatedWikis);
@@ -348,10 +352,10 @@ public class SpaceController {
 
         User user = loggedUser.get();
 
-        log.info("### user = {}", user);
+        log.debug("### user = {}", user);
 
         if (user.isGuest()) {
-            log.info("# 로그인 사용자 정보가 존재하지 않습니다.");
+            log.debug("# 로그인 사용자 정보가 존재하지 않습니다.");
             return "0";
         }
         // 즐겨 찾기 추가는 isDeleted를 false 로 넘김
@@ -373,7 +377,7 @@ public class SpaceController {
 
         User user = loggedUser.get();
         if (user.isGuest()) {
-            log.info("# 로그인 사용자 정보가 존재하지 않습니다.");
+            log.debug("# 로그인 사용자 정보가 존재하지 않습니다.");
             return "0";
         }
         // 즐겨 찾기 추가는 isDeleted를 false 로 넘김

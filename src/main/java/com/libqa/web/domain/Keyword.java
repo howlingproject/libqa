@@ -11,6 +11,11 @@ import java.util.Date;
  */
 @Entity
 @Data
+@Table(indexes = {
+        @Index(name="IDX_KEYWORD_SPACE_ID",columnList = "spaceId"),
+        @Index(name="IDX_KEYWORD_QA_ID",columnList = "qaId"),
+        @Index(name="IDX_KEYWORD_WIKI_ID",columnList = "wikiId")
+})
 public class Keyword {
     @Id
     @Column(nullable = false)

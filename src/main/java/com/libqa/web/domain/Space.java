@@ -3,6 +3,7 @@ package com.libqa.web.domain;
 import com.libqa.application.enums.SpaceView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,7 +15,11 @@ import java.util.List;
  */
 @Data
 @Entity
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "spaceId")
+@Table(indexes = {
+        @Index(name="IDX_SPACE_ID",columnList = "spaceId,isDeleted")
+})
+@ToString(exclude = {"spaceAccessUsers"})
 public class Space implements Serializable {
     @Id
     @Column(nullable = false, updatable = false)

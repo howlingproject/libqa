@@ -19,12 +19,11 @@
                 </span></div>
             </div>
             <div class="pull-left"><span class="nickname">공간오너 : {{space.insertUserNick}}</span></div>
-            <div class="pull-right">{{space.insertDate}}</div>
+            <div class="pull-right">{{formatDate space.insertDate "yyyy-MM-dd hh:MM"}}</div>
         </div>
     </div>
     {{/each}}
 {{^}}
-
     <div class="best-qna-item">
         생성된 공간이 없습니다.
     </div>

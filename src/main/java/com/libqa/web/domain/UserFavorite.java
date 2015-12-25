@@ -11,7 +11,12 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(name = "user_favorite")
+@Table(indexes = {
+        @Index(name="IDX_USER_FAVORITE_SPACE_ID",columnList = "spaceId"),
+        @Index(name="IDX_USER_FAVORITE_QA_ID",columnList = "qaId"),
+        @Index(name="IDX_USER_FAVORITE_WIKI_ID",columnList = "wikiId"),
+        @Index(name="IDX_USER_FAVORITE_USER_ID",columnList = "userId")
+})
 public class UserFavorite {
 
     @Id

@@ -43,9 +43,13 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="/admin">Admin</a>
-                </li>
+                {{#if userRole}}
+                    {{#compareTo userRole 'ADMIN'}}
+                        <li>
+                            <a href="/admin">Admin ({{userRole}})</a>
+                        </li>
+                    {{/compareTo}}
+                {{/if}}
             </ul>
             <ul class="nav navbar-nav navbar-right navi-info">
                 <li class="dropdown">
