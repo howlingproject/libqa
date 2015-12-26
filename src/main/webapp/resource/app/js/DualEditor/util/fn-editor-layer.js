@@ -186,6 +186,62 @@ var jisung;
         hideImg : function () {
 			$('#imgModal').remove();
 		}
-    };    
+    };
+
+    jQuery.layer_select.layout = {
+
+        open : function ( textEditor, $me, data ) {
+
+            this.hideLayout();
+            var div =
+                "<div class=\"modal fade\" id=\"layoutModal\" data-keyboard='false' role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">" +
+                "   <div class=\"modal-dialog\">" +
+                "     <div class=\"modal-content\">" +
+                "     	<div class=\"modal-body\">" +
+                " 			<form class=\"form\" role=\"form\">" +
+                " 				<div class=\"form-group\">" +
+                " 					<label for=\"exampleInputLinkText\">생성할 문단수(최대 4개)</label>" +
+                " 					<input type='number' class='form-control' id=\"layoutNum\">" +
+                " 				</div>" +
+                " 			</form>" +
+                "       </div>" +
+                "       <div class=\"modal-footer\">" +
+                "         <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" >Close</button>" +
+                "         <button type=\"button\" class=\"btn btn-primary\" id=\"ok\">Save changes</button>" +
+                "       </div>" +
+                "     </div>" +
+                "   </div>" +
+                " </div> "
+            var layout = $(div);
+
+
+
+            layout.find(".dualEditor-wiki-btn").on("click", function () {
+                $('#layoutModal').modal('hide');
+            });
+
+            //여기서부터 링크
+            layout.find('#ok').on("click",function(){
+                var layoutNum = $(this).parent().parent().find('input')[0].value ;
+                if( layoutNum > 4){
+                    return alert("4보다 큽니다.");
+                }
+                var html = "";
+                for( var i=0; i < layoutNum; i++){
+                    html += "[layout] 문단 "+(i+1)+" [layout]\n";
+                }
+
+                $.textInsert(textEditor, html, "", "" );
+                layout.modal('hide');
+            });
+
+            layout.appendTo($me.parent());
+        },
+
+        hideLayout : function () {
+            $('#layoutModal').remove();
+        }
+    };
+
 
 })(jQuery);
