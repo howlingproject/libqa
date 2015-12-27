@@ -11,9 +11,7 @@
                     <div class="media-heading">
                         <span>{{formatDate wiki.insertDate "yyyy.MM.dd HH:mm:SS"}}</span>
                         <div class="pull-right">
-                            {{#each wiki.keywordList}}
-                                <span class="label label-primary">{{keywordName}}</span>
-                            {{/each}}
+                            {{> common/_keywordBadge}}
                         </div>
                     </div>
                     <div>
