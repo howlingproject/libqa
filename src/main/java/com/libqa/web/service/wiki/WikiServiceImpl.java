@@ -173,7 +173,12 @@ public class WikiServiceImpl implements WikiService {
                 );
         if( !CollectionUtils.isEmpty( list )){
             for( Wiki wiki : list ){
-                resultWiki.add( new DisplayWiki(wiki, userService.findByUserId( wiki.getUserId() ) )  );
+                resultWiki.add( new DisplayWiki(
+                        wiki
+                        , userService.findByUserId( wiki.getUserId() )
+                        ,keywordService.findByWikiId(wiki.getWikiId(), false)
+                )
+                );
             }
         }
         return resultWiki;
@@ -194,7 +199,12 @@ public class WikiServiceImpl implements WikiService {
 
         if( !CollectionUtils.isEmpty( list ) ){
             for( Wiki wiki : list ){
-                resultWiki.add( new DisplayWiki(wiki, userService.findByUserId( wiki.getUserId() ) )  );
+                resultWiki.add( new DisplayWiki(
+                                wiki
+                                , userService.findByUserId( wiki.getUserId() )
+                                ,keywordService.findByWikiId(wiki.getWikiId(), false)
+                        )
+                );
             }
         }
 
@@ -216,7 +226,12 @@ public class WikiServiceImpl implements WikiService {
 
         if( !CollectionUtils.isEmpty( list ) ){
             for( Wiki wiki : list ){
-                resultWiki.add( new DisplayWiki(wiki, userService.findByUserId( wiki.getUserId() ) )  );
+                resultWiki.add( new DisplayWiki(
+                                wiki
+                                , userService.findByUserId( wiki.getUserId() )
+                                ,keywordService.findByWikiId(wiki.getWikiId(), false)
+                        )
+                );
             }
         }
 

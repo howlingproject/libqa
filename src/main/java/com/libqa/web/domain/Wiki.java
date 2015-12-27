@@ -107,10 +107,6 @@ public class Wiki implements Serializable{
 
     @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<Keyword> keywordList;
-
-    @OneToMany(mappedBy = "wikiId", fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<WikiReply> wikiReplies;
 
     @OneToMany(fetch = FetchType.LAZY)

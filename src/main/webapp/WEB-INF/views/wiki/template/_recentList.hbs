@@ -2,9 +2,7 @@
     <!-- 최근 활동 -->
     <div class="best-qna-item">
         <div>
-            {{#each wiki.keywordList}}
-                <span class="label label-primary">{{wiki.keywordName}}</span>
-            {{/each}}
+            {{> common/_keywordBadge}}
             <strong> {{wiki.title}}</strong>
         </div>
         <div class="media">
