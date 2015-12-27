@@ -14,18 +14,12 @@ import org.springframework.security.web.authentication.rememberme.PersistentReme
 import javax.persistence.*;
 import java.util.Date;
 
-
-/**
- * @Author : yion
- * @Date : 2015. 9. 14.
- * @Description :
- */
 @Data
 @Entity
-@Table(name = "persistent_login")
+@Table(name = "persistent_logins")
 @Slf4j
 @EqualsAndHashCode
-public class PersistentLogin {
+public class PersistentLogins {
 
     @Id
     @Column(length = 64, nullable = false)
@@ -41,7 +35,7 @@ public class PersistentLogin {
     @Column(nullable = false)
     private Date lastUsed;
 
-    public PersistentLogin(PersistentRememberMeToken persistentRememberMeToken) {
+    public PersistentLogins(PersistentRememberMeToken persistentRememberMeToken) {
         log.info("########## PersistentLogin : {}", persistentRememberMeToken.toString());
         this.username = persistentRememberMeToken.getUsername();
         this.series = persistentRememberMeToken.getSeries();
