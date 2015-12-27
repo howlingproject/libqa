@@ -164,7 +164,54 @@ var jisung;
 
         	this.hideImg();
 
-        	var img = $("<div class=\"modal fade\" id=\"imgModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">   <div class=\"modal-dialog\">     <div class=\"modal-content\">     	<div class=\"modal-body\"> 			<form class=\"form\" role=\"form\"> 				<div class=\"form-group\"> 					<label for=\"exampleInputImgText\">Img Text</label> 					<input type=\"text\" class=\"form-control\" id=\"ImgText\" placeholder=\"Img Text\"> 				</div> 				<div class=\"form-group\"> 					<label for=\"exampleInputURL\">URL</label> 					<input type=\"text\" class=\"form-control\" id=\"ImgUrl\" placeholder=\"URL\"> 				</div> 			</form>       </div>       <div class=\"modal-footer\">         <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" >Close</button>         <button type=\"button\" class=\"btn btn-primary\" id=\"ok\">Save changes</button>       </div>     </div>   </div> </div> ");
+            var img =
+                "<div class=\"modal fade\" id=\"imgModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">" +
+                "   <div class=\"modal-dialog\">" +
+                "     <div class=\"modal-content\">" +
+                "     	<div class=\"modal-body\">" +
+                "     	    <ul class=\"nav nav-tabs\" role=\"tablist\">" +
+                "     	        <li role=\"presentation\" class=\"active\"><a href=\"#imgLink\" data-id=\"imgLink\" role=\"tab\" data-toggle=\"tab\">Home</a></li>" +
+                "     	        <li role=\"presentation\"><a href=\"#imgUpload\" data-id=\"imgUpload\" role=\"tab\" data-toggle=\"tab\">Profile</a></li>" +
+                "     	    </ul>" +
+                " 			<form class=\"form-horizontal\" role=\"form\">" +
+                "               <div class=\"tab-content\">" +
+                "                   <div role=\"tabpanel\" class=\"tab-pane active\" id=\"imgLink\">" +
+                "                       <div class=\"form-group\">" +
+                "                           <label for=\"exampleInputImgText\">Img Text</label>" +
+                "                           <input type=\"text\" class=\"form-control\" id=\"ImgText\" placeholder=\"Img Text\">" +
+                "                       </div>" +
+                "                       <div class=\"form-group\">" +
+                "                           <label for=\"exampleInputURL\">URL</label>" +
+                "                           <input type=\"text\" class=\"form-control\" id=\"ImgUrl\" placeholder=\"URL\">" +
+                "                       </div>" +
+                "                   </div>"+
+                "                   <div role=\"tabpanel\" class=\"tab-pane well\" id=\"imgUpload\">" +
+                "                       <div class=\"form-group\">" +
+                "                           <input id=\"uploadfile\" type=\"file\" name=\"uploadfile\" accept=\"*\" style=\"display:none\">" +
+                "                           <label for=\"fileAttachmentInput\" class=\"col-sm-2 control-label\">첨부파일</label>" +
+                "                           <div class=\"col-sm-10 col-md-10\">" +
+                "                               <div class=\"row\">" +
+                "                                   <div class=\"col-sm-9 col-xs-9 col-md-9\">" +
+                "                                       <input id=\"fileAttachmentInput\" class=\"form-control\" type=\"text\" />" +
+                "                                   </div>" +
+                "                                   <div class=\"col-sm-3 col-xs-3 col-md-3\">" +
+                "                                       <button class=\"btn btn-info btn-default\" type=\"button\" onclick=\"$('#uploadfile').click();\">선택</button>" +
+                "                                   </div>" +
+                "                               </div>" +
+                "                           </div>" +
+                "                       </div>" +
+                "                   </div>"+
+                "               </div>"+
+                " 			</form>" +
+                "       </div>" +
+                "       <div class=\"modal-footer\">" +
+                "         <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" >Close</button>" +
+                "         <button type=\"button\" class=\"btn btn-primary\" id=\"ok\">Save changes</button>" +
+                "       </div>" +
+                "     </div>" +
+                "   </div>" +
+                "</div> ";
+            img = $(img);
 
             img.find(".dualEditor-wiki-btn").on("click", function () {
                 $('#imgModal').modal('hide');
