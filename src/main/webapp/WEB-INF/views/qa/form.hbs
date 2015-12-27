@@ -39,7 +39,6 @@
                                 <input type="text" id="title" name="title" class="form-control"  placeholder="">
                             </div>
                         </div>
-
                     </div>
                     <hr style="background-color:#ccc; height: 1px; margin-top:0px; margin-bottom: 10px;">
                     <!-- 에디터 -->
@@ -50,14 +49,17 @@
                     </div>
                     <!--// 에디터 -->
 
-                    <div class="form-inline" id="tag-info">
-                        <label for="keyword" class="sr-only">키워드</label>
-                        <input type="text" class="form-control" size="29" id="interesting" placeholder="키워드를 입력하세요. (최대 3개)">
-                        <button class="btn btn-primary" type="button" id="keywordAdd">Add <i class="glyphicon glyphicon-plus"></i></button>
-                        <ul id="tag-cloud" style="padding-left: 0px; width:100%;"></ul>
-                        <input type="hidden" name="keywords" id="keywords" />
+                    <div class="form-inline form-group">
+                        <div class="row">
+                            <div class="col-lg-4" id="tag-info">
+                                <label for="keyword" class="sr-only">키워드</label>
+                                <input type="text" class="form-control" size="29" id="interesting" placeholder="키워드를 입력하세요. (최대 3개)">
+                                <button class="btn btn-primary" type="button" id="keywordAdd">Add <i class="glyphicon glyphicon-plus"></i></button>
+                            </div>
+                            <ul id="tag-cloud" class="col-lg-8"></ul>
+                            <input type="hidden" name="keywords" id="keywords" />
+                        </div>
                     </div>
-
 
                     <div class="form-group">
                         <div id="uploadFilesArea">
