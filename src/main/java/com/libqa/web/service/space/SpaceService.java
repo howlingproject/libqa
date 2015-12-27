@@ -20,6 +20,8 @@ public interface SpaceService {
 	 */
 	List<Space> findAllByCondition(boolean isDeleted);
 
+	List<Space> findAllByCondition(boolean isDeleted, Integer startIdx, Integer endIdx);
+
 	Space findOne(Integer spaceId);
 
 	Space saveWithKeyword(Space space, Keyword keyword, ActivityType activityType);

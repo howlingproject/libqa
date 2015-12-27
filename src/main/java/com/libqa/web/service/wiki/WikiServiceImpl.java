@@ -363,4 +363,23 @@ public class WikiServiceImpl implements WikiService {
         return wikiSnapShotRepository.save(wikiSnapShot);
     }
 
+    @Override
+    public List<DisplayWiki> findUpdateWikiList(int startIdx, int endIdx) {
+        List<DisplayWiki> resultWiki = new ArrayList<DisplayWiki>();
+        List<Wiki> list = wikiRepository.findSpaceWikiUpdateByIsDeleted(
+                isDeleted
+                , PageUtil.sortPageable(startIdx, endIdx, PageUtil.sortId("DESC", "updateDate"))
+        );
+
+        if(!CollectionUtils.isEmpty(list)){
+            for( Wiki wiki : list ){
+                resultWiki.add( new DisplayWiki(wiki));
+            }
+        }
+
+        return resultWiki;
+
+    }
+
+
 }

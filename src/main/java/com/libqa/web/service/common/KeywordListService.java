@@ -11,7 +11,5 @@ import java.util.List;
  * @author yong
  */
 public interface KeywordListService {
-    boolean saveKeywordList(Object obj, KeywordType keywordType);
-
     List<KeywordList> findByKeywordType(String keywordType, boolean isDeleted);
 }

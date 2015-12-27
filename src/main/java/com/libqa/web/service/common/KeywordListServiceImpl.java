@@ -22,31 +22,6 @@ public class KeywordListServiceImpl implements KeywordListService {
     @Autowired
     KeywordListRepository keywordListRepository;
 
-    @Override
-    public boolean saveKeywordList(Object obj, KeywordType keywordType) {
-        boolean successType = true;
-
-//        Keyword keywordInstance = modelMapper.map(obj, Keyword.class);
-//        try {
-//            for (keyword in obj) {
-//                def keywordName = keyword.keywordName
-//                // TODO List KeywordList table에 아래의 조건으로 index를 걸어야함
-//                def keywordListObj = findKeywordListByKeywordNameAndKeywordType(keywordName, keywordType)
-//                if (keywordListObj == null) {
-//                    keywordListObj = new KeywordList()
-//                    keywordListObj.setKeywordName(keywordName)
-//                    keywordListObj.setKeywordType(keywordType)
-//                } else {
-//                    keywordListObj.keywordCount = keywordListObj.getKeywordCount() + 1
-//                }
-//                save(keywordListObj)
-//            }
-//        }catch(e){
-//            log.debug(e.printStackTrace())
-//            successType = 0
-//        }
-        return successType;
-    }
 
     @Override
     public List<KeywordList> findByKeywordType(String keywordType, boolean isDeleted) {

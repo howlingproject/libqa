@@ -1,6 +1,7 @@
 package com.libqa.web.repository;
 
 import com.libqa.web.domain.Wiki;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,4 +33,6 @@ public interface WikiRepository extends JpaRepository<Wiki, Integer>, CrudReposi
     Wiki findOneByWikiIdAndIsDeleted(Integer wikiId, boolean isDeleted);
 
     Long countByIsDeleted(boolean isDeleted);
+
+    List<Wiki> findSpaceWikiUpdateByIsDeleted(boolean isDeleted, Pageable pageable);
 }

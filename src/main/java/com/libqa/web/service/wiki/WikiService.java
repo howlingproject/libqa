@@ -45,4 +45,6 @@ public interface WikiService {
 
     Long countByAllWiki();
 
+    List<DisplayWiki> findUpdateWikiList(int startIdx, int endIdx);
+
 }
