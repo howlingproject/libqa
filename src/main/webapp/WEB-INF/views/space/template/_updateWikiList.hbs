@@ -2,7 +2,8 @@
     {{#each updatedWikis}}
         <div class="media">
             <div class="media-body">
-                <h4 class="media-heading" id="media-heading"><a href="/wiki/{{wikiId}}">{{title}}</a><a class="anchorjs-link" href="#media-heading"><span class="anchorjs-icon"></span></a></h4>
+                <h4 class="media-heading" id="media-heading"><a href="/wiki/{{wikiId}}">{{title}}</a><a class="anchorjs-link" href="#media-heading">
+                    <span class="anchorjs-icon"></span></a></h4>
                 <div class="text-left"><a href="/wiki/{{wikiId}}" class="text">{{subString (htmlDelete contents) 0 240 }}</a>
                 <span class="badge">{{replyCount}}</span>
                 </div>

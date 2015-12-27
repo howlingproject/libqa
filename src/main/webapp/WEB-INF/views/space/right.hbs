@@ -30,14 +30,18 @@ To change this template use File | Settings | File Templates.
 
 
 <div class="container components">
-    <h1>{{space.title}}</h1>
+
+    <h1 class="page-header">{{space.title}}
+        <small class="pull-right">{{formatDate space.insertDate "yyyy-MM-dd hh:MM"}} Owner : {{space.insertUserNick}}</small>
+    </h1>
+
     <hr>
 
     <div class="col-xs-12 col-sm-9">
 
         <div class="jumbotron">
             <img src="{{space.titleImagePath}}/{{space.titleImage}}" width="250">
-            <p>{{space.description}}</p>
+            <p>{{{space.description}}}</p>
         </div>
 
         <div class="row row-offcanvas row-offcanvas-right">
@@ -46,10 +50,7 @@ To change this template use File | Settings | File Templates.
             <blockquote class="pull-left">
                 {{> space/template/_updateWikiRight}}
             </blockquote>
-
             <hr>
-
-
             <h3>최근 이 공간의 활동 내역 목록 </h3>
             <blockquote class="pull-left">
                 {{> space/template/_activityList}}
