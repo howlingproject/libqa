@@ -33,7 +33,7 @@ To change this template use File | Settings | File Templates.
 <!--// contents -->
 <div class="container components">
     <h1 class="page-header">{{space.title}}
-        <small class="pull-right">{{space.insertDate}} {{space.insertUserNick}} 생성 </small>
+        <small class="pull-right">{{formatDate space.insertDate "yyyy-MM-dd hh:MM"}} Owner : {{space.insertUserNick}}</small>
     </h1>
 
     <div class="row" style="padding-bottom: 20px">
@@ -43,7 +43,7 @@ To change this template use File | Settings | File Templates.
         </div>
 
         <div class="col-md-8">
-            {{space.description}}
+            {{{space.description}}}
         </div>
 
     </div>
