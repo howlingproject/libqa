@@ -27,13 +27,14 @@
                             <li class="active"><a href="#">관련 키워드</a></li>
                             <li class="pull-left qa-view-keyowrdList">
                                 {{#each keywordList}}
-                                    <span class="label label-primary">{{keywordName}}</span>
+                                    <!--<span class="label label-primary">{{keywordName}}</span>-->
+                                    {{#keywordBadge keywordName}}{{/keywordBadge}}
                                 {{/each}}
                             </li>
                             <li class="pull-right">
                                 <div class="user-profile-sm">
                                     <span class="nickname">{{qaContent.userNick}}</span>
-                                    <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                                    <img alt="avatar" class="profile-image" src="{{writer.userImage}}" />
                                 </div>
                             </li>
                         </ul>
