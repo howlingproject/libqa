@@ -1,19 +1,18 @@
 {{#each data}}
-    <div class="my-qna-item" value="{{qaContent.qaId}}" onclick="location.href='/qa/{{qaContent.qaId}}';">
-        <a class="pull-left" href="#">
+    <div class="my-qna-item contents" value="{{qaId}}" onclick="location.href='/qa/{{qaId}}';">
+        <div class="pull-left">
             <div class="user-profile">
-                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                <img alt="avatar" class="profile-image" src="{{userImage}}" />
             </div>
-        </a>
-
+        </div>
         <div class="row">
             <div class="col-lg-10">
                 <div class="media-body">
                     <div class="media-heading">
-                        <span>{{qaContent.insertDate}}</span>
+                        <span>{{insertDate}}</span>
                         <span class="my-qna-writer">
                             <div class="user-profile-xs">
-                                <span class="nickname">{{qaContent.userNick}}</span>
+                                <span class="nickname">{{userNick}}</span>
                             </div>
                         </span>
 
@@ -24,20 +23,19 @@
                         </div>
 
                         <div class="qna-title">
-                            <span>{{qaContent.title}}</span>
+                            <span>{{title}}</span>
                         </div>
 
                         <div>
-                            {{{qaContent.contents}}}
+                            {{{contents}}}
                             <span class="badge">{{replyCnt}}</span>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="col-lg-1 my-qna-rating pull-right">
-                <button class="btn btn-sm btn-default btn-sm-fixed pull-right">조회 {{qaContent.viewCount}}</button>
-                <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 {{qaContent.recommendCount}}</button>
+                <button class="btn btn-sm btn-default btn-sm-fixed pull-right">조회 {{viewCount}}</button>
+                <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 {{recommendCount}}</button>
             </div>
         </div>
     </div>
