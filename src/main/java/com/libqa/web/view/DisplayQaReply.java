@@ -1,6 +1,7 @@
 package com.libqa.web.view;
 
 import com.libqa.web.domain.QaReply;
+import com.libqa.web.domain.User;
 import lombok.Getter;
 
 import java.util.List;
@@ -12,21 +13,25 @@ import java.util.List;
  */
 @Getter
 public class DisplayQaReply {
+    private String userNick;
+    private String userImage;
     private QaReply qaReply;
     private List<DisplayQaReply> qaReplies;
     private boolean selfRecommend;
     private boolean selfNonrecommend;
 
-    public DisplayQaReply(QaReply qaReply, List<DisplayQaReply> qaReplies){
-        this.qaReply = qaReply;
-        this.qaReplies = qaReplies;
-    }
+//    public DisplayQaReply(QaReply qaReply, List<DisplayQaReply> qaReplies){
+//        this.qaReply = qaReply;
+//        this.qaReplies = qaReplies;
+//    }
 
-    public DisplayQaReply(QaReply qaReply, List<DisplayQaReply> qaReplies, boolean selfRecommend, boolean selfNonrecommend){
+    public DisplayQaReply(QaReply qaReply, List<DisplayQaReply> qaReplies, boolean selfRecommend, boolean selfNonrecommend, User writer){
         this.qaReply = qaReply;
         this.qaReplies = qaReplies;
         this.selfRecommend = selfRecommend;
         this.selfNonrecommend = selfNonrecommend;
+        this.userNick = writer.getUserNick();
+        this.userImage = writer.getUserImage();
     }
 
 }
