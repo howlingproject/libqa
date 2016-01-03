@@ -6,6 +6,7 @@ import com.libqa.application.enums.KeywordType;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
+import com.libqa.web.domain.User;
 import com.libqa.web.repository.QaContentRepository;
 import com.libqa.web.service.common.KeywordService;
 import lombok.extern.slf4j.Slf4j;
@@ -41,14 +42,14 @@ public class QaServiceImpl implements QaService {
 
     @Override
     @Transactional
-    public QaContent saveWithKeyword(QaContent paramQaContent, QaFile qaFiles, Keyword keyword){
+    public QaContent saveWithKeyword(QaContent paramQaContent, QaFile qaFiles, Keyword keyword, User user){
         QaContent newQaContent = new QaContent();
         try {
 
             // TODO List 차후 로그인으로 변경
-            paramQaContent.setUserId(1);
-            paramQaContent.setUserNick("용퓌");
-            paramQaContent.setInsertUserId(1);
+            paramQaContent.setUserId(user.getUserId());
+            paramQaContent.setUserNick(user.getUserNick());
+            paramQaContent.setInsertUserId(user.getUserId());
             paramQaContent.setInsertDate(new Date());
 
             newQaContent = save(paramQaContent);
@@ -87,11 +88,11 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public QaContent updateWithKeyword(QaContent paramQaContent, QaFile paramQaFiles) {
+    public QaContent updateWithKeyword(QaContent paramQaContent, QaFile paramQaFiles, User user) {
         QaContent updateQaContent = new QaContent();
 
         // TODO List 차후 로그인으로 변경
-        paramQaContent.setUpdateUserId(1);
+        paramQaContent.setUpdateUserId(user.getUserId());
         paramQaContent.setUpdateDate(new Date());
 
         try {

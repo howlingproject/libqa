@@ -4,6 +4,7 @@ import com.libqa.application.dto.QaDto;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
+import com.libqa.web.domain.User;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * @author yong
  */
 public interface QaService {
-    QaContent saveWithKeyword(QaContent qaContent, QaFile qaFiles, Keyword keyword)throws Exception;
+    QaContent saveWithKeyword(QaContent qaContent, QaFile qaFiles, Keyword keyword, User user)throws Exception;
 
     QaContent findByQaId(Integer qaId, boolean isDeleted);
 
@@ -23,7 +24,7 @@ public interface QaService {
 
     void saveIsReplyed(Integer qaId, boolean b);
 
-    QaContent updateWithKeyword(QaContent paramQaContent, QaFile paramQaFiles);
+    QaContent updateWithKeyword(QaContent paramQaContent, QaFile paramQaFiles, User user);
 
     List<QaContent> findByUserId(Integer userId);
 

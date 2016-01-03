@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.libqa.application.enums.StatusCode.NOT_MATCH_USER;
 import static com.libqa.application.framework.ResponseData.createFailResult;
+import static com.libqa.application.framework.ResponseData.createResult;
 import static com.libqa.application.framework.ResponseData.createSuccessResult;
 
 /**
@@ -122,6 +124,7 @@ public class QaController {
         mav.addObject("qaContent", qaContent);
         mav.addObject("writer", writer);
         mav.addObject("keywordList", keywordList);
+        mav.addObject("loggedUser", loggedUser.get());
         return mav;
     }
 
@@ -148,9 +151,10 @@ public class QaController {
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaContent> save(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles, @ModelAttribute Keyword paramKeywords) {
+        User user = loggedUser.get();
         QaContent qaContent = new QaContent();
         try {
-            qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles, paramKeywords);
+            qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles, paramKeywords, user);
             return createSuccessResult(qaContent);
         } catch (Exception e) {
             return createFailResult(qaContent);
@@ -159,14 +163,18 @@ public class QaController {
 
     @RequestMapping(value = "/qa/update", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaContent> update(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles) {
-        QaContent qaContent = new QaContent();
-
+    public ResponseData<QaContent> update(@ModelAttribute QaContent requestQaContent, @ModelAttribute QaFile requestQaFiles) {
+        User user = loggedUser.get();
+        boolean isDeleted = false;
         try {
-            qaContent = qaService.updateWithKeyword(paramQaContent, paramQaFiles);
-            return createSuccessResult(qaContent);
+            QaContent originQaContent = qaService.findByQaId(requestQaContent.getQaId(), isDeleted);
+            if(user.isNotMatchUser(originQaContent.getUserId())){
+                return createResult(NOT_MATCH_USER);
+            }
+            QaContent savedQaContent = qaService.updateWithKeyword(requestQaContent, requestQaFiles, user);
+            return createSuccessResult(savedQaContent);
         } catch (Exception e) {
-            return createFailResult(qaContent);
+            return createFailResult(null);
         }
     }
 
