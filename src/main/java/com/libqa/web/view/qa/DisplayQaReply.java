@@ -1,4 +1,4 @@
-package com.libqa.web.view;
+package com.libqa.web.view.qa;
 
 import com.libqa.web.domain.QaReply;
 import lombok.Getter;

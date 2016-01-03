@@ -6,7 +6,7 @@ import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaReply;
 import com.libqa.web.domain.Vote;
 import com.libqa.web.repository.QaReplyRepository;
-import com.libqa.web.view.DisplayQaReply;
+import com.libqa.web.view.qa.DisplayQaReply;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

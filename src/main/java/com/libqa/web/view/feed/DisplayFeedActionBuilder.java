@@ -1,4 +1,4 @@
-package com.libqa.web.view;
+package com.libqa.web.view.feed;
 
 import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;

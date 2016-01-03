@@ -1,8 +1,9 @@
-package com.libqa.web.view;
+package com.libqa.web.view.feed;
 
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.User;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class DisplayFeedReply {
@@ -12,7 +13,10 @@ public class DisplayFeedReply {
     private String insertDate;
     private String feedReplyContent;
     private Boolean isWriter;
+
+    @Setter
     private DisplayFeedAction likeFeedAction;
+    @Setter
     private DisplayFeedAction claimFeedAction;
 
     public DisplayFeedReply(FeedReply feedReply) {
@@ -24,16 +28,13 @@ public class DisplayFeedReply {
         this.claimFeedAction = createNotYetFeedAction();
     }
 
-    public DisplayFeedReply(FeedReply feedReply, User user, Boolean isWriter,
-                            DisplayFeedAction likeFeedAction, DisplayFeedAction claimFeedAction) {
+    public DisplayFeedReply(FeedReply feedReply, User user, Boolean isWriter) {
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
         this.userImage = user.getUserImage();
         this.insertDate = DisplayDateParser.parseForFeed(feedReply.getInsertDate());
         this.feedReplyContent = feedReply.getFeedReplyContent();
         this.isWriter = isWriter;
-        this.likeFeedAction = likeFeedAction;
-        this.claimFeedAction = claimFeedAction;
     }
 
     private DisplayFeedAction createNotYetFeedAction() {

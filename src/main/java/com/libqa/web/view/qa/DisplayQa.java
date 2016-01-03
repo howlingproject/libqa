@@ -1,4 +1,4 @@
-package com.libqa.web.view;
+package com.libqa.web.view.qa;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.Lists;

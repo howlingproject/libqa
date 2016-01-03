@@ -1,4 +1,4 @@
-package com.libqa.web.view;
+package com.libqa.web.view.space;
 
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;

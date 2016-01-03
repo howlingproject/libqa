@@ -20,7 +20,7 @@ img { vertical-align: middle; border: 0 none; }
 #header .navi-info li a {padding: 10px 10px 12px 10px;}
 /*#header ul.nav .alert {color:#fa3c45;}*/
 #header ul.nav li.messenger i {color: #ffffff;}
-#header ul.nav li.messenger.notification i {color:#dc0d17;}
+#header ul.nav li.messenger.notification i {color:#f44336;}
 
 /**
 * Sticky footer styles

@@ -1,4 +1,4 @@
-package com.libqa.web.view;
+package com.libqa.web.view.feed;
 
 import com.google.common.collect.Lists;
 import com.libqa.application.util.HtmlContentHandler;
@@ -6,6 +6,7 @@ import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedFile;
 import com.libqa.web.domain.User;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -19,24 +20,24 @@ public class DisplayFeed {
     private String userImage;
     private String insertDate;
     private boolean writer;
-    private DisplayFeedAction likeFeedAction;
-    private DisplayFeedAction claimFeedAction;
-    private List<DisplayFeedReply> replies = Lists.newArrayList();
-    private List<FeedFile> files = Lists.newArrayList();
-    private List<FeedFile> images = Lists.newArrayList();
+    private List<FeedFile> files;
+    private List<FeedFile> images;
 
-    public DisplayFeed(Feed feed, User user, boolean writer, DisplayFeedAction likeFeedAction,
-                       DisplayFeedAction claimFeedAction, List<DisplayFeedReply> displayFeedReplies) {
+    @Setter
+    private DisplayFeedAction likeFeedAction;
+    @Setter
+    private DisplayFeedAction claimFeedAction;
+    @Setter
+    private List<DisplayFeedReply> replies;
+
+    public DisplayFeed(Feed feed, User user, Boolean isWriter) {
         this.feedId = feed.getFeedId();
         this.userNick = feed.getUserNick();
         this.userImage = user.getUserImage();
         this.originFeedContent = feed.getFeedContent();
         this.feedContent = parseHtml(feed.getFeedContent());
         this.insertDate = DisplayDateParser.parseForFeed(feed.getInsertDate());
-        this.writer = writer;
-        this.likeFeedAction = likeFeedAction;
-        this.claimFeedAction = claimFeedAction;
-        this.replies = displayFeedReplies;
+        this.writer = isWriter;
         setFeedFiles(feed.getFeedFiles());
     }
 
@@ -45,6 +46,9 @@ public class DisplayFeed {
     }
 
     private void setFeedFiles(List<FeedFile> feedFiles) {
+        this.files = Lists.newArrayList();
+        this.images = Lists.newArrayList();
+
         for (FeedFile each : feedFiles) {
             if (each.isFileType()) {
                 this.files.add(each);

@@ -1,4 +1,4 @@
-package com.libqa.web.view;
+package com.libqa.web.view.wiki;
 
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.User;
