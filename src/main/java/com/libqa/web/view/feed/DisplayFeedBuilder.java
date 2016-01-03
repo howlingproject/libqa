@@ -20,6 +20,11 @@ public class DisplayFeedBuilder {
     @Autowired
     private DisplayFeedActionBuilder displayFeedActionBuilder;
 
+    /**
+     * feed를 display 용으로 build 한다.
+     * @param feeds
+     * @return
+     */
     public List<DisplayFeed> buildFeeds(List<Feed> feeds) {
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
         for (Feed feed : feeds) {

@@ -129,126 +129,21 @@
         <div class="col-sm-3">
             <div class="index-thread-box first">
                 <h2><i class="fa fa-weixin"></i> Feed</h2>
+                {{#each displayIndex.feeds}}
                 <div class="index-thread-item">
                     <div class="media">
                         <a class="pull-left" href="#">
                             <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                                <img alt="avatar" class="profile-image" src="{{userImage}}" />
                             </div>
                         </a>
                         <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
+                            <a href="">{{{subString (htmlDelete content) 0 30}}}</a>
+                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> {{countOfReply}}</span>
                         </div>
                     </div>
                 </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
+                {{/each}}
             </div>
         </div>
     </div>

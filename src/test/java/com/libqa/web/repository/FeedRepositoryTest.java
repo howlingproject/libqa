@@ -35,4 +35,10 @@ public class FeedRepositoryTest extends LibqaRepositoryTest<FeedRepository> {
         System.out.println(feeds);
     }
 
+    @Test
+    public void countFeedRepliesByFeedId() {
+        Integer count = repository.countFeedRepliesByFeedId(-1);
+        System.out.println(count);
+    }
+
 }

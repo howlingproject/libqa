@@ -88,7 +88,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private SocialChannelType channelType;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<UserKeyword> userKeywords;
 

@@ -9,4 +9,5 @@ import java.util.List;
 public interface FeedRepository extends JpaRepository<Feed, Integer> {
     List<Feed> findByIsDeletedFalse(Pageable pageable);
     List<Feed> findByFeedIdLessThanAndIsDeletedFalse(int lastFeedId, Pageable pageable);
+    Integer countFeedRepliesByFeedId(Integer feedId);
 }
