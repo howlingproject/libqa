@@ -74,14 +74,6 @@ public class QaController {
         return mav;
     }
 
-    @RequestMapping("/qa/my")
-    public ModelAndView my(Model model){
-        boolean isDeleted = false;
-
-        ModelAndView mav = new ModelAndView("qa/my");
-        return mav;
-    }
-
     @RequestMapping(value = "/qa/myWriteQaList", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<DisplayQa> myQaList(@ModelAttribute QaDto qaDto){
