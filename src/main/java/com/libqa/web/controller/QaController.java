@@ -163,7 +163,7 @@ public class QaController {
 
     @RequestMapping(value = "/qa/update", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaContent> update(@ModelAttribute QaContent requestQaContent, @ModelAttribute QaFile requestQaFiles) {
+    public ResponseData<QaContent> update(@ModelAttribute QaContent requestQaContent, @ModelAttribute QaFile requestQaFiles, @ModelAttribute Keyword requestKeywords) {
         User user = loggedUser.get();
         boolean isDeleted = false;
         try {
@@ -171,7 +171,7 @@ public class QaController {
             if(user.isNotMatchUser(originQaContent.getUserId())){
                 return createResult(NOT_MATCH_USER);
             }
-            QaContent savedQaContent = qaService.updateWithKeyword(requestQaContent, requestQaFiles, user);
+            QaContent savedQaContent = qaService.updateWithKeyword(requestQaContent, requestQaFiles, requestKeywords, user);
             return createSuccessResult(savedQaContent);
         } catch (Exception e) {
             return createFailResult(null);

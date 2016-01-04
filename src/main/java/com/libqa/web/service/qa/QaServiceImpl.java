@@ -88,17 +88,16 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public QaContent updateWithKeyword(QaContent paramQaContent, QaFile paramQaFiles, User user) {
+    public QaContent updateWithKeyword(QaContent requestQaContent, QaFile requestQaFiles, Keyword requestKeywords,  User user) {
         QaContent updateQaContent = new QaContent();
 
-        // TODO List 차후 로그인으로 변경
-        paramQaContent.setUpdateUserId(user.getUserId());
-        paramQaContent.setUpdateDate(new Date());
+        requestQaContent.setUpdateUserId(user.getUserId());
+        requestQaContent.setUpdateDate(new Date());
 
         try {
-            updateQaContent = save(paramQaContent);
-            moveQaFilesToProductAndSave(updateQaContent.getQaId(), paramQaFiles);
-//            saveKeywordAndList(updateQaContent.getQaId(), paramQaContent.getKeywords(), paramQaContent.getDeleteKeywords());
+            updateQaContent = save(requestQaContent);
+            moveQaFilesToProductAndSave(updateQaContent.getQaId(), requestQaFiles);
+            saveKeywordAndList(updateQaContent.getQaId(), requestKeywords.getKeywords(), requestKeywords.getDeleteKeywords());
         }catch(Exception e){
             log.error("### moveQaFilesToProductAndSave Exception = {}", e);
             throw new RuntimeException("moveQaFilesToProductAndSave Exception");
