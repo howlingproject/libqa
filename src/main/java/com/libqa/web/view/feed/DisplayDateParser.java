@@ -1,4 +1,4 @@
-package com.libqa.web.view;
+package com.libqa.web.view.feed;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.libqa.web.view;
+package com.libqa.web.view.feed;
 
 import com.google.common.collect.Lists;
 import com.libqa.application.util.LoggedUser;
@@ -20,6 +20,11 @@ public class DisplayFeedBuilder {
     @Autowired
     private DisplayFeedActionBuilder displayFeedActionBuilder;
 
+    /**
+     * feed를 display 용으로 build 한다.
+     * @param feeds
+     * @return
+     */
     public List<DisplayFeed> buildFeeds(List<Feed> feeds) {
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
         for (Feed feed : feeds) {
@@ -33,7 +38,12 @@ public class DisplayFeedBuilder {
     private DisplayFeed buildFeed(Feed feed, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
         User writer = userService.findByUserId(feed.getUserId());
         List<DisplayFeedReply> displayFeedReplies = buildFeedReplies(feed.getFeedReplies());
-        return new DisplayFeed(feed, writer, isWriter(writer), likedFeedAction, claimedFeedAction, displayFeedReplies);
+
+        DisplayFeed displayFeed = new DisplayFeed(feed, writer, isWriter(writer));
+        displayFeed.setLikeFeedAction(likedFeedAction);
+        displayFeed.setClaimFeedAction(claimedFeedAction);
+        displayFeed.setReplies(displayFeedReplies);
+        return displayFeed;
     }
 
     private Boolean isWriter(User writer) {
@@ -53,7 +63,11 @@ public class DisplayFeedBuilder {
 
     private DisplayFeedReply buildFeedReply(FeedReply feedReply, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
         User writer = userService.findByUserId(feedReply.getUserId());
-        return new DisplayFeedReply(feedReply, writer, isWriter(writer), likedFeedAction, claimedFeedAction);
+
+        DisplayFeedReply displayFeedReply = new DisplayFeedReply(feedReply, writer, isWriter(writer));
+        displayFeedReply.setLikeFeedAction(likedFeedAction);
+        displayFeedReply.setClaimFeedAction(claimedFeedAction);
+        return displayFeedReply;
     }
 
 }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface FeedReplyRepository extends JpaRepository<FeedReply, Integer> {
     List<FeedReply> findByFeedFeedId(Integer feedId);
+    Integer countByFeedId(Integer feedId);
 }

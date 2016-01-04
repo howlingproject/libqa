@@ -4,8 +4,8 @@ import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Wiki;
 import com.libqa.web.domain.WikiLike;
-import com.libqa.web.view.DisplayWiki;
-import com.libqa.web.view.DisplayWikiLike;
+import com.libqa.web.view.wiki.DisplayWiki;
+import com.libqa.web.view.wiki.DisplayWikiLike;
 
 import java.util.List;
 

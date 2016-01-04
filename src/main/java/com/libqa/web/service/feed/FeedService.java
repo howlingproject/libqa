@@ -23,6 +23,8 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @Slf4j
 @Service
 public class FeedService {
+    private static final Sort DEFAULT_SORT = new Sort(DESC, "feedId");
+
     @Autowired
     private FeedRepository feedRepository;
     @Autowired
@@ -34,14 +36,29 @@ public class FeedService {
     @Autowired
     private FeedActionService feedActionService;
 
+    /**
+     * lastFeedId을 기준으로 feed 목록을 조회한다.
+     * lastFeedId가 null일 경우 가장 최근의 목록을 반환하게 된다.
+     *
+     * @param lastFeedId
+     * @return
+     */
     public List<Feed> search(Integer lastFeedId) {
+        PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
+
         Optional<Integer> lastFeedIdOptional = Optional.ofNullable(lastFeedId);
         if (lastFeedIdOptional.isPresent()) {
-            return feedRepository.findByFeedIdLessThanAndIsDeletedFalse(lastFeedId, getPageRequest());
+            return feedRepository.findByFeedIdLessThanAndIsDeletedFalse(lastFeedId, pageRequest);
         }
-        return feedRepository.findByIsDeletedFalse(getPageRequest());
+        return feedRepository.findByIsDeletedFalse(pageRequest);
     }
 
+    /**
+     * user를 기반으로 feed를 저장한다.
+     *
+     * @param feed
+     * @param user
+     */
     @Transactional
     public void save(Feed feed, User user) {
         feed.setUserNick(user.getUserNick());
@@ -52,6 +69,11 @@ public class FeedService {
         saveFeedFiles(feed);
     }
 
+    /**
+     * feed 삭제한다. reply/file 정보도 함께 제거한다.
+     *
+     * @param feed
+     */
     @Transactional
     public void delete(Feed feed) {
         feed.setDeleted(true);
@@ -67,6 +89,13 @@ public class FeedService {
         }
     }
 
+    /**
+     * user 기반으로 좋아요를 처리한다.
+     *
+     * @param feedId
+     * @param user
+     * @return
+     */
     @Transactional
     public Feed like(Integer feedId, User user) {
         Feed feed = feedRepository.findOne(feedId);
@@ -81,6 +110,13 @@ public class FeedService {
         return feed;
     }
 
+    /**
+     * user 기반으로 claim을 처리한다.
+     *
+     * @param feedId
+     * @param user
+     * @return
+     */
     @Transactional
     public Feed claim(Integer feedId, User user) {
         Feed feed = feedRepository.findOne(feedId);
@@ -95,14 +131,37 @@ public class FeedService {
         return feed;
     }
 
+    /**
+     * feed를 수정한다.
+     *
+     * @param originFeed
+     * @param requestFeed
+     * @return
+     */
     @Transactional
     public Feed modify(Feed originFeed, Feed requestFeed) {
         originFeed.setFeedContent(requestFeed.getFeedContent());
         return originFeed;
     }
 
+    /**
+     * feedIf로 feed를 조회한다.
+     *
+     * @param feedId
+     * @return
+     */
     public Feed findByFeedId(Integer feedId) {
         return feedRepository.findOne(feedId);
+    }
+
+    /**
+     * pageSize만큼 feed를 조회한다.
+     *
+     * @param pageSize
+     * @return
+     */
+    public List<Feed> searchByPageSize(Integer pageSize) {
+        return feedRepository.findByIsDeletedFalse(PageUtil.sortPageable(pageSize, DEFAULT_SORT));
     }
 
     private void saveFeedFiles(Feed feed) {
@@ -118,7 +177,4 @@ public class FeedService {
         ));
     }
 
-    private static PageRequest getPageRequest() {
-        return PageUtil.sortPageable(new Sort(DESC, "feedId"));
-    }
 }
