@@ -46,7 +46,6 @@ public class QaServiceImpl implements QaService {
         QaContent newQaContent = new QaContent();
         try {
 
-            // TODO List 차후 로그인으로 변경
             paramQaContent.setUserId(user.getUserId());
             paramQaContent.setUserNick(user.getUserNick());
             paramQaContent.setInsertUserId(user.getUserId());
@@ -88,24 +87,29 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public QaContent updateWithKeyword(QaContent requestQaContent, QaFile requestQaFiles, Keyword requestKeywords,  User user) {
-        QaContent updateQaContent = new QaContent();
-
-        requestQaContent.setUpdateUserId(user.getUserId());
-        requestQaContent.setUpdateDate(new Date());
-
+    public QaContent updateWithKeyword(QaContent originQaContent, QaContent requestQaContent, QaFile requestQaFiles, Keyword requestKeywords,  User user) {
         try {
-            updateQaContent = save(requestQaContent);
-            moveQaFilesToProductAndSave(updateQaContent.getQaId(), requestQaFiles);
-            saveKeywordAndList(updateQaContent.getQaId(), requestKeywords.getKeywords(), requestKeywords.getDeleteKeywords());
+            originQaContent = update(originQaContent, requestQaContent, user);
+            moveQaFilesToProductAndSave(originQaContent.getQaId(), requestQaFiles);
+            saveKeywordAndList(originQaContent.getQaId(), requestKeywords.getKeywords(), requestKeywords.getDeleteKeywords());
         }catch(Exception e){
             log.error("### moveQaFilesToProductAndSave Exception = {}", e);
             throw new RuntimeException("moveQaFilesToProductAndSave Exception");
         }
-        return updateQaContent;
+        return originQaContent;
     }
 
-    @Override
+	private QaContent update(QaContent originQaContent, QaContent requestQaContent, User user) {
+		originQaContent.setTitle(requestQaContent.getTitle());
+		originQaContent.setUpdateUserId(user.getUserId());
+		originQaContent.setUpdateDate(new Date());
+		originQaContent.setContents(requestQaContent.getContents());
+		originQaContent.setContentsMarkup(requestQaContent.getContentsMarkup());
+
+		return originQaContent;
+	}
+
+	@Override
     public List<QaContent> findByUserId(Integer userId) {
         return qaRepository.findByUserIdAndIsDeleted(userId, false);
     }
@@ -129,8 +133,6 @@ public class QaServiceImpl implements QaService {
 
     void saveKeywordAndList(Integer qaId, String keywords, String deleteKeywords) {
         if (qaId != 0) {
-            // todo deleteKeywords String 배열로 만들어서 keywordService에서 공통으로 입력, 수정, 삭제 처리 구현
-
             String[] keywordArrays = new String[0];
             String[] deleteKeywordArrays = new String[0];
             if(keywords != null){
@@ -139,8 +141,6 @@ public class QaServiceImpl implements QaService {
             if(deleteKeywords != null){
                 deleteKeywordArrays = deleteKeywords.split(",");
             }
-//            int keywordListSize = deleteKeywords.size();
-//            String [] keywordArrays = (String[]) qaContentInstance.getKeyword().toArray(new String[keywordListSize]);
             log.info(" keywordArrays : {}", keywordArrays.length);
             log.info(" deleteKeywordArrays : {}", deleteKeywordArrays.length);
             if (keywordArrays.length > 0 || deleteKeywordArrays.length > 0) {

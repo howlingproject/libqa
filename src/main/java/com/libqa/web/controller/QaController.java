@@ -150,11 +150,11 @@ public class QaController {
 
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaContent> save(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles, @ModelAttribute Keyword paramKeywords) {
+    public ResponseData<QaContent> save(@ModelAttribute QaContent requestQaContent, @ModelAttribute QaFile requestQaFiles, @ModelAttribute Keyword requestKeywords) {
         User user = loggedUser.get();
         QaContent qaContent = new QaContent();
         try {
-            qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles, paramKeywords, user);
+            qaContent = qaService.saveWithKeyword(requestQaContent, requestQaFiles, requestKeywords, user);
             return createSuccessResult(qaContent);
         } catch (Exception e) {
             return createFailResult(qaContent);
@@ -171,7 +171,7 @@ public class QaController {
             if(user.isNotMatchUser(originQaContent.getUserId())){
                 return createResult(NOT_MATCH_USER);
             }
-            QaContent savedQaContent = qaService.updateWithKeyword(requestQaContent, requestQaFiles, requestKeywords, user);
+            QaContent savedQaContent = qaService.updateWithKeyword(originQaContent, requestQaContent, requestQaFiles, requestKeywords, user);
             return createSuccessResult(savedQaContent);
         } catch (Exception e) {
             return createFailResult(null);

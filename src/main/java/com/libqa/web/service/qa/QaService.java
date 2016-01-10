@@ -14,7 +14,7 @@ import java.util.List;
  * @author yong
  */
 public interface QaService {
-    QaContent saveWithKeyword(QaContent qaContent, QaFile qaFiles, Keyword keyword, User user)throws Exception;
+    QaContent saveWithKeyword(QaContent requestQaContent, QaFile requestQaFiles, Keyword requestKeywords, User user)throws Exception;
 
     QaContent findByQaId(Integer qaId, boolean isDeleted);
 
@@ -24,7 +24,7 @@ public interface QaService {
 
     void saveIsReplyed(Integer qaId, boolean b);
 
-    QaContent updateWithKeyword(QaContent requestQaContent, QaFile requestQaFiles, Keyword requestKeywords, User user);
+    QaContent updateWithKeyword(QaContent originQaContent, QaContent requestQaContent, QaFile requestQaFiles, Keyword requestKeywords, User user);
 
     List<QaContent> findByUserId(Integer userId);
 
