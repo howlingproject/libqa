@@ -86,7 +86,7 @@ public class QaController {
             qaContentList = qaService.findByUserId(loggedUser.get().getUserId());
             for(QaContent qaContent : qaContentList) {
                 User writer = userService.findByUserId(qaContent.getUserId());
-                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId(), isDeleted), qaReplyService.findByQaId(qaContent.getQaId()) ));
+                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
             }
             return createSuccessResult(displayQaList);
         }catch(Exception e){
@@ -104,7 +104,7 @@ public class QaController {
             qaContentList = qaReplyService.findByUserId(loggedUser.get().getUserId());
             for(QaContent qaContent : qaContentList) {
                 User writer = userService.findByUserId(qaContent.getUserId());
-                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId(), isDeleted), qaReplyService.findByQaId(qaContent.getQaId()) ));
+                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
             }
             return createSuccessResult(displayQaList);
         }catch(Exception e){
@@ -118,7 +118,7 @@ public class QaController {
 
         QaContent qaContent = qaService.view(qaId);
         User writer = userService.findByUserId(qaContent.getUserId());
-        List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
+        List<Keyword> keywordList = keywordService.findByQaId(qaId);
 
         ModelAndView mav = new ModelAndView("qa/view");
         mav.addObject("qaContent", qaContent);
@@ -133,7 +133,7 @@ public class QaController {
         boolean isDeleted = false;
 
         QaContent qaContent =  qaService.findByQaId(qaId, isDeleted);
-        List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
+        List<Keyword> keywordList = keywordService.findByQaId(qaId);
         ModelAndView mav = new ModelAndView("qa/edit");
         mav.addObject("qaContent", qaContent);
         mav.addObject("qaReplyList", qaContent.getQaReplys());
@@ -245,7 +245,7 @@ public class QaController {
             qaContentList = qaService.findByIsReplyedAndDayType(qaDto);
             for(QaContent qaContent : qaContentList) {
                 User writer = userService.findByUserId(qaContent.getUserId());
-                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId(), isDeleted), qaReplyService.findByQaId(qaContent.getQaId()) ));
+                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
             }
             return createSuccessResult(displayQaList);
         }catch(Exception e){

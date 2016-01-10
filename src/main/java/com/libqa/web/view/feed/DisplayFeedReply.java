@@ -22,7 +22,7 @@ public class DisplayFeedReply {
     public DisplayFeedReply(FeedReply feedReply) {
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
-        this.insertDate = DisplayDateParser.parseForFeed(feedReply.getInsertDate());
+        this.insertDate = DisplayDate.parse(feedReply.getInsertDate());
         this.feedReplyContent = feedReply.getFeedReplyContent();
         this.likeFeedAction = createNotYetFeedAction();
         this.claimFeedAction = createNotYetFeedAction();
@@ -32,7 +32,7 @@ public class DisplayFeedReply {
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
         this.userImage = user.getUserImage();
-        this.insertDate = DisplayDateParser.parseForFeed(feedReply.getInsertDate());
+        this.insertDate = DisplayDate.parse(feedReply.getInsertDate());
         this.feedReplyContent = feedReply.getFeedReplyContent();
         this.isWriter = isWriter;
     }

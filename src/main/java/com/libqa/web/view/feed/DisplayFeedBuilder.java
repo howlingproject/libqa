@@ -6,6 +6,7 @@ import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.user.UserService;
+import com.libqa.web.view.DisplayFeed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

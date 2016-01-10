@@ -18,6 +18,8 @@ import com.libqa.web.view.wiki.DisplayWikiLike;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -377,5 +379,11 @@ public class WikiServiceImpl implements WikiService {
 
     }
 
-
+    @Override
+    public List<Wiki> searchRecentlyWikiesByPageSize(Integer pageSize) {
+        final Integer startIndex = 0;
+        final Sort sort = PageUtil.sortId("DESC", "wikiId");
+        PageRequest pageRequest = PageUtil.sortPageable(startIndex, pageSize, sort);
+        return wikiRepository.findAllByIsDeletedFalse(pageRequest);
+    }
 }

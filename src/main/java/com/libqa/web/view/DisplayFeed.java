@@ -1,10 +1,13 @@
-package com.libqa.web.view.feed;
+package com.libqa.web.view;
 
 import com.google.common.collect.Lists;
 import com.libqa.application.util.HtmlContentHandler;
 import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedFile;
 import com.libqa.web.domain.User;
+import com.libqa.web.view.feed.DisplayDate;
+import com.libqa.web.view.feed.DisplayFeedAction;
+import com.libqa.web.view.feed.DisplayFeedReply;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,7 +39,7 @@ public class DisplayFeed {
         this.userImage = user.getUserImage();
         this.originFeedContent = feed.getFeedContent();
         this.feedContent = parseHtml(feed.getFeedContent());
-        this.insertDate = DisplayDateParser.parseForFeed(feed.getInsertDate());
+        this.insertDate = DisplayDate.parse(feed.getInsertDate());
         this.writer = isWriter;
         setFeedFiles(feed.getFeedFiles());
     }

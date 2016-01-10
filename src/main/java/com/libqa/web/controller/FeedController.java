@@ -7,6 +7,7 @@ import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.feed.FeedReplyService;
 import com.libqa.web.service.feed.FeedService;
+import com.libqa.web.view.DisplayFeed;
 import com.libqa.web.view.feed.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

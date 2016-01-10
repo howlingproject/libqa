@@ -47,4 +47,5 @@ public interface WikiService {
 
     List<DisplayWiki> findUpdateWikiList(int startIdx, int endIdx);
 
+    List<Wiki> searchRecentlyWikiesByPageSize(Integer pageSize);
 }

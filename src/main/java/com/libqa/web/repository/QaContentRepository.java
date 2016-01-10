@@ -1,6 +1,7 @@
 package com.libqa.web.repository;
 
 import com.libqa.web.domain.QaContent;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;
@@ -21,4 +22,6 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     List<QaContent> findByUserIdAndIsDeleted(Integer userId, boolean isDeleted);
 
     List<QaContent> findByQaIdInAndIsDeletedOrderByQaIdDesc(List<Integer> qaIds, boolean isDeleted);
+
+    List<QaContent> findByIsDeletedFalse(Pageable pageable);
 }

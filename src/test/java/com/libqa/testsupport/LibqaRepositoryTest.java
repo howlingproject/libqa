@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("spring-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 public abstract class LibqaRepositoryTest<T> {
-
     @Autowired
     protected T repository;
 }

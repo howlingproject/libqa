@@ -31,4 +31,6 @@ public interface QaService {
     List<QaContent> findByQaIdIn(List<Integer> qaIds);
 
     QaContent view(Integer qaId);
+
+    List<QaContent> searchRecentlyQaContentsByPageSize(Integer pageSize);
 }

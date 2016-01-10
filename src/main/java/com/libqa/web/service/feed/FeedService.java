@@ -155,12 +155,12 @@ public class FeedService {
     }
 
     /**
-     * pageSize만큼 feed를 조회한다.
+     * pageSize만큼 최신 feed 목록을 조회한다.
      *
      * @param pageSize
      * @return
      */
-    public List<Feed> searchByPageSize(Integer pageSize) {
+    public List<Feed> searchRecentlyFeedsByPageSize(Integer pageSize) {
         return feedRepository.findByIsDeletedFalse(PageUtil.sortPageable(pageSize, DEFAULT_SORT));
     }
 

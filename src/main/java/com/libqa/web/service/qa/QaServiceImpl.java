@@ -3,6 +3,7 @@ package com.libqa.web.service.qa;
 import com.libqa.application.dto.QaDto;
 import com.libqa.application.enums.DayType;
 import com.libqa.application.enums.KeywordType;
+import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
@@ -12,6 +13,8 @@ import com.libqa.web.service.common.KeywordService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -125,6 +128,14 @@ public class QaServiceImpl implements QaService {
         QaContent qaContent = findByQaId(qaId, false);
         qaContent.setViewCount(qaContent.getViewCount() + 1);
         return qaContent;
+    }
+
+    @Override
+    public List<QaContent> searchRecentlyQaContentsByPageSize(Integer pageSize) {
+        final Integer startIndex = 0;
+        final Sort sort = PageUtil.sortId("DESC", "qaId");
+        PageRequest pageRequest = PageUtil.sortPageable(startIndex, pageSize, sort);
+        return qaRepository.findByIsDeletedFalse(pageRequest);
     }
 
     void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {

@@ -17,13 +17,15 @@ public class IndexController {
 
     @RequestMapping({"/", "/index"})
     public ModelAndView index(HttpServletRequest request, ModelAndView mav) {
-        log.info("request.get = {}", request.getAttribute("isLogin"));
-        log.info("request.get = {}", request.getAttribute("userEmail"));
-        log.info("request.get = {}", request.getAttribute("userRole"));
-
-        mav.setViewName("index");
         mav.addObject("isLogin", request.getAttribute("isLogin"));
         mav.addObject("displayIndex", indexCrawler.crawl());
+        mav.setViewName("index");
+        return mav;
+    }
+
+    @RequestMapping({"/index2"})
+    public ModelAndView index2(ModelAndView mav) {
+        mav.setViewName("index2");
         return mav;
     }
 }

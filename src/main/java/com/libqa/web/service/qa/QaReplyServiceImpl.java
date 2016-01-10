@@ -173,6 +173,11 @@ public class QaReplyServiceImpl implements QaReplyService {
         return qaService.findByQaIdIn(qaIds);
     }
 
+    @Override
+    public Integer countByQaContent(QaContent qaContent) {
+        return qaReplyRepository.countByQaId(qaContent.getQaId());
+    }
+
     public void updateOrderIdx(QaReply paramQaReply){
         boolean isDeleted = false;
         List<QaReply> updateTargetQaReplyList = qaReplyRepository.findAllByQaIdAndIsDeletedAndOrderIdxGreaterThanOrderByOrderIdxAsc(paramQaReply.getQaId(), isDeleted, paramQaReply.getOrderIdx());
