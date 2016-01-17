@@ -3,7 +3,7 @@
     width: 100%;
 }
 .nav-tabs{
-    background-color: #f7f7f7;
+    /*background-color: #f7f7f7;*/
 }
 
 .dualEditor-nav{
@@ -58,3 +58,9 @@ div button.dualEditor-wiki-btn {
     font-size: 0;
 }
 
+.dualEditor-image-well {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}

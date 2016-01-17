@@ -175,7 +175,7 @@ var jisung;
                 "     	    </ul>" +
                 " 			<form class=\"form-horizontal\" role=\"form\">" +
                 "               <div class=\"tab-content\">" +
-                "                   <div role=\"tabpanel\" class=\"tab-pane active\" id=\"imgLink\">" +
+                "                   <div role=\"tabpanel\" class=\"tab-pane dualEditor-image-well active\" id=\"imgLink\">" +
                 "                       <div class=\"form-group\">" +
                 "                           <label for=\"exampleInputImgText\">Img Text</label>" +
                 "                           <input type=\"text\" class=\"form-control\" id=\"ImgText\" placeholder=\"Img Text\">" +
@@ -185,7 +185,7 @@ var jisung;
                 "                           <input type=\"text\" class=\"form-control\" id=\"ImgUrl\" placeholder=\"URL\">" +
                 "                       </div>" +
                 "                   </div>"+
-                "                   <div role=\"tabpanel\" class=\"tab-pane well\" id=\"imgUpload\">" +
+                "                   <div role=\"tabpanel\" class=\"tab-pane dualEditor-image-well\" id=\"imgUpload\">" +
                 "                       <div class=\"form-group\">" +
                 "                           <input id=\"uploadfile\" type=\"file\" name=\"uploadfile\" accept=\"*\" style=\"display:none\">" +
                 "                           <label for=\"fileAttachmentInput\" class=\"col-sm-2 control-label\">첨부파일</label>" +
