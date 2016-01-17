@@ -10,6 +10,6 @@ import lombok.Setter;
 public class IndexFeed {
     private Integer feedId;
     private String userImage;
-    private String content;
+    private String feedContent;
     private Integer countOfReply;
 }

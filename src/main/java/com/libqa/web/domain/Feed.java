@@ -14,7 +14,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "feedId")
-@Table(indexes = {@Index(columnList = "isDeleted")})
+@Table(indexes = {
+        @Index(columnList = "isDeleted"),
+        @Index(columnList = "userId"),
+        @Index(columnList = "userNick")
+})
 @ToString(exclude = {"feedReplies", "feedFiles"})
 public class Feed {
     @Id
@@ -22,11 +26,11 @@ public class Feed {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer feedId;
 
-    @Column(nullable = true, length = 80)
+    @Column(length = 80)
     private String sharedResponseId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true, length = 20)
+    @Column(length = 20)
     private SocialChannelType sharedContentsType;
 
     @Column(columnDefinition = "TEXT", nullable = false)

@@ -1,35 +1,82 @@
 {{# partial "content" }}
-    <div class="index-container">
-        <div class="container-fluid">
-            <div class="col-sm-12" style="margin-bottom: 25px">
-                <div class="index-thread-box first">
-                    <h2><i class="glyphicon glyphicon-volume-up"></i> 공지사항 입니다.</h2>
-                    <div class="index-thread-item" style="cursor: pointer">
-                        <div class="title">공지사항 어쩌구 저쩌구 합니다..공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.
-                             공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.
-                             <br> 공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다...
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 4</span>
-                            <div class="pull-right">2015-12-27 13:46</div>
-                        </div>
-
-                    </div>
-                    <span class="label label-default pull-right" style="margin-top: 10px;padding:5px 10px 8px 10px;">more</span>
-                </div>
-            </div>
-
-            <!--center-->
-            <div class="col-sm-9">
-                <div class="col-sm-12">
+    {{#with displayIndex}}
+        <div class="container index-container">
+            <div class="container-fluid">
+                <div class="col-sm-12" style="margin-bottom: 25px">
                     <div class="index-thread-box first">
-                        <h2><i class="glyphicon glyphicon-question-sign"></i> Q&amp;A</h2>
-                        {{#each displayIndex.qaContents}}
-                        <div class="index-thread-item">
-                            <div class="title"><strong>{{{subString (htmlDelete title) 0 30}}}</strong></div>
-                            <div class="pull-right">
-                                {{#each keywords}}
-                                    {{{keywordBadge name}}}
-                                {{/each}}
+                        <h2><i class="glyphicon glyphicon-volume-up"></i> 공지사항 입니다.</h2>
+                        <div class="index-thread-item" style="cursor: pointer">
+                            <div class="title">공지사항 어쩌구 저쩌구 합니다..공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.
+                                 공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.
+                                 <br> 공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다...
+                                <span class="comments"><i class="glyphicon glyphicon-comment"></i> 4</span>
+                                <div class="pull-right">2015-12-27 13:46</div>
                             </div>
+    
+                        </div>
+                        <span class="label label-default pull-right" style="margin-top: 10px;padding:5px 10px 8px 10px;">more</span>
+                    </div>
+                </div>
+    
+                <!--center-->
+                <div class="col-sm-9">
+                    <div class="col-sm-12">
+                        <div class="index-thread-box first">
+                            <h2><i class="glyphicon glyphicon-question-sign"></i> Q&amp;A</h2>
+                            {{#each qaContents}}
+                            <div class="index-thread-item">
+                                <div class="title"><strong>{{{abbreviate (htmlDelete title) 30}}}</strong></div>
+                                <div class="pull-right">
+                                    {{#each keywords}}
+                                        {{{keywordBadge name}}}
+                                    {{/each}}
+                                </div>
+                                <div class="media">
+                                    <a class="pull-left" href="#">
+                                        <div class="user-profile">
+                                            <img alt="avatar" class="profile-image" src="{{userImage}}" />
+                                        </div>
+                                    </a>
+                                    <div class="media-body">
+                                        <a href="/qa/{{qaId}}">{{{abbreviate (htmlDelete contents) 200}}}</a>
+                                        <span class="comments"><i class="glyphicon glyphicon-comment"></i> {{countOfReply}}</span>
+                                    </div>
+                                    <div class="pull-left"><span class="nickname">{{userNick}}</span></div>
+                                    <div class="pull-right">{{insertDate}}</div>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h2><i class="fa fa-database"></i> Space</h2>
+                        {{#each spaces}}
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><strong>{{{abbreviate (htmlDelete title) 30}}}</strong></div>
+                            <div class="panel-body">
+                                <a href="/space/{{spaceId}}">{{{abbreviate (htmlDelete description) 70}}}</a>
+                            </div>
+                        </div>
+                        {{/each}}
+                   </div>
+                    <div class="col-sm-6">
+                        <h2><i class="glyphicon glyphicon-book"></i> Wiki</h2>
+                        {{#each wikies}}
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>{{{abbreviate (htmlDelete title) 30}}}</strong></div>
+                                <div class="panel-body">
+                                    <a href="/wiki/{{wikiId}}">{{{ abbreviate (htmlDelete description) 70}}}</a>
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+    
+                <div class="col-sm-3">
+                    <div class="index-thread-box first">
+                        <h2><i class="fa fa-weixin"></i> Feed</h2>
+                        {{#each feeds}}
+                        <div class="index-thread-item">
                             <div class="media">
                                 <a class="pull-left" href="#">
                                     <div class="user-profile">
@@ -37,62 +84,17 @@
                                     </div>
                                 </a>
                                 <div class="media-body">
-                                    <a href="/qa/{{qaId}}">{{{subString (htmlDelete contents) 0 200}}}</a>
+                                    {{{abbreviate (htmlDelete feedContent) 40}}}
                                     <span class="comments"><i class="glyphicon glyphicon-comment"></i> {{countOfReply}}</span>
                                 </div>
-                                <div class="pull-left"><span class="nickname">{{userNick}}</span></div>
-                                <div class="pull-right">{{insertDate}}</div>
                             </div>
                         </div>
                         {{/each}}
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <h2><i class="fa fa-database"></i> Space</h2>
-                    {{#each displayIndex.spaces}}
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><strong>{{{subString (htmlDelete title) 0 30}}}</strong></div>
-                        <div class="panel-body">
-                            <a href="/space/{{spaceId}}">{{{subString (htmlDelete description) 0 70}}}</a>
-                        </div>
-                    </div>
-                    {{/each}}
-               </div>
-                <div class="col-sm-6">
-                    <h2><i class="glyphicon glyphicon-book"></i> Wiki</h2>
-                    {{#each displayIndex.wikies}}
-                        <div class="panel panel-default">
-                            <div class="panel-heading"><strong>{{{subString (htmlDelete title) 0 30}}}</strong></div>
-                            <div class="panel-body">
-                                <a href="/wiki/{{wikiId}}">{{{subString (htmlDelete description) 0 70}}}</a>
-                            </div>
-                        </div>
-                    {{/each}}
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <div class="index-thread-box first">
-                    <h2><i class="fa fa-weixin"></i> Feed</h2>
-                    {{#each displayIndex.feeds}}
-                    <div class="index-thread-item">
-                        <div class="media">
-                            <a class="pull-left" href="#">
-                                <div class="user-profile">
-                                    <img alt="avatar" class="profile-image" src="{{userImage}}" />
-                                </div>
-                            </a>
-                            <div class="media-body">
-                                {{{subString (htmlDelete contents) 0 200}}}
-                                <span class="comments"><i class="glyphicon glyphicon-comment"></i> {{countOfReply}}</span>
-                            </div>
-                        </div>
-                    </div>
-                    {{/each}}
-                </div>
             </div>
         </div>
-    </div>
+    {{/with}}
 {{/partial}}
 
 {{> template/base}}
