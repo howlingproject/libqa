@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor(staticName = "of")
 public class IndexQaContent {
+    private Integer qaId;
     private String title;
     private String contents;
     private String userImage;

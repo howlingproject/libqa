@@ -173,9 +173,9 @@ var jisung;
                 "     	        <li role=\"presentation\" class=\"active\"><a href=\"#imgLink\" data-id=\"imgLink\" role=\"tab\" data-toggle=\"tab\">Home</a></li>" +
                 "     	        <li role=\"presentation\"><a href=\"#imgUpload\" data-id=\"imgUpload\" role=\"tab\" data-toggle=\"tab\">Profile</a></li>" +
                 "     	    </ul>" +
-                " 			<form class=\"form-horizontal\" role=\"form\">" +
+                " 			<form class=\"form-horizontal\" role=\"form\" id=\"imageUploadForm\">" +
                 "               <div class=\"tab-content\">" +
-                "                   <div role=\"tabpanel\" class=\"tab-pane active\" id=\"imgLink\">" +
+                "                   <div role=\"tabpanel\" class=\"tab-pane dualEditor-image-well active\" id=\"imgLink\">" +
                 "                       <div class=\"form-group\">" +
                 "                           <label for=\"exampleInputImgText\">Img Text</label>" +
                 "                           <input type=\"text\" class=\"form-control\" id=\"ImgText\" placeholder=\"Img Text\">" +
@@ -185,9 +185,9 @@ var jisung;
                 "                           <input type=\"text\" class=\"form-control\" id=\"ImgUrl\" placeholder=\"URL\">" +
                 "                       </div>" +
                 "                   </div>"+
-                "                   <div role=\"tabpanel\" class=\"tab-pane well\" id=\"imgUpload\">" +
+                "                   <div role=\"tabpanel\" class=\"tab-pane dualEditor-image-well\" id=\"imgUpload\">" +
                 "                       <div class=\"form-group\">" +
-                "                           <input id=\"uploadfile\" type=\"file\" name=\"uploadfile\" accept=\"*\" style=\"display:none\">" +
+                "                           <input id=\"image_uploadfile\" type=\"file\" name=\"uploadfile\" accept=\"*\" style=\"display:none\">" +
                 "                           <label for=\"fileAttachmentInput\" class=\"col-sm-2 control-label\">첨부파일</label>" +
                 "                           <div class=\"col-sm-10 col-md-10\">" +
                 "                               <div class=\"row\">" +
@@ -195,7 +195,7 @@ var jisung;
                 "                                       <input id=\"fileAttachmentInput\" class=\"form-control\" type=\"text\" />" +
                 "                                   </div>" +
                 "                                   <div class=\"col-sm-3 col-xs-3 col-md-3\">" +
-                "                                       <button class=\"btn btn-info btn-default\" type=\"button\" onclick=\"$('#uploadfile').click();\">선택</button>" +
+                "                                       <button class=\"btn btn-info btn-default\" type=\"button\" onclick=\"$('#image_uploadfile').click();\">선택</button>" +
                 "                                   </div>" +
                 "                               </div>" +
                 "                           </div>" +
@@ -217,11 +217,36 @@ var jisung;
                 $('#imgModal').modal('hide');
             });
 
+            img.find("#image_uploadfile").on("change", function () {
+                var uploadFile = $("#image_uploadfile");
+                var $imageUploadForm = $("#imageUploadForm");
+                $.ajax({
+                    url: "/common/uploadFile",
+                    type: "POST",
+                    data: new FormData($imageUploadForm[0]),
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (req) {
+                        var text = req.data.realName ;
+                        var url  = req.data.filePath+"/"+req.data.savedName;
+                        var html = "!["+text+"]("+url+")";
+
+                        $.textInsert(textEditor, html, "", "" );
+                        img.modal('hide');
+                    },
+                    error: function () {
+                        alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
+                    }
+                });
+            });
+
         	//여기서부터 링크
         	img.find('#ok').on("click",function(){
         		var text = $(this).parent().parent().find('input')[0].value ;
         		var url  = $(this).parent().parent().find('input')[1].value ;
-        		 var html = "!["+text+"]("+url+")";		
+        		var html = "!["+text+"]("+url+")";
         		
         		$.textInsert(textEditor, html, "", "" );
         		img.modal('hide');
