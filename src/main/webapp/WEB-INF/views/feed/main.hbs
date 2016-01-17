@@ -5,29 +5,29 @@
     <div class="col-md-12 col-xs-12">
         <!-- feed 글 쓰기 start -->
         <form id="feedForm">
-        <div class="feed feed-write well">
-            <ul>
-                <li>
-                    <div class="author">
-                        <div class="user-profile">
-                            <img alt="avatar" class="profile-image" src="{{loggedUser.userImage}}" />
+            <div class="feed feed-write well">
+                <ul>
+                    <li>
+                        <div class="author">
+                            <div class="user-profile">
+                                <img alt="avatar" class="profile-image" src="{{loggedUser.userImage}}" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="write-box">
-                        <textarea class="form-control" name="feedContent" rows="6" placeholder="오늘 있었던 일을 동료와 공유해주세요"></textarea>
-                    </div>
-                    <div class="attachmentArea">
-                        <div class="images text-left"></div>
-                        <div class="files">&nbsp;</div>
-                    </div>
-                </li>
-            </ul>
+                        <div class="write-box">
+                            <textarea class="form-control" name="feedContent" rows="6" placeholder="오늘 있었던 일을 동료와 공유해주세요"></textarea>
+                        </div>
+                        <div class="attachmentArea">
+                            <div class="images text-left"></div>
+                            <div class="files">&nbsp;</div>
+                        </div>
+                    </li>
+                </ul>
 
-            <div class="feed-write-bottom">
-                <button class="btn btn-primary btn-feed-image" type="button" data-toggle="modal" data-target="#fileUploadModal">이미지 및 파일첨부</button>
-                <button class="btn btn-info pull-right btn-feed-save" type="button" id="feedSave">저장</button>
+                <div class="feed-write-bottom">
+                    <button class="btn btn-primary btn-feed-image" type="button" data-toggle="modal" data-target="#fileUploadModal">이미지 및 파일첨부</button>
+                    <button class="btn btn-info pull-right btn-feed-save" type="button" id="feedSave">저장</button>
+                </div>
             </div>
-        </div>
         </form>
         <!-- feed 글 쓰기 end -->
 
@@ -164,7 +164,7 @@
             'bindAttachment': function () {
                 $('#uploadfile').change(function(){
                     $('#fileAttachmentInput').val($('#uploadfile').val());
-                    
+
                     var $feedFileForm = $("#feedFileForm");
                     $.ajax({
                         url: "/common/uploadFile",
@@ -471,7 +471,7 @@
                 }
             }
         };
-        
+
     $(function(){
         Feed.init();
     });

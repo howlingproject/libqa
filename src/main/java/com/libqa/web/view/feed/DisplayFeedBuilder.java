@@ -22,21 +22,21 @@ public class DisplayFeedBuilder {
     private DisplayFeedActionBuilder displayFeedActionBuilder;
 
     /**
-     * feed를 display 용으로 build 한다.
+     * feed 목록을 display 용으로 build 한다.
      * @param feeds
      * @return
      */
-    public List<DisplayFeed> buildFeeds(List<Feed> feeds) {
+    public List<DisplayFeed> build(List<Feed> feeds) {
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
         for (Feed feed : feeds) {
             DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feed);
             DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaimBy(feed);
-            displayFeeds.add(buildFeed(feed, likedFeedAction, claimedFeedAction));
+            displayFeeds.add(build(feed, likedFeedAction, claimedFeedAction));
         }
         return displayFeeds;
     }
 
-    private DisplayFeed buildFeed(Feed feed, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
+    private DisplayFeed build(Feed feed, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
         User writer = userService.findByUserId(feed.getUserId());
         List<DisplayFeedReply> displayFeedReplies = buildFeedReplies(feed.getFeedReplies());
 
