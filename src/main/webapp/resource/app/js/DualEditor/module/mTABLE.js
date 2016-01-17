@@ -5,7 +5,7 @@ DualEditor.markup.TABLE = function(contents){
     var regTitle2 = /\|\|(.*)\|\|/igm;
     var regBody = /\|(.*)\|/igm;
     var regBody2 = /\|(.*)\|/igm;
-    var arrayContents = editText.split("<br>");
+    var arrayContents = editText.split("\n");
     var flag = false ;
     for( var i = 0; i < arrayContents.length; i++ ){
         // 셀제목
@@ -51,5 +51,5 @@ DualEditor.markup.TABLE = function(contents){
         }
 
     }
-    return arrayContents.join("<br>");
+    return arrayContents.join("\n");
 };
