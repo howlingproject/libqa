@@ -11,5 +11,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = "com.libqa.web.domain")
 @EnableJpaRepositories(basePackages = "com.libqa.web.repository")
 @Import({DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
-public abstract class RepositoryTestConfiguration {
+abstract class RepositoryTestConfiguration {
 }

@@ -203,11 +203,11 @@
                 $("#cancelButton").on("click", this.cancelContents);
                 $("#saveButton").on("click", ConfirmDialog.saveConfirm);
             },
-            saveContents: function () {
+            updateContents: function () {
                 setParam();
                 var data = $('#qaForm').serialize();
                 $.ajax({
-                    url: '/qa/save',
+                    url: '/qa/update',
                     type: "POST",
                     dataType: "json",
                     cache: false,
@@ -273,7 +273,7 @@
                     cancelButton: '취소',
                     confirmButtonClass: 'btn-info',
                     confirm: function () {
-                        Qa.saveContents();
+                        Qa.updateContents();
                     },
                     cancel: function(){
                         return true;

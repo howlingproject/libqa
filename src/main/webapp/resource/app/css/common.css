@@ -20,7 +20,8 @@ img { vertical-align: middle; border: 0 none; }
 #header .navi-info li a {padding: 10px 10px 12px 10px;}
 /*#header ul.nav .alert {color:#fa3c45;}*/
 #header ul.nav li.messenger i {color: #ffffff;}
-#header ul.nav li.messenger.notification i {color:#dc0d17;}
+#header ul.nav li.messenger.notification i {color:#fff;}
+#header ul.nav li.messenger.notification.on i {color: #6fe9ed;}
 
 /**
 * Sticky footer styles
@@ -153,6 +154,7 @@ div.nav-tabs-header {border-bottom: 1px solid #eee; font-weight: bold; font-size
 span.section-category {margin-top: -7px; font-size: 12px}
 
 div.my-qna-item {border-bottom: 1px solid #eee; padding-bottom: 15px; padding-top: 15px;}
+div.my-qna-item.contents {cursor: pointer}
 div.qna-item {border-bottom: 1px solid #eee; padding-bottom:10px}
 div.qna-item.contents {cursor: pointer}
 

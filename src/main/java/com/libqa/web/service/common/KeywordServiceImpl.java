@@ -31,8 +31,8 @@ public class KeywordServiceImpl implements KeywordService {
 	KeywordListRepository keywordListRepository;
 
 	@Override
-	public List<Keyword> findByQaId(Integer qaId, boolean isDeleted) {
-		return keywordRepository.findAllByQaIdAndIsDeleted(qaId, isDeleted);
+	public List<Keyword> findByQaId(Integer qaId) {
+		return keywordRepository.findAllByQaIdAndIsDeletedFalse(qaId);
 	}
 
 	@Override

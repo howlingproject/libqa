@@ -1,44 +1,4 @@
 
-<div class="top-buffer">
-    <form name="qaReplyForm">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    답변
-                </h3>
-            </div>
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <div style="margin-left: 5px; margin-bottom: 10px;">
-                        <div class="avatar avatar-medium clearfix ">
-                            <div class="user-profile-sm">
-                                <!-- 세션에서 userNick 가져와야함 -->
-                                <span class="nickname">sjune</span>
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 댓글작성 Bootstrap Live Editor -->
-                    <div class="row" style="margin-left: 5px; margin-bottom: 10px; width: 90%">
-                        <input type="text" class="form-control" id="title" name="title" placeholder="title">
-                    </div>
-                    <div id="editor" class="form-group">
-                        <input type="hidden" id="contents" name="contents" />
-                        <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
-                        <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
-                        <input type="hidden" id="parentsId" name="parentsId" value="0" />   <!-- 답변 계층 -->
-                    </div>
-                    <!--// 댓글작성 Bootstrap Live Editor -->
-
-                    <!-- 댓글작성 저장 button -->
-                    <div class="feed-write-bottom text-right">
-                        <button id="saveReplyButton" type="button" class="btn btn-primary btn-default">저장</button>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </form>
-</div>
 {{#each data}}
     <div class="bg-info qna-reply-title"><span class="qna-reply-title">{{qaReply.title}}</span></div>
     <div class="feed well">
@@ -58,8 +18,8 @@
                         {{{qaReply.contents}}}
                     </div>
                     <div class="action-buttons qna-reply">
-                        <i class="fa fa-thumbs-o-up fa-2x {{#xif selfRecommend '==' true}}fa-4x{{/xif}}" data-qa-vote-type="UP"><span class="like-count">({{qaReply.voteUpCount}})</span></i>
-                        <i class="fa fa-thumbs-o-down fa-2x {{#xif selfNonrecommend '==' true}}fa-4x{{/xif}}" data-qa-vote-type="DOWN"><span class="claim-count">({{qaReply.voteDownCount}})</span></i>
+                        <i class="fa fa-thumbs-o-up {{#xif selfRecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="UP"><span class="like-count">({{qaReply.voteUpCount}})</span></i>
+                        <i class="fa fa-thumbs-o-down {{#xif selfNonrecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="DOWN"><span class="claim-count">({{qaReply.voteDownCount}})</span></i>
                     </div>
                 </div>
 
@@ -77,8 +37,8 @@
                             <div class="message-box">
                                 <div class="message">{{qaReply.contents}}</div>
                                 <div class="action-buttons qna-reply">
-                                    <i class="fa fa-thumbs-o-up fa-2x {{#xif selfRecommend '==' true}}fa-4x{{/xif}}" data-qa-vote-type="UP"><span class="like-count">({{qaReply.voteUpCount}})</span></i>
-                                    <i class="fa fa-thumbs-o-down fa-2x {{#xif selfNonrecommend '==' true}}fa-4x{{/xif}}" data-qa-vote-type="DOWN"><span class="claim-count">({{qaReply.voteDownCount}})</span></i>
+                                    <i class="fa fa-thumbs-o-up {{#xif selfRecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="UP"><span class="like-count">({{qaReply.voteUpCount}})</span></i>
+                                    <i class="fa fa-thumbs-o-down {{#xif selfNonrecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="DOWN"><span class="claim-count">({{qaReply.voteDownCount}})</span></i>
                                 </div>
                             </div>
                         </li>
@@ -113,7 +73,7 @@
 <script type="text/javascript">
     $(function(){
         $('.popover-config').popover({
-            trigger: 'click',
+            trigger: 'hover',
             html: true,
             content: function () {
                 return $('#popover-config-content').html();

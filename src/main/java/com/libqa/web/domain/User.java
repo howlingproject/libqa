@@ -21,6 +21,11 @@ import java.util.List;
 @Entity
 @EqualsAndHashCode
 @ToString(exclude = {"userKeywords", "userPoints"})
+@Table(indexes = {
+        @Index(name="IDX_USER_ID",columnList = "userId"),
+        @Index(name="IDX_USER_EMAIL",columnList = "userEmail"),
+        @Index(name="IDX_USER_NICK",columnList = "userNick")
+})
 public class User {
     private final static String DEFAULT_PROFILE_IMAGE = "/resource/images/avatar.png";
 
@@ -88,7 +93,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private SocialChannelType channelType;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<UserKeyword> userKeywords;
 

@@ -13,10 +13,10 @@ import com.libqa.web.service.space.SpaceService;
 import com.libqa.web.service.user.UserFavoriteService;
 import com.libqa.web.service.user.UserService;
 import com.libqa.web.service.wiki.WikiService;
-import com.libqa.web.view.DisplayWiki;
-import com.libqa.web.view.SpaceActivityList;
-import com.libqa.web.view.SpaceMain;
-import com.libqa.web.view.SpaceWikiList;
+import com.libqa.web.view.wiki.DisplayWiki;
+import com.libqa.web.view.space.SpaceActivityList;
+import com.libqa.web.view.space.SpaceMain;
+import com.libqa.web.view.space.SpaceWikiList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -88,9 +88,9 @@ public class SpaceController {
         log.debug("## /main");
         ModelAndView mav = new ModelAndView("/space/main");
 
-        // 전체 space 목록 조회
+        // 전체 space 목록 조회 (10개)
         boolean isDeleted = false;
-        List<Space> spaces = spaceService.findAllByCondition(isDeleted);
+        List<Space> spaces = findSpacesByPaging(isDeleted, 0, 10);
 
         /**
          * Space 접근 가능 사용자 목록 조회
@@ -137,16 +137,18 @@ public class SpaceController {
         /**
          * 최근 수정된 위키 정보 조회 10개
          */
-        List<DisplayWiki> updateWikiList = wikiService.findByAllWiki(0, 10);
+        List<DisplayWiki> updateWikiList = wikiService.findUpdateWikiList(0, 10);
 
         List<SpaceWikiList> spaceWikiLists = new ArrayList<>();
         for (DisplayWiki displayWiki : updateWikiList) {
             Wiki wiki = displayWiki.getWiki();
-            List<WikiReply> replies = wiki.getWikiReplies();
+            //List<WikiReply> replies = wiki.getWikiReplies();
             List<Keyword> keywords = keywordService.findByWikiId(wiki.getWikiId(), false);
-
-            User userInfo = userService.findByUserId(wiki.getUserId());
-            SpaceWikiList spaceWikiList = new SpaceWikiList(wiki, userInfo, keywords, replies.size());
+            User userInfo = new User();
+            userInfo.setUserId(wiki.getUserId());
+            userInfo.setUserNick(wiki.getUserNick());
+            // 속도상의 이슈로 위키의 리플갯수 조회하지 안흠
+            SpaceWikiList spaceWikiList = new SpaceWikiList(wiki, userInfo, keywords, 0);
             spaceWikiLists.add(spaceWikiList);
         }
 
@@ -155,6 +157,10 @@ public class SpaceController {
         mav.addObject("spaceWikiLists", spaceWikiLists);
 
         return mav;
+    }
+
+    public List<Space> findSpacesByPaging(boolean isDeleted, Integer startIdx, Integer endIdx) {
+        return spaceService.findAllByCondition(isDeleted, startIdx, endIdx);
     }
 
     @PreAuthorize("hasAuthority('USER')")

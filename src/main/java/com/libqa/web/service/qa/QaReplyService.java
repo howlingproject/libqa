@@ -2,7 +2,7 @@ package com.libqa.web.service.qa;
 
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaReply;
-import com.libqa.web.view.DisplayQaReply;
+import com.libqa.web.view.qa.DisplayQaReply;
 
 import java.util.List;
 
@@ -27,4 +27,6 @@ public interface QaReplyService {
     List<QaReply> findByQaId(Integer qaId);
 
     List<QaContent> findByUserId(Integer userId);
+
+    Integer countByQaContent(QaContent qaContent);
 }

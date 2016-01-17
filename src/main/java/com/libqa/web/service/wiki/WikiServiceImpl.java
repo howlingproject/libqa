@@ -1,8 +1,6 @@
 package com.libqa.web.service.wiki;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableList;
 import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.KeywordType;
 import com.libqa.application.enums.WikiRevisionActionType;
@@ -13,20 +11,20 @@ import com.libqa.web.repository.WikiLikeRepository;
 import com.libqa.web.repository.WikiRepository;
 import com.libqa.web.repository.WikiSnapShotRepository;
 import com.libqa.web.service.user.UserService;
-import com.libqa.web.service.user.UserServiceImpl;
-import com.libqa.web.view.DisplayWiki;
+import com.libqa.web.view.wiki.DisplayWiki;
 import com.libqa.web.service.common.ActivityService;
 import com.libqa.web.service.common.KeywordService;
-import com.libqa.web.view.DisplayWikiLike;
+import com.libqa.web.view.wiki.DisplayWikiLike;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -363,4 +361,29 @@ public class WikiServiceImpl implements WikiService {
         return wikiSnapShotRepository.save(wikiSnapShot);
     }
 
+    @Override
+    public List<DisplayWiki> findUpdateWikiList(int startIdx, int endIdx) {
+        List<DisplayWiki> resultWiki = new ArrayList<DisplayWiki>();
+        List<Wiki> list = wikiRepository.findSpaceWikiUpdateByIsDeleted(
+                isDeleted
+                , PageUtil.sortPageable(startIdx, endIdx, PageUtil.sortId("DESC", "updateDate"))
+        );
+
+        if(!CollectionUtils.isEmpty(list)){
+            for( Wiki wiki : list ){
+                resultWiki.add( new DisplayWiki(wiki));
+            }
+        }
+
+        return resultWiki;
+
+    }
+
+    @Override
+    public List<Wiki> searchRecentlyWikiesByPageSize(Integer pageSize) {
+        final Integer startIndex = 0;
+        final Sort sort = PageUtil.sortId("DESC", "wikiId");
+        PageRequest pageRequest = PageUtil.sortPageable(startIndex, pageSize, sort);
+        return wikiRepository.findAllByIsDeletedFalse(pageRequest);
+    }
 }

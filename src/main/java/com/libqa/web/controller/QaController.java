@@ -10,8 +10,9 @@ import com.libqa.web.service.qa.QaFileService;
 import com.libqa.web.service.qa.QaReplyService;
 import com.libqa.web.service.qa.QaService;
 import com.libqa.web.service.qa.VoteService;
-import com.libqa.web.view.DisplayQa;
-import com.libqa.web.view.DisplayQaReply;
+import com.libqa.web.service.user.UserService;
+import com.libqa.web.view.qa.DisplayQa;
+import com.libqa.web.view.qa.DisplayQaReply;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.libqa.application.enums.StatusCode.NOT_MATCH_USER;
 import static com.libqa.application.framework.ResponseData.createFailResult;
+import static com.libqa.application.framework.ResponseData.createResult;
 import static com.libqa.application.framework.ResponseData.createSuccessResult;
 
 /**
@@ -57,6 +60,9 @@ public class QaController {
     @Autowired
     VoteService voteService;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("/qa")
     public String qa() {
         return "redirect:/qa/main";
@@ -70,14 +76,6 @@ public class QaController {
         return mav;
     }
 
-    @RequestMapping("/qa/my")
-    public ModelAndView my(Model model){
-        boolean isDeleted = false;
-
-        ModelAndView mav = new ModelAndView("qa/my");
-        return mav;
-    }
-
     @RequestMapping(value = "/qa/myWriteQaList", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<DisplayQa> myQaList(@ModelAttribute QaDto qaDto){
@@ -87,7 +85,8 @@ public class QaController {
         try {
             qaContentList = qaService.findByUserId(loggedUser.get().getUserId());
             for(QaContent qaContent : qaContentList) {
-                displayQaList.add(new DisplayQa(qaContent, keywordService.findByQaId(qaContent.getQaId(), isDeleted), qaReplyService.findByQaId(qaContent.getQaId()) ));
+                User writer = userService.findByUserId(qaContent.getUserId());
+                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
             }
             return createSuccessResult(displayQaList);
         }catch(Exception e){
@@ -104,7 +103,8 @@ public class QaController {
         try {
             qaContentList = qaReplyService.findByUserId(loggedUser.get().getUserId());
             for(QaContent qaContent : qaContentList) {
-                displayQaList.add(new DisplayQa(qaContent, keywordService.findByQaId(qaContent.getQaId(), isDeleted), qaReplyService.findByQaId(qaContent.getQaId()) ));
+                User writer = userService.findByUserId(qaContent.getUserId());
+                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
             }
             return createSuccessResult(displayQaList);
         }catch(Exception e){
@@ -116,12 +116,15 @@ public class QaController {
     public ModelAndView view(@PathVariable Integer qaId) {
         boolean isDeleted = false;
 
-        QaContent qaContent =  qaService.view(qaId);
-        List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
+        QaContent qaContent = qaService.view(qaId);
+        User writer = userService.findByUserId(qaContent.getUserId());
+        List<Keyword> keywordList = keywordService.findByQaId(qaId);
 
         ModelAndView mav = new ModelAndView("qa/view");
         mav.addObject("qaContent", qaContent);
+        mav.addObject("writer", writer);
         mav.addObject("keywordList", keywordList);
+        mav.addObject("loggedUser", loggedUser.get());
         return mav;
     }
 
@@ -130,7 +133,7 @@ public class QaController {
         boolean isDeleted = false;
 
         QaContent qaContent =  qaService.findByQaId(qaId, isDeleted);
-        List<Keyword> keywordList = keywordService.findByQaId(qaId, isDeleted);
+        List<Keyword> keywordList = keywordService.findByQaId(qaId);
         ModelAndView mav = new ModelAndView("qa/edit");
         mav.addObject("qaContent", qaContent);
         mav.addObject("qaReplyList", qaContent.getQaReplys());
@@ -147,10 +150,11 @@ public class QaController {
 
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaContent> save(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles, @ModelAttribute Keyword paramKeywords) {
+    public ResponseData<QaContent> save(@ModelAttribute QaContent requestQaContent, @ModelAttribute QaFile requestQaFiles, @ModelAttribute Keyword requestKeywords) {
+        User user = loggedUser.get();
         QaContent qaContent = new QaContent();
         try {
-            qaContent = qaService.saveWithKeyword(paramQaContent, paramQaFiles, paramKeywords);
+            qaContent = qaService.saveWithKeyword(requestQaContent, requestQaFiles, requestKeywords, user);
             return createSuccessResult(qaContent);
         } catch (Exception e) {
             return createFailResult(qaContent);
@@ -159,14 +163,18 @@ public class QaController {
 
     @RequestMapping(value = "/qa/update", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaContent> update(@ModelAttribute QaContent paramQaContent, @ModelAttribute QaFile paramQaFiles) {
-        QaContent qaContent = new QaContent();
-
+    public ResponseData<QaContent> update(@ModelAttribute QaContent requestQaContent, @ModelAttribute QaFile requestQaFiles, @ModelAttribute Keyword requestKeywords) {
+        User user = loggedUser.get();
+        boolean isDeleted = false;
         try {
-            qaContent = qaService.updateWithKeyword(paramQaContent, paramQaFiles);
-            return createSuccessResult(qaContent);
+            QaContent originQaContent = qaService.findByQaId(requestQaContent.getQaId(), isDeleted);
+            if(user.isNotMatchUser(originQaContent.getUserId())){
+                return createResult(NOT_MATCH_USER);
+            }
+            QaContent savedQaContent = qaService.updateWithKeyword(originQaContent, requestQaContent, requestQaFiles, requestKeywords, user);
+            return createSuccessResult(savedQaContent);
         } catch (Exception e) {
-            return createFailResult(qaContent);
+            return createFailResult(null);
         }
     }
 
@@ -236,7 +244,8 @@ public class QaController {
         try {
             qaContentList = qaService.findByIsReplyedAndDayType(qaDto);
             for(QaContent qaContent : qaContentList) {
-                displayQaList.add(new DisplayQa(qaContent, keywordService.findByQaId(qaContent.getQaId(), isDeleted), qaReplyService.findByQaId(qaContent.getQaId()) ));
+                User writer = userService.findByUserId(qaContent.getUserId());
+                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
             }
             return createSuccessResult(displayQaList);
         }catch(Exception e){

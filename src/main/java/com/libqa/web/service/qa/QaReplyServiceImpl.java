@@ -4,9 +4,11 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaReply;
+import com.libqa.web.domain.User;
 import com.libqa.web.domain.Vote;
 import com.libqa.web.repository.QaReplyRepository;
-import com.libqa.web.view.DisplayQaReply;
+import com.libqa.web.service.user.UserService;
+import com.libqa.web.view.qa.DisplayQaReply;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,9 @@ public class QaReplyServiceImpl implements QaReplyService {
 
     @Autowired
     VoteService voteService;
+
+    @Autowired
+    UserService userService;
 
     @Override
     @Transactional
@@ -124,12 +129,13 @@ public class QaReplyServiceImpl implements QaReplyService {
         List<DisplayQaReply> displayQaReplyList = Lists.newArrayList();
         List<DisplayQaReply> displaySubQaReplyList = Lists.newArrayList();
         for(QaReply qaReply : qaReplyList){
+            User writer = userService.findByUserId(qaReply.getUserId());
             boolean selfRecommend = voteService.hasRecommendUser(qaReply.getReplyId(), 1);
             boolean selfNonrecommend = voteService.hasNonRecommendUser(qaReply.getReplyId(), 1);
             if(1 == qaReplyDepth) {
                 displaySubQaReplyList = findByQaIdAndParentsIdAndDepthIdx(qaReply.getQaId(), qaReply.getReplyId(), 2);
             }
-            displayQaReplyList.add(new DisplayQaReply(qaReply, displaySubQaReplyList, selfRecommend, selfNonrecommend));
+            displayQaReplyList.add(new DisplayQaReply(qaReply, displaySubQaReplyList, selfRecommend, selfNonrecommend, writer));
         }
         return displayQaReplyList;
     }
@@ -165,6 +171,11 @@ public class QaReplyServiceImpl implements QaReplyService {
         }
 
         return qaService.findByQaIdIn(qaIds);
+    }
+
+    @Override
+    public Integer countByQaContent(QaContent qaContent) {
+        return qaReplyRepository.countByQaId(qaContent.getQaId());
     }
 
     public void updateOrderIdx(QaReply paramQaReply){

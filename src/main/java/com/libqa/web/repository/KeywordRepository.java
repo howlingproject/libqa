@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface KeywordRepository extends JpaRepository<Keyword, Integer> {
 
-    List<Keyword> findAllByQaIdAndIsDeleted(Integer qaId, boolean isDeleted);
+    List<Keyword> findAllByQaIdAndIsDeletedFalse(Integer qaId);
 
     List<Keyword> findAllByKeywordTypeAndIsDeleted(KeywordType keywordType, boolean isDeleted);
 

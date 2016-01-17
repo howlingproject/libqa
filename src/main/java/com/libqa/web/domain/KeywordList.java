@@ -10,6 +10,10 @@ import javax.persistence.*;
  */
 @Entity
 @Data
+@Table(indexes = {
+        @Index(name="IDX_KEYWORDLIST_KEYWORD_TYPE",columnList = "keywordType"),
+        @Index(name="IDX_KEYWORDLIST_KEYWORD_NAME",columnList = "keywordName")
+})
 public class KeywordList {
     public KeywordList(){
 

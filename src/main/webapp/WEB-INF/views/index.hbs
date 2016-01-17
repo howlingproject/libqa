@@ -1,254 +1,89 @@
 {{# partial "content" }}
     <div class="container-fluid">
-        <div class="jumbotron">
-            <h1>LibQA</h1>
-            <p>This example is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
+        <div class="col-sm-12" style="margin-bottom: 25px">
+            <div class="index-thread-box first">
+                <h2><i class="glyphicon glyphicon-volume-up"></i> 공지사항 입니다.</h2>
+                <div class="index-thread-item" style="cursor: pointer">
+                    <div class="title">공지사항 어쩌구 저쩌구 합니다..공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.
+                         공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.
+                         <br> 공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다.공지사항 어쩌구 저쩌구 합니다...
+                        <span class="comments"><i class="glyphicon glyphicon-comment"></i> 4</span>
+                        <div class="pull-right">2015-12-27 13:46</div>
+                    </div>
+
+                </div>
+                <span class="label label-default pull-right" style="margin-top: 10px;padding:5px 10px 8px 10px;">more</span>
+            </div>
         </div>
 
-        <br />
         <!--center-->
         <div class="col-sm-9">
             <div class="col-sm-12">
                 <div class="index-thread-box first">
-                <h2><i class="glyphicon glyphicon-question-sign"></i> Q&amp;A</h2>
-                <div class="index-thread-item">
-                    <div class="title">질문이 있습니다...............</div>
-                    <div class="pull-right">
-                        <span class="label label-primary">Spring</span>
-                        <span class="label label-success">JAVA</span>
-                        <span class="label label-success">JAVA</span>
-                    </div>
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            여러분 저에게 이러 이러한 질문이 있어요 이런저런 내용이 있구요 그래서 이러저러 해서 그렇게 되는 건데 이리하여 저런 경우는
-                            어떻게 하면 좋을까요? 구릴까요? <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
+                    <h2><i class="glyphicon glyphicon-question-sign"></i> Q&amp;A</h2>
+                    {{#each displayIndex.qaContents}}
+                    <div class="index-thread-item">
+                        <div class="title"><strong>{{{subString (htmlDelete title) 0 30}}}</strong></div>
+                        <div class="pull-right">
+                            {{#each keywords}}
+                                {{{keywordBadge name}}}
+                            {{/each}}
                         </div>
-                        <div class="pull-left"><span class="nickname">user</span></div>
-                        <div class="pull-right">2015-04-05 12:12</div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="title">질문이 있습니다...............</div>
-                    <div class="pull-right">
-                        <span class="label label-primary">Spring</span>
-                        <span class="label label-success">JAVA</span>
-                        <span class="label label-success">JAVA</span>
-                    </div>
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        <div class="media">
+                            <a class="pull-left" href="#">
+                                <div class="user-profile">
+                                    <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                                </div>
+                            </a>
+                            <div class="media-body">
+                                {{{subString (htmlDelete contents) 0 200}}}
+                                <span class="comments"><i class="glyphicon glyphicon-comment"></i> {{countOfReply}}</span>
                             </div>
-                        </a>
-                        <div class="media-body">
-                            여러분 저에게 이러 이러한 질문이 있어요 이런저런 내용이 있구요 그래서 이러저러 해서 그렇게 되는 건데 이리하여 저런 경우는
-                            어떻게 하면 좋을까요? 구릴까요? <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
+                            <div class="pull-left"><span class="nickname">{{userNick}}</span></div>
+                            <div class="pull-right">{{insertDate}}</div>
                         </div>
-                        <div class="pull-left"><span class="nickname">user</span></div>
-                        <div class="pull-right">2015-04-05 12:12</div>
                     </div>
+                    {{/each}}
                 </div>
-                <div class="index-thread-item">
-                    <div class="title">질문이 있습니다...............</div>
-                    <div class="pull-right">
-                        <span class="label label-primary">Spring</span>
-                        <span class="label label-success">JAVA</span>
-                        <span class="label label-success">JAVA</span>
-                    </div>
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            여러분 저에게 이러 이러한 질문이 있어요 이런저런 내용이 있구요 그래서 이러저러 해서 그렇게 되는 건데 이리하여 저런 경우는
-                            어떻게 하면 좋을까요? 구릴까요? <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                        <div class="pull-left"><span class="nickname">user</span></div>
-                        <div class="pull-right">2015-04-05 12:12</div>
-                    </div>
-                </div>
-            </div>
             </div>
             <div class="col-sm-6">
                 <h2><i class="fa fa-database"></i> Space</h2>
+                {{#each displayIndex.spaces}}
                 <div class="panel panel-default">
-                    <div class="panel-heading">새로 생성된 공간</div>
-                    <div class="panel-body">
-                        공간 설명.......
-                        공간 설명.......
-                        공간 설명.......
-                    </div>
+                    <div class="panel-heading"><strong>{{{subString (htmlDelete title) 0 30}}}</strong></div>
+                    <div class="panel-body">{{{subString (htmlDelete description) 0 70}}}</div>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">새로 생성된 공간</div>
-                    <div class="panel-body">
-                        공간 설명.......
-                        공간 설명.......
-                        공간 설명.......
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">공간23412312321</div>
-                    <div class="panel-body">
-                        공간 설명.......
-                        공간 설명.......
-                        공간 설명.......
-                    </div>
-                </div>
+                {{/each}}
            </div>
             <div class="col-sm-6">
                 <h2><i class="glyphicon glyphicon-book"></i> Wiki</h2>
-                <div class="panel panel-default">
-                    <div class="panel-heading">스프링 시큐리티 가이드 .1</div>
-                    <div class="panel-body">
-                        어쩌고 저쩌고...
+                {{#each displayIndex.wikies}}
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><strong>{{{subString (htmlDelete title) 0 30}}}</strong></div>
+                        <div class="panel-body">{{{subString (htmlDelete description) 0 70}}}</div>
                     </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">개인적인 정리</div>
-                    <div class="panel-body">
-                        영어영어영어.........
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">테스트 위키</div>
-                    <div class="panel-body">
-                        솰라솰라솰라......솰라솰라솰라......솰라솰라솰라......
-                    </div>
-                </div>
+                {{/each}}
             </div>
         </div>
 
         <div class="col-sm-3">
             <div class="index-thread-box first">
                 <h2><i class="fa fa-weixin"></i> Feed</h2>
+                {{#each displayIndex.feeds}}
                 <div class="index-thread-item">
                     <div class="media">
                         <a class="pull-left" href="#">
                             <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                                <img alt="avatar" class="profile-image" src="{{userImage}}" />
                             </div>
                         </a>
                         <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
+                            <a href="">{{{subString (htmlDelete content) 0 30}}}</a>
+                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> {{countOfReply}}</span>
                         </div>
                     </div>
                 </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="index-thread-item">
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <div class="user-profile">
-                                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                            </div>
-                        </a>
-                        <div class="media-body">
-                            <a href="#">
-                                첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                            </a>
-                            <span class="comments"><i class="glyphicon glyphicon-comment"></i> 999</span>
-                        </div>
-                    </div>
-                </div>
+                {{/each}}
             </div>
         </div>
     </div>

@@ -47,9 +47,29 @@ public class SpaceServiceImpl implements SpaceService {
 
 	@Override
 	public List<Space> findAllByCondition(boolean isDeleted) {
-		List<Space> spaceList =  spaceRepository.findAllByIsDeleted(PageUtil.sortId("DESC", "spaceId"), isDeleted);
+		return this.findAllByCondition(isDeleted, null, null);
+	}
+
+
+	@Override
+	public List<Space> findAllByCondition(boolean isDeleted, Integer startIdx, Integer endIdx) {
+		List<Space> spaceList = new ArrayList<>();
+
+		if (startIdx == null) {
+			spaceList = spaceRepository.findAllByIsDeleted(PageUtil.sortId("DESC", "spaceId"), isDeleted);
+		} else {
+			spaceList = spaceRepository.findPagingByIsDeleted(
+					PageUtil.sortPageable(
+							startIdx
+							, endIdx
+							, PageUtil.sortId("DESC", "spaceId"))
+					, isDeleted);
+		}
+
 		return spaceList;
 	}
+
+
 
 	@Override
 	public Space findOne(Integer spaceId) {

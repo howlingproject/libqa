@@ -1,4 +1,4 @@
-package com.libqa.web.view;
+package com.libqa.web.view.feed;
 
 import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.Feed;
@@ -17,18 +17,42 @@ public class DisplayFeedActionBuilder {
     @Autowired
     private FeedActionService feedActionService;
 
+    /**
+     * feed에 의한 like 정보를 display용으로 build 한다
+     *
+     * @param feed
+     * @return
+     */
     public DisplayFeedAction buildLikeBy(Feed feed) {
         return build(FeedLike.of(feed.getFeedId()), feed.getLikeCount());
     }
 
+    /**
+     * feedReply에 의한 like 정보를 display용으로 build 한다
+     *
+     * @param feedReply
+     * @return
+     */
     public DisplayFeedAction buildLikeBy(FeedReply feedReply) {
         return build(FeedReplyLike.of(feedReply.getFeedReplyId()), feedReply.getLikeCount());
     }
 
+    /**
+     * feed에 의한 claim 정보를 display용으로 build 한다
+     *
+     * @param feed
+     * @return
+     */
     public DisplayFeedAction buildClaimBy(Feed feed) {
         return build(FeedClaim.of(feed.getFeedId()), feed.getClaimCount());
     }
 
+    /**
+     * feedReply에 의한 claim 정보를 display용으로 build 한다
+     *
+     * @param feedReply
+     * @return
+     */
     public DisplayFeedAction buildClaimBy(FeedReply feedReply) {
         return build(FeedReplyClaim.of(feedReply.getFeedReplyId()), feedReply.getClaimCount());
     }

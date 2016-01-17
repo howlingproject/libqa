@@ -32,8 +32,8 @@ public class PageUtil {
         return new PageRequest(page, size, sort);
     }
 
-    public static PageRequest pageable(int page, int size) {
-        return new PageRequest(page, size);
+    public static PageRequest sortPageable(int size, Sort sort) {
+        return new PageRequest(DEFAULT_PAGE, size, sort);
     }
 
     public static PageRequest sortPageable(Sort sort) {

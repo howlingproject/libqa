@@ -2,16 +2,13 @@ package com.libqa.application.helper;
 
 import com.github.jknack.handlebars.Options;
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.Wiki;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -155,7 +152,36 @@ public class HandlebarsHelper {
         }
     }
 
+    /**
+     * keywordBadge
+     *
+     * @return keywordBadge
+     * @throws Exception
+     */
+    public String keywordBadge(String keywordName){
+        int keywordLength = keywordName.length();
 
+        switch (keywordLength) {
+            case 1:
+                return "<span class=\"label label-primary\">" + keywordName +"</span>";
+            case 2:
+                return "<span class=\"label label-success\">" + keywordName +"</span>";
+            case 3:
+                return "<span class=\"label label-info\">" + keywordName +"</span>";
+            case 4:
+                return "<span class=\"label label-warning\">" + keywordName +"</span>";
+            case 5:
+                return "<span class=\"label label-danger\">" + keywordName +"</span>";
+            case 6:
+                return "<span class=\"label label-tag\">" + keywordName +"</span>";
+            case 7:
+                return "<span class=\"label label-focus\">" + keywordName +"</span>";
+            case 8:
+                return "<span class=\"label label-alert\">" + keywordName +"</span>";
+            default :
+                return "<span class=\"label label-default\">" + keywordName +"</span>";
+        }
+    }
 
 
 }
