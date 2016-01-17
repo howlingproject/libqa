@@ -11,7 +11,11 @@ import java.util.Date;
 @Data
 @Entity
 @ToString
-@Table(indexes = {@Index(columnList = "isDeleted")})
+@Table(indexes = {
+        @Index(columnList = "isDeleted"),
+        @Index(columnList = "userId"),
+        @Index(columnList = "userNick")
+})
 @EqualsAndHashCode(of = "feedReplyId")
 public class FeedReply {
     @Id
