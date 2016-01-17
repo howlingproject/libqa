@@ -28,15 +28,11 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    public static final String USER_EMAIL_CACHE = "usersCache";
-
-
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private UserKeywordRepository userKeywordRepository;
-
 
     @Override
     @Transactional
@@ -59,10 +55,8 @@ public class UserServiceImpl implements UserService {
             throw new UserNotCreateException("사용자 정보가 생성되지 않았습니다. 에러를 확인하세요.", e);
         }
 
-
         return createUser;
     }
-
 
     @Override
     public int updateForCertificationByKey(Integer userId, Integer certificationKey) throws UserNotCreateException {
@@ -118,6 +112,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 최종 방문일 수정
+     *
      * @param email
      */
     @Override
@@ -151,6 +146,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 프로필 업데이트 파라미터 세팅
+     *
      * @param user
      * @param entity
      */
@@ -197,6 +193,5 @@ public class UserServiceImpl implements UserService {
         }
 
     }
-
 
 }
