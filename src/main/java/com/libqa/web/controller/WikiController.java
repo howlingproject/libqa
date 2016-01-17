@@ -1,6 +1,7 @@
 package com.libqa.web.controller;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.primitives.Ints;
 import com.libqa.application.enums.ListType;
 import com.libqa.application.enums.WikiLikesType;
 import com.libqa.application.enums.WikiRevisionActionType;
