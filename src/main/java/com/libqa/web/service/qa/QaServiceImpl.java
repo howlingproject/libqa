@@ -214,15 +214,15 @@ public class QaServiceImpl implements QaService {
     public List<QaContent> findRecentList(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted){
         List<QaContent> recentList = new ArrayList<>();
         if(fromDate == null){
-            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndIsDeleted(qaIds, isReplyed, isDeleted);
+            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndIsDeletedOrderByInsertDateDesc(qaIds, isReplyed, isDeleted);
         } else {
-            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndInsertDateBetweenAndIsDeleted(qaIds, isReplyed, fromDate, today, isDeleted);
+            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndInsertDateBetweenAndIsDeletedOrderByInsertDateDesc(qaIds, isReplyed, fromDate, today, isDeleted);
         }
         return recentList;
     }
 
     public List<QaContent> findWaitList(List<Integer> qaIds, Date fromDate, Date today, boolean isDeleted){
-        return qaRepository.findAllByQaIdInAndInsertDateBetweenAndIsDeleted(qaIds, fromDate, today, isDeleted);
+        return qaRepository.findAllByQaIdInAndInsertDateBetweenAndIsDeletedOrderByInsertDateDesc(qaIds, fromDate, today, isDeleted);
     }
 
     public Date getFromDate(String dayType) throws ParseException {

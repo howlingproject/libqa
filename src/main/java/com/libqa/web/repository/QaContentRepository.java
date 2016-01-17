@@ -13,11 +13,11 @@ import java.util.List;
 public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     QaContent findOneByQaIdAndIsDeleted(Integer qaId, boolean isDeleted);
 
-    List<QaContent> findAllByQaIdInAndIsReplyedAndInsertDateBetweenAndIsDeleted(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted);
+    List<QaContent> findAllByQaIdInAndIsReplyedAndInsertDateBetweenAndIsDeletedOrderByInsertDateDesc(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted);
 
-    List<QaContent> findAllByQaIdInAndInsertDateBetweenAndIsDeleted(List<Integer> qaIds, Date fromDate, Date today, boolean isDeleted);
+    List<QaContent> findAllByQaIdInAndInsertDateBetweenAndIsDeletedOrderByInsertDateDesc(List<Integer> qaIds, Date fromDate, Date today, boolean isDeleted);
 
-    List<QaContent> findAllByQaIdInAndIsReplyedAndIsDeleted(List<Integer> qaIds, boolean isReplyed, boolean isDeleted);
+    List<QaContent> findAllByQaIdInAndIsReplyedAndIsDeletedOrderByInsertDateDesc(List<Integer> qaIds, boolean isReplyed, boolean isDeleted);
 
     List<QaContent> findByUserIdAndIsDeleted(Integer userId, boolean isDeleted);
 
