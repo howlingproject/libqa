@@ -24,7 +24,7 @@
                         <h2><i class="glyphicon glyphicon-question-sign"></i> Q&amp;A</h2>
                         {{#each displayIndex.qaContents}}
                         <div class="index-thread-item">
-                            <div class="title"><strong>{{{subString (htmlDelete title) 0 30}}}</strong></div>
+                            <div class="title"><strong>{{{abbreviate (htmlDelete title) 30}}}</strong></div>
                             <div class="pull-right">
                                 {{#each keywords}}
                                     {{{keywordBadge name}}}
@@ -37,7 +37,7 @@
                                     </div>
                                 </a>
                                 <div class="media-body">
-                                    <a href="/qa/{{qaId}}">{{{subString (htmlDelete contents) 0 200}}}</a>
+                                    <a href="/qa/{{qaId}}">{{{abbreviate (htmlDelete contents) 200}}}</a>
                                     <span class="comments"><i class="glyphicon glyphicon-comment"></i> {{countOfReply}}</span>
                                 </div>
                                 <div class="pull-left"><span class="nickname">{{userNick}}</span></div>
@@ -51,9 +51,9 @@
                     <h2><i class="fa fa-database"></i> Space</h2>
                     {{#each displayIndex.spaces}}
                     <div class="panel panel-default">
-                        <div class="panel-heading"><strong>{{{subString (htmlDelete title) 0 30}}}</strong></div>
+                        <div class="panel-heading"><strong>{{{abbreviate (htmlDelete title) 30}}}</strong></div>
                         <div class="panel-body">
-                            <a href="/space/{{spaceId}}">{{{subString (htmlDelete description) 0 70}}}</a>
+                            <a href="/space/{{spaceId}}">{{{abbreviate (htmlDelete description) 70}}}</a>
                         </div>
                     </div>
                     {{/each}}
@@ -62,9 +62,9 @@
                     <h2><i class="glyphicon glyphicon-book"></i> Wiki</h2>
                     {{#each displayIndex.wikies}}
                         <div class="panel panel-default">
-                            <div class="panel-heading"><strong>{{{subString (htmlDelete title) 0 30}}}</strong></div>
+                            <div class="panel-heading"><strong>{{{abbreviate (htmlDelete title) 30}}}</strong></div>
                             <div class="panel-body">
-                                <a href="/wiki/{{wikiId}}">{{{subString (htmlDelete description) 0 70}}}</a>
+                                <a href="/wiki/{{wikiId}}">{{ abbreviate (htmlDelete description) 70}}</a>
                             </div>
                         </div>
                     {{/each}}
@@ -83,7 +83,7 @@
                                 </div>
                             </a>
                             <div class="media-body">
-                                {{{subString (htmlDelete contents) 0 200}}}
+                                {{abbreviate (htmlDelete feedContent) 40}}
                                 <span class="comments"><i class="glyphicon glyphicon-comment"></i> {{countOfReply}}</span>
                             </div>
                         </div>

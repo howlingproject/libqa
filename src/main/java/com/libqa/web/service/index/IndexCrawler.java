@@ -123,7 +123,7 @@ public class IndexCrawler {
 
             IndexFeed indexFeed = IndexFeed.of();
             indexFeed.setFeedId(each.getFeedId());
-            indexFeed.setContent(each.getFeedContent());
+            indexFeed.setFeedContent(each.getFeedContent());
             indexFeed.setUserImage(writer.getUserImage());
             indexFeed.setCountOfReply(feedReplyService.countByFeed(each));
             result.add(indexFeed);

@@ -1,5 +1,6 @@
 package com.libqa.config;
 
+import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.springmvc.HandlebarsViewResolver;
 import com.libqa.application.helper.HandlebarsHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
         viewResolver.setSuffix(".hbs");
         viewResolver.setCache(viewResolverCached);
         viewResolver.registerHelpers(new HandlebarsHelper());
+        viewResolver.registerHelpers(StringHelpers.class);
         return viewResolver;
     }
 
