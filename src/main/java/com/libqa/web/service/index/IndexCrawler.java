@@ -63,6 +63,7 @@ public class IndexCrawler {
             List<Keyword> keywords = keywordService.findByQaId(each.getQaId());
 
             IndexQaContent qaContent = IndexQaContent.of();
+            qaContent.setQaId(each.getQaId());
             qaContent.setTitle(each.getTitle());
             qaContent.setContents(each.getContents());
             qaContent.setUserNick(each.getUserNick());

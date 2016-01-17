@@ -50,7 +50,7 @@ public class FeedController {
     @RequestMapping(value = "list", method = GET)
     public ResponseData<DisplayFeed> list(@RequestParam(required = false) Integer lastFeedId) {
         List<Feed> feeds = feedService.search(lastFeedId);
-        return createSuccessResult(displayFeedBuilder.buildFeeds(feeds));
+        return createSuccessResult(displayFeedBuilder.build(feeds));
     }
 
     @RequestMapping(value = "save", method = POST)
