@@ -10,8 +10,8 @@ To change this template use File | Settings | File Templates.
 
 {{# partial "content" }}
     <!-- contents -->
-<div class="container">
-    <div class="col-md" >
+<div class="container-fluid">
+    <div class="col-sm-12">
         <div style="padding-bottom: 45px;">
             <div class="btn-group" data-toggle="buttons" style="float: right">
                 <a class="btn btn-primary" id="cancelFavorite" style="display: none;"><i class="fa fa-heart-o"></i> 즐겨찾기 취소</a>
@@ -23,71 +23,66 @@ To change this template use File | Settings | File Templates.
         </div>
     </div>
 
-</div>
-
-<!--// contents -->
-
-<form name="space" id="space">
-    <input type="hidden" name="spaceId" id="spaceId" value="{{space.spaceId}}">
-</form>
-<!--// contents -->
-<div class="container components">
-    <h1 class="page-header">{{space.title}}
-        <small class="pull-right">{{formatDate space.insertDate "yyyy-MM-dd hh:MM"}} Owner : {{space.insertUserNick}}</small>
-    </h1>
-
-    <div class="row" style="padding-bottom: 20px">
-
-        <div class="col-md-4">
-            <img src="{{space.titleImagePath}}/{{space.titleImage}}" width="300">
+    <form name="space" id="space">
+        <input type="hidden" name="spaceId" id="spaceId" value="{{space.spaceId}}">
+    </form>
+    <!--// contents -->
+    <div class="col-sm-12" style="padding-bottom: 20px">
+        <div class="col-sm-12">
+            <h1 class="page-header">{{space.title}}
+                <small class="pull-right">{{formatDate space.insertDate "yyyy-MM-dd hh:MM"}} Owner : {{space.insertUserNick}}</small>
+            </h1>
         </div>
 
-        <div class="col-md-8">
-            {{{space.description}}}
-        </div>
-
-    </div>
-
-    <div class="row row-offcanvas row-offcanvas-right">
-
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-            <div class="well sidebar-nav">
-                {{#if spaceWikis}}
-                    {{#each spaceWikis}}
-                        <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
-                    {{/each}}
-                {{^}}
-                    생성된 위키가 없습니다.
-                {{/if}}
-            </div><!--/.well -->
-        </div><!--/span-->
-
-
-        <div class="col-xs-12 col-sm-9">
-            <div class="row">
-                <div style="padding-left:15px">
-                    <h3>최근 수정된 위키 목록</h3><hr>
+        <div class="col-sm-12">
+            <div>
+                <div class="col-sm-4">
+                    <img src="{{space.titleImagePath}}/{{space.titleImage}}" width="300">
                 </div>
-                <blockquote class="pull-right">
-                    {{> space/template/_updateWikiList}}
-                </blockquote>
 
-                <hr>
-                <div style="padding-left:15px">
-                    <h3>최근 이 공간의 활동 내역 목록 </h3>
+                <div class="col-sm-8">
+                    {{{space.description}}}
+                </div>
+            </div>
+
+            <div class="col-sm-12" style="padding-top: 20px">
+                <div class="col-sm-4" id="sidebar" role="navigation">
+                    <div class="well sidebar-nav">
+                        {{#if spaceWikis}}
+                            {{#each spaceWikis}}
+                                <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
+                            {{/each}}
+                        {{^}}
+                            생성된 위키가 없습니다.
+                        {{/if}}
+                    </div><!--/.well -->
+                </div><!--/span-->
+
+
+                <div class="col-sm-8">
+                    <div style="padding-left:15px">
+                        <h3>최근 수정된 위키 목록</h3><hr>
+                    </div>
+                    <blockquote class="pull-right">
+                        {{> space/template/_updateWikiList}}
+                    </blockquote>
+
                     <hr>
-                </div>
+                    <div style="padding-left:15px">
+                        <h3>최근 이 공간의 활동 내역 목록 </h3>
+                        <hr>
+                    </div>
 
-                <blockquote class="pull-right">
-                    {{> space/template/_activityList}}
-                </blockquote>
+                    <blockquote class="pull-right">
+                        {{> space/template/_activityList}}
+                    </blockquote>
 
-            </div><!--/row-->
-        </div><!--/span-->
+                </div><!--/row-->
+            </div>
+        </div>
     </div>
 </div>
 {{/partial}}
-
 
 {{# partial "script-page" }}
     <script type="text/javascript">

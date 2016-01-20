@@ -1,70 +1,73 @@
 {{# partial "content" }}
     <!--  메뉴  -->
-    <div class="container qna-top-search">
-        <div class="navbar-form navbar-left" role="search">
-            <div class="form-group">
-                <input type="text" data-linkval="searchText" class="form-control" placeholder="Search">
-            </div>
-            <span class="form-control btn btn-primary" data-link="/wiki/search" data-linktype="search">
-                위키검색
-            </span>
-        </div>
-        <div class="btn-group pull-right">
-            <a class="form-control btn btn-primary" href="/wiki/write">
-                위키생성
-            </a>
-        </div>
-    </div>
-
-    <div class="container contents-container top-buffer wiki-main">
-
-        <!-- 상단 컨텐츠 -->
-        <div class="col-md-12 col-lg-12">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><a href="/wiki/list/best">베스트 위키</a></h3>
+    <div class="container-fluid">
+        <div class="col-sm-12">
+            <div class="col-sm-12">
+                <div class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input type="text" data-linkval="searchText" class="form-control" placeholder="Search">
+                    </div>
+                    <span class="form-control btn btn-primary" data-link="/wiki/search" data-linktype="search">
+                        위키검색
+                    </span>
                 </div>
-                <!-- BEST 위키 컨텐츠 -->
-                <div class="panel-body" id="bestWikiList">
-                    {{> wiki/template/_bestList}}
+                <div class="btn-group pull-right">
+                    <a class="form-control btn btn-primary" href="/wiki/write">
+                        위키생성
+                    </a>
                 </div>
-                <!-- BEST 위키 컨텐츠 -->
             </div>
         </div>
 
-        <!-- 상단 컨텐츠 -->
-        <!-- 하단 컨텐츠 -->
-        <div class="col-md-12 col-lg-12">
-            <!-- 전체 키워드 선택 -->
-            <div class="col-md-2" style="padding-left: 0px;" id="categorizeKeywordListArea">
-                <div class="well">전체 키워드 선택</div>
-                <ul class="nav nav-pills nav-stacked" >
 
-                </ul>
-            </div>
-            <!--// 전체 키워드 선택 -->
-
-            <div class="col-md-7">
-
-                <!-- 전체 위키 -->
-                <div id="allWikiList">
-                    <div class="nav-tabs-header"><a href="/wiki/list/all">전체 위키</a></div>
-                    {{> wiki/template/_allList}}
+        <div class="col-sm-12 top-buffer wiki-main">
+            <!-- 상단 컨텐츠 -->
+            <div class="col-md-12 col-lg-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a href="/wiki/list/best">베스트 위키</a></h3>
+                    </div>
+                    <!-- BEST 위키 컨텐츠 -->
+                    <div class="panel-body" id="bestWikiList">
+                        {{> wiki/template/_bestList}}
+                    </div>
+                    <!-- BEST 위키 컨텐츠 -->
                 </div>
-                <!--// 위키 -->
-
             </div>
 
-            <div class="col-md-3" style="padding-right: 0px;">
-                <!-- 최근 활동 -->
-                <div class="nav-tabs-header"><a href="/wiki/list/recent">최근 활동</a></div>
-                <div id="recentWikiList">
-                    {{> wiki/template/_recentList}}
+            <!-- 상단 컨텐츠 -->
+            <!-- 하단 컨텐츠 -->
+            <div class="col-md-12 col-lg-12">
+                <!-- 전체 키워드 선택 -->
+                <div class="col-md-2" style="padding-left: 0px;" id="categorizeKeywordListArea">
+                    <div class="well">전체 키워드 선택</div>
+                    <ul class="nav nav-pills nav-stacked" >
+
+                    </ul>
                 </div>
-                <!--// 최근 활동 -->
+                <!--// 전체 키워드 선택 -->
+
+                <div class="col-md-6">
+
+                    <!-- 전체 위키 -->
+                    <div id="allWikiList">
+                        <div class="nav-tabs-header"><a href="/wiki/list/all">전체 위키</a></div>
+                        {{> wiki/template/_allList}}
+                    </div>
+                    <!--// 위키 -->
+
+                </div>
+
+                <div class="col-md-4" style="padding-right: 0px;">
+                    <!-- 최근 활동 -->
+                    <div class="nav-tabs-header"><a href="/wiki/list/recent">최근 활동</a></div>
+                    <div id="recentWikiList">
+                        {{> wiki/template/_recentList}}
+                    </div>
+                    <!--// 최근 활동 -->
+                </div>
             </div>
         </div>
-    </div>
 
 
 

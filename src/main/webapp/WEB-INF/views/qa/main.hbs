@@ -8,300 +8,299 @@
 {{# partial "content" }}
 
 <!-- contents -->
-<!-- qna top contents -->
-<div class="container qna-top-search">
-    <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-            <input name="searchName" type="text" class="form-control" placeholder="Search">
+<div class="container-fluid">
+    <div class="col-sm-12">
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <input name="searchName" type="text" class="form-control" placeholder="Search">
+            </div>
+            <a href="#" id="searchBtn" class="form-control btn btn-primary">Q&A 검색</a>
+        </form>
+        <div class="btn-group pull-right">
+            <a href="#" class="btn btn-primary">총 질문(123)</a>
+            <!--<a href="#" class="btn btn-primary">총 답변(123)</a>-->
+            <!--<a href="#" class="btn btn-primary">총 키워드(123)</a>-->
+            <a href="#" class="btn btn-primary">답변을 기다리는 Q&A(123)</a>
+            <a href="/qa/my" class="btn btn-primary">myQ&A</a>
+            <a href="/qa/form" class="btn btn-primary">질문하기</a>
         </div>
-        <a href="#" id="searchBtn" class="form-control btn btn-primary">검색</a>
-    </form>
-    <div class="btn-group pull-right">
-        <a href="#" class="btn btn-primary">총 질문(123)</a>
-        <!--<a href="#" class="btn btn-primary">총 답변(123)</a>-->
-        <!--<a href="#" class="btn btn-primary">총 키워드(123)</a>-->
-        <a href="#" class="btn btn-primary">답변을 기다리는 Q&A(123)</a>
-        <a href="/qa/my" class="btn btn-primary">myQ&A</a>
-        <a href="/qa/form" class="btn btn-primary">질문하기</a>
-    </div>
-</div>
-<!--// qna top contents -->
-
-<!-- 메뉴 -->
-<div class="container contents-container top-buffer">
-    <!-- keyword -->
-    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-        <div class="nav-tabs-header">분류키워드</div>
-        <!-- 분류키워드 list start -->
-        <div id="categorizeKeywordListArea"></div>
-        <!-- 분류키워드 list end -->
-    </div>
-    <!--// lnb -->
-
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <!-- 최근 Q&A -->
-        <div class="nav-tabs-header">최근 Q&A
-            <span class="pull-right section-category">
-                <ul id="recentQaDayTypeUl" class="nav nav-tabs">
-                    <li class="active" value=""><a href="#">Today</a></li>
-                    <li value="WEEK"><a href="#">Week</a></li>
-                </ul>
-            </span>
-        </div>
-        <!-- 최근 Q&A list start -->
-        <div id="recentQaListArea" style="margin-top: 15px"></div>
-        <!-- 최근 Q&A list end -->
-        <!--// 최근 Q&A -->
-
-        <div class="top-buffer">&nbsp;</div>
-        <!-- 답변을 기다리는 Q&A -->
-        <div class="nav-tabs-header">답변을 기다리는 Q&A
-            <span class="pull-right section-category">
-                <ul id="waitReplyQaDayTypeUl" class="nav nav-tabs">
-                    <li class="active" value=""><a href="#">Today</a></li>
-                    <li value="WEEK"><a href="#">Week</a></li>
-                    <li value="ALL"><a href="#">All</a></li>
-                </ul>
-            </span>
-        </div>
-
-        <!-- 답변을 기다리는 Q&A list start -->
-        <div id="waitReplyQaListArea" style="margin-top: 15px"></div>
-        <!-- 답변을 기다리는 Q&A list end -->
-
-        <!--// 답변을 기다리는 Q&A -->
     </div>
 
-    <div class="col-md-4">
-        <!-- BEST Q&A -->
-        <div class="nav-tabs-header">BEST Q&A</div>
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
+    <div class="col-sm-12 top-buffer">
+        <!-- keyword -->
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <div class="nav-tabs-header">분류키워드</div>
+            <!-- 분류키워드 list start -->
+            <div id="categorizeKeywordListArea"></div>
+            <!-- 분류키워드 list end -->
+        </div>
+        <!--// lnb -->
+
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <!-- 최근 Q&A -->
+            <div class="nav-tabs-header">최근 Q&A
+                <span class="pull-right section-category">
+                    <ul id="recentQaDayTypeUl" class="nav nav-tabs">
+                        <li class="active" value=""><a href="#">Today</a></li>
+                        <li value="WEEK"><a href="#">Week</a></li>
+                    </ul>
+                </span>
             </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
-                    </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <span class="badge">1927</span>
-                </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">용퓌</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
+            <!-- 최근 Q&A list start -->
+            <div id="recentQaListArea" style="margin-top: 15px"></div>
+            <!-- 최근 Q&A list end -->
+            <!--// 최근 Q&A -->
+
+            <div class="top-buffer">&nbsp;</div>
+            <!-- 답변을 기다리는 Q&A -->
+            <div class="nav-tabs-header">답변을 기다리는 Q&A
+                <span class="pull-right section-category">
+                    <ul id="waitReplyQaDayTypeUl" class="nav nav-tabs">
+                        <li class="active" value=""><a href="#">Today</a></li>
+                        <li value="WEEK"><a href="#">Week</a></li>
+                        <li value="ALL"><a href="#">All</a></li>
+                    </ul>
+                </span>
             </div>
+
+            <!-- 답변을 기다리는 Q&A list start -->
+            <div id="waitReplyQaListArea" style="margin-top: 15px"></div>
+            <!-- 답변을 기다리는 Q&A list end -->
+
+            <!--// 답변을 기다리는 Q&A -->
         </div>
 
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-warning">JavaScript</span>
-                <strong> 자바스크립트 AOP 설명좀 </strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+        <div class="col-md-4">
+            <!-- BEST Q&A -->
+            <div class="nav-tabs-header">BEST Q&A</div>
+            <div class="best-qna-item">
+                <div>
+                    <span class="label label-primary">Spring</span>
+                    <span class="label label-success">JAVA</span>
+                    <strong> 스프링 AOP에 대해서 설명 좀</strong>
+                </div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <div class="user-profile">
+                            <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        </div>
+                    </a>
+                    <div class="media-body">
+                        첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
+                        <span class="badge">1927</span>
                     </div>
-                </a>
-                <div class="media-body">
-                    그런거 없습니다.그런거 없습니다.그런거 없습니다.그런거 없습니다.그런거 없습..
-                    <span class="badge">1927</span>
+                    <div class="user-profile-sm">
+                        <span class="nickname">용퓌</span>
+                    </div>
+                    <div class="pull-right">2014-04-05 12:12</div>
                 </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">선준</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
             </div>
-        </div>
 
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+            <div class="best-qna-item">
+                <div>
+                    <span class="label label-warning">JavaScript</span>
+                    <strong> 자바스크립트 AOP 설명좀 </strong>
+                </div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <div class="user-profile">
+                            <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        </div>
+                    </a>
+                    <div class="media-body">
+                        그런거 없습니다.그런거 없습니다.그런거 없습니다.그런거 없습니다.그런거 없습..
+                        <span class="badge">1927</span>
                     </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <span class="badge">1927</span>
+                    <div class="user-profile-sm">
+                        <span class="nickname">선준</span>
+                    </div>
+                    <div class="pull-right">2014-04-05 12:12</div>
                 </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">Quick</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
             </div>
-        </div>
 
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+            <div class="best-qna-item">
+                <div>
+                    <span class="label label-primary">Spring</span>
+                    <span class="label label-success">JAVA</span>
+                    <strong> 스프링 AOP에 대해서 설명 좀</strong>
+                </div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <div class="user-profile">
+                            <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        </div>
+                    </a>
+                    <div class="media-body">
+                        첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
+                        <span class="badge">1927</span>
                     </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <span class="badge">1927</span>
+                    <div class="user-profile-sm">
+                        <span class="nickname">Quick</span>
+                    </div>
+                    <div class="pull-right">2014-04-05 12:12</div>
                 </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">손간지</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
             </div>
-        </div>
 
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+            <div class="best-qna-item">
+                <div>
+                    <span class="label label-primary">Spring</span>
+                    <span class="label label-success">JAVA</span>
+                    <strong> 스프링 AOP에 대해서 설명 좀</strong>
+                </div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <div class="user-profile">
+                            <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        </div>
+                    </a>
+                    <div class="media-body">
+                        첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
+                        <span class="badge">1927</span>
                     </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <span class="badge">1927</span>
-                </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">용퓌</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
-            </div>
-        </div>
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                    <div class="user-profile-sm">
+                        <span class="nickname">손간지</span>
                     </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <span class="badge">1927</span>
+                    <div class="pull-right">2014-04-05 12:12</div>
                 </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">용퓌</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
             </div>
-        </div>
 
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-warning">JavaScript</span>
-                <strong> 자바스크립트 AOP 설명좀 </strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+            <div class="best-qna-item">
+                <div>
+                    <span class="label label-primary">Spring</span>
+                    <span class="label label-success">JAVA</span>
+                    <strong> 스프링 AOP에 대해서 설명 좀</strong>
+                </div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <div class="user-profile">
+                            <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        </div>
+                    </a>
+                    <div class="media-body">
+                        첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
+                        <span class="badge">1927</span>
                     </div>
-                </a>
-                <div class="media-body">
-                    그런거 없습니다.그런거 없습니다.그런거 없습니다.그런거 없습니다.그런거 없습..
-                    <span class="badge">1927</span>
+                    <div class="user-profile-sm">
+                        <span class="nickname">용퓌</span>
+                    </div>
+                    <div class="pull-right">2014-04-05 12:12</div>
                 </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">용퓌</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
             </div>
-        </div>
+            <div class="best-qna-item">
+                <div>
+                    <span class="label label-primary">Spring</span>
+                    <span class="label label-success">JAVA</span>
+                    <strong> 스프링 AOP에 대해서 설명 좀</strong>
+                </div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <div class="user-profile">
+                            <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        </div>
+                    </a>
+                    <div class="media-body">
+                        첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
+                        <span class="badge">1927</span>
+                    </div>
+                    <div class="user-profile-sm">
+                        <span class="nickname">용퓌</span>
+                    </div>
+                    <div class="pull-right">2014-04-05 12:12</div>
+                </div>
+            </div>
 
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+            <div class="best-qna-item">
+                <div>
+                    <span class="label label-warning">JavaScript</span>
+                    <strong> 자바스크립트 AOP 설명좀 </strong>
+                </div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <div class="user-profile">
+                            <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        </div>
+                    </a>
+                    <div class="media-body">
+                        그런거 없습니다.그런거 없습니다.그런거 없습니다.그런거 없습니다.그런거 없습..
+                        <span class="badge">1927</span>
                     </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <span class="badge">1927</span>
+                    <div class="user-profile-sm">
+                        <span class="nickname">용퓌</span>
+                    </div>
+                    <div class="pull-right">2014-04-05 12:12</div>
                 </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">용퓌</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
             </div>
-        </div>
 
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+            <div class="best-qna-item">
+                <div>
+                    <span class="label label-primary">Spring</span>
+                    <span class="label label-success">JAVA</span>
+                    <strong> 스프링 AOP에 대해서 설명 좀</strong>
+                </div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <div class="user-profile">
+                            <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        </div>
+                    </a>
+                    <div class="media-body">
+                        첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
+                        <span class="badge">1927</span>
                     </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <span class="badge">1927</span>
+                    <div class="user-profile-sm">
+                        <span class="nickname">용퓌</span>
+                    </div>
+                    <div class="pull-right">2014-04-05 12:12</div>
                 </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">용퓌</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
             </div>
-        </div>
 
-        <div class="best-qna-item">
-            <div>
-                <span class="label label-primary">Spring</span>
-                <span class="label label-success">JAVA</span>
-                <strong> 스프링 AOP에 대해서 설명 좀</strong>
-            </div>
-            <div class="media">
-                <a class="pull-left" href="#">
-                    <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+            <div class="best-qna-item">
+                <div>
+                    <span class="label label-primary">Spring</span>
+                    <span class="label label-success">JAVA</span>
+                    <strong> 스프링 AOP에 대해서 설명 좀</strong>
+                </div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <div class="user-profile">
+                            <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        </div>
+                    </a>
+                    <div class="media-body">
+                        첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
+                        <span class="badge">1927</span>
                     </div>
-                </a>
-                <div class="media-body">
-                    첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-                    <span class="badge">1927</span>
+                    <div class="user-profile-sm">
+                        <span class="nickname">용퓌</span>
+                    </div>
+                    <div class="pull-right">2014-04-05 12:12</div>
                 </div>
-                <div class="user-profile-sm">
-                    <span class="nickname">용퓌</span>
-                </div>
-                <div class="pull-right">2014-04-05 12:12</div>
             </div>
+
+            <div class="best-qna-item">
+                <div>
+                    <span class="label label-primary">Spring</span>
+                    <span class="label label-success">JAVA</span>
+                    <strong> 스프링 AOP에 대해서 설명 좀</strong>
+                </div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <div class="user-profile">
+                            <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        </div>
+                    </a>
+                    <div class="media-body">
+                        첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
+                        <span class="badge">1927</span>
+                    </div>
+                    <div class="user-profile-sm">
+                        <span class="nickname">용퓌</span>
+                    </div>
+                    <div class="pull-right">2014-04-05 12:12</div>
+                </div>
+            </div>
+            <!--// BEST Q&A -->
         </div>
-        <!--// BEST Q&A -->
     </div>
 </div>
 
