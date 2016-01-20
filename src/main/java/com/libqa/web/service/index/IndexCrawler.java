@@ -1,6 +1,7 @@
 package com.libqa.web.service.index;
 
 import com.google.common.collect.Lists;
+import com.libqa.config.CacheConfig;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.KeywordService;
 import com.libqa.web.service.feed.FeedReplyService;
@@ -13,6 +14,7 @@ import com.libqa.web.service.wiki.WikiService;
 import com.libqa.web.view.feed.DisplayDate;
 import com.libqa.web.view.index.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +48,7 @@ public class IndexCrawler {
      *
      * @return DisplayIndex
      */
+    @Cacheable(CacheConfig.CACHE_DISPLAY_INDEX)
     public DisplayIndex crawl() {
         DisplayIndex displayIndex = DisplayIndex.of();
         displayIndex.setQaContents(buildQaContents());
@@ -123,7 +126,7 @@ public class IndexCrawler {
 
             IndexFeed indexFeed = IndexFeed.of();
             indexFeed.setFeedId(each.getFeedId());
-            indexFeed.setContent(each.getFeedContent());
+            indexFeed.setFeedContent(each.getFeedContent());
             indexFeed.setUserImage(writer.getUserImage());
             indexFeed.setCountOfReply(feedReplyService.countByFeed(each));
             result.add(indexFeed);

@@ -16,53 +16,53 @@
 
 {{# partial "content" }}
 <!-- contents -->
-<div class="container qna-top-search">
-    <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
+<div class="container-fluid">
+    <div class="col-sm-12">
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <a href="#" class="form-control btn btn-primary">공간검색</a>
+        </form>
+
+        <div class="btn-group pull-right">
+            <a href="/space/spaces" class="btn btn-primary" id="spaceCount"></a>
+            <a href="/space/wikis" class="btn btn-primary" id="wikiCount"></a>
+            <a href="/space/keywords" class="btn btn-primary" id="keywordCount"></a>
+            <a href="/space/form" class="btn btn-primary">공간 생성하기</a>
         </div>
-        <a href="#" class="form-control btn btn-primary">공간검색</a>
-    </form>
-
-    <div class="btn-group pull-right">
-        <a href="/space/spaces" class="btn btn-primary" id="spaceCount"></a>
-        <a href="/space/wikis" class="btn btn-primary" id="wikiCount"></a>
-        <a href="/space/keywords" class="btn btn-primary" id="keywordCount"></a>
-        <a href="/space/form" class="btn btn-primary">공간 생성하기</a>
     </div>
 
-</div>
+    <div class="col-sm-12 top-buffer" style="padding-bottom: 20px">
+        <!-- keyword -->
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
 
-<!-- 메뉴 -->
-<div class="container contents-container top-buffer">
-    <!-- keyword -->
-    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <div class="nav-tabs-header">분류키워드</div>
+            <!-- 분류키워드 list start -->
+            <div id="categorizeKeywordListArea"></div>
+            <!-- 분류키워드 list end -->
+        </div>
+        <!--// lnb -->
 
-        <div class="nav-tabs-header">분류키워드</div>
-        <!-- 분류키워드 list start -->
-        <div id="categorizeKeywordListArea"></div>
-        <!-- 분류키워드 list end -->
-    </div>
-    <!--// lnb -->
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <!-- 전체 공간 -->
+            <div class="nav-tabs-header">전체 공간</div>
+            {{> space/template/_allSpaceList}}
+            <br>
+            <p class="lead text-right" ><button class="btn btn-default">Read All {{readMoreCount}}</button></p>
+            <!--// 전체 공간 -->
+        </div>
 
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <!-- 전체 공간 -->
-        <div class="nav-tabs-header">전체 공간</div>
-        {{> space/template/_allSpaceList}}
-        <br>
-        <p class="lead text-right" ><button class="btn btn-default">Read All {{readMoreCount}}</button></p>
-        <!--// 전체 공간 -->
-    </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <!-- 내 즐겨찾기 -->
+            <div class="nav-tabs-header">내 즐겨찾기 공간</div>
+            {{> space/template/_myfavoriteList}}
 
-    <div class="col-md-4">
-        <!-- 내 즐겨찾기 -->
-        <div class="nav-tabs-header">내 즐겨찾기 공간</div>
-        {{> space/template/_myfavoriteList}}
-
-        <div class="top-buffer">&nbsp;</div>
-        <div class="nav-tabs-header">최근 위키</div>
-        {{> space/template/_recentWikiList}}
-        <!--// BEST Q&A -->
+            <div class="top-buffer">&nbsp;</div>
+            <div class="nav-tabs-header">최근 위키</div>
+            {{> space/template/_recentWikiList}}
+            <!--// BEST Q&A -->
+        </div>
     </div>
 </div>
 <!--// contents -->
