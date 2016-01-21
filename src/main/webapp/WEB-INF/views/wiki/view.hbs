@@ -1,8 +1,9 @@
 {{#partial "title"}}LibQA~{{/partial}}
 
 {{# partial "content" }}
-<div class="container">
-    <div class="col-md" id="mainContent">
+<div class="container-fluid">
+    <div class="col-sm-12" id="mainContent">
+
         <div style="padding-bottom: 45px;">
             <div class="btn-group" data-toggle="buttons" style="float: left">
                 {{#if wiki.test}}
@@ -27,7 +28,7 @@
 
         <div class="row">
             <div class="col-md-9" role="main" style="padding-bottom: 20px;">
-                <h1 class="page-header">{{{wiki.title}}}</h1>
+                <h1 class="page-header" style="margin-top: 15px">{{{wiki.title}}}</h1>
                 {{{wiki.contents}}}
             </div>
 
