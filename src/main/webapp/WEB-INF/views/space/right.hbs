@@ -5,54 +5,97 @@ Date: 2014. 12. 7.
 Time: 16:20
 To change this template use File | Settings | File Templates.
 --}}
+{{#partial "style"}}
+{{!-- 여기에 사용자 css 정의 --}}
+    <style type="text/css">
+        {
+            height:100%;
+        }
+        header
+        {
+            background: green;
+            height: 50px;
+        }
+
+        .row
+        {
+            height: 100%;
+            display: table-row;
+        }
+        .col-md-3.no-float, .col-md-9.no-float {
+            float: none; /* thanks baxabbit */
+        }
+        .col-md-3
+        {
+            display: table-cell;
+            background: #eeeeee;
+            width: 25%;
+            height:100%;
+        }
+        .col-md-9
+        {
+            display: table-cell;
+            background: #ffffff;
+            width: 75%;
+        }
+    </style>
+{{/partial}}
+{{#partial "plugin-style"}}
+    <link href="/resource/public/css/layout-default-latest.css" rel="stylesheet">
+{{/partial}}
+
+{{#partial "script-header"}}
+    <script src="/resource/public/js/jquery/jquery.layout-latest.js"></script>
+    <script src="/resource/public/js/jquery/jquery-ui-latest.js"></script>
+{{/partial}}
 
 {{#partial "title"}}LibQA~{{/partial}}
 
 {{# partial "content" }}
 <!-- contents -->
-
 <div class="container-fluid">
-    <div class="col-sm-12">
-        <div style="padding-bottom: 45px;">
-            <div class="btn-group" data-toggle="buttons" style="float: right">
-                <a class="btn btn-primary" id="cancelFavorite" style="display: none;"><i class="fa fa-heart-o"></i> 즐겨찾기 취소</a>
-                <a class="btn btn-primary" id="addFavorite" style="display: none;"><i class="fa fa-heart"></i> 즐겨찾기 추가</a>
-                <a class="btn btn-primary" id="createWiki"><i class="fa fa-pencil"></i> 위키 생성</a>
-                <a href="#" class="btn btn-primary"><i class="fa fa-file-text"></i> 첨부파일 목록</a>
-                <a href="#" id="editSpace" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i>  공간 정보수정</a>
+    {{> space/template/_spaceTopMenu}}
+</div>
+<div class="container-fluid">
+    <div class="row" style="padding-top:100px">&nbsp;</div>
+    <div class="row">
+        <div class="col-md-9 no-float">
+            <div class="col-sm-11">
+                <h1 class="page-header" style="margin-top: 0px">{{space.title}}
+                    <small class="pull-right" style="padding-top:10px">{{formatDate space.insertDate "yyyy-MM-dd hh:MM"}} </small>
+                </h1>
             </div>
-        </div>
-    </div>
-
-
-    <div class="col-sm-12">
-        <div class="col-sm-12">
-            <h1 class="page-header">{{space.title}}
-                <small class="pull-right">{{formatDate space.insertDate "yyyy-MM-dd hh:MM"}} Owner : {{space.insertUserNick}}</small>
-            </h1>
-        </div>
-
-        <div class="col-sm-8">
-            <div class="jumbotron">
-                <img src="{{space.titleImagePath}}/{{space.titleImage}}" width="250">
-                <p>{{{space.description}}}</p>
+            <div class="col-sm-1">
+                <div class="author">
+                    <div class="user-profile-md">
+                        <img alt="avatar" class="profile-image" src="{{spaceUser.userImage}}" onerror='this.src="/resource/images/avatar.png"' />
+                    </div>
+                </div>
             </div>
 
-            <div>
-                <h3>최근 수정된 위키 목록</h3>
-                <blockquote class="pull-left">
-                    {{> space/template/_updateWikiRight}}
+            <div class="col-sm-12">
+                <div class="jumbotron">
+                    <img src="{{space.titleImagePath}}/{{space.titleImage}}" width="250">
+                    <p>{{{space.description}}}</p>
+                </div>
+
+                <h3 style="border-bottom:1px solid #eee;padding-bottom:15px">최근 수정된 위키 목록</h3>
+                <blockquote class="pull-right">
+                    {{> space/template/_updateWikiList}}
                 </blockquote>
-                <hr>
-                <h3>최근 이 공간의 활동 내역 목록 </h3>
-                <blockquote class="pull-left">
+
+
+                <h3 style="border-bottom:1px solid #eee;padding-bottom:15px">최근 이 공간의 활동 내역 목록 </h3>
+                <blockquote class="pull-right">
                     {{> space/template/_activityList}}
                 </blockquote>
-            </div><!--/row-->
-        </div><!--/span-->
+            </div>
+        </div>
 
-        <div class="col-sm-4">
-            <div class="well sidebar-nav">
+        <div class="col-md-3 no-float vcenter" >
+            <div class="col-sm-12" style="padding: 10px">
+                <div class="pull-right" style="padding-top: 7px;cursor: pointer;"><i class="fa fa-times fa-1"></i></div>
+                <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:5px">전체위키</h4>
                 {{#if spaceWikis}}
                     {{#each spaceWikis}}
                         <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
@@ -60,15 +103,13 @@ To change this template use File | Settings | File Templates.
                 {{^}}
                     생성된 위키가 없습니다.
                 {{/if}}
-            </div><!--/.well -->
-        </div><!--/span-->
-    </div>
+            </div>
+        </div>
 
+    </div>
 </div>
 
 <!--// contents -->
-
-
 {{/partial}}
 
 

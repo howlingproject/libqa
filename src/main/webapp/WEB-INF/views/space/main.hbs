@@ -46,10 +46,17 @@
 
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             <!-- 전체 공간 -->
-            <div class="nav-tabs-header">전체 공간</div>
+            <div class="nav-tabs-header">전체 공간
+                <span class="pull-right section-category">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#">이름순</a></li>
+                        <li><a href="#">최신순</a></li>
+                    </ul>
+                </span>
+            </div>
             {{> space/template/_allSpaceList}}
             <br>
-            <p class="lead text-right" ><button class="btn btn-default">Read All {{readMoreCount}}</button></p>
+            <p class="lead text-right" ><button class="btn btn-default">더보기 {{readMoreCount}}</button></p>
             <!--// 전체 공간 -->
         </div>
 

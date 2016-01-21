@@ -21,21 +21,6 @@
 
 
         <div class="col-sm-12 top-buffer wiki-main">
-            <!-- 상단 컨텐츠 -->
-            <div class="col-md-12 col-lg-12">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><a href="/wiki/list/best">베스트 위키</a></h3>
-                    </div>
-                    <!-- BEST 위키 컨텐츠 -->
-                    <div class="panel-body" id="bestWikiList">
-                        {{> wiki/template/_bestList}}
-                    </div>
-                    <!-- BEST 위키 컨텐츠 -->
-                </div>
-            </div>
-
-            <!-- 상단 컨텐츠 -->
             <!-- 하단 컨텐츠 -->
             <div class="col-md-12 col-lg-12">
                 <!-- 전체 키워드 선택 -->
@@ -48,10 +33,18 @@
                 <!--// 전체 키워드 선택 -->
 
                 <div class="col-md-6">
-
                     <!-- 전체 위키 -->
                     <div id="allWikiList">
-                        <div class="nav-tabs-header"><a href="/wiki/list/all">전체 위키</a></div>
+                        <div class="nav-tabs-header">
+                            전체 위키
+                            <span class="pull-right section-category">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a href="#">이름순</a></li>
+                                    <li><a href="#">최신순</a></li>
+                                </ul>
+                            </span>
+                        </div>
+
                         {{> wiki/template/_allList}}
                     </div>
                     <!--// 위키 -->
@@ -59,8 +52,13 @@
                 </div>
 
                 <div class="col-md-4" style="padding-right: 0px;">
+
+                    <div class="nav-tabs-header">베스트 위키</div>
+                    {{> wiki/template/_bestList}}
+                    <div class="top-buffer">&nbsp;</div>
+
                     <!-- 최근 활동 -->
-                    <div class="nav-tabs-header"><a href="/wiki/list/recent">최근 활동</a></div>
+                    <div class="nav-tabs-header">최근 활동</div>
                     <div id="recentWikiList">
                         {{> wiki/template/_recentList}}
                     </div>

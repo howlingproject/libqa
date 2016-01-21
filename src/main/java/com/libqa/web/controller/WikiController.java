@@ -15,6 +15,7 @@ import com.libqa.web.service.common.KeywordService;
 import com.libqa.web.service.space.SpaceService;
 import com.libqa.web.service.wiki.WikiReplyService;
 import com.libqa.web.service.wiki.WikiService;
+import com.libqa.web.view.space.SpaceWikiList;
 import com.libqa.web.view.wiki.DisplayWiki;
 import com.libqa.web.view.wiki.DisplayWikiLike;
 import lombok.extern.slf4j.Slf4j;
@@ -68,11 +69,28 @@ public class WikiController {
         User user = loggedUser.get();
         if(isUser(user)){
             Integer userId = user.getUserId();
-            List<DisplayWiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 4);
+            List<DisplayWiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
             mav.addObject("resecntWiki", resecntWiki);
         }
-        List<DisplayWiki> bestWiki = wikiService.findByBestWiki(0, 4);
-        mav.addObject("bestWiki", bestWiki);
+        List<DisplayWiki> bestWiki = wikiService.findByBestWiki(0, 5);
+
+        // 베스트 위키 조회
+        List<DisplayWiki> bestWikiList = new ArrayList<>();
+        for (DisplayWiki displayWiki : bestWiki) {
+            Wiki wiki = displayWiki.getWiki();
+            List<WikiReply> replies = wiki.getWikiReplies();
+            List<Keyword> keywords = keywordService.findByWikiId(wiki.getWikiId(), false);
+            User userInfo = new User();
+            userInfo.setUserId(wiki.getUserId());
+            userInfo.setUserNick(wiki.getUserNick());
+            // 속도상의 이슈로 위키의 리플갯수 조회하지 안흠
+            DisplayWiki bestDisplayWiki = new DisplayWiki(wiki, userInfo, keywords, replies.size());
+
+            bestWikiList.add(bestDisplayWiki);
+        }
+
+
+        mav.addObject("bestWikiList", bestWikiList);
 
         return mav;
     }

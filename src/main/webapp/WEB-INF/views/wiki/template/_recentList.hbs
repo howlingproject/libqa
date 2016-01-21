@@ -1,24 +1,34 @@
-{{#each resecntWiki}}
-    <!-- 최근 활동 -->
-    <div class="best-qna-item">
-        <div>
-            {{> common/_keywordBadge}}
-            <strong> {{wiki.title}}</strong>
-        </div>
-        <div class="media">
-            <a class="pull-left" href="#">
-                <div class="user-profile">
-                    <img src="/resource/images/avatar.png" class="profile-image" alt="avatar">
-                </div>
-            </a>
-            <div class="media-body">
-                <div>
-                    <a class="form" href="/wiki/{{wiki.wikiId}}">
-                        {{{subString (htmlDelete wiki.contents) 0 50 }}}
-                    </a>
+{{#if resecntWiki}}
+    {{#each resecntWiki}}
+        <!-- 최근 활동 -->
+        <div class="best-qna-item">
+            <div>
+                {{> common/_keywordBadge}}
+                <strong> {{wiki.title}}</strong>
+                <span class="comments pull-right"><i class="glyphicon glyphicon-comment"></i> {{countOfReply}}</span>
+            </div>
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <div class="user-profile">
+                        <img src="/resource/images/avatar.png" class="profile-image" alt="avatar">
+                    </div>
+                </a>
+                <div class="media-body">
+                    <div>
+                        <a class="form" href="/wiki/{{wiki.wikiId}}">
+                            {{{subString (htmlDelete wiki.contents) 0 50 }}}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- 최근 활동 -->
+    {{/each}}
+
+    <div class="pull-right" style="padding-top:10px"><button class="btn btn-sm btn-default btn-sm-fixed">더보기</button></div>
+
+{{^}}
+    <div class="best-qna-item">
+        최근 활동이 없습니다.
     </div>
-    <!-- 최근 활동 -->
-{{/each}}
+{{/if}}

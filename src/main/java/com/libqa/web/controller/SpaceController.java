@@ -142,13 +142,13 @@ public class SpaceController {
         List<SpaceWikiList> spaceWikiLists = new ArrayList<>();
         for (DisplayWiki displayWiki : updateWikiList) {
             Wiki wiki = displayWiki.getWiki();
-            //List<WikiReply> replies = wiki.getWikiReplies();
+            List<WikiReply> replies = wiki.getWikiReplies();
             List<Keyword> keywords = keywordService.findByWikiId(wiki.getWikiId(), false);
             User userInfo = new User();
             userInfo.setUserId(wiki.getUserId());
             userInfo.setUserNick(wiki.getUserNick());
             // 속도상의 이슈로 위키의 리플갯수 조회하지 안흠
-            SpaceWikiList spaceWikiList = new SpaceWikiList(wiki, userInfo, keywords, 0);
+            SpaceWikiList spaceWikiList = new SpaceWikiList(wiki, userInfo, keywords, replies.size());
             spaceWikiLists.add(spaceWikiList);
         }
 
@@ -279,6 +279,7 @@ public class SpaceController {
     public ModelAndView spaceDetail(@PathVariable Integer spaceId) {
         Space space = spaceService.findOne(spaceId);
 
+        User spaceUser = userService.findByUserId(space.getInsertUserId());
 
         // Space 생성시 선택한 Layout 옵션의 View를 보여준다.
         String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
@@ -323,6 +324,7 @@ public class SpaceController {
         mav.addObject("spaceWikis", spaceWikis);
         mav.addObject("updatedWikis", updatedWikis);
         mav.addObject("space", space);
+        mav.addObject("spaceUser", spaceUser);
         mav.addObject("userFavorite", userFavorite);
         mav.addObject("activities", activities);
         mav.addObject("spaceActivityLists", spaceActivityLists);

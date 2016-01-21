@@ -15,6 +15,7 @@ public class DisplayWiki {
     private Wiki wiki;
     private User user;
     private List<Keyword> keywords;
+    private int countOfReply;
 
 
     public DisplayWiki (Wiki wiki){
@@ -29,4 +30,12 @@ public class DisplayWiki {
         this.user = user;
         this.keywords = keywords;
     }
+    public DisplayWiki(Wiki wiki, User user, List<Keyword> keywords, int countOfReply){
+        this.wiki = wiki;
+        this.user = user;
+        this.keywords = keywords;
+        this.countOfReply = countOfReply;
+    }
+
+
 }

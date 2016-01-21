@@ -43,6 +43,7 @@ div.user-profile, div.user-profile-sm, div.user-profile-xs { margin:1px; display
 img.profile-image {border: 1px solid #ddd; border-radius: 4px; background-color: #fff;}
 
 div.user-profile img.profile-image {width:64px; height: 64px;  }
+div.user-profile-md img.profile-image {width:48px; height: 48px;  }
 div.user-profile-sm img.profile-image {width:32px; height: 32px; }
 div.user-profile-xs img.profile-image {width:16px; height: 16px; }
 
@@ -369,3 +370,8 @@ a.text:focus {
 .bs-docs-sidebar .nav>.active>ul.nav {
     display: block;
 }
+.vcenter {
+    display: table-cell;
+    vertical-align: top;
+}
+
