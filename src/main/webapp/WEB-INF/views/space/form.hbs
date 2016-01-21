@@ -23,175 +23,177 @@ To change this template use File | Settings | File Templates.
 
 {{# partial "content" }}
 <!-- contents -->
-<div class="container">
-    <section id="forms">
+<div class="container-fluid">
+    <div class="col-sm-12">
+        <section id="forms">
 
-        <div class="page-header">
-            <h2>공간 생성하기</h2>
-        </div>
-
-        <div class="row" style="width:100%">
-            <div style="padding-left:30px">
-                <form name="spaceCreateForm" id="spaceCreateForm" class="form-horizontal well" enctype="multipart/form-data">
-                    <fieldset>
-                        <legend>공간 제목</legend>
-                        <div class="control-group">
-                            <div class="controls">
-                                <input type="text" class="form-control input-xlarge" id="title" name="title">
-                            </div>
-                        </div>
-                        <p style="padding-top:20px"></p>
-                        <legend>공간 이미지</legend>
-                        <div class="control-group">
-
-                            <div class="col-lg-8">
-                                <div class="col-xs-8 col-md-8">
-                                    <input id="userId" value="{{user.userId}}" type="hidden">
-                                    <input id="uploadType" value="Space" type="hidden">
-                                    <input name="titleImagePath" id="titleImagePath" type="hidden">
-                                    <input name="titleImage" id="titleImage" type="hidden">
-                                    <input id="viewType" name="viewType" value="Image" type="hidden" />
-                                    <input id="file-attachment" type="file" name="uploadfile" accept="*" />
-                                    <p class="help-block" id="spaceImage">(*) 공간을 표현할 수 있는 대표 이미지를 등록하세요.</p>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 text-right" id="imagePreviewArea">
-                                <img src="/resource/public/images/icons/pictures.png" width="200" alt="이미지 미리보기" class="img-thumbnail image-preview" id="image-preview">
-                            </div>
-                        </div>
-                        <p style="padding-top:20px"></p>
-                        <legend style="margin-bottom: 0px">공간 설명</legend>
-                        <div class="control-group">
-                            <div class="modal-body">
-                                <div id="editorArea" name="editorArea" class="form-group"></div>
-                                <input type="hidden" id="description" name="description" />
-                                <input type="hidden" id="descriptionMarkup" name="descriptionMarkup" />
-                                <div id="editor" class="form-group"></div>
-                                <p class="help-block">(*) 공간 메인 화면에 입력한 설명이 display 됩니다. (markdown 지원)</p>
-                            </div>
-                        </div>
-
-                        <legend>공개 여부</legend>
-                        <div class="control-group">
-                            <div class="controls">
-                                <label class="checkbox-inline">
-                                    <input type="radio" name="isPrivateYn" id="inlineCheckbox1" value="Y" checked> 공개
-                                </label>
-                                <label class="checkbox-inline">
-                                    <input type="radio" name="isPrivateYn" id="inlineCheckbox2" value="N"> 비공개
-                                </label>
-                                <input type="hidden" id="private" name="private" value=""/>
-                            </div>
-                        </div>
-                        <p style="padding-top:20px"></p>
-                        <legend>레이아웃</legend>
-                        <div class="control-group">
-
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="panel panel-info">
-                                        <div class="panel-heading"><input type="radio" name="layoutType" id="layoutTypeDefault" value="CENTER" checked> 기본형</div>
-                                        <div class="panel-body">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                <tr>
-                                                    <th colspan="2" class="text-center">
-                                                        <div style="margin: 30px"><strong>공간설명</strong></div>
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">
-                                                        <div style="margin: 30px"><strong>메뉴목록</strong></div>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <div style="margin: 30px"><strong>최근위키</strong></div>
-                                                    </td>
-                                                </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="panel panel-primary">
-                                        <div class="panel-heading"><input type="radio" name="layoutType" id="layoutTypeLeft" value="LEFT"> 좌측 메뉴</div>
-                                        <div class="panel-body">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                <tr>
-                                                    <th rowspan="2" class="text-center" style="width:80px">
-                                                        <div style="margin: 30px"><strong>메뉴목록</strong></div>
-                                                    </th>
-                                                    <th class="text-center">
-                                                        <div style="margin: 30px"><strong>공간설명</strong></div>
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">
-                                                        <div style="margin: 30px"><strong>최근위키</strong></div>
-                                                    </td>
-                                                </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="panel panel-success">
-                                        <div class="panel-heading"><input type="radio" name="layoutType" id="layoutTypeRight" value="RIGHT"> 우측 메뉴</div>
-                                        <div class="panel-body">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                <tr>
-                                                    <th class="text-center">
-                                                        <div style="margin: 30px"><strong>공간설명</strong></div>
-                                                    </th>
-                                                    <th rowspan="2" class="text-center" style="width:80px">
-                                                        <div style="margin: 30px"><strong>메뉴목록</strong></div>
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center">
-                                                        <div style="margin: 30px"><strong>최근위키</strong></div>
-                                                    </td>
-                                                </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <p style="padding-top:20px"></p>
-                        <legend>키워드 </legend>
-
-                        <div class="control-group">
-                            <div class="col-sm-4 col-md-4">
-                                <div id="tag-info" class="form-inline" style="padding-bottom: 10px;width:400px;">
-                                    <input type="text" class="form-control" size="29" id="interesting" placeholder="Keyword">
-                                    <button class="btn btn-primary" type="button" id="keywordAdd">Add <i class="glyphicon glyphicon-plus"></i></button>
-
-                                </div>
-                            </div>
-                            <input type="hidden" name="keywords" id="keywords" />
-                            <div class="col-sm-4 col-md-4">
-                                <ul id="tag-cloud" style="padding-left: 0px; width:100%; "></ul>
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <div class="form-actions text-center">
-                        <button type="button" class="btn btn-primary" id="btnSave" name="btnSave">저장</button>
-                        <button type="button" class="btn" id="btnCancel" name="btnCancel">취소</button>
-                    </div>
-
-                </form>
+            <div class="page-header">
+                <h2>공간 생성하기</h2>
             </div>
-        </div>
 
-    </section>
+            <div class="row" style="width:100%">
+                <div style="padding-left:30px">
+                    <form name="spaceCreateForm" id="spaceCreateForm" class="form-horizontal well" enctype="multipart/form-data">
+                        <fieldset>
+                            <legend>공간 제목</legend>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <input type="text" class="form-control input-xlarge" id="title" name="title">
+                                </div>
+                            </div>
+                            <p style="padding-top:20px"></p>
+                            <legend>공간 이미지</legend>
+                            <div class="control-group">
+
+                                <div class="col-lg-8">
+                                    <div class="col-xs-8 col-md-8">
+                                        <input id="userId" value="{{user.userId}}" type="hidden">
+                                        <input id="uploadType" value="Space" type="hidden">
+                                        <input name="titleImagePath" id="titleImagePath" type="hidden">
+                                        <input name="titleImage" id="titleImage" type="hidden">
+                                        <input id="viewType" name="viewType" value="Image" type="hidden" />
+                                        <input id="file-attachment" type="file" name="uploadfile" accept="*" />
+                                        <p class="help-block" id="spaceImage">(*) 공간을 표현할 수 있는 대표 이미지를 등록하세요.</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 text-right" id="imagePreviewArea">
+                                    <img src="/resource/public/images/icons/pictures.png" width="200" alt="이미지 미리보기" class="img-thumbnail image-preview" id="image-preview">
+                                </div>
+                            </div>
+                            <p style="padding-top:20px"></p>
+                            <legend style="margin-bottom: 0px">공간 설명</legend>
+                            <div class="control-group">
+                                <div class="modal-body">
+                                    <div id="editorArea" name="editorArea" class="form-group"></div>
+                                    <input type="hidden" id="description" name="description" />
+                                    <input type="hidden" id="descriptionMarkup" name="descriptionMarkup" />
+                                    <div id="editor" class="form-group"></div>
+                                    <p class="help-block">(*) 공간 메인 화면에 입력한 설명이 display 됩니다. (markdown 지원)</p>
+                                </div>
+                            </div>
+
+                            <legend>공개 여부</legend>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="isPrivateYn" id="inlineCheckbox1" value="Y" checked> 공개
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="isPrivateYn" id="inlineCheckbox2" value="N"> 비공개
+                                    </label>
+                                    <input type="hidden" id="private" name="private" value=""/>
+                                </div>
+                            </div>
+                            <p style="padding-top:20px"></p>
+                            <legend>레이아웃</legend>
+                            <div class="control-group">
+
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading"><input type="radio" name="layoutType" id="layoutTypeDefault" value="CENTER" checked> 기본형</div>
+                                            <div class="panel-body">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th colspan="2" class="text-center">
+                                                            <div style="margin: 30px"><strong>공간설명</strong></div>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <div style="margin: 30px"><strong>메뉴목록</strong></div>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <div style="margin: 30px"><strong>최근위키</strong></div>
+                                                        </td>
+                                                    </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading"><input type="radio" name="layoutType" id="layoutTypeLeft" value="LEFT"> 좌측 메뉴</div>
+                                            <div class="panel-body">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th rowspan="2" class="text-center" style="width:80px">
+                                                            <div style="margin: 30px"><strong>메뉴목록</strong></div>
+                                                        </th>
+                                                        <th class="text-center">
+                                                            <div style="margin: 30px"><strong>공간설명</strong></div>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <div style="margin: 30px"><strong>최근위키</strong></div>
+                                                        </td>
+                                                    </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading"><input type="radio" name="layoutType" id="layoutTypeRight" value="RIGHT"> 우측 메뉴</div>
+                                            <div class="panel-body">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-center">
+                                                            <div style="margin: 30px"><strong>공간설명</strong></div>
+                                                        </th>
+                                                        <th rowspan="2" class="text-center" style="width:80px">
+                                                            <div style="margin: 30px"><strong>메뉴목록</strong></div>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <div style="margin: 30px"><strong>최근위키</strong></div>
+                                                        </td>
+                                                    </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p style="padding-top:20px"></p>
+                            <legend>키워드 </legend>
+
+                            <div class="control-group">
+                                <div class="col-sm-4 col-md-4">
+                                    <div id="tag-info" class="form-inline" style="padding-bottom: 10px;width:400px;">
+                                        <input type="text" class="form-control" size="29" id="interesting" placeholder="Keyword">
+                                        <button class="btn btn-primary" type="button" id="keywordAdd">Add <i class="glyphicon glyphicon-plus"></i></button>
+
+                                    </div>
+                                </div>
+                                <input type="hidden" name="keywords" id="keywords" />
+                                <div class="col-sm-4 col-md-4">
+                                    <ul id="tag-cloud" style="padding-left: 0px; width:100%; "></ul>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="form-actions text-center">
+                            <button type="button" class="btn btn-primary" id="btnSave" name="btnSave">저장</button>
+                            <button type="button" class="btn" id="btnCancel" name="btnCancel">취소</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </section>
+    </div>
 </div>
 
 {{/partial}}

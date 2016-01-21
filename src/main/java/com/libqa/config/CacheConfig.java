@@ -27,7 +27,7 @@ public class CacheConfig implements CachingConfigurer {
     @Bean
     @Override
     public CacheManager cacheManager() {
-        log.info("cacheManager is loaded.");
+        log.debug("cacheManager is loaded.");
 
         SimpleCacheManager cacheManager = new SimpleCacheManager();
 

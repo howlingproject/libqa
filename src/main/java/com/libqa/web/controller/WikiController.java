@@ -114,7 +114,7 @@ public class WikiController {
 
     private ModelAndView wikiWrite(Space modelSpace, Integer wikiId){
         ModelAndView mav = new ModelAndView("wiki/write");
-        log.info("# spaceId : {}", modelSpace.getSpaceId());
+        log.debug("# spaceId : {}", modelSpace.getSpaceId());
 
         if( modelSpace.getSpaceId() == null ){
             boolean isDeleted = false;    // 삭제 하지 않은 것
@@ -135,7 +135,7 @@ public class WikiController {
 
         Wiki wiki = wikiService.findById(wikiId);
         //List<WikiReply> wikiReply = wiki.getWikiReplies();
-        log.info("# view : {}", wiki);
+        log.debug("# view : {}", wiki);
         Wiki parentWiki = wikiService.findByParentId(wiki.getParentsId());
         List<Wiki> subWikiList = wikiService.findBySubWikiId(wiki.getWikiId());
 
@@ -152,7 +152,7 @@ public class WikiController {
     @RequestMapping("wiki/update/{wikiId}")
     public ModelAndView update(@PathVariable Integer wikiId){
         ModelAndView mav = new ModelAndView("wiki/write");
-        log.info("# wikiId : {}", wikiId);
+        log.debug("# wikiId : {}", wikiId);
 
         Wiki wiki = wikiService.findById(wikiId);
         mav.addObject("wiki", wiki);
@@ -168,7 +168,7 @@ public class WikiController {
 
     @RequestMapping(value = "/wiki/delete/{wikiId}", method = RequestMethod.GET)
     public ModelAndView wikiDelete(@PathVariable Integer wikiId) {
-        log.info("# wikiId : {}", wikiId);
+        log.debug("# wikiId : {}", wikiId);
 
         Wiki wiki = wikiService.findById(wikiId);
         User user = loggedUser.get();
@@ -185,7 +185,7 @@ public class WikiController {
 
     @RequestMapping(value = "/wiki/lock/{wikiId}", method = RequestMethod.GET)
     public ModelAndView wikiLock(@PathVariable Integer wikiId) {
-        log.info("# wikiId : {}", wikiId);
+        log.debug("# wikiId : {}", wikiId);
 
         User user = loggedUser.get();
         int userId = user.getUserId();
@@ -206,9 +206,9 @@ public class WikiController {
     @ResponseBody
     public ResponseData<?> save(@ModelAttribute Wiki wiki, @ModelAttribute Keyword keyword){
         try{
-            log.info("####### WIKI SAVE Begin INFO ########");
-            log.info("wiki = {}", wiki);
-            log.info("wiki.wikiFile = {}", wiki.getWikiFiles());
+            log.debug("####### WIKI SAVE Begin INFO ########");
+            log.debug("wiki = {}", wiki);
+            log.debug("wiki.wikiFile = {}", wiki.getWikiFiles());
             User user = loggedUser.get();
             Date now = new Date();
             wiki.setUserNick(user.getUserNick());
@@ -224,8 +224,8 @@ public class WikiController {
             Wiki result = wikiService.saveWithKeyword(wiki, keyword);
 
 
-            log.info("####### WIKI SAVE After INFO ########");
-            log.info("result = {}", result);
+            log.debug("####### WIKI SAVE After INFO ########");
+            log.debug("result = {}", result);
 
             return ResponseData.createSuccessResult(result);
         }catch(Exception e){
@@ -240,9 +240,9 @@ public class WikiController {
     @ResponseBody
     public ResponseData<?> update(@ModelAttribute Wiki paramWiki, @ModelAttribute Keyword paramKeyword){
         try{
-            log.info("####### WIKI SAVE Begin INFO ########");
-            log.info("wiki = {}", paramWiki);
-            log.info("wiki.wikiFile = {}", paramWiki.getWikiFiles());
+            log.debug("####### WIKI SAVE Begin INFO ########");
+            log.debug("wiki = {}", paramWiki);
+            log.debug("wiki.wikiFile = {}", paramWiki.getWikiFiles());
 
             User user = loggedUser.get();
             Integer wikiId = paramWiki.getWikiId();
@@ -261,8 +261,8 @@ public class WikiController {
             Wiki result = wikiService.updateWithKeyword(currentWiki, paramKeyword, WikiRevisionActionType.UPDATE_WIKI);
 
 
-            log.info("####### WIKI SAVE After INFO ########");
-            log.info("result = {}", result);
+            log.debug("####### WIKI SAVE After INFO ########");
+            log.debug("result = {}", result);
 
             return ResponseData.createSuccessResult(result);
         }catch(Exception e){
@@ -345,7 +345,7 @@ public class WikiController {
     @RequestMapping(value = "wiki/search", method = RequestMethod.GET)
     public ModelAndView searchWikiList(@RequestParam String text) {
         ModelAndView mav = new ModelAndView("wiki/list");
-        log.info("# searchWikiList : {}", text);
+        log.debug("# searchWikiList : {}", text);
 
         List<Wiki> keyworldsWiki = wikiService.findWikiListByContentsMarkup(text, 0, 15);
         mav.addObject("listWiki", keyworldsWiki);
@@ -359,8 +359,8 @@ public class WikiController {
     @ResponseBody
     public ResponseData<DisplayWikiLike> saveLike(
             @RequestParam("type") WikiLikesType type, @RequestParam("num") int num) {
-        log.info("# type : {}", type);
-        log.info("# num : {}", num);
+        log.debug("# type : {}", type);
+        log.debug("# num : {}", num);
 
         DisplayWikiLike displayWikiLike = null;
         try{
@@ -386,8 +386,8 @@ public class WikiController {
     @ResponseBody
     public ResponseData<?> ReplySave(@ModelAttribute WikiReply wikiReply){
         try{
-            log.info("####### WIKI SAVE Begin INFO ########");
-            log.info("wiki = {}", wikiReply);
+            log.debug("####### WIKI SAVE Begin INFO ########");
+            log.debug("wiki = {}", wikiReply);
             User user = loggedUser.get();
 
             wikiReply.setUserNick(user.getUserNick());
@@ -396,8 +396,8 @@ public class WikiController {
             wikiReply.setInsertDate(new Date());
             WikiReply result = wikiReplyService.save(wikiReply);
 
-            log.info("####### WIKI SAVE After INFO ########");
-            log.info("result = {}", result);
+            log.debug("####### WIKI SAVE After INFO ########");
+            log.debug("result = {}", result);
 
             return ResponseData.createSuccessResult(result);
         }catch(Exception e){

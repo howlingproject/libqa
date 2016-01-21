@@ -35,15 +35,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String principal = (String) authentication.getPrincipal();
 
 
-        log.info("### CustomAuthenticationProvider email = {}", email);
-        log.info("### CustomAuthenticationProvider password = {}", password);
-        log.info("### CustomAuthenticationProvider principal = {}", principal);
+        log.debug("### CustomAuthenticationProvider email = {}", email);
+        log.debug("### CustomAuthenticationProvider password = {}", password);
+        log.debug("### CustomAuthenticationProvider principal = {}", principal);
         User user = userService.findByEmailAndIsCertification(email);
 
         if (user != null) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             boolean isMatchedUser = encoder.matches(password, user.getUserPass());
-            log.info("### isMatchedUser = {}", isMatchedUser);
+            log.debug("### isMatchedUser = {}", isMatchedUser);
             if (isMatchedUser) {
                 List<GrantedAuthority> grantedAuths = new ArrayList<>();
                 grantedAuths.add(new SimpleGrantedAuthority(user.getRole().name()));
@@ -62,7 +62,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     }
 
     private void updateUserLastVisitDate(String email) {
-        log.info("#### 사용자 정보 업데이트");
+        log.debug("#### 사용자 정보 업데이트");
         userService.updateUserLastVisitDate(email);
     }
 

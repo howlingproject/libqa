@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         try {
             User user = User.createUser(userEmail, userNick, new BCryptPasswordEncoder().encode(password), loginType);
             createUser = userRepository.save(user);
-            log.info("### createUser = {}", createUser);
+            log.debug("### createUser = {}", createUser);
 
             // 인증 메일 보내기
             if (loginType.equals(SocialChannelType.WEB.name())) {

@@ -137,7 +137,7 @@ public class WikiServiceImpl implements WikiService {
         if(keyword.getDeleteKeywords() != null){
             deleteKeywordArrays = keyword.getDeleteKeywords().split(",");
         }
-        log.info(" keywordArrays : {}", keywordArrays.length);
+        log.debug(" keywordArrays : {}", keywordArrays.length);
         if (keywordArrays.length > 0) {
             keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordType.WIKI, result.getWikiId());
         }

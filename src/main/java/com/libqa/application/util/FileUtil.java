@@ -42,10 +42,10 @@ public class FileUtil {
         FileDto fileDto = new FileDto();
         String today = DateUtil.getToday();
 
-        log.info("## uploadfile : {}", uploadfile.getContentType());
-        log.info("## uploadfile : {}", uploadfile.getName());
-        log.info("## uploadfile : {}", uploadfile.getOriginalFilename());
-        log.info("## uploadfile : {}", uploadfile.getSize());
+        log.debug("## uploadfile : {}", uploadfile.getContentType());
+        log.debug("## uploadfile : {}", uploadfile.getName());
+        log.debug("## uploadfile : {}", uploadfile.getOriginalFilename());
+        log.debug("## uploadfile : {}", uploadfile.getSize());
         String[] fileType = uploadfile.getContentType().split(SEPARATOR);
 
         String fileOriginalName = uploadfile.getOriginalFilename();

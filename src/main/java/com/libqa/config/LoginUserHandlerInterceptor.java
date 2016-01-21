@@ -41,7 +41,7 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
         String userEmail = "";
 
 
-        log.info("#### interceptor authentication : {} ", authentication);
+        log.debug("#### interceptor authentication : {} ", authentication);
         if (authentication == null) {
             login = "0";
         } else {
@@ -50,18 +50,18 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
 
             if (!isInvalidUser(userEmail)) {
                 List<GrantedAuthority> grantedAuths = (List<GrantedAuthority>) authentication.getAuthorities();
-                log.info("### grantedAuthority = {}", grantedAuths.get(0));
+                log.debug("### grantedAuthority = {}", grantedAuths.get(0));
 
-                log.info("@Interceptor authentication.isAuthenticated() = {}", authentication.isAuthenticated());
-                log.info("@Interceptor authentication.getDetails().toString() = {}", authentication.getDetails().toString());
-                log.info("@Interceptor authentication.getDetails().getName() = {}", authentication.getName());
-                log.info("@Interceptor authentication.gerRole() = {}", grantedAuths.get(0));
+                log.debug("@Interceptor authentication.isAuthenticated() = {}", authentication.isAuthenticated());
+                log.debug("@Interceptor authentication.getDetails().toString() = {}", authentication.getDetails().toString());
+                log.debug("@Interceptor authentication.getDetails().getName() = {}", authentication.getName());
+                log.debug("@Interceptor authentication.gerRole() = {}", grantedAuths.get(0));
                 login = "1";
                 role = String.valueOf(grantedAuths.get(0));
 
             }
-            log.info("### LoginUserInterceptor userEmail  = {}", userEmail);
-            log.info("### LoginUserInterceptor isInvalidUser(userEmail)  = {}", isInvalidUser(userEmail));
+            log.debug("### LoginUserInterceptor userEmail  = {}", userEmail);
+            log.debug("### LoginUserInterceptor isInvalidUser(userEmail)  = {}", isInvalidUser(userEmail));
 
         }
 
@@ -74,9 +74,9 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        log.info("# postHandle  request.get isLogin = {}", request.getAttribute("isLogin"));
-        log.info("# postHandle  request.get userEmail = {}", request.getAttribute("userEmail"));
-        log.info("# postHandle  request.get userRole = {}", request.getAttribute("userRole"));
+        log.debug("# postHandle  request.get isLogin = {}", request.getAttribute("isLogin"));
+        log.debug("# postHandle  request.get userEmail = {}", request.getAttribute("userEmail"));
+        log.debug("# postHandle  request.get userRole = {}", request.getAttribute("userRole"));
 
         String isLogin = (String) request.getAttribute("isLogin");
         String userEmail = (String) request.getAttribute("userEmail");
@@ -84,7 +84,7 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
 
         if (StringUtil.nullToString(isLogin, "").equals("1")) {
             if (modelAndView == null) {
-                log.info("#### modelandview 가 널임 ");
+                log.debug("#### modelandview 가 널임 ");
             } else {
                 modelAndView.addObject("isLogin", isLogin);
                 modelAndView.addObject("userEmail", userEmail);
@@ -100,7 +100,7 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        log.info("#### interceptor afterCompletion ");
+        log.debug("#### interceptor afterCompletion ");
     }
 
 

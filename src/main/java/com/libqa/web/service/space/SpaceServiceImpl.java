@@ -88,7 +88,7 @@ public class SpaceServiceImpl implements SpaceService {
 		if(keyword.getDeleteKeywords() != null){
 			deleteKeywordArrays = keyword.getDeleteKeywords().split(",");
 		}
-		log.info(" keywordArrays : {}", keywordArrays.length);
+		log.debug(" keywordArrays : {}", keywordArrays.length);
 		if (keywordArrays.length > 0) {
 			keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordType.SPACE, result.getSpaceId());
 		}

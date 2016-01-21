@@ -85,9 +85,9 @@ public class CommonController {
         // 이미지 파일일 경우 ContentType 검사
         FileUtil.checkImageUpload(uploadfile, viewType);
 
-        log.info("#### request ####");
-        log.info("# request getServletContext().getRealPath = {}", request.getServletContext().getRealPath(FileUtil.SEPARATOR));
-        log.info("# request getServletPath = {} ", request.getServletPath());
+        log.debug("#### request ####");
+        log.debug("# request getServletContext().getRealPath = {}", request.getServletContext().getRealPath(FileUtil.SEPARATOR));
+        log.debug("# request getServletPath = {} ", request.getServletPath());
 
         try {
             // temp/userId/yyyyMMdd/ 에 일단 저장 후 차후 userId/yyyyMMdd/파일명 으로 이동 후 삭제해야 한다.
@@ -116,8 +116,8 @@ public class CommonController {
             // 파일 업로드 스트림
             FileUtil.fileUpload(uploadfile, filePath);
 
-            log.info("####### FILE SAVE INFO ########");
-            log.info("fileDto = {}", fileDto);
+            log.debug("####### FILE SAVE INFO ########");
+            log.debug("fileDto = {}", fileDto);
             return ResponseData.createSuccessResult(fileDto);
         } catch (Exception e) {
             log.error("# File Upload Error : {}", e);
@@ -144,9 +144,9 @@ public class CommonController {
         // 이미지 파일일 경우 ContentType 검사
         FileUtil.checkImageUpload(uploadfile, viewType);
 
-        log.info("#### request ####");
-        log.info("# request getServletContext().getRealPath = {}", request.getServletContext().getRealPath(FileUtil.SEPARATOR));
-        log.info("# request getServletPath = {} ", request.getServletPath());
+        log.debug("#### request ####");
+        log.debug("# request getServletContext().getRealPath = {}", request.getServletContext().getRealPath(FileUtil.SEPARATOR));
+        log.debug("# request getServletPath = {} ", request.getServletPath());
 
         try {
             // /resource/profile/userId/yyyyMMdd/ 에 일단 저장 후 차후 userId/파일명 으로 이동 후 삭제해야 한다.
@@ -199,8 +199,8 @@ public class CommonController {
 
             fileDto = createThumbFile(orgFile, thumbFile, fileDto, localDir, saveThumbFileName);
 
-            log.info("####### FILE SAVE INFO ########");
-            log.info("fileDto = {}", fileDto);
+            log.debug("####### FILE SAVE INFO ########");
+            log.debug("fileDto = {}", fileDto);
             return ResponseData.createSuccessResult(fileDto);
         } catch (Exception e) {
             log.error("# File Upload Error : {}", e);

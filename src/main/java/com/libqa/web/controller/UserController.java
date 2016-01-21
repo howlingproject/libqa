@@ -45,9 +45,9 @@ public class UserController {
         ResponseData<User> responseData = null;
         String targetUrl = returnUrl(request);
 
-        log.info("/login = {}", targetUrl);
-        log.info("# userEmail = {}", loginUser.getUserEmail());
-        log.info("# userPass = {}", new BCryptPasswordEncoder().encode(loginUser.getUserPass()));
+        log.debug("/login = {}", targetUrl);
+        log.debug("# userEmail = {}", loginUser.getUserEmail());
+        log.debug("# userPass = {}", new BCryptPasswordEncoder().encode(loginUser.getUserPass()));
 
         User user = userService.findByEmail(loginUser.getUserEmail());
         if (user == null) {
@@ -57,8 +57,8 @@ public class UserController {
 
         boolean isUser = encoder.matches(loginUser.getUserPass(), user.getUserPass());
 
-        log.info("### isUser = {} ", isUser);
-        log.info("### user = {} ", user);
+        log.debug("### isUser = {} ", isUser);
+        log.debug("### user = {} ", user);
 
         if (!isUser) {
             responseData = ResponseData.createFailResult(user);
@@ -67,7 +67,7 @@ public class UserController {
             responseData = ResponseData.createSuccessResult(user);
         }
 
-        log.info("### responseData = {} ", responseData);
+        log.debug("### responseData = {} ", responseData);
         return responseData;
     }
     */
@@ -80,9 +80,9 @@ public class UserController {
     @RequestMapping("/loginPage")
     public ModelAndView loginPage(HttpServletRequest request) {
 
-        log.info("# loginPage request.get = {}", request.getAttribute("isLogin"));
-        log.info("# loginPage request.get = {}", request.getAttribute("userEmail"));
-        log.info("# loginPage request.get = {}", request.getAttribute("userRole"));
+        log.debug("# loginPage request.get = {}", request.getAttribute("isLogin"));
+        log.debug("# loginPage request.get = {}", request.getAttribute("userEmail"));
+        log.debug("# loginPage request.get = {}", request.getAttribute("userRole"));
         String returnUrl = RequestUtil.refererUrl(request, "/index");
 
         // 이전 페이지 결정 (로그인 및 가입일 경우 index로 이동)
@@ -95,7 +95,7 @@ public class UserController {
         mav.addObject("returnUrl", returnUrl);
         mav.addObject("isLogin", request.getAttribute("isLogin"));
 
-        log.info("### 로그인 정보 페이지로 이동");
+        log.debug("### 로그인 정보 페이지로 이동");
         return mav;
     }
 
@@ -135,7 +135,7 @@ public class UserController {
         User user = loggedUser.get();
 
         if (user == null || user.isGuest()) {
-            log.info("# 로그인 사용자 정보가 존재하지 않습니다.");
+            log.debug("# 로그인 사용자 정보가 존재하지 않습니다.");
             return sendAccessDenied();
         }
 
@@ -167,8 +167,8 @@ public class UserController {
     @RequestMapping(value = "/user/updateProfile", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<User> updateProfile(@ModelAttribute User user, @ModelAttribute Keyword keyword) throws IllegalAccessException {
-        log.info("### user = {}", user);
-        log.info("### keyword = {}", keyword);
+        log.debug("### user = {}", user);
+        log.debug("### keyword = {}", keyword);
         User result = userService.updateUserProfileAndKeyword(user, keyword);
         return ResponseData.createSuccessResult(result);
     }
@@ -181,18 +181,18 @@ public class UserController {
                                          @RequestParam String loginUserPass,
                                          @RequestParam String loginType, // Social Login type
                                          @RequestParam String targetUrl) {
-        log.info("# userEmail = {}", loginUserMail);
-        log.info("# userNick = {}", loginUserNick);
-        log.info("# userPass = {}", loginUserPass);
-        log.info("# loginType = {}", loginType);
+        log.debug("# userEmail = {}", loginUserMail);
+        log.debug("# userNick = {}", loginUserNick);
+        log.debug("# userPass = {}", loginUserPass);
+        log.debug("# loginType = {}", loginType);
         ResponseData<User> resultData = null;
         User user = new User();
         try {
             User duplicateEmail = userService.findByEmail(loginUserMail);   // 이메일 중복 체크
             User duplicateNick = userService.findByNick(loginUserNick);      // 닉네임 중복 체크
 
-            log.info("## duplicateEmail = {}", duplicateEmail);
-            log.info("## duplicateNick = {}", duplicateNick);
+            log.debug("## duplicateEmail = {}", duplicateEmail);
+            log.debug("## duplicateNick = {}", duplicateNick);
 
             if (duplicateEmail == null && duplicateNick == null) {
                 user = userService.createUser(loginUserMail, loginUserNick, loginUserPass, loginType);

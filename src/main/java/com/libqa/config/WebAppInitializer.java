@@ -19,7 +19,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        log.info("##### WebAppInitializer onStartup #####");
+        log.debug("##### WebAppInitializer onStartup #####");
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
         ctx.register(WebMvcConfiguration.class);
         ctx.setServletContext(servletContext);

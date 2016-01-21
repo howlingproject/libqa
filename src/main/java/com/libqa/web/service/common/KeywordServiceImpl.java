@@ -76,13 +76,13 @@ public class KeywordServiceImpl implements KeywordService {
 
 		try {
 			for (int i = 0; i < deleteKeywordParams.length; i++) {
-				log.info("@ param : {}", deleteKeywordParams[i]);
+				log.debug("@ param : {}", deleteKeywordParams[i]);
 				String keywordName = deleteKeyword(deleteKeywordParams[i]);
 				deleteKeywordList(keywordName, keywordType);
 			}
 
 			for (int i = 0; i < keywordParams.length; i++) {
-				log.info("@ param : {}", keywordParams[i]);
+				log.debug("@ param : {}", keywordParams[i]);
 				saveKeyword(keywordParams[i], keywordType, entityId);
 				saveKeywordList(keywordParams[i], keywordType);
 			}

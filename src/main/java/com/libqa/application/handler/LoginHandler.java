@@ -52,7 +52,7 @@ public class LoginHandler implements AuthenticationSuccessHandler {
         ObjectMapper om = new ObjectMapper();
 
         Map<String, Object> map = new HashMap<String, Object>();
-        log.info("### return URL = {}", returnUrl);
+        log.debug("### return URL = {}", returnUrl);
         map.put("status", true);
         map.put("returnUrl", returnUrl);
 

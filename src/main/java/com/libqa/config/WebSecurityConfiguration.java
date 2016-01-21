@@ -49,7 +49,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable();
-        log.info("## configure httpSecurity = {}", httpSecurity);
+        log.debug("## configure httpSecurity = {}", httpSecurity);
 
         httpSecurity
                 .authorizeRequests()
@@ -77,7 +77,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationSuccessHandler loginSuccessHandler() {
-        log.info("#### login Success handler #####");
+        log.debug("#### login Success handler #####");
         return new LoginHandler();
     }
 

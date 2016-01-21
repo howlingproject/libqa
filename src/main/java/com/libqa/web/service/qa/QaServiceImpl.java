@@ -152,8 +152,8 @@ public class QaServiceImpl implements QaService {
             if(deleteKeywords != null){
                 deleteKeywordArrays = deleteKeywords.split(",");
             }
-            log.info(" keywordArrays : {}", keywordArrays.length);
-            log.info(" deleteKeywordArrays : {}", deleteKeywordArrays.length);
+            log.debug(" keywordArrays : {}", keywordArrays.length);
+            log.debug(" deleteKeywordArrays : {}", deleteKeywordArrays.length);
             if (keywordArrays.length > 0 || deleteKeywordArrays.length > 0) {
                 keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordType.QA, qaId);
             }

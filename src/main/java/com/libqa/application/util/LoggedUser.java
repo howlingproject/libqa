@@ -25,8 +25,8 @@ public class LoggedUser {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-        log.info("### userEmail  = {}", userEmail);
-        log.info("### isInvalidUser(userEmail)  = {}", isInvalidUser(userEmail));
+        log.debug("### userEmail  = {}", userEmail);
+        log.debug("### isInvalidUser(userEmail)  = {}", isInvalidUser(userEmail));
 
         if (isInvalidUser(userEmail)) {
             return User.createGuest();

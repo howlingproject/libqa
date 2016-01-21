@@ -39,7 +39,7 @@ public class RequestUtil {
         int subPoint = returnUrl.lastIndexOf("/");
         String subUrl = returnUrl.substring(subPoint, returnUrl.length());
 
-        log.info("###################### subUrl : {}", subUrl);
+        log.debug("###################### subUrl : {}", subUrl);
 
 
         if (subUrl.equals("/") || subUrl.equals("/loginPage") || subUrl.equals("/signUp")) {
@@ -62,7 +62,7 @@ public class RequestUtil {
 
             if (values != null) {
                 for (int i = 0; i < values.length; i++) {
-                    log.info("** LoginHandler " + name + "( " + i + " ) " + values[i]);
+                    log.debug("** LoginHandler " + name + "( " + i + " ) " + values[i]);
                 }
             }
         }
