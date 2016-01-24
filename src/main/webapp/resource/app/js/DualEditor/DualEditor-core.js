@@ -246,16 +246,16 @@ function getMarkupEditMiniHtml(width, height){
     "<div class='dualEditor-nav' role='tabpanel' style=\""+styleWidth+"\">" +
     " 	<!-- Nav tabs --> 	" +
     " 	<ul class='nav nav-tabs ' role='tablist'>" +
-    " 	  <li role='presentation' class='active'><a href='#write' aria-controls='write' role='tab' data-toggle='tab'>Write</a></li>" +
-    " 	  <li role='presentation'><a href='#preview' aria-controls='preview' role='tab' data-toggle='tab'>Preview</a></li>" +
+    " 	  <li role='presentation' class='active'><a href='#mini-write' aria-controls='write' role='tab' data-toggle='tab'>Write</a></li>" +
+    " 	  <li role='presentation'><a href='#mini-preview' aria-controls='preview' role='tab' data-toggle='tab'>Preview</a></li>" +
     " 	</ul>" +
     " 	</div>" +
     " 	 	<!-- Tab panes --> 	" +
     "<div class='tab-content dualEditor-nav' style=\""+styleWidth+"\">" +
-    " 	  <div role='tabpanel' class='tab-pane preview' id='preview'>" +
+    " 	  <div role='tabpanel' class='tab-pane preview' id='mini-preview'>" +
     " 		<div id='wikimaincol' class='dualEditor-preview' style=\""+styleHeight+"\"></div>" +
     " 	  </div>" +
-    " 	  <div role='tabpanel' class='tab-pane active' id='write'>" +
+    " 	  <div role='tabpanel' class='tab-pane write active' id='mini-write'>" +
     " 	    <table class='sonDualEditor dualEditor-main' style=\""+styleHeight+"\">" +
     " 		    <thead>" +
     " 				<tr>" +
@@ -311,5 +311,5 @@ function getMarkupEditMiniHtml(width, height){
     " 	  </div>" +
     " 	</div>";
 
-
+    return html;
 }
