@@ -1,9 +1,6 @@
 package com.libqa.config;
 
-import com.libqa.application.enums.Role;
 import com.libqa.application.util.RequestUtil;
-import com.libqa.application.util.StringUtil;
-import com.libqa.web.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +33,12 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        String login = "0";
-        String role = "";
+        boolean isLogin = false;
+        String userRole = "";
         String userEmail = "";
 
-
         log.debug("#### interceptor authentication : {} ", authentication);
-        if (authentication == null) {
-            login = "0";
-        } else {
+        if (authentication != null) {
             // modelAndView null 체크 해야함
             userEmail = authentication.getName();
 
@@ -56,18 +50,18 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
                 log.debug("@Interceptor authentication.getDetails().toString() = {}", authentication.getDetails().toString());
                 log.debug("@Interceptor authentication.getDetails().getName() = {}", authentication.getName());
                 log.debug("@Interceptor authentication.gerRole() = {}", grantedAuths.get(0));
-                login = "1";
-                role = String.valueOf(grantedAuths.get(0));
+
+                isLogin = true;
+                userRole = String.valueOf(grantedAuths.get(0));
 
             }
             log.debug("### LoginUserInterceptor userEmail  = {}", userEmail);
             log.debug("### LoginUserInterceptor isInvalidUser(userEmail)  = {}", isInvalidUser(userEmail));
-
         }
 
-        request.setAttribute("isLogin", login);
+        request.setAttribute("isLogin", isLogin);
         request.setAttribute("userEmail", userEmail);
-        request.setAttribute("userRole", role);
+        request.setAttribute("userRole", userRole);
 
         return true;
     }
@@ -78,24 +72,15 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
         log.debug("# postHandle  request.get userEmail = {}", request.getAttribute("userEmail"));
         log.debug("# postHandle  request.get userRole = {}", request.getAttribute("userRole"));
 
-        String isLogin = (String) request.getAttribute("isLogin");
+        Boolean isLogin = (Boolean) request.getAttribute("isLogin");
         String userEmail = (String) request.getAttribute("userEmail");
+        String userRole = (String) request.getAttribute("userRole");
 
-
-        if (StringUtil.nullToString(isLogin, "").equals("1")) {
-            if (modelAndView == null) {
-                log.debug("#### modelandview 가 널임 ");
-            } else {
-                modelAndView.addObject("isLogin", isLogin);
-                modelAndView.addObject("userEmail", userEmail);
-                modelAndView.addObject("userRole", request.getAttribute("userRole"));
-            }
+        if(modelAndView != null) {
+            modelAndView.addObject("userEmail", userEmail);
+            modelAndView.addObject("userRole", userRole);
+            modelAndView.addObject("isLogin", isLogin);
         }
-
-    }
-
-    private boolean isInvalidUser(String userEmail) {
-        return StringUtils.isBlank(userEmail) || "anonymousUser".equals(userEmail);
     }
 
     @Override
@@ -103,5 +88,7 @@ public class LoginUserHandlerInterceptor implements HandlerInterceptor {
         log.debug("#### interceptor afterCompletion ");
     }
 
-
+    private boolean isInvalidUser(String userEmail) {
+        return StringUtils.isBlank(userEmail) || "anonymousUser".equals(userEmail);
+    }
 }

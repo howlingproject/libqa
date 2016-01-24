@@ -79,7 +79,6 @@ public class UserController {
      */
     @RequestMapping("/loginPage")
     public ModelAndView loginPage(HttpServletRequest request) {
-
         log.debug("# loginPage request.get = {}", request.getAttribute("isLogin"));
         log.debug("# loginPage request.get = {}", request.getAttribute("userEmail"));
         log.debug("# loginPage request.get = {}", request.getAttribute("userRole"));
@@ -93,7 +92,6 @@ public class UserController {
 
         // 실제 로그인 페이지가 아니라 권한으로 강제 이동 된 페이지에서는 returnUrl을 세팅해서 내려주고, hbs에서 강제로 url 이동 처리함.
         mav.addObject("returnUrl", returnUrl);
-        mav.addObject("isLogin", request.getAttribute("isLogin"));
 
         log.debug("### 로그인 정보 페이지로 이동");
         return mav;

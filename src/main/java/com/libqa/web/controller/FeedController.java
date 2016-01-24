@@ -51,7 +51,7 @@ public class FeedController {
     public ModelAndView view(@PathVariable Integer feedId, ModelAndView mav) {
         Feed feed = feedService.findByFeedId(feedId);
         mav.setViewName("feed/view");
-        mav.addObject("displayFeed", displayFeedBuilder.build(feed));
+        mav.addObject("displayFeed", displayFeedBuilder.build(feed, feed.getFeedReplies()));
         return mav;
     }
 

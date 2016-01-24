@@ -1,31 +1,22 @@
 {{# partial "header" }}
 <header class="navbar navbar-default" id="header">
+    <div class="navbar-header">
+        <button data-target=".bs-navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">LibQA</a>
+    </div>
 
-
-        <div class="navbar-header">
-            <button data-target=".bs-navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/index">LibQA</a>
-        </div>
-
-        <nav role="navigation" class="navbar-collapse bs-navbar-collapse collapse">
-            <ul class="nav navbar-nav navi-menu">
-                <li>
-                    <a href="/feed">Feeds</a>
-                </li>
-                <li>
-                    <a href="/qa/main">Q&amp;A</a>
-                </li>
-                <li>
-                    <a href="/space/main">Space</a>
-                </li>
-                <li>
-                    <a href="/wiki/main">Wiki</a>
-                </li>
+    <nav role="navigation" class="navbar-collapse bs-navbar-collapse collapse">
+        <ul class="nav navbar-nav navi-menu">
+            <li><a href="/feed">Feeds</a></li>
+            <li><a href="/qa/main">Q&amp;A</a></li>
+            <li><a href="/space/main">Space</a></li>
+            <li><a href="/wiki/main">Wiki</a></li>
+            {{#if isLogin}}
                 <li class="dropdown">
                     <a href="#" id="dropdownMenu1" class="dropdown-toggle" data-toggle="dropdown">My List</a>
                     <ul class="dropdown-menu text-left">
@@ -43,37 +34,32 @@
                         </li>
                     </ul>
                 </li>
-                {{#if userRole}}
-                    {{#compareTo userRole 'ADMIN'}}
-                        <li>
-                            <a href="/admin">Admin ({{userRole}})</a>
-                        </li>
-                    {{/compareTo}}
-                {{/if}}
-            </ul>
-            <ul class="nav navbar-nav navbar-right navi-info">
-                <li class="dropdown">
-                    <a aria-expanded="true" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-2x"></i></a>
-                    <ul class="dropdown-menu">
-                        {{#if isLogin}}
-                            {{#compareTo isLogin '1'}}
-                                {{> template/login}}
-                            {{/compareTo}}
-                            {{#compareTo isLogin '0'}}
-                                {{> template/guest}}
-                            {{/compareTo}}
-                        {{^}}
-                            {{> template/guest}}
-                        {{/if}}
-                    </ul>
-                </li>
-                <li class="messenger notification on"><a href="#"><i class="fa fa-comments fa-2x"></i></a></li>
-                <!-- 공간 트리메뉴 노출 여부 -->
-                <li class="messenger notification"><a href="#"><i class="fa fa-outdent fa-2x"></i></a></li>
-                <li class="messenger notification"><a href="#"><i class="fa fa-indent fa-2x"></i></a></li>
-            </ul>
-        </nav>
-
+            {{/if}}
+            {{#if userRole}}
+                {{#compareTo userRole 'ADMIN'}}
+                    <li>
+                        <a href="/admin">Admin ({{userRole}})</a>
+                    </li>
+                {{/compareTo}}
+            {{/if}}
+        </ul>
+        <ul class="nav navbar-nav navbar-right navi-info">
+            <li class="dropdown">
+                <a aria-expanded="true" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-2x"></i></a>
+                <ul class="dropdown-menu">
+                    {{#if isLogin}}
+                        {{> template/login}}
+                    {{^}}
+                        {{> template/guest}}
+                    {{/if}}
+                </ul>
+            </li>
+            <li class="messenger notification on"><a href="#"><i class="fa fa-comments fa-2x"></i></a></li>
+            <!-- 공간 트리메뉴 노출 여부 -->
+            <li class="messenger notification"><a href="#"><i class="fa fa-outdent fa-2x"></i></a></li>
+            <li class="messenger notification"><a href="#"><i class="fa fa-indent fa-2x"></i></a></li>
+        </ul>
+    </nav>
 </header>
 
 <div class="modal fade" style="padding-top:100px" id="loginLayer" tabindex="-1" role="dialog" aria-labelledby="Sign in" aria-hidden="true">

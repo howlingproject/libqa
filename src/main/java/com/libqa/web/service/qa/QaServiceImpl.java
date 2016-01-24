@@ -138,6 +138,16 @@ public class QaServiceImpl implements QaService {
         return qaRepository.findByIsDeletedFalse(pageRequest);
     }
 
+    @Override
+    public Integer getQaTotalCount() {
+        return qaRepository.countByIsDeletedFalse();
+    }
+
+    @Override
+    public Integer getQaNotReplyedCount() {
+        return qaRepository.countByIsReplyedFalseAndIsDeletedFalse();
+    }
+
     void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
         qaFileService.moveQaFilesToProductAndSave(qaId, qaFiles);
     }
