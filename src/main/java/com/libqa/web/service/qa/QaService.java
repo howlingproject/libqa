@@ -33,4 +33,8 @@ public interface QaService {
     QaContent view(Integer qaId);
 
     List<QaContent> searchRecentlyQaContentsByPageSize(Integer pageSize);
+
+    Integer getQaTotalCount();
+
+    Integer getQaNotReplyedCount();
 }

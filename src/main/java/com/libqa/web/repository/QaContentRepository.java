@@ -24,4 +24,8 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     List<QaContent> findByQaIdInAndIsDeletedOrderByQaIdDesc(List<Integer> qaIds, boolean isDeleted);
 
     List<QaContent> findByIsDeletedFalse(Pageable pageable);
+
+    Integer countByIsDeletedFalse();
+
+    Integer countByIsReplyedFalseAndIsDeletedFalse();
 }

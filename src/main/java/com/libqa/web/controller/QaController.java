@@ -70,7 +70,11 @@ public class QaController {
 
     @RequestMapping("/qa/main")
     public ModelAndView main(Model model){
+	    Integer qaTotalCount = qaService.getQaTotalCount();
+	    Integer qaNotReplyedCount = qaService.getQaNotReplyedCount();
         ModelAndView mav = new ModelAndView("qa/main");
+	    mav.addObject("qaTotalCount", qaTotalCount);
+	    mav.addObject("qaNotReplyedCount", qaNotReplyedCount);
         return mav;
     }
 
