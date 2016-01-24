@@ -1,6 +1,8 @@
 package com.libqa.web.controller;
 
+import com.libqa.web.service.qa.QaService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MyListController {
 
+    @Autowired
+    QaService qaService;
+
     @RequestMapping("/my/feed")
     public ModelAndView myFeed(Model model) {
         ModelAndView mav = new ModelAndView("/my/feedList");
@@ -23,7 +28,11 @@ public class MyListController {
 
     @RequestMapping("/my/qa")
     public ModelAndView myQa(Model model) {
+        Integer qaTotalCount = qaService.getQaTotalCount();
+        Integer qaNotReplyedCount = qaService.getQaNotReplyedCount();
         ModelAndView mav = new ModelAndView("/my/qaList");
+        mav.addObject("qaTotalCount", qaTotalCount);
+        mav.addObject("qaNotReplyedCount", qaNotReplyedCount);
         return mav;
     }
 

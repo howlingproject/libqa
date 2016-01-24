@@ -2,6 +2,7 @@ package com.libqa.web.service.qa;
 
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaReply;
+import com.libqa.web.domain.User;
 import com.libqa.web.view.qa.DisplayQaReply;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * @author yong
  */
 public interface QaReplyService {
-    QaReply saveWithQaContent(QaReply qaReply);
+    QaReply saveWithQaContent(QaReply qaReply, User user);
 
     QaReply saveVoteUp(QaReply paramQaReply, Integer userId);
 

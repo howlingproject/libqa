@@ -41,19 +41,24 @@ public class QaReplyServiceImpl implements QaReplyService {
 
     @Override
     @Transactional
-    public QaReply saveWithQaContent(QaReply paramQaReply) {
+    public QaReply saveWithQaContent(QaReply paramQaReply, User user) {
         boolean isDeleted = false;
+        boolean isReplyed = true;
+
         List<QaReply> parentQaReplyList = qaReplyRepository.findAllByQaIdAndIsDeletedOrderByOrderIdxDesc(paramQaReply.getQaId(), isDeleted);
         QaReply parentQaReply = Iterables.getFirst(parentQaReplyList, null);
         Integer orderIdx = parentQaReply == null ? 1 : parentQaReply.getOrderIdx() + 1;
+        paramQaReply.setInsertDate(new Date());
+        paramQaReply.setInsertUserId(user.getUserId());
+        paramQaReply.setUserId(user.getUserId());
+        paramQaReply.setUserNick(user.getUserNick());
         paramQaReply.setOrderIdx(orderIdx);
         QaReply newQaReply = qaReplyRepository.save(paramQaReply);
 
-        // TODO List 차후 로그인으로 변경
         newQaReply.setParentsId(newQaReply.getReplyId());
         newQaReply.setUpdateDate(new Date());
-        newQaReply.setUpdateUserId(1);
-        qaService.saveIsReplyed(paramQaReply.getQaId(), true);
+        newQaReply.setUpdateUserId(user.getUserId());
+        qaService.saveIsReplyed(paramQaReply.getQaId(), user, isReplyed);
         return newQaReply;
     }
 

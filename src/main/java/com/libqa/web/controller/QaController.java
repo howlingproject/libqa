@@ -197,14 +197,8 @@ public class QaController {
     @RequestMapping(value = "/qa/saveReply", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaReply> saveReply(QaReply qaReply) {
-
-        // TODO List 차후 로그인으로 변경
-        qaReply.setInsertDate(new Date());
-        qaReply.setInsertUserId(1);
-        qaReply.setUserId(1);
-        qaReply.setUserNick("용퓌");
-
-        QaReply newQaReply = qaReplyService.saveWithQaContent(qaReply);
+	    User user = loggedUser.get();
+        QaReply newQaReply = qaReplyService.saveWithQaContent(qaReply, user);
         return createSuccessResult(newQaReply);
     }
 

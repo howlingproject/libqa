@@ -79,14 +79,12 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public void saveIsReplyed(Integer qaId, boolean b) {
+    public void saveIsReplyed(Integer qaId, User user, boolean isReplyed) {
         QaContent targetQaContent = findByQaId(qaId, false);
-//        entityManager.getTransaction().begin();
-        // TODO List 차후 로그인으로 변경
-        targetQaContent.setReplyed(b);
-        targetQaContent.setUpdateUserId(1);
+
+        targetQaContent.setReplyed(isReplyed);
+        targetQaContent.setUpdateUserId(user.getUserId());
         targetQaContent.setUpdateDate(new Date());
-        qaRepository.flush();
     }
 
     @Override

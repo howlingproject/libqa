@@ -7,122 +7,142 @@
 
 {{# partial "content" }}
 
-<div class="container-fluid">
-    <div class="col-sm-12 top-buffer" style="padding-bottom: 20px">
-    <!-- keyword -->
-        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-
-            <div class="nav-tabs-header">분류키워드</div>
-            <div class="media qna-item">
-                <ul class="nav nav-pills nav-stacked cat-keyword">
-                    <li class="active"><a href="#">Java(120/789)</a></li>
-                    <li><a href="#">Spring(120/539)</a></li>
-                    <li><a href="#">Groovy(100/299)</a></li>
-                    <li><a href="#">Grails(3/300)</a></li>
-                    <li><a href="#">Gradle(282/402)</a></li>
-                    <li><a href="#">Tomcat(282/402)</a></li>
-                    <li><a href="#">Apache(282/402)</a></li>
-                    <li><a href="#">Javascript(282/402)</a></li>
-                    <li><a href="#">NodeJS(282/402)</a></li>
-                    <li><a href="#">MySQL(282/402)</a></li>
-                    <li><a href="#">MariaDB(282/402)</a></li>
-                </ul>
+    <!-- contents -->
+    <!-- qna top contents -->
+    <div class="container qna-top-search">
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search">
             </div>
+            <a href="#" class="form-control btn btn-primary">검색</a>
+        </form>
+        <div class="btn-group pull-right">
+            <a href="#" class="btn btn-primary">총 질문({{qaTotalCount}})</a>
+            <a href="#" class="btn btn-primary">답변을 기다리는 Q&A({{qaNotReplyedCount}})</a>
+            {{#if isLogin}}
+            <a href="/qa" class="btn btn-primary">Q&A</a>
+            <a href="/qa/form" class="btn btn-primary">질문하기</a>
+            {{/if}}
         </div>
+    </div>
+    <!--// qna top contents -->
 
+    <!-- 메뉴 -->
+    <div class="container contents-container top-buffer">
+        <!-- keyword -->
+        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <div class="nav-tabs-header">분류키워드</div>
+            <!-- 분류키워드 list start -->
+            <div id="categorizeKeywordListArea"></div>
+            <!-- 분류키워드 list end -->
+        </div>
+        <!--// lnb -->
 
-        <div class="col-md-10">
-
+        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
             <!-- 내가 작성한 Q&A -->
-            <div class="nav-tabs-header">내가 작성한 Q&amp;A</div>
+            <div class="nav-tabs-header">내가 작성한 Q&A</div>
+
+            <!-- 내가 작성한 Q&A list start -->
+            <div id="myWriteQaListArea"></div>
+            <!-- 내가 작성한 Q&A list end -->
             <div class="my-qna-item">
                 <a class="pull-left" href="#">
                     <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="../images/avatar.png">
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png"/>
                     </div>
                 </a>
+
                 <div class="row">
                     <div class="col-xs-9 col-sm-9 col-md-9 col-lg-10">
                         <div class="media-body">
                             <div class="media-heading">
                                 <span>2014-04-05 12:12</span>
-                                <span class="my-qna-writer">
-                                    <div class="user-profile-xs">
-                                        <span class="nickname">Yion</span>
-                                        <img alt="avatar" class="profile-image" src="../images/avatar.png">
-                                    </div>
-                                </span>
+                            <span class="my-qna-writer">
+                                <div class="user-profile-xs">
+                                    <span class="nickname">Yion</span>
+                                </div>
+                            </span>
+
                                 <div class="pull-right">
                                     <span class="label label-primary">Spring</span>
                                     <span class="label label-success">JAVA</span>
                                 </div>
+
                                 <div class="qna-title">
                                     <span>Spring 정복하기!</span>
                                 </div>
+
                                 <div>
-                                    Spring 서버사이드 공간 &gt; Spring AOP 위키에 질문을 올렸습니다.- 내용이 잘 이해가...
-                                    Spring 서버사이드 공간 &gt; Spring AOP 위키에 질문을 올렸습니다.- 내용이 잘 이해가...
+                                    Spring 서버사이드 공간 > Spring AOP 위키에 질문을 올렸습니다.- 내용이 잘 이해가...
+                                    Spring 서버사이드 공간 > Spring AOP 위키에 질문을 올렸습니다.- 내용이 잘 이해가...
                                     <span class="badge">6</span>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 my-qna-rating pull-right">
                         <button class="btn btn-sm btn-default btn-sm-fixed pull-right">조회 33</button>
                         <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 1</button>
                     </div>
                 </div>
             </div>
-
+            <!--// 내가 작성한 Q&A -->
 
             <div class="top-buffer">&nbsp;</div>
 
             <!-- 내가 답변한 Q&A -->
-            <div class="nav-tabs-header">내가 답변한 Q&amp;A</div>
+            <div class="nav-tabs-header">내가 답변한 Q&A</div>
+
+            <!-- 내가 답변한 Q&A list start -->
+            <div id="myReplyQaListArea"></div>
+            <!-- 내가  답변한 Q&A list end -->
             <div class="my-qna-item">
                 <a class="pull-left" href="#">
                     <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="../images/avatar.png">
+                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png"/>
                     </div>
                 </a>
+
                 <div class="row">
                     <div class="col-xs-9 col-sm-9 col-md-9 col-lg-10">
                         <div class="media-body">
                             <div class="media-heading">
                                 <span class="media">2014-04-05 12:12</span>
-                                <span class="my-qna-writer">
-                                    <div class="user-profile-xs">
-                                        <span class="nickname">Yion</span>
-                                        <img alt="avatar" class="profile-image" src="../images/avatar.png">
-                                    </div>
-                                </span>
+                            <span class="my-qna-writer">
+                                <div class="user-profile-xs">
+                                    <span class="nickname">Yion</span>
+                                </div>
+                            </span>
+
                                 <div class="pull-right">
                                     <span class="label label-primary">Spring</span>
                                     <span class="label label-success">JAVA</span>
                                 </div>
+
                                 <div class="qna-title">
                                     <span>Spring 정복하기!</span>
                                 </div>
+
                                 <div>
-                                    Spring 서버사이드 공간 &gt; Spring AOP 위키에 질문을 올렸습니다.- 내용이 잘 이해가...
-                                    Spring 서버사이드 공간 &gt; Spring AOP 위키에 질문을 올렸습니다.- 내용이 잘 이해가...
+                                    Spring 서버사이드 공간 > Spring AOP 위키에 질문을 올렸습니다.- 내용이 잘 이해가...
+                                    Spring 서버사이드 공간 > Spring AOP 위키에 질문을 올렸습니다.- 내용이 잘 이해가...
                                     <span class="badge">6</span>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 my-qna-rating pull-right">
                         <button class="btn btn-sm btn-default btn-sm-fixed pull-right">조회 33</button>
                         <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 1</button>
                     </div>
                 </div>
             </div>
-            <!--// 내가 답변한 Q&A -->
+            <!-- 내가 답변한 Q&A -->
         </div>
     </div>
-</div>
 
-<!--// contents -->
 {{/partial}}
 
 {{#partial "script-page"}}

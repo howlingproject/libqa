@@ -22,7 +22,7 @@ public interface QaService {
 
     boolean deleteWithKeyword(Integer qaId);
 
-    void saveIsReplyed(Integer qaId, boolean b);
+    void saveIsReplyed(Integer qaId, User user, boolean isReplyed);
 
     QaContent updateWithKeyword(QaContent originQaContent, QaContent requestQaContent, QaFile requestQaFiles, Keyword requestKeywords, User user);
 
