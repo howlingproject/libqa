@@ -30,6 +30,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.libqa.application.framework.ResponseData.createFailResult;
+import static com.libqa.application.framework.ResponseData.createSuccessResult;
+
 /**
  * Created by songanji on 2015. 3. 1..
  */
@@ -167,20 +170,28 @@ public class WikiController {
     }
 
     @RequestMapping(value = "/wiki/delete/{wikiId}", method = RequestMethod.GET)
-    public ModelAndView wikiDelete(@PathVariable Integer wikiId) {
+    public ResponseData wikiDelete(@PathVariable Integer wikiId) {
         log.debug("# wikiId : {}", wikiId);
 
         Wiki wiki = wikiService.findById(wikiId);
         User user = loggedUser.get();
         int userId = user.getUserId();
-        //위키만든 유저만 삭제가능
-        if( wiki.getUserId() == userId ){
-            wiki.setDeleted(true);
-            wikiService.save(wiki);
+        try {
+            //위키만든 유저만 삭제가능
+            if( wiki.getUserId() == userId ){
+                wiki.setDeleted(true);
+                wikiService.save(wiki);
+                RedirectView rv = new RedirectView("/wiki/main");
+                rv.setExposeModelAttributes(false);
+                new ModelAndView(rv);
+            }else{
+                return createFailResult("위키 생성자만 삭제할 수 있습니다.");
+            }
+        } catch (Exception e) {
+            log.error("delete wiki error.", e);
+            return createFailResult(wiki);
         }
-        RedirectView rv = new RedirectView("/wiki/main");
-        rv.setExposeModelAttributes(false);
-        return new ModelAndView(rv);
+        return createSuccessResult(wiki);
     }
 
     @RequestMapping(value = "/wiki/lock/{wikiId}", method = RequestMethod.GET)
