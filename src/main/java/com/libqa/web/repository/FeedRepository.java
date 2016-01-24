@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface FeedRepository extends JpaRepository<Feed, Integer> {
     List<Feed> findByIsDeletedFalse(Pageable pageable);
-    List<Feed> findByFeedIdLessThanAndIsDeletedFalse(int lastFeedId, Pageable pageable);
+    List<Feed> findByFeedIdLessThanAndIsDeletedFalse(Integer lastFeedId, Pageable pageable);
+    List<Feed> findByUserIdAndIsDeletedFalse(Integer userId, Pageable pageable);
+    List<Feed> findByUserIdAndFeedIdLessThanAndIsDeletedFalse(Integer userId, Integer lastFeedId, Pageable pageable);
     Integer countFeedRepliesByFeedId(Integer feedId);
 }

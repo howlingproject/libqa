@@ -41,7 +41,7 @@ public class FeedService {
      * lastFeedId가 null일 경우 가장 최근의 목록을 반환하게 된다.
      *
      * @param lastFeedId
-     * @return
+     * @return List&lt;Feed&gt;
      */
     public List<Feed> search(Integer lastFeedId) {
         PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
@@ -94,7 +94,7 @@ public class FeedService {
      *
      * @param feedId
      * @param user
-     * @return
+     * @return Feed
      */
     @Transactional
     public Feed like(Integer feedId, User user) {
@@ -115,7 +115,7 @@ public class FeedService {
      *
      * @param feedId
      * @param user
-     * @return
+     * @return Feed
      */
     @Transactional
     public Feed claim(Integer feedId, User user) {
@@ -136,7 +136,7 @@ public class FeedService {
      *
      * @param originFeed
      * @param requestFeed
-     * @return
+     * @return Feed
      */
     @Transactional
     public Feed modify(Feed originFeed, Feed requestFeed) {
@@ -148,7 +148,7 @@ public class FeedService {
      * feedIf로 feed를 조회한다.
      *
      * @param feedId
-     * @return
+     * @return Feed
      */
     public Feed findByFeedId(Integer feedId) {
         return feedRepository.findOne(feedId);
@@ -158,10 +158,27 @@ public class FeedService {
      * pageSize만큼 최신 feed 목록을 조회한다.
      *
      * @param pageSize
-     * @return
+     * @return Feed
      */
     public List<Feed> searchRecentlyFeedsByPageSize(Integer pageSize) {
         return feedRepository.findByIsDeletedFalse(PageUtil.sortPageable(pageSize, DEFAULT_SORT));
+    }
+
+    /**
+     * userId로 feed 목록을 조회한다.
+     *
+     * @param userId
+     * @param lastFeedId
+     * @return List&lt;Feed&gt;
+     */
+    public List<Feed> searchByUserId(Integer userId, Integer lastFeedId) {
+        PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
+
+        Optional<Integer> lastFeedIdOptional = Optional.ofNullable(lastFeedId);
+        if (lastFeedIdOptional.isPresent()) {
+            return feedRepository.findByUserIdAndFeedIdLessThanAndIsDeletedFalse(userId, lastFeedId, pageRequest);
+        }
+        return feedRepository.findByUserIdAndIsDeletedFalse(userId, pageRequest);
     }
 
     private void saveFeedFiles(Feed feed) {

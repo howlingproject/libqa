@@ -24,7 +24,7 @@ public class DisplayFeedBuilder {
     /**
      * feed 목록을 display 용으로 build 한다.
      * @param feeds
-     * @return
+     * @return List&lt;DisplayFeed&gt;
      */
     public List<DisplayFeed> build(List<Feed> feeds) {
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
@@ -39,7 +39,7 @@ public class DisplayFeedBuilder {
     /**
      * feed를 display 용으로 build 한다.
      * @param feed
-     * @return
+     * @return DisplayFeed
      */
     public DisplayFeed build(Feed feed) {
         DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feed);

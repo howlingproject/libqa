@@ -1,32 +1,20 @@
 var Feed = {
-    'init' : function() {
+    'initMain' : function() {
         this.bindSave();
         this.bindFileAttachment();
         this.initFileUploadModal();
         this.loadList();
     },
     'loadList' : function() {
-        this._callList("/feed/list", function(html, itemSize) {
+        FeedList.call("/feed/list", function(html, itemSize) {
             $('#feedList').html(html);
-            FeedPager.init(itemSize);
+            FeedPager.init(itemSize, Feed.moreList);
         });
     },
     'moreList' : function() {
-        this._callList("/feed/list?lastFeedId=" + this.getLastFeedId(), function(html, itemSize) {
+        FeedList.call("/feed/list?lastFeedId=" + FeedList.getLastFeedId(), function(html, itemSize) {
             $('#feedList').append(html);
             FeedPager.loaded(itemSize);
-        });
-    },
-    '_callList' : function(url, resultHandleCallback) {
-        $.get(url, function (response) {
-            if(response.resultCode != 1) {
-                alert(response.comment);
-                return;
-            }
-            var source = $('#feed-list-hbs').html();
-            var template = Handlebars.compile(source);
-            var html = template(response);
-            resultHandleCallback(html, response.data.length);
         });
     },
     'getId': function($target) {
@@ -179,9 +167,6 @@ var Feed = {
                 }).fail(function () {
             alert('Error claim feed');
         });
-    },
-    'getLastFeedId': function() {
-        return $('#feedList li.thread').last().data('feedId');
     }
 };
 
@@ -234,7 +219,7 @@ var FeedReply = {
     },
     'bindSave' : function() {
         var me = this;
-        $('button[name=saveReply]').on('click',function () {
+        $('button[name=saveReply]').off('click').on('click',function () {
             var $frm = $(this).closest('form');
             var $replies = $(this).closest('.thread').find('.feed-replies');
 
@@ -342,10 +327,10 @@ var FeedPager = {
     '$button': $('#feedMoreBtn'),
     'lastFeedId': null,
     'PAGE_SIZE': 5,
-    'init': function(itemSize) {
+    'init': function(itemSize, moreFunction) {
         if(itemSize > 0) {
             this.showBtn();
-            this.bindLoading();
+            this.bindLoading(moreFunction);
         } else {
             this.hideBtn();
         }
@@ -363,11 +348,11 @@ var FeedPager = {
             this.$button.prop('disabled', false).html('more');
         }
     },
-    'bindLoading': function() {
+    'bindLoading': function(moreFunction) {
         var me = this;
         this.$button.on('click', function(){
             me.toggleLoadingText(true);
-            Feed.moreList();
+            moreFunction();
         });
     },
     'loaded': function(itemSize) {
@@ -376,4 +361,45 @@ var FeedPager = {
             this.hideBtn();
         }
     }
+};
+
+var FeedList = {
+    'call' : function(url, resultHandleCallback) {
+        $.get(url, function (response) {
+            if(response.resultCode != 1) {
+                alert(response.comment);
+                return;
+            }
+            var source = $('#feed-list-hbs').html();
+            var template = Handlebars.compile(source);
+            var html = template(response);
+            resultHandleCallback(html, response.data.length);
+        });
+    },
+    'getLastFeedId': function() {
+        return $('#feedList li.thread').last().data('feedId');
+    }
+};
+
+var MyFeed = {
+    'init' : function() {
+        this.loadList();
+    },
+    'loadList' : function() {
+        FeedList.call("/feed/myList", function(html, itemSize) {
+            if(itemSize == 0) {
+                $('#feedList').html("<div class=\"text-center\">작성된 Feed가 없습니다.</div>");
+                return;
+            }
+
+            $('#feedList').html(html);
+            FeedPager.init(itemSize, MyFeed.moreList);
+        });
+    },
+    'moreList' : function() {
+        FeedList.call("/feed/myList?lastFeedId=" + FeedList.getLastFeedId(), function(html, itemSize) {
+            $('#feedList').append(html);
+            FeedPager.loaded(itemSize);
+        });
+    },
 };
