@@ -1,5 +1,5 @@
 var Feed = {
-    'initMain' : function() {
+    'init' : function() {
         this.bindSave();
         this.bindFileAttachment();
         this.initFileUploadModal();
@@ -30,14 +30,7 @@ var Feed = {
             $.post('/feed/save', $frm.serialize())
                 .done(function(response){
                     if(response.resultCode != 1) {
-                        $.alert({
-                            title: '확인',
-                            content: response.comment,
-                            confirmButton: 'OK',
-                            confirmButtonClass: 'btn-primary',
-                            icon: 'fa fa-info',
-                            animation: 'zoom'
-                        });
+                        FeedUtil.alert(response.comment);
                         return;
                     }
 
@@ -77,7 +70,7 @@ var Feed = {
                     $('#fileUploadModal').modal('hide');
                 },
                 error: function () {
-                    alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
+                   FeedUtil.alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
                 }
             });
         });
