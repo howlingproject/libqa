@@ -42,6 +42,10 @@ public class DisplayFeedBuilder {
      * @return DisplayFeed
      */
     public DisplayFeed build(Feed feed) {
+        if(feed == null || feed.isDeleted()) {
+            return DisplayFeed.EMPTY;
+        }
+
         DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feed);
         DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaimBy(feed);
         return build(feed, likedFeedAction, claimedFeedAction);

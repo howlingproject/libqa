@@ -145,7 +145,7 @@ public class FeedService {
     }
 
     /**
-     * feedIf로 feed를 조회한다.
+     * feedId로 feed를 조회한다.
      *
      * @param feedId
      * @return Feed

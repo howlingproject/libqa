@@ -15,6 +15,8 @@ import java.util.List;
 
 @Getter
 public class DisplayFeed {
+    public static final DisplayFeed EMPTY = new DisplayFeed();
+    private boolean isEmpty = false;
     private Integer feedId;
     private String originFeedContent;
     private String feedContent;
@@ -32,6 +34,10 @@ public class DisplayFeed {
     private DisplayFeedAction claimFeedAction;
     @Setter
     private List<DisplayFeedReply> replies;
+
+    private DisplayFeed() {
+        this.isEmpty = true;
+    }
 
     public DisplayFeed(Feed feed, User user, Boolean isWriter) {
         this.feedId = feed.getFeedId();
@@ -62,5 +68,6 @@ public class DisplayFeed {
             }
         }
     }
+
 }
 
