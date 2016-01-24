@@ -398,16 +398,16 @@ var FeedPager = {
 };
 
 var FeedList = {
-    'call' : function(url, resultHandleCallback) {
+    'call' : function(url, resultCallback) {
         $.get(url, function (response) {
             if(response.resultCode != 1) {
-                alert(response.comment);
+                FeedUtil.alert(response.comment);
                 return;
             }
             var source = $('#feed-list-hbs').html();
             var template = Handlebars.compile(source);
             var html = template(response);
-            resultHandleCallback(html, response.data.length);
+            resultCallback(html, response.data.length);
         });
     },
     'getLastFeedId': function() {

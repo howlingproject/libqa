@@ -9,15 +9,15 @@
             </ul>
             <button class="btn btn-default form-control btn-feed-more" type="button" id="feedMoreBtn">more</button>
         </div>
-
-        <!-- popover-config start -->
-        <div id="popover-config-content" style="display: none;">
-            <div class="button"><a href="javascript:void(0);" onclick="Feed.modifyItem(this);">수정</a></div>
-            <div class="button"><a href="javascript:void(0);" onclick="Feed.removeItem(this, '/feed');">삭제</a></div>
-        </div>
-        <!-- popover-config end -->
     </div>
 </div>
+
+<!-- popover-config start -->
+<div id="popover-config-content" style="display: none;">
+    <div class="button"><a href="javascript:void(0);" onclick="Feed.modifyItem(this);">수정</a></div>
+    <div class="button"><a href="javascript:void(0);" onclick="Feed.removeItem(this, '/feed');">삭제</a></div>
+</div>
+<!-- popover-config end -->
 {{/partial}}
 
 {{# partial "script-page" }}

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DisplayFeedBuilder {
@@ -18,6 +19,8 @@ public class DisplayFeedBuilder {
     private LoggedUser loggedUser;
     @Autowired
     private UserService userService;
+    @Autowired
+    private DisplayFeedReplyBuilder displayFeedReplyBuilder;
     @Autowired
     private DisplayFeedActionBuilder displayFeedActionBuilder;
 
@@ -29,11 +32,9 @@ public class DisplayFeedBuilder {
      */
     public List<DisplayFeed> build(List<Feed> feeds) {
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
-        for (Feed feed : feeds) {
-            DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feed);
-            DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaimBy(feed);
-            displayFeeds.add(build(feed, feed.getFeedReplies(), likedFeedAction, claimedFeedAction));
-        }
+        displayFeeds.addAll(feeds.stream()
+                .map(feed -> build(feed, feed.getFeedReplies()))
+                .collect(Collectors.toList()));
         return displayFeeds;
     }
 
@@ -50,13 +51,9 @@ public class DisplayFeedBuilder {
 
         DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feed);
         DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaimBy(feed);
-        return build(feed, feedReplies, likedFeedAction, claimedFeedAction);
-    }
 
-    private DisplayFeed build(Feed feed, List<FeedReply> feedReplies,
-                              DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
         User writer = userService.findByUserId(feed.getUserId());
-        List<DisplayFeedReply> displayFeedReplies = buildFeedReplies(feedReplies);
+        List<DisplayFeedReply> displayFeedReplies = displayFeedReplyBuilder.build(feedReplies);
 
         DisplayFeed displayFeed = new DisplayFeed(feed, writer, isWriter(writer));
         displayFeed.setLikeFeedAction(likedFeedAction);
@@ -69,24 +66,4 @@ public class DisplayFeedBuilder {
         User loginUser = loggedUser.get();
         return writer.isMatchUser(loginUser.getUserId());
     }
-
-    private List<DisplayFeedReply> buildFeedReplies(List<FeedReply> feedReplies) {
-        List<DisplayFeedReply> displayFeedReplies = Lists.newArrayList();
-        for (FeedReply feedReply : feedReplies) {
-            DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feedReply);
-            DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaimBy(feedReply);
-            displayFeedReplies.add(buildFeedReply(feedReply, likedFeedAction, claimedFeedAction));
-        }
-        return displayFeedReplies;
-    }
-
-    private DisplayFeedReply buildFeedReply(FeedReply feedReply, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
-        User writer = userService.findByUserId(feedReply.getUserId());
-
-        DisplayFeedReply displayFeedReply = new DisplayFeedReply(feedReply, writer, isWriter(writer));
-        displayFeedReply.setLikeFeedAction(likedFeedAction);
-        displayFeedReply.setClaimFeedAction(claimedFeedAction);
-        return displayFeedReply;
-    }
-
 }
