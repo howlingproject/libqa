@@ -70,8 +70,6 @@ public class QaController {
 
     @RequestMapping("/qa/main")
     public ModelAndView main(Model model){
-        boolean isDeleted = false;
-
         ModelAndView mav = new ModelAndView("qa/main");
         return mav;
     }
