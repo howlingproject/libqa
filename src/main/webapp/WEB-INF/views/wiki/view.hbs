@@ -16,9 +16,11 @@
             </div>
             <div class="btn-group" id="sub_menu" data-toggle="buttons" style="float: right">
                 <a href="#" class="btn btn-primary">히스토리</a>
+                {{#compareTo isLogin '1'}}
                 <a href="#" class="btn btn-primary" id="update">편집</a>
                 <a href="#" class="btn btn-primary" id="delete">삭제</a>
                 <a href="#" class="btn btn-primary" id="lock">잠금</a>
+                {{/compareTo}}
                 {{#unless parentWiki}}
                     <a href="#" class="btn btn-primary" id="write">자식위키생성</a>
                 {{/unless}}
@@ -64,8 +66,10 @@
                         </tr>
                         </tbody>
                     </table>
+                    {{#compareTo isLogin '1'}}
                     <a href="#" class="fun-like btn btn-primary"
                        data-value="{{wiki.wikiId}}" data-type="WIKI">추천하기</a>
+                    {{/compareTo}}
                     <a href="#" class="btn btn-primary">인쇄하기</a>
                     <!--<a href="#" id="leftMenu" class="btn btn-primary">숨김</a>-->
                 </div>
@@ -125,9 +129,11 @@
                 <!--</ul>-->
             <!--</div>-->
             <div class="btn-group">
+                {{#compareTo isLogin '1'}}
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="modal" data-target="#askModal">
                     이 위키에 질문하기
                 </button>
+                {{/compareTo}}
             </div>
             <!--<div class="btn-group">-->
                 <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">-->
