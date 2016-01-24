@@ -1,4 +1,5 @@
 {{# partial "content" }}
+    <div class="index-container">
     {{#with displayIndex}}
         <div class="container-fluid">
             <div class="col-sm-12" style="margin-top: -20px;">
@@ -85,7 +86,7 @@
                                 </div>
                             </a>
                             <div class="media-body">
-                                {{{abbreviate (htmlDelete feedContent) 40}}}
+                                <a href="/feed/{{feedId}}">{{{abbreviate (htmlDelete feedContent) 40}}}</a>
                                 <span class="comments pull-right"><i class="glyphicon glyphicon-comment"></i> {{countOfReply}}</span>
                             </div>
                         </div>
@@ -96,6 +97,7 @@
         </div>
     </div>
     {{/with}}
+    </div>
 {{/partial}}
 
 {{> template/base}}

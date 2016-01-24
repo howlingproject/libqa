@@ -36,6 +36,17 @@ public class DisplayFeedBuilder {
         return displayFeeds;
     }
 
+    /**
+     * feed를 display 용으로 build 한다.
+     * @param feed
+     * @return
+     */
+    public DisplayFeed build(Feed feed) {
+        DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feed);
+        DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaimBy(feed);
+        return build(feed, likedFeedAction, claimedFeedAction);
+    }
+
     private DisplayFeed build(Feed feed, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
         User writer = userService.findByUserId(feed.getUserId());
         List<DisplayFeedReply> displayFeedReplies = buildFeedReplies(feed.getFeedReplies());

@@ -24,7 +24,7 @@ public class IndexCrawler {
     static final Integer INDEX_QA_SIZE = 3;
     static final Integer INDEX_SPACE_SIZE = 3;
     static final Integer INDEX_WIKI_SIZE = 3;
-    static final Integer INDEX_FEED_SIZE = 8;
+    static final Integer INDEX_FEED_SIZE = 9;
 
     @Autowired
     private UserService userService;
@@ -44,7 +44,7 @@ public class IndexCrawler {
     private FeedReplyService feedReplyService;
 
     /**
-     * index에 노출할 정보를 crawling하여 반환한다.
+     * 인덱스에 노출할 정보를 crawling하여 {@link DisplayIndex}에 담아 반환한다.
      *
      * @return DisplayIndex
      */
