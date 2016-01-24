@@ -54,14 +54,7 @@ var Feed = {
     },
     'checkValidate' : function($frm) {
         if (!$frm.find('textarea[name=feedContent]').val().trim().length) {
-            $.alert({
-                title: '확인',
-                content: 'feed를 입력해주세요!',
-                confirmButton: 'OK',
-                confirmButtonClass: 'btn-primary',
-                icon: 'fa fa-info',
-                animation: 'zoom'
-            });
+            FeedUtil.alert('feed를 입력해주세요!');
             return false;
         }
         return true;
@@ -117,14 +110,7 @@ var Feed = {
                 $.post('/feed/' + feedId + '/delete')
                     .done(function (response) {
                         if (response.resultCode != 1) {
-                            $.alert({
-                                title: '확인',
-                                content: response.comment,
-                                confirmButton: 'OK',
-                                confirmButtonClass: 'btn-primary',
-                                icon: 'fa fa-info',
-                                animation: 'zoom'
-                            });
+                            FeedUtil.alert(response.comment);
                             return;
                         }
                         FeedUtil.hidePopOver();
@@ -154,7 +140,7 @@ var Feed = {
             $.post('/feed/modify', $frm.serialize())
                 .done(function (response) {
                     if (response.resultCode != 1) {
-                        alert(response.comment);
+                        FeedUtil.alert(response.comment);
                         return;
                     }
                     $modify.hide();
@@ -176,7 +162,7 @@ var Feed = {
         $.post('/feed/' + this.getId($(el)) + '/like')
             .done(function (response) {
                 if (response.resultCode != 1) {
-                    alert(response.comment);
+                    FeedUtil.alert(response.comment);
                     return;
                 }
                 FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
@@ -188,7 +174,7 @@ var Feed = {
         $.post('/feed/' + this.getId($(el)) + '/claim')
             .done(function (response) {
                 if (response.resultCode != 1) {
-                    alert(response.comment);
+                    FeedUtil.alert(response.comment);
                     return;
                 }
                 FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
@@ -255,17 +241,17 @@ var FeedReply = {
                 return;
             }
             $.post('/feed/reply/save', $frm.serialize())
-                    .done(function (response) {
-                        if (response.resultCode != 1) {
-                            alert(response.comment);
-                            return;
-                        }
+                .done(function (response) {
+                    if (response.resultCode != 1) {
+                        FeedUtil.alert(response.comment);
+                        return;
+                    }
 
-                        me.clearForm($frm);
-                        me.loadItem($replies, response.data);
-                    }).fail(function () {
-                alert('Error saving feed Reply');
-            });
+                    me.clearForm($frm);
+                    me.loadItem($replies, response.data);
+                }).fail(function () {
+                    alert('Error saving feed Reply');
+                });
         });
     },
     'loadItem': function($target, data){
@@ -276,7 +262,7 @@ var FeedReply = {
     },
     'checkValidate': function($frm) {
         if (!$frm.find('input[name=feedReplyContent]').val().trim().length) {
-            alert('댓글을 입력해주세요!');
+            FeedUtil.alert('댓글을 입력해주세요!');
             return false;
         }
         return true;
@@ -298,39 +284,39 @@ var FeedReply = {
                 $.post('/feed/reply/' + feedReplyId + '/delete')
                     .done(function (response) {
                         if (response.resultCode != 1) {
-                            alert(response.comment);
+                            FeedUtil.alert(response.comment);
                             return;
                         }
                         $target.remove();
                     }).fail(function () {
-                    alert('Error delete feed Reply');
-                });
+                        alert('Error delete feed Reply');
+                    });
             }
         });
     },
     'like' : function(el) {
         $.post('/feed/reply/' + this.getId($(el)) + '/like')
-                .done(function (response) {
-                    if (response.resultCode != 1) {
-                        alert(response.comment);
-                        return;
-                    }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
-                }).fail(function () {
-            alert('Error like feed');
-        });
+            .done(function (response) {
+                if (response.resultCode != 1) {
+                    FeedUtil.alert(response.comment);
+                    return;
+                }
+                FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
+            }).fail(function () {
+                alert('Error like feed');
+            });
     },
     'claim' : function(el) {
         $.post('/feed/reply/' + this.getId($(el)) + '/claim')
-                .done(function (response) {
-                    if (response.resultCode != 1) {
-                        alert(response.comment);
-                        return;
-                    }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
-                }).fail(function () {
-            alert('Error claim feed');
-        });
+            .done(function (response) {
+                if (response.resultCode != 1) {
+                    FeedUtil.alert(response.comment);
+                    return;
+                }
+                FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
+            }).fail(function () {
+                alert('Error claim feed');
+            });
     }
 };
 
@@ -354,6 +340,16 @@ var FeedUtil = {
         }  else {
             el.removeClass('hasViewer');
         }
+    },
+    'alert': function(message) {
+        $.alert({
+            title: '확인',
+            content: message,
+            confirmButton: 'OK',
+            confirmButtonClass: 'btn-primary',
+            icon: 'fa fa-info',
+            animation: 'zoom'
+        });
     }
 };
 
@@ -435,5 +431,5 @@ var MyFeed = {
             $('#feedList').append(html);
             FeedPager.loaded(itemSize);
         });
-    },
+    }
 };
