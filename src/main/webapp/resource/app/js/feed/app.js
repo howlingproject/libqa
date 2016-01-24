@@ -28,18 +28,25 @@ var Feed = {
                 return;
             }
             $.post('/feed/save', $frm.serialize())
-                    .done(function(response){
-                        if(response.resultCode != 1) {
-                            alert(response.comment);
-                            return;
-                        }
+                .done(function(response){
+                    if(response.resultCode != 1) {
+                        $.alert({
+                            title: '확인',
+                            content: response.comment,
+                            confirmButton: 'OK',
+                            confirmButtonClass: 'btn-primary',
+                            icon: 'fa fa-info',
+                            animation: 'zoom'
+                        });
+                        return;
+                    }
 
-                        me.loadList();
-                        me.clearForm();
-                        FeedFile.clear();
-                    }).fail(function(){
-                alert('Error saving feed');
-            });
+                    me.loadList();
+                    me.clearForm();
+                    FeedFile.clear();
+                }).fail(function(){
+                    alert('Error saving feed');
+                });
         });
     },
     'clearForm' : function() {
@@ -47,7 +54,14 @@ var Feed = {
     },
     'checkValidate' : function($frm) {
         if (!$frm.find('textarea[name=feedContent]').val().trim().length) {
-            alert('feed를 입력해주세요!');
+            $.alert({
+                title: '확인',
+                content: 'feed를 입력해주세요!',
+                confirmButton: 'OK',
+                confirmButtonClass: 'btn-primary',
+                icon: 'fa fa-info',
+                animation: 'zoom'
+            });
             return false;
         }
         return true;
@@ -89,26 +103,40 @@ var Feed = {
         return $('#feedList li.thread[data-feed-id="' + feedId + '"]');
     },
     'removeItem': function(el, redirectUrl) {
-        if (!confirm("FEED를 삭제하시겠습니까?")) {
-            return;
-        }
         var me = this;
         var feedId =  me.getFeedIdByPopOver(el);
-        var $feedBody = me.getFeedBodyByFeedId(feedId);
-        $.post('/feed/' + feedId + '/delete')
-                .done(function (response) {
-                    if (response.resultCode != 1) {
-                        alert(response.comment);
-                        return;
-                    }
-                    FeedUtil.hidePopOver();
-                    $feedBody.remove();
 
-                    if(redirectUrl) {
-                        location.href = redirectUrl;
-                    }
-                }).fail(function () {
-            alert('Error delete feed');
+        $.confirm({
+            title: '확인',
+            content: 'FEED를 삭제하시겠습니까?',
+            confirmButton: '삭제',
+            cancelButton: '취소',
+            confirmButtonClass: 'btn-info',
+            confirm: function () {
+                var $feedBody = me.getFeedBodyByFeedId(feedId);
+                $.post('/feed/' + feedId + '/delete')
+                    .done(function (response) {
+                        if (response.resultCode != 1) {
+                            $.alert({
+                                title: '확인',
+                                content: response.comment,
+                                confirmButton: 'OK',
+                                confirmButtonClass: 'btn-primary',
+                                icon: 'fa fa-info',
+                                animation: 'zoom'
+                            });
+                            return;
+                        }
+                        FeedUtil.hidePopOver();
+                        $feedBody.remove();
+
+                        if(redirectUrl) {
+                            location.href = redirectUrl;
+                        }
+                    }).fail(function () {
+                        alert('Error delete feed');
+                    });
+            }
         });
     },
     'modifyItem' : function(el) {
@@ -124,17 +152,17 @@ var Feed = {
                 return;
             }
             $.post('/feed/modify', $frm.serialize())
-                    .done(function (response) {
-                        if (response.resultCode != 1) {
-                            alert(response.comment);
-                            return;
-                        }
-                        $modify.hide();
-                        var contents = response.data.feedContent.replace(/(\r\n|\n|\r)/gm, '<br>');
-                        $feedContents.html(contents).show();
-                    }).fail(function () {
-                alert('Error modify feed');
-            });
+                .done(function (response) {
+                    if (response.resultCode != 1) {
+                        alert(response.comment);
+                        return;
+                    }
+                    $modify.hide();
+                    var contents = response.data.feedContent.replace(/(\r\n|\n|\r)/gm, '<br>');
+                    $feedContents.html(contents).show();
+                }).fail(function () {
+                    alert('Error modify feed');
+                });
         }).end().find('.cancelBtn').off('click').on('click', function () {
             $modify.hide();
             $feedContents.show();
@@ -146,27 +174,27 @@ var Feed = {
     },
     'like': function(el) {
         $.post('/feed/' + this.getId($(el)) + '/like')
-                .done(function (response) {
-                    if (response.resultCode != 1) {
-                        alert(response.comment);
-                        return;
-                    }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
-                }).fail(function () {
-            alert('Error like feed');
-        });
+            .done(function (response) {
+                if (response.resultCode != 1) {
+                    alert(response.comment);
+                    return;
+                }
+                FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
+            }).fail(function () {
+                alert('Error like feed');
+            });
     },
     'claim': function(el) {
         $.post('/feed/' + this.getId($(el)) + '/claim')
-                .done(function (response) {
-                    if (response.resultCode != 1) {
-                        alert(response.comment);
-                        return;
-                    }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
-                }).fail(function () {
-            alert('Error claim feed');
-        });
+            .done(function (response) {
+                if (response.resultCode != 1) {
+                    alert(response.comment);
+                    return;
+                }
+                FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
+            }).fail(function () {
+                alert('Error claim feed');
+            });
     }
 };
 
@@ -257,21 +285,27 @@ var FeedReply = {
         $frm.find('input[name=feedReplyContent]').val('');
     },
     'removeItem' : function(el) {
-        if (!confirm("댓글을 삭제하시겠습니까?")) {
-            return;
-        }
-
         var feedReplyId = this.getId($(el));
         var $target = $(el).closest('.reply-thread');
-        $.post('/feed/reply/' + feedReplyId + '/delete')
-                .done(function (response) {
-                    if (response.resultCode != 1) {
-                        alert(response.comment);
-                        return;
-                    }
-                    $target.remove();
-                }).fail(function () {
-            alert('Error delete feed Reply');
+
+        $.confirm({
+            title: '확인',
+            content: '댓글을 삭제하시겠습니까?',
+            confirmButton: '삭제',
+            cancelButton: '취소',
+            confirmButtonClass: 'btn-info',
+            confirm: function () {
+                $.post('/feed/reply/' + feedReplyId + '/delete')
+                    .done(function (response) {
+                        if (response.resultCode != 1) {
+                            alert(response.comment);
+                            return;
+                        }
+                        $target.remove();
+                    }).fail(function () {
+                    alert('Error delete feed Reply');
+                });
+            }
         });
     },
     'like' : function(el) {
