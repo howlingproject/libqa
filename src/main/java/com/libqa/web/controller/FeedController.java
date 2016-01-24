@@ -47,9 +47,24 @@ public class FeedController {
         return mav;
     }
 
+    @RequestMapping(value = "{feedId}", method = GET)
+    public ModelAndView view(@PathVariable Integer feedId, ModelAndView mav) {
+        Feed feed = feedService.findByFeedId(feedId);
+        mav.setViewName("feed/view");
+        mav.addObject("displayFeed", displayFeedBuilder.build(feed));
+        return mav;
+    }
+
     @RequestMapping(value = "list", method = GET)
     public ResponseData<DisplayFeed> list(@RequestParam(required = false) Integer lastFeedId) {
         List<Feed> feeds = feedService.search(lastFeedId);
+        return createSuccessResult(displayFeedBuilder.build(feeds));
+    }
+
+    @RequestMapping(value = "myList", method = GET)
+    public ResponseData<DisplayFeed> myList(@RequestParam(required = false) Integer lastFeedId) {
+        User user = loggedUser.get();
+        List<Feed> feeds = feedService.searchByUserId(user.getUserId(), lastFeedId);
         return createSuccessResult(displayFeedBuilder.build(feeds));
     }
 

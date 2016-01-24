@@ -32,7 +32,7 @@ public class CacheConfig implements CachingConfigurer {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
 
         GuavaCache displayIndexCache = new GuavaCache(CACHE_DISPLAY_INDEX, CacheBuilder.newBuilder()
-                .expireAfterWrite(360, TimeUnit.MINUTES)
+                .expireAfterWrite(30, TimeUnit.MINUTES)
                 .build());
 
         GuavaCache userEmailCache = new GuavaCache(CACHE_USER_EMAIL, CacheBuilder.newBuilder()

@@ -206,7 +206,7 @@ function getMarkupEditHtml(width, height){
         "               <div class=\"btn-group\">" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"* \" data-center=\" \" data-after=\"\"><i class=\"fa fa-list-ul\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"1. \" data-center=\" \" data-after=\"\"><i class=\"fa fa-list-ol\"></i></button>" +
-        //"                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[syntax]\" data-center=\"\"  data-after=\"[syntax]\"><i class=\"fa fa-code\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[syntax]\" data-center=\"\"  data-after=\"[syntax]\"><i class=\"fa fa-code\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#tableModal\" data-mode=\"layer\" data-type=\"table\"><i class=\"fa fa-table\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[field|타이틀]\" data-center=\"\"  data-after=\"[field]\"><i class=\"fa fa-credit-card\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#urlModal\" data-mode=\"layer\" data-type=\"url\" ><i class=\"fa fa-link\"></i></button>" +
@@ -246,16 +246,16 @@ function getMarkupEditMiniHtml(width, height){
     "<div class='dualEditor-nav' role='tabpanel' style=\""+styleWidth+"\">" +
     " 	<!-- Nav tabs --> 	" +
     " 	<ul class='nav nav-tabs ' role='tablist'>" +
-    " 	  <li role='presentation' class='active'><a href='#write' aria-controls='write' role='tab' data-toggle='tab'>Write</a></li>" +
-    " 	  <li role='presentation'><a href='#preview' aria-controls='preview' role='tab' data-toggle='tab'>Preview</a></li>" +
+    " 	  <li role='presentation' class='active'><a href='#mini-write' aria-controls='write' role='tab' data-toggle='tab'>Write</a></li>" +
+    " 	  <li role='presentation'><a href='#mini-preview' aria-controls='preview' role='tab' data-toggle='tab'>Preview</a></li>" +
     " 	</ul>" +
     " 	</div>" +
     " 	 	<!-- Tab panes --> 	" +
     "<div class='tab-content dualEditor-nav' style=\""+styleWidth+"\">" +
-    " 	  <div role='tabpanel' class='tab-pane preview' id='preview'>" +
+    " 	  <div role='tabpanel' class='tab-pane preview' id='mini-preview'>" +
     " 		<div id='wikimaincol' class='dualEditor-preview' style=\""+styleHeight+"\"></div>" +
     " 	  </div>" +
-    " 	  <div role='tabpanel' class='tab-pane active' id='write'>" +
+    " 	  <div role='tabpanel' class='tab-pane write active' id='mini-write'>" +
     " 	    <table class='sonDualEditor dualEditor-main' style=\""+styleHeight+"\">" +
     " 		    <thead>" +
     " 				<tr>" +
@@ -311,5 +311,5 @@ function getMarkupEditMiniHtml(width, height){
     " 	  </div>" +
     " 	</div>";
 
-
+    return html;
 }

@@ -25,7 +25,6 @@ public class KeywordListServiceImpl implements KeywordListService {
 
     @Override
     public List<KeywordList> findByKeywordType(String keywordType, boolean isDeleted) {
-        log.debug("### keywordType = {}", keywordType);
         List<KeywordList> keywordList = new ArrayList<>();
         KeywordType paramEnum = KeywordType.valueOf(keywordType);
 

@@ -100,10 +100,9 @@ public class HandlebarsHelper {
     }
 
     public CharSequence compareTo(Object str1, Object str2, Options options) throws IOException {
-        if( str2.equals(str1) ){
-            return options.fn();
-        }
-        return options.inverse();
+        str1 = MoreObjects.firstNonNull(str1, "");
+        str2 = MoreObjects.firstNonNull(str2, "");
+        return (str1.equals(str2) ) ? options.fn(this) : options.inverse(this);
     }
 
     public CharSequence ifIntCont(Integer int1, String operator, Integer int2, Options options) throws Exception {
