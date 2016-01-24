@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Slf4j
 @Controller
 public class IndexController {
@@ -16,8 +14,7 @@ public class IndexController {
     private IndexCrawler indexCrawler;
 
     @RequestMapping({"/", "/index"})
-    public ModelAndView index(HttpServletRequest request, ModelAndView mav) {
-        mav.addObject("isLogin", request.getAttribute("isLogin"));
+    public ModelAndView index(ModelAndView mav) {
         mav.addObject("displayIndex", indexCrawler.crawl());
         mav.setViewName("index");
         return mav;
