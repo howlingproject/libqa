@@ -5,128 +5,8 @@
         <div class="container">
             <div class="col-md-12 col-xs-12">
                 <div class="feed well">
-                    <ul id="feedList">
-                        <li class="thread" data-feed-id="{{feedId}}">
-                            <div class="author">
-                                <div class="user-profile">
-                                    <img alt="avatar" class="profile-image" src="{{userImage}}"/>
-                                </div>
-                            </div>
-                            <div class="name">{{userNick}}</div>
-                            <div class="date">{{insertDate}}</div>
-                            {{#if writer}}
-                                <div class="config">
-                                    <i class="fa fa-check popover-config" data-container="body" data-toggle="popover"
-                                       data-placement="right"></i>
-                                </div>
-                            {{/if}}
-                            <div class="thread-message-box">
-                                <div class="message">
-                                    <div class="feed-contents-box">{{{feedContent}}}</div>
-                                    <div class="feed-modify well">
-                                        <form class="feed-modify-form">
-                                            <input type="hidden" name="feedId" value="{{feedId}}"/>
-                                            <textarea class="form-control" name="feedContent" rows="6">{{originFeedContent}}</textarea>
-                                            <div class="feed-modify-bottom">
-                                                <button class="btn btn-sm btn-info pull-right modifyBtn" type="button">
-                                                    수정
-                                                </button>
-                                                <button class="btn btn-sm btn-default pull-right cancelBtn" type="button">취소</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="images text-center">
-                                        {{#images}}
-                                            <a href="#" data-toggle="modal" data-target=".image-viewer-{{../feedId}}">
-                                                <img width="190" class="img-thumbnail" src="{{filePath}}/{{savedName}}"/>
-                                            </a>
-                                            <div class="modal fade image-viewer-{{../feedId}}" tabindex="-1" role="dialog"
-                                                 aria-labelledby="imageModalLabel-{{../feedId}}" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                                                            <h4 class="modal-title text-left"
-                                                                id="imageModalLabel-{{../feedId}}">이미지 보기</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <img class="img-responsive img-rounded center-block" src="{{filePath}}/{{savedName}}"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        {{/images}}
-                                    </div>
-                                    <div class="attachment">
-                                        {{#files}}
-                                            <a href="{{filePath}}/{{savedName}}" target="_blank"><i
-                                                    class="fa fa-file-o"></i> {{realName}}</a>&nbsp;
-                                        {{/files}}
-                                    </div>
-                                </div>
-                                <div class="action-buttons">
-                                    <i class="fa fa-thumbs-o-up {{#if likeFeedAction.hasViewer}}hasViewer{{/if}}"
-                                       onclick="Feed.like(this)">
-                                        <span class="like-count">({{likeFeedAction.count}})</span>
-                                    </i>
-                                    <i class="fa fa-bullhorn {{#if claimFeedAction.hasViewer}}hasViewer{{/if}}"
-                                       onclick="Feed.claim(this)">
-                                        <span class="claim-count">({{claimFeedAction.count}})</span>
-                                    </i>
-                                </div>
-                            </div>
-
-                            <ul class="feed-replies">
-                                {{#replies}}
-                                    <li class="reply-thread" data-feed-reply-id="{{feedReplyId}}">
-                                        <div class="author">
-                                            <div class="user-profile-sm">
-                                                <img alt="avatar" class="profile-image" src="{{userImage}}"/>
-                                            </div>
-                                        </div>
-                                        <div class="name">{{userNick}}</div>
-                                        <div class="date">{{insertDate}}</div>
-                                        {{#if writer}}
-                                            <div class="config" onclick="FeedReply.removeItem(this)">
-                                                <i class="fa fa-close feedReplyDeleteBtn"></i>
-                                            </div>
-                                        {{/if}}
-                                        <div class="message-box">
-                                            <div class="message">{{feedReplyContent}}</div>
-                                            <div class="action-buttons">
-                                                <i class="fa fa-thumbs-o-up {{#if likeFeedAction.hasViewer}}hasViewer{{/if}}"
-                                                   onclick="FeedReply.like(this)">
-                                                    <span class="like-count">({{likeFeedAction.count}})</span>
-                                                </i>
-                                                <i class="fa fa-bullhorn {{#if claimFeedAction.hasViewer}}hasViewer{{/if}}"
-                                                   onclick="FeedReply.claim(this)">
-                                                    <span class="claim-count">({{claimFeedAction.count}})</span>
-                                                </i>
-                                            </div>
-                                        </div>
-                                    </li>
-                                {{/replies}}
-                            </ul>
-
-                            <ul>
-                                <li>
-                                    <div class="row">
-                                        <form name="feedReplyForm" onsubmit="return false;">
-                                            <input type="hidden" name="feed.feedId" value="{{feedId}}"/>
-
-                                            <div class="col-xs-9 col-md-10">
-                                                <input type="text" name="feedReplyContent" class="form-control input-sm"
-                                                       placeholder="댓글 입력">
-                                            </div>
-                                            <div class="col-xs-3 col-md-2 feed-comment">
-                                                <button class="btn btn-sm btn-info" name="saveReply" type="submit">저장</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <ul id="feedList">로딩 중...</ul>
+                    <button class="btn btn-default form-control btn-feed-more" type="button" id="feedMoreBtn">more</button>
                 </div>
             </div>
         </div>
@@ -144,6 +24,7 @@
 <script type="text/javascript" src="/resource/app/js/feed/app.js"></script>
 <script type="text/javascript">
     $(function(){
+        Feed.init();
         FeedReply.init();
         FeedUtil.bindPopOver();
     });

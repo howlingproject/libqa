@@ -22,15 +22,15 @@ public class FeedRepositoryTest extends LibqaRepositoryTest<FeedRepository> {
 
     @Test
     public void findByFeedIdLessThanAndIsDeletedFalse() {
-        int lastFeedId = 0;
-        PageRequest pageRequest = PageUtil.sortPageable(new Sort(DESC, "feedId"));
+        final int lastFeedId = 0;
+        final PageRequest pageRequest = PageUtil.sortPageable(new Sort(DESC, "feedId"));
         List<Feed> feeds = repository.findByFeedIdLessThanAndIsDeletedFalse(lastFeedId, pageRequest);
         System.out.println(feeds);
     }
 
     @Test
     public void findByIsDeletedFalse() {
-        PageRequest pageRequest = new PageRequest(0, 5, new Sort(new Sort.Order(DESC, "feedId")));
+        final PageRequest pageRequest = new PageRequest(0, 5, new Sort(new Sort.Order(DESC, "feedId")));
         List<Feed> feeds = repository.findByIsDeletedFalse(pageRequest);
         System.out.println(feeds);
     }
@@ -41,4 +41,21 @@ public class FeedRepositoryTest extends LibqaRepositoryTest<FeedRepository> {
         System.out.println(count);
     }
 
+    @Test
+    public void findByUserIdAndIsDeletedFalse() {
+        final int userId = 100000;
+        final PageRequest pageRequest = PageUtil.sortPageable(new Sort(DESC, "feedId"));
+        List<Feed> feeds = repository.findByUserIdAndIsDeletedFalse(userId, pageRequest);
+        System.out.println(feeds);
+    }
+
+
+    @Test
+    public void findByUserIdAndFeedIdLessThanAndIsDeletedFalse() {
+        final int userId = 100000;
+        final int lastFeedId = 1000;
+        final PageRequest pageRequest = PageUtil.sortPageable(new Sort(DESC, "feedId"));
+        List<Feed> feeds = repository.findByUserIdAndFeedIdLessThanAndIsDeletedFalse(userId, lastFeedId, pageRequest);
+        System.out.println(feeds);
+    }
 }

@@ -62,6 +62,13 @@ public class FeedController {
         return createSuccessResult(displayFeedBuilder.build(feeds));
     }
 
+    @RequestMapping(value = "myList", method = GET)
+    public ResponseData<DisplayFeed> myList(@RequestParam(required = false) Integer lastFeedId) {
+        User user = loggedUser.get();
+        List<Feed> feeds = feedService.searchByUserId(user.getUserId(), lastFeedId);
+        return createSuccessResult(displayFeedBuilder.build(feeds));
+    }
+
     @RequestMapping(value = "save", method = POST)
     public ResponseData<Feed> save(Feed feed) {
         User user = loggedUser.get();
