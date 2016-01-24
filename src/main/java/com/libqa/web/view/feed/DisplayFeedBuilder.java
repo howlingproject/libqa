@@ -23,6 +23,7 @@ public class DisplayFeedBuilder {
 
     /**
      * feed 목록을 display 용으로 build 한다.
+     *
      * @param feeds
      * @return List&lt;DisplayFeed&gt;
      */
@@ -31,29 +32,31 @@ public class DisplayFeedBuilder {
         for (Feed feed : feeds) {
             DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feed);
             DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaimBy(feed);
-            displayFeeds.add(build(feed, likedFeedAction, claimedFeedAction));
+            displayFeeds.add(build(feed, feed.getFeedReplies(), likedFeedAction, claimedFeedAction));
         }
         return displayFeeds;
     }
 
     /**
      * feed를 display 용으로 build 한다.
+     *
      * @param feed
      * @return DisplayFeed
      */
-    public DisplayFeed build(Feed feed) {
-        if(feed == null || feed.isDeleted()) {
-            return DisplayFeed.EMPTY;
+    public DisplayFeed build(Feed feed, List<FeedReply> feedReplies) {
+        if (feed == null || feed.isDeleted()) {
+            return DisplayFeed.empty();
         }
 
         DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feed);
         DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaimBy(feed);
-        return build(feed, likedFeedAction, claimedFeedAction);
+        return build(feed, feedReplies, likedFeedAction, claimedFeedAction);
     }
 
-    private DisplayFeed build(Feed feed, DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
+    private DisplayFeed build(Feed feed, List<FeedReply> feedReplies,
+                              DisplayFeedAction likedFeedAction, DisplayFeedAction claimedFeedAction) {
         User writer = userService.findByUserId(feed.getUserId());
-        List<DisplayFeedReply> displayFeedReplies = buildFeedReplies(feed.getFeedReplies());
+        List<DisplayFeedReply> displayFeedReplies = buildFeedReplies(feedReplies);
 
         DisplayFeed displayFeed = new DisplayFeed(feed, writer, isWriter(writer));
         displayFeed.setLikeFeedAction(likedFeedAction);
