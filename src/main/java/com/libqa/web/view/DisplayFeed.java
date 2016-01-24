@@ -15,8 +15,6 @@ import java.util.List;
 
 @Getter
 public class DisplayFeed {
-    public static final DisplayFeed EMPTY = new DisplayFeed();
-    private boolean isEmpty = false;
     private Integer feedId;
     private String originFeedContent;
     private String feedContent;
@@ -29,6 +27,8 @@ public class DisplayFeed {
     private List<FeedFile> images;
 
     @Setter
+    private boolean isEmpty = false;
+    @Setter
     private DisplayFeedAction likeFeedAction;
     @Setter
     private DisplayFeedAction claimFeedAction;
@@ -36,7 +36,6 @@ public class DisplayFeed {
     private List<DisplayFeedReply> replies;
 
     private DisplayFeed() {
-        this.isEmpty = true;
     }
 
     public DisplayFeed(Feed feed, User user, Boolean isWriter) {
@@ -48,6 +47,12 @@ public class DisplayFeed {
         this.insertDate = DisplayDate.parse(feed.getInsertDate());
         this.writer = isWriter;
         setFeedFiles(feed.getFeedFiles());
+    }
+
+    public static DisplayFeed empty() {
+        DisplayFeed displayFeed = new DisplayFeed();
+        displayFeed.setEmpty(true);
+        return displayFeed;
     }
 
     private String parseHtml(String feedContent) {

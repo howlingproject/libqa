@@ -274,7 +274,7 @@
 
 </div>
 
-<div id="leftMenu" style='position:absolute;z-index:2;top:135px;right:0;margin-right: 15px;'>
+<div id="leftMenu" style='position:absolute;z-index:2;top:430px;right:0;margin-right: 15px;'>
     <a href="#" id="leftMenu2" class="btn btn-primary">
         숨김
     </a>
@@ -379,7 +379,7 @@
 
             $(window).scroll(function()
             {
-                $('#leftMenu').animate({top:$(window).scrollTop()+135+"px" },{queue: false, duration: 0});
+                $('#leftMenu').animate({top:$(window).scrollTop()+430+"px" },{queue: false, duration: 0});
             });
 
         });
@@ -398,7 +398,6 @@
         $("#saveWiki").on("click", function(){
             Wiki.save();
         });
-
         $("#sub_menu a").on("click", function(){
            var link = '';
            var text = '';
@@ -420,10 +419,20 @@
            }
            if( link != '' ){
                if( confirm(text+" 하시겠습니까?") ){
-                   location.href = link;
+                   if( this.id == 'update' ){
+                       location.href = link;
+                   }else if( this.id == 'delete' ){
+                       Wiki.updateStat(this.id, link);
+                   }else if( this.id == 'lock' ){
+                       Wiki.updateStat(this.id, link);
+                   }else if( this.id == 'write' ){
+                       location.href = link;
+                   }else if( this.id == 'space' ){
+                       location.href = link;
+                   }
+
                }
            }
-
         });
 
         var Wiki = {
@@ -450,9 +459,6 @@
                                 })
                             }
                         }
-//                        if(data == 1) {
-//
-//                        }
                     },
                     error : function(req){
                         // Handle upload error
@@ -487,6 +493,30 @@
                         }
                     }});
                 return false;
+            },
+
+            updateStat:function(id, link){
+                jQuery.ajax({
+                    type:'GET',
+                    url : link,
+                    success:function(req){
+                        if (req.resultCode == 1) {
+                            if( id == "update"){
+                                location.href = "/wiki/main";
+                            }else{
+                                location.reload();
+                            }
+                        }else{
+                            alert(req.data);
+                        }
+                    },
+                    error:function(req){
+                        if (req.status == 500) {
+                            error500(true, '');
+                        } else {
+                            error500(false, req.status);
+                        }
+                    }});
             }
         }
     </script>
