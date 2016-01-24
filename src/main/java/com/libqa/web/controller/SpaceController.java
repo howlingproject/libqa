@@ -106,7 +106,6 @@ public class SpaceController {
 
         User user = loggedUser.get();
 
-        log.debug("##### user  = {}", user);
         if (user == null || user.isGuest()) {
             log.debug("# 로그인 사용자 정보가 존재하지 않습니다.");
             mav.addObject("myFavoriteSpaceList", null);
@@ -193,7 +192,6 @@ public class SpaceController {
             throw new IllegalAccessException("로그인 정보가 필요합니다.");
         }
 
-        log.debug("##### user  = {}", user);
         // TODO List 차후 로그인으로 변경
         space.setInsertDate(new Date());
         space.setInsertUserId(user.getUserId());
