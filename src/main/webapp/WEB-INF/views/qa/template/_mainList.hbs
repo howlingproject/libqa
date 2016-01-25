@@ -1,15 +1,18 @@
 {{#each data}}
-    <div class="media qna-item contents" value="{{qaId}}" onclick="location.href='/qa/{{qaId}}';">
-        <div class="pull-left">
+    <div class="media qna-item" value="{{qaId}}" onclick="location.href='/qa/{{qaId}}';">
+
+        <a class="pull-left" style="cursor: pointer">
             <div class="user-profile">
-                <img alt="avatar" class="profile-image" src="{{userImage}}" />
+                <img src="{{userImage}}" class="profile-image" alt="avatar">
             </div>
-        </div>
+        </a>
+
         <div class="row">
-            <div class="qna-main-top col-lg-8">
+            <div class="col-xs-9 col-sm-9 col-md-9">
                 <div class="media-body">
                     <div class="media-heading">
                         <span>{{insertDate}}</span>
+
                         <span class="my-qna-writer">
                             <div class="user-profile-xs">
                                 <span class="nickname">{{userNick}}</span>
@@ -33,7 +36,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-1 my-qna-rating">
+            <div class="my-qna-rating">
                 <button class="btn btn-sm btn-default btn-sm-fixed">조회 {{viewCount}}</button>
                 <button class="btn btn-sm btn-default btn-sm-fixed">추천 {{recommendCount}}</button>
             </div>

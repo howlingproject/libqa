@@ -5,6 +5,7 @@
     <div class="best-qna-item">
         <div>
             <strong> <a class="form" href="/wiki/{{wiki.wikiId}}">{{wiki.title}}</a></strong>
+            <span class="comments pull-right"><i class="glyphicon glyphicon-comment"></i> {{replyCount}}</span>
             <br>{{> common/_keywordBadge}}
         </div>
         <div class="media">
@@ -20,9 +21,9 @@
                 -->
             </div>
             <div class="user-profile-sm">
-                <span class="nickname">작성자 : {{wiki.userNick}}</span>
+                <span class="nickname"><i class="fa fa-pencil-square-o"></i> {{wiki.userNick}}</span>
             </div>
-            <div class="pull-right">{{formatDate wiki.insertDate "yyyy-MM-dd hh:MM"}}</div>
+            <div class="pull-right"><i class="fa fa-clock-o"></i> {{formatDate wiki.insertDate "yyyy-MM-dd hh:MM"}}</div>
         </div>
     </div>
     {{/each}}
