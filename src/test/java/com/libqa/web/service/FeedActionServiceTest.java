@@ -20,7 +20,6 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,23 +33,36 @@ public class FeedActionServiceTest {
     @Test
     public void 피드의_좋아요_액션을_생성한다() {
         final FeedLike feedLike = FeedLike.of(100000);
+        final User user = userFixture();
 
-        sut.action(userFixture(), feedLike);
+        sut.action(user, feedLike);
 
         verify(feedActionRepository).save(any(FeedAction.class));
     }
 
     @Test
-    public void 피드의_좋아요_액션이_재호출되면_액션을_다시_생성하지_않는다() {
+    public void 피드의_좋아요_액션이_재호출되면_액션은_취소된다() {
         final FeedLike feedLike = FeedLike.of(100000);
         final User user = userFixture();
-
+        final FeedAction expectedFeedAction = feedLikeFixture(feedLike.getFeedActorId(), user.getUserId());
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedLike.getFeedActorId(), user.getUserId()))
-                .willReturn(Lists.newArrayList(feedLikeFixture(feedLike.getFeedActorId(), user.getUserId())));
+                .willReturn(Lists.newArrayList(expectedFeedAction));
 
         sut.action(userFixture(), feedLike);
 
-        verify(feedActionRepository, never()).save(any(FeedAction.class));
+        assertThat(expectedFeedAction.isCanceled()).isTrue();
+    }
+
+    @Test
+    public void 취소된_역션이_존재하면_액션은_다시_생성된다() {
+        final FeedLike feedLike = FeedLike.of(100000);
+        final User user = userFixture();
+        given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedLike.getFeedActorId(), user.getUserId()))
+                .willReturn(feedLikeFixturesWithCancel(feedLike.getFeedActorId(), user.getUserId()));
+
+        sut.action(userFixture(), feedLike);
+
+        verify(feedActionRepository).save(any(FeedAction.class));
     }
 
     @Test
@@ -71,7 +83,7 @@ public class FeedActionServiceTest {
         final User user = userFixture();
 
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedLike.getFeedActorId(), user.getUserId()))
-                .willReturn(canceledFeedLikeFixtures(feedLike.getFeedActorId(), user.getUserId()));
+                .willReturn(feedLikeFixturesWithCancel(feedLike.getFeedActorId(), user.getUserId()));
 
         FeedAction actual = sut.getFeedActionByUser(user, feedLike);
 
@@ -82,7 +94,7 @@ public class FeedActionServiceTest {
     public void 피드_좋아요_액션_카운트를_조회한다() {
         final FeedLike feedLike = FeedLike.of(10000);
 
-        sut.getCount(feedLike);
+        sut.countOf(feedLike);
 
         verify(feedActionRepository).countByFeedActorIdAndFeedThreadTypeAndFeedActionTypeAndIsCanceledFalse(
                 eq(feedLike.getFeedActorId()), eq(feedLike.getFeedThreadType()), eq(feedLike.getFeedActionType()));
@@ -117,7 +129,7 @@ public class FeedActionServiceTest {
         return Lists.newArrayList(notCanceled, canceled);
     }
 
-    private List<FeedAction> canceledFeedLikeFixtures(int actorId, int userId) {
+    private List<FeedAction> feedLikeFixturesWithCancel(int actorId, int userId) {
         FeedAction canceled = new FeedAction();
         canceled.setFeedActionId(actorId);
         canceled.setUserId(userId);

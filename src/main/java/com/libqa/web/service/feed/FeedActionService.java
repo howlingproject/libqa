@@ -20,6 +20,7 @@ public class FeedActionService {
 
     /**
      * feedActor의 action을 처리한다.
+     *
      * @param user
      * @param feedActor
      */
@@ -43,7 +44,7 @@ public class FeedActionService {
                 )).or(FeedAction.notYet());
     }
 
-    public Integer getCount(FeedActor feedActor) {
+    public Integer countOf(FeedActor feedActor) {
         // TODO convert to queryDsl
         return feedActionRepository.countByFeedActorIdAndFeedThreadTypeAndFeedActionTypeAndIsCanceledFalse(
                 feedActor.getFeedActorId(), feedActor.getFeedThreadType(), feedActor.getFeedActionType());
