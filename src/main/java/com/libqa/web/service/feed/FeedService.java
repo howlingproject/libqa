@@ -100,13 +100,10 @@ public class FeedService {
     public Feed like(Integer feedId, User user) {
         Feed feed = feedRepository.findOne(feedId);
         FeedLike feedLike = FeedLike.of(feed.getFeedId());
-        FeedAction feedAction = feedActionService.getFeedActionByUser(user, feedLike);
-        if (feedAction.isNotYet()) {
-            feedActionService.create(user, feedLike);
-        } else {
-            feedAction.cancel();
-        }
-        feed.setLikeCount(feedActionService.getCount(feedLike));
+
+        feedActionService.action(user, feedLike);
+        Integer likeCount = feedActionService.getCount(feedLike);
+        feed.setLikeCount(likeCount);
         return feed;
     }
 
@@ -121,13 +118,11 @@ public class FeedService {
     public Feed claim(Integer feedId, User user) {
         Feed feed = feedRepository.findOne(feedId);
         FeedClaim feedClaim = FeedClaim.of(feed.getFeedId());
-        FeedAction feedAction = feedActionService.getFeedActionByUser(user, feedClaim);
-        if (feedAction.isNotYet()) {
-            feedActionService.create(user, feedClaim);
-        } else {
-            feedAction.cancel();
-        }
-        feed.setClaimCount(feedActionService.getCount(feedClaim));
+
+        feedActionService.action(user, feedClaim);
+        Integer claimCount = feedActionService.getCount(feedClaim);
+
+        feed.setClaimCount(claimCount);
         return feed;
     }
 
@@ -139,8 +134,10 @@ public class FeedService {
      * @return Feed
      */
     @Transactional
-    public Feed modify(Feed originFeed, Feed requestFeed) {
+    public Feed modify(Feed originFeed, Feed requestFeed, User user) {
         originFeed.setFeedContent(requestFeed.getFeedContent());
+        originFeed.setUpdateDate(new Date());
+        originFeed.setUpdateUserId(user.getUserId());
         return originFeed;
     }
 

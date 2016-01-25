@@ -1,7 +1,6 @@
 package com.libqa.web.service.feed;
 
 import com.libqa.web.domain.Feed;
-import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedReplyRepository;
@@ -51,20 +50,17 @@ public class FeedReplyService {
      *
      * @param feedReplyId
      * @param user
-     * @return
+     * @return FeedReply
      */
     @Transactional
     public FeedReply like(Integer feedReplyId, User user) {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         FeedReplyLike feedReplyLike = FeedReplyLike.of(feedReply.getFeedReplyId());
 
-        FeedAction feedAction = feedActionService.getFeedActionByUser(user, feedReplyLike);
-        if (feedAction.isNotYet()) {
-            feedActionService.create(user, feedReplyLike);
-        } else {
-            feedAction.cancel();
-        }
-        feedReply.setLikeCount(feedActionService.getCount(feedReplyLike));
+        feedActionService.action(user, feedReplyLike);
+        Integer likeCount = feedActionService.getCount(feedReplyLike);
+
+        feedReply.setLikeCount(likeCount);
         return feedReply;
     }
 
@@ -73,19 +69,17 @@ public class FeedReplyService {
      *
      * @param feedReplyId
      * @param user
-     * @return
+     * @return FeedReply
      */
     @Transactional
     public FeedReply claim(Integer feedReplyId, User user) {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         FeedReplyClaim feedReplyClaim = FeedReplyClaim.of(feedReply.getFeedReplyId());
-        FeedAction feedAction = feedActionService.getFeedActionByUser(user, feedReplyClaim);
-        if (feedAction.isNotYet()) {
-            feedActionService.create(user, feedReplyClaim);
-        } else {
-            feedAction.cancel();
-        }
-        feedReply.setClaimCount(feedActionService.getCount(feedReplyClaim));
+
+        feedActionService.action(user, feedReplyClaim);
+        Integer claimCount = feedActionService.getCount(feedReplyClaim);
+
+        feedReply.setClaimCount(claimCount);
         return feedReply;
     }
 
@@ -93,7 +87,7 @@ public class FeedReplyService {
      * feedReplyId로 feed 댓글을 조회한다.
      *
      * @param feedReplyId
-     * @return
+     * @return FeedReply
      */
     public FeedReply findByFeedReplyId(Integer feedReplyId) {
         return feedReplyRepository.findOne(feedReplyId);
@@ -101,7 +95,7 @@ public class FeedReplyService {
 
     /**
      * @param feed
-     * @return
+     * @return reply count by feed
      */
     public Integer countByFeed(Feed feed) {
         return feedReplyRepository.countByFeedId(feed.getFeedId());

@@ -74,11 +74,11 @@
                         </div>
                         <div class="action-buttons">
                             <i class="fa fa-thumbs-o-up {{#if likeFeedAction.hasViewer}}hasViewer{{/if}}"
-                               onclick="FeedAction.like(this)">
+                               onclick="Feed.like(this)">
                                 <span class="like-count">({{likeFeedAction.count}})</span>
                             </i>
                             <i class="fa fa-bullhorn {{#if claimFeedAction.hasViewer}}hasViewer{{/if}}"
-                               onclick="FeedAction.claim(this)">
+                               onclick="Feed.claim(this)">
                                 <span class="claim-count">({{claimFeedAction.count}})</span>
                             </i>
                         </div>

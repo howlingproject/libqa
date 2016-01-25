@@ -15,7 +15,6 @@ import java.util.Date;
 @EqualsAndHashCode(of = "feedActionId")
 @Table(indexes = {
         @Index(columnList = "isCanceled"),
-        @Index(columnList = "feedActionType"),
         @Index(columnList = "feedActorId,userId")
 })
 public class FeedAction {
@@ -63,9 +62,10 @@ public class FeedAction {
         return !this.isCanceled;
     }
 
-    public void cancel() {
+    public void cancelByUser(User user) {
         this.setCanceled(true);
         this.setUpdateDate(new Date());
+        this.setUpdateUserId(user.getUserId());
     }
 
     public static FeedAction notYet() {

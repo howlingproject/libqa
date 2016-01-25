@@ -1,8 +1,6 @@
 package com.libqa.web.service.feed;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.libqa.application.enums.FeedActionType;
 import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedActionRepository;
@@ -20,40 +18,50 @@ public class FeedActionService {
     @Autowired
     private FeedActionRepository feedActionRepository;
 
-    public FeedAction create(User user, FeedActor feedActor) {
+    /**
+     * feedActor의 action을 처리한다.
+     * @param user
+     * @param feedActor
+     */
+    public void action(User user, FeedActor feedActor) {
+        FeedAction feedAction = getFeedActionByUser(user, feedActor);
+        if (feedAction.isNotYet()) {
+            createFeedAction(user, feedActor);
+        } else {
+            feedAction.cancelByUser(user);
+        }
+    }
+
+    public FeedAction getFeedActionByUser(User user, FeedActor feedActor) {
+        // TODO convert to queryDsl
+        List<FeedAction> feedActionsByUser = feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(
+                feedActor.getFeedActorId(), user.getUserId());
+
+        return Iterables.tryFind(feedActionsByUser,
+                input -> (input.getFeedActionType() == feedActor.getFeedActionType()
+                        && input.getFeedThreadType() == feedActor.getFeedThreadType()
+                )).or(FeedAction.notYet());
+    }
+
+    public Integer getCount(FeedActor feedActor) {
+        // TODO convert to queryDsl
+        return feedActionRepository.countByFeedActorIdAndFeedThreadTypeAndFeedActionTypeAndIsCanceledFalse(
+                feedActor.getFeedActorId(), feedActor.getFeedThreadType(), feedActor.getFeedActionType());
+    }
+
+    private FeedAction createFeedAction(User user, FeedActor feedActor) {
         FeedAction feedAction = new FeedAction();
         feedAction.setFeedActorId(feedActor.getFeedActorId());
         feedAction.setFeedActionType(feedActor.getFeedActionType());
         feedAction.setFeedThreadType(feedActor.getFeedThreadType());
         feedAction.setUserId(user.getUserId());
         feedAction.setUserNick(user.getUserNick());
-        feedAction.setInsertUserId(user.getUserId());
-        feedAction.setUpdateUserId(user.getUserId());
-        feedAction.setCanceled(false);
         feedAction.setInsertDate(new Date());
-        feedAction.setUpdateDate(new Date());
+        feedAction.setInsertUserId(user.getUserId());
+        feedAction.setCanceled(false);
         feedActionRepository.save(feedAction);
         return feedAction;
     }
 
-    public FeedAction getFeedActionByUser(User user, FeedActor feedActor) {
-        FeedAction feedAction = findFeedAction(feedActor.getFeedActorId(), user.getUserId(), feedActor.getFeedActionType());
-        if (feedAction == null) {
-            return FeedAction.notYet();
-        }
-        return feedAction;
-    }
 
-    public Integer getCount(FeedActor feedActor) {
-        return feedActionRepository.countByFeedActorIdAndFeedActionTypeAndIsCanceledFalse(feedActor.getFeedActorId(), feedActor.getFeedActionType());
-    }
-
-    private FeedAction findFeedAction(int actorId, int userId, FeedActionType actionType) {
-        List<FeedAction> feedActions = feedActionRepository.findByFeedActorIdAndUserId(actorId, userId);
-        return Iterables.tryFind(feedActions, IS_NOT_CANCEL(actionType)).orNull();
-    }
-
-    private static Predicate<FeedAction> IS_NOT_CANCEL(FeedActionType actionType) {
-        return input -> input.isNotCanceled() && input.getFeedActionType() == actionType;
-    }
 }

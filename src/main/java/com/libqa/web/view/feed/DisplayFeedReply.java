@@ -38,6 +38,6 @@ public class DisplayFeedReply {
     }
 
     private DisplayFeedAction createNotYetFeedAction() {
-        return new DisplayFeedAction(0, false);
+        return new DisplayFeedAction(false, 0);
     }
 }

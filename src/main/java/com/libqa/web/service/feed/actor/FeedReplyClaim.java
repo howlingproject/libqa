@@ -19,7 +19,7 @@ public class FeedReplyClaim extends FeedActor {
 
     @Override
     public FeedActionType getFeedActionType() {
-        return FeedActionType.FEED_REPLY_CLAIM;
+        return FeedActionType.CLAIM;
     }
 
 }

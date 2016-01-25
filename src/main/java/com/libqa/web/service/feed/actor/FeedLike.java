@@ -19,6 +19,6 @@ public class FeedLike extends FeedActor {
 
     @Override
     public FeedActionType getFeedActionType() {
-        return FeedActionType.FEED_LIKE;
+        return FeedActionType.LIKE;
     }
 }

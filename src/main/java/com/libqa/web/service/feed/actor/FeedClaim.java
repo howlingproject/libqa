@@ -19,6 +19,6 @@ public class FeedClaim extends FeedActor {
 
     @Override
     public FeedActionType getFeedActionType() {
-        return FeedActionType.FEED_CLAIM;
+        return FeedActionType.CLAIM;
     }
 }

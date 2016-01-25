@@ -7,7 +7,7 @@ import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.feed.FeedReplyService;
 import com.libqa.web.service.feed.FeedService;
-import com.libqa.web.view.DisplayFeed;
+import com.libqa.web.view.feed.DisplayFeed;
 import com.libqa.web.view.feed.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +94,7 @@ public class FeedController {
                 return createResult(NOT_MATCH_USER);
             }
 
-            Feed savedFeed = feedService.modify(originFeed, requestFeed);
+            Feed savedFeed = feedService.modify(originFeed, requestFeed, user);
             return createSuccessResult(savedFeed);
         } catch (Exception e) {
             log.error("delete feed error.", e);

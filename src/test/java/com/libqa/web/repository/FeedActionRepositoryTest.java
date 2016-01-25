@@ -1,30 +1,33 @@
 package com.libqa.web.repository;
 
+import com.libqa.application.enums.FeedActionType;
+import com.libqa.application.enums.FeedThreadType;
 import com.libqa.testsupport.LibqaRepositoryTest;
 import com.libqa.web.domain.FeedAction;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.fest.assertions.Assertions.assertThat;
 
 public class FeedActionRepositoryTest extends LibqaRepositoryTest<FeedActionRepository> {
 
     @Test
-    public void findByFeedIdAndUserId() {
+    public void findByFeedActorIdAndUserIdAndIsCanceledFalse() {
         final Integer feedId = -1;
         final Integer userId = 1234;
-        List<FeedAction> actual = repository.findByFeedActorIdAndUserId(feedId, userId);
-        assertThat(actual.size(), is(0));
+        List<FeedAction> actual = repository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedId, userId);
+        assertThat(actual.size()).isZero();
     }
 
     @Test
-    public void findByFeedReplyIdAndUserId() {
+    public void countByFeedActorIdAndFeedThreadTypeAndFeedActionTypeAndIsCanceledFalse() {
         final Integer feedReplyId = -1;
-        final Integer userId = 1234;
+        final FeedThreadType feedThreadType = FeedThreadType.FEED_REPLY;
+        final FeedActionType feedActionType = FeedActionType.LIKE;
 
-        List<FeedAction> actual = repository.findByFeedActorIdAndUserId(feedReplyId, userId);
-        assertThat(actual.size(), is(0));
+        int count = repository.countByFeedActorIdAndFeedThreadTypeAndFeedActionTypeAndIsCanceledFalse(
+                feedReplyId, feedThreadType, feedActionType);
+        assertThat(count).isZero();
     }
 }
