@@ -63,9 +63,9 @@ public class DisplayFeedActionBuilder {
         return build(feedReplyClaimActor, feedReply.getClaimCount());
     }
 
-    private DisplayFeedAction build(FeedActor feedActor, int count) {
-        FeedAction feedAction = feedActionService.getFeedActionBy(feedActor);
-        return new DisplayFeedAction(feedAction.isActed(), count);
+    private DisplayFeedAction build(FeedActor feedActor, int actCount) {
+        FeedAction feedAction = (actCount == 0) ? FeedAction.notYet() : feedActionService.getFeedActionBy(feedActor);
+        return new DisplayFeedAction(feedAction.hasActed(), actCount);
     }
 
 }

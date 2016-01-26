@@ -22,7 +22,7 @@ public class FeedActionService {
      */
     public void action(FeedActor feedActor) {
         FeedAction feedAction = getFeedActionBy(feedActor);
-        if (feedAction.isActed()) {
+        if (feedAction.hasActed()) {
             feedAction.cancelByUser(feedActor.getActionUser());
         } else {
             createFeedAction(feedActor);
@@ -37,7 +37,7 @@ public class FeedActionService {
         return Iterables.tryFind(feedActionsByUser,
                 input -> (input.getFeedActionType() == feedActor.getFeedActionType()
                         && input.getFeedThreadType() == feedActor.getFeedThreadType()
-                )).or(FeedAction.notYetCreated());
+                )).or(FeedAction.notYet());
     }
 
     public Integer countOf(FeedActor feedActor) {

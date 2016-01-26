@@ -75,7 +75,7 @@ public class FeedActionServiceTest {
 
         FeedAction actual = sut.getFeedActionBy(feedLike);
 
-        assertThat(actual.isActed()).isTrue();
+        assertThat(actual.hasActed()).isTrue();
     }
 
     @Test
@@ -88,7 +88,7 @@ public class FeedActionServiceTest {
 
         FeedAction actual = sut.getFeedActionBy(feedLike);
 
-        assertThat(actual.isActed()).isFalse();
+        assertThat(actual.hasActed()).isFalse();
     }
 
     @Test
