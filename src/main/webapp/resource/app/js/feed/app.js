@@ -20,6 +20,9 @@ var Feed = {
     'getId': function($target) {
         return $target.closest('.thread').data('feedId');
     },
+    'hasNotAction': function($target) {
+        return !$target.hasClass('hasViewer');
+    },
     'bindSave' : function() {
         var me = this;
         var $frm = $('#feedForm');
@@ -92,30 +95,23 @@ var Feed = {
         var me = this;
         var feedId =  me.getFeedIdByPopOver(el);
 
-        $.confirm({
-            title: '확인',
-            content: 'FEED를 삭제하시겠습니까?',
-            confirmButton: '삭제',
-            cancelButton: '취소',
-            confirmButtonClass: 'btn-info',
-            confirm: function () {
-                var $feedBody = me.getFeedBodyByFeedId(feedId);
-                $.post('/feed/' + feedId + '/delete')
-                    .done(function (response) {
-                        if (response.resultCode != 1) {
-                            FeedUtil.alert(response.comment);
-                            return;
-                        }
-                        FeedUtil.hidePopOver();
-                        $feedBody.remove();
+        FeedUtil.confirm('FEED를 삭제하시겠습니까?', function(){
+            var $feedBody = me.getFeedBodyByFeedId(feedId);
+            $.post('/feed/' + feedId + '/delete')
+                .done(function (response) {
+                    if (response.resultCode != 1) {
+                        FeedUtil.alert(response.comment);
+                        return;
+                    }
+                    FeedUtil.hidePopOver();
+                    $feedBody.remove();
 
-                        if(redirectUrl) {
-                            location.href = redirectUrl;
-                        }
-                    }).fail(function () {
-                        alert('Error delete feed');
-                    });
-            }
+                    if(redirectUrl) {
+                        location.href = redirectUrl;
+                    }
+                }).fail(function () {
+                    alert('Error delete feed');
+                });
         });
     },
     'modifyItem' : function(el) {
@@ -152,28 +148,41 @@ var Feed = {
         FeedUtil.hidePopOver();
     },
     'like': function(el) {
-        $.post('/feed/' + this.getId($(el)) + '/like')
-            .done(function (response) {
-                if (response.resultCode != 1) {
-                    FeedUtil.alert(response.comment);
-                    return;
-                }
-                FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
-            }).fail(function () {
-                alert('Error like feed');
-            });
+        var feedId = this.getId($(el));
+        var hasNotAction = this.hasNotAction($(el));
+        var message = hasNotAction ? '이 글을 좋아하시나요?' : '좋아요를 취소하시겠습니까?';
+
+        FeedUtil.confirm(message, function(){
+            $.post('/feed/' + feedId + '/like')
+                .done(function (response) {
+                    if (response.resultCode != 1) {
+                        FeedUtil.alert(response.comment);
+                        return;
+                    }
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
+                }).fail(function () {
+                    alert('Error like feed');
+                });
+
+        });
     },
     'claim': function(el) {
-        $.post('/feed/' + this.getId($(el)) + '/claim')
-            .done(function (response) {
-                if (response.resultCode != 1) {
-                    FeedUtil.alert(response.comment);
-                    return;
-                }
-                FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
-            }).fail(function () {
-                alert('Error claim feed');
-            });
+        var feedId = this.getId($(el));
+        var hasNotAction = this.hasNotAction($(el));
+        var message = hasNotAction ? '이 글을 신고하시겠습니까?' : '신고를 취소하시겠습니까?';
+
+        FeedUtil.confirm(message, function(){
+            $.post('/feed/' + feedId + '/claim')
+                .done(function (response) {
+                    if (response.resultCode != 1) {
+                        FeedUtil.alert(response.comment);
+                        return;
+                    }
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
+                }).fail(function () {
+                    alert('Error claim feed');
+                });
+        });
     }
 };
 
@@ -224,6 +233,9 @@ var FeedReply = {
     'getId' : function($target){
         return $target.closest('.reply-thread').data('feedReplyId');
     },
+    'hasNotAction': function($target) {
+        return !$target.hasClass('hasViewer');
+    },
     'bindSave' : function() {
         var me = this;
         $('button[name=saveReply]').off('click').on('click',function () {
@@ -267,49 +279,54 @@ var FeedReply = {
         var feedReplyId = this.getId($(el));
         var $target = $(el).closest('.reply-thread');
 
-        $.confirm({
-            title: '확인',
-            content: '댓글을 삭제하시겠습니까?',
-            confirmButton: '삭제',
-            cancelButton: '취소',
-            confirmButtonClass: 'btn-info',
-            confirm: function () {
-                $.post('/feed/reply/' + feedReplyId + '/delete')
-                    .done(function (response) {
-                        if (response.resultCode != 1) {
-                            FeedUtil.alert(response.comment);
-                            return;
-                        }
-                        $target.remove();
-                    }).fail(function () {
-                        alert('Error delete feed Reply');
-                    });
-            }
+        FeedUtil.confirm('댓글을 삭제하시겠습니까?', function(){
+            $.post('/feed/reply/' + feedReplyId + '/delete')
+                .done(function (response) {
+                    if (response.resultCode != 1) {
+                        FeedUtil.alert(response.comment);
+                        return;
+                    }
+                    $target.remove();
+                }).fail(function () {
+                    alert('Error delete feed Reply');
+                });
         });
     },
     'like' : function(el) {
-        $.post('/feed/reply/' + this.getId($(el)) + '/like')
-            .done(function (response) {
-                if (response.resultCode != 1) {
-                    FeedUtil.alert(response.comment);
-                    return;
-                }
-                FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
-            }).fail(function () {
+        var feedReplyId = this.getId($(el));
+        var hasNotAction = this.hasNotAction($(el));
+        var message = hasNotAction ? '이 댓글을 좋아하시나요?' : '좋아요를 취소하시겠습니까?';
+
+        FeedUtil.confirm(message, function(){
+            $.post('/feed/reply/' + feedReplyId + '/like')
+                .done(function (response) {
+                    if (response.resultCode != 1) {
+                        FeedUtil.alert(response.comment);
+                        return;
+                    }
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
+                }).fail(function () {
                 alert('Error like feed');
             });
+        });
     },
     'claim' : function(el) {
-        $.post('/feed/reply/' + this.getId($(el)) + '/claim')
-            .done(function (response) {
-                if (response.resultCode != 1) {
-                    FeedUtil.alert(response.comment);
-                    return;
-                }
-                FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
-            }).fail(function () {
-                alert('Error claim feed');
-            });
+        var feedReplyId = this.getId($(el));
+        var hasNotAction = this.hasNotAction($(el));
+        var message = hasNotAction ? '이 댓글을 신고하시겠습니까?' : '신고를 취소하시겠습니까?';
+
+        FeedUtil.confirm(message, function(){
+            $.post('/feed/reply/' + feedReplyId + '/claim')
+                .done(function (response) {
+                    if (response.resultCode != 1) {
+                        FeedUtil.alert(response.comment);
+                        return;
+                    }
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
+                }).fail(function () {
+                    alert('Error claim feed');
+                });
+        });
     }
 };
 
@@ -342,6 +359,16 @@ var FeedUtil = {
             confirmButtonClass: 'btn-primary',
             icon: 'fa fa-info',
             animation: 'zoom'
+        });
+    },
+    'confirm': function(message, confirmCallback) {
+        $.confirm({
+            title: '확인',
+            content: message,
+            confirmButton: '확인',
+            cancelButton: '취소',
+            confirmButtonClass: 'btn-info',
+            confirm: confirmCallback
         });
     }
 };
