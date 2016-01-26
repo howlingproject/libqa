@@ -52,7 +52,7 @@ div.user-profile-sm span.nickname { font-size: 14px;}
 div.user-profile-xs span.nickname { font-size: 12px;}
 label.error-label {color: #EC6459;}
 label.error-label.hide {display: none;}
-div.action-buttons i.hasViewer {color : #2682C4; font-weight: bold;}
+div.action-buttons i.hasAction {color : #2682C4; font-weight: bold;}
 
 /**
 * Components

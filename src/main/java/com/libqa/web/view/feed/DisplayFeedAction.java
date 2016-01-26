@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public class DisplayFeedAction {
-    private boolean hasViewer = false;
+    private boolean hasAction = false;
     private Integer count = 0;
 
-    public DisplayFeedAction(boolean hasViewer, Integer count) {
-        this.hasViewer = hasViewer;
+    public DisplayFeedAction(boolean hasAction, Integer count) {
+        this.hasAction = hasAction;
         this.count = count;
     }
 }

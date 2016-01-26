@@ -21,7 +21,7 @@ var Feed = {
         return $target.closest('.thread').data('feedId');
     },
     'hasNotAction': function($target) {
-        return !$target.hasClass('hasViewer');
+        return !$target.hasClass('hasAction');
     },
     'bindSave' : function() {
         var me = this;
@@ -159,7 +159,7 @@ var Feed = {
                         FeedUtil.alert(response.comment);
                         return;
                     }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasAction);
                 }).fail(function () {
                     alert('Error like feed');
                 });
@@ -178,7 +178,7 @@ var Feed = {
                         FeedUtil.alert(response.comment);
                         return;
                     }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasAction);
                 }).fail(function () {
                     alert('Error claim feed');
                 });
@@ -234,7 +234,7 @@ var FeedReply = {
         return $target.closest('.reply-thread').data('feedReplyId');
     },
     'hasNotAction': function($target) {
-        return !$target.hasClass('hasViewer');
+        return !$target.hasClass('hasAction');
     },
     'bindSave' : function() {
         var me = this;
@@ -304,7 +304,7 @@ var FeedReply = {
                         FeedUtil.alert(response.comment);
                         return;
                     }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasAction);
                 }).fail(function () {
                 alert('Error like feed');
             });
@@ -322,7 +322,7 @@ var FeedReply = {
                         FeedUtil.alert(response.comment);
                         return;
                     }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasViewer);
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasAction);
                 }).fail(function () {
                     alert('Error claim feed');
                 });
@@ -340,15 +340,15 @@ var FeedUtil = {
             }
         });
     },
-    'hidePopOver' : function() {
+    'hidePopOver': function() {
         $('.popover-config').popover('hide');
     },
-    'toggleCount': function(el, count, hasViewer) {
-        el.find('span').html('('+count+')');
-        if(hasViewer) {
-            el.addClass('hasViewer');
-        }  else {
-            el.removeClass('hasViewer');
+    'toggleCount': function(el, count, hasAction) {
+        el.find('span').html('(' + count + ')');
+        if (hasAction) {
+            el.addClass('hasAction');
+        } else {
+            el.removeClass('hasAction');
         }
     },
     'alert': function(message) {

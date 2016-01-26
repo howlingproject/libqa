@@ -10,10 +10,10 @@
     <div class="message-box">
         <div class="message">{{feedReplyContent}}</div>
         <div class="action-buttons">
-            <i class="fa fa-thumbs-o-up {{#if likeFeedAction.hasViewer}}hasViewer{{/if}}" onclick="FeedReply.like(this)">
+            <i class="fa fa-thumbs-o-up {{#if likeFeedAction.hasAction}}hasAction{{/if}}" onclick="FeedReply.like(this)">
                 <span class="like-count">({{likeFeedAction.count}})</span>
             </i>
-            <i class="fa fa-bullhorn {{#if claimFeedAction.hasViewer}}hasViewer{{/if}}" onclick="FeedReply.claim(this)">
+            <i class="fa fa-bullhorn {{#if claimFeedAction.hasAction}}hasAction{{/if}}" onclick="FeedReply.claim(this)">
                 <span class="claim-count">({{claimFeedAction.count}})</span>
             </i>
         </div>
