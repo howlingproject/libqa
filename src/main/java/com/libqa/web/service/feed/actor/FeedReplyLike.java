@@ -5,12 +5,12 @@ import com.libqa.application.enums.FeedThreadType;
 import com.libqa.web.domain.User;
 
 public class FeedReplyLike extends FeedActor {
-    private FeedReplyLike(Integer feedReplyId, User user) {
-        super(feedReplyId, user);
+    private FeedReplyLike(Integer feedReplyId, User actionUser) {
+        super(feedReplyId, actionUser);
     }
 
-    public static FeedReplyLike of(Integer feedReplyId, User user) {
-        return new FeedReplyLike(feedReplyId, user);
+    public static FeedReplyLike of(Integer feedReplyId, User actionUser) {
+        return new FeedReplyLike(feedReplyId, actionUser);
     }
 
     @Override

@@ -46,17 +46,16 @@ public class DisplayFeedBuilder {
             return DisplayFeed.empty();
         }
 
+        User writer = userService.findByUserId(feed.getUserId());
         DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feed, viewer);
         DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaimBy(feed, viewer);
 
-        User writer = userService.findByUserId(feed.getUserId());
-        boolean isWriter = writer.isMatchUser(viewer.getUserId());
-        List<DisplayFeedReply> displayFeedReplies = displayFeedReplyBuilder.build(feed.getFeedReplies(), viewer);
+        final boolean isWriter = writer.isMatchUser(viewer.getUserId());
 
         DisplayFeed displayFeed = new DisplayFeed(feed, writer, isWriter);
         displayFeed.setLikeFeedAction(likedFeedAction);
         displayFeed.setClaimFeedAction(claimedFeedAction);
-        displayFeed.setReplies(displayFeedReplies);
+        displayFeed.setReplies(displayFeedReplyBuilder.build(feed.getFeedReplies(), viewer));
         return displayFeed;
     }
 }

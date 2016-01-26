@@ -35,10 +35,10 @@ public class DisplayFeed {
     private DisplayFeed() {
     }
 
-    public DisplayFeed(Feed feed, User user, Boolean isWriter) {
+    public DisplayFeed(Feed feed, User viewer, Boolean isWriter) {
         this.feedId = feed.getFeedId();
         this.userNick = feed.getUserNick();
-        this.userImage = user.getUserImage();
+        this.userImage = viewer.getUserImage();
         this.originFeedContent = feed.getFeedContent();
         this.feedContent = parseHtml(feed.getFeedContent());
         this.insertDate = DisplayDate.parse(feed.getInsertDate());

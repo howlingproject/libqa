@@ -10,16 +10,16 @@ public abstract class FeedActor {
     private Integer feedActorId;
 
     @Getter
-    private User user;
+    private User actionUser;
 
     /**
      * @param feedActorId 각 actor의 unique key를 나타낸다. <br />
      *                    feed -> feedId, feedReploy -> feedReplyId
-     * @param user        action을 취한 user
+     * @param actionUser        action을 취한 user
      */
-    FeedActor(Integer feedActorId, User user) {
+    FeedActor(Integer feedActorId, User actionUser) {
         this.feedActorId = feedActorId;
-        this.user = user;
+        this.actionUser = actionUser;
     }
 
     public abstract FeedThreadType getFeedThreadType();

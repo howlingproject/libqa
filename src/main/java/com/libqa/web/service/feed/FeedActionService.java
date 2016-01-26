@@ -23,7 +23,7 @@ public class FeedActionService {
     public void action(FeedActor feedActor) {
         FeedAction feedAction = getFeedActionBy(feedActor);
         if (feedAction.isActed()) {
-            feedAction.cancelByUser(feedActor.getUser());
+            feedAction.cancelByUser(feedActor.getActionUser());
         } else {
             createFeedAction(feedActor);
         }
@@ -32,7 +32,7 @@ public class FeedActionService {
     public FeedAction getFeedActionBy(FeedActor feedActor) {
         // TODO convert to queryDsl
         List<FeedAction> feedActionsByUser = feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(
-                feedActor.getFeedActorId(), feedActor.getUser().getUserId());
+                feedActor.getFeedActorId(), feedActor.getActionUser().getUserId());
 
         return Iterables.tryFind(feedActionsByUser,
                 input -> (input.getFeedActionType() == feedActor.getFeedActionType()
@@ -51,14 +51,13 @@ public class FeedActionService {
         feedAction.setFeedActorId(feedActor.getFeedActorId());
         feedAction.setFeedActionType(feedActor.getFeedActionType());
         feedAction.setFeedThreadType(feedActor.getFeedThreadType());
-        feedAction.setUserId(feedActor.getUser().getUserId());
-        feedAction.setUserNick(feedActor.getUser().getUserNick());
-        feedAction.setInsertUserId(feedActor.getUser().getUserId());
+        feedAction.setUserId(feedActor.getActionUser().getUserId());
+        feedAction.setUserNick(feedActor.getActionUser().getUserNick());
+        feedAction.setInsertUserId(feedActor.getActionUser().getUserId());
         feedAction.setInsertDate(new Date());
         feedAction.setCanceled(false);
         feedActionRepository.save(feedAction);
         return feedAction;
     }
-
 
 }

@@ -94,13 +94,13 @@ public class FeedService {
      * user 기반으로 좋아요를 처리한다.
      *
      * @param feedId
-     * @param user
+     * @param actionUser
      * @return Feed
      */
     @Transactional
-    public Feed like(Integer feedId, User user) {
+    public Feed like(Integer feedId, User actionUser) {
         Feed feed = feedRepository.findOne(feedId);
-        FeedLike feedLike = FeedLike.of(feed.getFeedId(), user);
+        FeedLike feedLike = FeedLike.of(feed.getFeedId(), actionUser);
 
         feedActionService.action(feedLike);
         Integer likeCount = feedActionService.countOf(feedLike);
@@ -112,13 +112,13 @@ public class FeedService {
      * user 기반으로 claim을 처리한다.
      *
      * @param feedId
-     * @param user
+     * @param actionUser
      * @return Feed
      */
     @Transactional
-    public Feed claim(Integer feedId, User user) {
+    public Feed claim(Integer feedId, User actionUser) {
         Feed feed = feedRepository.findOne(feedId);
-        FeedClaim feedClaim = FeedClaim.of(feed.getFeedId(), user);
+        FeedClaim feedClaim = FeedClaim.of(feed.getFeedId(), actionUser);
 
         feedActionService.action(feedClaim);
         Integer claimCount = feedActionService.countOf(feedClaim);

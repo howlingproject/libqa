@@ -49,13 +49,13 @@ public class FeedReplyService {
      * user기반으로 feed 댓글에 like를 처리한다.
      *
      * @param feedReplyId
-     * @param user
+     * @param actionUser
      * @return FeedReply
      */
     @Transactional
-    public FeedReply like(Integer feedReplyId, User user) {
+    public FeedReply like(Integer feedReplyId, User actionUser) {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
-        FeedReplyLike feedReplyLike = FeedReplyLike.of(feedReply.getFeedReplyId(), user);
+        FeedReplyLike feedReplyLike = FeedReplyLike.of(feedReply.getFeedReplyId(), actionUser);
 
         feedActionService.action(feedReplyLike);
         Integer likeCount = feedActionService.countOf(feedReplyLike);
@@ -68,13 +68,13 @@ public class FeedReplyService {
      * user기반으로 feed 댓글에 cliam을 처리한다.
      *
      * @param feedReplyId
-     * @param user
+     * @param actionUser
      * @return FeedReply
      */
     @Transactional
-    public FeedReply claim(Integer feedReplyId, User user) {
+    public FeedReply claim(Integer feedReplyId, User actionUser) {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
-        FeedReplyClaim feedReplyClaim = FeedReplyClaim.of(feedReply.getFeedReplyId(), user);
+        FeedReplyClaim feedReplyClaim = FeedReplyClaim.of(feedReply.getFeedReplyId(), actionUser);
 
         feedActionService.action(feedReplyClaim);
         Integer claimCount = feedActionService.countOf(feedReplyClaim);

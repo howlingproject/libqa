@@ -5,12 +5,12 @@ import com.libqa.application.enums.FeedThreadType;
 import com.libqa.web.domain.User;
 
 public class FeedReplyClaim extends FeedActor {
-    private FeedReplyClaim(Integer feedReplyId, User user) {
-        super(feedReplyId, user);
+    private FeedReplyClaim(Integer feedReplyId, User actionUser) {
+        super(feedReplyId, actionUser);
     }
 
-    public static FeedReplyClaim of(Integer feedReplyId, User user) {
-        return new FeedReplyClaim(feedReplyId, user);
+    public static FeedReplyClaim of(Integer feedReplyId, User actionUser) {
+        return new FeedReplyClaim(feedReplyId, actionUser);
     }
 
     @Override
