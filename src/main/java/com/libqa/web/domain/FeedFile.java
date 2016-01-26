@@ -20,10 +20,10 @@ public class FeedFile {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer feedFileId;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String realName;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String savedName;
 
     @Column(nullable = false, length = 80)
@@ -33,7 +33,7 @@ public class FeedFile {
     private Integer fileSize;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true, length = 10)
+    @Column(length = 10)
     private FileType fileType;
 
     @Column

@@ -48,13 +48,13 @@ public class FeedActionServiceTest {
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedLike.getFeedActorId(), user.getUserId()))
                 .willReturn(Lists.newArrayList(expectedFeedAction));
 
-        sut.action(userFixture(), feedLike);
+        sut.action(user, feedLike);
 
         assertThat(expectedFeedAction.isCanceled()).isTrue();
     }
 
     @Test
-    public void 취소된_역션이_존재하면_액션은_다시_생성된다() {
+    public void 취소된_액션이_존재하면_액션은_다시_생성된다() {
         final FeedLike feedLike = FeedLike.of(100000);
         final User user = userFixture();
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedLike.getFeedActorId(), user.getUserId()))
@@ -72,22 +72,22 @@ public class FeedActionServiceTest {
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedId, user.getUserId()))
                 .willReturn(feedLikeFixtures(feedId, user.getUserId()));
 
-        FeedAction actual = sut.getFeedActionByUser(user, FeedLike.of(feedId));
+        FeedAction actual = sut.getFeedAction(user, FeedLike.of(feedId));
 
         assertThat(actual.isActed()).isTrue();
     }
 
     @Test
-    public void 취소된_액션은_존재하지_않는_액션으로_간주한다() {
+    public void 취소된_액션은_취하지_않은_액션으로_간주한다() {
         final FeedLike feedLike = FeedLike.of(10000);
         final User user = userFixture();
 
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedLike.getFeedActorId(), user.getUserId()))
                 .willReturn(feedLikeFixturesWithCancel(feedLike.getFeedActorId(), user.getUserId()));
 
-        FeedAction actual = sut.getFeedActionByUser(user, feedLike);
+        FeedAction actual = sut.getFeedAction(user, feedLike);
 
-        assertThat(actual.isNotYet()).isTrue();
+        assertThat(actual.isActed()).isFalse();
     }
 
     @Test

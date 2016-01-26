@@ -1,13 +1,15 @@
 package com.libqa.web.service.feed;
 
 import com.libqa.application.util.PageUtil;
-import com.libqa.web.domain.*;
+import com.libqa.web.domain.Feed;
+import com.libqa.web.domain.FeedFile;
+import com.libqa.web.domain.FeedReply;
+import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedFileRepository;
 import com.libqa.web.repository.FeedReplyRepository;
 import com.libqa.web.repository.FeedRepository;
 import com.libqa.web.service.feed.actor.FeedClaim;
 import com.libqa.web.service.feed.actor.FeedLike;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,7 +22,6 @@ import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
-@Slf4j
 @Service
 public class FeedService {
     private static final Sort DEFAULT_SORT = new Sort(DESC, "feedId");

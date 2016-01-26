@@ -5,14 +5,12 @@ import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedActionRepository;
 import com.libqa.web.service.feed.actor.FeedActor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
-@Slf4j
 @Service
 public class FeedActionService {
     @Autowired
@@ -25,15 +23,15 @@ public class FeedActionService {
      * @param feedActor
      */
     public void action(User user, FeedActor feedActor) {
-        FeedAction feedAction = getFeedActionByUser(user, feedActor);
-        if (feedAction.isNotYet()) {
-            createFeedAction(user, feedActor);
-        } else {
+        FeedAction feedAction = getFeedAction(user, feedActor);
+        if (feedAction.isActed()) {
             feedAction.cancelByUser(user);
+        } else {
+            createFeedAction(user, feedActor);
         }
     }
 
-    public FeedAction getFeedActionByUser(User user, FeedActor feedActor) {
+    public FeedAction getFeedAction(User user, FeedActor feedActor) {
         // TODO convert to queryDsl
         List<FeedAction> feedActionsByUser = feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(
                 feedActor.getFeedActorId(), user.getUserId());
@@ -41,7 +39,7 @@ public class FeedActionService {
         return Iterables.tryFind(feedActionsByUser,
                 input -> (input.getFeedActionType() == feedActor.getFeedActionType()
                         && input.getFeedThreadType() == feedActor.getFeedThreadType()
-                )).or(FeedAction.notYet());
+                )).or(FeedAction.notYetCreated());
     }
 
     public Integer countOf(FeedActor feedActor) {

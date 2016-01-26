@@ -8,7 +8,13 @@ public abstract class FeedActor {
     @Getter
     private int feedActorId;
 
-    protected FeedActor(int feedActorId) {
+    /**
+     * feedActorId는 각 actor의 unique key를 나타낸다.
+     * feed -> feedId, feedReploy -> feedReplyId
+     *
+     * @param feedActorId
+     */
+    FeedActor(int feedActorId) {
         this.feedActorId = feedActorId;
     }
 

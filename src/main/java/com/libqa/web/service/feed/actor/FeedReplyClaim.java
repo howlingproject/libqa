@@ -4,7 +4,7 @@ import com.libqa.application.enums.FeedActionType;
 import com.libqa.application.enums.FeedThreadType;
 
 public class FeedReplyClaim extends FeedActor {
-    public FeedReplyClaim(int feedReplyId) {
+    private FeedReplyClaim(int feedReplyId) {
         super(feedReplyId);
     }
 
