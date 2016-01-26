@@ -2,14 +2,15 @@ package com.libqa.web.service.feed.actor;
 
 import com.libqa.application.enums.FeedActionType;
 import com.libqa.application.enums.FeedThreadType;
+import com.libqa.web.domain.User;
 
 public class FeedClaim extends FeedActor {
-    private FeedClaim(int feedId) {
-        super(feedId);
+    private FeedClaim(Integer feedId, User user) {
+        super(feedId, user);
     }
 
-    public static FeedClaim of(int feedId) {
-        return new FeedClaim(feedId);
+    public static FeedClaim of(Integer feedId, User user) {
+        return new FeedClaim(feedId, user);
     }
 
     @Override

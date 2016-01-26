@@ -2,7 +2,6 @@ package com.libqa.web.service.feed;
 
 import com.google.common.collect.Iterables;
 import com.libqa.web.domain.FeedAction;
-import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedActionRepository;
 import com.libqa.web.service.feed.actor.FeedActor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +18,21 @@ public class FeedActionService {
     /**
      * feedActor의 action을 처리한다.
      *
-     * @param user
      * @param feedActor
      */
-    public void action(User user, FeedActor feedActor) {
-        FeedAction feedAction = getFeedAction(user, feedActor);
+    public void action(FeedActor feedActor) {
+        FeedAction feedAction = getFeedActionBy(feedActor);
         if (feedAction.isActed()) {
-            feedAction.cancelByUser(user);
+            feedAction.cancelByUser(feedActor.getUser());
         } else {
-            createFeedAction(user, feedActor);
+            createFeedAction(feedActor);
         }
     }
 
-    public FeedAction getFeedAction(User user, FeedActor feedActor) {
+    public FeedAction getFeedActionBy(FeedActor feedActor) {
         // TODO convert to queryDsl
         List<FeedAction> feedActionsByUser = feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(
-                feedActor.getFeedActorId(), user.getUserId());
+                feedActor.getFeedActorId(), feedActor.getUser().getUserId());
 
         return Iterables.tryFind(feedActionsByUser,
                 input -> (input.getFeedActionType() == feedActor.getFeedActionType()
@@ -48,15 +46,15 @@ public class FeedActionService {
                 feedActor.getFeedActorId(), feedActor.getFeedThreadType(), feedActor.getFeedActionType());
     }
 
-    private FeedAction createFeedAction(User user, FeedActor feedActor) {
+    private FeedAction createFeedAction(FeedActor feedActor) {
         FeedAction feedAction = new FeedAction();
         feedAction.setFeedActorId(feedActor.getFeedActorId());
         feedAction.setFeedActionType(feedActor.getFeedActionType());
         feedAction.setFeedThreadType(feedActor.getFeedThreadType());
-        feedAction.setUserId(user.getUserId());
-        feedAction.setUserNick(user.getUserNick());
+        feedAction.setUserId(feedActor.getUser().getUserId());
+        feedAction.setUserNick(feedActor.getUser().getUserNick());
+        feedAction.setInsertUserId(feedActor.getUser().getUserId());
         feedAction.setInsertDate(new Date());
-        feedAction.setInsertUserId(user.getUserId());
         feedAction.setCanceled(false);
         feedActionRepository.save(feedAction);
         return feedAction;

@@ -7,7 +7,6 @@ import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.feed.FeedReplyService;
 import com.libqa.web.service.feed.FeedService;
-import com.libqa.web.view.feed.DisplayFeed;
 import com.libqa.web.view.feed.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,34 +48,37 @@ public class FeedController {
 
     @RequestMapping(value = "{feedId}", method = GET)
     public ModelAndView view(@PathVariable Integer feedId, ModelAndView mav) {
+        User viewer = loggedUser.get();
         Feed feed = feedService.findByFeedId(feedId);
+
         mav.setViewName("feed/view");
-        mav.addObject("displayFeed", displayFeedBuilder.build(feed, feed.getFeedReplies()));
+        mav.addObject("displayFeed", displayFeedBuilder.build(feed, viewer));
         return mav;
     }
 
     @RequestMapping(value = "list", method = GET)
     public ResponseData<DisplayFeed> list(@RequestParam(required = false) Integer lastFeedId) {
+        User viewer = loggedUser.get();
         List<Feed> feeds = feedService.search(lastFeedId);
-        return createSuccessResult(displayFeedBuilder.build(feeds));
+        return createSuccessResult(displayFeedBuilder.build(feeds, viewer));
     }
 
     @RequestMapping(value = "myList", method = GET)
     public ResponseData<DisplayFeed> myList(@RequestParam(required = false) Integer lastFeedId) {
-        User user = loggedUser.get();
-        List<Feed> feeds = feedService.searchByUserId(user.getUserId(), lastFeedId);
-        return createSuccessResult(displayFeedBuilder.build(feeds));
+        User viewer = loggedUser.get();
+        List<Feed> feeds = feedService.searchByUserId(viewer.getUserId(), lastFeedId);
+        return createSuccessResult(displayFeedBuilder.build(feeds, viewer));
     }
 
     @RequestMapping(value = "save", method = POST)
     public ResponseData<Feed> save(Feed feed) {
-        User user = loggedUser.get();
-        if (user.isGuest()) {
+        User viewer = loggedUser.get();
+        if (viewer.isGuest()) {
             return createResult(NEED_LOGIN);
         }
 
         try {
-            feedService.save(feed, user);
+            feedService.save(feed, viewer);
             return createSuccessResult(feed);
         } catch (Exception e) {
             log.error("save feed error.", e);
@@ -86,15 +88,15 @@ public class FeedController {
 
     @RequestMapping(value = "/modify", method = POST)
     public ResponseData<Feed> modify(Feed requestFeed) {
-        User user = loggedUser.get();
+        User viewer = loggedUser.get();
         try {
             log.debug("requestFeed : {}", requestFeed);
             Feed originFeed = feedService.findByFeedId(requestFeed.getFeedId());
-            if (user.isNotMatchUser(originFeed.getUserId())) {
+            if (viewer.isNotMatchUser(originFeed.getUserId())) {
                 return createResult(NOT_MATCH_USER);
             }
 
-            Feed savedFeed = feedService.modify(originFeed, requestFeed, user);
+            Feed savedFeed = feedService.modify(originFeed, requestFeed, viewer);
             return createSuccessResult(savedFeed);
         } catch (Exception e) {
             log.error("delete feed error.", e);
@@ -104,10 +106,10 @@ public class FeedController {
 
     @RequestMapping(value = "{feedId}/delete", method = POST)
     public ResponseData<Integer> delete(@PathVariable Integer feedId) {
-        User user = loggedUser.get();
+        User viewer = loggedUser.get();
         try {
             Feed originFeed = feedService.findByFeedId(feedId);
-            if (user.isNotMatchUser(originFeed.getUserId())) {
+            if (viewer.isNotMatchUser(originFeed.getUserId())) {
                 return createResult(NOT_MATCH_USER);
             }
 
@@ -121,14 +123,14 @@ public class FeedController {
 
     @RequestMapping(value = "{feedId}/like", method = POST)
     public ResponseData<DisplayFeedAction> likeFeed(@PathVariable Integer feedId) {
-        User user = loggedUser.get();
-        if (user.isGuest()) {
+        User viewer = loggedUser.get();
+        if (viewer.isGuest()) {
             return createResult(NEED_LOGIN);
         }
 
         try {
-            Feed feed = feedService.like(feedId, user);
-            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildLikeBy(feed);
+            Feed feed = feedService.like(feedId, viewer);
+            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildLikeBy(feed, viewer);
             return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("like feed error.", e);
@@ -138,14 +140,14 @@ public class FeedController {
 
     @RequestMapping(value = "{feedId}/claim", method = POST)
     public ResponseData<DisplayFeedAction> claimFeed(@PathVariable Integer feedId) {
-        User user = loggedUser.get();
-        if (user.isGuest()) {
+        User viewer = loggedUser.get();
+        if (viewer.isGuest()) {
             return createResult(NEED_LOGIN);
         }
 
         try {
-            Feed feed = feedService.claim(feedId, user);
-            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildClaimBy(feed);
+            Feed feed = feedService.claim(feedId, viewer);
+            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildClaimBy(feed, viewer);
             return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("claim feed error.", e);
@@ -155,13 +157,13 @@ public class FeedController {
 
     @RequestMapping(value = "reply/save", method = POST)
     public ResponseData<DisplayFeedReply> saveReply(FeedReply feedReply) {
-        User user = loggedUser.get();
-        if (user.isGuest()) {
+        User viewer = loggedUser.get();
+        if (viewer.isGuest()) {
             return createResult(NEED_LOGIN);
         }
 
         try {
-            feedReplyService.save(feedReply, user);
+            feedReplyService.save(feedReply, viewer);
             return createSuccessResult(new DisplayFeedReply(feedReply));
         } catch (Exception e) {
             log.error("save reply error.", e);
@@ -171,11 +173,11 @@ public class FeedController {
 
     @RequestMapping(value = "reply/{feedReplyId}/delete", method = POST)
     public ResponseData<Integer> deleteReply(@PathVariable Integer feedReplyId) {
-        User user = loggedUser.get();
+        User viewer = loggedUser.get();
 
         try {
             FeedReply originFeedReply = feedReplyService.findByFeedReplyId(feedReplyId);
-            if (user.isNotMatchUser(originFeedReply.getUserId())) {
+            if (viewer.isNotMatchUser(originFeedReply.getUserId())) {
                 return createResult(NOT_MATCH_USER);
             }
 
@@ -189,14 +191,14 @@ public class FeedController {
 
     @RequestMapping(value = "reply/{feedReplyId}/like", method = POST)
     public ResponseData<DisplayFeedAction> likeReply(@PathVariable Integer feedReplyId) {
-        User user = loggedUser.get();
-        if (user.isGuest()) {
+        User viewer = loggedUser.get();
+        if (viewer.isGuest()) {
             return createResult(NEED_LOGIN);
         }
 
         try {
-            FeedReply feedReply = feedReplyService.like(feedReplyId, user);
-            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildLikeBy(feedReply);
+            FeedReply feedReply = feedReplyService.like(feedReplyId, viewer);
+            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildLikeBy(feedReply, viewer);
             return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("like feedReply error.", e);
@@ -206,14 +208,14 @@ public class FeedController {
 
     @RequestMapping(value = "reply/{feedReplyId}/claim", method = POST)
     public ResponseData<DisplayFeedAction> claimReply(@PathVariable Integer feedReplyId) {
-        User user = loggedUser.get();
-        if (user.isGuest()) {
+        User viewer = loggedUser.get();
+        if (viewer.isGuest()) {
             return createResult(NEED_LOGIN);
         }
 
         try {
-            FeedReply feedReply = feedReplyService.claim(feedReplyId, user);
-            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildClaimBy(feedReply);
+            FeedReply feedReply = feedReplyService.claim(feedReplyId, viewer);
+            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildClaimBy(feedReply, viewer);
             return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("claim feedReply error.", e);

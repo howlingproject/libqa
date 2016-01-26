@@ -100,9 +100,9 @@ public class FeedService {
     @Transactional
     public Feed like(Integer feedId, User user) {
         Feed feed = feedRepository.findOne(feedId);
-        FeedLike feedLike = FeedLike.of(feed.getFeedId());
+        FeedLike feedLike = FeedLike.of(feed.getFeedId(), user);
 
-        feedActionService.action(user, feedLike);
+        feedActionService.action(feedLike);
         Integer likeCount = feedActionService.countOf(feedLike);
         feed.setLikeCount(likeCount);
         return feed;
@@ -118,9 +118,9 @@ public class FeedService {
     @Transactional
     public Feed claim(Integer feedId, User user) {
         Feed feed = feedRepository.findOne(feedId);
-        FeedClaim feedClaim = FeedClaim.of(feed.getFeedId());
+        FeedClaim feedClaim = FeedClaim.of(feed.getFeedId(), user);
 
-        feedActionService.action(user, feedClaim);
+        feedActionService.action(feedClaim);
         Integer claimCount = feedActionService.countOf(feedClaim);
 
         feed.setClaimCount(claimCount);
@@ -167,6 +167,8 @@ public class FeedService {
      *
      * @param userId
      * @param lastFeedId
+
+
      * @return List&lt;Feed&gt;
      */
     public List<Feed> searchByUserId(Integer userId, Integer lastFeedId) {

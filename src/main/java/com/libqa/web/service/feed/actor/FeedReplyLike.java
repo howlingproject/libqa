@@ -2,14 +2,15 @@ package com.libqa.web.service.feed.actor;
 
 import com.libqa.application.enums.FeedActionType;
 import com.libqa.application.enums.FeedThreadType;
+import com.libqa.web.domain.User;
 
 public class FeedReplyLike extends FeedActor {
-    private FeedReplyLike(int feedReplyId) {
-        super(feedReplyId);
+    private FeedReplyLike(Integer feedReplyId, User user) {
+        super(feedReplyId, user);
     }
 
-    public static FeedReplyLike of(int feedReplyId) {
-        return new FeedReplyLike(feedReplyId);
+    public static FeedReplyLike of(Integer feedReplyId, User user) {
+        return new FeedReplyLike(feedReplyId, user);
     }
 
     @Override
