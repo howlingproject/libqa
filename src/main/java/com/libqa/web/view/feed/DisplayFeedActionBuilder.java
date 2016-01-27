@@ -22,7 +22,7 @@ public class DisplayFeedActionBuilder {
      * @param viewer
      * @return DisplayFeedAction
      */
-    public DisplayFeedAction buildLikeBy(Feed feed, User viewer) {
+    public DisplayFeedAction buildLike(Feed feed, User viewer) {
         FeedLike feedLikeActor = FeedLike.of(feed.getFeedId(), viewer);
         return build(feedLikeActor, feed.getLikeCount());
     }
@@ -34,7 +34,7 @@ public class DisplayFeedActionBuilder {
      * @param viewer
      * @return DisplayFeedAction
      */
-    public DisplayFeedAction buildLikeBy(FeedReply feedReply, User viewer) {
+    public DisplayFeedAction buildLike(FeedReply feedReply, User viewer) {
         FeedReplyLike feedReplyLikeActor = FeedReplyLike.of(feedReply.getFeedReplyId(), viewer);
         return build(feedReplyLikeActor, feedReply.getLikeCount());
     }
@@ -46,7 +46,7 @@ public class DisplayFeedActionBuilder {
      * @param viewer
      * @return DisplayFeedAction
      */
-    public DisplayFeedAction buildClaimBy(Feed feed, User viewer) {
+    public DisplayFeedAction buildClaim(Feed feed, User viewer) {
         FeedClaim feedClaimActor = FeedClaim.of(feed.getFeedId(), viewer);
         return build(feedClaimActor, feed.getClaimCount());
     }
@@ -58,14 +58,18 @@ public class DisplayFeedActionBuilder {
      * @param viewer
      * @return DisplayFeedAction
      */
-    public DisplayFeedAction buildClaimBy(FeedReply feedReply, User viewer) {
+    public DisplayFeedAction buildClaim(FeedReply feedReply, User viewer) {
         FeedReplyClaim feedReplyClaimActor = FeedReplyClaim.of(feedReply.getFeedReplyId(), viewer);
         return build(feedReplyClaimActor, feedReply.getClaimCount());
     }
 
-    private DisplayFeedAction build(FeedActor feedActor, int actCount) {
-        FeedAction feedAction = (actCount == 0) ? FeedAction.notYet() : feedActionService.getFeedActionBy(feedActor);
-        return new DisplayFeedAction(feedAction.hasActed(), actCount);
+    private DisplayFeedAction build(FeedActor feedActor, int actionCount) {
+        if (actionCount == 0) {
+            return new DisplayFeedAction(false, actionCount);
+        }
+
+        FeedAction feedAction = feedActionService.getFeedActionBy(feedActor);
+        return new DisplayFeedAction(feedAction.isActed(), actionCount);
     }
 
 }

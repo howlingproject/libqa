@@ -130,7 +130,7 @@ public class FeedController {
 
         try {
             Feed feed = feedService.like(feedId, viewer);
-            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildLikeBy(feed, viewer);
+            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildLike(feed, viewer);
             return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("like feed error.", e);
@@ -147,7 +147,7 @@ public class FeedController {
 
         try {
             Feed feed = feedService.claim(feedId, viewer);
-            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildClaimBy(feed, viewer);
+            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildClaim(feed, viewer);
             return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("claim feed error.", e);
@@ -198,7 +198,7 @@ public class FeedController {
 
         try {
             FeedReply feedReply = feedReplyService.like(feedReplyId, viewer);
-            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildLikeBy(feedReply, viewer);
+            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildLike(feedReply, viewer);
             return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("like feedReply error.", e);
@@ -215,7 +215,7 @@ public class FeedController {
 
         try {
             FeedReply feedReply = feedReplyService.claim(feedReplyId, viewer);
-            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildClaimBy(feedReply, viewer);
+            DisplayFeedAction displayFeedAction = displayFeedActionBuilder.buildClaim(feedReply, viewer);
             return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("claim feedReply error.", e);

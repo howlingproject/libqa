@@ -18,7 +18,7 @@ import java.util.Date;
         @Index(columnList = "feedActorId,userId")
 })
 public class FeedAction {
-    private static final FeedAction NOT_YET = new FeedAction();
+    private static final FeedAction EMPTY = new FeedAction();
 
     @Id
     @Column(nullable = false)
@@ -58,10 +58,6 @@ public class FeedAction {
     @Column
     private Integer updateUserId;
 
-    public boolean isNotCanceled() {
-        return !this.isCanceled;
-    }
-
     public void cancelByUser(User user) {
         this.setCanceled(true);
         this.setUpdateDate(new Date());
@@ -69,11 +65,14 @@ public class FeedAction {
     }
 
     public static FeedAction notYet() {
-        return NOT_YET;
+        return EMPTY;
     }
 
-    public boolean hasActed() {
-        return this != NOT_YET;
+    public boolean isNotYet() {
+        return this == EMPTY;
     }
 
+    public boolean isActed() {
+        return !isNotYet();
+    }
 }

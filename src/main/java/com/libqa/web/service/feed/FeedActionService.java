@@ -17,18 +17,26 @@ public class FeedActionService {
 
     /**
      * feedActor의 action을 처리한다.
+     * 처음 요청인 경우 action 생성하고, 재요청인 경우 취소한다.
      *
-     * @param feedActor
+     * @param feedActor feedActor of user
      */
-    public void action(FeedActor feedActor) {
+    public void act(FeedActor feedActor) {
         FeedAction feedAction = getFeedActionBy(feedActor);
-        if (feedAction.hasActed()) {
-            feedAction.cancelByUser(feedActor.getActionUser());
+        if (feedAction.isNotYet()) {
+            createFeedActionBy(feedActor);
         } else {
-            createFeedAction(feedActor);
+            feedAction.cancelByUser(feedActor.getActionUser());
         }
     }
 
+    /**
+     * feedActor의 FeedAction을 조회한다.
+     * feedAction이 존재하지 않으면 {@code FeedAction.notYet()}이 리턴된다.
+     *
+     * @param feedActor feedActor of user
+     * @return FeedAction
+     */
     public FeedAction getFeedActionBy(FeedActor feedActor) {
         // TODO convert to queryDsl
         List<FeedAction> feedActionsByUser = feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(
@@ -46,7 +54,7 @@ public class FeedActionService {
                 feedActor.getFeedActorId(), feedActor.getFeedThreadType(), feedActor.getFeedActionType());
     }
 
-    private FeedAction createFeedAction(FeedActor feedActor) {
+    private FeedAction createFeedActionBy(FeedActor feedActor) {
         FeedAction feedAction = new FeedAction();
         feedAction.setFeedActorId(feedActor.getFeedActorId());
         feedAction.setFeedActionType(feedActor.getFeedActionType());

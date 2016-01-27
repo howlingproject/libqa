@@ -21,7 +21,7 @@ var Feed = {
         return $target.closest('.thread').data('feedId');
     },
     'hasNotAction': function($target) {
-        return !$target.hasClass('hasAction');
+        return !$target.hasClass('hasActor');
     },
     'bindSave' : function() {
         var me = this;
@@ -159,7 +159,7 @@ var Feed = {
                         FeedUtil.alert(response.comment);
                         return;
                     }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasAction);
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasActor);
                 }).fail(function () {
                     alert('Error like feed');
                 });
@@ -178,7 +178,7 @@ var Feed = {
                         FeedUtil.alert(response.comment);
                         return;
                     }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasAction);
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasActor);
                 }).fail(function () {
                     alert('Error claim feed');
                 });
@@ -234,7 +234,7 @@ var FeedReply = {
         return $target.closest('.reply-thread').data('feedReplyId');
     },
     'hasNotAction': function($target) {
-        return !$target.hasClass('hasAction');
+        return !$target.hasClass('hasActor');
     },
     'bindSave' : function() {
         var me = this;
@@ -304,7 +304,7 @@ var FeedReply = {
                         FeedUtil.alert(response.comment);
                         return;
                     }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasAction);
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasActor);
                 }).fail(function () {
                 alert('Error like feed');
             });
@@ -322,7 +322,7 @@ var FeedReply = {
                         FeedUtil.alert(response.comment);
                         return;
                     }
-                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasAction);
+                    FeedUtil.toggleCount($(el), response.data.count, response.data.hasActor);
                 }).fail(function () {
                     alert('Error claim feed');
                 });
@@ -343,12 +343,12 @@ var FeedUtil = {
     'hidePopOver': function() {
         $('.popover-config').popover('hide');
     },
-    'toggleCount': function(el, count, hasAction) {
+    'toggleCount': function(el, count, hasActor) {
         el.find('span').html('(' + count + ')');
-        if (hasAction) {
-            el.addClass('hasAction');
+        if (hasActor) {
+            el.addClass('hasActor');
         } else {
-            el.removeClass('hasAction');
+            el.removeClass('hasActor');
         }
     },
     'alert': function(message) {

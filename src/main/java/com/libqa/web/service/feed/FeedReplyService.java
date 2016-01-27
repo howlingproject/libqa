@@ -57,7 +57,7 @@ public class FeedReplyService {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         FeedReplyLike feedReplyLike = FeedReplyLike.of(feedReply.getFeedReplyId(), actionUser);
 
-        feedActionService.action(feedReplyLike);
+        feedActionService.act(feedReplyLike);
         Integer likeCount = feedActionService.countOf(feedReplyLike);
 
         feedReply.setLikeCount(likeCount);
@@ -76,7 +76,7 @@ public class FeedReplyService {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         FeedReplyClaim feedReplyClaim = FeedReplyClaim.of(feedReply.getFeedReplyId(), actionUser);
 
-        feedActionService.action(feedReplyClaim);
+        feedActionService.act(feedReplyClaim);
         Integer claimCount = feedActionService.countOf(feedReplyClaim);
 
         feedReply.setClaimCount(claimCount);

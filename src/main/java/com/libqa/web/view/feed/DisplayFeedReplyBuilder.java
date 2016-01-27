@@ -29,8 +29,8 @@ public class DisplayFeedReplyBuilder {
 
     private DisplayFeedReply build(FeedReply feedReply, User viewer) {
         User writer = userService.findByUserId(feedReply.getUserId());
-        DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLikeBy(feedReply, viewer);
-        DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaimBy(feedReply, viewer);
+        DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLike(feedReply, viewer);
+        DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaim(feedReply, viewer);
 
         final boolean isWriter = writer.isMatchUser(viewer.getUserId());
 

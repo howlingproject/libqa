@@ -102,7 +102,7 @@ public class FeedService {
         Feed feed = feedRepository.findOne(feedId);
         FeedLike feedLike = FeedLike.of(feed.getFeedId(), actionUser);
 
-        feedActionService.action(feedLike);
+        feedActionService.act(feedLike);
         Integer likeCount = feedActionService.countOf(feedLike);
         feed.setLikeCount(likeCount);
         return feed;
@@ -120,7 +120,7 @@ public class FeedService {
         Feed feed = feedRepository.findOne(feedId);
         FeedClaim feedClaim = FeedClaim.of(feed.getFeedId(), actionUser);
 
-        feedActionService.action(feedClaim);
+        feedActionService.act(feedClaim);
         Integer claimCount = feedActionService.countOf(feedClaim);
 
         feed.setClaimCount(claimCount);

@@ -35,7 +35,7 @@ public class FeedActionServiceTest {
         final User user = userFixture();
         final FeedLike feedLike = FeedLike.of(100000, user);
 
-        sut.action(feedLike);
+        sut.act(feedLike);
 
         verify(feedActionRepository).save(any(FeedAction.class));
     }
@@ -48,7 +48,7 @@ public class FeedActionServiceTest {
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedLike.getFeedActorId(), user.getUserId()))
                 .willReturn(Lists.newArrayList(expectedFeedAction));
 
-        sut.action(feedLike);
+        sut.act(feedLike);
 
         assertThat(expectedFeedAction.isCanceled()).isTrue();
     }
@@ -60,7 +60,7 @@ public class FeedActionServiceTest {
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedLike.getFeedActorId(), user.getUserId()))
                 .willReturn(feedLikeFixturesWithCancel(feedLike.getFeedActorId(), user.getUserId()));
 
-        sut.action(feedLike);
+        sut.act(feedLike);
 
         verify(feedActionRepository).save(any(FeedAction.class));
     }
@@ -75,7 +75,7 @@ public class FeedActionServiceTest {
 
         FeedAction actual = sut.getFeedActionBy(feedLike);
 
-        assertThat(actual.hasActed()).isTrue();
+        assertThat(actual.isNotYet()).isTrue();
     }
 
     @Test
@@ -88,7 +88,7 @@ public class FeedActionServiceTest {
 
         FeedAction actual = sut.getFeedActionBy(feedLike);
 
-        assertThat(actual.hasActed()).isFalse();
+        assertThat(actual.isNotYet()).isFalse();
     }
 
     @Test

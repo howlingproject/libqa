@@ -13,9 +13,9 @@ public abstract class FeedActor {
     private User actionUser;
 
     /**
-     * @param feedActorId 각 actor의 unique key를 나타낸다. <br />
-     *                    feed -> feedId, feedReploy -> feedReplyId
-     * @param actionUser        action을 취한 user
+     * @param feedActorId 각 actor의 unique key를 나타낸다.
+     *                    feed -> feedId, feedReply -> feedReplyId
+     * @param actionUser  action을 취한 user
      */
     FeedActor(Integer feedActorId, User actionUser) {
         this.feedActorId = feedActorId;
