@@ -78,10 +78,10 @@
             <div class="message-box">
                 <div class="message">{{feedReplyContent}}</div>
                 <div class="action-buttons">
-                    <i class="fa fa-thumbs-o-up {{#if likeFeedAction.hasActor}}hasActor{{/if}}" onclick="FeedReply.like(this)">
+                    <i class="fa fa-thumbs-o-up {{#if likeFeedAction.hasActor}}hasActor{{/if}}" onclick="FeedReply.like(this)" title="좋아요">
                         <span class="like-count">({{likeFeedAction.count}})</span>
                     </i>
-                    <i class="fa fa-bullhorn {{#if claimFeedAction.hasActor}}hasActor{{/if}}" onclick="FeedReply.claim(this)">
+                    <i class="fa fa-bullhorn {{#if claimFeedAction.hasActor}}hasActor{{/if}}" onclick="FeedReply.claim(this)" title="신고하기">
                         <span class="claim-count">({{claimFeedAction.count}})</span>
                     </i>
                 </div>
