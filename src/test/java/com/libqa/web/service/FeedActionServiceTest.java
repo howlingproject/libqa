@@ -5,7 +5,9 @@ import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedActionRepository;
 import com.libqa.web.service.feed.FeedActionService;
+import com.libqa.web.service.feed.actor.FeedActor;
 import com.libqa.web.service.feed.actor.FeedLike;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -14,14 +16,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
 
-import static com.libqa.application.enums.FeedActionType.LIKE;
-import static com.libqa.application.enums.FeedThreadType.FEED;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 
+@Slf4j
 @RunWith(MockitoJUnitRunner.class)
 public class FeedActionServiceTest {
     @Mock
@@ -44,7 +45,7 @@ public class FeedActionServiceTest {
     public void 피드의_좋아요_액션이_재호출되면_액션은_취소된다() {
         final User user = userFixture();
         final FeedLike feedLike = FeedLike.of(100000, user);
-        final FeedAction expectedFeedAction = feedLikeFixture(feedLike.getFeedActorId(), user.getUserId());
+        final FeedAction expectedFeedAction = feedActionFixture(feedLike);
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedLike.getFeedActorId(), user.getUserId()))
                 .willReturn(Lists.newArrayList(expectedFeedAction));
 
@@ -58,7 +59,7 @@ public class FeedActionServiceTest {
         final User user = userFixture();
         final FeedLike feedLike = FeedLike.of(100000, user);
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedLike.getFeedActorId(), user.getUserId()))
-                .willReturn(feedLikeFixturesWithCancel(feedLike.getFeedActorId(), user.getUserId()));
+                .willReturn(onlyCancelFeedActionsFixture(feedLike));
 
         sut.act(feedLike);
 
@@ -71,11 +72,11 @@ public class FeedActionServiceTest {
         final User user = userFixture();
         final FeedLike feedLike = FeedLike.of(feedId, user);
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedId, user.getUserId()))
-                .willReturn(feedLikeFixtures(feedId, user.getUserId()));
+                .willReturn(feedActionFixtures(feedLike));
 
         FeedAction actual = sut.getFeedActionBy(feedLike);
 
-        assertThat(actual.isNotYet()).isTrue();
+        assertThat(actual.isActed()).isTrue();
     }
 
     @Test
@@ -84,11 +85,11 @@ public class FeedActionServiceTest {
         final FeedLike feedLike = FeedLike.of(10000, user);
 
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedLike.getFeedActorId(), user.getUserId()))
-                .willReturn(feedLikeFixturesWithCancel(feedLike.getFeedActorId(), user.getUserId()));
+                .willReturn(onlyCancelFeedActionsFixture(feedLike));
 
         FeedAction actual = sut.getFeedActionBy(feedLike);
 
-        assertThat(actual.isNotYet()).isFalse();
+        assertThat(actual.isNotYet()).isTrue();
     }
 
     @Test
@@ -101,41 +102,41 @@ public class FeedActionServiceTest {
                 eq(feedLike.getFeedActorId()), eq(feedLike.getFeedThreadType()), eq(feedLike.getFeedActionType()));
     }
 
-    private FeedAction feedLikeFixture(int actorId, int userId) {
-        FeedAction feedAction = new FeedAction();
-        feedAction.setFeedActionId(actorId);
-        feedAction.setUserId(userId);
 
+    private FeedAction feedActionFixture(FeedActor feedActor) {
+        FeedAction feedAction = new FeedAction();
+        feedAction.setFeedActionId(feedActor.getFeedActorId());
+        feedAction.setFeedThreadType(feedActor.getFeedThreadType());
+        feedAction.setFeedActionType(feedActor.getFeedActionType());
+        feedAction.setUserId(feedActor.getActionUser().getUserId());
         feedAction.setCanceled(false);
-        feedAction.setFeedThreadType(FEED);
-        feedAction.setFeedActionType(LIKE);
         return feedAction;
     }
 
-    private List<FeedAction> feedLikeFixtures(int actorId, int userId) {
+    private List<FeedAction> feedActionFixtures(FeedActor feedActor) {
         FeedAction notCanceled = new FeedAction();
-        notCanceled.setFeedActionId(actorId);
-        notCanceled.setUserId(userId);
-
+        notCanceled.setFeedActionId(feedActor.getFeedActorId());
+        notCanceled.setFeedThreadType(feedActor.getFeedThreadType());
+        notCanceled.setFeedActionType(feedActor.getFeedActionType());
+        notCanceled.setUserId(feedActor.getActionUser().getUserId());
         notCanceled.setCanceled(false);
-        notCanceled.setFeedThreadType(FEED);
-        notCanceled.setFeedActionType(LIKE);
 
         FeedAction canceled = new FeedAction();
-        canceled.setFeedActionId(actorId);
-        canceled.setUserId(userId);
+        canceled.setFeedActionId(feedActor.getFeedActorId());
+        canceled.setFeedThreadType(feedActor.getFeedThreadType());
+        canceled.setFeedActionType(feedActor.getFeedActionType());
+        canceled.setUserId(feedActor.getActionUser().getUserId());
         canceled.setCanceled(true);
-        canceled.setFeedThreadType(FEED);
-        canceled.setFeedActionType(LIKE);
+
         return Lists.newArrayList(notCanceled, canceled);
     }
 
-    private List<FeedAction> feedLikeFixturesWithCancel(int actorId, int userId) {
+    private List<FeedAction> onlyCancelFeedActionsFixture(FeedActor feedActor) {
         FeedAction canceled = new FeedAction();
-        canceled.setFeedActionId(actorId);
-        canceled.setUserId(userId);
+        canceled.setFeedActionId(feedActor.getFeedActorId());
+        canceled.setFeedActionType(feedActor.getFeedActionType());
+        canceled.setUserId(feedActor.getActionUser().getUserId());
         canceled.setCanceled(true);
-        canceled.setFeedActionType(LIKE);
         return Lists.newArrayList(canceled);
     }
 
