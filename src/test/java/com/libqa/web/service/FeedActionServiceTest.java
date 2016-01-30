@@ -5,7 +5,7 @@ import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedActionRepository;
 import com.libqa.web.service.feed.FeedActionService;
-import com.libqa.web.service.feed.actor.FeedActor;
+import com.libqa.web.service.feed.actor.FeedActionActor;
 import com.libqa.web.service.feed.actor.FeedLike;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -103,39 +103,39 @@ public class FeedActionServiceTest {
     }
 
 
-    private FeedAction feedActionFixture(FeedActor feedActor) {
+    private FeedAction feedActionFixture(FeedActionActor feedActionActor) {
         FeedAction feedAction = new FeedAction();
-        feedAction.setFeedActionId(feedActor.getFeedActorId());
-        feedAction.setFeedThreadType(feedActor.getFeedThreadType());
-        feedAction.setFeedActionType(feedActor.getFeedActionType());
-        feedAction.setUserId(feedActor.getActionUser().getUserId());
+        feedAction.setFeedActionId(feedActionActor.getFeedActorId());
+        feedAction.setFeedThreadType(feedActionActor.getFeedThreadType());
+        feedAction.setFeedActionType(feedActionActor.getFeedActionType());
+        feedAction.setUserId(feedActionActor.getActionUser().getUserId());
         feedAction.setCanceled(false);
         return feedAction;
     }
 
-    private List<FeedAction> feedActionFixtures(FeedActor feedActor) {
+    private List<FeedAction> feedActionFixtures(FeedActionActor feedActionActor) {
         FeedAction notCanceled = new FeedAction();
-        notCanceled.setFeedActionId(feedActor.getFeedActorId());
-        notCanceled.setFeedThreadType(feedActor.getFeedThreadType());
-        notCanceled.setFeedActionType(feedActor.getFeedActionType());
-        notCanceled.setUserId(feedActor.getActionUser().getUserId());
+        notCanceled.setFeedActionId(feedActionActor.getFeedActorId());
+        notCanceled.setFeedThreadType(feedActionActor.getFeedThreadType());
+        notCanceled.setFeedActionType(feedActionActor.getFeedActionType());
+        notCanceled.setUserId(feedActionActor.getActionUser().getUserId());
         notCanceled.setCanceled(false);
 
         FeedAction canceled = new FeedAction();
-        canceled.setFeedActionId(feedActor.getFeedActorId());
-        canceled.setFeedThreadType(feedActor.getFeedThreadType());
-        canceled.setFeedActionType(feedActor.getFeedActionType());
-        canceled.setUserId(feedActor.getActionUser().getUserId());
+        canceled.setFeedActionId(feedActionActor.getFeedActorId());
+        canceled.setFeedThreadType(feedActionActor.getFeedThreadType());
+        canceled.setFeedActionType(feedActionActor.getFeedActionType());
+        canceled.setUserId(feedActionActor.getActionUser().getUserId());
         canceled.setCanceled(true);
 
         return Lists.newArrayList(notCanceled, canceled);
     }
 
-    private List<FeedAction> onlyCancelFeedActionsFixture(FeedActor feedActor) {
+    private List<FeedAction> onlyCancelFeedActionsFixture(FeedActionActor feedActionActor) {
         FeedAction canceled = new FeedAction();
-        canceled.setFeedActionId(feedActor.getFeedActorId());
-        canceled.setFeedActionType(feedActor.getFeedActionType());
-        canceled.setUserId(feedActor.getActionUser().getUserId());
+        canceled.setFeedActionId(feedActionActor.getFeedActorId());
+        canceled.setFeedActionType(feedActionActor.getFeedActionType());
+        canceled.setUserId(feedActionActor.getActionUser().getUserId());
         canceled.setCanceled(true);
         return Lists.newArrayList(canceled);
     }

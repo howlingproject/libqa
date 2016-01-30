@@ -5,7 +5,7 @@ import com.libqa.application.enums.FeedThreadType;
 import com.libqa.web.domain.User;
 import lombok.Getter;
 
-public abstract class FeedActor {
+public abstract class FeedActionActor {
     @Getter
     private Integer feedActorId;
 
@@ -17,7 +17,7 @@ public abstract class FeedActor {
      *                    feed -> feedId, feedReply -> feedReplyId
      * @param actionUser  action을 취한 user
      */
-    FeedActor(Integer feedActorId, User actionUser) {
+    FeedActionActor(Integer feedActorId, User actionUser) {
         this.feedActorId = feedActorId;
         this.actionUser = actionUser;
     }

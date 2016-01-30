@@ -4,7 +4,7 @@ import com.libqa.application.enums.FeedActionType;
 import com.libqa.application.enums.FeedThreadType;
 import com.libqa.web.domain.User;
 
-public class FeedClaim extends FeedActor {
+public class FeedClaim extends FeedActionActor {
     private FeedClaim(Integer feedId, User actionUser) {
         super(feedId, actionUser);
     }

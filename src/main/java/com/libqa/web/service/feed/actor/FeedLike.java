@@ -4,7 +4,7 @@ import com.libqa.application.enums.FeedActionType;
 import com.libqa.application.enums.FeedThreadType;
 import com.libqa.web.domain.User;
 
-public class FeedLike extends FeedActor {
+public class FeedLike extends FeedActionActor {
     private FeedLike(Integer feedId, User actionUser) {
         super(feedId, actionUser);
     }
