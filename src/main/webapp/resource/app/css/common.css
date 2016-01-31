@@ -174,7 +174,7 @@ div.qna-reply-title {padding: 5px; margin-bottom: 10px;}
 span.qna-alert-info {font-size: 16px;}
 span.my-qna-writer {margin-left:20px;}
 span.qna-reply-title {font-size: 15px; font-weight: bold; margin-left: 20px;}
-.my-qna-rating button {margin:5px;}
+.my-qna-rating button {margin:5px 0px 5px 0px;}
 .qna-reply li {margin-top:10px;margin-bottom: 10px;}
 
 .cat-keyword{font-size: 13px; text-align: right}
