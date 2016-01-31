@@ -6,10 +6,10 @@
             <li class="thread" data-qa-reply-id="{{qaReply.replyId}}">
                 <div class="author">
                     <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                        <img alt="avatar" class="profile-image" src="{{userImage}}" />
                     </div>
                 </div>
-                <div class="name">{{qaReply.userNick}}</div>
+                <div class="name">{{userNick}}</div>
                 <div class="date">{{qaReply.insertDate}}</div>
                 <div class="config"><i class="fa fa-check popover-config" data-container="body" data-toggle="popover" data-placement="right"></i></div>
 
@@ -83,7 +83,6 @@
         var QaReply = {
             init: function(){
                 this.bindDelete();
-                Qa.makeEditor();
                 Qa.saveReplyEvent();
                 Qa.saveVoteEvent();
             },

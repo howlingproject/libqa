@@ -156,6 +156,7 @@
             Qa.bindEvent();
             Qa.makeFileList();
             Qa.searchList();
+            Qa.makeEditor();
         });
 
         function setParam(){
@@ -172,6 +173,11 @@
                     , width : '100%'
                     , height : '400px;'
                 });
+            },
+            clearEditor : function(){
+                $('#title').val('');
+                $('#contents').val('');
+                $('#contentsMarkup').val('');
             },
             searchList : function(){
                 $.get("/qa/replyList",{qaId : $('[name=qaId]').val()}, function (response) {
@@ -201,7 +207,6 @@
             bindEvent : function(){
                 this.cancleEvent();
                 this.buttonEvent();
-                this.saveReplyEvent();
             },
             saveReplyEvent : function(){
                 $("#saveReplyButton").on("click", this.saveReply);
@@ -237,6 +242,7 @@
                     success : function(data){
                         if(data.resultCode == 1) {
                             Qa.searchList();
+                            Qa.clearEditor();
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
