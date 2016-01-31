@@ -57,7 +57,6 @@ var Feed = {
     "bindFileAttachment": function () {
         $('#uploadfile').change(function(){
             $('#fileAttachmentInput').val($('#uploadfile').val());
-
             var $feedFileForm = $("#feedFileForm");
             $.ajax({
                 url: "/common/uploadFile",
@@ -208,7 +207,6 @@ var FeedFile = {
     'addHiddenInputToForm': function (obj) {
         var idx = $('#feedForm input[name$=fileType]').size();
         var $input = $('<input />').attr('type', 'hidden');
-
         $('#feedForm').append($input.clone().attr('name', "feedFiles["+ idx + "].realName").val(obj.realName))
                 .append($input.clone().attr('name', "feedFiles["+ idx + "].savedName").val(obj.savedName))
                 .append($input.clone().attr('name', "feedFiles["+ idx + "].filePath").val(obj.filePath))

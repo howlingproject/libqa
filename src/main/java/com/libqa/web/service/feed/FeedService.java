@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -84,8 +85,23 @@ public class FeedService {
         feed.setUserId(user.getUserId());
         feed.setInsertUserId(user.getUserId());
         feed.setInsertDate(new Date());
+        feed.setReplyCount(0);
+
+        final boolean hasUploadFiles = !CollectionUtils.isEmpty(feed.getFeedFiles());
+        if (hasUploadFiles) {
+            final List<FeedFile> feedFiles = feed.getFeedFiles();
+            feed.setFileCount(feedFiles.size());
+            feedFiles.forEach(feedFile -> {
+                        feedFile.setUserNick(feed.getUserNick());
+                        feedFile.setUserId(feed.getUserId());
+                        feedFile.setInsertUserId(feed.getInsertUserId());
+                        feedFile.setInsertDate(new Date());
+                        feedFile.setFeed(feed);
+                        feedFileService.save(feedFile);
+                    }
+            );
+        }
         feedRepository.save(feed);
-        saveFeedFiles(feed);
     }
 
     /**
@@ -96,6 +112,8 @@ public class FeedService {
     @Transactional
     public void delete(Feed feed) {
         feed.setDeleted(true);
+        feed.setFileCount(0);
+        feed.setReplyCount(0);
 
         List<FeedReply> feedReplies = feedReplyRepository.findByFeedFeedId(feed.getFeedId());
         for (FeedReply each : feedReplies) {
@@ -194,20 +212,6 @@ public class FeedService {
             return feedRepository.findByUserIdAndFeedIdLessThanAndIsDeletedFalse(user.getUserId(), lastFeedId, pageRequest);
         }
         return feedRepository.findByUserIdAndIsDeletedFalse(user.getUserId(), pageRequest);
-    }
-
-    private void saveFeedFiles(Feed feed) {
-        Optional.ofNullable(feed.getFeedFiles())
-                .ifPresent(feedFiles -> feedFiles.forEach(
-                        feedFile -> {
-                            feedFile.setUserNick(feed.getUserNick());
-                            feedFile.setUserId(feed.getUserId());
-                            feedFile.setInsertUserId(feed.getInsertUserId());
-                            feedFile.setInsertDate(new Date());
-                            feedFile.setFeed(feed);
-                            feedFileService.save(feedFile);
-                        }
-                ));
     }
 
 }

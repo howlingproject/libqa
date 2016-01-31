@@ -36,7 +36,7 @@ public class Feed {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String feedContent;
 
-    @Column(length = 255)
+    @Column
     private String feedUrl;
 
     @Column
@@ -44,6 +44,12 @@ public class Feed {
 
     @Column
     private Integer claimCount = 0;
+
+    @Column
+    private Integer fileCount = 0;
+
+    @Column
+    private Integer replyCount = 0;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isShared;
