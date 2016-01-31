@@ -2,7 +2,7 @@ var Feed = {
     'init' : function() {
         this.bindSave();
         this.bindFileAttachment();
-        this.initFileUploadModal();
+        this.bindFileUploadModal();
     },
     'loadList' : function() {
         FeedList.call("/feed/list", function(html, itemSize) {
@@ -76,7 +76,7 @@ var Feed = {
             });
         });
     },
-    'initFileUploadModal': function() {
+    'bindFileUploadModal': function() {
         $('#fileUploadModal').on('show.bs.modal', function () {
             $('#fileAttachmentInput').val('');
         });
@@ -372,15 +372,18 @@ var FeedUtil = {
 
 var FeedPager = {
     '$button': $('#feedMoreBtn'),
+    '$emptyFeedMore': $('#emptyFeedMore'),
     'lastFeedId': null,
     'PAGE_SIZE': 5,
-    'init': function(itemSize, moreFunction) {
+    'init': function(itemSize, callback) {
         if(itemSize > 0) {
             this.showBtn();
-            this.bindLoading(moreFunction);
+            this.bindLoading(callback);
         } else {
             this.hideBtn();
         }
+
+        this.$emptyFeedMore.hide();
     },
     'showBtn' : function() {
         this.$button.show();
@@ -388,18 +391,22 @@ var FeedPager = {
     'hideBtn' : function() {
         this.$button.hide();
     },
-    'toggleLoadingText': function(loading) {
-        if(loading) {
-            this.$button.prop('disabled', true).html('로딩 중...');
+    'toggleLoadingText': function (isLoading) {
+        if(isLoading) {
+            this.$button
+                .prop('disabled', true)
+                .html('로딩 중...');
         } else {
-            this.$button.prop('disabled', false).html('more');
+            this.$button
+                .prop('disabled', false)
+                .html('more');
         }
     },
-    'bindLoading': function(moreFunction) {
+    'bindLoading': function(callbackAfterLoading) {
         var me = this;
         this.$button.on('click', function(){
             me.toggleLoadingText(true);
-            moreFunction();
+            callbackAfterLoading();
         });
     },
     'loaded': function(itemSize) {
@@ -425,21 +432,13 @@ var FeedList = {
     },
     'getLastFeedId': function() {
         return $('#feedList li.thread').last().data('feedId');
+    },
+    'size': function(){
+        return $('#feedList li.thread').size();
     }
 };
 
 var MyFeed = {
-    'loadList' : function() {
-        FeedList.call("/feed/myList", function(html, itemSize) {
-            if(itemSize == 0) {
-                $('#feedList').html("<div class=\"text-center\">작성된 Feed가 없습니다.</div>");
-                return;
-            }
-
-            $('#feedList').html(html);
-            FeedPager.init(itemSize, MyFeed.moreList);
-        });
-    },
     'moreList' : function() {
         FeedList.call("/feed/myList?lastFeedId=" + FeedList.getLastFeedId(), function(html, itemSize) {
             $('#feedList').append(html);

@@ -7,9 +7,12 @@
             <ul id="feedList">
                 {{> feed/template/list }}
             </ul>
-            {{#if data}}
             <button class="btn btn-default form-control btn-feed-more" type="button" id="feedMoreBtn">more</button>
-            {{/if}}
+            {{#unless data}}
+                <div class="text-center" id="emptyFeedMore">
+                    등록된 Feed가 존재하지 않습니다.
+                </div>
+            {{/unless}}
         </div>
     </div>
 </div>
@@ -26,7 +29,7 @@
     <script type="text/javascript" src="/resource/app/js/feed/app.js"></script>
     <script type="text/javascript">
         $(function(){
-            FeedPager.init(5, MyFeed.moreList);
+            FeedPager.init(FeedList.size(), MyFeed.moreList);
         });
     </script>
 {{/partial}}
