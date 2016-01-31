@@ -36,7 +36,9 @@
             <ul id="feedList">
                 {{> feed/template/list}}
             </ul>
+            {{#if data}}
             <button class="btn btn-default form-control btn-feed-more" type="button" id="feedMoreBtn">more</button>
+            {{/if}}
         </div>
         <!-- feed 글 목록 end -->
     </div>

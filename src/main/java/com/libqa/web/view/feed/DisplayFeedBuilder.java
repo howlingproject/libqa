@@ -55,7 +55,7 @@ public class DisplayFeedBuilder {
         DisplayFeed displayFeed = new DisplayFeed(feed, writer, isWriter);
         displayFeed.setLikeFeedAction(likedFeedAction);
         displayFeed.setClaimFeedAction(claimedFeedAction);
-        displayFeed.setReplies(displayFeedReplyBuilder.build(feed.getFeedReplies(), viewer));
+        displayFeed.setReplies(displayFeedReplyBuilder.build(feed, viewer));
         return displayFeed;
     }
 }

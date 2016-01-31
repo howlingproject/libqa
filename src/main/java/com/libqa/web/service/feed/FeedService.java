@@ -135,7 +135,7 @@ public class FeedService {
      */
     @Transactional
     public Feed like(Integer feedId, User actionUser) {
-        Feed feed = feedRepository.findOne(feedId);
+        Feed feed = getByFeedId(feedId);
         FeedLike feedLike = FeedLike.of(feed.getFeedId(), actionUser);
 
         feedActionService.act(feedLike);
@@ -153,7 +153,7 @@ public class FeedService {
      */
     @Transactional
     public Feed claim(Integer feedId, User actionUser) {
-        Feed feed = feedRepository.findOne(feedId);
+        Feed feed = getByFeedId(feedId);
         FeedClaim feedClaim = FeedClaim.of(feed.getFeedId(), actionUser);
 
         feedActionService.act(feedClaim);

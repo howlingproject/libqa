@@ -96,4 +96,11 @@ public class Feed {
     @Where(clause = "is_deleted = 0")
     private List<FeedFile> feedFiles;
 
+    public boolean hasFiles() {
+        return getFileCount() > 0;
+    }
+
+    public boolean noHasReplies() {
+        return getReplyCount() == 0;
+    }
 }

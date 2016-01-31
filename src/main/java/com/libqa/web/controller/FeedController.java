@@ -167,7 +167,7 @@ public class FeedController {
         }
 
         try {
-            feedReplyService.save(feedReply, viewer);
+            feedReplyService.create(feedReply, viewer);
             return createSuccessResult(new DisplayFeedReply(feedReply));
         } catch (Exception e) {
             log.error("save reply error.", e);
@@ -185,7 +185,7 @@ public class FeedController {
                 return createResult(NOT_MATCH_USER);
             }
 
-            feedReplyService.deleteByFeedReplyId(feedReplyId);
+            feedReplyService.delete(feedReplyId);
             return createSuccessResult(feedReplyId);
         } catch (Exception e) {
             log.error("delete reply error.", e);

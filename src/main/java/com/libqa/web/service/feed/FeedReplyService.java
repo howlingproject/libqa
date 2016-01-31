@@ -6,19 +6,23 @@ import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedReplyRepository;
 import com.libqa.web.service.feed.actor.FeedReplyClaim;
 import com.libqa.web.service.feed.actor.FeedReplyLike;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
+@Slf4j
 @Service
 public class FeedReplyService {
 
     @Autowired
-    private FeedActionService feedActionService;
+    private FeedService feedService;
     @Autowired
     private FeedReplyRepository feedReplyRepository;
+    @Autowired
+    private FeedActionService feedActionService;
 
     /**
      * user 기반으로 feed 댓글을 저장한다.
@@ -26,12 +30,17 @@ public class FeedReplyService {
      * @param feedReply
      * @param user
      */
-    public void save(FeedReply feedReply, User user) {
+    @Transactional
+    public void create(FeedReply feedReply, User user) {
         feedReply.setUserId(user.getUserId());
         feedReply.setUserNick(user.getUserNick());
         feedReply.setInsertUserId(user.getUserId());
+        feedReply.setDeleted(false);
         feedReply.setInsertDate(new Date());
         feedReplyRepository.save(feedReply);
+
+        Feed feed = feedService.getByFeedId(feedReply.getFeed().getFeedId());
+        feed.setReplyCount(feedReplyRepository.countByFeedAndIsDeletedFalse(feed));
     }
 
     /**
@@ -40,9 +49,13 @@ public class FeedReplyService {
      * @param feedReplyId
      */
     @Transactional
-    public void deleteByFeedReplyId(Integer feedReplyId) {
+    public void delete(Integer feedReplyId) {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         feedReply.setDeleted(true);
+        feedReplyRepository.save(feedReply);
+
+        Feed feed = feedService.getByFeedId(feedReply.getFeed().getFeedId());
+        feed.setReplyCount(feedReplyRepository.countByFeedAndIsDeletedFalse(feed));
     }
 
     /**
@@ -98,6 +111,6 @@ public class FeedReplyService {
      * @return reply count by feed
      */
     public Integer countByFeed(Feed feed) {
-        return feedReplyRepository.countByFeedId(feed.getFeedId());
+        return feedReplyRepository.countByFeed(feed);
     }
 }

@@ -54,9 +54,6 @@ public class FeedReply {
     @Column
     private Integer updateUserId;
 
-    @Column(name = "feedId", insertable = false, updatable = false, nullable = false)
-    private Integer feedId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feedId", referencedColumnName = "feedId")
     @JsonIgnore
