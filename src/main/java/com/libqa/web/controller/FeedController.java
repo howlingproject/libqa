@@ -41,32 +41,36 @@ public class FeedController {
 
     @RequestMapping(method = GET)
     public ModelAndView main(ModelAndView mav) {
-        mav.setViewName("feed/main");
-        mav.addObject("loggedUser", loggedUser.get());
-        return mav;
-    }
-
-    @RequestMapping(value = "{feedId}", method = GET)
-    public ModelAndView view(@PathVariable Integer feedId, ModelAndView mav) {
         User viewer = loggedUser.get();
-        Feed feed = feedService.findByFeedId(feedId);
+        List<Feed> feeds = feedService.searchRecentlyFeeds();
 
-        mav.setViewName("feed/view");
-        mav.addObject("displayFeed", displayFeedBuilder.build(feed, viewer));
+        mav.addObject("loggedUser", viewer);
+        mav.addObject("data", displayFeedBuilder.build(feeds, viewer));
+        mav.setViewName("feed/main");
         return mav;
     }
 
     @RequestMapping(value = "list", method = GET)
     public ResponseData<DisplayFeed> list(@RequestParam(required = false) Integer lastFeedId) {
         User viewer = loggedUser.get();
-        List<Feed> feeds = feedService.search(lastFeedId);
+        List<Feed> feeds = feedService.searchRecentlyFeedsWithLastFeedId(lastFeedId);
         return createSuccessResult(displayFeedBuilder.build(feeds, viewer));
+    }
+
+    @RequestMapping(value = "{feedId}", method = GET)
+    public ModelAndView view(@PathVariable Integer feedId, ModelAndView mav) {
+        User viewer = loggedUser.get();
+        Feed feed = feedService.getByFeedId(feedId);
+
+        mav.addObject("displayFeed", displayFeedBuilder.build(feed, viewer));
+        mav.setViewName("feed/view");
+        return mav;
     }
 
     @RequestMapping(value = "myList", method = GET)
     public ResponseData<DisplayFeed> myList(@RequestParam(required = false) Integer lastFeedId) {
         User viewer = loggedUser.get();
-        List<Feed> feeds = feedService.searchByUserId(viewer.getUserId(), lastFeedId);
+        List<Feed> feeds = feedService.searchRecentlyFeedsByUserWithLastFeedId(viewer, lastFeedId);
         return createSuccessResult(displayFeedBuilder.build(feeds, viewer));
     }
 
@@ -91,7 +95,7 @@ public class FeedController {
         User viewer = loggedUser.get();
         try {
             log.debug("requestFeed : {}", requestFeed);
-            Feed originFeed = feedService.findByFeedId(requestFeed.getFeedId());
+            Feed originFeed = feedService.getByFeedId(requestFeed.getFeedId());
             if (viewer.isNotMatchUser(originFeed.getUserId())) {
                 return createResult(NOT_MATCH_USER);
             }
@@ -108,7 +112,7 @@ public class FeedController {
     public ResponseData<Integer> delete(@PathVariable Integer feedId) {
         User viewer = loggedUser.get();
         try {
-            Feed originFeed = feedService.findByFeedId(feedId);
+            Feed originFeed = feedService.getByFeedId(feedId);
             if (viewer.isNotMatchUser(originFeed.getUserId())) {
                 return createResult(NOT_MATCH_USER);
             }

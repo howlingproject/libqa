@@ -34,7 +34,7 @@
         <!-- feed 글 목록 start -->
         <div class="feed well">
             <ul id="feedList">
-                <div class="text-center">로딩 중...</div>
+                {{> feed/template/list}}
             </ul>
             <button class="btn btn-default form-control btn-feed-more" type="button" id="feedMoreBtn">more</button>
         </div>
@@ -71,7 +71,6 @@
 
                         <div class="form-group image-options">
                             <label class="col-sm-2 col-md-2 control-label">미리보기</label>
-
                             <div class="col-sm-10 col-md-10">
                                 <img src="https://octodex.github.com/images/droctocat.png" alt="이미지 미리보기" class="img-thumbnail image-preview">
                             </div>
@@ -100,11 +99,12 @@
 <script type="text/javascript">
     $(function(){
         Feed.init();
+        FeedPager.init(5, Feed.moreList);
     });
 </script>
 {{/partial}}
 
 {{> template/base}}
-{{embedded "feed/list"}}
-{{embedded "feed/reply"}}
+{{embedded "feed/template/list"}}
+{{embedded "feed/template/reply"}}
 
