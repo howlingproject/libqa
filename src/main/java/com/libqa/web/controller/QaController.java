@@ -6,10 +6,7 @@ import com.libqa.application.util.LoggedUser;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.KeywordListService;
 import com.libqa.web.service.common.KeywordService;
-import com.libqa.web.service.qa.QaFileService;
-import com.libqa.web.service.qa.QaReplyService;
-import com.libqa.web.service.qa.QaService;
-import com.libqa.web.service.qa.VoteService;
+import com.libqa.web.service.qa.*;
 import com.libqa.web.service.user.UserService;
 import com.libqa.web.view.qa.DisplayQa;
 import com.libqa.web.view.qa.DisplayQaReply;
@@ -26,9 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.libqa.application.enums.StatusCode.NOT_MATCH_USER;
-import static com.libqa.application.framework.ResponseData.createFailResult;
-import static com.libqa.application.framework.ResponseData.createResult;
-import static com.libqa.application.framework.ResponseData.createSuccessResult;
+import static com.libqa.application.framework.ResponseData.*;
 
 /**
  * Created by yong on 2015-02-08.
@@ -47,6 +42,9 @@ public class QaController {
 
     @Autowired
     QaReplyService qaReplyService;
+
+    @Autowired
+    QaRecommendService qaRecommendService;
 
     @Autowired
     QaFileService qaFileService;
@@ -107,6 +105,25 @@ public class QaController {
             for(QaContent qaContent : qaContentList) {
                 User writer = userService.findByUserId(qaContent.getUserId());
                 displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
+            }
+            return createSuccessResult(displayQaList);
+        }catch(Exception e){
+            return createFailResult(displayQaList);
+        }
+    }
+
+    @RequestMapping(value = "/qa/myRecommendQaList", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<DisplayQa> myRecommendQaList(@ModelAttribute QaDto qaDto){
+        boolean isDeleted = false;
+        List<QaRecommend> qaRecommendList = new ArrayList<>();
+        List<DisplayQa> displayQaList = new ArrayList<>();
+        try {
+            qaRecommendList = qaRecommendService.findByUserIdAndIsCommendTrue(loggedUser.get().getUserId());
+            for(QaRecommend qaRecommend : qaRecommendList) {
+                User recommender = userService.findByUserId(qaRecommend.getUserId());
+                QaContent qaContent = qaService.findByQaId(qaRecommend.getQaId(), isDeleted);
+                displayQaList.add(new DisplayQa(qaContent, recommender, keywordService.findByQaId(qaRecommend.getQaId()), qaReplyService.findByQaId(qaRecommend.getQaId()) ));
             }
             return createSuccessResult(displayQaList);
         }catch(Exception e){

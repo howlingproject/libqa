@@ -6,6 +6,7 @@
 -->
 
 {{# partial "content" }}
+
 <!-- contents -->
 <div class="container-fluid">
     <div class="col-sm-12">
@@ -40,8 +41,8 @@
             <div class="nav-tabs-header">최근 Q&A
                 <span class="pull-right section-category">
                     <ul id="recentQaDayTypeUl" class="nav nav-tabs">
-                        <li class="active" value=""><a href="#">Today</a></li>
-                        <li value="WEEK"><a href="#">Week</a></li>
+                        <li value="WEEK" data="defalut"><a href="#">Week</a></li>
+                        <li value=""><a href="#">Today</a></li>
                     </ul>
                 </span>
             </div>
@@ -55,9 +56,9 @@
             <div class="nav-tabs-header">답변을 기다리는 Q&A
                 <span class="pull-right section-category">
                     <ul id="waitReplyQaDayTypeUl" class="nav nav-tabs">
-                        <li class="active" value=""><a href="#">Today</a></li>
+                        <li value="ALL" data="defalut"><a href="#">All</a></li>
                         <li value="WEEK"><a href="#">Week</a></li>
-                        <li value="ALL"><a href="#">All</a></li>
+                        <li value=""><a href="#">Today</a></li>
                     </ul>
                 </span>
             </div>
@@ -91,8 +92,8 @@
         var Qa = {
             init : function(){
                 this.renderKeywordList();
-                this.renderRecentQaList();
-                this.renderWaitReplyQaList();
+                this.renderRecentQaList('WEEK');
+                this.renderWaitReplyQaList('ALL');
                 this.renderDayType($('#recentQaDayTypeUl'));
                 this.renderDayType($('#waitReplyQaDayTypeUl'));
                 this.bindDayTypeEvent();
@@ -198,7 +199,7 @@
             },
             renderDayType : function(targetObj){
                 targetObj.find('li').removeClass('active');
-                targetObj.find('li[value=""]').addClass('active');
+                targetObj.find('li[data="defalut"]').addClass('active');
             },
             bindSearch : function(){
                 $('#searchBtn').click(function(){
