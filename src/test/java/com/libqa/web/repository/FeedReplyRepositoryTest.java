@@ -1,6 +1,7 @@
 package com.libqa.web.repository;
 
 import com.libqa.testsupport.LibqaRepositoryTest;
+import com.libqa.web.domain.Feed;
 import com.libqa.web.domain.FeedReply;
 import org.junit.Test;
 
@@ -16,8 +17,10 @@ public class FeedReplyRepositoryTest extends LibqaRepositoryTest<FeedReplyReposi
     }
 
     @Test
-    public void countByFeedId() {
-        Integer count = repository.countByFeedId(-1);
+    public void countByFeed() {
+        Feed feed = new Feed();
+        feed.setFeedId(10000);
+        Integer count = repository.countByFeed(feed);
         assertThat(count).isZero();
     }
 
