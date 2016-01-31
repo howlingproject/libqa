@@ -1,6 +1,7 @@
 package com.libqa.web.service.feed;
 
 
+import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,23 +26,29 @@ public class FeedServiceTest {
 
     @Test
     public void lastFeedId가_null이면_해당_사용자의_피드목록을_제공한다() {
-        final int userId = 10000;
+        final User user = user();
         final Integer lastFeedId = null;
 
-        sut.searchRecentlyFeedsByUserWithLastFeedId(userId, lastFeedId);
+        sut.searchRecentlyFeedsByUserWithLastFeedId(user, lastFeedId);
 
-        verify(feedRepository, never()).findByUserIdAndFeedIdLessThanAndIsDeletedFalse(eq(userId), eq(lastFeedId), any(PageRequest.class));
-        verify(feedRepository).findByUserIdAndIsDeletedFalse(eq(userId), any(PageRequest.class));
+        verify(feedRepository, never()).findByUserIdAndFeedIdLessThanAndIsDeletedFalse(eq(user.getUserId()), eq(lastFeedId), any(PageRequest.class));
+        verify(feedRepository).findByUserIdAndIsDeletedFalse(eq(user.getUserId()), any(PageRequest.class));
     }
 
     @Test
     public void lastFeedId가_null이_아니면_lastFeedId보다_작은_해당_사용자의_피드목록을_제공한다() {
-        final int userId = 10000;
+        final User user = user();
         final Integer lastFeedId = 10;
 
-        sut.searchRecentlyFeedsByUserWithLastFeedId(userId, lastFeedId);
+        sut.searchRecentlyFeedsByUserWithLastFeedId(user, lastFeedId);
 
-        verify(feedRepository).findByUserIdAndFeedIdLessThanAndIsDeletedFalse(eq(userId), eq(lastFeedId), any(PageRequest.class));
-        verify(feedRepository, never()).findByUserIdAndIsDeletedFalse(eq(userId), any(PageRequest.class));
+        verify(feedRepository).findByUserIdAndFeedIdLessThanAndIsDeletedFalse(eq(user.getUserId()), eq(lastFeedId), any(PageRequest.class));
+        verify(feedRepository, never()).findByUserIdAndIsDeletedFalse(eq(user.getUserId()), any(PageRequest.class));
+    }
+
+    private User user() {
+        User user = new User();
+        user.setUserId(12345);
+        return user;
     }
 }
