@@ -1,12 +1,19 @@
 package com.libqa.web.controller;
 
+import com.libqa.application.util.LoggedUser;
+import com.libqa.web.domain.Feed;
+import com.libqa.web.domain.User;
+import com.libqa.web.service.feed.FeedService;
 import com.libqa.web.service.qa.QaService;
+import com.libqa.web.view.feed.DisplayFeedBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * @Author : yion
@@ -18,11 +25,21 @@ import org.springframework.web.servlet.ModelAndView;
 public class MyListController {
 
     @Autowired
-    QaService qaService;
+    private LoggedUser loggedUser;
+    @Autowired
+    private QaService qaService;
+    @Autowired
+    private FeedService feedService;
+    @Autowired
+    private DisplayFeedBuilder displayFeedBuilder;
 
     @RequestMapping("/my/feed")
-    public ModelAndView myFeed(Model model) {
-        ModelAndView mav = new ModelAndView("/my/feedList");
+    public ModelAndView myFeed(ModelAndView mav) {
+        User viewer = loggedUser.get();
+        List<Feed> feeds = feedService.searchRecentlyFeedsByUser(viewer);
+
+        mav.addObject("data", displayFeedBuilder.build(feeds, viewer));
+        mav.setViewName("/my/feedList");
         return mav;
     }
 

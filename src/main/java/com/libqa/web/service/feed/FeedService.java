@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -38,13 +39,21 @@ public class FeedService {
     private FeedActionService feedActionService;
 
     /**
-     * lastFeedId을 기준으로 feed 목록을 조회한다.
-     * lastFeedId가 null일 경우 가장 최근의 목록을 반환하게 된다.
+     * 최신 feed 목록을 조회한다.
+     *
+     * @return List&lt;Feed&gt;
+     */
+    public List<Feed> searchRecentlyFeeds() {
+        return searchRecentlyFeedsWithLastFeedId(null);
+    }
+
+    /**
+     * lastFeedId을 기준으로 최신 feed 목록을 조회한다.
      *
      * @param lastFeedId
      * @return List&lt;Feed&gt;
      */
-    public List<Feed> search(Integer lastFeedId) {
+    public List<Feed> searchRecentlyFeedsWithLastFeedId(Integer lastFeedId) {
         PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
 
         Optional<Integer> lastFeedIdOptional = Optional.ofNullable(lastFeedId);
@@ -52,6 +61,16 @@ public class FeedService {
             return feedRepository.findByFeedIdLessThanAndIsDeletedFalse(lastFeedId, pageRequest);
         }
         return feedRepository.findByIsDeletedFalse(pageRequest);
+    }
+
+    /**
+     * pageSize만큼 최신 feed 목록을 조회한다.
+     *
+     * @param pageSize
+     * @return Feed
+     */
+    public List<Feed> searchRecentlyFeedsByPageSize(Integer pageSize) {
+        return feedRepository.findByIsDeletedFalse(PageUtil.sortPageable(pageSize, DEFAULT_SORT));
     }
 
     /**
@@ -66,8 +85,23 @@ public class FeedService {
         feed.setUserId(user.getUserId());
         feed.setInsertUserId(user.getUserId());
         feed.setInsertDate(new Date());
+        feed.setReplyCount(0);
+
+        final boolean hasUploadFiles = !CollectionUtils.isEmpty(feed.getFeedFiles());
+        if (hasUploadFiles) {
+            final List<FeedFile> feedFiles = feed.getFeedFiles();
+            feed.setFileCount(feedFiles.size());
+            feedFiles.forEach(feedFile -> {
+                        feedFile.setUserNick(feed.getUserNick());
+                        feedFile.setUserId(feed.getUserId());
+                        feedFile.setInsertUserId(feed.getInsertUserId());
+                        feedFile.setInsertDate(new Date());
+                        feedFile.setFeed(feed);
+                        feedFileService.save(feedFile);
+                    }
+            );
+        }
         feedRepository.save(feed);
-        saveFeedFiles(feed);
     }
 
     /**
@@ -78,6 +112,8 @@ public class FeedService {
     @Transactional
     public void delete(Feed feed) {
         feed.setDeleted(true);
+        feed.setFileCount(0);
+        feed.setReplyCount(0);
 
         List<FeedReply> feedReplies = feedReplyRepository.findByFeedFeedId(feed.getFeedId());
         for (FeedReply each : feedReplies) {
@@ -148,50 +184,34 @@ public class FeedService {
      * @param feedId
      * @return Feed
      */
-    public Feed findByFeedId(Integer feedId) {
+    public Feed getByFeedId(Integer feedId) {
         return feedRepository.findOne(feedId);
     }
 
     /**
-     * pageSize만큼 최신 feed 목록을 조회한다.
+     * userId로 최신 feed 목록을 조회한다.
      *
-     * @param pageSize
-     * @return Feed
+     * @return List&lt;Feed&gt;
      */
-    public List<Feed> searchRecentlyFeedsByPageSize(Integer pageSize) {
-        return feedRepository.findByIsDeletedFalse(PageUtil.sortPageable(pageSize, DEFAULT_SORT));
+    public List<Feed> searchRecentlyFeedsByUser(User user) {
+        return searchRecentlyFeedsByUserWithLastFeedId(user, null);
     }
 
     /**
      * userId로 feed 목록을 조회한다.
      *
-     * @param userId
+     * @param user
      * @param lastFeedId
-
-
      * @return List&lt;Feed&gt;
      */
-    public List<Feed> searchByUserId(Integer userId, Integer lastFeedId) {
+    public List<Feed> searchRecentlyFeedsByUserWithLastFeedId(User user, Integer lastFeedId) {
         PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
 
         Optional<Integer> lastFeedIdOptional = Optional.ofNullable(lastFeedId);
         if (lastFeedIdOptional.isPresent()) {
-            return feedRepository.findByUserIdAndFeedIdLessThanAndIsDeletedFalse(userId, lastFeedId, pageRequest);
+            return feedRepository.findByUserIdAndFeedIdLessThanAndIsDeletedFalse(user.getUserId(), lastFeedId, pageRequest);
         }
-        return feedRepository.findByUserIdAndIsDeletedFalse(userId, pageRequest);
-    }
-
-    private void saveFeedFiles(Feed feed) {
-        Optional.ofNullable(feed.getFeedFiles()).ifPresent(list -> list.forEach(
-                feedFile -> {
-                    feedFile.setUserNick(feed.getUserNick());
-                    feedFile.setUserId(feed.getUserId());
-                    feedFile.setInsertUserId(feed.getInsertUserId());
-                    feedFile.setInsertDate(new Date());
-                    feedFile.setFeed(feed);
-                    feedFileService.save(feedFile);
-                }
-        ));
+        return feedRepository.findByUserIdAndIsDeletedFalse(user.getUserId(), pageRequest);
     }
 
 }

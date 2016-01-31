@@ -43,7 +43,9 @@ public class DisplayFeed {
         this.feedContent = parseHtml(feed.getFeedContent());
         this.insertDate = DisplayDate.parse(feed.getInsertDate());
         this.writer = isWriter;
-        setFeedFiles(feed.getFeedFiles());
+        if(feed.getFileCount() > 0) {
+            setFeedFiles(feed.getFeedFiles());
+        }
     }
 
     public static DisplayFeed empty() {

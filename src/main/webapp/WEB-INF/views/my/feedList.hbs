@@ -5,7 +5,7 @@
     <div class="col-md-12 col-xs-12">
         <div class="feed well">
             <ul id="feedList">
-                <div class="text-center">로딩 중...</div>
+                {{> feed/template/list }}
             </ul>
             <button class="btn btn-default form-control btn-feed-more" type="button" id="feedMoreBtn">more</button>
         </div>
@@ -24,11 +24,12 @@
     <script type="text/javascript" src="/resource/app/js/feed/app.js"></script>
     <script type="text/javascript">
         $(function(){
-            MyFeed.init();
+            FeedPager.init(5, MyFeed.moreList);
         });
     </script>
 {{/partial}}
 
 {{> template/base}}
-{{embedded "feed/list"}}
-{{embedded "feed/reply"}}
+
+{{embedded "feed/template/list"}}
+{{embedded "feed/template/reply"}}

@@ -3,7 +3,6 @@ var Feed = {
         this.bindSave();
         this.bindFileAttachment();
         this.initFileUploadModal();
-        this.loadList();
     },
     'loadList' : function() {
         FeedList.call("/feed/list", function(html, itemSize) {
@@ -58,7 +57,6 @@ var Feed = {
     "bindFileAttachment": function () {
         $('#uploadfile').change(function(){
             $('#fileAttachmentInput').val($('#uploadfile').val());
-
             var $feedFileForm = $("#feedFileForm");
             $.ajax({
                 url: "/common/uploadFile",
@@ -209,7 +207,6 @@ var FeedFile = {
     'addHiddenInputToForm': function (obj) {
         var idx = $('#feedForm input[name$=fileType]').size();
         var $input = $('<input />').attr('type', 'hidden');
-
         $('#feedForm').append($input.clone().attr('name', "feedFiles["+ idx + "].realName").val(obj.realName))
                 .append($input.clone().attr('name', "feedFiles["+ idx + "].savedName").val(obj.savedName))
                 .append($input.clone().attr('name', "feedFiles["+ idx + "].filePath").val(obj.filePath))
@@ -260,7 +257,7 @@ var FeedReply = {
         });
     },
     'loadItem': function($target, data){
-        var source = $('#feed-reply-hbs').html();
+        var source = $('#feed-template-reply-hbs').html();
         var template = Handlebars.compile(source);
         var html = template(data);
         $target.append(html);
@@ -420,7 +417,7 @@ var FeedList = {
                 FeedUtil.alert(response.comment);
                 return;
             }
-            var source = $('#feed-list-hbs').html();
+            var source = $('#feed-template-list-hbs').html();
             var template = Handlebars.compile(source);
             var html = template(response);
             resultCallback(html, response.data.length);
@@ -432,9 +429,6 @@ var FeedList = {
 };
 
 var MyFeed = {
-    'init' : function() {
-        this.loadList();
-    },
     'loadList' : function() {
         FeedList.call("/feed/myList", function(html, itemSize) {
             if(itemSize == 0) {

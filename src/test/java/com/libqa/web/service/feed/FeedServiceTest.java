@@ -28,7 +28,7 @@ public class FeedServiceTest {
         final int userId = 10000;
         final Integer lastFeedId = null;
 
-        sut.searchByUserId(userId, lastFeedId);
+        sut.searchRecentlyFeedsByUserWithLastFeedId(userId, lastFeedId);
 
         verify(feedRepository, never()).findByUserIdAndFeedIdLessThanAndIsDeletedFalse(eq(userId), eq(lastFeedId), any(PageRequest.class));
         verify(feedRepository).findByUserIdAndIsDeletedFalse(eq(userId), any(PageRequest.class));
@@ -39,7 +39,7 @@ public class FeedServiceTest {
         final int userId = 10000;
         final Integer lastFeedId = 10;
 
-        sut.searchByUserId(userId, lastFeedId);
+        sut.searchRecentlyFeedsByUserWithLastFeedId(userId, lastFeedId);
 
         verify(feedRepository).findByUserIdAndFeedIdLessThanAndIsDeletedFalse(eq(userId), eq(lastFeedId), any(PageRequest.class));
         verify(feedRepository, never()).findByUserIdAndIsDeletedFalse(eq(userId), any(PageRequest.class));
