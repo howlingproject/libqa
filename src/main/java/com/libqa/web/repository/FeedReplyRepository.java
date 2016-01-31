@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface FeedReplyRepository extends JpaRepository<FeedReply, Integer> {
     List<FeedReply> findByFeedFeedId(Integer feedId);
-    Integer countByFeed(Feed feed);
     Integer countByFeedAndIsDeletedFalse(Feed feed);
 
 }

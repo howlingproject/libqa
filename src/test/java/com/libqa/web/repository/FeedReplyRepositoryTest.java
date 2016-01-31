@@ -17,15 +17,6 @@ public class FeedReplyRepositoryTest extends LibqaRepositoryTest<FeedReplyReposi
     }
 
     @Test
-    public void countByFeed() {
-        Feed feed = new Feed();
-        feed.setFeedId(10000);
-        Integer count = repository.countByFeed(feed);
-        assertThat(count).isZero();
-    }
-
-
-    @Test
     public void countByFeedAndIsDeletedFalse() {
         Feed feed = new Feed();
         feed.setFeedId(10000);

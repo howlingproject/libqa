@@ -206,11 +206,12 @@ public class FeedService {
      */
     public List<Feed> searchRecentlyFeedsByUserWithLastFeedId(User user, Integer lastFeedId) {
         PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
-
         Optional<Integer> lastFeedIdOptional = Optional.ofNullable(lastFeedId);
+
         if (lastFeedIdOptional.isPresent()) {
             return feedRepository.findByUserIdAndFeedIdLessThanAndIsDeletedFalse(user.getUserId(), lastFeedId, pageRequest);
         }
+
         return feedRepository.findByUserIdAndIsDeletedFalse(user.getUserId(), pageRequest);
     }
 

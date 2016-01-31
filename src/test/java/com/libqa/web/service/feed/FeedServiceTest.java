@@ -26,7 +26,7 @@ public class FeedServiceTest {
 
     @Test
     public void lastFeedId가_null이면_해당_사용자의_피드목록을_제공한다() {
-        final User user = user();
+        final User user = userFixture();
         final Integer lastFeedId = null;
 
         sut.searchRecentlyFeedsByUserWithLastFeedId(user, lastFeedId);
@@ -37,7 +37,7 @@ public class FeedServiceTest {
 
     @Test
     public void lastFeedId가_null이_아니면_lastFeedId보다_작은_해당_사용자의_피드목록을_제공한다() {
-        final User user = user();
+        final User user = userFixture();
         final Integer lastFeedId = 10;
 
         sut.searchRecentlyFeedsByUserWithLastFeedId(user, lastFeedId);
@@ -46,7 +46,7 @@ public class FeedServiceTest {
         verify(feedRepository, never()).findByUserIdAndIsDeletedFalse(eq(user.getUserId()), any(PageRequest.class));
     }
 
-    private User user() {
+    private User userFixture() {
         User user = new User();
         user.setUserId(12345);
         return user;

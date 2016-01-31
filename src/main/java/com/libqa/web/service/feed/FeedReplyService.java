@@ -38,9 +38,7 @@ public class FeedReplyService {
         feedReply.setDeleted(false);
         feedReply.setInsertDate(new Date());
         feedReplyRepository.save(feedReply);
-
-        Feed feed = feedService.getByFeedId(feedReply.getFeed().getFeedId());
-        feed.setReplyCount(feedReplyRepository.countByFeedAndIsDeletedFalse(feed));
+        updateFeedReplyCount(feedReply);
     }
 
     /**
@@ -53,7 +51,10 @@ public class FeedReplyService {
         FeedReply feedReply = feedReplyRepository.findOne(feedReplyId);
         feedReply.setDeleted(true);
         feedReplyRepository.save(feedReply);
+        updateFeedReplyCount(feedReply);
+    }
 
+    private void updateFeedReplyCount(FeedReply feedReply) {
         Feed feed = feedService.getByFeedId(feedReply.getFeed().getFeedId());
         feed.setReplyCount(feedReplyRepository.countByFeedAndIsDeletedFalse(feed));
     }
@@ -104,13 +105,5 @@ public class FeedReplyService {
      */
     public FeedReply findByFeedReplyId(Integer feedReplyId) {
         return feedReplyRepository.findOne(feedReplyId);
-    }
-
-    /**
-     * @param feed
-     * @return reply count by feed
-     */
-    public Integer countByFeed(Feed feed) {
-        return feedReplyRepository.countByFeed(feed);
     }
 }

@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.libqa.config.CacheConfig;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.KeywordService;
-import com.libqa.web.service.feed.FeedReplyService;
 import com.libqa.web.service.feed.FeedService;
 import com.libqa.web.service.qa.QaReplyService;
 import com.libqa.web.service.qa.QaService;
@@ -40,8 +39,6 @@ public class IndexCrawler {
     private WikiService wikiService;
     @Autowired
     private FeedService feedService;
-    @Autowired
-    private FeedReplyService feedReplyService;
 
     /**
      * 인덱스에 노출할 정보를 crawling하여 {@link DisplayIndex}에 담아 반환한다.
@@ -127,8 +124,8 @@ public class IndexCrawler {
             IndexFeed indexFeed = IndexFeed.of();
             indexFeed.setFeedId(each.getFeedId());
             indexFeed.setFeedContent(each.getFeedContent());
+            indexFeed.setCountOfReply(each.getReplyCount());
             indexFeed.setUserImage(writer.getUserImage());
-            indexFeed.setCountOfReply(feedReplyService.countByFeed(each));
             result.add(indexFeed);
         }
         return result;
