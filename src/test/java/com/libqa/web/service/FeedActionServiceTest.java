@@ -68,10 +68,10 @@ public class FeedActionServiceTest {
 
     @Test
     public void 특정_사용자의_피드에_좋아요_액션이_존재한다() {
-        final int feedId = 1234;
+        final int feedThreadId = 1234;
         final User user = userFixture();
-        final FeedLike feedLike = FeedLike.of(feedId, user);
-        given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedId, user.getUserId()))
+        final FeedLike feedLike = FeedLike.of(feedThreadId, user);
+        given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedThreadId, user.getUserId()))
                 .willReturn(feedActionFixtures(feedLike));
 
         FeedAction actual = sut.getFeedActionBy(feedLike);

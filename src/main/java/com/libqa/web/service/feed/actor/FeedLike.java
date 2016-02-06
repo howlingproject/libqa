@@ -5,12 +5,12 @@ import com.libqa.application.enums.PostType;
 import com.libqa.web.domain.User;
 
 public class FeedLike extends FeedActionActor {
-    private FeedLike(Integer feedId, User actionUser) {
-        super(feedId, actionUser);
+    private FeedLike(Integer feedThreadId, User actionUser) {
+        super(feedThreadId, actionUser);
     }
 
-    public static FeedLike of(Integer feedId, User actionUser) {
-        return new FeedLike(feedId, actionUser);
+    public static FeedLike of(Integer feedThreadId, User actionUser) {
+        return new FeedLike(feedThreadId, actionUser);
     }
 
     @Override

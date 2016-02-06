@@ -1,7 +1,7 @@
 package com.libqa.web.view.feed;
 
 import com.google.common.collect.Lists;
-import com.libqa.web.domain.Feed;
+import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.user.UserService;
@@ -22,17 +22,17 @@ public class DisplayFeedReplyBuilder {
     /**
      * display용 feedReply 목록을 build 한다.
      *
-     * @param feed
+     * @param feedThread
      * @param viewer
      * @return
      */
-    List<DisplayFeedReply> build(Feed feed, User viewer) {
+    List<DisplayFeedReply> build(FeedThread feedThread, User viewer) {
         List<DisplayFeedReply> displayFeedReplies = Lists.newArrayList();
-        if (feed.noHasReplies()) {
+        if (feedThread.noHasReplies()) {
             return displayFeedReplies;
         }
 
-        displayFeedReplies.addAll(feed.getFeedReplies().stream()
+        displayFeedReplies.addAll(feedThread.getFeedReplies().stream()
                 .map(feedReply -> build(feedReply, viewer))
                 .collect(Collectors.toList())
         );

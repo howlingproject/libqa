@@ -14,9 +14,9 @@ public class FeedActionRepositoryTest extends LibqaRepositoryTest<FeedActionRepo
 
     @Test
     public void findByFeedActorIdAndUserIdAndIsCanceledFalse() {
-        final Integer feedId = -1;
+        final Integer feedThreadId = -1;
         final Integer userId = 1234;
-        List<FeedAction> actual = repository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedId, userId);
+        List<FeedAction> actual = repository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedThreadId, userId);
         assertThat(actual.size()).isZero();
     }
 

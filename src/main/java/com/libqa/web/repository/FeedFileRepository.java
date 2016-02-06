@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FeedFileRepository extends JpaRepository<FeedFile, Integer> {
-    List<FeedFile> findByFeedFeedId(Integer feedId);
+    List<FeedFile> findByFeedThreadFeedThreadId(Integer feedThreadId);
 }

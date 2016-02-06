@@ -55,8 +55,8 @@ public class FeedReply {
     private Integer updateUserId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feedId", referencedColumnName = "feedId")
+    @JoinColumn(name = "feedThreadId", referencedColumnName = "feedThreadId")
     @JsonIgnore
-    private Feed feed;
+    private FeedThread feedThread;
 }
 

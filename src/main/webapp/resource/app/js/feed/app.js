@@ -11,13 +11,13 @@ var Feed = {
         });
     },
     'moreList' : function() {
-        FeedList.call("/feed/list?lastFeedId=" + FeedList.getLastFeedId(), function(html, itemSize) {
+        FeedList.call("/feed/list?lastFeedThreadId=" + FeedList.getLastFeedThreadId(), function(html, itemSize) {
             $('#feedList').append(html);
             FeedPager.loaded(itemSize);
         });
     },
     'getId': function($target) {
-        return $target.closest('.thread').data('feedId');
+        return $target.closest('.thread').data('feedThreadId');
     },
     'hasNotAction': function($target) {
         return !$target.hasClass('hasActor');
@@ -81,21 +81,21 @@ var Feed = {
             $('#fileAttachmentInput').val('');
         });
     },
-    'getFeedIdByPopOver': function(el) {
+    "getFeedThreadIdByPopOver": function(el) {
         var popoverId = $(el).closest('.popover').attr('id');
         var $popOverBody =  $('.thread .config').find('[aria-describedby='+ popoverId +']');
         return this.getId($popOverBody);
     },
-    'getFeedBodyByFeedId': function(feedId) {
-        return $('#feedList li.thread[data-feed-id="' + feedId + '"]');
+    "getFeedBodyByFeedThreadId": function(feedThreadId) {
+        return $('#feedList li.thread[data-feed-thread-id="' + feedThreadId + '"]');
     },
     'removeItem': function(el, redirectUrl) {
         var me = this;
-        var feedId =  me.getFeedIdByPopOver(el);
+        var feedThreadId = me.getFeedThreadIdByPopOver(el);
 
         FeedUtil.confirm('FEED를 삭제하시겠습니까?', function(){
-            var $feedBody = me.getFeedBodyByFeedId(feedId);
-            $.post('/feed/' + feedId + '/delete')
+            var $feedBody = me.getFeedBodyByFeedThreadId(feedThreadId);
+            $.post('/feed/' + feedThreadId + '/delete')
                 .done(function (response) {
                     if (response.resultCode != 1) {
                         FeedUtil.alert(response.comment);
@@ -114,8 +114,8 @@ var Feed = {
     },
     'modifyItem' : function(el) {
         var me = this;
-        var feedId =  me.getFeedIdByPopOver(el);
-        var $feedBody = me.getFeedBodyByFeedId(feedId);
+        var feedThreadId =  me.getFeedThreadIdByPopOver(el);
+        var $feedBody = me.getFeedBodyByFeedThreadId(feedThreadId);
         var $feedContents = $feedBody.find('.feed-contents-box');
         var $modify = $feedBody.find('.feed-modify');
         var $frm = $modify.find('.feed-modify-form');
@@ -146,12 +146,12 @@ var Feed = {
         FeedUtil.hidePopOver();
     },
     'like': function(el) {
-        var feedId = this.getId($(el));
+        var feedThreadId = this.getId($(el));
         var hasNotAction = this.hasNotAction($(el));
         var message = hasNotAction ? '이 글을 좋아하시나요?' : '좋아요를 취소하시겠습니까?';
 
         FeedUtil.confirm(message, function(){
-            $.post('/feed/' + feedId + '/like')
+            $.post('/feed/' + feedThreadId + '/like')
                 .done(function (response) {
                     if (response.resultCode != 1) {
                         FeedUtil.alert(response.comment);
@@ -165,12 +165,12 @@ var Feed = {
         });
     },
     'claim': function(el) {
-        var feedId = this.getId($(el));
+        var feedThreadId = this.getId($(el));
         var hasNotAction = this.hasNotAction($(el));
         var message = hasNotAction ? '이 글을 신고하시겠습니까?' : '신고를 취소하시겠습니까?';
 
         FeedUtil.confirm(message, function(){
-            $.post('/feed/' + feedId + '/claim')
+            $.post('/feed/' + feedThreadId + '/claim')
                 .done(function (response) {
                     if (response.resultCode != 1) {
                         FeedUtil.alert(response.comment);
@@ -373,17 +373,16 @@ var FeedUtil = {
 var FeedPager = {
     '$button': $('#feedMoreBtn'),
     '$emptyFeedMore': $('#emptyFeedMore'),
-    'lastFeedId': null,
+    'lastFeedThreadId': null,
     'PAGE_SIZE': 5,
     'init': function(itemSize, callback) {
         if(itemSize > 0) {
             this.showBtn();
             this.bindLoading(callback);
+            this.$emptyFeedMore.hide();
         } else {
             this.hideBtn();
         }
-
-        this.$emptyFeedMore.hide();
     },
     'showBtn' : function() {
         this.$button.show();
@@ -430,8 +429,8 @@ var FeedList = {
             resultCallback(html, response.data.length);
         });
     },
-    'getLastFeedId': function() {
-        return $('#feedList li.thread').last().data('feedId');
+    'getLastFeedThreadId': function() {
+        return $('#feedList li.thread').last().data('feedThreadId');
     },
     'size': function(){
         return $('#feedList li.thread').size();
@@ -440,7 +439,7 @@ var FeedList = {
 
 var MyFeed = {
     'moreList' : function() {
-        FeedList.call("/feed/myList?lastFeedId=" + FeedList.getLastFeedId(), function(html, itemSize) {
+        FeedList.call("/feed/myList?lastFeedThreadId=" + FeedList.getLastFeedThreadId(), function(html, itemSize) {
             $('#feedList').append(html);
             FeedPager.loaded(itemSize);
         });
