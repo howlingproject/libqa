@@ -121,6 +121,7 @@ div.index-container div.index-thread-item .media-body .comments {margin-left:10p
 .best-feed .media-body {cursor: pointer;}
 .popover-content a, .popover-feed-image-content a { padding: 3px; }
 
+.modal {z-index: 9999999;}
 #bestFeedModal {z-index: 999999;}
 #bestFeedModal .modal-dialog {width:900px;}
 #bestFeedModal .modal-body {max-height: 580px; overflow-y:scroll;}

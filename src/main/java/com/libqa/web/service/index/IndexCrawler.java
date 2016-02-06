@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Comparator.comparing;
+
 @Service
 public class IndexCrawler {
     static final Integer INDEX_QA_SIZE = 3;
@@ -48,11 +50,33 @@ public class IndexCrawler {
     @Cacheable(CacheConfig.CACHE_DISPLAY_INDEX)
     public DisplayIndex crawl() {
         DisplayIndex displayIndex = DisplayIndex.of();
+        displayIndex.setNotice(buildNotice());
         displayIndex.setQaContents(buildQaContents());
         displayIndex.setSpaces(buildSpaces());
         displayIndex.setWikies(buildWikies());
         displayIndex.setFeeds(buildFeeds());
         return displayIndex;
+    }
+
+    private IndexNotice buildNotice() {
+        final int spaceIdForNotice = 1;
+        List<Wiki> wikies = wikiService.findBySpaceId(spaceIdForNotice);
+        if (wikies.isEmpty()) {
+            return IndexNotice.empty();
+        }
+
+        Wiki wiki = wikies.stream()
+                .sorted(comparing(Wiki::getWikiId))
+                .findFirst().get();
+        String noticeUrl = String.format("/wiki/%s", wiki.getWikiId());
+
+        IndexNotice indexNotice = IndexNotice.of();
+        indexNotice.setUrl(noticeUrl);
+        indexNotice.setTitle(wiki.getTitle());
+        indexNotice.setContents(wiki.getContents());
+        indexNotice.setInsertDate(DisplayDate.parse(wiki.getInsertDate()));
+        indexNotice.setCountOfReply(0); // TODO wiki의 replyCount 로 대체
+        return indexNotice;
     }
 
     private List<IndexQaContent> buildQaContents() {
@@ -104,8 +128,8 @@ public class IndexCrawler {
 
     private List<IndexWiki> buildWikies() {
         List<IndexWiki> result = Lists.newArrayList();
-        List<Wiki> wikes = wikiService.searchRecentlyWikiesByPageSize(INDEX_WIKI_SIZE);
-        for (Wiki each : wikes) {
+        List<Wiki> wikies = wikiService.searchRecentlyWikiesByPageSize(INDEX_WIKI_SIZE);
+        for (Wiki each : wikies) {
             IndexWiki indexWiki = IndexWiki.of();
             indexWiki.setWikiId(each.getWikiId());
             indexWiki.setTitle(each.getTitle());

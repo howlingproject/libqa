@@ -1,7 +1,7 @@
 package com.libqa.web.domain;
 
-import com.libqa.application.enums.FeedActionType;
-import com.libqa.application.enums.FeedThreadType;
+import com.libqa.application.enums.ActionType;
+import com.libqa.application.enums.PostType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -30,11 +30,11 @@ public class FeedAction {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private FeedThreadType feedThreadType;
+    private PostType postType;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private FeedActionType feedActionType;
+    private ActionType actionType;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isCanceled;
