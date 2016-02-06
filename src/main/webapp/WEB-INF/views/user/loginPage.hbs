@@ -21,50 +21,52 @@ Time: 16:20
     <!-- contents -->
     <div class="container">
         <form class="form-horizontal well" style="background-color:#ffffff" role="form" method="post" name="registForm" id="registForm">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color: #428bca">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <div class="bootstrap-dialog-title" id="modal-title" style="font-size: 16px;color: #ffffff">Log in</div>
-                    </div>
+            <div class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #428bca">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <div class="bootstrap-dialog-title" id="modal-title" style="font-size: 16px;color: #ffffff">Log in</div>
+                        </div>
 
-                    <div class="modal-body" style="height: 260px">
+                        <div class="modal-body" style="height: 260px">
 
-                        <form id="loginFormArea" name="loginFormArea" method="post" class="form-horizontal">
-                            <div class="row" style="height: 40px">
-                                <div class="col-xs-4 text-left">
-                                    <span style="color: #428bca;"><a href="#">Forgot password?</a></span>
+                            <form id="loginFormArea" name="loginFormArea" method="post" class="form-horizontal">
+                                <div class="row" style="height: 40px">
+                                    <div class="col-xs-4 text-left">
+                                        <span style="color: #428bca;"><a href="#">Forgot password?</a></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input type="text" class="form-control" name="loginUserEmail" id="loginUserEmail" placeholder="email address">
-                            </div>
-                            <span class="help-block"></span>
-
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input type="password" class="form-control" name="loginUserPass" id="loginUserPass" placeholder="Password">
-                            </div>
-
-                            <span class="help-block" style="color: red; display: none;" id="loginPageInfo">로그인 정보가 올바르지 않습니다. 아이디/비밀번호를 확인하세요.</span>
-
-                            <div style="padding-top:10px;border-top: 1px solid #e5e5e5">
-                                <div class="col-xs-4">
-                                    <label class="checkbox">
-
-                                    </label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input type="text" class="form-control" name="loginUserEmail" id="loginUserEmail" placeholder="email address">
                                 </div>
-                                <div class="col-xs-4" >
-                                    <button type="button" class="btn btn-primary" id="loginFormBtn">Log in</button>
-                                    <button type="button" class="btn btn-default" id="loginFormCancel">Cancel</button>
+                                <span class="help-block"></span>
+
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                    <input type="password" class="form-control" name="loginUserPass" id="loginUserPass" placeholder="Password">
                                 </div>
 
-                            </div>
+                                <span class="help-block" style="color: red; display: none;" id="loginPageInfo">로그인 정보가 올바르지 않습니다. 아이디/비밀번호를 확인하세요.</span>
 
-                        </form>
+                                <div style="padding-top:10px;border-top: 1px solid #e5e5e5">
+                                    <div class="col-xs-4">
+                                        <label class="checkbox">
+
+                                        </label>
+                                    </div>
+                                    <div class="col-xs-4" >
+                                        <button type="button" class="btn btn-primary" id="loginFormBtn">Log in</button>
+                                        <button type="button" class="btn btn-default" id="loginFormCancel">Cancel</button>
+                                    </div>
+
+                                </div>
+
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
