@@ -1,7 +1,7 @@
 package com.libqa.web.service.feed.actor;
 
 import com.libqa.application.enums.ActionType;
-import com.libqa.application.enums.ThreadType;
+import com.libqa.application.enums.PostType;
 import com.libqa.web.domain.User;
 import lombok.Getter;
 
@@ -22,7 +22,7 @@ public abstract class FeedActionActor {
         this.actionUser = actionUser;
     }
 
-    public abstract ThreadType getThreadType();
+    public abstract PostType getPostType();
 
     public abstract ActionType getActionType();
 }

@@ -1,7 +1,7 @@
 package com.libqa.web.domain;
 
 import com.libqa.application.enums.ActionType;
-import com.libqa.application.enums.ThreadType;
+import com.libqa.application.enums.PostType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -30,7 +30,7 @@ public class FeedAction {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private ThreadType threadType;
+    private PostType postType;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)

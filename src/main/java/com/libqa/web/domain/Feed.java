@@ -9,16 +9,13 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@Builder
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(of = "feedId")
 @Table(indexes = {
         @Index(columnList = "isDeleted"),
         @Index(columnList = "userId"),
         @Index(columnList = "userNick")
 })
+@EqualsAndHashCode(of = "feedId")
 @ToString(exclude = {"feedReplies", "feedFiles"})
 public class Feed {
     @Id

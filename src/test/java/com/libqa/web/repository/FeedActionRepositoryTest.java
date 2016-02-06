@@ -1,7 +1,7 @@
 package com.libqa.web.repository;
 
 import com.libqa.application.enums.ActionType;
-import com.libqa.application.enums.ThreadType;
+import com.libqa.application.enums.PostType;
 import com.libqa.testsupport.LibqaRepositoryTest;
 import com.libqa.web.domain.FeedAction;
 import org.junit.Test;
@@ -21,13 +21,13 @@ public class FeedActionRepositoryTest extends LibqaRepositoryTest<FeedActionRepo
     }
 
     @Test
-    public void countByFeedActorIdAndThreadTypeAndActionTypeAndIsCanceledFalse() {
+    public void countByFeedActorIdAndPostTypeAndActionTypeAndIsCanceledFalse() {
         final Integer feedReplyId = -1;
-        final ThreadType threadType = ThreadType.FEED_REPLY;
+        final PostType postType = PostType.REPLY;
         final ActionType actionType = ActionType.LIKE;
 
-        int count = repository.countByFeedActorIdAndThreadTypeAndActionTypeAndIsCanceledFalse(
-                feedReplyId, threadType, actionType);
+        int count = repository.countByFeedActorIdAndPostTypeAndActionTypeAndIsCanceledFalse(
+                feedReplyId, postType, actionType);
 
         assertThat(count).isZero();
     }

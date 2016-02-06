@@ -1,7 +1,7 @@
 package com.libqa.web.service.feed.actor;
 
 import com.libqa.application.enums.ActionType;
-import com.libqa.application.enums.ThreadType;
+import com.libqa.application.enums.PostType;
 import com.libqa.web.domain.User;
 
 public class FeedLike extends FeedActionActor {
@@ -14,8 +14,8 @@ public class FeedLike extends FeedActionActor {
     }
 
     @Override
-    public ThreadType getThreadType() {
-        return ThreadType.FEED;
+    public PostType getPostType() {
+        return PostType.THREAD;
     }
 
     @Override

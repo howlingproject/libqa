@@ -98,15 +98,15 @@ public class FeedActionServiceTest {
 
         sut.countOf(feedLike);
 
-        verify(feedActionRepository).countByFeedActorIdAndThreadTypeAndActionTypeAndIsCanceledFalse(
-                eq(feedLike.getFeedActorId()), eq(feedLike.getThreadType()), eq(feedLike.getActionType()));
+        verify(feedActionRepository).countByFeedActorIdAndPostTypeAndActionTypeAndIsCanceledFalse(
+                eq(feedLike.getFeedActorId()), eq(feedLike.getPostType()), eq(feedLike.getActionType()));
     }
 
 
     private FeedAction feedActionFixture(FeedActionActor feedActionActor) {
         FeedAction feedAction = new FeedAction();
         feedAction.setFeedActionId(feedActionActor.getFeedActorId());
-        feedAction.setThreadType(feedActionActor.getThreadType());
+        feedAction.setPostType(feedActionActor.getPostType());
         feedAction.setActionType(feedActionActor.getActionType());
         feedAction.setUserId(feedActionActor.getActionUser().getUserId());
         feedAction.setCanceled(false);
@@ -116,14 +116,14 @@ public class FeedActionServiceTest {
     private List<FeedAction> feedActionFixtures(FeedActionActor feedActionActor) {
         FeedAction notCanceled = new FeedAction();
         notCanceled.setFeedActionId(feedActionActor.getFeedActorId());
-        notCanceled.setThreadType(feedActionActor.getThreadType());
+        notCanceled.setPostType(feedActionActor.getPostType());
         notCanceled.setActionType(feedActionActor.getActionType());
         notCanceled.setUserId(feedActionActor.getActionUser().getUserId());
         notCanceled.setCanceled(false);
 
         FeedAction canceled = new FeedAction();
         canceled.setFeedActionId(feedActionActor.getFeedActorId());
-        canceled.setThreadType(feedActionActor.getThreadType());
+        canceled.setPostType(feedActionActor.getPostType());
         canceled.setActionType(feedActionActor.getActionType());
         canceled.setUserId(feedActionActor.getActionUser().getUserId());
         canceled.setCanceled(true);
