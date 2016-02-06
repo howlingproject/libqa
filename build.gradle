@@ -53,6 +53,7 @@ dependencies {
     compile('org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc3:1.16')
     compile('com.google.guava:guava:18.0')
     compile('com.twitter:twitter-text:1.13.0')
+    compile('org.codehaus.jackson:jackson-core-asl:1.9.13')
     testCompile('com.jayway.restassured:spring-mock-mvc:2.4.0')
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     testCompile('cglib:cglib:2.2')

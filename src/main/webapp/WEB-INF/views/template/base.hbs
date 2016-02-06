@@ -56,8 +56,8 @@
             </li>
             <li class="messenger notification on"><a href="#"><i class="fa fa-comments fa-2x"></i></a></li>
             <!-- 공간 트리메뉴 노출 여부 -->
-            <li class="messenger notification"><a href="#"><i class="fa fa-outdent fa-2x"></i></a></li>
-            <li class="messenger notification"><a href="#"><i class="fa fa-indent fa-2x"></i></a></li>
+            <li class="messenger notification" id="outdent"><a href="#"><i class="fa fa-outdent fa-2x"></i></a></li>
+            <li class="messenger notification" id="indent"><a href="#"><i class="fa fa-indent fa-2x"></i></a></li>
         </ul>
     </nav>
 </header>
@@ -148,6 +148,18 @@
             }
         });
     });
+
+    function test1(){
+        var div1 = $("#mainContent").children(".row").children(":first");
+        var div2 = $("#mainContent").children(".row").children(":last");
+        if( div2.css("display") == "none" ){
+            div2.show();
+            div1.toggleClass("col-md-12 col-md-9");
+        }else{
+            div2.hide();
+            div1.toggleClass("col-md-9 col-md-12");
+        }
+    }
 
     function submitLogin() {
         userEmail = $("#userEmail").val();
