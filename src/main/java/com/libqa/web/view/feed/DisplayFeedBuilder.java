@@ -1,7 +1,7 @@
 package com.libqa.web.view.feed;
 
 import com.google.common.collect.Lists;
-import com.libqa.web.domain.Feed;
+import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +20,15 @@ public class DisplayFeedBuilder {
     private DisplayFeedActionBuilder displayFeedActionBuilder;
 
     /**
-     * feed 목록을 display 용으로 build 한다.
+     * feedThread 목록을 display 용으로 build 한다.
      *
-     * @param feeds  list of feed
+     * @param feedThreads  list of feedThread
      * @param viewer viewer
      * @return List&lt;DisplayFeed&gt;
      */
-    public List<DisplayFeed> build(List<Feed> feeds, User viewer) {
+    public List<DisplayFeed> build(List<FeedThread> feedThreads, User viewer) {
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
-        displayFeeds.addAll(feeds.stream()
+        displayFeeds.addAll(feedThreads.stream()
                 .map(feed -> build(feed, viewer))
                 .collect(Collectors.toList()));
         return displayFeeds;
@@ -37,25 +37,25 @@ public class DisplayFeedBuilder {
     /**
      * feed를 display 용으로 build 한다.
      *
-     * @param feed   feed
+     * @param feedThread   feedThread
      * @param viewer viewer
      * @return DisplayFeed
      */
-    public DisplayFeed build(Feed feed, User viewer) {
-        if (feed == null || feed.isDeleted()) {
+    public DisplayFeed build(FeedThread feedThread, User viewer) {
+        if (feedThread == null || feedThread.isDeleted()) {
             return DisplayFeed.empty();
         }
 
-        User writer = userService.findByUserId(feed.getUserId());
-        DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLike(feed, viewer);
-        DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaim(feed, viewer);
+        User writer = userService.findByUserId(feedThread.getUserId());
+        DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLike(feedThread, viewer);
+        DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaim(feedThread, viewer);
 
         final boolean isWriter = writer.isMatchUser(viewer.getUserId());
 
-        DisplayFeed displayFeed = new DisplayFeed(feed, writer, isWriter);
+        DisplayFeed displayFeed = new DisplayFeed(feedThread, writer, isWriter);
         displayFeed.setLikeFeedAction(likedFeedAction);
         displayFeed.setClaimFeedAction(claimedFeedAction);
-        displayFeed.setReplies(displayFeedReplyBuilder.build(feed, viewer));
+        displayFeed.setReplies(displayFeedReplyBuilder.build(feedThread, viewer));
         return displayFeed;
     }
 }

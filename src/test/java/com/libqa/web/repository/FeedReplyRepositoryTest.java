@@ -1,7 +1,7 @@
 package com.libqa.web.repository;
 
 import com.libqa.testsupport.LibqaRepositoryTest;
-import com.libqa.web.domain.Feed;
+import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.FeedReply;
 import org.junit.Test;
 
@@ -18,9 +18,9 @@ public class FeedReplyRepositoryTest extends LibqaRepositoryTest<FeedReplyReposi
 
     @Test
     public void countByFeedAndIsDeletedFalse() {
-        Feed feed = new Feed();
-        feed.setFeedId(10000);
-        Integer count = repository.countByFeedAndIsDeletedFalse(feed);
+        FeedThread feedThread = new FeedThread();
+        feedThread.setFeedThreadId(10000);
+        Integer count = repository.countByFeedThreadAndIsDeletedFalse(feedThread);
         assertThat(count).isZero();
     }
 

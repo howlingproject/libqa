@@ -1,6 +1,6 @@
 package com.libqa.web.service.feed;
 
-import com.libqa.web.domain.Feed;
+import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedReplyRepository;
@@ -18,7 +18,7 @@ import java.util.Date;
 public class FeedReplyService {
 
     @Autowired
-    private FeedService feedService;
+    private FeedThreadService feedThreadService;
     @Autowired
     private FeedReplyRepository feedReplyRepository;
     @Autowired
@@ -55,8 +55,9 @@ public class FeedReplyService {
     }
 
     private void updateFeedReplyCount(FeedReply feedReply) {
-        Feed feed = feedService.getByFeedId(feedReply.getFeed().getFeedId());
-        feed.setReplyCount(feedReplyRepository.countByFeedAndIsDeletedFalse(feed));
+        final Integer feedThreadId = feedReply.getFeedThread().getFeedThreadId();
+        FeedThread feedThread = feedThreadService.getByFeedThreadId(feedThreadId);
+        feedThread.setReplyCount(feedReplyRepository.countByFeedThreadAndIsDeletedFalse(feedThread));
     }
 
     /**
