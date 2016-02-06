@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor(staticName = "of")
 public class IndexFeed {
-    private Integer feedId;
+    private Integer feedThreadId;
     private String userImage;
     private String feedContent;
     private Integer countOfReply;

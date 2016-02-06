@@ -2,7 +2,7 @@ package com.libqa.web.view.feed;
 
 import com.google.common.collect.Lists;
 import com.libqa.application.util.HtmlContentHandler;
-import com.libqa.web.domain.Feed;
+import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.FeedFile;
 import com.libqa.web.domain.User;
 import lombok.Getter;
@@ -12,10 +12,9 @@ import java.util.List;
 
 @Getter
 public class DisplayFeed {
-    private Integer feedId;
+    private Integer feedThreadId;
     private String originFeedContent;
     private String feedContent;
-    private Integer userId;
     private String userNick;
     private String userImage;
     private String insertDate;
@@ -35,16 +34,16 @@ public class DisplayFeed {
     private DisplayFeed() {
     }
 
-    public DisplayFeed(Feed feed, User viewer, Boolean isWriter) {
-        this.feedId = feed.getFeedId();
-        this.userNick = feed.getUserNick();
+    public DisplayFeed(FeedThread feedThread, User viewer, Boolean isWriter) {
+        this.feedThreadId = feedThread.getFeedThreadId();
+        this.userNick = feedThread.getUserNick();
         this.userImage = viewer.getUserImage();
-        this.originFeedContent = feed.getFeedContent();
-        this.feedContent = parseHtml(feed.getFeedContent());
-        this.insertDate = DisplayDate.parse(feed.getInsertDate());
+        this.originFeedContent = feedThread.getFeedContent();
+        this.feedContent = parseHtml(feedThread.getFeedContent());
+        this.insertDate = DisplayDate.parse(feedThread.getInsertDate());
         this.writer = isWriter;
-        if(feed.hasFiles()) {
-            setFeedFiles(feed.getFeedFiles());
+        if(feedThread.hasFiles()) {
+            setFeedFiles(feedThread.getFeedFiles());
         }
     }
 

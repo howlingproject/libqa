@@ -57,8 +57,8 @@ public class FeedFile {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feedId", referencedColumnName = "feedId")
-    private Feed feed;
+    @JoinColumn(name = "feedThreadId", referencedColumnName = "feedThreadId")
+    private FeedThread feedThread;
 
     public boolean isFileType() {
         return FileType.FILE == this.fileType;

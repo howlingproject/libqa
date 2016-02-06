@@ -228,13 +228,13 @@ public class WikiController {
             wiki.setInsertDate(now);
             wiki.setUpdateDate(now);
 
-            if( wiki.getParentsId() == null  ){
-                wiki.setDepthIdx(1);
+            if( wiki.getParentsId() == null ){ // 부모위키 번호가 없으면 Root에 생성되는 것이므로 Depth는  0
+                wiki.setDepthIdx(0);
+            } else { // 부모 위키 번호가 있으면 Depth 가 늘어남
+                wiki.setDepthIdx(wiki.getDepthIdx() + 1);
             }
 
             Wiki result = wikiService.saveWithKeyword(wiki, keyword);
-
-
             log.debug("####### WIKI SAVE After INFO ########");
             log.debug("result = {}", result);
 

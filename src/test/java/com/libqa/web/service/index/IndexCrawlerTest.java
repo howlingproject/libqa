@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.KeywordService;
 import com.libqa.web.service.feed.FeedReplyService;
-import com.libqa.web.service.feed.FeedService;
+import com.libqa.web.service.feed.FeedThreadService;
 import com.libqa.web.service.qa.QaReplyService;
 import com.libqa.web.service.qa.QaService;
 import com.libqa.web.service.space.SpaceService;
@@ -23,6 +23,7 @@ import java.util.List;
 import static com.libqa.web.service.index.IndexCrawler.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -42,7 +43,7 @@ public class IndexCrawlerTest {
     @Mock
     private WikiService wikiService;
     @Mock
-    private FeedService feedService;
+    private FeedThreadService feedThreadService;
     @Mock
     private FeedReplyService feedReplyService;
 
@@ -51,19 +52,22 @@ public class IndexCrawlerTest {
 
     @Test
     public void crawl() {
+        final List<Wiki> expectedNoticeWikis = noticeForWikies();
         final List<QaContent> expectedQaContents = Lists.newArrayList(qaContentFixture(), qaContentFixture());
         final List<Space> expectedSpaces = Lists.newArrayList(mock(Space.class), mock(Space.class));
         final List<Wiki> expectedWikies = Lists.newArrayList(mock(Wiki.class));
-        final List<Feed> expectedFeeds = Lists.newArrayList(feedFixture());
+        final List<FeedThread> expectedFeedThreads = Lists.newArrayList(feedThreadFixture());
 
+        given(wikiService.findBySpaceId(anyInt())).willReturn(expectedNoticeWikis);
         given(userService.findByUserId(ANY_USER_ID)).willReturn(mock(User.class));
         given(qaService.searchRecentlyQaContentsByPageSize(INDEX_QA_SIZE)).willReturn(expectedQaContents);
         given(spaceService.findAllByCondition(false, 0, INDEX_SPACE_SIZE)).willReturn(expectedSpaces);
         given(wikiService.searchRecentlyWikiesByPageSize(INDEX_WIKI_SIZE)).willReturn(expectedWikies);
-        given(feedService.searchRecentlyFeedsByPageSize(INDEX_FEED_SIZE)).willReturn(expectedFeeds);
+        given(feedThreadService.searchRecentlyFeedsByPageSize(INDEX_FEED_SIZE)).willReturn(expectedFeedThreads);
 
         DisplayIndex actual = sut.crawl();
 
+        assertThat(actual.getNotice().getTitle()).isEqualTo("wiki1");
         assertThat(actual.getQaContents().size()).isEqualTo(2);
         assertThat(actual.getSpaces().size()).isEqualTo(2);
         assertThat(actual.getWikies().size()).isEqualTo(1);
@@ -72,14 +76,9 @@ public class IndexCrawlerTest {
 
     @Test
     public void crawlWithEmptyList() {
-        given(userService.findByUserId(ANY_USER_ID)).willReturn(mock(User.class));
-        given(qaService.searchRecentlyQaContentsByPageSize(INDEX_QA_SIZE)).willReturn(Lists.newArrayList());
-        given(spaceService.findAllByCondition(false, 0, INDEX_SPACE_SIZE)).willReturn(Lists.newArrayList());
-        given(wikiService.searchRecentlyWikiesByPageSize(INDEX_WIKI_SIZE)).willReturn(Lists.newArrayList());
-        given(feedService.searchRecentlyFeedsByPageSize(INDEX_FEED_SIZE)).willReturn(Lists.newArrayList());
-
         DisplayIndex actual = sut.crawl();
 
+        assertThat(actual.getNotice().isEmpty()).isTrue();
         assertThat(actual.getQaContents().size()).isZero();
         assertThat(actual.getSpaces().size()).isZero();
         assertThat(actual.getWikies().size()).isZero();
@@ -93,10 +92,27 @@ public class IndexCrawlerTest {
         return qaContent;
     }
 
-    private Feed feedFixture() {
-        Feed feed = new Feed();
-        feed.setUserId(ANY_USER_ID);
-        feed.setInsertDate(new Date());
-        return feed;
+    private FeedThread feedThreadFixture() {
+        FeedThread feedThread = new FeedThread();
+        feedThread.setUserId(ANY_USER_ID);
+        feedThread.setInsertDate(new Date());
+        return feedThread;
+    }
+
+    private List<Wiki> noticeForWikies() {
+        Wiki wiki1 = new Wiki();
+        wiki1.setWikiId(1);
+        wiki1.setTitle("wiki1");
+        wiki1.setInsertDate(new Date());
+
+        Wiki wiki2 = new Wiki();
+        wiki2.setWikiId(2);
+        wiki2.setTitle("wiki2");
+        wiki2.setInsertDate(new Date());
+
+        List<Wiki> wikies = Lists.newArrayList();
+        wikies.add(wiki1);
+        wikies.add(wiki2);
+        return wikies;
     }
 }

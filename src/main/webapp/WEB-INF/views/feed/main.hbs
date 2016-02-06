@@ -3,7 +3,6 @@
 {{# partial "content" }}
 <div class="container">
     <div class="col-md-12 col-xs-12">
-        <!-- feed 글 쓰기 start -->
         <form id="feedForm">
             <div class="feed feed-write well">
                 <ul>
@@ -29,21 +28,19 @@
                 </div>
             </div>
         </form>
-        <!-- feed 글 쓰기 end -->
 
-        <!-- feed 글 목록 start -->
         <div class="feed well">
             <ul id="feedList">
                 {{> feed/template/list}}
             </ul>
             <button class="btn btn-default form-control btn-feed-more" type="button" id="feedMoreBtn">more</button>
+
             {{#unless data}}
                 <div class="text-center" id="emptyFeedMore">
                     등록된 Feed가 존재하지 않습니다.
                 </div>
             {{/unless}}
         </div>
-        <!-- feed 글 목록 end -->
     </div>
 </div>
 

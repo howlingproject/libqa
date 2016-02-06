@@ -1,6 +1,6 @@
 package com.libqa.web.view.feed;
 
-import com.libqa.web.domain.Feed;
+import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.FeedAction;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.User;
@@ -18,13 +18,13 @@ public class DisplayFeedActionBuilder {
     /**
      * feed에 의한 like 정보를 display용으로 build 한다
      *
-     * @param feed
+     * @param feedThread
      * @param viewer
      * @return DisplayFeedAction
      */
-    public DisplayFeedAction buildLike(Feed feed, User viewer) {
-        FeedLike feedLikeActor = FeedLike.of(feed.getFeedId(), viewer);
-        return build(feedLikeActor, feed.getLikeCount());
+    public DisplayFeedAction buildLike(FeedThread feedThread, User viewer) {
+        FeedLike feedLikeActor = FeedLike.of(feedThread.getFeedThreadId(), viewer);
+        return build(feedLikeActor, feedThread.getLikeCount());
     }
 
     /**
@@ -42,13 +42,13 @@ public class DisplayFeedActionBuilder {
     /**
      * feed에 의한 claim 정보를 display용으로 build 한다
      *
-     * @param feed
+     * @param feedThread
      * @param viewer
      * @return DisplayFeedAction
      */
-    public DisplayFeedAction buildClaim(Feed feed, User viewer) {
-        FeedClaim feedClaimActor = FeedClaim.of(feed.getFeedId(), viewer);
-        return build(feedClaimActor, feed.getClaimCount());
+    public DisplayFeedAction buildClaim(FeedThread feedThread, User viewer) {
+        FeedClaim feedClaimActor = FeedClaim.of(feedThread.getFeedThreadId(), viewer);
+        return build(feedClaimActor, feedThread.getClaimCount());
     }
 
     /**

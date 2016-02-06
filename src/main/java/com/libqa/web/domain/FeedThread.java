@@ -9,22 +9,19 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@Builder
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(of = "feedId")
 @Table(indexes = {
         @Index(columnList = "isDeleted"),
         @Index(columnList = "userId"),
         @Index(columnList = "userNick")
 })
+@EqualsAndHashCode(of = "feedThreadId")
 @ToString(exclude = {"feedReplies", "feedFiles"})
-public class Feed {
+public class FeedThread {
     @Id
     @Column(nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer feedId;
+    private Integer feedThreadId;
 
     @Column(length = 80)
     private String sharedResponseId;
@@ -88,11 +85,11 @@ public class Feed {
     @Column
     private Integer updateUserId;
 
-    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "feedThread", fetch = FetchType.LAZY)
     @Where(clause = "is_deleted = 0")
     private List<FeedReply> feedReplies;
 
-    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "feedThread", fetch = FetchType.LAZY)
     @Where(clause = "is_deleted = 0")
     private List<FeedFile> feedFiles;
 

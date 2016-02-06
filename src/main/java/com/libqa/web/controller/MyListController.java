@@ -1,9 +1,9 @@
 package com.libqa.web.controller;
 
 import com.libqa.application.util.LoggedUser;
-import com.libqa.web.domain.Feed;
+import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.User;
-import com.libqa.web.service.feed.FeedService;
+import com.libqa.web.service.feed.FeedThreadService;
 import com.libqa.web.service.qa.QaService;
 import com.libqa.web.view.feed.DisplayFeedBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -29,16 +29,16 @@ public class MyListController {
     @Autowired
     private QaService qaService;
     @Autowired
-    private FeedService feedService;
+    private FeedThreadService feedThreadService;
     @Autowired
     private DisplayFeedBuilder displayFeedBuilder;
 
     @RequestMapping("/my/feed")
     public ModelAndView myFeed(ModelAndView mav) {
         User viewer = loggedUser.get();
-        List<Feed> feeds = feedService.searchRecentlyFeedsByUser(viewer);
+        List<FeedThread> feedThreads = feedThreadService.searchRecentlyFeedsByUser(viewer);
 
-        mav.addObject("data", displayFeedBuilder.build(feeds, viewer));
+        mav.addObject("data", displayFeedBuilder.build(feedThreads, viewer));
         mav.setViewName("/my/feedList");
         return mav;
     }

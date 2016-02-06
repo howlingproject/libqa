@@ -1,25 +1,25 @@
 package com.libqa.web.service.feed.actor;
 
-import com.libqa.application.enums.FeedActionType;
-import com.libqa.application.enums.FeedThreadType;
+import com.libqa.application.enums.ActionType;
+import com.libqa.application.enums.PostType;
 import com.libqa.web.domain.User;
 
 public class FeedLike extends FeedActionActor {
-    private FeedLike(Integer feedId, User actionUser) {
-        super(feedId, actionUser);
+    private FeedLike(Integer feedThreadId, User actionUser) {
+        super(feedThreadId, actionUser);
     }
 
-    public static FeedLike of(Integer feedId, User actionUser) {
-        return new FeedLike(feedId, actionUser);
-    }
-
-    @Override
-    public FeedThreadType getFeedThreadType() {
-        return FeedThreadType.FEED;
+    public static FeedLike of(Integer feedThreadId, User actionUser) {
+        return new FeedLike(feedThreadId, actionUser);
     }
 
     @Override
-    public FeedActionType getFeedActionType() {
-        return FeedActionType.LIKE;
+    public PostType getPostType() {
+        return PostType.THREAD;
+    }
+
+    @Override
+    public ActionType getActionType() {
+        return ActionType.LIKE;
     }
 }

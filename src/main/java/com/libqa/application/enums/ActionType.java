@@ -1,5 +1,5 @@
 package com.libqa.application.enums;
 
-public enum FeedActionType {
+public enum ActionType {
     LIKE, CLAIM
 }
