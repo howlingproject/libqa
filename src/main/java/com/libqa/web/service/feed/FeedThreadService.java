@@ -19,7 +19,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
@@ -43,24 +42,19 @@ public class FeedThreadService {
      *
      * @return List&lt;FeedThread&gt;
      */
-    public List<FeedThread> searchRecentlyFeeds() {
-        return searchRecentlyFeedsWithlastFeedThreadId(null);
+    public List<FeedThread> searchRecentlyFeedThreads() {
+        return feedThreadRepository.findByIsDeletedFalse(PageUtil.sortPageable(DEFAULT_SORT));
     }
 
     /**
-     * lastFeedThreadId을 기준으로 최신 feedThread 목록을 조회한다.
+     * lastId을 보다 작은 최신 feedThread 목록을 조회한다.
      *
-     * @param lastFeedThreadId
+     * @param lastId
      * @return List&lt;FeedThread&gt;
      */
-    public List<FeedThread> searchRecentlyFeedsWithlastFeedThreadId(Integer lastFeedThreadId) {
+    public List<FeedThread> searchRecentlyFeedThreadsLessThanLastId(Integer lastId) {
         PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
-
-        Optional<Integer> lastFeedThreadIdOptional = Optional.ofNullable(lastFeedThreadId);
-        if (lastFeedThreadIdOptional.isPresent()) {
-            return feedThreadRepository.findByFeedThreadIdLessThanAndIsDeletedFalse(lastFeedThreadId, pageRequest);
-        }
-        return feedThreadRepository.findByIsDeletedFalse(pageRequest);
+        return feedThreadRepository.findByFeedThreadIdLessThanAndIsDeletedFalse(lastId, pageRequest);
     }
 
     /**
@@ -69,8 +63,9 @@ public class FeedThreadService {
      * @param pageSize
      * @return FeedThread
      */
-    public List<FeedThread> searchRecentlyFeedsByPageSize(Integer pageSize) {
-        return feedThreadRepository.findByIsDeletedFalse(PageUtil.sortPageable(pageSize, DEFAULT_SORT));
+    public List<FeedThread> searchRecentlyFeedThreadsByPageSize(Integer pageSize) {
+        PageRequest pageRequest = PageUtil.sortPageable(pageSize, DEFAULT_SORT);
+        return feedThreadRepository.findByIsDeletedFalse(pageRequest);
     }
 
     /**
@@ -194,26 +189,22 @@ public class FeedThreadService {
      *
      * @return List&lt;FeedThread&gt;
      */
-    public List<FeedThread> searchRecentlyFeedsByUser(User user) {
-        return searchRecentlyFeedsByUserWithlastFeedThreadId(user, null);
+    public List<FeedThread> searchRecentlyFeedThreadsByUser(User user) {
+        PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
+        return feedThreadRepository.findByUserIdAndIsDeletedFalse(user.getUserId(), pageRequest);
     }
 
     /**
-     * userId로 feedThread 목록을 조회한다.
+     * userId로 lastId보다 작은 최신 feedThread 목록을 조회한다.
      *
      * @param user
-     * @param lastFeedThreadId
+     * @param lastId
      * @return List&lt;FeedThread&gt;
      */
-    public List<FeedThread> searchRecentlyFeedsByUserWithlastFeedThreadId(User user, Integer lastFeedThreadId) {
+    public List<FeedThread> searchRecentlyFeedThreadsByUserLessThanLastId(User user, Integer lastId) {
         PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
-        Optional<Integer> lastFeedThreadIdOptional = Optional.ofNullable(lastFeedThreadId);
-
-        if (lastFeedThreadIdOptional.isPresent()) {
-            return feedThreadRepository.findByUserIdAndFeedThreadIdLessThanAndIsDeletedFalse(user.getUserId(), lastFeedThreadId, pageRequest);
-        }
-
-        return feedThreadRepository.findByUserIdAndIsDeletedFalse(user.getUserId(), pageRequest);
+        return feedThreadRepository.findByUserIdAndFeedThreadIdLessThanAndIsDeletedFalse(
+                user.getUserId(), lastId, pageRequest);
     }
 
 }

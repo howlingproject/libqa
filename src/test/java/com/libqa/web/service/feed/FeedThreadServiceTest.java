@@ -25,24 +25,24 @@ public class FeedThreadServiceTest {
     private FeedThreadService sut;
 
     @Test
-    public void lastFeedThreadId가_null이면_해당_사용자의_피드목록을_제공한다() {
+    public void lastId가_null이면_해당_사용자의_피드목록을_제공한다() {
         final User user = userFixture();
-        final Integer lastFeedThreadId = null;
+        final Integer lastId = null;
 
-        sut.searchRecentlyFeedsByUserWithlastFeedThreadId(user, lastFeedThreadId);
+        sut.searchRecentlyFeedThreadsByUserLessThanLastId(user, lastId);
 
-        verify(feedThreadRepository, never()).findByUserIdAndFeedThreadIdLessThanAndIsDeletedFalse(eq(user.getUserId()), eq(lastFeedThreadId), any(PageRequest.class));
+        verify(feedThreadRepository, never()).findByUserIdAndFeedThreadIdLessThanAndIsDeletedFalse(eq(user.getUserId()), eq(lastId), any(PageRequest.class));
         verify(feedThreadRepository).findByUserIdAndIsDeletedFalse(eq(user.getUserId()), any(PageRequest.class));
     }
 
     @Test
-    public void lastFeedThreadId가_null이_아니면_lastFeedThreadId보다_작은_해당_사용자의_피드목록을_제공한다() {
+    public void lastId가_null이_아니면_lastId보다_작은_해당_사용자의_피드목록을_제공한다() {
         final User user = userFixture();
-        final Integer lastFeedThreadId = 10;
+        final Integer lastId = 10;
 
-        sut.searchRecentlyFeedsByUserWithlastFeedThreadId(user, lastFeedThreadId);
+        sut.searchRecentlyFeedThreadsByUserLessThanLastId(user, lastId);
 
-        verify(feedThreadRepository).findByUserIdAndFeedThreadIdLessThanAndIsDeletedFalse(eq(user.getUserId()), eq(lastFeedThreadId), any(PageRequest.class));
+        verify(feedThreadRepository).findByUserIdAndFeedThreadIdLessThanAndIsDeletedFalse(eq(user.getUserId()), eq(lastId), any(PageRequest.class));
         verify(feedThreadRepository, never()).findByUserIdAndIsDeletedFalse(eq(user.getUserId()), any(PageRequest.class));
     }
 

@@ -4,14 +4,14 @@ var Feed = {
         this.bindFileAttachment();
         this.bindFileUploadModal();
     },
-    'loadList' : function() {
-        FeedList.call("/feed/list", function(html, itemSize) {
+    'loadRecentlyList' : function() {
+        FeedList.call("/feed/recentlyList", function(html, itemSize) {
             $('#feedList').html(html);
             FeedPager.init(itemSize, Feed.moreList);
         });
     },
     'moreList' : function() {
-        FeedList.call("/feed/list?lastFeedThreadId=" + FeedList.getLastFeedThreadId(), function(html, itemSize) {
+        FeedList.call("/feed/list?lastId=" + FeedList.getLastId(), function(html, itemSize) {
             $('#feedList').append(html);
             FeedPager.loaded(itemSize);
         });
@@ -36,7 +36,7 @@ var Feed = {
                         return;
                     }
 
-                    me.loadList();
+                    me.loadRecentlyList();
                     me.clearForm();
                     FeedFile.clear();
                 }).fail(function(){
@@ -371,10 +371,9 @@ var FeedUtil = {
 };
 
 var FeedPager = {
+    'PAGE_SIZE': 5,
     '$button': $('#feedMoreBtn'),
     '$emptyFeedMore': $('#emptyFeedMore'),
-    'lastFeedThreadId': null,
-    'PAGE_SIZE': 5,
     'init': function(itemSize, callback) {
         if(itemSize > 0) {
             this.showBtn();
@@ -429,7 +428,7 @@ var FeedList = {
             resultCallback(html, response.data.length);
         });
     },
-    'getLastFeedThreadId': function() {
+    "getLastId": function() {
         return $('#feedList li.thread').last().data('feedThreadId');
     },
     'size': function(){
@@ -439,7 +438,7 @@ var FeedList = {
 
 var MyFeed = {
     'moreList' : function() {
-        FeedList.call("/feed/myList?lastFeedThreadId=" + FeedList.getLastFeedThreadId(), function(html, itemSize) {
+        FeedList.call("/feed/myList?lastId=" + FeedList.getLastId(), function(html, itemSize) {
             $('#feedList').append(html);
             FeedPager.loaded(itemSize);
         });

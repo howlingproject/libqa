@@ -22,9 +22,9 @@ public class FeedThreadRepositoryTest extends LibqaRepositoryTest<FeedThreadRepo
 
     @Test
     public void findByFeedThreadIdLessThanAndIsDeletedFalse() {
-        final int lastFeedThreadId = 0;
+        final int feedThreadId = 0;
         final PageRequest pageRequest = PageUtil.sortPageable(new Sort(DESC, "feedThreadId"));
-        List<FeedThread> feedThreads = repository.findByFeedThreadIdLessThanAndIsDeletedFalse(lastFeedThreadId, pageRequest);
+        List<FeedThread> feedThreads = repository.findByFeedThreadIdLessThanAndIsDeletedFalse(feedThreadId, pageRequest);
         System.out.println(feedThreads);
     }
 
@@ -53,9 +53,9 @@ public class FeedThreadRepositoryTest extends LibqaRepositoryTest<FeedThreadRepo
     @Test
     public void findByUserIdAndFeedThreadIdLessThanAndIsDeletedFalse() {
         final int userId = 100000;
-        final int lastFeedThreadId = 1000;
+        final int feedThreadId = 1000;
         final PageRequest pageRequest = PageUtil.sortPageable(new Sort(DESC, "feedThreadId"));
-        List<FeedThread> feedThreads = repository.findByUserIdAndFeedThreadIdLessThanAndIsDeletedFalse(userId, lastFeedThreadId, pageRequest);
+        List<FeedThread> feedThreads = repository.findByUserIdAndFeedThreadIdLessThanAndIsDeletedFalse(userId, feedThreadId, pageRequest);
         System.out.println(feedThreads);
     }
 }

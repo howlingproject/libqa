@@ -22,23 +22,24 @@ public class DisplayFeedBuilder {
     /**
      * feedThread 목록을 display 용으로 build 한다.
      *
-     * @param feedThreads  list of feedThread
-     * @param viewer viewer
+     * @param feedThreads list of feedThread
+     * @param viewer      viewer
      * @return List&lt;DisplayFeed&gt;
      */
     public List<DisplayFeed> build(List<FeedThread> feedThreads, User viewer) {
         List<DisplayFeed> displayFeeds = Lists.newArrayList();
-        displayFeeds.addAll(feedThreads.stream()
-                .map(feed -> build(feed, viewer))
-                .collect(Collectors.toList()));
+        displayFeeds.addAll(
+                feedThreads.stream()
+                        .map(feed -> build(feed, viewer))
+                        .collect(Collectors.toList()));
         return displayFeeds;
     }
 
     /**
      * feed를 display 용으로 build 한다.
      *
-     * @param feedThread   feedThread
-     * @param viewer viewer
+     * @param feedThread feedThread
+     * @param viewer     viewer
      * @return DisplayFeed
      */
     public DisplayFeed build(FeedThread feedThread, User viewer) {

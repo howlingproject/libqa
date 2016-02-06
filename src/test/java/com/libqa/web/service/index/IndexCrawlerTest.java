@@ -63,7 +63,7 @@ public class IndexCrawlerTest {
         given(qaService.searchRecentlyQaContentsByPageSize(INDEX_QA_SIZE)).willReturn(expectedQaContents);
         given(spaceService.findAllByCondition(false, 0, INDEX_SPACE_SIZE)).willReturn(expectedSpaces);
         given(wikiService.searchRecentlyWikiesByPageSize(INDEX_WIKI_SIZE)).willReturn(expectedWikies);
-        given(feedThreadService.searchRecentlyFeedsByPageSize(INDEX_FEED_SIZE)).willReturn(expectedFeedThreads);
+        given(feedThreadService.searchRecentlyFeedThreadsByPageSize(INDEX_FEED_SIZE)).willReturn(expectedFeedThreads);
 
         DisplayIndex actual = sut.crawl();
 
