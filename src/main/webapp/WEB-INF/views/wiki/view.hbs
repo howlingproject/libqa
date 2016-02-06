@@ -16,11 +16,11 @@
             </div>
             <div class="btn-group" id="sub_menu" data-toggle="buttons" style="float: right">
                 <a href="#" class="btn btn-primary">히스토리</a>
-                {{#compareTo isLogin '1'}}
+                {{#if isLogin}}
                 <a href="#" class="btn btn-primary" id="update">편집</a>
                 <a href="#" class="btn btn-primary" id="delete">삭제</a>
                 <a href="#" class="btn btn-primary" id="lock">잠금</a>
-                {{/compareTo}}
+                {{/if}}
                 {{#unless parentWiki}}
                     <a href="#" class="btn btn-primary" id="write">자식위키생성</a>
                 {{/unless}}
@@ -66,10 +66,10 @@
                         </tr>
                         </tbody>
                     </table>
-                    {{#compareTo isLogin '1'}}
+                    {{#if isLogin}}
                     <a href="#" class="fun-like btn btn-primary"
                        data-value="{{wiki.wikiId}}" data-type="WIKI">추천하기</a>
-                    {{/compareTo}}
+                    {{/if}}
                     <a href="#" class="btn btn-primary">인쇄하기</a>
                 </div>
             </div>
@@ -128,11 +128,11 @@
                 <!--</ul>-->
             <!--</div>-->
             <div class="btn-group">
-                {{#compareTo isLogin '1'}}
+                {{#if isLogin}}
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="modal" data-target="#askModal">
                     이 위키에 질문하기
                 </button>
-                {{/compareTo}}
+                {{/if}}
             </div>
             <!--<div class="btn-group">-->
                 <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">-->
@@ -377,9 +377,19 @@
         });
 
         $(".fun-like").on("click", function(){
-            if( confirm("추천 하시겠습니까?") ){
-                Wiki.like(this.dataset.type,this.dataset.value);
-            }
+            var type = this.dataset.type;
+            var value = this.dataset.value;
+            $.confirm({
+                title: '추천',
+                content: "추천 하시겠습니까?",
+                confirmButton: '추천',
+                confirmButtonClass: 'btn-info',
+                icon: 'fa fa-question-circle',
+                animation: 'top',
+                confirm: function () {
+                    Wiki.like(type, value);
+                }
+            });
         });
 
         $("#saveWiki").on("click", function(){
@@ -388,37 +398,45 @@
         $("#sub_menu a").on("click", function(){
            var link = '';
            var text = '';
-           if( this.id == 'update' ){
+           var id = this.id;
+           if( id == 'update' ){
                text ='이 위키를 수정를';
                link = "/wiki/update/"+$("#wikiId").val();
-           }else if( this.id == 'delete' ){
+           }else if( id == 'delete' ){
                text ='이 위키를 삭제를';
                link = "/wiki/delete/"+$("#wikiId").val();
-           }else if( this.id == 'lock' ){
+           }else if( id == 'lock' ){
                text ='이 위키를 잠금을';
                link = "/wiki/lock/"+$("#wikiId").val();
-           }else if( this.id == 'write' ){
+           }else if( id == 'write' ){
                text ='자식위키를 생성';
                link = "/wiki/write/"+$("#wikiId").val();
-           }else if( this.id == 'space' ){
+           }else if( id == 'space' ){
                text ='공간으로 이동';
                link = "/wiki/space/"+$("#wikiId").val();
            }
            if( link != '' ){
-               if( confirm(text+" 하시겠습니까?") ){
-                   if( this.id == 'update' ){
-                       location.href = link;
-                   }else if( this.id == 'delete' ){
-                       Wiki.updateStat(this.id, link);
-                   }else if( this.id == 'lock' ){
-                       Wiki.updateStat(this.id, link);
-                   }else if( this.id == 'write' ){
-                       location.href = link;
-                   }else if( this.id == 'space' ){
-                       location.href = link;
+               $.confirm({
+                   title: '알림',
+                   content: text+" 하시겠습니까?",
+                   confirmButton: '처리',
+                   confirmButtonClass: 'btn-info',
+                   icon: 'fa fa-question-circle',
+                   animation: 'top',
+                   confirm: function () {
+                       if( id == 'update' ){
+                           location.href = link;
+                       }else if( id == 'delete' ){
+                           Wiki.updateStat(id, link);
+                       }else if( id == 'lock' ){
+                           Wiki.updateStat(id, link);
+                       }else if( id == 'write' ){
+                           location.href = link;
+                       }else if( id == 'space' ){
+                           location.href = link;
+                       }
                    }
-
-               }
+               });
            }
         });
 
@@ -429,9 +447,18 @@
                     type: "POST",
                     data: { type : type, num : num },
                     success : function(result){
-                        console.info(result);
                         if( result.data != null){
                             if( result.data.result == 1  ){
+                                $.alert({
+                                    title: '추천',
+                                    content: '추천이 되었습니다.',
+                                    confirmButton: '확인',
+                                    confirmButtonClass: 'btn-primary',
+                                    icon: 'fa fa-info',
+                                    animation: 'zoom',
+                                    confirm: function () {
+                                    }
+                                });
                                 $(".fun-like").each(function(){
                                     if( result.data.wikiLike.wikiId != null && this.dataset.type == "WIKI"){
                                         var num = Number($("#wikiIdLike").text())+1;
@@ -444,6 +471,17 @@
                                         $("#"+id+" span").text(num);
                                     }
                                 })
+                            }else{
+                                $.alert({
+                                    title: '추천',
+                                    content: '이미 추천이 되었습니다.',
+                                    confirmButton: '확인',
+                                    confirmButtonClass: 'btn-primary',
+                                    icon: 'fa fa-info',
+                                    animation: 'zoom',
+                                    confirm: function () {
+                                    }
+                                });
                             }
                         }
                     },
