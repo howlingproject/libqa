@@ -1,7 +1,7 @@
 package com.libqa.web.service.feed.actor;
 
-import com.libqa.application.enums.FeedActionType;
-import com.libqa.application.enums.FeedThreadType;
+import com.libqa.application.enums.ActionType;
+import com.libqa.application.enums.ThreadType;
 import com.libqa.web.domain.User;
 
 public class FeedReplyLike extends FeedActionActor {
@@ -14,12 +14,12 @@ public class FeedReplyLike extends FeedActionActor {
     }
 
     @Override
-    public FeedThreadType getFeedThreadType() {
-        return FeedThreadType.FEED_REPLY;
+    public ThreadType getThreadType() {
+        return ThreadType.FEED_REPLY;
     }
 
     @Override
-    public FeedActionType getFeedActionType() {
-        return FeedActionType.LIKE;
+    public ActionType getActionType() {
+        return ActionType.LIKE;
     }
 }

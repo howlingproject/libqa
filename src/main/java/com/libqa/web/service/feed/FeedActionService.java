@@ -43,22 +43,22 @@ public class FeedActionService {
                 feedActionActor.getFeedActorId(), feedActionActor.getActionUser().getUserId());
 
         return Iterables.tryFind(feedActionsByUser,
-                input -> (input.getFeedActionType() == feedActionActor.getFeedActionType()
-                        && input.getFeedThreadType() == feedActionActor.getFeedThreadType()
+                input -> (input.getActionType() == feedActionActor.getActionType()
+                        && input.getThreadType() == feedActionActor.getThreadType()
                 )).or(FeedAction.notYet());
     }
 
     public Integer countOf(FeedActionActor feedActionActor) {
         // TODO convert to queryDsl
-        return feedActionRepository.countByFeedActorIdAndFeedThreadTypeAndFeedActionTypeAndIsCanceledFalse(
-                feedActionActor.getFeedActorId(), feedActionActor.getFeedThreadType(), feedActionActor.getFeedActionType());
+        return feedActionRepository.countByFeedActorIdAndThreadTypeAndActionTypeAndIsCanceledFalse(
+                feedActionActor.getFeedActorId(), feedActionActor.getThreadType(), feedActionActor.getActionType());
     }
 
     private FeedAction createFeedActionBy(FeedActionActor feedActionActor) {
         FeedAction feedAction = new FeedAction();
         feedAction.setFeedActorId(feedActionActor.getFeedActorId());
-        feedAction.setFeedActionType(feedActionActor.getFeedActionType());
-        feedAction.setFeedThreadType(feedActionActor.getFeedThreadType());
+        feedAction.setActionType(feedActionActor.getActionType());
+        feedAction.setThreadType(feedActionActor.getThreadType());
         feedAction.setUserId(feedActionActor.getActionUser().getUserId());
         feedAction.setUserNick(feedActionActor.getActionUser().getUserNick());
         feedAction.setInsertUserId(feedActionActor.getActionUser().getUserId());

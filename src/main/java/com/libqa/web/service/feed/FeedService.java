@@ -80,7 +80,7 @@ public class FeedService {
      * @param user
      */
     @Transactional
-    public void save(Feed feed, User user) {
+    public void create(Feed feed, User user) {
         feed.setUserNick(user.getUserNick());
         feed.setUserId(user.getUserId());
         feed.setInsertUserId(user.getUserId());
