@@ -82,7 +82,7 @@ public class FeedController {
         }
 
         try {
-            feedService.save(feed, viewer);
+            feedService.create(feed, viewer);
             return createSuccessResult(feed);
         } catch (Exception e) {
             log.error("save feed error.", e);

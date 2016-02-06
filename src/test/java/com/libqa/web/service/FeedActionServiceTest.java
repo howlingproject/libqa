@@ -98,16 +98,16 @@ public class FeedActionServiceTest {
 
         sut.countOf(feedLike);
 
-        verify(feedActionRepository).countByFeedActorIdAndFeedThreadTypeAndFeedActionTypeAndIsCanceledFalse(
-                eq(feedLike.getFeedActorId()), eq(feedLike.getFeedThreadType()), eq(feedLike.getFeedActionType()));
+        verify(feedActionRepository).countByFeedActorIdAndPostTypeAndActionTypeAndIsCanceledFalse(
+                eq(feedLike.getFeedActorId()), eq(feedLike.getPostType()), eq(feedLike.getActionType()));
     }
 
 
     private FeedAction feedActionFixture(FeedActionActor feedActionActor) {
         FeedAction feedAction = new FeedAction();
         feedAction.setFeedActionId(feedActionActor.getFeedActorId());
-        feedAction.setFeedThreadType(feedActionActor.getFeedThreadType());
-        feedAction.setFeedActionType(feedActionActor.getFeedActionType());
+        feedAction.setPostType(feedActionActor.getPostType());
+        feedAction.setActionType(feedActionActor.getActionType());
         feedAction.setUserId(feedActionActor.getActionUser().getUserId());
         feedAction.setCanceled(false);
         return feedAction;
@@ -116,15 +116,15 @@ public class FeedActionServiceTest {
     private List<FeedAction> feedActionFixtures(FeedActionActor feedActionActor) {
         FeedAction notCanceled = new FeedAction();
         notCanceled.setFeedActionId(feedActionActor.getFeedActorId());
-        notCanceled.setFeedThreadType(feedActionActor.getFeedThreadType());
-        notCanceled.setFeedActionType(feedActionActor.getFeedActionType());
+        notCanceled.setPostType(feedActionActor.getPostType());
+        notCanceled.setActionType(feedActionActor.getActionType());
         notCanceled.setUserId(feedActionActor.getActionUser().getUserId());
         notCanceled.setCanceled(false);
 
         FeedAction canceled = new FeedAction();
         canceled.setFeedActionId(feedActionActor.getFeedActorId());
-        canceled.setFeedThreadType(feedActionActor.getFeedThreadType());
-        canceled.setFeedActionType(feedActionActor.getFeedActionType());
+        canceled.setPostType(feedActionActor.getPostType());
+        canceled.setActionType(feedActionActor.getActionType());
         canceled.setUserId(feedActionActor.getActionUser().getUserId());
         canceled.setCanceled(true);
 
@@ -134,7 +134,7 @@ public class FeedActionServiceTest {
     private List<FeedAction> onlyCancelFeedActionsFixture(FeedActionActor feedActionActor) {
         FeedAction canceled = new FeedAction();
         canceled.setFeedActionId(feedActionActor.getFeedActorId());
-        canceled.setFeedActionType(feedActionActor.getFeedActionType());
+        canceled.setActionType(feedActionActor.getActionType());
         canceled.setUserId(feedActionActor.getActionUser().getUserId());
         canceled.setCanceled(true);
         return Lists.newArrayList(canceled);

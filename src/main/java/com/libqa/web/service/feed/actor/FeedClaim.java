@@ -1,7 +1,7 @@
 package com.libqa.web.service.feed.actor;
 
-import com.libqa.application.enums.FeedActionType;
-import com.libqa.application.enums.FeedThreadType;
+import com.libqa.application.enums.ActionType;
+import com.libqa.application.enums.PostType;
 import com.libqa.web.domain.User;
 
 public class FeedClaim extends FeedActionActor {
@@ -14,12 +14,12 @@ public class FeedClaim extends FeedActionActor {
     }
 
     @Override
-    public FeedThreadType getFeedThreadType() {
-        return FeedThreadType.FEED;
+    public PostType getPostType() {
+        return PostType.THREAD;
     }
 
     @Override
-    public FeedActionType getFeedActionType() {
-        return FeedActionType.CLAIM;
+    public ActionType getActionType() {
+        return ActionType.CLAIM;
     }
 }

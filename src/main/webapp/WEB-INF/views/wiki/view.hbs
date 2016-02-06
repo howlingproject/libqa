@@ -71,7 +71,6 @@
                        data-value="{{wiki.wikiId}}" data-type="WIKI">추천하기</a>
                     {{/compareTo}}
                     <a href="#" class="btn btn-primary">인쇄하기</a>
-                    <!--<a href="#" id="leftMenu" class="btn btn-primary">숨김</a>-->
                 </div>
             </div>
         </div>
@@ -274,14 +273,6 @@
 
 </div>
 
-<div id="leftMenu" style='position:absolute;z-index:2;top:430px;right:0;margin-right: 15px;'>
-    <a href="#" id="leftMenu2" class="btn btn-primary">
-        숨김
-    </a>
-</div>
-
-
-
 <div class="modal fade" id="askModal" tabindex="-1" role="dialog" aria-labelledby="askModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -365,23 +356,19 @@
             });
             $("#file-attachment").on("change", Wiki.uploadFile);
 
-            $("#leftMenu").on("click", function(){
+            $("#outdent").click(function(){
                 var div1 = $("#mainContent").children(".row").children(":first");
                 var div2 = $("#mainContent").children(".row").children(":last");
-                if( div2.css("display") == "none" ){
-                    div2.show();
-                    div1.toggleClass("col-md-12 col-md-9");
-                }else{
-                    div2.hide();
-                    div1.toggleClass("col-md-9 col-md-12");
-                }
+                div2.show();
+                div1.toggleClass("col-md-12 col-md-9");
             });
 
-            $(window).scroll(function()
-            {
-                $('#leftMenu').animate({top:$(window).scrollTop()+430+"px" },{queue: false, duration: 0});
+            $("#indent").click(function(){
+                var div1 = $("#mainContent").children(".row").children(":first");
+                var div2 = $("#mainContent").children(".row").children(":last");
+                div2.hide();
+                div1.toggleClass("col-md-9 col-md-12");
             });
-
         });
 
         $(".btn-group a").on("click", function(){
