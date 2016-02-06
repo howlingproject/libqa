@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor(staticName = "of")
 public class DisplayIndex {
+    private IndexNotice notice;
     private List<IndexQaContent> qaContents;
     private List<IndexWiki> wikies;
     private List<IndexSpace> spaces;
