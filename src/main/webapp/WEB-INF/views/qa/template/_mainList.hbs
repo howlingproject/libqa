@@ -1,45 +1,33 @@
 {{#each data}}
-    <div class="media qna-item" value="{{qaId}}" onclick="location.href='/qa/{{qaId}}';">
-
-        <a class="pull-left" style="cursor: pointer">
-            <div class="user-profile">
-                <img src="{{userImage}}" class="profile-image" alt="avatar">
+    <div class="best-qna-item">
+        <div>
+            <strong><a href="/qa/{{qaId}}">{{title}}</a></strong>
+            <div class="pull-right">
+                {{#each keywords}}
+                    {{#keywordBadge keywordName}}{{/keywordBadge}}
+                {{/each}}
             </div>
-        </a>
-
-        <div class="row">
-            <div class="col-xs-9 col-sm-9 col-md-9">
-                <div class="media-body">
-                    <div class="media-heading">
-                        <span>{{insertDate}}</span>
-
-                        <span class="my-qna-writer">
-                            <div class="user-profile-xs">
-                                <span class="nickname">{{userNick}}</span>
-                            </div>
-                        </span>
-
-                        <div class="pull-right">
-                            {{#each keywords}}
-                                {{#keywordBadge keywordName}}{{/keywordBadge}}
-                            {{/each}}
-                        </div>
-
-                        <div class="qna-title">
-                            <span>{{title}}</span>
-                        </div>
-
-                        <div>
-                            {{{contents}}}
-                            <span class="badge">{{replyCnt}}</span>
-                        </div>
+        </div>
+        <div class="media">
+            <a class="pull-left" href="#">
+                <div class="user-profile">
+                    <img alt="avatar" class="profile-image" src="{{userImage}}" />
+                </div>
+            </a>
+            <div class="row">
+                <div class="col-xs-9 col-sm-9 col-md-9">
+                    <div class="media-body">
+                        {{{contents}}}
+                        <span class="badge">{{replyCnt}}</span>
                     </div>
                 </div>
+                <div class="my-qna-rating">
+                    <button class="btn btn-sm btn-default btn-sm-fixed">조회 {{viewCount}}</button>
+                    <button class="btn btn-sm btn-default btn-sm-fixed">추천 {{recommendCount}}</button>
+                </div>
             </div>
-            <div class="my-qna-rating">
-                <button class="btn btn-sm btn-default btn-sm-fixed">조회 {{viewCount}}</button>
-                <button class="btn btn-sm btn-default btn-sm-fixed">추천 {{recommendCount}}</button>
-            </div>
+            <div class="pull-left"><span class="nickname"><i class="fa fa-pencil-square-o"></i> {{userNick}}</span></div>
+            <div class="pull-right"><i class="fa fa-clock-o"></i> {{insertDate}}</div>
         </div>
     </div>
 {{/each}}
