@@ -13,10 +13,8 @@ import com.libqa.web.service.space.SpaceService;
 import com.libqa.web.service.user.UserFavoriteService;
 import com.libqa.web.service.user.UserService;
 import com.libqa.web.service.wiki.WikiService;
+import com.libqa.web.view.space.*;
 import com.libqa.web.view.wiki.DisplayWiki;
-import com.libqa.web.view.space.SpaceActivityList;
-import com.libqa.web.view.space.SpaceMain;
-import com.libqa.web.view.space.SpaceWikiList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -401,14 +400,36 @@ public class SpaceController {
     }
 
 
+    @RequestMapping("/space/wikis")
+    @ResponseBody
+    public Collection wikiLists(@RequestParam Integer spaceId) {
+        List<WikiTree> defaultData = new ArrayList<>();
+
+        WikiTreeNode wikiTreeNode = new WikiTreeNode();
+        wikiTreeNode.setHref("/1");
+        wikiTreeNode.setTags(5);
+        wikiTreeNode.setText("자식노드1");
+        List<WikiTreeNode> nodes = new ArrayList<>();
+        nodes.add(wikiTreeNode);
+
+        WikiTree data = new WikiTree();
+        data.setText("Parent 1");
+        data.setTags(4);
+        data.setHref("#parent 1");
+        data.setNodes(nodes);
+
+        defaultData.add(data);
+
+        return defaultData;
+
+    }
+
     public ModelAndView sendAccessDenied() {
         ModelAndView mav = new ModelAndView("/common/403");
         mav.addObject("msg", "Hi " + ", you do not have permission to access this page!");
 
         return mav;
     }
-
-
 
 }
 

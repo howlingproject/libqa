@@ -75,7 +75,15 @@ public class WikiServiceImpl implements WikiService {
         saveWikiFileAndList(result);
         saveKeywordAndList(keyword, result);
         saveWikiActivity(result, ActivityType.INSERT_WIKI);
+
+        // wiki parentsId update
+        updateParentWikiId(result);
         return result;
+    }
+
+    private void updateParentWikiId(Wiki wiki) {
+        wiki.setParentsId(wiki.getWikiId());
+        save(wiki);
     }
 
     private void saveWikiActivity(Wiki saveWiki, ActivityType ActivityType) {

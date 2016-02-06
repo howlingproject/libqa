@@ -25,4 +25,10 @@ public class IndexController {
         mav.setViewName("index2");
         return mav;
     }
+
+    @RequestMapping({"/index3"})
+    public ModelAndView index3(ModelAndView mav) {
+        mav.setViewName("index3");
+        return mav;
+    }
 }
