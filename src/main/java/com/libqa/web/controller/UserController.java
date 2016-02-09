@@ -76,16 +76,18 @@ public class UserController {
      * 회원 로그인 form
      *
      * @return
-     */
+
     @RequestMapping("/loginPage")
     public ModelAndView loginPage(HttpServletRequest request) {
-        log.debug("# loginPage request.get = {}", request.getAttribute("isLogin"));
-        log.debug("# loginPage request.get = {}", request.getAttribute("userEmail"));
-        log.debug("# loginPage request.get = {}", request.getAttribute("userRole"));
+        log.info("# loginPage request.get = {}", request.getAttribute("isLogin"));
+        log.info("# loginPage request.get = {}", request.getAttribute("userEmail"));
+        log.info("# loginPage request.get = {}", request.getAttribute("userRole"));
         String returnUrl = RequestUtil.refererUrl(request, "/index");
 
         // 이전 페이지 결정 (로그인 및 가입일 경우 index로 이동)
         returnUrl = RequestUtil.checkReturnUrl(returnUrl);
+        log.info("# returnUrl = {}", returnUrl);
+
         RequestUtil.printRequest(request, "UserController.loginPage");
 
         ModelAndView mav = new ModelAndView("/user/loginPage");
@@ -96,6 +98,7 @@ public class UserController {
         log.debug("### 로그인 정보 페이지로 이동");
         return mav;
     }
+     */
 
     @RequestMapping("/user/signUp")
     public ModelAndView signUp(HttpServletRequest request) {

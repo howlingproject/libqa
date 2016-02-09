@@ -47,12 +47,16 @@ public class LoginHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
-        RequestUtil.printRequest(request, "LoginHandler");
+        RequestUtil.printRequest(request, "* LoginHandler");
+
+
+        //TODO root url 접근시 isLogin 값이 없어서 false 로 넘어가는 문제가 있음 (로그인 후에도 비로그인 메뉴로 출력되는 bug)
+
         String returnUrl = RequestUtil.refererUrl(request, DEFAULT_URL);
         ObjectMapper om = new ObjectMapper();
 
         Map<String, Object> map = new HashMap<String, Object>();
-        log.debug("### return URL = {}", returnUrl);
+        log.info("### return URL = {}", returnUrl);
         map.put("status", true);
         map.put("returnUrl", returnUrl);
 

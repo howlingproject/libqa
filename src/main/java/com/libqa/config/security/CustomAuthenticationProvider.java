@@ -35,19 +35,19 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String principal = (String) authentication.getPrincipal();
 
 
-        log.debug("### CustomAuthenticationProvider email = {}", email);
-        log.debug("### CustomAuthenticationProvider password = {}", password);
-        log.debug("### CustomAuthenticationProvider principal = {}", principal);
+        log.info("### CustomAuthenticationProvider email = {}", email);
+        log.info("### CustomAuthenticationProvider password = {}", password);
+        log.info("### CustomAuthenticationProvider principal = {}", principal);
         User user = userService.findByEmailAndIsCertification(email);
 
         if (user != null) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             boolean isMatchedUser = encoder.matches(password, user.getUserPass());
-            log.debug("### isMatchedUser = {}", isMatchedUser);
+            log.info("### isMatchedUser = {}", isMatchedUser);
             if (isMatchedUser) {
                 List<GrantedAuthority> grantedAuths = new ArrayList<>();
                 grantedAuths.add(new SimpleGrantedAuthority(user.getRole().name()));
-                System.out.println("### grantedAuthority = " + grantedAuths.get(0));
+                System.out.println("### grantedAuthority = " + grantedAuths.get(0)); // USER
                 // 최종 방문일 업데이트 함
                 updateUserLastVisitDate(email);
                 return new UsernamePasswordAuthenticationToken(email, password, grantedAuths);
@@ -62,7 +62,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     }
 
     private void updateUserLastVisitDate(String email) {
-        log.debug("#### 사용자 정보 업데이트");
+        log.info("#### 사용자 정보 업데이트");
         userService.updateUserLastVisitDate(email);
     }
 

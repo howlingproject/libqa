@@ -26,7 +26,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(final InterceptorRegistry resistry) {
-        resistry.addInterceptor(new LoginUserHandlerInterceptor()).addPathPatterns("", "/*", "/**", "/*/**");
+        resistry.addInterceptor(new LoginUserHandlerInterceptor()).addPathPatterns("/", "/*", "/**", "/*/**");
     }
 
     @Override

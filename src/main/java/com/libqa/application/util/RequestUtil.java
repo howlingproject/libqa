@@ -15,18 +15,16 @@ import java.util.Enumeration;
 public class RequestUtil {
 
     /**
-     * 이전 페이지의 referer 를 조회한다.
+     * 이전 페이지의 referer 를 조회한다. 특정 패턴일 경우 /index를 리턴한다.
      * @param request
      * @param defaultUrl
      * @return
      */
     public static String refererUrl(HttpServletRequest request, String defaultUrl) {
         String returnUrl = request.getHeader("Referer");
+        log.info("### returnUrl = {}", returnUrl);
 
-        if (returnUrl == null) {
-            returnUrl = defaultUrl;
-        }
-        return returnUrl;
+        return checkReturnUrl(returnUrl);
     }
 
     /**
@@ -35,12 +33,9 @@ public class RequestUtil {
      * @return
      */
     public static String checkReturnUrl(String returnUrl) {
-
         int subPoint = returnUrl.lastIndexOf("/");
         String subUrl = returnUrl.substring(subPoint, returnUrl.length());
-
         log.debug("###################### subUrl : {}", subUrl);
-
 
         if (subUrl.equals("/") || subUrl.equals("/loginPage") || subUrl.equals("/signUp")) {
             returnUrl = "/index";
@@ -62,7 +57,7 @@ public class RequestUtil {
 
             if (values != null) {
                 for (int i = 0; i < values.length; i++) {
-                    log.debug("** LoginHandler " + name + "( " + i + " ) " + values[i]);
+                    log.info("** LoginHandler " + name + "( " + i + " ) " + values[i]);
                 }
             }
         }
