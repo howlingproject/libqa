@@ -127,7 +127,11 @@ public class WikiController {
             Space space = spaceService.findOne(modelSpace.getSpaceId());
             mav.addObject("space", space);
         }
-        mav.addObject("parentsId",wikiId);
+
+        if( wikiId != null ){
+            Wiki wiki = wikiService.findById(wikiId);
+            mav.addObject("parentWiki",wiki);
+        }
 
         return mav;
     }
@@ -139,14 +143,14 @@ public class WikiController {
         Wiki wiki = wikiService.findById(wikiId);
         //List<WikiReply> wikiReply = wiki.getWikiReplies();
         log.debug("# view : {}", wiki);
-        Wiki parentWiki = wikiService.findByParentId(wiki.getParentsId());
-        List<Wiki> subWikiList = wikiService.findBySubWikiId(wiki.getWikiId());
+        //Wiki parentWiki = wikiService.findByParentId(wiki.getParentsId());
+        //List<Wiki> subWikiList = wikiService.findBySubWikiId(wiki.getWikiId());
 
         //List<Activity> activityList = activityService.findByWikiId(wikiId);
 
         mav.addObject("wiki", wiki);
-        mav.addObject("subWikiList", subWikiList);
-        mav.addObject("parentWiki", parentWiki);
+        //mav.addObject("subWikiList", subWikiList);
+        //mav.addObject("parentWiki", parentWiki);
         //mav.addObject("activityList", activityList);
 
         return mav;
@@ -230,8 +234,25 @@ public class WikiController {
 
             if( wiki.getParentsId() == null ){ // 부모위키 번호가 없으면 Root에 생성되는 것이므로 Depth는  0
                 wiki.setDepthIdx(0);
+                wiki.setOrderIdx(0);
             } else { // 부모 위키 번호가 있으면 Depth 가 늘어남
-                wiki.setDepthIdx(wiki.getDepthIdx() + 1);
+                Integer maxOrderIdx = wikiService.maxOrderIdx(wiki.getParentsId(), wiki.getDepthIdx() + 1);
+                if( maxOrderIdx == 0 && wiki.getDepthIdx() > 0 ){
+                    maxOrderIdx = wiki.getOrderIdx();
+                }
+
+                if( maxOrderIdx > 0 ){
+                    List<Wiki> list = wikiService.findByGroupIdxAndOrderIdxGreaterThanAndIsDeleted( wiki.getGroupIdx(), maxOrderIdx+1 );
+                    if( list != null && list.size() > 0 ){
+                        for( Wiki tempWiki : list ){
+                            tempWiki.setOrderIdx( tempWiki.getOrderIdx() + 1  );
+                            wikiService.save(tempWiki);
+                        }
+                    }
+                }
+
+                wiki.setOrderIdx( maxOrderIdx+1 );
+                wiki.setDepthIdx( wiki.getDepthIdx() + 1 );
             }
 
             Wiki result = wikiService.saveWithKeyword(wiki, keyword);
