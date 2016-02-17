@@ -24,4 +24,19 @@ public class QaRecommendServiceImpl implements QaRecommendService {
 	public List<QaRecommend> findByUserIdAndIsCommendTrue(Integer userId) {
 		return qaRecommendRepository.findByUserIdAndIsCommendTrue(userId);
 	}
+
+	@Override
+	public QaRecommend findByQaIdAndUserIdAndIsCommend(Integer qaId, Integer userId, boolean isCommend) {
+		return qaRecommendRepository.findByQaIdAndUserIdAndIsCommend(qaId, userId, isCommend);
+	}
+
+	@Override
+	public QaRecommend saveRecommendUp(QaRecommend paramQaRecommend, Integer userId) {
+		return null;
+	}
+
+	@Override
+	public QaRecommend saveRecommendDown(QaRecommend paramQaRecommend, Integer userId) {
+		return null;
+	}
 }

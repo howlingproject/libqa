@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface QaRecommendRepository extends JpaRepository<QaRecommend, Integer> {
 	List<QaRecommend> findByUserIdAndIsCommendTrue(Integer userId);
+
+	QaRecommend findByQaIdAndUserIdAndIsCommend(Integer qaId, Integer userId, boolean isCommend);
 }
