@@ -7,11 +7,13 @@ import com.libqa.web.domain.FeedFile;
 import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class DisplayFeed {
     private Integer feedThreadId;
     private String originFeedContent;
@@ -31,9 +33,6 @@ public class DisplayFeed {
     private DisplayFeedAction claimFeedAction;
     @Setter
     private List<DisplayFeedReply> replies;
-
-    private DisplayFeed() {
-    }
 
     DisplayFeed(FeedThread feedThread, User viewer, Boolean isWriter) {
         this.feedThreadId = feedThread.getFeedThreadId();

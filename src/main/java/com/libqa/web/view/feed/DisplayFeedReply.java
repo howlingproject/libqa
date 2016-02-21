@@ -28,7 +28,7 @@ public class DisplayFeedReply {
         this.claimFeedAction = createNotYetFeedAction();
     }
 
-    public DisplayFeedReply(FeedReply feedReply, User user, Boolean isWriter) {
+    DisplayFeedReply(FeedReply feedReply, User user, Boolean isWriter) {
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
         this.userImage = user.getUserImage();
