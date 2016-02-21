@@ -325,6 +325,14 @@
                             } else {
                                 alert("이미 추천/비추천 하셨습니다.");
                             }
+                        } else if(data.resultCode == 200){
+                            $.alert({
+                                title: 'Alert!',
+                                content: data.comment,
+                                confirm: function(){
+                                    location.href = '/loginPage';
+                                }
+                            });
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
@@ -400,6 +408,8 @@
                     success : function(data){
                         if(data.resultCode == 1) {
                             Qa.searchList();
+                        } else {
+                            $.alert(data.comment);
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
