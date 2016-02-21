@@ -318,6 +318,7 @@ public class SpaceController {
         }
         log.debug("# spaceWikis : {}", spaceWikis);
 
+
         mav.addObject("spaceWikis", spaceWikis);
         mav.addObject("updatedWikis", updatedWikis);
         mav.addObject("space", space);
@@ -325,6 +326,8 @@ public class SpaceController {
         mav.addObject("userFavorite", userFavorite);
         mav.addObject("activities", activities);
         mav.addObject("spaceActivityLists", spaceActivityLists);
+
+
         return mav;
     }
 
@@ -403,6 +406,9 @@ public class SpaceController {
     @RequestMapping("/space/wikis")
     @ResponseBody
     public Collection wikiLists(@RequestParam Integer spaceId) {
+        List<Wiki> wikiList = wikiService.findBySpaceId(spaceId);
+
+
         List<WikiTree> defaultData = new ArrayList<>();
 
         WikiTreeNode wikiTreeNode = new WikiTreeNode();
@@ -420,6 +426,7 @@ public class SpaceController {
 
         defaultData.add(data);
 
+        log.info("### defaultData = {}", defaultData);
         return defaultData;
 
     }
