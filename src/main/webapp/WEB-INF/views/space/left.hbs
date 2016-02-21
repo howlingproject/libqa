@@ -54,19 +54,27 @@ To change this template use File | Settings | File Templates.
                 <div class="pull-right" style="padding-top: 7px;cursor: pointer;"><i class="fa fa-times fa-1"></i></div>
                 <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:5px">전체위키</h4>
 
-                <div id="treeview" class=""></div>
+                {{#if wikiTrees}}
+                <div id="sidetreecontrol"><a href="?#">전체 닫기</a> | <a href="?#">전체 열기</a></div>
+                    <ul id="tree">
 
-{{!--
-{{#if spaceWikis}}
+                        {{{wikiTrees}}}
 
-{{#each spaceWikis}}
-    <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
-{{/each}}
+                    </ul>
+                {{^}}
+                    생성된 위키기 없습니다.
+                {{/if}}
+                {{!--
+                {{#if spaceWikis}}
 
-{{^}}
-    생성된 위키가 없습니다.
-{{/if}}
---}}
+                {{#each spaceWikis}}
+                    <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
+                {{/each}}
+
+                {{^}}
+                    생성된 위키가 없습니다.
+                {{/if}}
+                --}}
             </div>
         </div>
         <div class="col-md-9 no-float">
@@ -106,22 +114,21 @@ To change this template use File | Settings | File Templates.
 
 
 {{# partial "script-page" }}
-    <link href="/resource/public/js/jquery/plugin/bootstrap-treeview-1.2.0/bootstrap-treeview.min.css" rel="stylesheet" />
-    <script type="text/javascript" src="/resource/public/js/jquery/plugin/bootstrap-treeview-1.2.0/bootstrap-treeview.min.js"></script>
+    <link href="/resource/public/css/jquery.treeview.css" rel="stylesheet" />
+    <script type="text/javascript" src="/resource/public/js/jquery/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/resource/public/js/jquery/jquery.treeview.js"></script>
     <script type="text/javascript">
         // bind the on-change event
         $(document).ready(function() {
             var userFavorite = "{{userFavorite}}";
-            var treeData = "";
-            $.ajax({
-                type: "GET",
-                url: "/space/wikis?spaceId=5",
-                dataType: "json",
-                contentType: "charset=UTF-8",
-                success: function(jsonData){
-                    createTree(jsonData);
-                }
+
+            $("#tree").treeview({
+                collapsed: true,
+                animated: "medium",
+                control:"#sidetreecontrol",
+                persist: "location"
             });
+
 
             console.log("## userFavorite = " + userFavorite);
 
@@ -243,18 +250,6 @@ To change this template use File | Settings | File Templates.
                     }
                 })
             });
-
-            function createTree(jsonData) {
-                $('#treeview').treeview({
-                    color: "#428bca",
-                    showBorder: false,
-                    backColor : "#eeeeee",
-                    expandIcon: "glyphicon glyphicon-stop",
-                    collapseIcon: "glyphicon glyphicon-unchecked",
-                    showTags: true,
-                    data: jsonData
-                });
-            }
         });
     </script>
 {{/partial}}

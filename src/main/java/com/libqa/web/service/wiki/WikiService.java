@@ -55,4 +55,6 @@ public interface WikiService {
 
     List<Wiki> findAllLatestWikiBySpaceId(Integer pageSize, Integer spaceId);
 
+    List<Wiki> findBySpaceIdAndSort(Integer spaceId);
+
 }
