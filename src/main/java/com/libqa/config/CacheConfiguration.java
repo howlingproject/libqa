@@ -31,7 +31,7 @@ public class CacheConfiguration implements CachingConfigurer {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
 
         GuavaCache displayIndexCache = new GuavaCache(CACHE_DISPLAY_INDEX, CacheBuilder.newBuilder()
-                .expireAfterWrite(30, TimeUnit.MINUTES)
+                .expireAfterWrite(5, TimeUnit.MINUTES)
                 .build());
 
         cacheManager.setCaches(Lists.newArrayList(displayIndexCache));
