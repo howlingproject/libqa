@@ -1,9 +1,10 @@
 package com.libqa.web.view.feed;
 
 import com.google.common.collect.Lists;
+import com.libqa.application.util.FileUtil;
 import com.libqa.application.util.HtmlContentHandler;
-import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.FeedFile;
+import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,8 +20,8 @@ public class DisplayFeed {
     private String userImage;
     private String insertDate;
     private boolean writer;
-    private List<FeedFile> files;
-    private List<FeedFile> images;
+    private List<DisplayFeedFile> files;
+    private List<DisplayFeedFile> images;
 
     @Setter
     private boolean isEmpty = false;
@@ -34,7 +35,7 @@ public class DisplayFeed {
     private DisplayFeed() {
     }
 
-    public DisplayFeed(FeedThread feedThread, User viewer, Boolean isWriter) {
+    DisplayFeed(FeedThread feedThread, User viewer, Boolean isWriter) {
         this.feedThreadId = feedThread.getFeedThreadId();
         this.userNick = feedThread.getUserNick();
         this.userImage = viewer.getUserImage();
@@ -42,7 +43,7 @@ public class DisplayFeed {
         this.feedContent = parseHtml(feedThread.getFeedContent());
         this.insertDate = DisplayDate.parse(feedThread.getInsertDate());
         this.writer = isWriter;
-        if(feedThread.hasFiles()) {
+        if (feedThread.hasFiles()) {
             setFeedFiles(feedThread.getFeedFiles());
         }
     }
@@ -54,9 +55,7 @@ public class DisplayFeed {
     }
 
     private String parseHtml(String feedContent) {
-        return new HtmlContentHandler(feedContent)
-                .urlWithLink()
-                .nl2br().parse();
+        return new HtmlContentHandler(feedContent).urlWithLink().nl2br().parse();
     }
 
     private void setFeedFiles(List<FeedFile> feedFiles) {
@@ -64,12 +63,14 @@ public class DisplayFeed {
         this.images = Lists.newArrayList();
 
         for (FeedFile each : feedFiles) {
+            final String fullPath = each.getFilePath() + FileUtil.SEPARATOR + each.getSavedName();
+            DisplayFeedFile displayFeedFile = new DisplayFeedFile(each.getFeedFileId(), each.getRealName(), fullPath);
             if (each.isFileType()) {
-                this.files.add(each);
+                this.files.add(displayFeedFile);
             }
 
             if (each.isImageType()) {
-                this.images.add(each);
+                this.images.add(displayFeedFile);
             }
         }
     }
