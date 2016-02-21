@@ -4,7 +4,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.libqa.application.enums.ActivityType;
 import com.libqa.application.framework.ResponseData;
-import com.libqa.application.util.LoggedUser;
+import com.libqa.application.util.LoggedUserManager;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.ActivityService;
@@ -63,7 +63,7 @@ public class SpaceController {
 
 
     @Autowired
-    private LoggedUser loggedUser;
+    private LoggedUserManager loggedUserManager;
 
     /**
      * 파일 업로드 테스트용 페이지
@@ -103,7 +103,7 @@ public class SpaceController {
             spaceMainList.add(spaceMain);
         }
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
 
         if (user == null || user.isGuest()) {
             log.debug("# 로그인 사용자 정보가 존재하지 않습니다.");
@@ -166,7 +166,7 @@ public class SpaceController {
     public ModelAndView form(Model model) {
         log.debug("# message : {}", message);
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         UserFavorite userFavorite = null;
 
         if (user == null) {
@@ -185,7 +185,7 @@ public class SpaceController {
     @RequestMapping(value = "/space/add", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<Space> saveSpace(@ModelAttribute Space space, @ModelAttribute Keyword keyword) throws IllegalAccessException {
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
 
         if (user == null) {
             throw new IllegalAccessException("로그인 정보가 필요합니다.");
@@ -210,7 +210,7 @@ public class SpaceController {
     @RequestMapping(value = "/space/edit/{spaceId}", method = RequestMethod.GET)
     public ModelAndView editSpace(@PathVariable Integer spaceId) throws IllegalAccessException {
         Space space = spaceService.findOne(spaceId);
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         if (space.getInsertUserId() != user.getUserId()) {
             throw new IllegalAccessException("공간을 수정할 권한이 없습니다.");
         }
@@ -226,7 +226,7 @@ public class SpaceController {
     @RequestMapping(value = "/space/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<Space>  updateSpace(@ModelAttribute Space space, @ModelAttribute Keyword keyword) throws IllegalAccessException {
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
 
         if (user == null) {
             throw new IllegalAccessException("로그인 정보가 필요합니다.");
@@ -302,7 +302,7 @@ public class SpaceController {
             spaceActivityLists.add(spaceActivity);
         }
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         UserFavorite userFavorite = null;
 
         if (user == null) {
@@ -358,7 +358,7 @@ public class SpaceController {
     @ResponseBody
     public String addFavorite(@RequestParam Integer spaceId) {
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
 
         log.debug("### user = {}", user);
 
@@ -383,7 +383,7 @@ public class SpaceController {
     @ResponseBody
     public String cancelFavorite(@RequestParam Integer spaceId) {
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         if (user.isGuest()) {
             log.debug("# 로그인 사용자 정보가 존재하지 않습니다.");
             return "0";

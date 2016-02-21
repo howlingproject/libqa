@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class LoggedUser {
+public class LoggedUserManager {
 
     @Autowired
     private UserService userService;
@@ -21,21 +21,21 @@ public class LoggedUser {
      *
      * @return logged user
      */
-    public User get() {
+    public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
         log.debug("### userEmail  = {}", userEmail);
-        log.debug("### isInvalidUser(userEmail)  = {}", isInvalidUser(userEmail));
+        log.debug("### isGuestUser(userEmail)  = {}",  isGuestUser(userEmail));
 
-        if (isInvalidUser(userEmail)) {
+        if (isGuestUser(userEmail)) {
             return User.createGuest();
         }
 
         return userService.findByEmail(userEmail);
     }
 
-    private boolean isInvalidUser(String userEmail) {
+    private boolean isGuestUser(String userEmail) {
         return StringUtils.isBlank(userEmail) || "anonymousUser".equals(userEmail);
     }
 

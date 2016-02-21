@@ -2,7 +2,7 @@ package com.libqa.web.controller;
 
 import com.libqa.application.dto.QaDto;
 import com.libqa.application.framework.ResponseData;
-import com.libqa.application.util.LoggedUser;
+import com.libqa.application.util.LoggedUserManager;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.KeywordListService;
 import com.libqa.web.service.common.KeywordService;
@@ -36,7 +36,7 @@ import static com.libqa.application.framework.ResponseData.*;
 public class QaController {
 
     @Autowired
-    LoggedUser loggedUser;
+    LoggedUserManager loggedUserManager;
 
     @Autowired
     QaService qaService;
@@ -84,7 +84,7 @@ public class QaController {
         List<QaContent> qaContentList = new ArrayList<>();
         List<DisplayQa> displayQaList = new ArrayList<>();
         try {
-            qaContentList = qaService.findByUserId(loggedUser.get().getUserId());
+            qaContentList = qaService.findByUserId(loggedUserManager.getUser().getUserId());
             for(QaContent qaContent : qaContentList) {
                 User writer = userService.findByUserId(qaContent.getUserId());
                 displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
@@ -102,7 +102,7 @@ public class QaController {
         List<QaContent> qaContentList = new ArrayList<>();
         List<DisplayQa> displayQaList = new ArrayList<>();
         try {
-            qaContentList = qaReplyService.findByUserId(loggedUser.get().getUserId());
+            qaContentList = qaReplyService.findByUserId(loggedUserManager.getUser().getUserId());
             for(QaContent qaContent : qaContentList) {
                 User writer = userService.findByUserId(qaContent.getUserId());
                 displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
@@ -120,7 +120,7 @@ public class QaController {
         List<QaRecommend> qaRecommendList = new ArrayList<>();
         List<DisplayQa> displayQaList = new ArrayList<>();
         try {
-            qaRecommendList = qaRecommendService.findByUserIdAndIsCommendTrue(loggedUser.get().getUserId());
+            qaRecommendList = qaRecommendService.findByUserIdAndIsCommendTrue(loggedUserManager.getUser().getUserId());
             for(QaRecommend qaRecommend : qaRecommendList) {
                 User recommender = userService.findByUserId(qaRecommend.getUserId());
                 QaContent qaContent = qaService.findByQaId(qaRecommend.getQaId(), isDeleted);
@@ -144,7 +144,7 @@ public class QaController {
         mav.addObject("qaContent", qaContent);
         mav.addObject("writer", writer);
         mav.addObject("keywordList", keywordList);
-        mav.addObject("loggedUser", loggedUser.get());
+        mav.addObject("loggedUser", loggedUserManager.getUser());
         return mav;
     }
 
@@ -171,7 +171,7 @@ public class QaController {
     @RequestMapping(value = "/qa/save", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaContent> save(@ModelAttribute QaContent requestQaContent, @ModelAttribute QaFile requestQaFiles, @ModelAttribute Keyword requestKeywords) {
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         QaContent qaContent = new QaContent();
         try {
             qaContent = qaService.saveWithKeyword(requestQaContent, requestQaFiles, requestKeywords, user);
@@ -184,7 +184,7 @@ public class QaController {
     @RequestMapping(value = "/qa/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaContent> update(@ModelAttribute QaContent requestQaContent, @ModelAttribute QaFile requestQaFiles, @ModelAttribute Keyword requestKeywords) {
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         boolean isDeleted = false;
         try {
             QaContent originQaContent = qaService.findByQaId(requestQaContent.getQaId(), isDeleted);
@@ -215,7 +215,7 @@ public class QaController {
     @RequestMapping(value = "/qa/saveReply", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaReply> saveReply(QaReply qaReply) {
-	    User user = loggedUser.get();
+	    User user = loggedUserManager.getUser();
         QaReply newQaReply = qaReplyService.saveWithQaContent(qaReply, user);
         return createSuccessResult(newQaReply);
     }
@@ -270,7 +270,7 @@ public class QaController {
     @RequestMapping(value = "/qa/saveRecommendUp", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaRecommend> saveRecommendUp(@ModelAttribute QaRecommend paramQaRecommend){
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         try {
             if (user.isGuest()) {
                 return createResult(NEED_LOGIN);
@@ -285,7 +285,7 @@ public class QaController {
     @RequestMapping(value = "/qa/saveRecommendDown", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaRecommend> saveRecommendDown(@ModelAttribute QaRecommend paramQaRecommend){
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         try {
             if (user.isGuest()) {
                 return createResult(NEED_LOGIN);
@@ -300,7 +300,7 @@ public class QaController {
     @RequestMapping(value = "/qa/saveVoteUp", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaReply> saveVoteUp(@ModelAttribute QaReply paramQaReply){
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         try {
             if (user.isGuest()) {
                 return createResult(NEED_LOGIN);
@@ -315,7 +315,7 @@ public class QaController {
     @RequestMapping(value = "/qa/saveVoteDown", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaReply> saveVoteDown(@ModelAttribute QaReply paramQaReply){
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         try {
             if (user.isGuest()) {
                 return createResult(NEED_LOGIN);
@@ -349,7 +349,7 @@ public class QaController {
     @RequestMapping(value="/qa/recommend", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaRecommend> recommendDetail(@ModelAttribute QaRecommend paramQaRecommend){
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         try{
             if(user.isGuest()){
                 return createResult(NEED_LOGIN);
@@ -364,7 +364,7 @@ public class QaController {
     @RequestMapping(value="/qa/reply/vote", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<Vote> voteDetail(@ModelAttribute Vote paramVote){
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         boolean isCancel = false;
         try{
             if(user.isGuest()){
