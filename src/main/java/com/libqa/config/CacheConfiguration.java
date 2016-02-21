@@ -20,9 +20,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Configuration
 @EnableCaching
-public class CacheConfig implements CachingConfigurer {
+public class CacheConfiguration implements CachingConfigurer {
     public static final String CACHE_DISPLAY_INDEX = "cache.displayIndex";
-    public static final String CACHE_USER_EMAIL = "cache.userEmail";
 
     @Bean
     @Override
@@ -35,11 +34,7 @@ public class CacheConfig implements CachingConfigurer {
                 .expireAfterWrite(30, TimeUnit.MINUTES)
                 .build());
 
-        GuavaCache userEmailCache = new GuavaCache(CACHE_USER_EMAIL, CacheBuilder.newBuilder()
-                .expireAfterWrite(60, TimeUnit.SECONDS)
-                .build());
-
-        cacheManager.setCaches(Lists.newArrayList(displayIndexCache, userEmailCache));
+        cacheManager.setCaches(Lists.newArrayList(displayIndexCache));
         return cacheManager;
     }
 

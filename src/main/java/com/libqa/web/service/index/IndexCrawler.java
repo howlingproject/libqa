@@ -1,7 +1,7 @@
 package com.libqa.web.service.index;
 
 import com.google.common.collect.Lists;
-import com.libqa.config.CacheConfig;
+import com.libqa.config.CacheConfiguration;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.KeywordService;
 import com.libqa.web.service.feed.FeedThreadService;
@@ -47,7 +47,7 @@ public class IndexCrawler {
      *
      * @return DisplayIndex
      */
-    @Cacheable(CacheConfig.CACHE_DISPLAY_INDEX)
+    @Cacheable(CacheConfiguration.CACHE_DISPLAY_INDEX)
     public DisplayIndex crawl() {
         DisplayIndex displayIndex = DisplayIndex.of();
         displayIndex.setNotice(buildNotice());

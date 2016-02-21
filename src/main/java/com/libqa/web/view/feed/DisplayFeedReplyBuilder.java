@@ -28,7 +28,7 @@ public class DisplayFeedReplyBuilder {
      */
     List<DisplayFeedReply> build(FeedThread feedThread, User viewer) {
         List<DisplayFeedReply> displayFeedReplies = Lists.newArrayList();
-        if (feedThread.noHasReplies()) {
+        if (feedThread.notHasReplies()) {
             return displayFeedReplies;
         }
 
