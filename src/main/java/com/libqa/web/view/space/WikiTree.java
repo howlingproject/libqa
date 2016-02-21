@@ -17,9 +17,11 @@ import java.util.List;
 @ToString
 public class WikiTree {
 
-    private String text;
-    private String href;
-    private Integer tags;
-    private List<WikiTreeNode> nodes;
-
+    private int groupIdx;
+    private int wikiId;
+    private int parentsId;
+    private int depthIdx;
+    private int orderIdx;
+    private String title;
+    private int maxRows;
 }

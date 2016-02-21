@@ -440,7 +440,7 @@ public class SpaceController {
         return mav;
     }
 
-
+    /*
     @RequestMapping("/space/wikis")
     @ResponseBody
     public Collection wikiLists(@RequestParam Integer spaceId) {
@@ -468,6 +468,7 @@ public class SpaceController {
         return defaultData;
 
     }
+    */
 
 
     public ModelAndView sendAccessDenied() {
