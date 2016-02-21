@@ -307,16 +307,16 @@
             },
             checkSaveRecommend : function(recommendLiObj){
                 var recommendType = $(recommendLiObj).attr('data-qa-recommend-type');
-                var isRecommend;
+                var isCommend;
                 if( recommendType == 'UP' ){
-                    isRecommend = true;
+                    isCommend = true;
                 } else {
-                    isRecommend = false;
+                    isCommend = false;
                 }
                 $.ajax({
                     type : 'POST',
                     data : { qaId : $('[name=qaId]').val(),
-                             isRecommend : isRecommend},
+                             isCommend : isCommend},
                     url : '/qa/recommend',
                     success : function(data){
                         if(data.resultCode == 1) {
@@ -325,6 +325,14 @@
                             } else {
                                 alert("이미 추천/비추천 하셨습니다.");
                             }
+                        } else if(data.resultCode == 200){
+                            $.alert({
+                                title: 'Alert!',
+                                content: data.comment,
+                                confirm: function(){
+                                    location.href = '/loginPage';
+                                }
+                            });
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
@@ -363,19 +371,21 @@
             },
             saveRecommend : function(recommendLiObj){
                 var recommendType = $(recommendLiObj).attr('data-qa-recommend-type');
-                var url = '';
-                if(recommendType == 'UP'){
-                    url = '/qa/saveRecommendUp';
-                } else if(recommendType == 'DOWN'){
-                    url = '/qa/saveRecommendDown';
+                var url = '/qa/saveRecommend';
+                var isCommend;
+                if( recommendType == 'UP' ){
+                    isCommend = true;
+                } else {
+                    isCommend = false;
                 }
                 $.ajax({
                     type : 'POST',
-                    data : {qaId : $('[name=qaId]').val()},
+                    data : { qaId : $('[name=qaId]').val(),
+                             isCommend : isCommend},
                     url : url,
                     success : function(data){
                         if(data.resultCode == 1) {
-                            Qa.searchList();
+                            Qa.refrashRecommendCount(data.data.recommendCount, data.data.nonrecommendCount);
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
@@ -400,6 +410,8 @@
                     success : function(data){
                         if(data.resultCode == 1) {
                             Qa.searchList();
+                        } else {
+                            $.alert(data.comment);
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
@@ -426,6 +438,10 @@
                     }).fail(function () {
                         alert('Error delete Qa Reply');
                     });
+            },
+            refrashRecommendCount : function(recommendCount, nonrecommendCount){
+                $('.qna-content').find('.like-count').text('('+recommendCount+')');
+                $('.qna-content').find('.claim-count').text('('+nonrecommendCount+')');
             }
         };
 

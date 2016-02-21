@@ -146,21 +146,35 @@ public class QaServiceImpl implements QaService {
         return qaRepository.countByIsReplyedFalseAndIsDeletedFalse();
     }
 
-    /**
-     * BEST Q&A를 조회한다.
-     * <br />
-     * 추천수로 desc, 비추천 asc을 기준으로 sort 해서 최근 10개 추출함.
-     *
-     * @return list of QaContent
-     */
-    @Override
-    public List<QaContent> getBestQaContents() {
-        final Integer pageSize = 10;
-        final Order order1 = new Order(Sort.Direction.DESC, "recommendCount");
-        final Order order2 = new Order(Sort.Direction.ASC, "nonrecommendCount");
-        PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order1, order2));
+	/**
+	 * BEST Q&A를 조회한다.
+	 * <br />
+	 * 추천수로 desc, 비추천 asc을 기준으로 sort 해서 최근 10개 추출함.
+	 *
+	 * @return list of QaContent
+	 */
+	@Override
+	public List<QaContent> getBestQaContents() {
+		final Integer pageSize = 10;
+		final Order order1 = new Order(Sort.Direction.DESC, "recommendCount");
+		final Order order2 = new Order(Sort.Direction.ASC, "nonrecommendCount");
+		PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order1, order2));
 
-        return qaRepository.findByIsDeletedFalse(pageRequest);
+		return qaRepository.findByIsDeletedFalse(pageRequest);
+	}
+
+    @Override
+    public QaContent saveRecommendCount(Integer qaId, boolean commend, int calculationCnt) {
+        QaContent qaContent = qaRepository.findByQaIdAndIsDeletedFalse(qaId);
+	    int preCount;
+	    if(commend){
+		    preCount = qaContent.getRecommendCount();
+		    qaContent.setRecommendCount(preCount + calculationCnt);
+	    } else {
+		    preCount = qaContent.getNonrecommendCount();
+		    qaContent.setNonrecommendCount(preCount + calculationCnt);
+	    }
+	    return qaContent;
     }
 
     void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {

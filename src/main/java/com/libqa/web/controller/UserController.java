@@ -76,6 +76,7 @@ public class UserController {
      * 회원 로그인 form
      *
      * @return
+     */
 
     @RequestMapping("/loginPage")
     public ModelAndView loginPage(HttpServletRequest request) {
@@ -98,7 +99,6 @@ public class UserController {
         log.debug("### 로그인 정보 페이지로 이동");
         return mav;
     }
-     */
 
     @RequestMapping("/user/signUp")
     public ModelAndView signUp(HttpServletRequest request) {
