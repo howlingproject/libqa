@@ -1,5 +1,6 @@
 package com.libqa.web.service.qa;
 
+import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaRecommend;
 
 import java.util.List;
@@ -14,7 +15,6 @@ public interface QaRecommendService {
 
 	QaRecommend findByQaIdAndUserIdAndIsCommend(Integer qaId, Integer userId, boolean isCommend);
 
-	QaRecommend saveRecommendUp(QaRecommend paramQaRecommend, Integer userId);
+	QaContent saveRecommend(QaRecommend paramQaRecommend, Integer userId, String userNick) throws Exception;
 
-	QaRecommend saveRecommendDown(QaRecommend paramQaRecommend, Integer userId);
 }

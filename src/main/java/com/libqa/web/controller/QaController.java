@@ -264,31 +264,16 @@ public class QaController {
         }
     }
 
-    @RequestMapping(value = "/qa/saveRecommendUp", method = RequestMethod.POST)
+    @RequestMapping(value = "/qa/saveRecommend", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaRecommend> saveRecommendUp(@ModelAttribute QaRecommend paramQaRecommend){
+    public ResponseData<QaContent> saveRecommend(@ModelAttribute QaRecommend paramQaRecommend){
         User user = loggedUserManager.getUser();
         try {
             if (user.isGuest()) {
                 return createResult(NEED_LOGIN);
             }
-            QaRecommend qaRecommend = qaRecommendService.saveRecommendUp(paramQaRecommend, user.getUserId());
-            return createSuccessResult(qaRecommend);
-        } catch (Exception e){
-            return createFailResult(null);
-        }
-    }
-
-    @RequestMapping(value = "/qa/saveRecommendDown", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseData<QaRecommend> saveRecommendDown(@ModelAttribute QaRecommend paramQaRecommend){
-        User user = loggedUserManager.getUser();
-        try {
-            if (user.isGuest()) {
-                return createResult(NEED_LOGIN);
-            }
-            QaRecommend qaRecommend = qaRecommendService.saveRecommendDown(paramQaRecommend, user.getUserId());
-            return createSuccessResult(qaRecommend);
+	        QaContent qaContent = qaRecommendService.saveRecommend(paramQaRecommend, user.getUserId(), user.getUserNick());
+            return createSuccessResult(qaContent);
         } catch (Exception e){
             return createFailResult(null);
         }
@@ -351,7 +336,7 @@ public class QaController {
             if(user.isGuest()){
                 return createResult(NEED_LOGIN);
             }
-            QaRecommend qaRecommend = qaRecommendService.findByQaIdAndUserIdAndIsCommend(paramQaRecommend.getQaId(), user.getUserId(), paramQaRecommend.isCommend());
+            QaRecommend qaRecommend = qaRecommendService.findByQaIdAndUserIdAndIsCommend(paramQaRecommend.getQaId(), user.getUserId(), paramQaRecommend.getIsCommend());
             return createSuccessResult(qaRecommend);
         } catch (Exception e) {
             return createFailResult(null);

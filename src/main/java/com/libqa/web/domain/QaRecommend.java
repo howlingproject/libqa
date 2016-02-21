@@ -27,7 +27,7 @@ public class QaRecommend {
     private String userNick;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean isCommend;
+    private Boolean isCommend;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isCanceled;

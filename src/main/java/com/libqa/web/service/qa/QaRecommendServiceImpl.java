@@ -1,10 +1,12 @@
 package com.libqa.web.service.qa;
 
+import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaRecommend;
 import com.libqa.web.repository.QaRecommendRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,7 +17,11 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@Transactional
 public class QaRecommendServiceImpl implements QaRecommendService {
+
+	@Autowired
+	QaService qaService;
 
 	@Autowired
 	QaRecommendRepository qaRecommendRepository;
@@ -27,16 +33,28 @@ public class QaRecommendServiceImpl implements QaRecommendService {
 
 	@Override
 	public QaRecommend findByQaIdAndUserIdAndIsCommend(Integer qaId, Integer userId, boolean isCommend) {
-		return qaRecommendRepository.findByQaIdAndUserIdAndIsCommend(qaId, userId, isCommend);
+		return qaRecommendRepository.findByQaIdAndUserIdAndIsCommendAndIsCanceledFalse(qaId, userId, isCommend);
 	}
 
 	@Override
-	public QaRecommend saveRecommendUp(QaRecommend paramQaRecommend, Integer userId) {
-		return null;
+	public QaContent saveRecommend(QaRecommend paramQaRecommend, Integer userId, String userNick) throws Exception {
+		try {
+			QaRecommend preQaRecommend = qaRecommendRepository.findByQaIdAndUserIdAndIsCanceledFalse(paramQaRecommend.getQaId(), userId);
+			int calculationCnt = 0;
+			if (preQaRecommend != null) {
+				calculationCnt = -1;
+				preQaRecommend.setCanceled(true);
+				qaService.saveRecommendCount(paramQaRecommend.getQaId(), preQaRecommend.getIsCommend(), calculationCnt);
+			}
+			paramQaRecommend.setUserId(userId);
+			paramQaRecommend.setUserNick(userNick);
+			QaRecommend newQaRecommend = qaRecommendRepository.save(paramQaRecommend);
+
+			int newCalculationCnt = 1;
+			return qaService.saveRecommendCount(paramQaRecommend.getQaId(), paramQaRecommend.getIsCommend(), newCalculationCnt);
+		} catch (Exception e) {
+			throw new Exception(e.toString());
+		}
 	}
 
-	@Override
-	public QaRecommend saveRecommendDown(QaRecommend paramQaRecommend, Integer userId) {
-		return null;
-	}
 }

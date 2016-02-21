@@ -40,5 +40,5 @@ public interface QaService {
 
     List<QaContent> getBestQaContents();
 
-	void saveRecommendCount(Integer qaId, boolean commend, int calculationCnt);
+	QaContent saveRecommendCount(Integer qaId, boolean commend, int calculationCnt);
 }

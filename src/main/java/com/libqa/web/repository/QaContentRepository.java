@@ -28,4 +28,6 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     Integer countByIsDeletedFalse();
 
     Integer countByIsReplyedFalseAndIsDeletedFalse();
+
+    QaContent findByQaIdAndIsDeletedFalse(Integer qaId);
 }
