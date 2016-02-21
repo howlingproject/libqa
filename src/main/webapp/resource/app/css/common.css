@@ -39,8 +39,8 @@ button.btn-lg-fixed { width: 102px !important;}
 
 .btn-info, .btn-info:hover, .btn-info.active { border-color: #46b8da; color: #fff; background: #46b8da none;}
 
-div.user-profile, div.user-profile-sm, div.user-profile-xs { margin:1px; display: inline;}
-img.profile-image {border: 1px solid #ddd; border-radius: 4px; background-color: #fff;}
+div.user-profile, div.user-profile-sm, div.user-profile-xs { margin:1px; display: inline; cursor: pointer;}
+img.profile-image {border: 1px solid #ddd; border-radius: 4px; background-color: #fff; }
 
 div.user-profile img.profile-image {width:64px; height: 64px;  }
 div.user-profile-md img.profile-image {width:48px; height: 48px;  }
@@ -163,6 +163,7 @@ div.qna-item.contents {cursor: pointer}
 
 div.best-qna-item {border-bottom: 1px solid #eee; padding-top: 15px; padding-bottom: 15px; }
 div.best-qna-item .media{}
+div.best-qna-item .media .recommends, div.best-qna-item .media .insertDate{ margin-left: 10px; }
 
 div.qna-rating-info {width:30px; padding:0px; margin-left:5px;}
 div.best-qna-bottom {font-size: 14px; margin: 5px 0 0 10px; padding-left: 10px;}
