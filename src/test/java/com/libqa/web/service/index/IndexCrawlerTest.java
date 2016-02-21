@@ -52,13 +52,13 @@ public class IndexCrawlerTest {
 
     @Test
     public void crawl() {
-        final List<Wiki> expectedNoticeWikis = noticeForWikies();
+        final List<Wiki> expectedNoticeWikies = noticeForWikies();
         final List<QaContent> expectedQaContents = Lists.newArrayList(qaContentFixture(), qaContentFixture());
         final List<Space> expectedSpaces = Lists.newArrayList(mock(Space.class), mock(Space.class));
         final List<Wiki> expectedWikies = Lists.newArrayList(mock(Wiki.class));
         final List<FeedThread> expectedFeedThreads = Lists.newArrayList(feedThreadFixture());
 
-        given(wikiService.findBySpaceId(anyInt())).willReturn(expectedNoticeWikis);
+        given(wikiService.findAllLatestWikiBySpaceId(anyInt(), anyInt())).willReturn(expectedNoticeWikies);
         given(userService.findByUserId(ANY_USER_ID)).willReturn(mock(User.class));
         given(qaService.searchRecentlyQaContentsByPageSize(INDEX_QA_SIZE)).willReturn(expectedQaContents);
         given(spaceService.findAllByCondition(false, 0, INDEX_SPACE_SIZE)).willReturn(expectedSpaces);
@@ -105,14 +105,6 @@ public class IndexCrawlerTest {
         wiki1.setTitle("wiki1");
         wiki1.setInsertDate(new Date());
 
-        Wiki wiki2 = new Wiki();
-        wiki2.setWikiId(2);
-        wiki2.setTitle("wiki2");
-        wiki2.setInsertDate(new Date());
-
-        List<Wiki> wikies = Lists.newArrayList();
-        wikies.add(wiki1);
-        wikies.add(wiki2);
-        return wikies;
+        return Lists.newArrayList(wiki1);
     }
 }

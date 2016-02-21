@@ -18,14 +18,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static java.util.Comparator.comparing;
-
 @Service
 public class IndexCrawler {
+    static final Integer INDEX_NOTICE_SIZE = 1;
     static final Integer INDEX_QA_SIZE = 3;
     static final Integer INDEX_SPACE_SIZE = 3;
     static final Integer INDEX_WIKI_SIZE = 3;
-    static final Integer INDEX_FEED_SIZE = 9;
+    static final Integer INDEX_FEED_SIZE = 10;
 
     @Autowired
     private UserService userService;
@@ -43,7 +42,7 @@ public class IndexCrawler {
     private FeedThreadService feedThreadService;
 
     /**
-     * 인덱스에 노출할 정보를 crawling하여 {@link DisplayIndex}에 담아 반환한다.
+     * 인덱스에 노출할 정보를 crawl 하여 {@link DisplayIndex}에 담아 반환한다.
      *
      * @return DisplayIndex
      */
@@ -60,15 +59,13 @@ public class IndexCrawler {
 
     private IndexNotice buildNotice() {
         final int spaceIdForNotice = 1;
-        List<Wiki> wikies = wikiService.findBySpaceId(spaceIdForNotice);
+        List<Wiki> wikies = wikiService.findAllLatestWikiBySpaceId(INDEX_NOTICE_SIZE, spaceIdForNotice);
         if (wikies.isEmpty()) {
             return IndexNotice.empty();
         }
 
-        Wiki wiki = wikies.stream()
-                .sorted(comparing(Wiki::getWikiId))
-                .findFirst().get();
-        String noticeUrl = String.format("/wiki/%s", wiki.getWikiId());
+        Wiki wiki = wikies.stream().findFirst().get();
+        String noticeUrl = String.format("/space/%s", spaceIdForNotice);
 
         IndexNotice indexNotice = IndexNotice.of();
         indexNotice.setUrl(noticeUrl);
