@@ -39,4 +39,6 @@ public interface QaService {
     Integer getQaNotReplyedCount();
 
     List<QaContent> getBestQaContents();
+
+	void saveRecommendCount(Integer qaId, boolean commend, int calculationCnt);
 }
