@@ -148,6 +148,7 @@ public class IndexCrawler {
             indexFeed.setFeedThreadId(each.getFeedThreadId());
             indexFeed.setFeedContent(each.getFeedContent());
             indexFeed.setCountOfReply(each.getReplyCount());
+            indexFeed.setUserNick(writer.getUserNick());
             indexFeed.setUserImage(writer.getUserImage());
             result.add(indexFeed);
         }

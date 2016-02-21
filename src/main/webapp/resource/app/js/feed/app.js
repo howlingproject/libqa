@@ -19,7 +19,7 @@ var Feed = {
     'getId': function($target) {
         return $target.closest('.thread').data('feedThreadId');
     },
-    'hasNotAction': function($target) {
+    "notHasAction": function($target) {
         return !$target.hasClass('hasActor');
     },
     'bindSave' : function() {
@@ -147,8 +147,8 @@ var Feed = {
     },
     'like': function(el) {
         var feedThreadId = this.getId($(el));
-        var hasNotAction = this.hasNotAction($(el));
-        var message = hasNotAction ? '이 글을 좋아하시나요?' : '좋아요를 취소하시겠습니까?';
+        var notHasAction = this.notHasAction($(el));
+        var message = notHasAction ? '이 글을 좋아하시나요?' : '좋아요를 취소하시겠습니까?';
 
         FeedUtil.confirm(message, function(){
             $.post('/feed/' + feedThreadId + '/like')
@@ -166,8 +166,8 @@ var Feed = {
     },
     'claim': function(el) {
         var feedThreadId = this.getId($(el));
-        var hasNotAction = this.hasNotAction($(el));
-        var message = hasNotAction ? '이 글을 신고하시겠습니까?' : '신고를 취소하시겠습니까?';
+        var notHasAction = this.notHasAction($(el));
+        var message = notHasAction ? '이 글을 신고하시겠습니까?' : '신고를 취소하시겠습니까?';
 
         FeedUtil.confirm(message, function(){
             $.post('/feed/' + feedThreadId + '/claim')
@@ -230,7 +230,7 @@ var FeedReply = {
     'getId' : function($target){
         return $target.closest('.reply-thread').data('feedReplyId');
     },
-    'hasNotAction': function($target) {
+    'notHasAction': function($target) {
         return !$target.hasClass('hasActor');
     },
     'bindSave' : function() {
@@ -291,8 +291,8 @@ var FeedReply = {
     },
     'like' : function(el) {
         var feedReplyId = this.getId($(el));
-        var hasNotAction = this.hasNotAction($(el));
-        var message = hasNotAction ? '이 댓글을 좋아하시나요?' : '좋아요를 취소하시겠습니까?';
+        var notHasAction = this.notHasAction($(el));
+        var message = notHasAction ? '이 댓글을 좋아하시나요?' : '좋아요를 취소하시겠습니까?';
 
         FeedUtil.confirm(message, function(){
             $.post('/feed/reply/' + feedReplyId + '/like')
@@ -309,8 +309,8 @@ var FeedReply = {
     },
     'claim' : function(el) {
         var feedReplyId = this.getId($(el));
-        var hasNotAction = this.hasNotAction($(el));
-        var message = hasNotAction ? '이 댓글을 신고하시겠습니까?' : '신고를 취소하시겠습니까?';
+        var notHasAction = this.notHasAction($(el));
+        var message = notHasAction ? '이 댓글을 신고하시겠습니까?' : '신고를 취소하시겠습니까?';
 
         FeedUtil.confirm(message, function(){
             $.post('/feed/reply/' + feedReplyId + '/claim')
@@ -431,7 +431,7 @@ var FeedList = {
     "getLastId": function() {
         return $('#feedList li.thread').last().data('feedThreadId');
     },
-    'size': function(){
+    'getSize': function(){
         return $('#feedList li.thread').size();
     }
 };

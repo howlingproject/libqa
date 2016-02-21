@@ -46,11 +46,11 @@
                                 {{/each}}
                             </div>
                             <div class="media">
-                                <a class="pull-left" href="#">
+                                <div class="pull-left">
                                     <div class="user-profile">
                                         <img alt="avatar" class="profile-image" src="{{userImage}}" />
                                     </div>
-                                </a>
+                                </div>
                                 <div class="media-body">
                                     <a href="/qa/{{qaId}}">{{{abbreviate (htmlDelete contents) 200}}}</a>
                                     <span class="comments"><i class="glyphicon glyphicon-comment"></i> {{countOfReply}}</span>
@@ -92,15 +92,16 @@
                     {{#each feeds}}
                     <div class="index-thread-item">
                         <div class="media">
-                            <a class="pull-left" href="#">
+                            <div class="pull-left">
                                 <div class="user-profile">
                                     <img alt="avatar" class="profile-image" src="{{userImage}}" />
                                 </div>
-                            </a>
+                            </div>
                             <div class="media-body">
                                 <a href="/feed/{{feedThreadId}}">{{{abbreviate (htmlDelete feedContent) 40}}}</a>
                                 <span class="comments pull-right"><i class="glyphicon glyphicon-comment"></i> {{countOfReply}}</span>
                             </div>
+                            <div class="pull-left"><span class="nickname">{{userNick}}</span></div>
                         </div>
                     </div>
                     {{/each}}
