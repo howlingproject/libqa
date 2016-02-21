@@ -54,4 +54,6 @@ public interface WikiService {
 
     List<Wiki> findByGroupIdxAndOrderIdxGreaterThanAndIsDeleted( Integer groupIdx, Integer maxOrderIdx );
 
+    List<Wiki> findBySpaceIdAndSort(Integer spaceId);
+
 }

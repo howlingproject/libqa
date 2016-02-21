@@ -25,6 +25,8 @@ public interface WikiRepository extends JpaRepository<Wiki, Integer>, CrudReposi
 
     List<Wiki> findAllBySpaceIdAndIsDeleted(Integer spaceId, boolean isDeleted, Pageable pageable);
 
+    List<Wiki> findAllBySpaceIdAndIsDeleted(Integer spaceId, boolean isDeleted, Sort sort);
+
     List<Wiki> findAllByWikiIdInAndIsDeleted(List<Integer> wikiIds, boolean isDeleted, Pageable pageable);
 
     List<Wiki> findAllByContentsMarkupContainingAndIsDeleted(String contentsMarkup, boolean isDeleted, Pageable pageable);

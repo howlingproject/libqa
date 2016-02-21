@@ -150,6 +150,7 @@ public class SpaceController {
             spaceWikiLists.add(spaceWikiList);
         }
 
+
         mav.addObject("readMoreCount", spaces.size());
         mav.addObject("spaceMainList", spaceMainList);
         mav.addObject("spaceWikiLists", spaceWikiLists);
@@ -317,8 +318,13 @@ public class SpaceController {
             userFavorite = Iterables.getFirst(userFavorites, null);
         }
         log.debug("# spaceWikis : {}", spaceWikis);
+        List<Wiki> wikiListInSpace = wikiService.findBySpaceIdAndSort(spaceId);
+        String wikiTrees = convertTreeTag(wikiListInSpace);
+
+        log.info("## wikiTrees = {} ", wikiTrees);
 
 
+        mav.addObject("wikiTrees", wikiTrees);
         mav.addObject("spaceWikis", spaceWikis);
         mav.addObject("updatedWikis", updatedWikis);
         mav.addObject("space", space);
@@ -329,6 +335,38 @@ public class SpaceController {
 
 
         return mav;
+    }
+
+    private String convertTreeTag(List<Wiki> wikiListInSpace) {
+        StringBuffer stringBuffer = new StringBuffer();
+
+        int groupIdx = 0;
+        int parentsId = 0;
+
+        for (Wiki wiki : wikiListInSpace) {
+            if (wiki.getOrderIdx() == 0) {
+                stringBuffer.append("<li>")
+                        .append(wiki.getTitle());
+            } else {
+                if (groupIdx == wiki.getGroupIdx()) {
+                    stringBuffer.append("<ul><li>")
+                            .append(wiki.getTitle())
+                            .append("</li></ul>");
+                    continue;
+                } else {
+                    stringBuffer.append("<li>")
+                            .append(wiki.getTitle())
+                            .append("</li>");
+                    continue;
+                }
+            }
+            groupIdx = wiki.getGroupIdx();
+
+
+            stringBuffer.append("</li>");
+        }
+
+        return stringBuffer.toString();
     }
 
     /**
@@ -430,6 +468,7 @@ public class SpaceController {
         return defaultData;
 
     }
+
 
     public ModelAndView sendAccessDenied() {
         ModelAndView mav = new ModelAndView("/common/403");
