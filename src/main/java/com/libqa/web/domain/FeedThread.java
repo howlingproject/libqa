@@ -97,7 +97,7 @@ public class FeedThread {
         return getFileCount() > 0;
     }
 
-    public boolean noHasReplies() {
+    public boolean notHasReplies() {
         return getReplyCount() == 0;
     }
 }

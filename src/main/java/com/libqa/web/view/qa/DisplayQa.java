@@ -29,7 +29,6 @@ public class DisplayQa {
     private String contentsMarkup;
     private int viewCount = 0;
     private int recommendCount = 0;
-    private QaContent qaContent;
     private List<Keyword> keywords = Lists.newArrayList();
     private int replyCnt;
     private String userImage;

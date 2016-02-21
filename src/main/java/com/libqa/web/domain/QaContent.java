@@ -15,22 +15,26 @@ import java.util.List;
 @Data
 @Entity
 @EqualsAndHashCode
+@Table(indexes = {
+        @Index(columnList = "isDeleted"),
+        @Index(columnList = "recommendCount,nonrecommendCount")
+})
 public class QaContent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Integer qaId;
 
-    @Column(nullable = true)
+    @Column
     private Integer wikiId;
 
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false, columnDefinition="Text")
+    @Column(nullable = false, columnDefinition = "Text")
     private String contents;
 
-    @Column(nullable = false, columnDefinition="Text")
+    @Column(nullable = false, columnDefinition = "Text")
     private String contentsMarkup;
 
     @Column(nullable = false)
@@ -48,10 +52,10 @@ public class QaContent {
     @Column(nullable = false, columnDefinition = "int DEFAULT 0")
     private int nonrecommendCount = 0;
 
-    @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
-    @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isShared;
 
     @Enumerated(EnumType.STRING)
@@ -61,10 +65,10 @@ public class QaContent {
     @Column(nullable = true)
     private Integer sharedResponseId;
 
-    @Column(nullable = false, columnDefinition="TINYINT(1) DEFAULT 0")
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isReplyed;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date insertDate;

@@ -1,23 +1,29 @@
+{{#unless bestQAContents}}
+    <div class="best-qna-item">
+        최근에 작성된 Q&A가 없습니다.
+    </div>
+{{/unless}}
 
-<div class="best-qna-item">
-    <div>
-        <span class="label label-primary">Spring</span>
-        <span class="label label-success">JAVA</span>
-        <strong> 스프링 AOP에 대해서 설명 좀</strong>
-    </div>
-    <div class="media">
-        <a class="pull-left" href="#">
-            <div class="user-profile">
-                <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+{{#each bestQAContents}}
+    <div class="best-qna-item">
+        <div>
+            <strong> <a class="form" href="/qa/{{qaId}}">{{{abbreviate (htmlDelete title) 30}}}</a></strong>
+            <span class="comments pull-right"><i class="glyphicon glyphicon-comment"></i> {{replyCnt}}</span>
+            <br>{{> common/_keywordBadge}}
+        </div>
+        <div class="media">
+            <a class="pull-left" href="#">
+                <div class="user-profile">
+                    <img alt="avatar" class="profile-image" src="{{userImage}}" onerror='this.src="/resource/images/avatar.png"' />
+                </div>
+            </a>
+            <div class="media-body best-qna-item-body">
+                {{subString (htmlDelete contents) 0 78 }}
             </div>
-        </a>
-        <div class="media-body">
-            첫번째 타임라인 어쩌구 저쩌구해서 내용이 나오는데 어쩌구 저쩌구~? 솰라솰라...
-            <span class="badge">1927</span>
+            <div class="user-profile-sm">
+                <span class="nickname"><i class="fa fa-pencil-square-o"></i> {{userNick}}</span>
+            </div>
+            <div class="pull-right"><i class="fa fa-clock-o"></i> {{formatDate insertDate "yyyy-MM-dd hh:MM"}}</div>
         </div>
-        <div class="user-profile-sm">
-            <span class="nickname">용퓌</span>
-        </div>
-        <div class="pull-right">2014-04-05 12:12</div>
     </div>
-</div>
+{{/each}}

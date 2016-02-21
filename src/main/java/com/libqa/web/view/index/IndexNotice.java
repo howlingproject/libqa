@@ -10,7 +10,8 @@ import lombok.Setter;
 public class IndexNotice {
     private static final IndexNotice EMPTY = IndexNotice.of();
 
-    private String url;
+    private String viewUrl;
+    private String moreUrl;
     private String title;
     private String contents;
     private String insertDate;

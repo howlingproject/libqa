@@ -43,7 +43,7 @@ public class CommonController {
     KeywordListService keywordListService;
 
     @Autowired
-    private LoggedUser loggedUser;
+    private LoggedUserManager loggedUserManager;
 
     final int MAX_THUMB_SIZE = 64;
 
@@ -91,7 +91,7 @@ public class CommonController {
 
         try {
             // temp/userId/yyyyMMdd/ 에 일단 저장 후 차후 userId/yyyyMMdd/파일명 으로 이동 후 삭제해야 한다.
-            User user = loggedUser.get();
+            User user = loggedUserManager.getUser();
 
             Integer userId = user.getUserId();
             String localDir = "/resource/temp/" + userId; // 임시 저장 경로
@@ -150,7 +150,7 @@ public class CommonController {
 
         try {
             // /resource/profile/userId/yyyyMMdd/ 에 일단 저장 후 차후 userId/파일명 으로 이동 후 삭제해야 한다.
-            User user = loggedUser.get();
+            User user = loggedUserManager.getUser();
 
             Integer userId = user.getUserId();
             String localDir = "/resource/profile/" + userId;
@@ -238,7 +238,7 @@ public class CommonController {
         String savedDirectory = serverPath + fileDto.getFilePath();
         String targetFileFullPath = savedDirectory + "/" + fileDto.getSavedName();
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
 
 
         Integer userId = user.getUserId();
