@@ -71,6 +71,7 @@ div.index-container a { text-decoration: none; color: #000000; }
 div.index-container div.index-thread-box h2 {border-bottom: 1px solid #eee; padding-bottom: 8px;}
 div.index-container div.index-thread-box h2 i {top:4px;}
 div.index-container div.index-thread-box.first h2 {margin-top:0; margin-bottom:0;}
+div.index-container div.index-thread-box span.notice-more { margin-top: 5px; padding:5px 10px 8px 10px;cursor: pointer; }
 div.index-container div.index-thread-item {border-bottom: 1px solid #eee; padding-top: 10px; padding-bottom: 10px; }
 div.index-container div.index-thread-item .title { display: inline;}
 div.index-container div.index-thread-item .nickname {padding-left:5px;}

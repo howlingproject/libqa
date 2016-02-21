@@ -15,13 +15,13 @@
                     {{/if}}
                     {{#unless notice.empty}}
                     <div class="index-thread-box first">
-                        <a href="{{notice.url}}">
-                            <span class="label label-default pull-right" style="margin-top: 5px;padding:5px 10px 8px 10px;cursor: pointer;">more</span>
+                        <a href="{{notice.moreUrl}}">
+                            <span class="label label-default pull-right notice-more">more</span>
                         </a>
                         <h3 class="page-header"><i class="glyphicon glyphicon-volume-up"></i> {{notice.title}}</h3>
                         <div class="index-thread-item" style="cursor: pointer;">
                             <div class="title" style="margin-top: 10px;">
-                                <a href="{{notice.url}}">{{{abbreviate (htmlDelete notice.contents) 300}}}</a>
+                                <a href="{{notice.viewUrl}}">{{{abbreviate (htmlDelete notice.contents) 300}}}</a>
                                 <span class="comments"><i class="glyphicon glyphicon-comment"></i> {{notice.countOfReply}}</span>
                                 <div class="pull-right">{{notice.insertDate}}</div>
                             </div>
