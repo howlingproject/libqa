@@ -27,19 +27,17 @@
             </div>
             <div class="images text-center">
                 {{#each images}}
-                    <a href="#" data-toggle="modal" data-target=".image-viewer-{{../feedThreadId}}">
-                        <img width="190" class="img-thumbnail" src="{{filePath}}/{{savedName}}" />
-                    </a>
-                    <div class="modal fade image-viewer-{{../feedThreadId}}" tabindex="-1" role="dialog"
-                         aria-labelledby="imageModalLabel-{{../feedThreadId}}" aria-hidden="true">
+                    <a href="#" data-toggle="modal" data-target=".image-viewer-{{fileId}}"><img width="190" class="img-thumbnail" src="{{fullPath}}" /></a>
+                    <div class="modal fade image-viewer-{{fileId}}" tabindex="-1" role="dialog"
+                         aria-labelledby="imageModalLabel-{{fileId}}" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                                    <h4 class="modal-title text-left" id="imageModalLabel-{{../feedThreadId}}">이미지 보기</h4>
+                                    <h4 class="modal-title text-left" id="imageModalLabel-{{fileId}}">이미지 보기</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <img class="img-responsive img-rounded center-block" src="{{filePath}}/{{savedName}}" />
+                                    <img class="img-responsive img-rounded center-block" src="{{fullPath}}" />
                                 </div>
                             </div>
                         </div>
@@ -48,7 +46,7 @@
             </div>
             <div class="attachment">
                 {{#each files}}
-                    <a href="{{filePath}}/{{savedName}}" target="_blank"><i class="fa fa-file-o"></i> {{realName}}</a>&nbsp;
+                    <a href="{{fullPath}}" target="_blank"><i class="fa fa-file-o"></i> {{realName}}</a>&nbsp;
                 {{/each}}
             </div>
         </div>

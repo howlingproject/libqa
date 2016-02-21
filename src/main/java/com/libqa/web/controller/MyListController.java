@@ -1,6 +1,6 @@
 package com.libqa.web.controller;
 
-import com.libqa.application.util.LoggedUser;
+import com.libqa.application.util.LoggedUserManager;
 import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.feed.FeedThreadService;
@@ -25,7 +25,7 @@ import java.util.List;
 public class MyListController {
 
     @Autowired
-    private LoggedUser loggedUser;
+    private LoggedUserManager loggedUserManager;
     @Autowired
     private QaService qaService;
     @Autowired
@@ -35,7 +35,7 @@ public class MyListController {
 
     @RequestMapping("/my/feed")
     public ModelAndView myFeed(ModelAndView mav) {
-        User viewer = loggedUser.get();
+        User viewer = loggedUserManager.getUser();
         List<FeedThread> feedThreads = feedThreadService.searchRecentlyFeedThreadsByUser(viewer);
 
         mav.addObject("data", displayFeedBuilder.build(feedThreads, viewer));

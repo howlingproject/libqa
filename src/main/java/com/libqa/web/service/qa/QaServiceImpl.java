@@ -15,6 +15,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -130,9 +131,8 @@ public class QaServiceImpl implements QaService {
 
     @Override
     public List<QaContent> searchRecentlyQaContentsByPageSize(Integer pageSize) {
-        final Integer startIndex = 0;
         final Sort sort = PageUtil.sortId("DESC", "qaId");
-        PageRequest pageRequest = PageUtil.sortPageable(startIndex, pageSize, sort);
+        PageRequest pageRequest = PageUtil.sortPageable(pageSize, sort);
         return qaRepository.findByIsDeletedFalse(pageRequest);
     }
 
@@ -144,6 +144,23 @@ public class QaServiceImpl implements QaService {
     @Override
     public Integer getQaNotReplyedCount() {
         return qaRepository.countByIsReplyedFalseAndIsDeletedFalse();
+    }
+
+    /**
+     * BEST Q&A를 조회한다.
+     * <br />
+     * 추천수로 desc, 비추천 asc을 기준으로 sort 해서 최근 10개 추출함.
+     *
+     * @return list of QaContent
+     */
+    @Override
+    public List<QaContent> getBestQaContents() {
+        final Integer pageSize = 10;
+        final Order order1 = new Order(Sort.Direction.DESC, "recommendCount");
+        final Order order2 = new Order(Sort.Direction.ASC, "nonrecommendCount");
+        PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order1, order2));
+
+        return qaRepository.findByIsDeletedFalse(pageRequest);
     }
 
     void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {

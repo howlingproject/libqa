@@ -423,4 +423,9 @@ public class WikiServiceImpl implements WikiService {
         return trees;
     }
 
+    @Override
+    public List<Wiki> findAllLatestWikiBySpaceId(Integer pageSize, Integer spaceId) {
+        PageRequest pageRequest = PageUtil.sortPageable(pageSize, PageUtil.sortId("DESC", "wikiId"));
+        return wikiRepository.findAllBySpaceIdAndIsDeletedFalse(pageRequest, spaceId);
+    }
 }

@@ -7,37 +7,28 @@ To change this template use File | Settings | File Templates.
 --}}
 {{#partial "style"}}
 {{!-- 여기에 사용자 css 정의 --}}
-<style type="text/css">
-    {
-        height:100%;
-    }
-    header
-    {
-        background: green;
-        height: 50px;
-    }
-
-    .row
-    {
-        height: 100%;
-        display: table-row;
-    }
-    .col-md-3.no-float, .col-md-9.no-float {
-        float: none; /* thanks baxabbit */
-    }
-    .col-md-3
-    {
-        display: table-cell;
-        background: #eeeeee;
-        width: 25%;
-    }
-    .col-md-9
-    {
-        display: table-cell;
-        background: #ffffff;
-        width: 75%;
-    }
-</style>
+    <style type="text/css">
+        .row
+        {
+            height: 100%;
+            display: table-row;
+        }
+        .col-md-3.no-float, .col-md-9.no-float {
+            float: none; /* thanks baxabbit */
+        }
+        .col-md-3
+        {
+            display: table-cell;
+            background: #eeeeee;
+            width: 25%;
+        }
+        .col-md-9
+        {
+            display: table-cell;
+            background: #ffffff;
+            width: 75%;
+        }
+    </style>
 {{/partial}}
 {{#partial "plugin-style"}}
     <link href="/resource/public/css/layout-default-latest.css" rel="stylesheet">

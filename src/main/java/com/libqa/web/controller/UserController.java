@@ -3,7 +3,7 @@ package com.libqa.web.controller;
 import com.libqa.application.Exception.UserNotCreateException;
 import com.libqa.application.enums.StatusCode;
 import com.libqa.application.framework.ResponseData;
-import com.libqa.application.util.LoggedUser;
+import com.libqa.application.util.LoggedUserManager;
 import com.libqa.application.util.RequestUtil;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.User;
@@ -32,7 +32,7 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private LoggedUser loggedUser;
+    private LoggedUserManager loggedUserManager;
 
     @Autowired
     private UserKeywordService userKeywordService;
@@ -133,7 +133,7 @@ public class UserController {
 
         // TODO user_keyword 가져와야 함
         String returnUrl = RequestUtil.refererUrl(request, "/index");
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
 
         if (user == null || user.isGuest()) {
             log.debug("# 로그인 사용자 정보가 존재하지 않습니다.");
