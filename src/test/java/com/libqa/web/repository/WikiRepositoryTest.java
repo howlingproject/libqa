@@ -16,6 +16,5 @@ public class WikiRepositoryTest extends LibqaRepositoryTest<WikiRepository> {
         final PageRequest pageRequest = PageUtil.sortPageable(1, PageUtil.sortId("DESC", "wikiId"));
         List<Wiki> wikies = repository.findAllBySpaceIdAndIsDeletedFalse(pageRequest, spaceId);
         System.out.println(wikies);
-
     }
 }

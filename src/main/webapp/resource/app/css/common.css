@@ -163,7 +163,7 @@ div.qna-item {border-bottom: 1px solid #eee; padding-bottom:10px}
 div.qna-item.contents {cursor: pointer}
 
 div.best-qna-item {border-bottom: 1px solid #eee; padding-top: 15px; padding-bottom: 15px; }
-div.best-qna-item .media{}
+div.best-qna-item .best-qna-item-body{ height:48px;}
 
 div.qna-rating-info {width:30px; padding:0px; margin-left:5px;}
 div.best-qna-bottom {font-size: 14px; margin: 5px 0 0 10px; padding-left: 10px;}

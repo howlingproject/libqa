@@ -1,5 +1,6 @@
 package com.libqa.web.controller;
 
+import com.google.common.collect.Lists;
 import com.libqa.application.dto.QaDto;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUserManager;
@@ -74,43 +75,39 @@ public class QaController {
         ModelAndView mav = new ModelAndView("qa/main");
 	    mav.addObject("qaTotalCount", qaTotalCount);
 	    mav.addObject("qaNotReplyedCount", qaNotReplyedCount);
+	    mav.addObject("bestQAContents", buildDisplayQas(qaService.getBestQaContents()));
         return mav;
     }
 
     @RequestMapping(value = "/qa/myWriteQaList", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<DisplayQa> myQaList(@ModelAttribute QaDto qaDto){
-        boolean isDeleted = false;
-        List<QaContent> qaContentList = new ArrayList<>();
-        List<DisplayQa> displayQaList = new ArrayList<>();
         try {
-            qaContentList = qaService.findByUserId(loggedUserManager.getUser().getUserId());
-            for(QaContent qaContent : qaContentList) {
-                User writer = userService.findByUserId(qaContent.getUserId());
-                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
-            }
-            return createSuccessResult(displayQaList);
+            List<QaContent> qaContentList = qaService.findByUserId(loggedUserManager.getUser().getUserId());
+            return createSuccessResult(buildDisplayQas(qaContentList));
         }catch(Exception e){
-            return createFailResult(displayQaList);
+            return createFailResult(Lists.newArrayList());
         }
     }
 
     @RequestMapping(value = "/qa/myReplyQaList", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<DisplayQa> myReplyQaList(@ModelAttribute QaDto qaDto){
-        boolean isDeleted = false;
-        List<QaContent> qaContentList = new ArrayList<>();
-        List<DisplayQa> displayQaList = new ArrayList<>();
         try {
-            qaContentList = qaReplyService.findByUserId(loggedUserManager.getUser().getUserId());
-            for(QaContent qaContent : qaContentList) {
-                User writer = userService.findByUserId(qaContent.getUserId());
-                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
-            }
-            return createSuccessResult(displayQaList);
+            List<QaContent> qaContentList = qaReplyService.findByUserId(loggedUserManager.getUser().getUserId());
+            return createSuccessResult(buildDisplayQas(qaContentList));
         }catch(Exception e){
-            return createFailResult(displayQaList);
+            return createFailResult(Lists.newArrayList());
         }
+    }
+
+    private List<DisplayQa> buildDisplayQas(List<QaContent> qaContentList) {
+        List<DisplayQa> displayQaList = Lists.newArrayList();
+        for(QaContent qaContent : qaContentList) {
+            User writer = userService.findByUserId(qaContent.getUserId());
+            displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
+        }
+        return displayQaList;
     }
 
     @RequestMapping(value = "/qa/myRecommendQaList", method = RequestMethod.POST)

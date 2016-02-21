@@ -25,8 +25,7 @@ public class LoggedUserManager {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
-        log.debug("### userEmail  = {}", userEmail);
-        log.debug("### isGuestUser(userEmail)  = {}",  isGuestUser(userEmail));
+        log.debug("### userEmail:{}, isGuestUser:{}", userEmail, isGuestUser(userEmail));
 
         if (isGuestUser(userEmail)) {
             return User.createGuest();

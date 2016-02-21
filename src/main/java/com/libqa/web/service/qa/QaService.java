@@ -37,4 +37,6 @@ public interface QaService {
     Integer getQaTotalCount();
 
     Integer getQaNotReplyedCount();
+
+    List<QaContent> getBestQaContents();
 }
