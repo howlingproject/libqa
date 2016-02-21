@@ -1,0 +1,262 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: yong
+  Date: 2015. 12. 20.
+  Time: 오후 04:54
+-->
+
+{{# partial "content" }}
+
+<!-- contents -->
+<!-- qna top contents -->
+<div class="container qna-top-search">
+    <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search" value="">
+        </div>
+        <a href="#" class="form-control btn btn-primary">검색</a>
+    </form>
+    <div class="btn-group pull-right">
+        <a href="#" class="btn btn-primary">총 질문(123)</a>
+        <a href="#" class="btn btn-primary">답변을 기다리는 Q&A(123)</a>
+        <a href="/qa" class="btn btn-primary">Q&A</a>
+        <a href="/qa/form" class="btn btn-primary">질문하기</a>
+    </div>
+</div>
+<!--// qna top contents -->
+
+<!-- 메뉴 -->
+<div class="container contents-container top-buffer">
+    <!-- keyword -->
+    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        <div class="nav-tabs-header">분류키워드</div>
+        <!-- 분류키워드 list start -->
+        <div id="categorizeKeywordListArea"></div>
+        <!-- 분류키워드 list end -->
+    </div>
+    <!--// lnb -->
+
+    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+        <!-- 내가 작성한 Q&A -->
+        <div class="nav-tabs-header">내가 작성한 Q&A</div>
+
+        <!-- 내가 작성한 Q&A list start -->
+        <div id="myWriteQaListArea"></div>
+        <!-- 내가 작성한 Q&A list end -->
+        <div class="my-qna-item">
+            <a class="pull-left" href="#">
+                <div class="user-profile">
+                    <img alt="avatar" class="profile-image" src="/resource/images/avatar.png"/>
+                </div>
+            </a>
+
+            <div class="row">
+                <div class="col-xs-9 col-sm-9 col-md-9 col-lg-10">
+                    <div class="media-body">
+                        <div class="media-heading">
+                            <span>2014-04-05 12:12</span>
+                            <span class="my-qna-writer">
+                                <div class="user-profile-xs">
+                                    <span class="nickname">Yion</span>
+                                </div>
+                            </span>
+
+                            <div class="pull-right">
+                                <span class="label label-primary">Spring</span>
+                                <span class="label label-success">JAVA</span>
+                            </div>
+
+                            <div class="qna-title">
+                                <span>Spring 정복하기!</span>
+                            </div>
+
+                            <div>
+                                Spring 서버사이드 공간 > Spring AOP 위키에 질문을 올렸습니다.- 내용이 잘 이해가...
+                                Spring 서버사이드 공간 > Spring AOP 위키에 질문을 올렸습니다.- 내용이 잘 이해가...
+                                <span class="badge">6</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 my-qna-rating pull-right">
+                    <button class="btn btn-sm btn-default btn-sm-fixed pull-right">조회 33</button>
+                    <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 1</button>
+                </div>
+            </div>
+        </div>
+        <!--// 내가 작성한 Q&A -->
+
+        <div class="top-buffer">&nbsp;</div>
+
+        <!-- 내가 답변한 Q&A -->
+        <div class="nav-tabs-header">내가 답변한 Q&A</div>
+
+            <!-- 내가 답변한 Q&A list start -->
+            <div id="myReplyQaListArea"></div>
+            <!-- 내가  답변한 Q&A list end -->
+            <div class="my-qna-item">
+            <a class="pull-left" href="#">
+                <div class="user-profile">
+                    <img alt="avatar" class="profile-image" src="/resource/images/avatar.png"/>
+                </div>
+            </a>
+
+            <div class="row">
+                <div class="col-xs-9 col-sm-9 col-md-9 col-lg-10">
+                    <div class="media-body">
+                        <div class="media-heading">
+                            <span class="media">2014-04-05 12:12</span>
+                            <span class="my-qna-writer">
+                                <div class="user-profile-xs">
+                                    <span class="nickname">Yion</span>
+                                </div>
+                            </span>
+
+                            <div class="pull-right">
+                                <span class="label label-primary">Spring</span>
+                                <span class="label label-success">JAVA</span>
+                            </div>
+
+                            <div class="qna-title">
+                                <span>Spring 정복하기!</span>
+                            </div>
+
+                            <div>
+                                Spring 서버사이드 공간 > Spring AOP 위키에 질문을 올렸습니다.- 내용이 잘 이해가...
+                                Spring 서버사이드 공간 > Spring AOP 위키에 질문을 올렸습니다.- 내용이 잘 이해가...
+                                <span class="badge">6</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 my-qna-rating pull-right">
+                    <button class="btn btn-sm btn-default btn-sm-fixed pull-right">조회 33</button>
+                    <button class="btn btn-sm btn-default btn-sm-fixed pull-right">추천 1</button>
+                </div>
+            </div>
+        </div>
+        <!-- 내가 답변한 Q&A -->
+    </div>
+</div>
+
+{{/partial}}
+
+{{#partial "script-page"}}
+{{embedded "common/_keywordList"}}
+{{embedded "qa/template/_myList"}}
+<script type="text/javascript">
+    $(document).ready(function(){
+        Qa.init();
+    });
+
+    var Qa = {
+        init : function(){
+            this.renderKeywordList();
+            this.renderMyWriteQaList();
+            this.renderMyReplyQaList();
+        },
+        renderKeywordList : function(){
+            $.ajax({
+                url: "/common/findKeywordList",
+                type: "POST",
+                data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName() },
+                success : function(data){
+                    if(data.resultCode == 1) {
+                        var source = $('#common-_keywordList-hbs').html();
+                        var template = Handlebars.compile(source);
+
+                        var html = template(data);
+                        $('#categorizeKeywordListArea').html(html);
+                        Qa.bindKeywordListEvent();
+                    }
+                },
+                error : function(req){
+                    // Handle upload error
+                    alert('req : ' + req);
+                    console.log('req : ' + req.status);
+                    console.log('req : ' + req.readyState);
+
+                    alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                }
+            });
+        },
+        renderMyWriteQaList : function(){
+            $.ajax({
+                url: "/qa/myWriteQaList",
+                type: "POST",
+                data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName()},
+                success : function(data){
+                    if(data.resultCode == 1) {
+                        var source = $('#qa-template-_myList-hbs').html();
+                        var template = Handlebars.compile(source);
+
+                        var html = template(data);
+                        $('#myWriteQaListArea').html(html);
+                    }
+                },
+                error : function(req){
+                    // Handle upload error
+                    alert('req : ' + req);
+                    console.log('req : ' + req.status);
+                    console.log('req : ' + req.readyState);
+
+                    alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                }
+            });
+        },
+        renderMyReplyQaList : function(){
+            $.ajax({
+                url: "/qa/myReplyQaList",
+                type: "POST",
+                data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName()},
+                success : function(data){
+                    if(data.resultCode == 1) {
+                        var source = $('#qa-template-_myList-hbs').html();
+                        var template = Handlebars.compile(source);
+
+                        var html = template(data);
+                        $('#myReplyQaListArea').html(html);
+                    }
+                },
+                error : function(req){
+                    // Handle upload error
+                    alert('req : ' + req);
+                    console.log('req : ' + req.status);
+                    console.log('req : ' + req.readyState);
+
+                    alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                }
+            });
+        },
+        selectedKeywordName : function(){
+            var keywordName = $('#categorizeKeywordListArea').find('li.active').attr('data-keywordList-name');
+            return keywordName;
+        },
+        bindKeywordListEvent : function(){
+            $('#categorizeKeywordListArea').find('li').click(function(){
+                KeywordList.findKeywordList(this);
+            });
+        }
+    };
+
+    var KeywordList = {
+        findKeywordList : function(keywordListObj){
+            var ulObj = $(keywordListObj).parent();
+            ulObj.find('li').removeClass('active');
+            var keywordListValue = keywordListObj.getAttribute('data-keywordList-name');
+            if(keywordListValue == ''){
+                ulObj.find('li[data-keywordList-name=""]').addClass('active');
+            } else {
+                ulObj.find('li[data-keywordList-name=' + keywordListValue + ']').addClass('active');
+            }
+            Qa.renderMyWriteQaList();
+            Qa.renderMyReplyQaList();
+        }
+    }
+
+</script>
+{{/partial}}
+
+{{> template/base}}

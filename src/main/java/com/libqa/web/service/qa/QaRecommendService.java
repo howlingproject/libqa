@@ -11,4 +11,10 @@ import java.util.List;
  */
 public interface QaRecommendService {
 	List<QaRecommend> findByUserIdAndIsCommendTrue(Integer userId);
+
+	QaRecommend findByQaIdAndUserIdAndIsCommend(Integer qaId, Integer userId, boolean isCommend);
+
+	QaRecommend saveRecommendUp(QaRecommend paramQaRecommend, Integer userId);
+
+	QaRecommend saveRecommendDown(QaRecommend paramQaRecommend, Integer userId);
 }

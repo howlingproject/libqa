@@ -76,13 +76,15 @@ public class WikiServiceImpl implements WikiService {
         saveKeywordAndList(keyword, result);
         saveWikiActivity(result, ActivityType.INSERT_WIKI);
 
-        // update wiki parentsId
-        updateParentWikiId(result);
+        if( wiki.getParentsId() == null ){
+            updateParentWikiId(result);
+        }
         return result;
     }
 
     private void updateParentWikiId(Wiki wiki) {
         wiki.setParentsId(wiki.getWikiId());
+        wiki.setGroupIdx(wiki.getWikiId());
         save(wiki);
     }
 
@@ -394,4 +396,23 @@ public class WikiServiceImpl implements WikiService {
         PageRequest pageRequest = PageUtil.sortPageable(startIndex, pageSize, sort);
         return wikiRepository.findAllByIsDeletedFalse(pageRequest);
     }
+
+
+    @Override
+    public Integer maxOrderIdx(Integer parentsId, Integer depthIdx) {
+        List<Wiki> maxOrder = wikiRepository.findByParentsIdAndDepthIdxAndIsDeleted(
+                parentsId, depthIdx, isDeleted
+                , PageUtil.sortPageable(
+                        0
+                        , 1
+                        , PageUtil.sortId("DESC", "orderIdx")
+                ));
+        return maxOrder == null || maxOrder.size() <= 0 ? 0 : maxOrder.get(0).getOrderIdx();
+    }
+
+    @Override
+    public List<Wiki> findByGroupIdxAndOrderIdxGreaterThanAndIsDeleted(Integer groupIdx, Integer maxOrderIdx) {
+        return wikiRepository.findByGroupIdxAndOrderIdxGreaterThanEqualAndIsDeleted(groupIdx, maxOrderIdx, isDeleted);
+    }
+
 }

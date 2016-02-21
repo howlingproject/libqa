@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.libqa.application.enums.StatusCode.NEED_LOGIN;
 import static com.libqa.application.enums.StatusCode.NOT_MATCH_USER;
 import static com.libqa.application.framework.ResponseData.*;
 
@@ -266,20 +267,64 @@ public class QaController {
         }
     }
 
+    @RequestMapping(value = "/qa/saveRecommendUp", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<QaRecommend> saveRecommendUp(@ModelAttribute QaRecommend paramQaRecommend){
+        User user = loggedUser.get();
+        try {
+            if (user.isGuest()) {
+                return createResult(NEED_LOGIN);
+            }
+            QaRecommend qaRecommend = qaRecommendService.saveRecommendUp(paramQaRecommend, user.getUserId());
+            return createSuccessResult(qaRecommend);
+        } catch (Exception e){
+            return createFailResult(null);
+        }
+    }
+
+    @RequestMapping(value = "/qa/saveRecommendDown", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<QaRecommend> saveRecommendDown(@ModelAttribute QaRecommend paramQaRecommend){
+        User user = loggedUser.get();
+        try {
+            if (user.isGuest()) {
+                return createResult(NEED_LOGIN);
+            }
+            QaRecommend qaRecommend = qaRecommendService.saveRecommendDown(paramQaRecommend, user.getUserId());
+            return createSuccessResult(qaRecommend);
+        } catch (Exception e){
+            return createFailResult(null);
+        }
+    }
+
     @RequestMapping(value = "/qa/saveVoteUp", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaReply> saveVoteUp(@ModelAttribute QaReply paramQaReply){
-        QaReply qareply = qaReplyService.saveVoteUp(paramQaReply, 1); // TODO 로그인 처리
-
-        return createSuccessResult(qareply);
+        User user = loggedUser.get();
+        try {
+            if (user.isGuest()) {
+                return createResult(NEED_LOGIN);
+            }
+            QaReply qareply = qaReplyService.saveVoteUp(paramQaReply, user.getUserId());
+            return createSuccessResult(qareply);
+        } catch (Exception e){
+            return createFailResult(null);
+        }
     }
 
     @RequestMapping(value = "/qa/saveVoteDown", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaReply> saveVoteDown(@ModelAttribute QaReply paramQaReply){
-        QaReply qareply = qaReplyService.saveVoteDown(paramQaReply, 1); // TODO 로그인 처리
-
-        return createSuccessResult(qareply);
+        User user = loggedUser.get();
+        try {
+            if (user.isGuest()) {
+                return createResult(NEED_LOGIN);
+            }
+            QaReply qareply = qaReplyService.saveVoteDown(paramQaReply, user.getUserId());
+            return createSuccessResult(qareply);
+        } catch (Exception e){
+            return createFailResult(null);
+        }
     }
 
     @RequestMapping(value="/qa/replyList", method = RequestMethod.GET)
@@ -301,11 +346,34 @@ public class QaController {
         }
     }
 
+    @RequestMapping(value="/qa/recommend", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<QaRecommend> recommendDetail(@ModelAttribute QaRecommend paramQaRecommend){
+        User user = loggedUser.get();
+        try{
+            if(user.isGuest()){
+                return createResult(NEED_LOGIN);
+            }
+            QaRecommend qaRecommend = qaRecommendService.findByQaIdAndUserIdAndIsCommend(paramQaRecommend.getQaId(), user.getUserId(), paramQaRecommend.isCommend());
+            return createSuccessResult(qaRecommend);
+        } catch (Exception e) {
+            return createFailResult(null);
+        }
+    }
+
     @RequestMapping(value="/qa/reply/vote", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<Vote> voteDetail(@ModelAttribute Vote paramVote){
+        User user = loggedUser.get();
         boolean isCancel = false;
-        Vote vote = voteService.findByReplyIdAndUserIdAndIsVoteAndIsCancel(paramVote.getReplyId(), 1, paramVote.getIsVote(), isCancel);
-        return createSuccessResult(vote);
+        try{
+            if(user.isGuest()){
+                return createResult(NEED_LOGIN);
+            }
+            Vote vote = voteService.findByReplyIdAndUserIdAndIsVoteAndIsCancel(paramVote.getReplyId(), user.getUserId(), paramVote.getIsVote(), isCancel);
+            return createSuccessResult(vote);
+        } catch (Exception e) {
+            return createFailResult(null);
+        }
     }
 }

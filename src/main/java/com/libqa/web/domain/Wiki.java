@@ -42,6 +42,9 @@ public class Wiki implements Serializable{
     @Column(nullable = false, columnDefinition = "int default 0")
     private Integer depthIdx = 0;
 
+    @Column
+    private Integer groupIdx;
+
     @Column(columnDefinition = "Text", nullable = false)
     private String contents;
 
@@ -115,5 +118,6 @@ public class Wiki implements Serializable{
             @JoinColumn(name = "wikiId", referencedColumnName = "wikiId")
     })
     private List<WikiLike> wikiLikes;
+
 
 }
