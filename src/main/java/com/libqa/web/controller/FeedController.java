@@ -2,18 +2,15 @@ package com.libqa.web.controller;
 
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUserManager;
-import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.FeedReply;
+import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.feed.FeedReplyService;
 import com.libqa.web.service.feed.FeedThreadService;
 import com.libqa.web.view.feed.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -36,6 +33,8 @@ public class FeedController {
     private FeedReplyService feedReplyService;
     @Autowired
     private DisplayFeedBuilder displayFeedBuilder;
+    @Autowired
+    private DisplayFeedReplyBuilder displayFeedReplyBuilder;
     @Autowired
     private DisplayFeedActionBuilder displayFeedActionBuilder;
 
@@ -93,7 +92,7 @@ public class FeedController {
             return createSuccessResult(feedThread);
         } catch (Exception e) {
             log.error("save feedThread error.", e);
-            return createFailResult(feedThread);
+            return createFailResult();
         }
     }
 
@@ -111,7 +110,7 @@ public class FeedController {
             return createSuccessResult(savedFeedThread);
         } catch (Exception e) {
             log.error("delete feedThread error.", e);
-            return createFailResult(null);
+            return createFailResult();
         }
     }
 
@@ -128,7 +127,7 @@ public class FeedController {
             return createSuccessResult(feedThreadId);
         } catch (Exception e) {
             log.error("delete feedThread error.", e);
-            return createFailResult(feedThreadId);
+            return createFailResult();
         }
     }
 
@@ -145,7 +144,7 @@ public class FeedController {
             return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("like feedThread error.", e);
-            return createFailResult(null);
+            return createFailResult();
         }
     }
 
@@ -162,7 +161,7 @@ public class FeedController {
             return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("claim feedThread error.", e);
-            return createFailResult(null);
+            return createFailResult();
         }
     }
 
@@ -175,10 +174,10 @@ public class FeedController {
 
         try {
             feedReplyService.create(feedReply, viewer);
-            return createSuccessResult(new DisplayFeedReply(feedReply));
+            return createSuccessResult(displayFeedReplyBuilder.build(feedReply));
         } catch (Exception e) {
             log.error("save reply error.", e);
-            return createFailResult(null);
+            return createFailResult();
         }
     }
 
@@ -187,7 +186,7 @@ public class FeedController {
         User viewer = loggedUserManager.getUser();
 
         try {
-            FeedReply originFeedReply = feedReplyService.findByFeedReplyId(feedReplyId);
+            FeedReply originFeedReply = feedReplyService.getByFeedReplyId(feedReplyId);
             if (viewer.isNotMatchUser(originFeedReply.getUserId())) {
                 return createResult(NOT_MATCH_USER);
             }
@@ -213,7 +212,7 @@ public class FeedController {
             return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("like feedReply error.", e);
-            return createFailResult(null);
+            return createFailResult();
         }
     }
 
@@ -230,7 +229,7 @@ public class FeedController {
             return createSuccessResult(displayFeedAction);
         } catch (Exception e) {
             log.error("claim feedReply error.", e);
-            return createFailResult(null);
+            return createFailResult();
         }
     }
 }
