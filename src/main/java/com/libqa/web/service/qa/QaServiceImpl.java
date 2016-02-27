@@ -53,7 +53,9 @@ public class QaServiceImpl implements QaService {
             paramQaContent.setUserId(user.getUserId());
             paramQaContent.setUserNick(user.getUserNick());
             paramQaContent.setInsertUserId(user.getUserId());
-            paramQaContent.setInsertDate(new Date());
+	        Date today = new Date();
+            paramQaContent.setInsertDate(today);
+	        paramQaContent.setUpdateDate(today);
 
             newQaContent = save(paramQaContent);
             moveQaFilesToProductAndSave(newQaContent.getQaId(), qaFiles);
@@ -177,7 +179,32 @@ public class QaServiceImpl implements QaService {
 	    return qaContent;
     }
 
-    void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
+    @Override
+    public List<QaContent> getRecentQAContents() {
+	    Date today = new Date();
+	    Date fromDate = null;
+	    try {
+		    fromDate = getFromDate(DayType.WEEK.getCode());
+	    } catch (ParseException e) {
+		    e.printStackTrace();
+	    }
+	    final Integer pageSize = 10;
+        final Order order = new Order(Sort.Direction.DESC, "updateDate");
+        PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order));
+
+	    return qaRepository.findByUpdateDateBetweenAndIsDeletedFalse(fromDate, today, pageRequest);
+    }
+
+	@Override
+	public List<QaContent> getWaitReplyQaContents() {
+		final Integer pageSize = 10;
+		final Order order = new Order(Sort.Direction.DESC, "updateDate");
+		PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order));
+
+		return qaRepository.findByIsDeletedFalseAndIsReplyedFalse(pageRequest);
+	}
+
+	void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
         qaFileService.moveQaFilesToProductAndSave(qaId, qaFiles);
     }
 
@@ -253,15 +280,15 @@ public class QaServiceImpl implements QaService {
     public List<QaContent> findRecentList(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted){
         List<QaContent> recentList = new ArrayList<>();
         if(fromDate == null){
-            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndIsDeletedOrderByInsertDateDesc(qaIds, isReplyed, isDeleted);
+            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndIsDeletedOrderByUpdateDateDesc(qaIds, isReplyed, isDeleted);
         } else {
-            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndInsertDateBetweenAndIsDeletedOrderByInsertDateDesc(qaIds, isReplyed, fromDate, today, isDeleted);
+            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndUpdateDateBetweenAndIsDeletedOrderByUpdateDateDesc(qaIds, isReplyed, fromDate, today, isDeleted);
         }
         return recentList;
     }
 
     public List<QaContent> findWaitList(List<Integer> qaIds, Date fromDate, Date today, boolean isDeleted){
-        return qaRepository.findAllByQaIdInAndInsertDateBetweenAndIsDeletedOrderByInsertDateDesc(qaIds, fromDate, today, isDeleted);
+        return qaRepository.findAllByQaIdInAndUpdateDateBetweenAndIsDeletedOrderByUpdateDateDesc(qaIds, fromDate, today, isDeleted);
     }
 
     public Date getFromDate(String dayType) throws ParseException {

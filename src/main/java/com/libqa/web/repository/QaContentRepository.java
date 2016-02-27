@@ -13,11 +13,11 @@ import java.util.List;
 public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     QaContent findOneByQaIdAndIsDeleted(Integer qaId, boolean isDeleted);
 
-    List<QaContent> findAllByQaIdInAndIsReplyedAndInsertDateBetweenAndIsDeletedOrderByInsertDateDesc(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted);
+    List<QaContent> findAllByQaIdInAndIsReplyedAndUpdateDateBetweenAndIsDeletedOrderByUpdateDateDesc(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted);
 
-    List<QaContent> findAllByQaIdInAndInsertDateBetweenAndIsDeletedOrderByInsertDateDesc(List<Integer> qaIds, Date fromDate, Date today, boolean isDeleted);
+    List<QaContent> findAllByQaIdInAndUpdateDateBetweenAndIsDeletedOrderByUpdateDateDesc(List<Integer> qaIds, Date fromDate, Date today, boolean isDeleted);
 
-    List<QaContent> findAllByQaIdInAndIsReplyedAndIsDeletedOrderByInsertDateDesc(List<Integer> qaIds, boolean isReplyed, boolean isDeleted);
+    List<QaContent> findAllByQaIdInAndIsReplyedAndIsDeletedOrderByUpdateDateDesc(List<Integer> qaIds, boolean isReplyed, boolean isDeleted);
 
     List<QaContent> findByUserIdAndIsDeleted(Integer userId, boolean isDeleted);
 
@@ -30,4 +30,10 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     Integer countByIsReplyedFalseAndIsDeletedFalse();
 
     QaContent findByQaIdAndIsDeletedFalse(Integer qaId);
+
+	List<QaContent> findByIsDeletedFalseAndIsReplyedFalse(Pageable Pageable);
+
+	List<QaContent> findByUpdateDateBetweenAndIsDeletedFalse(Date fromDate, Date today, Pageable Pageable);
+
+//	Stream<QaContent> findAllByCustomQueryAndStream();
 }

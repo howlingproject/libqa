@@ -73,6 +73,7 @@ public class QaContent {
     @Column(nullable = false)
     private Date insertDate;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 

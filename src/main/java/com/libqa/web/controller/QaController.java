@@ -75,6 +75,8 @@ public class QaController {
         ModelAndView mav = new ModelAndView("qa/main");
 	    mav.addObject("qaTotalCount", qaTotalCount);
 	    mav.addObject("qaNotReplyedCount", qaNotReplyedCount);
+	    mav.addObject("recentQAContents", buildDisplayQas(qaService.getRecentQAContents()));
+	    mav.addObject("waitReplyQAContents", buildDisplayQas(qaService.getWaitReplyQaContents()));
 	    mav.addObject("bestQAContents", buildDisplayQas(qaService.getBestQaContents()));
         return mav;
     }
