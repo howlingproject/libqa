@@ -24,4 +24,5 @@ public class WikiTree {
     private int orderIdx;
     private String title;
     private int maxRows;
+    private boolean hasChild;   // 자식이 있는가?
 }

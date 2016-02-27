@@ -4,6 +4,7 @@ import com.libqa.web.view.space.WikiTree;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -33,37 +34,71 @@ public class TreeData {
     @Test
     public void makeTree() {
         List<WikiTree> wikiList = simpleData();
-        System.out.println("## wikiList : " + wikiList);
-        String result = recursiveTree(wikiList, wikiList.get(0).getParentsId());
-        System.out.println("### result : \n" + result);
-    }
 
-    public String recursiveTree(List<WikiTree> wikiList, int parentId) {
-        String ret = "<ul>";
-        String sub = "";
+        System.out.println("@@@ 변경전 wikiList : " + wikiList);
 
         for (int i = 0; i < wikiList.size(); i++) {
-            if (parentId == wikiList.get(i).getParentsId()) {
-                ret += "<li>" + wikiList.get(i).getTitle();
+            if (wikiList.get(i).getWikiId() == wikiList.get(i).getParentsId()) {
+                continue;
+            } else {
+                // 자식 위키가 있음
+                setChild(wikiList, wikiList.get(i).getParentsId());
+            }
+        }
 
-                if (wikiList.size() > 1) {
-                    List<WikiTree> newList = wikiList.subList(1, wikiList.size());
-                    System.out.println("New List : = " + newList);
-                    System.out.println("New List Size : = " + newList.size());
-                    System.out.println("newList.get(0).getParentsId() = " + newList.get(0).getParentsId());
+        System.out.println("@@@ wikiList : " + wikiList);
+        String tree = createTree(wikiList);
+
+        System.out.println("#### tree = \n" + tree);
+
+    }
+
+    private String createTree(List<WikiTree> wikiList) {
+        String appendTag = "<ul>";
+        int parentId = 0;
+        int wikiId = 0;
+        for (int i = 0; i < wikiList.size(); i++) {
+
+            System.out.println(i + "번째  parentId = "
+                    + wikiList.get(i).getParentsId() + "  ## wikiId = "
+                    + wikiList.get(i).getWikiId() + " ## child = "
+                    + wikiList.get(i).isHasChild() + " || wikiId = "
+                    + wikiId + " || parentId = " + parentId);
 
 
-                    sub = recursiveTree(newList, newList.get(0).getParentsId());
-                    System.out.println("@@@@@@ sub = " + sub);
-                    if (sub != "<ul></ul>")
-                        ret += sub;
+            if (wikiList.get(i).isHasChild() == true) {
 
-                    ret += "</li>";
+                appendTag += "<ll>" + wikiList.get(i).getTitle();
+                appendTag += "<ul>";
+            } else {
+                appendTag += "<ll>" + wikiList.get(i).getTitle();
+                appendTag += "</li>";
+
+            }
+
+            if (wikiList.get(i).isHasChild() == false) {
+
+                if (wikiList.get(i).getParentsId() != parentId) {
+                    appendTag += "</ul>";
+                    appendTag += "</li>";
                 }
             }
 
+            parentId = wikiList.get(i).getParentsId();
+            wikiId = wikiList.get(i).getWikiId();
         }
-        return ret+"</ul>";
+
+        appendTag += "</ul>";
+
+        return  appendTag;
+    }
+
+    private void setChild(List<WikiTree> wikiList, int wikiId) {
+        for (WikiTree tree : wikiList) {
+            if (wikiId == tree.getWikiId()) {
+                tree.setHasChild(true);
+            }
+        }
     }
 
 
