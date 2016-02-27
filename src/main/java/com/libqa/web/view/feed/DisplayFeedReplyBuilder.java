@@ -1,8 +1,8 @@
 package com.libqa.web.view.feed;
 
 import com.google.common.collect.Lists;
-import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.FeedReply;
+import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class DisplayFeedReplyBuilder {
      *
      * @param feedThread
      * @param viewer
-     * @return
+     * @return list of DisplayFeedReply
      */
     List<DisplayFeedReply> build(FeedThread feedThread, User viewer) {
         List<DisplayFeedReply> displayFeedReplies = Lists.newArrayList();
@@ -37,6 +37,16 @@ public class DisplayFeedReplyBuilder {
                 .collect(Collectors.toList())
         );
         return displayFeedReplies;
+    }
+
+    /**
+     * display용 feedReply를 build 한다.
+     *
+     * @param feedReply
+     * @return DisplayFeedReply
+     */
+    public DisplayFeedReply build(FeedReply feedReply) {
+        return new DisplayFeedReply(feedReply);
     }
 
     private DisplayFeedReply build(FeedReply feedReply, User viewer) {

@@ -3,6 +3,7 @@ var Feed = {
         this.bindSave();
         this.bindFileAttachment();
         this.bindFileUploadModal();
+        this.bindImageGallery();
     },
     'loadRecentlyList' : function() {
         FeedList.call("/feed/recentlyList", function(html, itemSize) {
@@ -31,11 +32,9 @@ var Feed = {
             }
             $.post('/feed/save', $frm.serialize())
                 .done(function(response){
-                    if(response.resultCode != 1) {
-                        FeedUtil.alert(response.comment);
+                    if(FeedUtil.alertResponse(response)) {
                         return;
                     }
-
                     me.loadRecentlyList();
                     me.clearForm();
                     FeedFile.clear();
@@ -97,8 +96,7 @@ var Feed = {
             var $feedBody = me.getFeedBodyByFeedThreadId(feedThreadId);
             $.post('/feed/' + feedThreadId + '/delete')
                 .done(function (response) {
-                    if (response.resultCode != 1) {
-                        FeedUtil.alert(response.comment);
+                    if (FeedUtil.alertResponse(response)) {
                         return;
                     }
                     FeedUtil.hidePopOver();
@@ -126,8 +124,7 @@ var Feed = {
             }
             $.post('/feed/modify', $frm.serialize())
                 .done(function (response) {
-                    if (response.resultCode != 1) {
-                        FeedUtil.alert(response.comment);
+                    if (FeedUtil.alertResponse(response)) {
                         return;
                     }
                     $modify.hide();
@@ -153,8 +150,7 @@ var Feed = {
         FeedUtil.confirm(message, function(){
             $.post('/feed/' + feedThreadId + '/like')
                 .done(function (response) {
-                    if (response.resultCode != 1) {
-                        FeedUtil.alert(response.comment);
+                    if (FeedUtil.alertResponse(response)) {
                         return;
                     }
                     FeedUtil.toggleCount($(el), response.data.count, response.data.hasActor);
@@ -172,14 +168,22 @@ var Feed = {
         FeedUtil.confirm(message, function(){
             $.post('/feed/' + feedThreadId + '/claim')
                 .done(function (response) {
-                    if (response.resultCode != 1) {
-                        FeedUtil.alert(response.comment);
+                    if (FeedUtil.alertResponse(response)) {
                         return;
                     }
                     FeedUtil.toggleCount($(el), response.data.count, response.data.hasActor);
                 }).fail(function () {
                     alert('Error claim feed');
                 });
+        });
+    },
+    'bindImageGallery': function(){
+        $('#feedList').off('click').delegate('*[data-toggle="lightbox"]', 'click', function(e) {
+            e.preventDefault();
+            return $(this).ekkoLightbox({
+                always_show_close: true,
+                loadingMessage: '<img src="/resource/images/loading-spinner.svg" class="feed-image-loader" />'
+            });
         });
     }
 };
@@ -244,12 +248,11 @@ var FeedReply = {
             }
             $.post('/feed/reply/save', $frm.serialize())
                 .done(function (response) {
-                    if (response.resultCode != 1) {
-                        FeedUtil.alert(response.comment);
+                    if (FeedUtil.alertResponse(response)) {
                         return;
                     }
-
                     me.clearForm($frm);
+                    debugger;
                     me.loadItem($replies, response.data);
                 }).fail(function () {
                     alert('Error saving feed Reply');
@@ -279,8 +282,7 @@ var FeedReply = {
         FeedUtil.confirm('댓글을 삭제하시겠습니까?', function(){
             $.post('/feed/reply/' + feedReplyId + '/delete')
                 .done(function (response) {
-                    if (response.resultCode != 1) {
-                        FeedUtil.alert(response.comment);
+                    if (FeedUtil.alertResponse(response)) {
                         return;
                     }
                     $target.remove();
@@ -297,8 +299,7 @@ var FeedReply = {
         FeedUtil.confirm(message, function(){
             $.post('/feed/reply/' + feedReplyId + '/like')
                 .done(function (response) {
-                    if (response.resultCode != 1) {
-                        FeedUtil.alert(response.comment);
+                    if (FeedUtil.alertResponse(response)) {
                         return;
                     }
                     FeedUtil.toggleCount($(el), response.data.count, response.data.hasActor);
@@ -315,8 +316,7 @@ var FeedReply = {
         FeedUtil.confirm(message, function(){
             $.post('/feed/reply/' + feedReplyId + '/claim')
                 .done(function (response) {
-                    if (response.resultCode != 1) {
-                        FeedUtil.alert(response.comment);
+                    if (FeedUtil.alertResponse(response)) {
                         return;
                     }
                     FeedUtil.toggleCount($(el), response.data.count, response.data.hasActor);
@@ -348,15 +348,28 @@ var FeedUtil = {
             el.removeClass('hasActor');
         }
     },
-    'alert': function(message) {
+    'alert': function(message, confirmCallback) {
         $.alert({
             title: '확인',
             content: message,
             confirmButton: 'OK',
             confirmButtonClass: 'btn-primary',
             icon: 'fa fa-info',
-            animation: 'zoom'
+            animation: 'zoom',
+            confirm: confirmCallback
         });
+    },
+    'alertResponse': function(response) {
+        var isErrorOccur = (response.resultCode != 1);
+        if(isErrorOccur) {
+            this.alert(response.comment, function(){
+                if(response.resultCode == 10) {
+                    location.href = '/loginPage';
+                }
+            });
+        }
+
+        return isErrorOccur;
     },
     'confirm': function(message, confirmCallback) {
         $.confirm({
@@ -418,8 +431,7 @@ var FeedPager = {
 var FeedList = {
     'call' : function(url, resultCallback) {
         $.get(url, function (response) {
-            if(response.resultCode != 1) {
-                FeedUtil.alert(response.comment);
+            if(FeedUtil.alertResponse(response)) {
                 return;
             }
             var source = $('#feed-template-list-hbs').html();

@@ -104,7 +104,7 @@ public class FeedReplyService {
      * @param feedReplyId
      * @return FeedReply
      */
-    public FeedReply findByFeedReplyId(Integer feedReplyId) {
+    public FeedReply getByFeedReplyId(Integer feedReplyId) {
         return feedReplyRepository.findOne(feedReplyId);
     }
 }
