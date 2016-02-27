@@ -23,6 +23,9 @@ public class DisplayQa {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private Date insertDate;
 
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    private Date updateDate;
+
     private String userNick;
     private String title;
     private String contents;
@@ -36,6 +39,7 @@ public class DisplayQa {
     public DisplayQa(QaContent qaContent, User writer, List<Keyword> keywords, List<QaReply> qaReplies){
         this.qaId = qaContent.getQaId();
         this.insertDate = qaContent.getInsertDate();
+        this.updateDate = qaContent.getUpdateDate();
         this.userNick = qaContent.getUserNick();
         this.title = qaContent.getTitle();
         this.contents = qaContent.getContents();

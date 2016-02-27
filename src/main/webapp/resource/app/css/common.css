@@ -117,6 +117,7 @@ div.index-container div.index-thread-item .comments {margin-left:10px; color: #2
 .feed ul li ul li .config { background: none repeat scroll 0 0 transparent; right: 10px; }
 .feed ul li .feed-comment button{ margin-left:-15px;}
 .feed .btn-feed-more {width:100%; margin-left: auto; margin-right: auto; display:none;}
+.feed-image-loader {text-align: center; display:block; margin-top:30%; margin-left: auto; margin-right:auto;}
 
 .best-feed { max-height: 600px; overflow-y:scroll;}
 .best-feed .media-body {cursor: pointer;}
