@@ -3,6 +3,7 @@ var Feed = {
         this.bindSave();
         this.bindFileAttachment();
         this.bindFileUploadModal();
+        this.bindImageGallery();
     },
     'loadRecentlyList' : function() {
         FeedList.call("/feed/recentlyList", function(html, itemSize) {
@@ -180,6 +181,15 @@ var Feed = {
                 }).fail(function () {
                     alert('Error claim feed');
                 });
+        });
+    },
+    'bindImageGallery': function(){
+        $('#feedList').unbind('click').delegate('*[data-toggle="lightbox"]', 'click', function(e) {
+            e.preventDefault();
+            return $(this).ekkoLightbox({
+                always_show_close: true,
+                loadingMessage: '<img src="/resource/images/loading-spinner.svg" class="feed-image-loader" />'
+            });
         });
     }
 };
