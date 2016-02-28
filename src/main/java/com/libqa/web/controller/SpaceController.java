@@ -1,5 +1,7 @@
 package com.libqa.web.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.libqa.application.enums.ActivityType;
@@ -15,9 +17,11 @@ import com.libqa.web.service.user.UserService;
 import com.libqa.web.service.wiki.WikiService;
 import com.libqa.web.view.space.*;
 import com.libqa.web.view.wiki.DisplayWiki;
+import com.sun.deploy.net.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,10 +30,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.*;
 
 /**
  * @Author : yion
@@ -196,6 +200,7 @@ public class SpaceController {
         space.setInsertDate(new Date());
         space.setInsertUserId(user.getUserId());
         space.setInsertUserNick(user.getUserNick());
+        space.setUpdateDate(new Date());
 
         Space result = spaceService.saveWithKeyword(space, keyword, ActivityType.CREATE_SPACE);
         log.debug("#result : [{}]", result);
@@ -384,7 +389,7 @@ public class SpaceController {
                     appendTag += " \t\t</li>\n\t</ul>\n</li>\n";
                 }
 
-                appendTag += "\t<li><strong>" + wikiList.get(i).getTitle() +"</strong>\n";
+                appendTag += "\t<li><strong><a href=\"#\">" + wikiList.get(i).getTitle() +"</a></strong>\n";
 
                 if (wikiList.get(i).isHasChild() == true) {
                     appendTag += "\t<ul>\n";
@@ -553,6 +558,27 @@ public class SpaceController {
 
     }
     */
+    @RequestMapping(value = "/space/tree", method = RequestMethod.POST)
+    @ResponseBody
+    public String treeJson(@RequestParam Integer spaceId) throws IOException {
+        List<Wiki> wikiListInSpace = wikiService.findBySpaceIdAndSort(spaceId);
+        List<WikiTree> wikiList = bindWikiTree(wikiListInSpace);
+
+        for (int i = 0; i < wikiList.size(); i++) {
+            if (wikiList.get(i).getWikiId() == wikiList.get(i).getParentsId()) {
+                continue;
+            } else {
+                // 자식 위키가 있음
+                setChild(wikiList, wikiList.get(i).getParentsId());
+            }
+        }
+        ObjectMapper om = new ObjectMapper();
+
+        // {"success" : true, "returnUrl" : "..."}
+        String jsonString = om.writeValueAsString(wikiList);
+        log.info("### json = " + jsonString);
+        return jsonString;
+    }
 
 
     public ModelAndView sendAccessDenied() {

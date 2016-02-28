@@ -52,11 +52,10 @@ To change this template use File | Settings | File Templates.
         <div class="col-md-3 no-float vcenter" >
             <div class="col-sm-12" style="padding: 10px">
                 <input type="hidden" name="spaceId" value="{{space.spaceId}}">
-                <div class="pull-right" style="padding-top: 7px;cursor: pointer;"><i class="fa fa-times fa-1"></i></div>
-                <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:5px">전체위키</h4>
-
+                <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:5px">
+                    <div id="sidetreecontrol"><a href="?#">전체 닫기</a> | <a href="?#">전체 열기</a></div>
+                </h4>
                 {{#if trees}}
-                <div id="sidetreecontrol"><a href="?#">전체 닫기</a> | <a href="?#">전체 열기</a></div>
                     {{{trees}}}
                 {{^}}
                     생성된 위키기 없습니다.
@@ -119,11 +118,24 @@ To change this template use File | Settings | File Templates.
         $(document).ready(function() {
 
             var userFavorite = "{{userFavorite}}";
+            $.ajax({
+                url: "/space/tree",
+                type: "POST",
+                data: { spaceId : $('[name=spaceId]').val() },
+                success : function(response){
+                    console.log("# response = " + response);
+                    alert(response);
+                },
+                error : function(req){
+                    // Handle upload error
+                    alert(' 에러코드 [' + req.status + ']'); 
+                }
+            });
 
 
             $("#tree").treeview({
                 collapsed: true,
-                animated: "medium",
+                animated: "fast",
                 control:"#sidetreecontrol",
                 persist: "location"
             });

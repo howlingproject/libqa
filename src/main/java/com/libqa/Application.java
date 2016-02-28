@@ -22,6 +22,7 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
+
     @Bean
     public HttpMessageConverter<String> responseBodyConverter() {
         return new StringHttpMessageConverter(Charset.forName("UTF-8"));

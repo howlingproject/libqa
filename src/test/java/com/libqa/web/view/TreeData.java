@@ -71,7 +71,8 @@ public class TreeData {
 
     @Test
     public void makeTree() {
-        List<WikiTree> wikiList = setData();
+        // List<WikiTree> wikiList = simpleData(); // 4개
+        List<WikiTree> wikiList = setData();    // 8개
 
         System.out.println("@@@ 변경전 wikiList : " + wikiList);
 
@@ -122,7 +123,7 @@ public class TreeData {
             if (groupId != wikiList.get(i).getGroupIdx()) { //새로은 그룹 아이디일 경우 새로운 li생성
 
                 if (isClosed) {
-                    appendTag += " \t\t뎁스</li>\n\t</ul>\n</li>\n";
+                    appendTag += " \t\t뎁스</li>";
                 }
 
                 appendTag += "\t새<ll><strong>" + wikiList.get(i).getTitle() + " depth : " + wikiList.get(i).getDepthIdx()
@@ -134,6 +135,8 @@ public class TreeData {
 
                 if (wikiList.get(i).isHasChild() == true) {
                     appendTag += "\t<ul>\n";
+                } else {
+                    appendTag += "닫아</li>";
                 }
             } else {
 
@@ -160,12 +163,6 @@ public class TreeData {
                 }
             }
 
-
-            if (wikiList.size() - 1 == i) { // 마지막 태그
-                if (!wikiList.get(i).isHasBrother()) {
-                    appendTag += "\t마지막</li>\n";
-                }
-            }
             depth = wikiList.get(i).getDepthIdx();
             groupId = wikiList.get(i).getGroupIdx();
 
@@ -229,9 +226,9 @@ public class TreeData {
         List<WikiTree> wikiList = new ArrayList<>();
 
         WikiTree wiki1 = new WikiTree();
-        wiki1.setGroupIdx(126);
-        wiki1.setWikiId(126);
-        wiki1.setParentsId(126);
+        wiki1.setGroupIdx(28);
+        wiki1.setWikiId(28);
+        wiki1.setParentsId(28);
         wiki1.setDepthIdx(0);
         wiki1.setOrderIdx(0);
         wiki1.setTitle("첫번째 위키");
@@ -239,32 +236,32 @@ public class TreeData {
         wikiList.add(wiki1);
 
         WikiTree wiki2 = new WikiTree();
-        wiki2.setGroupIdx(126);
-        wiki2.setWikiId(128);
-        wiki2.setParentsId(126);
-        wiki2.setDepthIdx(1);
-        wiki2.setOrderIdx(1);
-        wiki2.setTitle("첫번째 위키의 첫번째자식");
+        wiki2.setGroupIdx(30);
+        wiki2.setWikiId(30);
+        wiki2.setParentsId(30);
+        wiki2.setDepthIdx(0);
+        wiki2.setOrderIdx(0);
+        wiki2.setTitle("두번째 위키 ");
         wiki2.setMaxRows(4);
         wikiList.add(wiki2);
 
         WikiTree wiki3 = new WikiTree();
-        wiki3.setGroupIdx(126);
-        wiki3.setWikiId(129);
-        wiki3.setParentsId(128);
-        wiki3.setDepthIdx(2);
-        wiki3.setOrderIdx(2);
-        wiki3.setTitle("첫번째 위키의 자식위키의 자식");
+        wiki3.setGroupIdx(30);
+        wiki3.setWikiId(31);
+        wiki3.setParentsId(30);
+        wiki3.setDepthIdx(1);
+        wiki3.setOrderIdx(1);
+        wiki3.setTitle("두번째 위키의 자식");
         wiki3.setMaxRows(4);
         wikiList.add(wiki3);
 
         WikiTree wiki4 = new WikiTree();
-        wiki4.setGroupIdx(126);
-        wiki4.setWikiId(133);
-        wiki4.setParentsId(126);
-        wiki4.setDepthIdx(1);
-        wiki4.setOrderIdx(3);
-        wiki4.setTitle("첫번째 위키의 두번째자식");
+        wiki4.setGroupIdx(127);
+        wiki4.setWikiId(127);
+        wiki4.setParentsId(127);
+        wiki4.setDepthIdx(0);
+        wiki4.setOrderIdx(0);
+        wiki4.setTitle("세번째 ");
         wiki4.setMaxRows(4);
         wikiList.add(wiki4);
 
