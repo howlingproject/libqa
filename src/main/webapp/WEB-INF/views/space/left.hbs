@@ -118,6 +118,7 @@ To change this template use File | Settings | File Templates.
         $(document).ready(function() {
 
             var userFavorite = "{{userFavorite}}";
+            // https://github.com/jonmiles/bootstrap-treeview 으로 변경할 예정
             $.ajax({
                 url: "/space/tree",
                 type: "POST",
@@ -128,7 +129,7 @@ To change this template use File | Settings | File Templates.
                 },
                 error : function(req){
                     // Handle upload error
-                    alert(' 에러코드 [' + req.status + ']'); 
+                    alert(' 에러코드 [' + req.status + ']');
                 }
             });
 
