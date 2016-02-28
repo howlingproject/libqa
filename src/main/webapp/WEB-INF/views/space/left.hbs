@@ -7,7 +7,7 @@ To change this template use File | Settings | File Templates.
 --}}
 {{#partial "style"}}
 {{!-- 여기에 사용자 css 정의 --}}
-    <style type="text/css">
+    <style type="text/css" xmlns="http://www.w3.org/1999/html">
         .row
         {
             height: 100%;
@@ -51,16 +51,13 @@ To change this template use File | Settings | File Templates.
     <div class="row">
         <div class="col-md-3 no-float vcenter" >
             <div class="col-sm-12" style="padding: 10px">
+                <input type="hidden" name="spaceId" value="{{space.spaceId}}">
                 <div class="pull-right" style="padding-top: 7px;cursor: pointer;"><i class="fa fa-times fa-1"></i></div>
                 <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:5px">전체위키</h4>
 
-                {{#if wikiTrees}}
+                {{#if trees}}
                 <div id="sidetreecontrol"><a href="?#">전체 닫기</a> | <a href="?#">전체 열기</a></div>
-                    <ul id="tree">
-
-                        {{{wikiTrees}}}
-
-                    </ul>
+                    {{{trees}}}
                 {{^}}
                     생성된 위키기 없습니다.
                 {{/if}}
@@ -120,7 +117,9 @@ To change this template use File | Settings | File Templates.
     <script type="text/javascript">
         // bind the on-change event
         $(document).ready(function() {
+
             var userFavorite = "{{userFavorite}}";
+
 
             $("#tree").treeview({
                 collapsed: true,
@@ -128,7 +127,6 @@ To change this template use File | Settings | File Templates.
                 control:"#sidetreecontrol",
                 persist: "location"
             });
-
 
             console.log("## userFavorite = " + userFavorite);
 
@@ -251,6 +249,8 @@ To change this template use File | Settings | File Templates.
                 })
             });
         });
+
+
     </script>
 {{/partial}}
 

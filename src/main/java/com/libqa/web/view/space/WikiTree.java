@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,7 +23,9 @@ public class WikiTree {
     private int parentsId;
     private int depthIdx;
     private int orderIdx;
+
     private String title;
     private int maxRows;
     private boolean hasChild;   // 자식이 있는가?
+    private boolean hasBrother; // 형제가 있는가?
 }
