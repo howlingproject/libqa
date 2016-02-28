@@ -241,7 +241,7 @@ var FeedReply = {
         var me = this;
         $('button[name=saveReply]').off('click').on('click',function () {
             var $frm = $(this).closest('form');
-            var $replies = $(this).closest('.thread').find('.feed-replies');
+            var $repliesBody = $(this).closest('.thread').find('.feed-replies');
 
             if(!me.checkValidate($frm)) {
                 return;
@@ -252,8 +252,7 @@ var FeedReply = {
                         return;
                     }
                     me.clearForm($frm);
-                    debugger;
-                    me.loadItem($replies, response.data);
+                    me.loadItem($repliesBody, response.data);
                 }).fail(function () {
                     alert('Error saving feed Reply');
                 });
@@ -440,7 +439,7 @@ var FeedList = {
             resultCallback(html, response.data.length);
         });
     },
-    "getLastId": function() {
+    'getLastId': function() {
         return $('#feedList li.thread').last().data('feedThreadId');
     },
     'getSize': function(){

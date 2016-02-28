@@ -174,7 +174,7 @@ public class FeedController {
 
         try {
             feedReplyService.create(feedReply, viewer);
-            return createSuccessResult(displayFeedReplyBuilder.build(feedReply));
+            return createSuccessResult(displayFeedReplyBuilder.build(feedReply, viewer));
         } catch (Exception e) {
             log.error("save reply error.", e);
             return createFailResult();

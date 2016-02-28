@@ -151,7 +151,7 @@ public class QaServiceImpl implements QaService {
 	/**
 	 * BEST Q&A를 조회한다.
 	 * <br />
-	 * 추천수로 desc, 비추천 asc을 기준으로 sort 해서 최근 10개 추출함.
+	 * 추천수 desc, 비추천 asc로 sort 하여 최근 10개 추출함.
 	 *
 	 * @return list of QaContent
 	 */

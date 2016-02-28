@@ -141,12 +141,10 @@ public class FeedControllerTest {
     public void testSave_withNeedLoginResponse() throws Exception {
         given(loggedUserManager.getUser()).willReturn(guestUser());
 
-        mockMvc.perform(
-                post("/feed/save")
-                        .contentType(APPLICATION_FORM_URLENCODED))
+        mockMvc.perform(post("/feed/save"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.resultCode").value(is(200)))
+                .andExpect(jsonPath("$.resultCode").value(is(10)))
                 .andExpect(jsonPath("$.comment").value(is("로그인이 필요합니다")));
 
         verify(feedThreadService, never()).create(any(FeedThread.class), any(User.class));
@@ -157,9 +155,7 @@ public class FeedControllerTest {
         given(loggedUserManager.getUser()).willReturn(normalUser());
         willThrow(new RuntimeException("unknown Error.")).given(feedThreadService).create(any(FeedThread.class), any(User.class));
 
-        mockMvc.perform(
-                post("/feed/save")
-                        .contentType(APPLICATION_FORM_URLENCODED))
+        mockMvc.perform(post("/feed/save"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$.resultCode").value(is(-1)))
@@ -204,7 +200,7 @@ public class FeedControllerTest {
                         .param("feedContent", "test"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.resultCode").value(is(300)))
+                .andExpect(jsonPath("$.resultCode").value(is(11)))
                 .andExpect(jsonPath("$.comment").value(is("사용자가 일치하지 않습니다.")));
 
         verify(feedThreadService, never()).modify(any(FeedThread.class), any(FeedThread.class), any(User.class));

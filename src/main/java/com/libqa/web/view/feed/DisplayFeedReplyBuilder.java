@@ -43,13 +43,10 @@ public class DisplayFeedReplyBuilder {
      * display용 feedReply를 build 한다.
      *
      * @param feedReply
+     * @param viewer
      * @return DisplayFeedReply
      */
-    public DisplayFeedReply build(FeedReply feedReply) {
-        return new DisplayFeedReply(feedReply);
-    }
-
-    private DisplayFeedReply build(FeedReply feedReply, User viewer) {
+    public DisplayFeedReply build(FeedReply feedReply, User viewer) {
         User writer = userService.findByUserId(feedReply.getUserId());
         DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLike(feedReply, viewer);
         DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaim(feedReply, viewer);
