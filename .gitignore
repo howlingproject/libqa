@@ -17,7 +17,7 @@ target
 *.ipr
 *.iws
 .idea
-#*.jar
+*.jar
 .DS_Store
 *.MF
 bin/
