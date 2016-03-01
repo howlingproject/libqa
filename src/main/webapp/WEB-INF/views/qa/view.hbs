@@ -186,6 +186,7 @@
                 $('#title').val('');
                 $('#contents').val('');
                 $('#contentsMarkup').val('');
+                $("#wikiEditor").val('');
             },
             searchList : function(){
                 $.get("/qa/replyList",{qaId : $('[name=qaId]').val()}, function (response) {

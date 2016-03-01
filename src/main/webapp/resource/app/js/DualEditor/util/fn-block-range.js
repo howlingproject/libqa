@@ -133,8 +133,8 @@
 	 * $.rangeTag(editor, 시작지점, 종료지점);
 	 */
 	jQuery.rangeTag = function(textEditor, start, end){
-		
 	    if (textEditor.setSelectionRange) {		// FF, CROME
+            textEditor.focus();
 	        textEditor.setSelectionRange(start, end);			
 	    } else {  	
 	        if(textEditor.createTextRange) {	// IE

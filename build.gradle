@@ -41,6 +41,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
+    compile('org.springframework.boot:spring-boot-starter-tomcat')
     compile("org.springframework:spring-context-support")
     compile('org.apache.tomcat.embed:tomcat-embed-jasper')
     compile('javax.inject:javax.inject:1')
@@ -62,7 +63,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    gradleVersion = '2.11'
 }
 
 bootRun {
