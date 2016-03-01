@@ -55,20 +55,15 @@ To change this template use File | Settings | File Templates.
                 <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:5px">
                     <div id="sidetreecontrol"><a href="?#">전체 닫기</a> | <a href="?#">전체 열기</a></div>
                 </h4>
+
+                <div id="treeview" class=""></div>
+
+
+                {{!--
                 {{#if trees}}
                     {{{trees}}}
                 {{^}}
                     생성된 위키기 없습니다.
-                {{/if}}
-                {{!--
-                {{#if spaceWikis}}
-
-                {{#each spaceWikis}}
-                    <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
-                {{/each}}
-
-                {{^}}
-                    생성된 위키가 없습니다.
                 {{/if}}
                 --}}
             </div>
@@ -110,11 +105,13 @@ To change this template use File | Settings | File Templates.
 
 
 {{# partial "script-page" }}
-    <link href="/resource/public/css/jquery.treeview.css" rel="stylesheet" />
-    <script type="text/javascript" src="/resource/public/js/jquery/jquery.cookie.js"></script>
-    <script type="text/javascript" src="/resource/public/js/jquery/jquery.treeview.js"></script>
+
+    <link href="/resource/public/js/jquery/plugin/bootstrap-treeview-1.2.0/bootstrap-treeview.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="/resource/public/js/jquery/plugin/bootstrap-treeview-1.2.0/bootstrap-treeview.min.js"></script>
+
     <script type="text/javascript">
         // bind the on-change event
+
         $(document).ready(function() {
 
             var userFavorite = "{{userFavorite}}";
@@ -125,7 +122,16 @@ To change this template use File | Settings | File Templates.
                 data: { spaceId : $('[name=spaceId]').val() },
                 success : function(response){
                     console.log("# response = " + response);
-                    alert(response);
+                    //var r = convert(JSON.parse(response));
+                    var defaultData = unflatten(JSON.parse(response) );
+
+                    console.log("## defaultData = " + JSON.stringify(defaultData, null, " "));
+
+                    $('#treeview').treeview({
+                        color: "#428bca",
+                        showBorder: false,
+                        data: JSON.stringify(defaultData, null, " ")
+                    });
                 },
                 error : function(req){
                     // Handle upload error
@@ -133,13 +139,6 @@ To change this template use File | Settings | File Templates.
                 }
             });
 
-
-            $("#tree").treeview({
-                collapsed: true,
-                animated: "fast",
-                control:"#sidetreecontrol",
-                persist: "location"
-            });
 
             console.log("## userFavorite = " + userFavorite);
 
@@ -263,6 +262,33 @@ To change this template use File | Settings | File Templates.
             });
         });
 
+
+        function unflatten(arr) {
+            var tree = [], mappedArr = {}, arrElem, mappedElem;
+            // TODO  하위 트리가 없을 경우 node 에 푸시 하지 않음
+            // First map the nodes of the array to an object -> create a hash table.
+            for(var i = 0, len = arr.length; i < len; i++) {
+                arrElem = arr[i];
+                mappedArr[arrElem.id] = arrElem;
+                mappedArr[arrElem.id]['nodes'] = [];
+            }
+
+            for (var id in mappedArr) {
+                if (mappedArr.hasOwnProperty(id)) {
+                    mappedElem = mappedArr[id];
+                    console.log("mappedElem.parentId = " + mappedElem.parentId);
+                    // If the element is not at the root level, add it to its parent array of children.
+                    if (mappedElem.parentId) {
+                        mappedArr[mappedElem['parentId']]['nodes'].push(mappedElem);
+                    }
+                    // If the element is at the root level, add it to first level elements array.
+                    else {
+                        tree.push(mappedElem);
+                    }
+                }
+            }
+            return tree;
+        }
 
     </script>
 {{/partial}}

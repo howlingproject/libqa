@@ -562,8 +562,9 @@ public class SpaceController {
     @ResponseBody
     public String treeJson(@RequestParam Integer spaceId) throws IOException {
         List<Wiki> wikiListInSpace = wikiService.findBySpaceIdAndSort(spaceId);
-        List<WikiTree> wikiList = bindWikiTree(wikiListInSpace);
+        List<TreeModel> wikiList = bindTree(wikiListInSpace);
 
+        /*
         for (int i = 0; i < wikiList.size(); i++) {
             if (wikiList.get(i).getWikiId() == wikiList.get(i).getParentsId()) {
                 continue;
@@ -572,12 +573,39 @@ public class SpaceController {
                 setChild(wikiList, wikiList.get(i).getParentsId());
             }
         }
+        */
         ObjectMapper om = new ObjectMapper();
 
         // {"success" : true, "returnUrl" : "..."}
         String jsonString = om.writeValueAsString(wikiList);
         log.info("### json = " + jsonString);
         return jsonString;
+    }
+
+    private List<TreeModel> bindTree(List<Wiki> wikiListInSpace) {
+        List<TreeModel> models = new ArrayList<>();
+        for (Wiki wiki : wikiListInSpace) {
+            TreeModel model = new TreeModel();
+
+            log.info("### wiki id = " + wiki.getWikiId());
+            log.info("### wiki parent = " + wiki.getParentsId());
+            log.info("### wiki result = " + wiki.getWikiId().equals(wiki.getParentsId()));
+
+            if (wiki.getWikiId().equals(wiki.getParentsId())) {
+                model.setParentId(0);
+            } else {
+                model.setParentId(wiki.getParentsId());
+            }
+            model.setId(wiki.getWikiId());
+            model.setText(wiki.getTitle());
+            model.setNodes(null);
+            model.setHref("/wiki/" + wiki.getWikiId());
+
+            models.add(model);
+
+        }
+
+        return models;
     }
 
 
