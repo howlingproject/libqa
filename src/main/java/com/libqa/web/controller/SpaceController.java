@@ -558,7 +558,7 @@ public class SpaceController {
 
     }
     */
-    @RequestMapping(value = "/space/tree", method = RequestMethod.POST)
+    @RequestMapping(value = "/space/tree", method = RequestMethod.POST, produces = "text/html; charset=utf8")
     @ResponseBody
     public String treeJson(@RequestParam Integer spaceId) throws IOException {
         List<Wiki> wikiListInSpace = wikiService.findBySpaceIdAndSort(spaceId);
