@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -415,4 +416,16 @@ public class WikiServiceImpl implements WikiService {
         return wikiRepository.findByGroupIdxAndOrderIdxGreaterThanEqualAndIsDeleted(groupIdx, maxOrderIdx, isDeleted);
     }
 
+    @Override
+    public List<Wiki> findBySpaceIdAndSort(Integer spaceId) {
+
+        List<Wiki> trees = wikiRepository.findAllBySpaceIdAndIsDeleted(spaceId, isDeleted, PageUtil.sort(PageUtil.order("ASC", "groupIdx"), PageUtil.order("ASC", "orderIdx")));
+        return trees;
+    }
+
+    @Override
+    public List<Wiki> findAllLatestWikiBySpaceId(Integer pageSize, Integer spaceId) {
+        PageRequest pageRequest = PageUtil.sortPageable(pageSize, PageUtil.sortId("DESC", "wikiId"));
+        return wikiRepository.findAllBySpaceIdAndIsDeletedFalse(pageRequest, spaceId);
+    }
 }

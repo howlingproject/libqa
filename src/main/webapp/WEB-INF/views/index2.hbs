@@ -95,42 +95,77 @@
             // Some logic to retrieve, or generate tree structure
             var tree = [
                 {
-                    text: "Node 1",
-                    icon: "glyphicon glyphicon-stop",
-                    selectedIcon: "glyphicon glyphicon-stop",
-                    color: "#000000",
-                    backColor: "#FFFFFF",
-                    href: "#node-1",
-                    selectable: true,
-                    state: {
-                        checked: true,
-                        disabled: true,
-                        expanded: true,
-                        selected: true
-                    },
-                    tags: ['available'],
+                    text: 'Parent 1',
+                    href: '#parent1',
+                    tags: ['4'],
                     nodes: [
                         {
-                            text: "Child 1",
+                            text: 'Child 1',
+                            href: '#child1',
+                            tags: ['2'],
                             nodes: [
                                 {
-                                    text: "Grandchild 1"
+                                    text: 'Grandchild 1',
+                                    href: '#grandchild1',
+                                    tags: ['0']
                                 },
                                 {
-                                    text: "Grandchild 2"
+                                    text: 'Grandchild 2',
+                                    href: '#grandchild2',
+                                    tags: ['0'],
+                                    nodes: [
+                                        {
+                                            text: '차일드차일드 1',
+                                            href: '#grandchild1',
+                                            tags: ['2'],
+                                            nodes: [
+                                                {
+                                                    text: '차차차일드 1',
+                                                    href: '#grandchild1',
+                                                    tags: ['2']
+                                                },
+                                                {
+                                                    text: '차차차일드 2',
+                                                    href: '#grandchild2',
+                                                    tags: ['3']
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            text: '차일드차일드 2',
+                                            href: '#grandchild2',
+                                            tags: ['3']
+                                        }
+                                    ]
                                 }
                             ]
                         },
                         {
-                            text: "Child 2"
+                            text: 'Child 2',
+                            href: '#child2',
+                            tags: ['0']
                         }
                     ]
                 },
                 {
-                    text: "Parent 2"
+                    text: 'Parent 2',
+                    href: '#parent2',
+                    tags: ['0']
                 },
                 {
-                    text: "Parent 3"
+                    text: 'Parent 3',
+                    href: '#parent3',
+                    tags: ['0']
+                },
+                {
+                    text: 'Parent 4',
+                    href: '#parent4',
+                    tags: ['0']
+                },
+                {
+                    text: 'Parent 5',
+                    href: '#parent5'  ,
+                    tags: ['0']
                 }
             ];
             return tree;

@@ -6,7 +6,6 @@ import com.libqa.web.domain.Wiki;
 import com.libqa.web.domain.WikiLike;
 import com.libqa.web.view.wiki.DisplayWiki;
 import com.libqa.web.view.wiki.DisplayWikiLike;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -53,5 +52,9 @@ public interface WikiService {
     Integer maxOrderIdx( Integer parentsId, Integer depthIdx );
 
     List<Wiki> findByGroupIdxAndOrderIdxGreaterThanAndIsDeleted( Integer groupIdx, Integer maxOrderIdx );
+
+    List<Wiki> findAllLatestWikiBySpaceId(Integer pageSize, Integer spaceId);
+
+    List<Wiki> findBySpaceIdAndSort(Integer spaceId);
 
 }

@@ -15,6 +15,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +53,9 @@ public class QaServiceImpl implements QaService {
             paramQaContent.setUserId(user.getUserId());
             paramQaContent.setUserNick(user.getUserNick());
             paramQaContent.setInsertUserId(user.getUserId());
-            paramQaContent.setInsertDate(new Date());
+	        Date today = new Date();
+            paramQaContent.setInsertDate(today);
+	        paramQaContent.setUpdateDate(today);
 
             newQaContent = save(paramQaContent);
             moveQaFilesToProductAndSave(newQaContent.getQaId(), qaFiles);
@@ -130,9 +133,8 @@ public class QaServiceImpl implements QaService {
 
     @Override
     public List<QaContent> searchRecentlyQaContentsByPageSize(Integer pageSize) {
-        final Integer startIndex = 0;
         final Sort sort = PageUtil.sortId("DESC", "qaId");
-        PageRequest pageRequest = PageUtil.sortPageable(startIndex, pageSize, sort);
+        PageRequest pageRequest = PageUtil.sortPageable(pageSize, sort);
         return qaRepository.findByIsDeletedFalse(pageRequest);
     }
 
@@ -146,7 +148,63 @@ public class QaServiceImpl implements QaService {
         return qaRepository.countByIsReplyedFalseAndIsDeletedFalse();
     }
 
-    void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
+	/**
+	 * BEST Q&A를 조회한다.
+	 * <br />
+	 * 추천수 desc, 비추천 asc로 sort 하여 최근 10개 추출함.
+	 *
+	 * @return list of QaContent
+	 */
+	@Override
+	public List<QaContent> getBestQaContents() {
+		final Integer pageSize = 10;
+		final Order order1 = new Order(Sort.Direction.DESC, "recommendCount");
+		final Order order2 = new Order(Sort.Direction.ASC, "nonrecommendCount");
+		PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order1, order2));
+
+		return qaRepository.findByIsDeletedFalse(pageRequest);
+	}
+
+    @Override
+    public QaContent saveRecommendCount(Integer qaId, boolean commend, int calculationCnt) {
+        QaContent qaContent = qaRepository.findByQaIdAndIsDeletedFalse(qaId);
+	    int preCount;
+	    if(commend){
+		    preCount = qaContent.getRecommendCount();
+		    qaContent.setRecommendCount(preCount + calculationCnt);
+	    } else {
+		    preCount = qaContent.getNonrecommendCount();
+		    qaContent.setNonrecommendCount(preCount + calculationCnt);
+	    }
+	    return qaContent;
+    }
+
+    @Override
+    public List<QaContent> getRecentQAContents() {
+	    Date today = new Date();
+	    Date fromDate = null;
+	    try {
+		    fromDate = getFromDate(DayType.WEEK.getCode());
+	    } catch (ParseException e) {
+		    e.printStackTrace();
+	    }
+	    final Integer pageSize = 10;
+        final Order order = new Order(Sort.Direction.DESC, "updateDate");
+        PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order));
+
+	    return qaRepository.findByUpdateDateBetweenAndIsDeletedFalse(fromDate, today, pageRequest);
+    }
+
+	@Override
+	public List<QaContent> getWaitReplyQaContents() {
+		final Integer pageSize = 10;
+		final Order order = new Order(Sort.Direction.DESC, "updateDate");
+		PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order));
+
+		return qaRepository.findByIsDeletedFalseAndIsReplyedFalse(pageRequest);
+	}
+
+	void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
         qaFileService.moveQaFilesToProductAndSave(qaId, qaFiles);
     }
 
@@ -222,15 +280,15 @@ public class QaServiceImpl implements QaService {
     public List<QaContent> findRecentList(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted){
         List<QaContent> recentList = new ArrayList<>();
         if(fromDate == null){
-            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndIsDeletedOrderByInsertDateDesc(qaIds, isReplyed, isDeleted);
+            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndIsDeletedOrderByUpdateDateDesc(qaIds, isReplyed, isDeleted);
         } else {
-            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndInsertDateBetweenAndIsDeletedOrderByInsertDateDesc(qaIds, isReplyed, fromDate, today, isDeleted);
+            recentList = qaRepository.findAllByQaIdInAndIsReplyedAndUpdateDateBetweenAndIsDeletedOrderByUpdateDateDesc(qaIds, isReplyed, fromDate, today, isDeleted);
         }
         return recentList;
     }
 
     public List<QaContent> findWaitList(List<Integer> qaIds, Date fromDate, Date today, boolean isDeleted){
-        return qaRepository.findAllByQaIdInAndInsertDateBetweenAndIsDeletedOrderByInsertDateDesc(qaIds, fromDate, today, isDeleted);
+        return qaRepository.findAllByQaIdInAndUpdateDateBetweenAndIsDeletedOrderByUpdateDateDesc(qaIds, fromDate, today, isDeleted);
     }
 
     public Date getFromDate(String dayType) throws ParseException {

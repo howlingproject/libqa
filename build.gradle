@@ -58,10 +58,11 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     testCompile('cglib:cglib:2.2')
     testCompile('org.easytesting:fest-assert:1.4')
+    testCompile('com.jayway.jsonpath:json-path:2.1.0')
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    gradleVersion = '2.11'
 }
 
 bootRun {

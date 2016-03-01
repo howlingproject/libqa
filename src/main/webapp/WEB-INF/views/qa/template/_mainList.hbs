@@ -9,25 +9,21 @@
             </div>
         </div>
         <div class="media">
-            <a class="pull-left" href="#">
-                <div class="user-profile">
-                    <img alt="avatar" class="profile-image" src="{{userImage}}" />
-                </div>
-            </a>
-            <div class="row">
-                <div class="col-xs-9 col-sm-9 col-md-9">
-                    <div class="media-body">
-                        {{{contents}}}
-                        <span class="badge">{{replyCnt}}</span>
-                    </div>
-                </div>
-                <div class="my-qna-rating">
-                    <button class="btn btn-sm btn-default btn-sm-fixed">조회 {{viewCount}}</button>
-                    <button class="btn btn-sm btn-default btn-sm-fixed">추천 {{recommendCount}}</button>
-                </div>
+            <div class="user-profile pull-left">
+                <img alt="avatar" class="profile-image" src="{{userImage}}" onerror='this.src="/resource/images/avatar.png"'/>
             </div>
-            <div class="pull-left"><span class="nickname"><i class="fa fa-pencil-square-o"></i> {{userNick}}</span></div>
-            <div class="pull-right"><i class="fa fa-clock-o"></i> {{insertDate}}</div>
+            <div class="row media-body">
+                {{subString (htmlDelete contents) 0 150 }}
+                <span class="badge">{{replyCnt}}</span>
+            </div>
+            <div class="pull-left">
+                <span class="nickname"><i class="fa fa-pencil-square-o"></i> {{userNick}}</span>
+                <!--<span class="comments"><i class="fa fa-eye"></i> {{viewCount}}</span>-->
+            </div>
+            <div class="pull-right">
+                <span class="recommends"><i class="fa fa-thumbs-o-up"></i>{{recommendCount}}</span>
+                <span class="insertDate"><i class="fa fa-clock-o"></i> {{insertDate}}</span>
+            </div>
         </div>
     </div>
 {{/each}}

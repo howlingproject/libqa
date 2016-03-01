@@ -178,8 +178,10 @@
         $.post('/loginPage', data).done(function(response){
             var result = jQuery.parseJSON(response);
 
+            console.log("@ result = " + result);
+
             if (result.status == true) {
-                $(location).attr('href', "{{returnUrl}}");
+                $(location).attr('href', result.returnUrl);
             }
         }).fail(function(response){
             console.log("# ERROR login : " + response.status);

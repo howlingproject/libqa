@@ -25,11 +25,18 @@
 <!-- popover-config end -->
 {{/partial}}
 
+{{# partial "style" }}
+    <link rel="stylesheet" href="/resource/public/ekko-lightbox/ekko-lightbox.min.css">
+    <link rel="stylesheet" href="/resource/public/ekko-lightbox/dark-theme.css">
+{{/partial}}
+
 {{# partial "script-page" }}
+    <script src="/resource/public/ekko-lightbox/ekko-lightbox.min.js"></script>
     <script type="text/javascript" src="/resource/app/js/feed/app.js"></script>
     <script type="text/javascript">
         $(function(){
-            FeedPager.init(FeedList.size(), MyFeed.moreList);
+            Feed.bindImageGallery();
+            FeedPager.init(FeedList.getSize(), MyFeed.moreList);
         });
     </script>
 {{/partial}}

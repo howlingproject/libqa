@@ -47,7 +47,8 @@
                 </span>
             </div>
             <!-- 최근 Q&A list start -->
-            <div id="recentQaListArea" style="margin-top: 15px"></div>
+            <div id="recentQaListArea"></div>
+            {{> qa/template/_recentList}}
             <!-- 최근 Q&A list end -->
             <!--// 최근 Q&A -->
 
@@ -64,7 +65,8 @@
             </div>
 
             <!-- 답변을 기다리는 Q&A list start -->
-            <div id="waitReplyQaListArea" style="margin-top: 15px"></div>
+            <div id="waitReplyQaListArea"></div>
+            {{> qa/template/_waitReplyList}}
             <!-- 답변을 기다리는 Q&A list end -->
 
             <!--// 답변을 기다리는 Q&A -->
@@ -92,8 +94,8 @@
         var Qa = {
             init : function(){
                 this.renderKeywordList();
-                this.renderRecentQaList('WEEK');
-                this.renderWaitReplyQaList('ALL');
+                //this.renderRecentQaList('WEEK');
+                //this.renderWaitReplyQaList('ALL');
                 this.renderDayType($('#recentQaDayTypeUl'));
                 this.renderDayType($('#waitReplyQaDayTypeUl'));
                 this.bindDayTypeEvent();

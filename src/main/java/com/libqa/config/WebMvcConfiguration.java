@@ -4,9 +4,9 @@ import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.springmvc.HandlebarsViewResolver;
 import com.libqa.application.helper.HandlebarsHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.ErrorPage;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -22,11 +22,11 @@ import javax.sql.DataSource;
 @Slf4j
 public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
     @Value("${environment.viewResolver.cached}")
-    private boolean viewResolverCached;
+    private String viewResolverCached;
 
     @Override
     public void addInterceptors(final InterceptorRegistry resistry) {
-        resistry.addInterceptor(new LoginUserHandlerInterceptor()).addPathPatterns("", "/*", "/**", "/*/**");
+        resistry.addInterceptor(new LoginUserHandlerInterceptor()).addPathPatterns("/", "/*", "/**", "/*/**");
     }
 
     @Override
@@ -40,30 +40,22 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
         viewResolver.setOrder(1);
         viewResolver.setPrefix("/WEB-INF/views/");
         viewResolver.setSuffix(".hbs");
-        viewResolver.setCache(viewResolverCached);
+        viewResolver.setCache(BooleanUtils.toBoolean(viewResolverCached));
         viewResolver.registerHelpers(new HandlebarsHelper());
         viewResolver.registerHelpers(StringHelpers.class);
         return viewResolver;
     }
 
-
     @Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
-
-        return new EmbeddedServletContainerCustomizer() {
-            @Override
-            public void customize(ConfigurableEmbeddedServletContainer container) {
-
-                ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/401.html");
-                ErrorPage error403Page = new ErrorPage(HttpStatus.FORBIDDEN, "/403.html");
-                ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/404.html");
-                ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html");
-
-                container.addErrorPages(error401Page, error403Page, error404Page, error500Page);
-            }
+        return container -> {
+            ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/401.html");
+            ErrorPage error403Page = new ErrorPage(HttpStatus.FORBIDDEN, "/403.html");
+            ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/404.html");
+            ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html");
+            container.addErrorPages(error401Page, error403Page, error404Page, error500Page);
         };
     }
-
 
     @Bean
     @ConfigurationProperties("spring.datasource")

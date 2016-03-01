@@ -1,12 +1,11 @@
 package com.libqa.web.controller;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.primitives.Ints;
 import com.libqa.application.enums.ListType;
 import com.libqa.application.enums.WikiLikesType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.application.framework.ResponseData;
-import com.libqa.application.util.LoggedUser;
+import com.libqa.application.util.LoggedUserManager;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.ActivityService;
@@ -15,7 +14,6 @@ import com.libqa.web.service.common.KeywordService;
 import com.libqa.web.service.space.SpaceService;
 import com.libqa.web.service.wiki.WikiReplyService;
 import com.libqa.web.service.wiki.WikiService;
-import com.libqa.web.view.space.SpaceWikiList;
 import com.libqa.web.view.wiki.DisplayWiki;
 import com.libqa.web.view.wiki.DisplayWikiLike;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +58,7 @@ public class WikiController {
     private ActivityService activityService;
 
     @Autowired
-    private LoggedUser loggedUser;
+    private LoggedUserManager loggedUserManager;
 
     @RequestMapping("wiki/main")
     public ModelAndView main(Model model){
@@ -69,7 +67,7 @@ public class WikiController {
         List<DisplayWiki> allWiki = wikiService.findByAllWiki(0, 10);
         mav.addObject("allWiki", allWiki);
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         if(isUser(user)){
             Integer userId = user.getUserId();
             List<DisplayWiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
@@ -178,7 +176,7 @@ public class WikiController {
         log.debug("# wikiId : {}", wikiId);
 
         Wiki wiki = wikiService.findById(wikiId);
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         int userId = user.getUserId();
         try {
             //위키만든 유저만 삭제가능
@@ -202,7 +200,7 @@ public class WikiController {
     public ModelAndView wikiLock(@PathVariable Integer wikiId) {
         log.debug("# wikiId : {}", wikiId);
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         int userId = user.getUserId();
 
         Wiki wiki = wikiService.findById(wikiId);
@@ -224,7 +222,7 @@ public class WikiController {
             log.debug("####### WIKI SAVE Begin INFO ########");
             log.debug("wiki = {}", wiki);
             log.debug("wiki.wikiFile = {}", wiki.getWikiFiles());
-            User user = loggedUser.get();
+            User user = loggedUserManager.getUser();
             Date now = new Date();
             wiki.setUserNick(user.getUserNick());
             wiki.setUserId(user.getUserId());
@@ -276,7 +274,7 @@ wiki.setOrderIdx( maxOrderIdx+1 );
             log.debug("wiki = {}", paramWiki);
             log.debug("wiki.wikiFile = {}", paramWiki.getWikiFiles());
 
-            User user = loggedUser.get();
+            User user = loggedUserManager.getUser();
             Integer wikiId = paramWiki.getWikiId();
 
             Wiki currentWiki = wikiService.findById(wikiId);
@@ -346,7 +344,7 @@ wiki.setOrderIdx( maxOrderIdx+1 );
             mav.addObject("listTitle","베스트 위키 List");
 
         }else if( ListType.RESENT.getName().equals(listType) ){
-            User user = loggedUser.get();
+            User user = loggedUserManager.getUser();
             int userId = 0;
             if(isUser(user)){
                 userId = user.getUserId();
@@ -396,7 +394,7 @@ wiki.setOrderIdx( maxOrderIdx+1 );
 
         DisplayWikiLike displayWikiLike = null;
         try{
-            User user = loggedUser.get();
+            User user = loggedUserManager.getUser();
             if(isUser(user)){
                 WikiLike wikiLike = new WikiLike();
                 wikiLike.setUserId(user.getUserId());
@@ -420,7 +418,7 @@ wiki.setOrderIdx( maxOrderIdx+1 );
         try{
             log.debug("####### WIKI SAVE Begin INFO ########");
             log.debug("wiki = {}", wikiReply);
-            User user = loggedUser.get();
+            User user = loggedUserManager.getUser();
 
             wikiReply.setUserNick(user.getUserNick());
             wikiReply.setUserId(user.getUserId());

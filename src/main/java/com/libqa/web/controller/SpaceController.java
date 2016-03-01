@@ -1,10 +1,11 @@
 package com.libqa.web.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.libqa.application.enums.ActivityType;
 import com.libqa.application.framework.ResponseData;
-import com.libqa.application.util.LoggedUser;
+import com.libqa.application.util.LoggedUserManager;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.ActivityService;
@@ -13,7 +14,10 @@ import com.libqa.web.service.space.SpaceService;
 import com.libqa.web.service.user.UserFavoriteService;
 import com.libqa.web.service.user.UserService;
 import com.libqa.web.service.wiki.WikiService;
-import com.libqa.web.view.space.*;
+import com.libqa.web.view.space.SpaceActivityList;
+import com.libqa.web.view.space.SpaceMain;
+import com.libqa.web.view.space.SpaceWikiList;
+import com.libqa.web.view.space.WikiTree;
 import com.libqa.web.view.wiki.DisplayWiki;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +30,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -63,7 +67,7 @@ public class SpaceController {
 
 
     @Autowired
-    private LoggedUser loggedUser;
+    private LoggedUserManager loggedUserManager;
 
     /**
      * 파일 업로드 테스트용 페이지
@@ -103,7 +107,7 @@ public class SpaceController {
             spaceMainList.add(spaceMain);
         }
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
 
         if (user == null || user.isGuest()) {
             log.debug("# 로그인 사용자 정보가 존재하지 않습니다.");
@@ -150,6 +154,7 @@ public class SpaceController {
             spaceWikiLists.add(spaceWikiList);
         }
 
+
         mav.addObject("readMoreCount", spaces.size());
         mav.addObject("spaceMainList", spaceMainList);
         mav.addObject("spaceWikiLists", spaceWikiLists);
@@ -166,7 +171,7 @@ public class SpaceController {
     public ModelAndView form(Model model) {
         log.debug("# message : {}", message);
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         UserFavorite userFavorite = null;
 
         if (user == null) {
@@ -185,7 +190,7 @@ public class SpaceController {
     @RequestMapping(value = "/space/add", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<Space> saveSpace(@ModelAttribute Space space, @ModelAttribute Keyword keyword) throws IllegalAccessException {
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
 
         if (user == null) {
             throw new IllegalAccessException("로그인 정보가 필요합니다.");
@@ -195,6 +200,7 @@ public class SpaceController {
         space.setInsertDate(new Date());
         space.setInsertUserId(user.getUserId());
         space.setInsertUserNick(user.getUserNick());
+        space.setUpdateDate(new Date());
 
         Space result = spaceService.saveWithKeyword(space, keyword, ActivityType.CREATE_SPACE);
         log.debug("#result : [{}]", result);
@@ -210,7 +216,7 @@ public class SpaceController {
     @RequestMapping(value = "/space/edit/{spaceId}", method = RequestMethod.GET)
     public ModelAndView editSpace(@PathVariable Integer spaceId) throws IllegalAccessException {
         Space space = spaceService.findOne(spaceId);
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         if (space.getInsertUserId() != user.getUserId()) {
             throw new IllegalAccessException("공간을 수정할 권한이 없습니다.");
         }
@@ -226,7 +232,7 @@ public class SpaceController {
     @RequestMapping(value = "/space/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<Space>  updateSpace(@ModelAttribute Space space, @ModelAttribute Keyword keyword) throws IllegalAccessException {
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
 
         if (user == null) {
             throw new IllegalAccessException("로그인 정보가 필요합니다.");
@@ -302,7 +308,7 @@ public class SpaceController {
             spaceActivityLists.add(spaceActivity);
         }
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         UserFavorite userFavorite = null;
 
         if (user == null) {
@@ -318,6 +324,38 @@ public class SpaceController {
         }
         log.debug("# spaceWikis : {}", spaceWikis);
 
+
+        List<Wiki> wikiListInSpace = wikiService.findBySpaceIdAndSort(spaceId);
+        List<WikiTree> wikiTrees = bindWikiTree(wikiListInSpace);
+
+        log.info("### wikiTrees : {}", wikiTrees);
+
+
+        for (int i = 0; i < wikiTrees.size(); i++) {
+            if (wikiTrees.get(i).getWikiId() == wikiTrees.get(i).getParentsId()) {
+                continue;
+            } else {
+                // 자식 위키가 있음
+                setChild(wikiTrees, wikiTrees.get(i).getParentsId());
+            }
+        }
+
+        int depth = 0;
+        for (int x = 0; x < wikiTrees.size(); x++) {
+            if (depth != 0 && depth == wikiTrees.get(x).getDepthIdx()) {
+                wikiTrees.get(x-1).setHasBrother(true);
+            }
+
+            depth = wikiTrees.get(x).getDepthIdx();
+        }
+
+
+
+        System.out.println("@@@ wikiList : " + wikiTrees);
+        String trees = htmlTree(wikiTrees);
+        System.out.println("##### trees : " + trees);
+
+        mav.addObject("trees", trees);
         mav.addObject("spaceWikis", spaceWikis);
         mav.addObject("updatedWikis", updatedWikis);
         mav.addObject("space", space);
@@ -325,8 +363,100 @@ public class SpaceController {
         mav.addObject("userFavorite", userFavorite);
         mav.addObject("activities", activities);
         mav.addObject("spaceActivityLists", spaceActivityLists);
+
+
         return mav;
     }
+
+    private String htmlTree(List<WikiTree> wikiList) {
+        String appendTag = "<ul id=\"tree\">\n";
+        int groupId = 0;
+        int depth = 0;
+
+        for (int i = 0; i < wikiList.size(); i++) {
+            System.out.println(i + "번째  ## group = " + wikiList.get(i).getGroupIdx()
+                    + " ## parentId = " + wikiList.get(i).getParentsId()
+                    + " ## wikiId = " + wikiList.get(i).getWikiId()
+                    + " ## depth = " + wikiList.get(i).getDepthIdx()
+                    + " ## child = " + wikiList.get(i).isHasChild()
+                    + " ## brother = " + wikiList.get(i).isHasBrother()
+                    + " || title = " + wikiList.get(i).getTitle() );
+            boolean isClosed = wikiList.get(i).getDepthIdx() < depth;
+
+            if (groupId != wikiList.get(i).getGroupIdx()) { //새로은 그룹 아이디일 경우 새로운 li생성
+
+                if (isClosed) {
+                    appendTag += " \t\t</li>\n\t</ul>\n</li>\n";
+                }
+
+                appendTag += "\t<li><strong><a href=\"#\">" + wikiList.get(i).getTitle() +"</a></strong>\n";
+
+                if (wikiList.get(i).isHasChild() == true) {
+                    appendTag += "\t<ul>\n";
+                }
+            } else {
+
+                System.out.println("depth = " + depth + " listDepth = " + wikiList.get(i).getDepthIdx() + " isClose =" + isClosed);
+
+                if (isClosed) {
+                    appendTag += "\t\t</li>\n\t</ul>\n";
+                    appendTag += "\t\t</li>\n";
+                }
+                appendTag += "\t\t<li><a href=\"#\">" + wikiList.get(i).getTitle() +"</a>";
+                if (wikiList.get(i).isHasChild() == true) {
+                    appendTag += "\n\t\t<ul>\n";
+                } else {
+                    if (!wikiList.get(i).isHasBrother()) {
+                        appendTag += "</li>\n\t\t</ul>\n";
+                    } else {
+                        appendTag += "</li>\n";
+                    }
+                }
+            }
+
+
+            if (wikiList.size() - 1 == i) { // 마지막 태그
+                if (!wikiList.get(i).isHasBrother()) {
+                    appendTag += "\t</li>\n";
+                }
+            }
+            depth = wikiList.get(i).getDepthIdx();
+            groupId = wikiList.get(i).getGroupIdx();
+
+        }
+        appendTag += "</ul>";
+        return appendTag;
+    }
+
+
+    private void setChild(List<WikiTree> wikiList, int parentId) {
+        for (WikiTree tree : wikiList) {
+            if (parentId == tree.getWikiId()) {
+                tree.setHasChild(true);
+            }
+        }
+    }
+
+    private List<WikiTree> bindWikiTree(List<Wiki> wikiListInSpace) {
+        List<WikiTree> wikiTrees = new ArrayList<>();
+
+
+        for (Wiki wiki : wikiListInSpace) {
+            WikiTree wikiTree = new WikiTree();
+
+            wikiTree.setWikiId(wiki.getWikiId());
+            wikiTree.setTitle(wiki.getTitle());
+            wikiTree.setDepthIdx(wiki.getDepthIdx());
+            wikiTree.setGroupIdx(wiki.getGroupIdx());
+            wikiTree.setOrderIdx(wiki.getOrderIdx());
+            wikiTree.setParentsId(wiki.getParentsId());
+            wikiTrees.add(wikiTree);
+        }
+
+        return wikiTrees;
+    }
+
+
 
     /**
      * 개설된 공간 수 조회
@@ -355,7 +485,7 @@ public class SpaceController {
     @ResponseBody
     public String addFavorite(@RequestParam Integer spaceId) {
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
 
         log.debug("### user = {}", user);
 
@@ -380,7 +510,7 @@ public class SpaceController {
     @ResponseBody
     public String cancelFavorite(@RequestParam Integer spaceId) {
 
-        User user = loggedUser.get();
+        User user = loggedUserManager.getUser();
         if (user.isGuest()) {
             log.debug("# 로그인 사용자 정보가 존재하지 않습니다.");
             return "0";
@@ -399,10 +529,13 @@ public class SpaceController {
         return mav;
     }
 
-
+    /*
     @RequestMapping("/space/wikis")
     @ResponseBody
     public Collection wikiLists(@RequestParam Integer spaceId) {
+        List<Wiki> wikiList = wikiService.findBySpaceId(spaceId);
+
+
         List<WikiTree> defaultData = new ArrayList<>();
 
         WikiTreeNode wikiTreeNode = new WikiTreeNode();
@@ -420,9 +553,33 @@ public class SpaceController {
 
         defaultData.add(data);
 
+        log.info("### defaultData = {}", defaultData);
         return defaultData;
 
     }
+    */
+    @RequestMapping(value = "/space/tree", method = RequestMethod.POST)
+    @ResponseBody
+    public String treeJson(@RequestParam Integer spaceId) throws IOException {
+        List<Wiki> wikiListInSpace = wikiService.findBySpaceIdAndSort(spaceId);
+        List<WikiTree> wikiList = bindWikiTree(wikiListInSpace);
+
+        for (int i = 0; i < wikiList.size(); i++) {
+            if (wikiList.get(i).getWikiId() == wikiList.get(i).getParentsId()) {
+                continue;
+            } else {
+                // 자식 위키가 있음
+                setChild(wikiList, wikiList.get(i).getParentsId());
+            }
+        }
+        ObjectMapper om = new ObjectMapper();
+
+        // {"success" : true, "returnUrl" : "..."}
+        String jsonString = om.writeValueAsString(wikiList);
+        log.info("### json = " + jsonString);
+        return jsonString;
+    }
+
 
     public ModelAndView sendAccessDenied() {
         ModelAndView mav = new ModelAndView("/common/403");

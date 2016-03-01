@@ -7,37 +7,28 @@ To change this template use File | Settings | File Templates.
 --}}
 {{#partial "style"}}
 {{!-- 여기에 사용자 css 정의 --}}
-<style type="text/css">
-    {
-        height:100%;
-    }
-    header
-    {
-        background: green;
-        height: 50px;
-    }
-
-    .row
-    {
-        height: 100%;
-        display: table-row;
-    }
-    .col-md-3.no-float, .col-md-9.no-float {
-        float: none; /* thanks baxabbit */
-    }
-    .col-md-3
-    {
-        display: table-cell;
-        background: #eeeeee;
-        width: 25%;
-    }
-    .col-md-9
-    {
-        display: table-cell;
-        background: #ffffff;
-        width: 75%;
-    }
-</style>
+    <style type="text/css" xmlns="http://www.w3.org/1999/html">
+        .row
+        {
+            height: 100%;
+            display: table-row;
+        }
+        .col-md-3.no-float, .col-md-9.no-float {
+            float: none; /* thanks baxabbit */
+        }
+        .col-md-3
+        {
+            display: table-cell;
+            background: #eeeeee;
+            width: 25%;
+        }
+        .col-md-9
+        {
+            display: table-cell;
+            background: #ffffff;
+            width: 75%;
+        }
+    </style>
 {{/partial}}
 {{#partial "plugin-style"}}
     <link href="/resource/public/css/layout-default-latest.css" rel="stylesheet">
@@ -60,22 +51,26 @@ To change this template use File | Settings | File Templates.
     <div class="row">
         <div class="col-md-3 no-float vcenter" >
             <div class="col-sm-12" style="padding: 10px">
-                <div class="pull-right" style="padding-top: 7px;cursor: pointer;"><i class="fa fa-times fa-1"></i></div>
-                <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:5px">전체위키</h4>
+                <input type="hidden" name="spaceId" value="{{space.spaceId}}">
+                <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:5px">
+                    <div id="sidetreecontrol"><a href="?#">전체 닫기</a> | <a href="?#">전체 열기</a></div>
+                </h4>
+                {{#if trees}}
+                    {{{trees}}}
+                {{^}}
+                    생성된 위키기 없습니다.
+                {{/if}}
+                {{!--
+                {{#if spaceWikis}}
 
-                <div id="treeview" class=""></div>
+                {{#each spaceWikis}}
+                    <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
+                {{/each}}
 
-{{!--
-{{#if spaceWikis}}
-
-{{#each spaceWikis}}
-    <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
-{{/each}}
-
-{{^}}
-    생성된 위키가 없습니다.
-{{/if}}
---}}
+                {{^}}
+                    생성된 위키가 없습니다.
+                {{/if}}
+                --}}
             </div>
         </div>
         <div class="col-md-9 no-float">
@@ -115,12 +110,36 @@ To change this template use File | Settings | File Templates.
 
 
 {{# partial "script-page" }}
-    <link href="/resource/public/js/jquery/plugin/bootstrap-treeview-1.2.0/bootstrap-treeview.min.css" rel="stylesheet" />
-    <script type="text/javascript" src="/resource/public/js/jquery/plugin/bootstrap-treeview-1.2.0/bootstrap-treeview.min.js"></script>
+    <link href="/resource/public/css/jquery.treeview.css" rel="stylesheet" />
+    <script type="text/javascript" src="/resource/public/js/jquery/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/resource/public/js/jquery/jquery.treeview.js"></script>
     <script type="text/javascript">
         // bind the on-change event
         $(document).ready(function() {
+
             var userFavorite = "{{userFavorite}}";
+            // https://github.com/jonmiles/bootstrap-treeview 으로 변경할 예정
+            $.ajax({
+                url: "/space/tree",
+                type: "POST",
+                data: { spaceId : $('[name=spaceId]').val() },
+                success : function(response){
+                    console.log("# response = " + response);
+                    alert(response);
+                },
+                error : function(req){
+                    // Handle upload error
+                    alert(' 에러코드 [' + req.status + ']');
+                }
+            });
+
+
+            $("#tree").treeview({
+                collapsed: true,
+                animated: "fast",
+                control:"#sidetreecontrol",
+                persist: "location"
+            });
 
             console.log("## userFavorite = " + userFavorite);
 
@@ -242,71 +261,9 @@ To change this template use File | Settings | File Templates.
                     }
                 })
             });
-
-
-            var defaultData = [
-                {
-                    text: 'Parent 1',
-                    href: '#parent1',
-                    tags: ['4'],
-                    nodes: [
-                        {
-                            text: 'Child 1',
-                            href: '#child1',
-                            tags: ['2'],
-                            nodes: [
-                                {
-                                    text: 'Grandchild 1',
-                                    href: '#grandchild1',
-                                    tags: ['0']
-                                },
-                                {
-                                    text: 'Grandchild 2',
-                                    href: '#grandchild2',
-                                    tags: ['0']
-                                }
-                            ]
-                        },
-                        {
-                            text: 'Child 2',
-                            href: '#child2',
-                            tags: ['0']
-                        }
-                    ]
-                },
-                {
-                    text: 'Parent 2',
-                    href: '#parent2',
-                    tags: ['0']
-                },
-                {
-                    text: 'Parent 3',
-                    href: '#parent3',
-                    tags: ['0']
-                },
-                {
-                    text: 'Parent 4',
-                    href: '#parent4',
-                    tags: ['0']
-                },
-                {
-                    text: 'Parent 5',
-                    href: '#parent5'  ,
-                    tags: ['0']
-                }
-            ];
-
-            $('#treeview').treeview({
-                color: "#428bca",
-                showBorder: false,
-                backColor : "#eeeeee",
-                expandIcon: "glyphicon glyphicon-stop",
-                collapseIcon: "glyphicon glyphicon-unchecked",
-                showTags: true,
-                data: defaultData
-            });
-
         });
+
+
     </script>
 {{/partial}}
 

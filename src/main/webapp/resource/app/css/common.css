@@ -71,12 +71,13 @@ div.index-container a { text-decoration: none; color: #000000; }
 div.index-container div.index-thread-box h2 {border-bottom: 1px solid #eee; padding-bottom: 8px;}
 div.index-container div.index-thread-box h2 i {top:4px;}
 div.index-container div.index-thread-box.first h2 {margin-top:0; margin-bottom:0;}
-div.index-container div.index-thread-item {border-bottom: 1px solid #eee; padding-top: 10px; padding-bottom: 10px; }
+div.index-container div.index-thread-box span.notice-more { margin-top: 5px; padding:5px 10px 8px 10px;cursor: pointer; }
+div.index-container div.index-thread-item { padding-top: 10px; padding-bottom: 10px; }
 div.index-container div.index-thread-item .title { display: inline;}
 div.index-container div.index-thread-item .nickname {padding-left:5px;}
 div.index-container div.index-thread-item .media-body {height:40px; padding-left:5px;}
 div.index-container div.index-thread-item .media-body a {color: #0f0f0f;}
-div.index-container div.index-thread-item .media-body .comments {margin-left:10px; color: #2fa4e7; padding-right: 5px;}
+div.index-container div.index-thread-item .comments {margin-left:10px; color: #2fa4e7; padding-right: 5px;}
 
 /**
 * Feed
@@ -116,6 +117,7 @@ div.index-container div.index-thread-item .media-body .comments {margin-left:10p
 .feed ul li ul li .config { background: none repeat scroll 0 0 transparent; right: 10px; }
 .feed ul li .feed-comment button{ margin-left:-15px;}
 .feed .btn-feed-more {width:100%; margin-left: auto; margin-right: auto; display:none;}
+.feed-image-loader {text-align: center; display:block; margin-top:30%; margin-left: auto; margin-right:auto;}
 
 .best-feed { max-height: 600px; overflow-y:scroll;}
 .best-feed .media-body {cursor: pointer;}
@@ -163,6 +165,10 @@ div.qna-item.contents {cursor: pointer}
 
 div.best-qna-item {border-bottom: 1px solid #eee; padding-top: 15px; padding-bottom: 15px; }
 div.best-qna-item .media{}
+div.best-qna-item .media .media-body{height: 70px;}
+div.best-qna-item .best-qna-item-body{ height:48px;}
+
+div.best-qna-item .media .recommends, div.best-qna-item .media .insertDate{ margin-left: 10px; }
 
 div.qna-rating-info {width:30px; padding:0px; margin-left:5px;}
 div.best-qna-bottom {font-size: 14px; margin: 5px 0 0 10px; padding-left: 10px;}

@@ -19,7 +19,7 @@ public class DisplayFeedReply {
     @Setter
     private DisplayFeedAction claimFeedAction;
 
-    public DisplayFeedReply(FeedReply feedReply) {
+    DisplayFeedReply(FeedReply feedReply) {
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
         this.insertDate = DisplayDate.parse(feedReply.getInsertDate());
@@ -28,7 +28,7 @@ public class DisplayFeedReply {
         this.claimFeedAction = createNotYetFeedAction();
     }
 
-    public DisplayFeedReply(FeedReply feedReply, User user, Boolean isWriter) {
+    DisplayFeedReply(FeedReply feedReply, User user, Boolean isWriter) {
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
         this.userImage = user.getUserImage();

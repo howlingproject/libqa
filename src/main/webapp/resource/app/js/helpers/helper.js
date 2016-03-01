@@ -57,3 +57,22 @@ Handlebars.registerHelper('keywordBadge', function(keywordName){
             return "<span class=\"label label-default\">" + keywordName +"</span>";
     }
 });
+
+Handlebars.registerHelper('subString', function(html, startIdx, endIdx){
+    if( html == null ){
+        return html;
+    }
+
+    if( html.length > endIdx ){
+        return html.substring(startIdx, endIdx)+ "...";
+    }
+    return html;
+});
+
+Handlebars.registerHelper('htmlDelete', function(html){
+    if( html == null ){
+        return html;
+    }
+    var returnString = new Handlebars.SafeString(html);
+    return returnString.string;
+});

@@ -93,17 +93,24 @@
     <div class="button"><a href="javascript:void(0);" onclick="Feed.modifyItem(this);">수정</a></div>
     <div class="button"><a href="javascript:void(0);" onclick="Feed.removeItem(this);">삭제</a></div>
 </div>
+
 <!-- popover-config end -->
 {{/partial}}
 
+{{# partial "style" }}
+    <link rel="stylesheet" href="/resource/public/ekko-lightbox/ekko-lightbox.min.css">
+    <link rel="stylesheet" href="/resource/public/ekko-lightbox/dark-theme.css">
+{{/partial}}
+
 {{# partial "script-page" }}
-<script type="text/javascript" src="/resource/app/js/feed/app.js"></script>
-<script type="text/javascript">
-    $(function(){
-        Feed.init();
-        FeedPager.init(FeedList.size(), Feed.moreList);
-    });
-</script>
+    <script src="/resource/public/ekko-lightbox/ekko-lightbox.min.js"></script>
+    <script type="text/javascript" src="/resource/app/js/feed/app.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            Feed.init();
+            FeedPager.init(FeedList.getSize(), Feed.moreList);
+        });
+    </script>
 {{/partial}}
 
 {{> template/base}}
