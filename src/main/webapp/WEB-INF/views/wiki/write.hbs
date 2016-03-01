@@ -21,7 +21,7 @@
                             <label for="space_title" class="col-sm-1 control-label">공간제목</label>
                             <div class="col-sm-11">
                                 {{#if space.spaceId}}
-                                    <input type="text" class="form-control" id="space_title" placeholder="{{space.title}}">
+                                    <input type="text" class="form-control" id="space_title" placeholder="{{space.title}}" readonly>
                                     <input type="hidden" id="spaceId" name="spaceId" value="{{space.spaceId}}">
                                 {{else}}
                                     <select class="form-control" id="spaceId" name="spaceId">
