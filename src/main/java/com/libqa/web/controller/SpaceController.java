@@ -14,10 +14,7 @@ import com.libqa.web.service.space.SpaceService;
 import com.libqa.web.service.user.UserFavoriteService;
 import com.libqa.web.service.user.UserService;
 import com.libqa.web.service.wiki.WikiService;
-import com.libqa.web.view.space.SpaceActivityList;
-import com.libqa.web.view.space.SpaceMain;
-import com.libqa.web.view.space.SpaceWikiList;
-import com.libqa.web.view.space.WikiTree;
+import com.libqa.web.view.space.*;
 import com.libqa.web.view.wiki.DisplayWiki;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -414,16 +411,15 @@ public class SpaceController {
         List<Wiki> wikiListInSpace = wikiService.findBySpaceIdAndSort(spaceId);
         List<TreeModel> wikiList = bindTree(wikiListInSpace);
 
-        /*
         for (int i = 0; i < wikiList.size(); i++) {
-            if (wikiList.get(i).getWikiId() == wikiList.get(i).getParentsId()) {
+            if (wikiList.get(i).getId() == wikiList.get(i).getParentId()) {
                 continue;
             } else {
                 // 자식 위키가 있음
-                setChild(wikiList, wikiList.get(i).getParentsId());
+                setChild(wikiList, wikiList.get(i).getParentId());
             }
         }
-        */
+
         ObjectMapper om = new ObjectMapper();
 
         // {"success" : true, "returnUrl" : "..."}
@@ -448,7 +444,10 @@ public class SpaceController {
             }
             model.setId(wiki.getWikiId());
             model.setText(wiki.getTitle());
-            model.setNodes(null);
+            String[] counts = new String[1];
+            counts[0] = wiki.getReplyCount()+"";
+            model.setTags(counts);
+            //model.setNodes(null);
             model.setHref("/wiki/" + wiki.getWikiId());
 
             models.add(model);
@@ -457,6 +456,15 @@ public class SpaceController {
 
         return models;
     }
+
+    private void setChild(List<TreeModel> wikiList, int parentId) {
+        for (TreeModel tree : wikiList) {
+            if (parentId == tree.getId()) {
+                tree.setHasChild(true);
+            }
+        }
+    }
+
 
 
     public ModelAndView sendAccessDenied() {

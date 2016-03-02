@@ -19,7 +19,8 @@ public class TreeModel {
     private String text;
     private Integer parentId;
     private String href;
-    private int tags;
+    private String[] tags = new String[0];
 
-    private List<TreeModel> nodes = new ArrayList<>();
+    private boolean hasChild;
+
 }

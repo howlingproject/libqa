@@ -123,15 +123,23 @@ To change this template use File | Settings | File Templates.
                 success : function(response){
                     console.log("# response = " + response);
                     //var r = convert(JSON.parse(response));
-                    var defaultData = unflatten(JSON.parse(response) );
+                    var defaultData = makeTree(JSON.parse(response) );
 
                     console.log("## defaultData = " + JSON.stringify(defaultData, null, " "));
 
+
                     $('#treeview').treeview({
                         color: "#428bca",
+                        backColor : "#eeeeee",
+                        onhoverColor: "#eeeeee",
                         showBorder: false,
+                        showTags: true,
+                        highlightSelected: false,
+                        levels: 1,
+                        enableLinks: true,
                         data: JSON.stringify(defaultData, null, " ")
                     });
+
                 },
                 error : function(req){
                     // Handle upload error
@@ -263,20 +271,24 @@ To change this template use File | Settings | File Templates.
         });
 
 
-        function unflatten(arr) {
+        function makeTree(arr) {
             var tree = [], mappedArr = {}, arrElem, mappedElem;
             // TODO  하위 트리가 없을 경우 node 에 푸시 하지 않음
             // First map the nodes of the array to an object -> create a hash table.
             for(var i = 0, len = arr.length; i < len; i++) {
                 arrElem = arr[i];
+                console.log("## arrElem.id : " + arrElem.id);
+
                 mappedArr[arrElem.id] = arrElem;
-                mappedArr[arrElem.id]['nodes'] = [];
+                if (arrElem.hasChild) {
+                    mappedArr[arrElem.id]['nodes'] = [];
+                }
             }
 
             for (var id in mappedArr) {
                 if (mappedArr.hasOwnProperty(id)) {
                     mappedElem = mappedArr[id];
-                    console.log("mappedElem.parentId = " + mappedElem.parentId);
+                    console.log("## mappedElem : " + mappedElem);
                     // If the element is not at the root level, add it to its parent array of children.
                     if (mappedElem.parentId) {
                         mappedArr[mappedElem['parentId']]['nodes'].push(mappedElem);
