@@ -291,7 +291,7 @@ public class SpaceController {
 
         // 최근 수정된 위키 목록
         List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
-        List<Wiki> spaceWikis = wikiService.findBySpaceId(spaceId);
+
 
         // 이 공간의 활동 내역을 조회한다. 저장일 역순
         List<Activity> activities = activityService.findBySpaceId(spaceId);
@@ -319,9 +319,7 @@ public class SpaceController {
             List<UserFavorite> userFavorites = userFavoriteService.findBySpaceIdAndUserIdAndIsDeleted(spaceId, user.getUserId(), false);
             userFavorite = Iterables.getFirst(userFavorites, null);
         }
-        log.debug("# spaceWikis : {}", spaceWikis);
 
-        mav.addObject("spaceWikis", spaceWikis);
         mav.addObject("updatedWikis", updatedWikis);
         mav.addObject("space", space);
         mav.addObject("spaceUser", spaceUser);

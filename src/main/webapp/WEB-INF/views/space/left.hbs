@@ -50,23 +50,21 @@ To change this template use File | Settings | File Templates.
     </div>
     <div class="row">
         <div class="col-md-3 no-float vcenter" >
-            <div class="col-sm-12" style="padding: 10px">
-                <input type="hidden" name="spaceId" value="{{space.spaceId}}">
-                <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:5px">
-                    <div id="sidetreecontrol"><a href="?#">전체 닫기</a> | <a href="?#">전체 열기</a></div>
-                </h4>
+            <input type="hidden" name="spaceId" value="{{space.spaceId}}">
+            <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:10px;padding-top:10px">
+                <div id="sidetreecontrol"><a href="?#">전체 닫기</a> | <a href="?#">전체 열기</a></div>
+            </h4>
 
-                <div id="treeview" class=""></div>
+            <div id="treeview" class=""></div>
 
 
-                {{!--
-                {{#if trees}}
-                    {{{trees}}}
-                {{^}}
-                    생성된 위키기 없습니다.
-                {{/if}}
-                --}}
-            </div>
+            {{!--
+            {{#if trees}}
+                {{{trees}}}
+            {{^}}
+                생성된 위키기 없습니다.
+            {{/if}}
+            --}}
         </div>
         <div class="col-md-9 no-float">
             <div class="col-sm-11">
