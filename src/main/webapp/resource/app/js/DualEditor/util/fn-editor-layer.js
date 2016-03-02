@@ -182,6 +182,12 @@ var jisung;
                     "<div class=\"modal fade\" id=\"urlModal\" data-keyboard='false' role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">" +
                     "   <div class=\"modal-dialog\">" +
                     "     <div class=\"modal-content\">" +
+                    "     	<div class=\"modal-header\">" +
+                    "           <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">" +
+                    "               <span aria-hidden=\"true\">&times;</span>" +
+                    "           </button>" +
+                    "           <h4 class=\"modal-title\">링크 마크업생성</h4>" +
+                    "       </div>" +
                     "     	<div class=\"modal-body\">" +
                     " 			<form class=\"form\" role=\"form\">" +
                     " 				<div class=\"form-group\">" +
@@ -236,10 +242,16 @@ var jisung;
                 "<div class=\"modal fade\" id=\"imgModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">" +
                 "   <div class=\"modal-dialog\">" +
                 "     <div class=\"modal-content\">" +
+                "     	<div class=\"modal-header\">" +
+                "           <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">" +
+                "               <span aria-hidden=\"true\">&times;</span>" +
+                "           </button>" +
+                "           <h4 class=\"modal-title\">이미지 마크업생성</h4>" +
+                "       </div>" +
                 "     	<div class=\"modal-body\">" +
                 "     	    <ul class=\"nav nav-tabs\" role=\"tablist\">" +
-                "     	        <li role=\"presentation\" class=\"active\"><a href=\"#imgLink\" data-id=\"imgLink\" role=\"tab\" data-toggle=\"tab\">Home</a></li>" +
-                "     	        <li role=\"presentation\"><a href=\"#imgUpload\" data-id=\"imgUpload\" role=\"tab\" data-toggle=\"tab\">Profile</a></li>" +
+                "     	        <li role=\"presentation\" class=\"active\"><a href=\"#imgLink\" data-id=\"imgLink\" role=\"tab\" data-toggle=\"tab\">Link</a></li>" +
+                "     	        <li role=\"presentation\"><a href=\"#imgUpload\" data-id=\"imgUpload\" role=\"tab\" data-toggle=\"tab\">Upload</a></li>" +
                 "     	    </ul>" +
                 " 			<form class=\"form-horizontal\" style='padding-top: 10px;' role=\"form\">" +
                 "               <div class=\"tab-content\">" +

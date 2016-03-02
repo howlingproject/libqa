@@ -16,7 +16,7 @@
                 <li class="thread" data-feed-thread-id="{{feedThreadId}}">
                     <div class="author">
                         <div class="user-profile">
-                            <img alt="avatar" class="profile-image" src="{{userImage}}"/>
+                            <img alt="avatar" class="profile-image" src="{{userImage}}" onerror='this.src="/resource/images/avatar.png"' />
                         </div>
                     </div>
                     <div class="name">{{userNick}}</div>
@@ -43,31 +43,18 @@
                                 </form>
                             </div>
                             <div class="images text-center">
-                                {{#images}}
-                                    <a href="#" data-toggle="modal" data-target=".image-viewer-{{fileId}}"><img width="190" class="img-thumbnail" src="{{fullPath}}"/></a>
-                                    <div class="modal fade image-viewer-{{fileId}}" tabindex="-1" role="dialog"
-                                         aria-labelledby="imageModalLabel-{{fileId}}" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                                                    <h4 class="modal-title text-left"
-                                                        id="imageModalLabel-{{fileId}}">이미지 보기</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <img class="img-responsive img-rounded center-block" src="{{fullPath}}"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {{/images}}
+                                {{#each images}}
+                                    <a href="{{fullPath}}"
+                                       data-toggle="lightbox" data-title="Feed Image Viewer"
+                                       data-gallery="feed-images-{{../feedThreadId}}"><img width="190" class="img-thumbnail" src="{{fullPath}}" /></a>
+                                {{/each}}
                             </div>
                             <div class="attachment">
-                                {{#files}}
+                                {{#each files}}
                                     <a href="{{fullPath}}" target="_blank">
                                         <i class="fa fa-file-o"></i> {{realName}}
                                     </a>&nbsp;
-                                {{/files}}
+                                {{/each}}
                             </div>
                         </div>
                         <div class="action-buttons">
@@ -83,11 +70,11 @@
                     </div>
 
                     <ul class="feed-replies">
-                        {{#replies}}
+                        {{#each replies}}
                             <li class="reply-thread" data-feed-reply-id="{{feedReplyId}}">
                                 <div class="author">
                                     <div class="user-profile-sm">
-                                        <img alt="avatar" class="profile-image" src="{{userImage}}"/>
+                                        <img alt="avatar" class="profile-image" src="{{userImage}}" onerror='this.src="/resource/images/avatar.png"' />
                                     </div>
                                 </div>
                                 <div class="name">{{userNick}}</div>
@@ -111,7 +98,7 @@
                                     </div>
                                 </div>
                             </li>
-                        {{/replies}}
+                        {{/each}}
                     </ul>
 
                     <ul>
@@ -119,7 +106,6 @@
                             <div class="row">
                                 <form name="feedReplyForm" onsubmit="return false;">
                                     <input type="hidden" name="feedThread.feedThreadId" value="{{feedThreadId}}"/>
-
                                     <div class="col-xs-9 col-md-10">
                                         <input type="text" name="feedReplyContent" class="form-control input-sm"
                                                placeholder="댓글 입력">
@@ -146,10 +132,17 @@
 <!-- popover-config end -->
 {{/partial}}
 
+{{# partial "style" }}
+    <link rel="stylesheet" href="/resource/public/ekko-lightbox/ekko-lightbox.min.css">
+    <link rel="stylesheet" href="/resource/public/ekko-lightbox/dark-theme.css">
+{{/partial}}
+
 {{# partial "script-page" }}
+    <script src="/resource/public/ekko-lightbox/ekko-lightbox.min.js"></script>
     <script type="text/javascript" src="/resource/app/js/feed/app.js"></script>
     <script type="text/javascript">
         $(function(){
+            Feed.bindImageGallery();
             FeedReply.init();
             FeedUtil.bindPopOver();
         });
