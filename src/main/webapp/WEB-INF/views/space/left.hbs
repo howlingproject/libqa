@@ -37,6 +37,7 @@ To change this template use File | Settings | File Templates.
 {{#partial "script-header"}}
     <script src="/resource/public/js/jquery/jquery.layout-latest.js"></script>
     <script src="/resource/public/js/jquery/jquery-ui-latest.js"></script>
+    <script src="/resource/app/js/space/tree.js"></script>
 {{/partial}}
 
 
@@ -267,38 +268,6 @@ To change this template use File | Settings | File Templates.
                 })
             });
         });
-
-
-        function makeTree(arr) {
-            var tree = [], mappedArr = {}, arrElem, mappedElem;
-            // TODO  하위 트리가 없을 경우 node 에 푸시 하지 않음
-            // First map the nodes of the array to an object -> create a hash table.
-            for(var i = 0, len = arr.length; i < len; i++) {
-                arrElem = arr[i];
-                console.log("## arrElem.id : " + arrElem.id);
-
-                mappedArr[arrElem.id] = arrElem;
-                if (arrElem.hasChild) {
-                    mappedArr[arrElem.id]['nodes'] = [];
-                }
-            }
-
-            for (var id in mappedArr) {
-                if (mappedArr.hasOwnProperty(id)) {
-                    mappedElem = mappedArr[id];
-                    console.log("## mappedElem : " + mappedElem);
-                    // If the element is not at the root level, add it to its parent array of children.
-                    if (mappedElem.parentId) {
-                        mappedArr[mappedElem['parentId']]['nodes'].push(mappedElem);
-                    }
-                    // If the element is at the root level, add it to first level elements array.
-                    else {
-                        tree.push(mappedElem);
-                    }
-                }
-            }
-            return tree;
-        }
 
     </script>
 {{/partial}}
