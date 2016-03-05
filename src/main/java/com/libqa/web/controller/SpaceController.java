@@ -151,7 +151,6 @@ public class SpaceController {
             spaceWikiLists.add(spaceWikiList);
         }
 
-
         mav.addObject("readMoreCount", spaces.size());
         mav.addObject("spaceMainList", spaceMainList);
         mav.addObject("spaceWikiLists", spaceWikiLists);
@@ -174,7 +173,6 @@ public class SpaceController {
         if (user == null) {
             return sendAccessDenied();
         }
-
 
         ModelAndView mav = new ModelAndView("/space/form");
         mav.addObject("message", message);
@@ -280,25 +278,20 @@ public class SpaceController {
         Space space = spaceService.findOne(spaceId);
 
         User spaceUser = userService.findByUserId(space.getInsertUserId());
-
         // Space 생성시 선택한 Layout 옵션의 View를 보여준다.
         String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
-
         log.debug("# view : {}", view);
 
         ModelAndView mav = null;
 
-
         // 최근 수정된 위키 목록
         List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
-
 
         // 이 공간의 활동 내역을 조회한다. 저장일 역순
         List<Activity> activities = activityService.findBySpaceId(spaceId);
         List<SpaceActivityList> spaceActivityLists = new ArrayList<>();
 
         for (Activity activity : activities) {
-
             User userInfo = userService.findByUserId(activity.getUserId());
             SpaceActivityList spaceActivity = new SpaceActivityList(activity, userInfo);
 
@@ -462,8 +455,6 @@ public class SpaceController {
             }
         }
     }
-
-
 
     public ModelAndView sendAccessDenied() {
         ModelAndView mav = new ModelAndView("/common/403");
