@@ -284,9 +284,6 @@ public class SpaceController {
 
         ModelAndView mav = null;
 
-        // 최근 수정된 위키 목록
-        List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
-
         // 이 공간의 활동 내역을 조회한다. 저장일 역순
         List<Activity> activities = activityService.findBySpaceId(spaceId);
         List<SpaceActivityList> spaceActivityLists = new ArrayList<>();
@@ -298,6 +295,18 @@ public class SpaceController {
             spaceActivityLists.add(spaceActivity);
         }
 
+        // 최근 수정된 위키 목록
+        List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
+        List<SpaceWikiList> spaceWikiLists = new ArrayList<>();
+        for (Wiki wiki : updatedWikis) {
+            User user = userService.findByUserId(wiki.getUserId());
+            SpaceWikiList spaceWikiList = new SpaceWikiList();
+            spaceWikiList.setUser(user);
+            spaceWikiList.setWiki(wiki);
+            spaceWikiList.setReplyCount(wiki.getWikiReplies().size());
+            spaceWikiLists.add(spaceWikiList);
+        }
+
         User user = loggedUserManager.getUser();
         UserFavorite userFavorite = null;
 
@@ -307,19 +316,17 @@ public class SpaceController {
 
         mav = new ModelAndView(view);
 
-
         if (!user.isGuest()) {
             List<UserFavorite> userFavorites = userFavoriteService.findBySpaceIdAndUserIdAndIsDeleted(spaceId, user.getUserId(), false);
             userFavorite = Iterables.getFirst(userFavorites, null);
         }
 
-        mav.addObject("updatedWikis", updatedWikis);
+        mav.addObject("spaceWikiLists", spaceWikiLists);
         mav.addObject("space", space);
         mav.addObject("spaceUser", spaceUser);
         mav.addObject("userFavorite", userFavorite);
         mav.addObject("activities", activities);
         mav.addObject("spaceActivityLists", spaceActivityLists);
-
 
         return mav;
     }
