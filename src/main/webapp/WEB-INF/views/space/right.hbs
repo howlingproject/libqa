@@ -86,7 +86,9 @@ To change this template use File | Settings | File Templates.
         <div class="col-md-3 no-float vcenter" >
             <input type="hidden" name="spaceId" value="{{space.spaceId}}">
             <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:10px;padding-top:10px">
-                <div id="sidetreecontrol"><a href="?#">전체 닫기</a> | <a href="?#">전체 열기</a></div>
+                <div id="sidetreecontrol">
+                    <span id="btn-expand-all" style="cursor: pointer">전체열기</span> | <span id="btn-collapse-all" style="cursor: pointer">전체닫기</span>
+                </div>
             </h4>
 
             <div id="treeview" class=""></div>
@@ -101,13 +103,24 @@ To change this template use File | Settings | File Templates.
 
 {{# partial "script-page" }}
 
-    <link href="/resource/public/js/jquery/plugin/bootstrap-treeview-1.2.0/bootstrap-treeview.min.css" rel="stylesheet" />
-    <script type="text/javascript" src="/resource/public/js/jquery/plugin/bootstrap-treeview-1.2.0/bootstrap-treeview.min.js"></script>
+    <link href="/resource/public/css/bootstrap-treeview.css" rel="stylesheet" />
+    <script type="text/javascript" src="/resource/public/js/bootstrap-treeview.js"></script>
+
     <script src="/resource/app/js/space/tree.js"></script>
 
     <script type="text/javascript">
         // bind the on-change event
         $(document).ready(function() {
+
+            $('#btn-expand-all').on('click', function (e) {
+                var levels = 5;
+                $('#treeview').treeview('expandAll', { levels: levels, silent: '' });
+            });
+
+            $('#btn-collapse-all').on('click', function (e) {
+                $('#treeview').treeview('collapseAll', '');
+            });
+
             var userFavorite = "{{userFavorite}}";
 
             $.ajax({
