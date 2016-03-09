@@ -325,6 +325,7 @@
     </div>
 </div>
 <input type="hidden" id="wikiId" value="{{wiki.wikiId}}">
+<input type="hidden" id="spaceId" value="{{wiki.spaceId}}">
 {{/partial}}
 
 
@@ -356,7 +357,10 @@
             });
             $("#file-attachment").on("change", Wiki.uploadFile);
 
+            $("#outdent").hide();
             $("#outdent").click(function(){
+                $("#indent").show();
+                $("#outdent").hide();
                 var div1 = $("#mainContent").children(".row").children(":first");
                 var div2 = $("#mainContent").children(".row").children(":last");
                 div2.show();
@@ -364,6 +368,8 @@
             });
 
             $("#indent").click(function(){
+                $("#outdent").show();
+                $("#indent").hide();
                 var div1 = $("#mainContent").children(".row").children(":first");
                 var div2 = $("#mainContent").children(".row").children(":last");
                 div2.hide();
@@ -413,7 +419,7 @@
                link = "/wiki/write/"+$("#wikiId").val();
            }else if( id == 'space' ){
                text ='공간으로 이동';
-               link = "/wiki/space/"+$("#wikiId").val();
+               link = "/space/"+$("#spaceId").val();
            }
            if( link != '' ){
                $.confirm({
