@@ -85,17 +85,14 @@ To change this template use File | Settings | File Templates.
     <div class="col-sm-12">
 
         <div class="col-md-3 no-float vcenter" >
-            <div class="col-sm-12" style="padding: 10px">
-                <div class="pull-right" style="padding-top: 7px;cursor: pointer;"><i class="fa fa-times fa-1"></i></div>
-                <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:5px">전체위키</h4>
-                {{#if spaceWikis}}
-                    {{#each spaceWikis}}
-                        <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
-                    {{/each}}
-                {{^}}
-                    생성된 위키가 없습니다.
-                {{/if}}
-            </div>
+            <input type="hidden" name="spaceId" value="{{space.spaceId}}">
+            <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:10px;padding-top:10px">
+                <div id="sidetreecontrol">
+                    <span id="btn-expand-all" style="cursor: pointer">전체열기</span> | <span id="btn-collapse-all" style="cursor: pointer">전체닫기</span>
+                </div>
+            </h4>
+
+            <div id="treeview" class=""></div>
         </div>
         <div class="col-md-9 no-float">
             <h3 style="border-bottom:1px solid #eee;padding-bottom:15px">최근 수정된 위키 목록</h3>
@@ -113,11 +110,54 @@ To change this template use File | Settings | File Templates.
 {{/partial}}
 
 {{# partial "script-page" }}
+    <link href="/resource/public/css/bootstrap-treeview.css" rel="stylesheet" />
+    <script type="text/javascript" src="/resource/public/js/bootstrap-treeview.js"></script>
+    <script src="/resource/app/js/space/tree.js"></script>
     <script type="text/javascript">
         // bind the on-change event
         $(document).ready(function() {
+
+            $('#btn-expand-all').on('click', function (e) {
+                var levels = 5;
+                $('#treeview').treeview('expandAll', { levels: levels, silent: '' });
+            });
+
+            $('#btn-collapse-all').on('click', function (e) {
+                $('#treeview').treeview('collapseAll', '');
+            });
+
             var userFavorite = "{{userFavorite}}";
 
+            $.ajax({
+                url: "/space/tree",
+                type: "POST",
+                data: { spaceId : $('[name=spaceId]').val() },
+                success : function(response){
+                    console.log("# response = " + response);
+                    //var r = convert(JSON.parse(response));
+                    var defaultData = makeTree(JSON.parse(response) );
+
+                    console.log("## defaultData = " + JSON.stringify(defaultData, null, " "));
+
+
+                    $('#treeview').treeview({
+                        color: "#428bca",
+                        backColor : "#eeeeee",
+                        onhoverColor: "#eeeeee",
+                        showBorder: false,
+                        showTags: true,
+                        highlightSelected: false,
+                        levels: 1,
+                        enableLinks: true,
+                        data: JSON.stringify(defaultData, null, " ")
+                    });
+
+                },
+                error : function(req){
+                    // Handle upload error
+                    alert(' 에러코드 [' + req.status + ']');
+                }
+            });
             console.log("## userFavorite = " + userFavorite);
 
             if (userFavorite == '') {
@@ -240,6 +280,7 @@ To change this template use File | Settings | File Templates.
                 })
             });
         });
+
     </script>
 {{/partial}}
 

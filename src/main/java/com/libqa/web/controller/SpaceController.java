@@ -14,10 +14,7 @@ import com.libqa.web.service.space.SpaceService;
 import com.libqa.web.service.user.UserFavoriteService;
 import com.libqa.web.service.user.UserService;
 import com.libqa.web.service.wiki.WikiService;
-import com.libqa.web.view.space.SpaceActivityList;
-import com.libqa.web.view.space.SpaceMain;
-import com.libqa.web.view.space.SpaceWikiList;
-import com.libqa.web.view.space.WikiTree;
+import com.libqa.web.view.space.*;
 import com.libqa.web.view.wiki.DisplayWiki;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,7 +151,6 @@ public class SpaceController {
             spaceWikiLists.add(spaceWikiList);
         }
 
-
         mav.addObject("readMoreCount", spaces.size());
         mav.addObject("spaceMainList", spaceMainList);
         mav.addObject("spaceWikiLists", spaceWikiLists);
@@ -177,7 +173,6 @@ public class SpaceController {
         if (user == null) {
             return sendAccessDenied();
         }
-
 
         ModelAndView mav = new ModelAndView("/space/form");
         mav.addObject("message", message);
@@ -283,29 +278,33 @@ public class SpaceController {
         Space space = spaceService.findOne(spaceId);
 
         User spaceUser = userService.findByUserId(space.getInsertUserId());
-
         // Space 생성시 선택한 Layout 옵션의 View를 보여준다.
         String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
-
         log.debug("# view : {}", view);
 
         ModelAndView mav = null;
-
-
-        // 최근 수정된 위키 목록
-        List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
-        List<Wiki> spaceWikis = wikiService.findBySpaceId(spaceId);
 
         // 이 공간의 활동 내역을 조회한다. 저장일 역순
         List<Activity> activities = activityService.findBySpaceId(spaceId);
         List<SpaceActivityList> spaceActivityLists = new ArrayList<>();
 
         for (Activity activity : activities) {
-
             User userInfo = userService.findByUserId(activity.getUserId());
             SpaceActivityList spaceActivity = new SpaceActivityList(activity, userInfo);
 
             spaceActivityLists.add(spaceActivity);
+        }
+
+        // 최근 수정된 위키 목록
+        List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
+        List<SpaceWikiList> spaceWikiLists = new ArrayList<>();
+        for (Wiki wiki : updatedWikis) {
+            User user = userService.findByUserId(wiki.getUserId());
+            SpaceWikiList spaceWikiList = new SpaceWikiList();
+            spaceWikiList.setUser(user);
+            spaceWikiList.setWiki(wiki);
+            spaceWikiList.setReplyCount(wiki.getWikiReplies().size());
+            spaceWikiLists.add(spaceWikiList);
         }
 
         User user = loggedUserManager.getUser();
@@ -317,145 +316,20 @@ public class SpaceController {
 
         mav = new ModelAndView(view);
 
-
         if (!user.isGuest()) {
             List<UserFavorite> userFavorites = userFavoriteService.findBySpaceIdAndUserIdAndIsDeleted(spaceId, user.getUserId(), false);
             userFavorite = Iterables.getFirst(userFavorites, null);
         }
-        log.debug("# spaceWikis : {}", spaceWikis);
 
-
-        List<Wiki> wikiListInSpace = wikiService.findBySpaceIdAndSort(spaceId);
-        List<WikiTree> wikiTrees = bindWikiTree(wikiListInSpace);
-
-        log.info("### wikiTrees : {}", wikiTrees);
-
-
-        for (int i = 0; i < wikiTrees.size(); i++) {
-            if (wikiTrees.get(i).getWikiId() == wikiTrees.get(i).getParentsId()) {
-                continue;
-            } else {
-                // 자식 위키가 있음
-                setChild(wikiTrees, wikiTrees.get(i).getParentsId());
-            }
-        }
-
-        int depth = 0;
-        for (int x = 0; x < wikiTrees.size(); x++) {
-            if (depth != 0 && depth == wikiTrees.get(x).getDepthIdx()) {
-                wikiTrees.get(x-1).setHasBrother(true);
-            }
-
-            depth = wikiTrees.get(x).getDepthIdx();
-        }
-
-
-
-        System.out.println("@@@ wikiList : " + wikiTrees);
-        String trees = htmlTree(wikiTrees);
-        System.out.println("##### trees : " + trees);
-
-        mav.addObject("trees", trees);
-        mav.addObject("spaceWikis", spaceWikis);
-        mav.addObject("updatedWikis", updatedWikis);
+        mav.addObject("spaceWikiLists", spaceWikiLists);
         mav.addObject("space", space);
         mav.addObject("spaceUser", spaceUser);
         mav.addObject("userFavorite", userFavorite);
         mav.addObject("activities", activities);
         mav.addObject("spaceActivityLists", spaceActivityLists);
 
-
         return mav;
     }
-
-    private String htmlTree(List<WikiTree> wikiList) {
-        String appendTag = "<ul id=\"tree\">\n";
-        int groupId = 0;
-        int depth = 0;
-
-        for (int i = 0; i < wikiList.size(); i++) {
-            System.out.println(i + "번째  ## group = " + wikiList.get(i).getGroupIdx()
-                    + " ## parentId = " + wikiList.get(i).getParentsId()
-                    + " ## wikiId = " + wikiList.get(i).getWikiId()
-                    + " ## depth = " + wikiList.get(i).getDepthIdx()
-                    + " ## child = " + wikiList.get(i).isHasChild()
-                    + " ## brother = " + wikiList.get(i).isHasBrother()
-                    + " || title = " + wikiList.get(i).getTitle() );
-            boolean isClosed = wikiList.get(i).getDepthIdx() < depth;
-
-            if (groupId != wikiList.get(i).getGroupIdx()) { //새로은 그룹 아이디일 경우 새로운 li생성
-
-                if (isClosed) {
-                    appendTag += " \t\t</li>\n\t</ul>\n</li>\n";
-                }
-
-                appendTag += "\t<li><strong><a href=\"#\">" + wikiList.get(i).getTitle() +"</a></strong>\n";
-
-                if (wikiList.get(i).isHasChild() == true) {
-                    appendTag += "\t<ul>\n";
-                }
-            } else {
-
-                System.out.println("depth = " + depth + " listDepth = " + wikiList.get(i).getDepthIdx() + " isClose =" + isClosed);
-
-                if (isClosed) {
-                    appendTag += "\t\t</li>\n\t</ul>\n";
-                    appendTag += "\t\t</li>\n";
-                }
-                appendTag += "\t\t<li><a href=\"#\">" + wikiList.get(i).getTitle() +"</a>";
-                if (wikiList.get(i).isHasChild() == true) {
-                    appendTag += "\n\t\t<ul>\n";
-                } else {
-                    if (!wikiList.get(i).isHasBrother()) {
-                        appendTag += "</li>\n\t\t</ul>\n";
-                    } else {
-                        appendTag += "</li>\n";
-                    }
-                }
-            }
-
-
-            if (wikiList.size() - 1 == i) { // 마지막 태그
-                if (!wikiList.get(i).isHasBrother()) {
-                    appendTag += "\t</li>\n";
-                }
-            }
-            depth = wikiList.get(i).getDepthIdx();
-            groupId = wikiList.get(i).getGroupIdx();
-
-        }
-        appendTag += "</ul>";
-        return appendTag;
-    }
-
-
-    private void setChild(List<WikiTree> wikiList, int parentId) {
-        for (WikiTree tree : wikiList) {
-            if (parentId == tree.getWikiId()) {
-                tree.setHasChild(true);
-            }
-        }
-    }
-
-    private List<WikiTree> bindWikiTree(List<Wiki> wikiListInSpace) {
-        List<WikiTree> wikiTrees = new ArrayList<>();
-
-
-        for (Wiki wiki : wikiListInSpace) {
-            WikiTree wikiTree = new WikiTree();
-
-            wikiTree.setWikiId(wiki.getWikiId());
-            wikiTree.setTitle(wiki.getTitle());
-            wikiTree.setDepthIdx(wiki.getDepthIdx());
-            wikiTree.setGroupIdx(wiki.getGroupIdx());
-            wikiTree.setOrderIdx(wiki.getOrderIdx());
-            wikiTree.setParentsId(wiki.getParentsId());
-            wikiTrees.add(wikiTree);
-        }
-
-        return wikiTrees;
-    }
-
 
 
     /**
@@ -529,49 +403,21 @@ public class SpaceController {
         return mav;
     }
 
-    /*
-    @RequestMapping("/space/wikis")
-    @ResponseBody
-    public Collection wikiLists(@RequestParam Integer spaceId) {
-        List<Wiki> wikiList = wikiService.findBySpaceId(spaceId);
-
-
-        List<WikiTree> defaultData = new ArrayList<>();
-
-        WikiTreeNode wikiTreeNode = new WikiTreeNode();
-        wikiTreeNode.setHref("/1");
-        wikiTreeNode.setTags(5);
-        wikiTreeNode.setText("자식노드1");
-        List<WikiTreeNode> nodes = new ArrayList<>();
-        nodes.add(wikiTreeNode);
-
-        WikiTree data = new WikiTree();
-        data.setText("Parent 1");
-        data.setTags(4);
-        data.setHref("#parent 1");
-        data.setNodes(nodes);
-
-        defaultData.add(data);
-
-        log.info("### defaultData = {}", defaultData);
-        return defaultData;
-
-    }
-    */
-    @RequestMapping(value = "/space/tree", method = RequestMethod.POST)
+    @RequestMapping(value = "/space/tree", method = RequestMethod.POST, produces = "text/html; charset=utf8")
     @ResponseBody
     public String treeJson(@RequestParam Integer spaceId) throws IOException {
         List<Wiki> wikiListInSpace = wikiService.findBySpaceIdAndSort(spaceId);
-        List<WikiTree> wikiList = bindWikiTree(wikiListInSpace);
+        List<TreeModel> wikiList = bindTree(wikiListInSpace);
 
         for (int i = 0; i < wikiList.size(); i++) {
-            if (wikiList.get(i).getWikiId() == wikiList.get(i).getParentsId()) {
+            if (wikiList.get(i).getId() == wikiList.get(i).getParentId()) {
                 continue;
             } else {
                 // 자식 위키가 있음
-                setChild(wikiList, wikiList.get(i).getParentsId());
+                setChild(wikiList, wikiList.get(i).getParentId());
             }
         }
+
         ObjectMapper om = new ObjectMapper();
 
         // {"success" : true, "returnUrl" : "..."}
@@ -580,6 +426,42 @@ public class SpaceController {
         return jsonString;
     }
 
+    private List<TreeModel> bindTree(List<Wiki> wikiListInSpace) {
+        List<TreeModel> models = new ArrayList<>();
+        for (Wiki wiki : wikiListInSpace) {
+            TreeModel model = new TreeModel();
+
+            log.info("### wiki id = " + wiki.getWikiId());
+            log.info("### wiki parent = " + wiki.getParentsId());
+            log.info("### wiki result = " + wiki.getWikiId().equals(wiki.getParentsId()));
+
+            if (wiki.getWikiId().equals(wiki.getParentsId())) {
+                model.setParentId(0);
+            } else {
+                model.setParentId(wiki.getParentsId());
+            }
+            model.setId(wiki.getWikiId());
+            model.setText(wiki.getTitle());
+            String[] counts = new String[1];
+            counts[0] = wiki.getReplyCount()+"";
+            model.setTags(counts);
+            //model.setNodes(null);
+            model.setHref("/wiki/" + wiki.getWikiId());
+
+            models.add(model);
+
+        }
+
+        return models;
+    }
+
+    private void setChild(List<TreeModel> wikiList, int parentId) {
+        for (TreeModel tree : wikiList) {
+            if (parentId == tree.getId()) {
+                tree.setHasChild(true);
+            }
+        }
+    }
 
     public ModelAndView sendAccessDenied() {
         ModelAndView mav = new ModelAndView("/common/403");

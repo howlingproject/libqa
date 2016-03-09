@@ -4,6 +4,7 @@ import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.User;
 import com.libqa.web.domain.Wiki;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  */
 
 @Getter
+@Setter
 public class SpaceWikiList {
 
     private Wiki wiki;
@@ -26,5 +28,8 @@ public class SpaceWikiList {
         this.user = user;
         this.keywords = keywords;
         this.replyCount = replyCount;
+    }
+
+    public SpaceWikiList() {
     }
 }

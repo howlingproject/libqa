@@ -14,10 +14,10 @@ import java.util.Properties;
  * @Date : 2015. 4. 26.
  * @Description :
  */
-@Configuration
-@PropertySource("classpath:mail.properties")
+//@Configuration
+//@PropertySource("classpath:mail.properties")
 public class SendMailConfiguration {
-
+/*
     @Value("${mail.protocol}")
     private String protocol;
     @Value("${mail.host}")
@@ -52,4 +52,6 @@ public class SendMailConfiguration {
         return javaMailSender;
 
     }
+
+    */
 }

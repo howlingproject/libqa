@@ -43,7 +43,7 @@
                 {{/compareTo}}
             {{/if}}
         </ul>
-        <ul class="nav navbar-nav navbar-right navi-info">
+        <ul class="nav navbar-nav navbar-right navi-info pull-right">
             <li class="dropdown">
                 <a aria-expanded="true" href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-2x"></i></a>
                 <ul class="dropdown-menu">
@@ -54,11 +54,24 @@
                     {{/if}}
                 </ul>
             </li>
-            <li class="messenger notification on"><a href="#"><i class="fa fa-comments fa-2x"></i></a></li>
-            <!-- 공간 트리메뉴 노출 여부 -->
+            <li class="messenger notification"><a href="#"><i class="fa fa-comments fa-2x"></i></a></li>
+            <!-- 공간 트리메뉴 노출 여부
             <li class="messenger notification" id="outdent"><a href="#"><i class="fa fa-outdent fa-2x"></i></a></li>
             <li class="messenger notification" id="indent"><a href="#"><i class="fa fa-indent fa-2x"></i></a></li>
+            -->
+
         </ul>
+        <ul class="nav navbar-nav navbar-right pull-right">
+
+            <!-- https://buttons.github.io/ -->
+            <!-- Place this tag where you want the button to render. -->
+            <div style="padding-top:15px;padding-right:10px" >
+                <a class="github-button" href="https://github.com/howlingproject/libqa" data-count-href="/howlingproject/libqa/stargazers" data-count-api="/repos/howlingproject/libqa#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star howlingproject/libqa on GitHub">Star</a>
+                <a class="github-button" href="https://github.com/howlingproject/libqa/issues" data-count-api="/repos/howlingproject/libqa#open_issues_count" data-count-aria-label="# issues on GitHub" aria-label="Issue howlingproject/libqa on GitHub">Issue</a>
+                <a class="github-button" href="https://github.com/howlingproject/libqa/archive/master.zip" aria-label="Download howlingproject/libqa on GitHub">Download</a>
+            </div>
+        </ul>
+
     </nav>
 </header>
 
@@ -111,7 +124,8 @@
         </div>
     </div>
 </div>
-
+<!-- Place this tag right after the last button or just before your close body tag. -->
+<script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
 {{/partial}}
 
 {{# partial "footer" }}
@@ -127,7 +141,7 @@
         </div>
         <div class="col-md-12 text-center">
             <p class="">
-                Copyright © 2015 LibQA™
+                Copyright © 2016 LibQA™
             </p>
         </div>
     </div>

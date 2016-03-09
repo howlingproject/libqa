@@ -37,6 +37,7 @@ To change this template use File | Settings | File Templates.
 {{#partial "script-header"}}
     <script src="/resource/public/js/jquery/jquery.layout-latest.js"></script>
     <script src="/resource/public/js/jquery/jquery-ui-latest.js"></script>
+    <script src="/resource/app/js/space/tree.js"></script>
 {{/partial}}
 
 
@@ -50,28 +51,14 @@ To change this template use File | Settings | File Templates.
     </div>
     <div class="row">
         <div class="col-md-3 no-float vcenter" >
-            <div class="col-sm-12" style="padding: 10px">
-                <input type="hidden" name="spaceId" value="{{space.spaceId}}">
-                <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:5px">
-                    <div id="sidetreecontrol"><a href="?#">전체 닫기</a> | <a href="?#">전체 열기</a></div>
-                </h4>
-                {{#if trees}}
-                    {{{trees}}}
-                {{^}}
-                    생성된 위키기 없습니다.
-                {{/if}}
-                {{!--
-                {{#if spaceWikis}}
+            <input type="hidden" name="spaceId" value="{{space.spaceId}}">
+            <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:10px;padding-top:10px">
+                <div id="sidetreecontrol">
+                    <span id="btn-expand-all" style="cursor: pointer">전체열기</span> | <span id="btn-collapse-all" style="cursor: pointer">전체닫기</span>
+                </div>
+            </h4>
 
-                {{#each spaceWikis}}
-                    <a href="/wiki/{{wikiId}}">{{title}}</a><BR>
-                {{/each}}
-
-                {{^}}
-                    생성된 위키가 없습니다.
-                {{/if}}
-                --}}
-            </div>
+            <div id="treeview" class=""></div>
         </div>
         <div class="col-md-9 no-float">
             <div class="col-sm-11">
@@ -110,12 +97,24 @@ To change this template use File | Settings | File Templates.
 
 
 {{# partial "script-page" }}
-    <link href="/resource/public/css/jquery.treeview.css" rel="stylesheet" />
-    <script type="text/javascript" src="/resource/public/js/jquery/jquery.cookie.js"></script>
-    <script type="text/javascript" src="/resource/public/js/jquery/jquery.treeview.js"></script>
+
+    <link href="/resource/public/css/bootstrap-treeview.css" rel="stylesheet" />
+    <script type="text/javascript" src="/resource/public/js/bootstrap-treeview.js"></script>
+
     <script type="text/javascript">
         // bind the on-change event
+
         $(document).ready(function() {
+
+            $('#btn-expand-all').on('click', function (e) {
+                var levels = 5;
+                $('#treeview').treeview('expandAll', { levels: levels, silent: '' });
+            });
+
+            $('#btn-collapse-all').on('click', function (e) {
+                $('#treeview').treeview('collapseAll', '');
+            });
+
 
             var userFavorite = "{{userFavorite}}";
             // https://github.com/jonmiles/bootstrap-treeview 으로 변경할 예정
@@ -125,7 +124,24 @@ To change this template use File | Settings | File Templates.
                 data: { spaceId : $('[name=spaceId]').val() },
                 success : function(response){
                     console.log("# response = " + response);
-                    alert(response);
+                    //var r = convert(JSON.parse(response));
+                    var defaultData = makeTree(JSON.parse(response) );
+
+                    console.log("## defaultData = " + JSON.stringify(defaultData, null, " "));
+
+
+                    $('#treeview').treeview({
+                        color: "#428bca",
+                        backColor : "#eeeeee",
+                        onhoverColor: "#eeeeee",
+                        showBorder: false,
+                        showTags: true,
+                        highlightSelected: false,
+                        levels: 1,
+                        enableLinks: true,
+                        data: JSON.stringify(defaultData, null, " ")
+                    });
+
                 },
                 error : function(req){
                     // Handle upload error
@@ -133,13 +149,6 @@ To change this template use File | Settings | File Templates.
                 }
             });
 
-
-            $("#tree").treeview({
-                collapsed: true,
-                animated: "fast",
-                control:"#sidetreecontrol",
-                persist: "location"
-            });
 
             console.log("## userFavorite = " + userFavorite);
 
@@ -262,7 +271,6 @@ To change this template use File | Settings | File Templates.
                 })
             });
         });
-
 
     </script>
 {{/partial}}
