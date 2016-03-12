@@ -336,7 +336,7 @@ var FeedUtil = {
             }
         });
 
-        $('body').on('click', function (e) {
+        $('body').off('click').on('click', function (e) {
             $('[data-toggle="popover"]').each(function () {
                 var isInsidePopover = !$(this).is(e.target)
                     && $(this).has(e.target).length === 0
