@@ -38,40 +38,6 @@ public class UserController {
     private UserKeywordService userKeywordService;
 
 
-    /*
-    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseData<User> login(HttpServletRequest request, User loginUser) {
-        ResponseData<User> responseData = null;
-        String targetUrl = returnUrl(request);
-
-        log.debug("/login = {}", targetUrl);
-        log.debug("# userEmail = {}", loginUser.getUserEmail());
-        log.debug("# userPass = {}", new BCryptPasswordEncoder().encode(loginUser.getUserPass()));
-
-        User user = userService.findByEmail(loginUser.getUserEmail());
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("사용자 정보가 존재하지 않습니다. email : %s", loginUser.getUserEmail()));
-        }
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        boolean isUser = encoder.matches(loginUser.getUserPass(), user.getUserPass());
-
-        log.debug("### isUser = {} ", isUser);
-        log.debug("### user = {} ", user);
-
-        if (!isUser) {
-            responseData = ResponseData.createFailResult(user);
-        } else {
-            user.setTargetUrl(targetUrl);
-            responseData = ResponseData.createSuccessResult(user);
-        }
-
-        log.debug("### responseData = {} ", responseData);
-        return responseData;
-    }
-    */
-
     /**
      * 회원 로그인 form
      *
