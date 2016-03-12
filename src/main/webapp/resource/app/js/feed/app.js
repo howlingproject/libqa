@@ -335,6 +335,17 @@ var FeedUtil = {
                 return $('#popover-config-content').html();
             }
         });
+
+        $('body').off('click').on('click', function (e) {
+            $('[data-toggle="popover"]').each(function () {
+                var isInsidePopover = !$(this).is(e.target)
+                    && $(this).has(e.target).length === 0
+                    && $('.popover').has(e.target).length === 0;
+                if (isInsidePopover) {
+                    $(this).popover('hide');
+                }
+            });
+        });        
     },
     'hidePopOver': function() {
         $('.popover-config').popover('hide');
