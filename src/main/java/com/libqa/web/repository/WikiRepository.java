@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface WikiRepository extends JpaRepository<Wiki, Integer>, CrudRepository<Wiki, Integer> {
 
+    Wiki findByWikiIdAndIsDeleted(Integer wikiId, boolean isDeleted);
+
     List<Wiki> findAllByIsDeleted(Sort orders, boolean isDeleted);
 
     List<Wiki> findAllByIsDeleted(boolean isDeleted, Pageable pageable);

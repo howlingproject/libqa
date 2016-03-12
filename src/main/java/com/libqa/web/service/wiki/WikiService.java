@@ -1,5 +1,6 @@
 package com.libqa.web.service.wiki;
 
+import com.libqa.application.enums.WikiOrderListType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Wiki;
@@ -21,11 +22,13 @@ public interface WikiService {
 
     Wiki findById(Integer wikiId);
 
+    Wiki wikiDetail(Integer wikiId);
+
     Wiki findByParentId(Integer parentId);
 
     List<Wiki> findBySubWikiId(Integer wikiId);
 
-    List<DisplayWiki> findByAllWiki(int startIdx, int endIdx);
+    List<DisplayWiki> findByAllWiki(int startIdx, int endIdx, WikiOrderListType wikiOrderListType);
 
     List<DisplayWiki> findByBestWiki(int startIdx, int endIdx);
 

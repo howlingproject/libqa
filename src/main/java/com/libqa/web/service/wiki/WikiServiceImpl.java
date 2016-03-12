@@ -3,6 +3,7 @@ package com.libqa.web.service.wiki;
 import com.google.common.base.MoreObjects;
 import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.KeywordType;
+import com.libqa.application.enums.WikiOrderListType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.*;
@@ -155,9 +156,18 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-//    @Transactional(readOnly = true)
     public Wiki findById(Integer wikiId) {
-        return wikiRepository.findOne(wikiId);
+        return wikiRepository.findByWikiIdAndIsDeleted(wikiId, isDeleted);
+    }
+
+    @Override
+    public Wiki wikiDetail(Integer wikiId) {
+        Wiki wiki = findById(wikiId);
+        if( wiki != null ){
+            wiki.setViewCount( MoreObjects.firstNonNull(wiki.getViewCount(), 0)  + 1 );
+            save(wiki);
+        }
+        return wiki;
     }
 
     @Override
@@ -174,11 +184,11 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-    public List<DisplayWiki> findByAllWiki(int page, int size) {
+    public List<DisplayWiki> findByAllWiki(int page, int size, WikiOrderListType wikiOrderListType) {
         List<DisplayWiki> resultWiki = new ArrayList<>();
         List<Wiki> list = wikiRepository.findAllByIsDeleted(
                 isDeleted
-                , PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "insertDate"))
+                , PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", wikiOrderListType.toString()))
                 );
         if( !CollectionUtils.isEmpty( list )){
             for( Wiki wiki : list ){
@@ -317,6 +327,10 @@ public class WikiServiceImpl implements WikiService {
                     Wiki wiki = findById(like.getWikiId());
                     wiki.setLikeCount( MoreObjects.firstNonNull(wiki.getLikeCount(), 0)  + 1 );
                     save(wiki);
+                }else if( like.getReplyId() != null ){
+                    WikiReply wikiReply = wikiReplyService.findById( like.getReplyId() );
+                    wikiReply.setLikeCount( MoreObjects.firstNonNull(wikiReply.getLikeCount(), 0)  + 1 );
+                    wikiReplyService.update(wikiReply);
                 }
                 wikiLikeRepository.save(like);
                 result.setResult(1);

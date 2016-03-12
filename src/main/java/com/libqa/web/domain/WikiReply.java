@@ -34,17 +34,20 @@ public class WikiReply implements Serializable{
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isDeleted;
 
+    @Column
+    private Integer likeCount = 0;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumns({
-            @JoinColumn(name = "userId", referencedColumnName = "userId"),
-            @JoinColumn(name = "replyId", referencedColumnName = "replyId")
-    })
-    private List<WikiLike> wikiLikes;
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinColumns({
+//            @JoinColumn(name = "userId", referencedColumnName = "userId"),
+//            @JoinColumn(name = "replyId", referencedColumnName = "replyId")
+//    })
+//    private List<WikiLike> wikiLikes;
 
 }
