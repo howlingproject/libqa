@@ -19,7 +19,7 @@ public interface QaReplyService {
 
     QaReply saveVoteDown(QaReply paramQaReply, Integer userId);
 
-    QaReply saveChildReply(QaReply qaReply);
+    QaReply saveChildReply(QaReply qaReply, User user);
 
     List<DisplayQaReply> findByQaIdAndDepthIdx(Integer qaId, int depthIdx);
 

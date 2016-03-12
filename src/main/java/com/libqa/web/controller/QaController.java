@@ -222,14 +222,14 @@ public class QaController {
     @RequestMapping(value ="/qa/saveChildReply", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaReply> saveChildReply(QaReply qaReply){
-
+        User user = loggedUserManager.getUser();
         // TODO List 차후 로그인으로 변경
         qaReply.setInsertDate(new Date());
         qaReply.setInsertUserId(1);
         qaReply.setUserId(1);
         qaReply.setUserNick("용퓌");
 
-        QaReply newQaReply = qaReplyService.saveChildReply(qaReply);
+        QaReply newQaReply = qaReplyService.saveChildReply(qaReply, user);
         return createSuccessResult(newQaReply);
     }
 
