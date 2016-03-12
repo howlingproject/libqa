@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.libqa.application.enums.ActivityType;
+import com.libqa.application.enums.Role;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUserManager;
 import com.libqa.application.util.StringUtil;
@@ -246,6 +247,33 @@ public class SpaceController {
         return ResponseData.createSuccessResult(result);
     }
 
+
+    @RequestMapping(value = "/space/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<Space> deleteSpace(@RequestParam Integer spaceId) throws IllegalAccessException {
+        User user = loggedUserManager.getUser();
+        if (user == null) {
+            throw new IllegalAccessException("로그인 정보가 필요합니다.");
+        }
+
+        Space spaceEntity = spaceService.findOne(spaceId);
+
+        if (spaceEntity.getInsertUserId() != user.getUserId()
+                || user.getRole() != Role.ADMIN) {
+            throw new IllegalAccessException("공간을 삭제할 권한이 없습니다.");
+        }
+
+        Space result = null;
+        try {
+            result = spaceService.delete(spaceEntity, user);
+            return ResponseData.createSuccessResult(result);
+        } catch (Exception e) {
+            log.error("공간 삭제 에러 = {}", e.getMessage());
+            return ResponseData.createFailResult();
+
+        }
+    }
+
     /**
      * 공간 정보 수정시 원본 데이터를 바인딩 한다.
      * @param space
@@ -253,6 +281,7 @@ public class SpaceController {
      * @param spaceEntity
      */
     public void bindSpaceEntity(Space space, User user, Space spaceEntity) {
+
         spaceEntity.setDescription(space.getDescription());
         spaceEntity.setDescriptionMarkup(space.getDescriptionMarkup());
         spaceEntity.setTitle(space.getTitle());
@@ -321,8 +350,10 @@ public class SpaceController {
             userFavorite = Iterables.getFirst(userFavorites, null);
         }
 
+
         mav.addObject("spaceWikiLists", spaceWikiLists);
         mav.addObject("space", space);
+        mav.addObject("isAdmin", user.isAdmin());
         mav.addObject("spaceUser", spaceUser);
         mav.addObject("userFavorite", userFavorite);
         mav.addObject("activities", activities);

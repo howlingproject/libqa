@@ -3,6 +3,7 @@ package com.libqa.web.service.space;
 import com.libqa.application.enums.ActivityType;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;
+import com.libqa.web.domain.User;
 
 import java.util.List;
 
@@ -43,4 +44,12 @@ public interface SpaceService {
 	Integer addSpaceFavorite(Integer spaceId, Integer userId, boolean isDeleted);
 
 	Integer cancelSpaceFavorite(Integer spaceId, Integer userId, boolean isDeleted);
+
+	/**
+	 * 삭제
+	 * @param space
+	 * @param user
+	 * @return
+	 */
+	Space delete(Space space, User user);
 }

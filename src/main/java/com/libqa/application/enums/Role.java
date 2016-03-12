@@ -6,5 +6,5 @@ package com.libqa.application.enums;
  * @Description :
  */
 public enum Role {
-    GUEST, USER, MANAGER, ADMIN
+    GUEST, USER, ADMIN
 }
