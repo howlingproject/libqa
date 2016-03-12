@@ -4,13 +4,13 @@ import com.libqa.application.enums.ActionType;
 import com.libqa.application.enums.PostType;
 import com.libqa.web.domain.User;
 
-public class FeedClaim extends FeedActionActor {
-    private FeedClaim(Integer feedThreadId, User actionUser) {
+public class FeedThreadLike extends FeedActionActor {
+    private FeedThreadLike(Integer feedThreadId, User actionUser) {
         super(feedThreadId, actionUser);
     }
 
-    public static FeedClaim of(Integer feedThreadId, User actionUser) {
-        return new FeedClaim(feedThreadId, actionUser);
+    public static FeedThreadLike of(Integer feedThreadId, User actionUser) {
+        return new FeedThreadLike(feedThreadId, actionUser);
     }
 
     @Override
@@ -20,6 +20,6 @@ public class FeedClaim extends FeedActionActor {
 
     @Override
     public ActionType getActionType() {
-        return ActionType.CLAIM;
+        return ActionType.LIKE;
     }
 }
