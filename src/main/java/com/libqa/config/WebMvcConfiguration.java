@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 @EnableWebMvc
 @Slf4j
 public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
-    @Value("${environment.viewResolver.cached}")
+    @Value("${libqa.viewResolver.cached}")
     private String viewResolverCached;
 
     @Override

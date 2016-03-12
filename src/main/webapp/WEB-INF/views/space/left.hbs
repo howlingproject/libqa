@@ -69,13 +69,13 @@ To change this template use File | Settings | File Templates.
 
             <div class="author pull-right">
                 <div class="user-profile-md">
-                    <img alt="avatar" class="profile-image" src="{{spaceUser.userImage}}" onerror='this.src="/resource/images/avatar.png"' />
+                    <img alt="avatar" class="profile-image" src="/imageView?path={{spaceUser.userImage}}" onerror='this.src="/resource/images/avatar.png"' />
                 </div>
             </div>
 
             <div class="col-sm-12">
                 <div class="jumbotron">
-                    <img src="{{space.titleImagePath}}/{{space.titleImage}}" width="250">
+                    <img src="/imageView?path={{space.titleImagePath}}/{{space.titleImage}}" width="250">
                     <p>{{{space.description}}}</p>
                 </div>
 
