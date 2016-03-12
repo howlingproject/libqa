@@ -424,15 +424,15 @@
                    icon: 'fa fa-question-circle',
                    animation: 'top',
                    confirm: function () {
-                       if( id == 'update' ){
+                       if( id == 'update' ) {
                            location.href = link;
-                       }else if( id == 'delete' ){
+                       }else if( id == 'delete' ) {
                            Wiki.updateStat(id, link);
-                       }else if( id == 'lock' ){
+                       }else if( id == 'lock' ) {
                            Wiki.updateStat(id, link);
                        }else if( id == 'write' ){
                            location.href = link;
-                       }else if( id == 'space' ){
+                       }else if( id == 'space' ) {
                            location.href = link;
                        }
                    }
