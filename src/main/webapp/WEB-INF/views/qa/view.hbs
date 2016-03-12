@@ -384,6 +384,14 @@
                             } else {
                                 alert("이미 추천/비추천 하셨습니다.");
                             }
+                        } else if(data.resultCode == 10){
+                            $.alert({
+                                title: 'Alert!',
+                                content: data.comment,
+                                confirm: function(){
+                                    location.href = '/loginPage';
+                                }
+                            });
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
