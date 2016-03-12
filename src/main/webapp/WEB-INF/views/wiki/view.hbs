@@ -60,12 +60,17 @@
                             <td>{{nullToNumber wiki.viewCount}}</td>
                         </tr>
                         <tr>
-                            <td>공감수</td>
-                            <td id="wikiIdLike">{{size wiki.wikiLikes }}</td>
+                            <td>추천수</td>
+                            <td id="wikiIdLike">{{wiki.likeCount }}</td>
                         </tr>
                         <tr>
                             <td>글상태</td>
-                            <td>기본</td>
+                            {{#if wiki.lock}}
+                                <td>잠금</td>
+                            {{else}}
+                                <td>기본</td>
+                            {{/if}}
+
                         </tr>
                         </tbody>
                     </table>
@@ -111,9 +116,11 @@
             <div style="padding-bottom: 5px">
                 첨부파일
                 <div>
-                    <i class="fa fa-file">압축파일.zip</i>
-                    <i class="fa fa-file">압축파일.zip</i>
-                    <i class="fa fa-file">압축파일.zip</i>
+                    {{#each wiki.wikiFiles}}
+                    <a href="{{filePath}}/{{savedName}}" download="{{realName}}"> <i class="fa fa-file">{{realName}}</i> </a>
+                    {{/each}}
+                    <!--<i class="fa fa-file">압축파일.zip</i>-->
+                    <!--<i class="fa fa-file">압축파일.zip</i>-->
                 </div>
             </div>
             {{/if}}
@@ -236,7 +243,7 @@
                     </div>
                     <div class="col-md-1 my-qna-rating pull-right">
                         <button class="fun-like btn btn-sm btn-default btn-sm-fixed pull-right"
-                                data-value="{{this.replyId}}" data-type="COMMENT" id="replyIdLike{{this.replyId}}">추천 <span>{{size this.wikiLikes }}</span></button>
+                                data-value="{{this.replyId}}" data-type="COMMENT" id="replyIdLike{{this.replyId}}">추천 <span>{{this.likeCount}}</span></button>
                         <!--<button class="btn btn-sm btn-default btn-sm-fixed pull-right">비추천</button>-->
                     </div>
                 </div>
@@ -432,15 +439,19 @@
                    icon: 'fa fa-question-circle',
                    animation: 'top',
                    confirm: function () {
-                       if( id == 'update' ){
+                       if( id == 'update' ) {
                            location.href = link;
+                       }else if( id == 'delete' ) {
+                           Wiki.updateStat(id, link);
+                       }else if( id == 'lock' ) {
+                           Wiki.updateStat(id, link);
                        }else if( id == 'delete' ){
                            location.href = "/wiki/main";
                        }else if( id == 'lock' ){
                            Wiki.updateStat(id, link);
                        }else if( id == 'write' ){
                            location.href = link;
-                       }else if( id == 'space' ){
+                       }else if( id == 'space' ) {
                            location.href = link;
                        }
                    }
@@ -534,7 +545,7 @@
                     url : link,
                     success:function(req){
                         if (req.resultCode == 1) {
-                            if( id == "update"){
+                            if( id == "update" || id == "delete" ){
                                 location.href = "/wiki/main";
                             }else{
                                 location.reload();
