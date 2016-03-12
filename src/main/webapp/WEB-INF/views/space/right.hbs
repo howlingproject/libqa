@@ -131,6 +131,51 @@ To change this template use File | Settings | File Templates.
                 }
             });
 
+            $('#deleteSpace').on('click', function () {
+                $.confirm({
+                    title: '확인',
+                    content: '공간을 삭제하겠습니까?<BR>위키가 존재할 경우 관리자만 삭제할 수 있습니다.',
+                    confirmButton: '확인',
+                    cancelButton: '취소',
+                    confirmButtonClass: 'btn-info',
+                    confirm: function () {
+                        $.post('/space/delete', { spaceId: "{{space.spaceId}}" })
+                                .done(function (response) {
+
+                                    $.alert({
+                                        title: '확인',
+                                        content: response.comment,
+                                        confirmButton: 'OK',
+                                        confirmButtonClass: 'btn-primary',
+                                        icon: 'fa fa-info',
+                                        animation: 'zoom',
+                                        confirm: function () {
+                                            if (response.resultCode == 1) {
+                                                location.href = '/space/main';
+                                            }
+                                        }
+                                    });
+                                }).fail(function () {
+                                    $.alert({
+                                        title: '확인',
+                                        content: '공간 삭제중 에러가 발생하였습니다. 다시 시도하세요.',
+                                        confirmButton: 'OK',
+                                        confirmButtonClass: 'btn-primary',
+                                        icon: 'fa fa-info',
+                                        animation: 'zoom',
+                                        confirm: function () {
+                                        }
+                                    });
+                                });
+                    },
+                    cancel: function(){
+                        return true;
+                    }
+                });
+
+            });
+
+
             console.log("## userFavorite = " + userFavorite);
             if (userFavorite == '') {
                 $("#addFavorite").css("display","block");

@@ -137,7 +137,7 @@ Time: 16:20
             var data = $("#registForm").serialize();
             $.confirm({
                 title: '가입확인',
-                content: 'Login id : ' + userEmail + " <BR>Password : " + userPass +"<BR>현재 정보로 가입하시겠습니까?",
+                content: 'Login id : ' + userEmail + " <BR>닉네임 : " + userNick +"<BR>현재 정보로 가입하시겠습니까?",
                 confirmButton: '가입',
                 cancelButton: '취소',
                 confirmButtonClass: 'btn-info',
@@ -154,7 +154,7 @@ Time: 16:20
                             if (req.resultCode == 1) {
                                 $.confirm({
                                     title: '완료',
-                                    content: '회원가입 완료!' ,
+                                    content: '회원가입 완료! 로그인 후 이용 가능합니다.' ,
                                     confirmButton: '확인',
                                     cancelButton: '취소',
                                     confirmButtonClass: 'btn-info',
