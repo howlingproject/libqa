@@ -99,7 +99,12 @@ public class WikiController {
         return (user != null && user.getUserId() != null );
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+
+
+
+
+    //@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping("wiki/write")
     public ModelAndView write(@ModelAttribute Space modelSpace){
         ModelAndView mav = wikiWrite(modelSpace, null);

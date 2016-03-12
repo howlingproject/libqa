@@ -6,30 +6,6 @@ Time: 16:20
 To change this template use File | Settings | File Templates.
 --}}
 {{#partial "style"}}
-{{!-- 여기에 사용자 css 정의 --}}
-    <style type="text/css">
-        .row
-        {
-            height: 100%;
-            display: table-row;
-        }
-        .col-md-3.no-float, .col-md-9.no-float {
-            float: none; /* thanks baxabbit */
-        }
-        .col-md-3
-        {
-            display: table-cell;
-            background: #eeeeee;
-            width: 25%;
-            height:100%;
-        }
-        .col-md-9
-        {
-            display: table-cell;
-            background: #ffffff;
-            width: 75%;
-        }
-    </style>
 {{/partial}}
 {{#partial "plugin-style"}}
     <link href="/resource/public/css/layout-default-latest.css" rel="stylesheet">
@@ -48,9 +24,10 @@ To change this template use File | Settings | File Templates.
     {{> space/template/_spaceTopMenu}}
 </div>
 <div class="container-fluid">
-    <div class="row" style="padding-top:100px">&nbsp;</div>
+    <form name="spaceForm" id="spaceForm"></form>
+    <div class="row"  style="padding-top:100px;height: 100%; display: table-row;">&nbsp;</div>
     <div class="row">
-        <div class="col-md-9 no-float">
+        <div class="col-md-9" style="float: none;display: table-cell;background: #ffffff;width: 75%;">
             <div class="col-sm-11">
                 <h1 class="page-header" style="margin-top: 0px">{{space.title}}
                     <small class="pull-right" style="padding-top:10px">{{formatDate space.insertDate "yyyy-MM-dd hh:MM"}} </small>
@@ -83,7 +60,7 @@ To change this template use File | Settings | File Templates.
             </div>
         </div>
 
-        <div class="col-md-3 no-float vcenter" >
+        <div class="col-md-3 vcenter" style="float: none;display: table-cell;background: #eeeeee; width: 25%;">
             <input type="hidden" name="spaceId" value="{{space.spaceId}}">
             <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:10px;padding-top:10px">
                 <div id="sidetreecontrol">
@@ -162,11 +139,11 @@ To change this template use File | Settings | File Templates.
             }
 
             $('#createWiki').on('click', function () {
-                $('#space').attr({action:'/wiki/write', method:'post'}).submit();
+                $('#spaceForm').attr({action:'/wiki/write', method:'post'}).submit();
             });
 
             $('#editSpace').on('click', function () {
-                $('#space').attr({action:'/space/edit/{{space.spaceId}}', method:'get'}).submit();
+                $('#spaceForm').attr({action:'/space/edit/{{space.spaceId}}', method:'get'}).submit();
             });
 
             $('#getMoreWiki').on('click', function () {

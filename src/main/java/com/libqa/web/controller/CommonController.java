@@ -52,6 +52,7 @@ public class CommonController {
     public ModelAndView accessDenied(Principal user) {
         ModelAndView model = new ModelAndView();
 
+        log.info("####### user.role access ########");
         if (user != null) {
             model.addObject("msg", "Hi " + user.getName()
                     + ", you do not have permission to access this page!");
