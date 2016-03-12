@@ -37,7 +37,7 @@
             {{#if files}}
             <div class="attachment">
                 {{#each files}}
-                    <a href="{{fullPath}}" target="_blank"><i class="fa fa-file-o"></i> {{realName}}</a>&nbsp;
+                    <a href="/download?path={{fullPath}}" download><i class="fa fa-file-o"></i> {{realName}}</a>&nbsp;
                 {{/each}}
             </div>
             {{/if}}
