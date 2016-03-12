@@ -1,5 +1,6 @@
 package com.libqa.web.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.libqa.application.enums.ActivityType;
@@ -26,8 +27,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -150,7 +151,6 @@ public class SpaceController {
             spaceWikiLists.add(spaceWikiList);
         }
 
-
         mav.addObject("readMoreCount", spaces.size());
         mav.addObject("spaceMainList", spaceMainList);
         mav.addObject("spaceWikiLists", spaceWikiLists);
@@ -174,7 +174,6 @@ public class SpaceController {
             return sendAccessDenied();
         }
 
-
         ModelAndView mav = new ModelAndView("/space/form");
         mav.addObject("message", message);
         mav.addObject("user", user);
@@ -196,6 +195,7 @@ public class SpaceController {
         space.setInsertDate(new Date());
         space.setInsertUserId(user.getUserId());
         space.setInsertUserNick(user.getUserNick());
+        space.setUpdateDate(new Date());
 
         Space result = spaceService.saveWithKeyword(space, keyword, ActivityType.CREATE_SPACE);
         log.debug("#result : [{}]", result);
@@ -278,29 +278,33 @@ public class SpaceController {
         Space space = spaceService.findOne(spaceId);
 
         User spaceUser = userService.findByUserId(space.getInsertUserId());
-
         // Space 생성시 선택한 Layout 옵션의 View를 보여준다.
         String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
-
         log.debug("# view : {}", view);
 
         ModelAndView mav = null;
-
-
-        // 최근 수정된 위키 목록
-        List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
-        List<Wiki> spaceWikis = wikiService.findBySpaceId(spaceId);
 
         // 이 공간의 활동 내역을 조회한다. 저장일 역순
         List<Activity> activities = activityService.findBySpaceId(spaceId);
         List<SpaceActivityList> spaceActivityLists = new ArrayList<>();
 
         for (Activity activity : activities) {
-
             User userInfo = userService.findByUserId(activity.getUserId());
             SpaceActivityList spaceActivity = new SpaceActivityList(activity, userInfo);
 
             spaceActivityLists.add(spaceActivity);
+        }
+
+        // 최근 수정된 위키 목록
+        List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
+        List<SpaceWikiList> spaceWikiLists = new ArrayList<>();
+        for (Wiki wiki : updatedWikis) {
+            User user = userService.findByUserId(wiki.getUserId());
+            SpaceWikiList spaceWikiList = new SpaceWikiList();
+            spaceWikiList.setUser(user);
+            spaceWikiList.setWiki(wiki);
+            spaceWikiList.setReplyCount(wiki.getWikiReplies().size());
+            spaceWikiLists.add(spaceWikiList);
         }
 
         User user = loggedUserManager.getUser();
@@ -312,62 +316,21 @@ public class SpaceController {
 
         mav = new ModelAndView(view);
 
-
         if (!user.isGuest()) {
             List<UserFavorite> userFavorites = userFavoriteService.findBySpaceIdAndUserIdAndIsDeleted(spaceId, user.getUserId(), false);
             userFavorite = Iterables.getFirst(userFavorites, null);
         }
-        log.debug("# spaceWikis : {}", spaceWikis);
-        List<Wiki> wikiListInSpace = wikiService.findBySpaceIdAndSort(spaceId);
-        String wikiTrees = convertTreeTag(wikiListInSpace);
 
-        log.info("## wikiTrees = {} ", wikiTrees);
-
-
-        mav.addObject("wikiTrees", wikiTrees);
-        mav.addObject("spaceWikis", spaceWikis);
-        mav.addObject("updatedWikis", updatedWikis);
+        mav.addObject("spaceWikiLists", spaceWikiLists);
         mav.addObject("space", space);
         mav.addObject("spaceUser", spaceUser);
         mav.addObject("userFavorite", userFavorite);
         mav.addObject("activities", activities);
         mav.addObject("spaceActivityLists", spaceActivityLists);
 
-
         return mav;
     }
 
-    private String convertTreeTag(List<Wiki> wikiListInSpace) {
-        StringBuffer stringBuffer = new StringBuffer();
-
-        int groupIdx = 0;
-        int parentsId = 0;
-
-        for (Wiki wiki : wikiListInSpace) {
-            if (wiki.getOrderIdx() == 0) {
-                stringBuffer.append("<li>")
-                        .append(wiki.getTitle());
-            } else {
-                if (groupIdx == wiki.getGroupIdx()) {
-                    stringBuffer.append("<ul><li>")
-                            .append(wiki.getTitle())
-                            .append("</li></ul>");
-                    continue;
-                } else {
-                    stringBuffer.append("<li>")
-                            .append(wiki.getTitle())
-                            .append("</li>");
-                    continue;
-                }
-            }
-            groupIdx = wiki.getGroupIdx();
-
-
-            stringBuffer.append("</li>");
-        }
-
-        return stringBuffer.toString();
-    }
 
     /**
      * 개설된 공간 수 조회
@@ -440,36 +403,65 @@ public class SpaceController {
         return mav;
     }
 
-    /*
-    @RequestMapping("/space/wikis")
+    @RequestMapping(value = "/space/tree", method = RequestMethod.POST, produces = "text/html; charset=utf8")
     @ResponseBody
-    public Collection wikiLists(@RequestParam Integer spaceId) {
-        List<Wiki> wikiList = wikiService.findBySpaceId(spaceId);
+    public String treeJson(@RequestParam Integer spaceId) throws IOException {
+        List<Wiki> wikiListInSpace = wikiService.findBySpaceIdAndSort(spaceId);
+        List<TreeModel> wikiList = bindTree(wikiListInSpace);
 
+        for (int i = 0; i < wikiList.size(); i++) {
+            if (wikiList.get(i).getId() == wikiList.get(i).getParentId()) {
+                continue;
+            } else {
+                // 자식 위키가 있음
+                setChild(wikiList, wikiList.get(i).getParentId());
+            }
+        }
 
-        List<WikiTree> defaultData = new ArrayList<>();
+        ObjectMapper om = new ObjectMapper();
 
-        WikiTreeNode wikiTreeNode = new WikiTreeNode();
-        wikiTreeNode.setHref("/1");
-        wikiTreeNode.setTags(5);
-        wikiTreeNode.setText("자식노드1");
-        List<WikiTreeNode> nodes = new ArrayList<>();
-        nodes.add(wikiTreeNode);
-
-        WikiTree data = new WikiTree();
-        data.setText("Parent 1");
-        data.setTags(4);
-        data.setHref("#parent 1");
-        data.setNodes(nodes);
-
-        defaultData.add(data);
-
-        log.info("### defaultData = {}", defaultData);
-        return defaultData;
-
+        // {"success" : true, "returnUrl" : "..."}
+        String jsonString = om.writeValueAsString(wikiList);
+        log.info("### json = " + jsonString);
+        return jsonString;
     }
-    */
 
+    private List<TreeModel> bindTree(List<Wiki> wikiListInSpace) {
+        List<TreeModel> models = new ArrayList<>();
+        for (Wiki wiki : wikiListInSpace) {
+            TreeModel model = new TreeModel();
+
+            log.info("### wiki id = " + wiki.getWikiId());
+            log.info("### wiki parent = " + wiki.getParentsId());
+            log.info("### wiki result = " + wiki.getWikiId().equals(wiki.getParentsId()));
+
+            if (wiki.getWikiId().equals(wiki.getParentsId())) {
+                model.setParentId(0);
+            } else {
+                model.setParentId(wiki.getParentsId());
+            }
+            model.setId(wiki.getWikiId());
+            model.setText(wiki.getTitle());
+            String[] counts = new String[1];
+            counts[0] = wiki.getReplyCount()+"";
+            model.setTags(counts);
+            //model.setNodes(null);
+            model.setHref("/wiki/" + wiki.getWikiId());
+
+            models.add(model);
+
+        }
+
+        return models;
+    }
+
+    private void setChild(List<TreeModel> wikiList, int parentId) {
+        for (TreeModel tree : wikiList) {
+            if (parentId == tree.getId()) {
+                tree.setHasChild(true);
+            }
+        }
+    }
 
     public ModelAndView sendAccessDenied() {
         ModelAndView mav = new ModelAndView("/common/403");

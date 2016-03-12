@@ -63,7 +63,40 @@ var jisung;
 
             this.hideTable();
 
-            var table = $("<div class='modal fade' id='tableModal' data-keyboard='false' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>   <div class='modal-dialog'>     <div class='modal-content'>       <div class='modal-body'>         		<form class='form-inline' id='tableHYform' role='form'> 			<div class='form-group'> 				<input type='number' class='form-control'> 행 x 			</div> 			<div class='form-group'> 				<input type='number' class='form-control'> 열 			</div> 			<button type='button' class='btn btn-primary'>적용</button> 		</form>        <hr>                <div id='tableHYdiv'>        </div>               </div>       <div class='modal-footer'>         <button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' >Close</button>         <button type='button' class='btn btn-primary' id='ok'>Save changes</button>       </div>     </div>   </div> </div>  ");
+            var table =
+                "<div class='modal fade' id='tableModal' data-keyboard='false' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>" +
+                "   <div class='modal-dialog'>" +
+                "     <div class='modal-content'>" +
+                "     	<div class=\"modal-header\">" +
+                "           <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">" +
+                "               <span aria-hidden=\"true\">&times;</span>" +
+                "           </button>" +
+                "           <h4 class=\"modal-title\">테이블 마크업생성</h4>" +
+                "       </div>" +
+                "       <div class='modal-body'>" +
+                "         	<form class='form-inline' id='tableHYform' role='form'>" +
+                " 			    <div class='form-group'>" +
+                " 				    <input type='number' class='form-control'> 행 x" +
+                "               </div>" +
+                " 			    <div class='form-group'>" +
+                " 				    <input type='number' class='form-control'> 열" +
+                " 			    </div>" +
+                " 			    <div class='form-group'>" +
+                " 			        <button type='button' class='btn btn-primary btn-sm'>적용</button>" +
+                " 			    </div>" +
+                " 		    </form>" +
+                "           <hr>" +
+                "           <div id='tableHYdiv'>" +
+                "           </div>" +
+                "       </div>" +
+                "       <div class='modal-footer'>" +
+                "         <button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' >닫기</button>" +
+                "         <button type='button' class='btn btn-primary btn-sm' id='ok'>표현하기</button>" +
+                "       </div>" +
+                "       </div>" +
+                "   </div>" +
+                "</div>  ";
+            table = $(table);
 
             table.find(".dualEditor-wiki-btn").on("click", function () {
                 $('#tableModal').modal('hide');
@@ -75,6 +108,11 @@ var jisung;
                 html += "||셀제목";
                 html += "||셀제목";
                 html += "|| \n";
+
+                if( $(this).parent().parent().find('#tableHYdiv').find('.form-inline').size() <= 0 ){
+                    alert("적용할 행과열이 없습니다.");
+                    return false;
+                }
 
                 $(this).parent().parent().find('#tableHYdiv').find('.form-inline').each(function(){
                     $(this).find('input').each(function(){
@@ -90,10 +128,10 @@ var jisung;
 
             //행적용
             table.find('#tableHYform').find("button").on("click", function(){
-                var hh = $(this).parent().find("input")[0].value;
-                var yy = $(this).parent().find("input")[1].value;
-                $(this).parent().parent().find("#tableHYdiv").empty();
-                $(this).parent().parent().find("#tableHYdiv").append( $.layer_select.table.tableSetHtml(hh,yy) );
+                var hh = $(this).parent().parent().find("input")[0].value;
+                var yy = $(this).parent().parent().find("input")[1].value;
+                $(this).parent().parent().parent().find("#tableHYdiv").empty();
+                $(this).parent().parent().parent().find("#tableHYdiv").append( $.layer_select.table.tableSetHtml(hh,yy) );
                 $.layer_select.table.tableEnvent(this);
             });
 
@@ -102,25 +140,31 @@ var jisung;
         },
 
         tableEnvent : function(item){
-            $(item).parent().parent().find("#tableHYdiv form").each(function(){
+            $(item).parent().parent().parent().find("#tableHYdiv form").each(function(){
                 $(this).find("button").on("click",function(){
-                    $(this).parent().remove();
+                    $(this).parent().parent().remove();
                 });
             });
         },
 
         tableSetHtml : function(hh, yy){
             var html = "";
+            var row = "";
+            var column = "";
             for( var h=0; h < hh; h++ ){
-         		 html += "<form class=\"form-inline\" role=\"form\">\n";
-         		 for( var y=0; y < yy; y++ ){
-         			 html += "<div class=\"form-group\">\n";
-         			 html += "<input type=\"text\" class=\"form-control\">\n";
-         			 html += "</div>\n";
-         		 }
-         		 html += "<button type=\"button\" class=\"btn btn-primary\">행삭제</button>\n</form>\n";			 
-         	 }
-         	return html;
+                row = (h+1)+"행";
+                html += "<form class=\"tableHYdiv form-inline\" role=\"form\">\n";
+                for( var y=0; y < yy; y++ ){
+                    column = row + " " +(y+1)+"열";
+                    html += "<div class=\"form-group\">\n";
+                    html += "<input type=\"text\" class=\"form-control\" placeholder=\""+column+"\" >\n";
+                    html += "</div>\n";
+                }
+                html += "<div class=\"form-group\">\n";
+                html += "<button type=\"button\" class=\"btn btn-primary btn-sm\">행삭제</button>\n</form>\n";
+                html += "</div>\n";
+            }
+            return html;
         },
         
         hideTable : function () {
@@ -133,8 +177,38 @@ var jisung;
         open : function ( textEditor, $me, data ) {
 
         	this.hideLink();
-        	
-        	var link = $("<div class=\"modal fade\" id=\"urlModal\" data-keyboard='false' role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">   <div class=\"modal-dialog\">     <div class=\"modal-content\">     	<div class=\"modal-body\"> 			<form class=\"form\" role=\"form\"> 				<div class=\"form-group\"> 					<label for=\"exampleInputLinkText\">Link Text</label> 					<input type=\"text\" class=\"form-control\" id=\"linkText\" placeholder=\"Link Text\"> 				</div> 				<div class=\"form-group\"> 					<label for=\"exampleInputURL\">URL</label> 					<input type=\"text\" class=\"form-control\" id=\"linkUrl\" placeholder=\"URL\"> 				</div> 			</form>       </div>       <div class=\"modal-footer\">         <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" >Close</button>         <button type=\"button\" class=\"btn btn-primary\" id=\"ok\">Save changes</button>       </div>     </div>   </div> </div> ");
+
+            var link =
+                    "<div class=\"modal fade\" id=\"urlModal\" data-keyboard='false' role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">" +
+                    "   <div class=\"modal-dialog\">" +
+                    "     <div class=\"modal-content\">" +
+                    "     	<div class=\"modal-header\">" +
+                    "           <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">" +
+                    "               <span aria-hidden=\"true\">&times;</span>" +
+                    "           </button>" +
+                    "           <h4 class=\"modal-title\">링크 마크업생성</h4>" +
+                    "       </div>" +
+                    "     	<div class=\"modal-body\">" +
+                    " 			<form class=\"form\" role=\"form\">" +
+                    " 				<div class=\"form-group\">" +
+                    " 					<label for=\"exampleInputLinkText\">Link lable</label>" +
+                    " 					<input type=\"text\" class=\"form-control\" id=\"linkText\" placeholder=\"Link lable\">" +
+                    " 				</div>" +
+                    " 				<div class=\"form-group\">" +
+                    " 					<label for=\"exampleInputURL\">Link URL</label>" +
+                    " 					<input type=\"text\" class=\"form-control\" id=\"linkUrl\" placeholder=\"Link URL\">" +
+                    " 				</div>" +
+                    " 			</form>" +
+                    "       </div>" +
+                    "       <div class=\"modal-footer\">" +
+                    "         <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" >닫기</button>" +
+                    "         <button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"ok\">표현하기</button>" +
+                    "       </div>" +
+                    "     </div>" +
+                    "   </div>" +
+                    " </div> "
+                ;
+            link = $(link);
 
             link.find(".dualEditor-wiki-btn").on("click", function () {
                 $('#urlModal').modal('hide');
@@ -168,26 +242,32 @@ var jisung;
                 "<div class=\"modal fade\" id=\"imgModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">" +
                 "   <div class=\"modal-dialog\">" +
                 "     <div class=\"modal-content\">" +
+                "     	<div class=\"modal-header\">" +
+                "           <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">" +
+                "               <span aria-hidden=\"true\">&times;</span>" +
+                "           </button>" +
+                "           <h4 class=\"modal-title\">이미지 마크업생성</h4>" +
+                "       </div>" +
                 "     	<div class=\"modal-body\">" +
                 "     	    <ul class=\"nav nav-tabs\" role=\"tablist\">" +
-                "     	        <li role=\"presentation\" class=\"active\"><a href=\"#imgLink\" data-id=\"imgLink\" role=\"tab\" data-toggle=\"tab\">Home</a></li>" +
-                "     	        <li role=\"presentation\"><a href=\"#imgUpload\" data-id=\"imgUpload\" role=\"tab\" data-toggle=\"tab\">Profile</a></li>" +
+                "     	        <li role=\"presentation\" class=\"active\"><a href=\"#imgLink\" data-id=\"imgLink\" role=\"tab\" data-toggle=\"tab\">Link</a></li>" +
+                "     	        <li role=\"presentation\"><a href=\"#imgUpload\" data-id=\"imgUpload\" role=\"tab\" data-toggle=\"tab\">Upload</a></li>" +
                 "     	    </ul>" +
-                " 			<form class=\"form-horizontal\" role=\"form\" id=\"imageUploadForm\">" +
+                " 			<form class=\"form-horizontal\" style='padding-top: 10px;' role=\"form\">" +
                 "               <div class=\"tab-content\">" +
-                "                   <div role=\"tabpanel\" class=\"tab-pane dualEditor-image-well active\" id=\"imgLink\">" +
-                "                       <div class=\"form-group\">" +
+                "                   <div role=\"tabpanel\" class=\"tab-pane active\" id=\"imgLink\">" +
+                "                       <div style='margin-bottom: 15px;'>" +
                 "                           <label for=\"exampleInputImgText\">Img Text</label>" +
                 "                           <input type=\"text\" class=\"form-control\" id=\"ImgText\" placeholder=\"Img Text\">" +
                 "                       </div>" +
-                "                       <div class=\"form-group\">" +
+                "                       <div >" +
                 "                           <label for=\"exampleInputURL\">URL</label>" +
                 "                           <input type=\"text\" class=\"form-control\" id=\"ImgUrl\" placeholder=\"URL\">" +
                 "                       </div>" +
                 "                   </div>"+
-                "                   <div role=\"tabpanel\" class=\"tab-pane dualEditor-image-well\" id=\"imgUpload\">" +
+                "                   <div role=\"tabpanel\" class=\"tab-pane well\" id=\"imgUpload\">" +
                 "                       <div class=\"form-group\">" +
-                "                           <input id=\"image_uploadfile\" type=\"file\" name=\"uploadfile\" accept=\"*\" style=\"display:none\">" +
+                "                           <input id=\"uploadfile\" type=\"file\" name=\"uploadfile\" accept=\"*\" style=\"display:none\">" +
                 "                           <label for=\"fileAttachmentInput\" class=\"col-sm-2 control-label\">첨부파일</label>" +
                 "                           <div class=\"col-sm-10 col-md-10\">" +
                 "                               <div class=\"row\">" +
@@ -195,7 +275,7 @@ var jisung;
                 "                                       <input id=\"fileAttachmentInput\" class=\"form-control\" type=\"text\" />" +
                 "                                   </div>" +
                 "                                   <div class=\"col-sm-3 col-xs-3 col-md-3\">" +
-                "                                       <button class=\"btn btn-info btn-default\" type=\"button\" onclick=\"$('#image_uploadfile').click();\">선택</button>" +
+                "                                       <button class=\"btn btn-info btn-default\" type=\"button\" onclick=\"$('#uploadfile').click();\">선택</button>" +
                 "                                   </div>" +
                 "                               </div>" +
                 "                           </div>" +
@@ -205,8 +285,8 @@ var jisung;
                 " 			</form>" +
                 "       </div>" +
                 "       <div class=\"modal-footer\">" +
-                "         <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" >Close</button>" +
-                "         <button type=\"button\" class=\"btn btn-primary\" id=\"ok\">Save changes</button>" +
+                "         <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" >닫기</button>" +
+                "         <button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"ok\">표현하기</button>" +
                 "       </div>" +
                 "     </div>" +
                 "   </div>" +
@@ -278,8 +358,8 @@ var jisung;
                 " 			</form>" +
                 "       </div>" +
                 "       <div class=\"modal-footer\">" +
-                "         <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" >Close</button>" +
-                "         <button type=\"button\" class=\"btn btn-primary\" id=\"ok\">Save changes</button>" +
+                "         <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" >닫기</button>" +
+                "         <button type=\"button\" class=\"btn btn-primary btn-sm\" id=\"ok\">표현하기</button>" +
                 "       </div>" +
                 "     </div>" +
                 "   </div>" +

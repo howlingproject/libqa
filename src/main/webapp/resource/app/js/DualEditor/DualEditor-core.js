@@ -170,19 +170,19 @@ function getMarkupEditHtml(width, height){
         "   <thead>" +
         "   <tr>" +
         "       <th colspan=\"2\">" +
-        "           <div class=\"btn-toolbar    \" id=\"btnToolbar\">" +
+        "           <div class=\"btn-toolbar\" id=\"btnToolbar\">" +
         "               <div class=\"btn-group\">" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm dropdown-toggle\" data-toggle=\"dropdown\"><i class=\"fa fa-header\"></i><span class=\"caret\"></span></button>" +
         "                   <ul class=\"dropdown-menu\" role=\"menu\">" +
         "                       <li>" +
         "                           <a data-mode=\"font\" data-before=\"# \" data-center=\"\"  data-after=\"\" unselectable=\"on\">" +
-        "                               <span style=\"font-size:18px;\" unselectable=\"on\"><h1>h1. 큰 헤드라인</h1></span>" +
+        "                               <span style=\"font-size:18px;\">h1. 큰 헤드라인</span>" +
         "                           </a>" +
         "                           <a data-mode=\"font\" data-before=\"## \" data-center=\"\"  data-after=\"\" unselectable=\"on\">" +
-        "                               <span style=\"font-size:14px;\" unselectable=\"on\"><h2>h2. 중간 헤드라인</h2></span>" +
+        "                               <span style=\"font-size:14px;\">h2. 중간 헤드라인</span>" +
         "                           </a>" +
         "                           <a data-mode=\"font\" data-before=\"### \" data-center=\"\"  data-after=\"\" unselectable=\"on\">" +
-        "                               <span style=\"font-size:12px;\" unselectable=\"on\"><h3>h3. 작은 헤드라인</h3></span>" +
+        "                               <span style=\"font-size:12px;\">h3. 작은 헤드라인</span>" +
         "                           </a>" +
         "                       </li>" +
         "                   </ul>" +
@@ -213,10 +213,11 @@ function getMarkupEditHtml(width, height){
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#imgModal\" data-mode=\"layer\" data-type=\"img\" ><i class=\"fa fa-file-image-o\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[alert]\" data-center=\" \" data-after=\"[alert]\"><i class=\"fa fa-exclamation-triangle\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\"  data-before=\"[info]\"  data-center=\" \"  data-after=\"[info]\"><i class=\"fa fa-info\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditorWiki-btn btn btn-default btn-sm\" data-mode=\"append\"  data-before=\"[syntax]\"  data-center=\" \"  data-after=\"[syntax]\"><i class=\"fa fa-file-code-o\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\"  data-before=\"[syntax]\"  data-center=\" \"  data-after=\"[syntax]\"><i class=\"fa fa-file-code-o\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#layoutModal\" data-mode=\"layer\" data-type=\"layout\" ><i class=\"fa fa-columns\"></i></button>" +
         "               </div>" +
         "           </div>" +
+        "           <hr style=\"background-color:#ccc;height: 1px;margin-top: 10px;margin-bottom: 12px;\"> " +
         "       </th>" +
         "   </tr>" +
         "   </thead>" +
@@ -269,15 +270,15 @@ function getMarkupEditMiniHtml(width, height){
     " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'><i class='fa fa-header'></i><span class='caret'></span></button>" +
     " 								<ul class='dropdown-menu' role='menu'>" +
     " 									<li>" +
-    " 										<a data-mode='font' data-before='# ' data-center=''  data-after='' unselectable='on'>" +
-    " 											<span style='font-size:18px;' unselectable='on'><h1>h1. 큰 헤드라인</h1></span>" +
-    " 										</a>" +
-    " 										<a data-mode='font' data-before='## ' data-center=''  data-after='' unselectable='on'>" +
-    " 											<span style='font-size:14px;' unselectable='on'><h2>h2. 중간 헤드라인</h2></span>" +
-    " 										</a>" +
-    " 										<a data-mode='font' data-before='### ' data-center=''  data-after='' unselectable='on'>" +
-    " 											<span style='font-size:12px;' unselectable='on'><h3>h3. 작은 헤드라인</h3></span>" +
-    " 										</a>" +
+    "                                       <a data-mode=\"font\" data-before=\"# \" data-center=\"\"  data-after=\"\" unselectable=\"on\">" +
+    "                                           <span style=\"font-size:18px;\">h1. 큰 헤드라인</span>" +
+    "                                       </a>" +
+    "                                       <a data-mode=\"font\" data-before=\"## \" data-center=\"\"  data-after=\"\" unselectable=\"on\">" +
+    "                                           <span style=\"font-size:14px;\">h2. 중간 헤드라인</span>" +
+    "                                       </a>" +
+    "                                       <a data-mode=\"font\" data-before=\"### \" data-center=\"\"  data-after=\"\" unselectable=\"on\">" +
+    "                                           <span style=\"font-size:12px;\">h3. 작은 헤드라인</span>" +
+    "                                       </a>" +
     " 									</li>" +
     " 								</ul>" +
     " 							</div>" +
@@ -297,6 +298,7 @@ function getMarkupEditMiniHtml(width, height){
     "                               <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#layoutModal\" data-mode=\"layer\" data-type=\"layout\" ><i class=\"fa fa-columns\"></i></button>" +
     " 							</div>" +
     " 						</div>" +
+
     " 					</th>" +
     " 				</tr>" +
     " 				<tr><td style='padding: 8px'></td></tr>" +

@@ -78,8 +78,8 @@ Time: 16:20
                         <span class="input-group-addon"><i class="fa fa-lock" style="width:14px"></i></span>
                         <input  type="password" class="form-control" name="loginUserPass" id="loginUserPass" placeholder="Password">
                     </div>
-                    <span class="help-block">Password error - 중복검사 안내 문구 출력 </span>
-
+                    <span class="help-block" style="display: none;">Password error - 중복검사 안내 문구 출력 </span>
+                    <span class="help-block"></span>
                     <button class="btn btn-lg btn-primary btn-block" type="button" id="signUser">Sign up</button>
                 </div>
             </div>
@@ -154,7 +154,7 @@ Time: 16:20
                             if (req.resultCode == 1) {
                                 $.confirm({
                                     title: '완료',
-                                    content: '회원가입 완료!' + '<BR>회원님의 메일 주소로 인증 메일이 발송되었습니다. 메일을 확인하세요.' ,
+                                    content: '회원가입 완료!' ,
                                     confirmButton: '확인',
                                     cancelButton: '취소',
                                     confirmButtonClass: 'btn-info',

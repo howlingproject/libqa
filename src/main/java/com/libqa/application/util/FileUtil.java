@@ -129,8 +129,4 @@ public class FileUtil {
         stream.close();
     }
 
-    public static void makeThumbnailAndUpload(MultipartFile uploadfile) {
-
-
-    }
 }

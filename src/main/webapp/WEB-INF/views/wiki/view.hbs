@@ -15,7 +15,10 @@
                 {{/if}}
             </div>
             <div class="btn-group" id="sub_menu" data-toggle="buttons" style="float: right">
-                <a href="#" class="btn btn-primary">히스토리</a>
+                {{#if isLogin}}
+                <a href="#" class="fun-like btn btn-primary" data-value="{{wiki.wikiId}}" data-type="WIKI">추천하기</a>
+                {{/if}}
+                <!--<a href="#" class="btn btn-primary">히스토리</a>-->
                 {{#if isLogin}}
                 <a href="#" class="btn btn-primary" id="update">편집</a>
                 <a href="#" class="btn btn-primary" id="delete">삭제</a>
@@ -66,11 +69,10 @@
                         </tr>
                         </tbody>
                     </table>
-                    {{#if isLogin}}
-                    <a href="#" class="fun-like btn btn-primary"
-                       data-value="{{wiki.wikiId}}" data-type="WIKI">추천하기</a>
-                    {{/if}}
-                    <a href="#" class="btn btn-primary">인쇄하기</a>
+                    <!--{{#if isLogin}}-->
+                    <!--<a href="#" class="fun-like btn btn-primary" data-value="{{wiki.wikiId}}" data-type="WIKI">추천하기</a>-->
+                    <!--{{/if}}-->
+                    <!--<a href="#" class="btn btn-primary">인쇄하기</a>-->
                 </div>
             </div>
         </div>
@@ -227,7 +229,7 @@
                             <div class="media-heading">
                                 {{formatDate insertDate "yyyy.MM.dd"}}
                                 <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{this.userNick}}</span>
-                                <strong><span class="pull-right">form facebook</span></strong>
+                                <!--<strong><span class="pull-right">form facebook</span></strong>-->
                             </div>
                             {{{this.contents }}}
                         </div>
@@ -235,7 +237,7 @@
                     <div class="col-md-1 my-qna-rating pull-right">
                         <button class="fun-like btn btn-sm btn-default btn-sm-fixed pull-right"
                                 data-value="{{this.replyId}}" data-type="COMMENT" id="replyIdLike{{this.replyId}}">추천 <span>{{size this.wikiLikes }}</span></button>
-                        <button class="btn btn-sm btn-default btn-sm-fixed pull-right">비추천</button>
+                        <!--<button class="btn btn-sm btn-default btn-sm-fixed pull-right">비추천</button>-->
                     </div>
                 </div>
             </div>
@@ -325,6 +327,7 @@
     </div>
 </div>
 <input type="hidden" id="wikiId" value="{{wiki.wikiId}}">
+<input type="hidden" id="spaceId" value="{{wiki.spaceId}}">
 {{/partial}}
 
 
@@ -356,7 +359,10 @@
             });
             $("#file-attachment").on("change", Wiki.uploadFile);
 
+            $("#outdent").hide();
             $("#outdent").click(function(){
+                $("#indent").show();
+                $("#outdent").hide();
                 var div1 = $("#mainContent").children(".row").children(":first");
                 var div2 = $("#mainContent").children(".row").children(":last");
                 div2.show();
@@ -364,6 +370,8 @@
             });
 
             $("#indent").click(function(){
+                $("#outdent").show();
+                $("#indent").hide();
                 var div1 = $("#mainContent").children(".row").children(":first");
                 var div2 = $("#mainContent").children(".row").children(":last");
                 div2.hide();
@@ -413,7 +421,7 @@
                link = "/wiki/write/"+$("#wikiId").val();
            }else if( id == 'space' ){
                text ='공간으로 이동';
-               link = "/wiki/space/"+$("#wikiId").val();
+               link = "/space/"+$("#spaceId").val();
            }
            if( link != '' ){
                $.confirm({
@@ -424,15 +432,15 @@
                    icon: 'fa fa-question-circle',
                    animation: 'top',
                    confirm: function () {
-                       if( id == 'update' ) {
+                       if( id == 'update' ){
                            location.href = link;
-                       }else if( id == 'delete' ) {
-                           Wiki.updateStat(id, link);
-                       }else if( id == 'lock' ) {
+                       }else if( id == 'delete' ){
+                           location.href = "/wiki/main";
+                       }else if( id == 'lock' ){
                            Wiki.updateStat(id, link);
                        }else if( id == 'write' ){
                            location.href = link;
-                       }else if( id == 'space' ) {
+                       }else if( id == 'space' ){
                            location.href = link;
                        }
                    }

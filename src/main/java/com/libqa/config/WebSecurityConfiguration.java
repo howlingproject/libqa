@@ -48,6 +48,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        /** 한글처리
+        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        filter.setEncoding("UTF-8");
+        filter.setForceEncoding(true);
+        httpSecurity.addFilterBefore(filter,CsrfFilter.class);
+
+         */
+
         httpSecurity.csrf().disable();
         log.debug("## configure httpSecurity = {}", httpSecurity);
 

@@ -205,7 +205,7 @@ public class WikiController {
 
         Wiki wiki = wikiService.findById(wikiId);
 
-        //위키만든 유저만 삭제가능
+        //위키만든 유저만 잠금가능
         if( wiki.getUserId() == userId ){
             wiki.setLock(true);
             wikiService.save(wiki);
@@ -245,19 +245,19 @@ public class WikiController {
                         for( Wiki tempWiki : list ){
                             tempWiki.setOrderIdx( tempWiki.getOrderIdx() + 1  );
                             wikiService.save(tempWiki);
+                            log.debug("####### WIKI SAVE After INFO ########");
                         }
                     }
                 }
-
                 wiki.setOrderIdx( maxOrderIdx+1 );
                 wiki.setDepthIdx( wiki.getDepthIdx() + 1 );
             }
 
             Wiki result = wikiService.saveWithKeyword(wiki, keyword);
-            log.debug("####### WIKI SAVE After INFO ########");
             log.debug("result = {}", result);
 
             return ResponseData.createSuccessResult(result);
+
         }catch(Exception e){
             e.printStackTrace();
             log.error(e.toString());

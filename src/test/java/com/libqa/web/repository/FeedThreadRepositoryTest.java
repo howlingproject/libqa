@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
-import static junit.framework.Assert.assertNull;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 public class FeedThreadRepositoryTest extends LibqaRepositoryTest<FeedThreadRepository> {
@@ -17,7 +17,7 @@ public class FeedThreadRepositoryTest extends LibqaRepositoryTest<FeedThreadRepo
     @Test
     public void findOne() {
         FeedThread actual = repository.findOne(-1);
-        assertNull(actual);
+        assertThat(actual).isNull();
     }
 
     @Test
