@@ -55,6 +55,7 @@ dependencies {
     compile('com.google.guava:guava:18.0')
     compile('com.twitter:twitter-text:1.13.0')
     compile('org.codehaus.jackson:jackson-core-asl:1.9.13')
+    compile('commons-io:commons-io:2.4')
     testCompile('com.jayway.restassured:spring-mock-mvc:2.4.0')
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     testCompile('cglib:cglib:2.2')

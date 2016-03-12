@@ -10,7 +10,7 @@
         </div>
         <div class="media">
             <div class="user-profile pull-left">
-                <img alt="avatar" class="profile-image" src="{{userImage}}" onerror='this.src="/resource/images/avatar.png"'/>
+                <img alt="avatar" class="profile-image" src="/imageView?path={{userImage}}" onerror='this.src="/resource/images/avatar.png"'/>
             </div>
             <div class="row media-body">
                 {{subString (htmlDelete contents) 0 150 }}
