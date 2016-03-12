@@ -205,7 +205,7 @@ public class WikiController {
 
         Wiki wiki = wikiService.findById(wikiId);
 
-        //위키만든 유저만 삭제가능
+        //위키만든 유저만 잠금가능
         if( wiki.getUserId() == userId ){
             wiki.setLock(true);
             wikiService.save(wiki);
