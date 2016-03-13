@@ -38,40 +38,6 @@ public class UserController {
     private UserKeywordService userKeywordService;
 
 
-    /*
-    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseData<User> login(HttpServletRequest request, User loginUser) {
-        ResponseData<User> responseData = null;
-        String targetUrl = returnUrl(request);
-
-        log.debug("/login = {}", targetUrl);
-        log.debug("# userEmail = {}", loginUser.getUserEmail());
-        log.debug("# userPass = {}", new BCryptPasswordEncoder().encode(loginUser.getUserPass()));
-
-        User user = userService.findByEmail(loginUser.getUserEmail());
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("사용자 정보가 존재하지 않습니다. email : %s", loginUser.getUserEmail()));
-        }
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        boolean isUser = encoder.matches(loginUser.getUserPass(), user.getUserPass());
-
-        log.debug("### isUser = {} ", isUser);
-        log.debug("### user = {} ", user);
-
-        if (!isUser) {
-            responseData = ResponseData.createFailResult(user);
-        } else {
-            user.setTargetUrl(targetUrl);
-            responseData = ResponseData.createSuccessResult(user);
-        }
-
-        log.debug("### responseData = {} ", responseData);
-        return responseData;
-    }
-    */
-
     /**
      * 회원 로그인 form
      *
@@ -112,21 +78,6 @@ public class UserController {
     }
 
 
-    // @PreAuthorize("hasAuthority('ADMIN')")
-    // hasAnyRole('USER', 'ADMIN')
-    // isFullyAuthenticated() and hasAnyRole(‘customer’, ‘admin’)
-    // hasIpAddress(‘127.0.0.1’)
-    // hasRole(‘admin’) and hasIpAddress(‘192.168.1.0/24’)
-
-    /**
-     * hasAnyAuthority() or hasAnyRole() ('authority' and 'role' are synonyms in Spring Security lingo!) - checks whether the current user has one of the GrantedAuthority in the list.
-     * hasAuthority() or hasRole() - as above, but for just one.
-     * isAuthenticated() or isAnonymous() - whether the current user is authenticated or not.
-     * isRememberMe() or isFullyAuthenticated() - whether the current user is authenticated by 'remember me' token or not.
-     * @param request
-     * @return
-     */
-
     @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("/user/profile")
     public ModelAndView userProfile(HttpServletRequest request) {
@@ -152,17 +103,39 @@ public class UserController {
         return mav;
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+
+    @RequestMapping(value = "/user/checkEmail", method = RequestMethod.POST)
+    @ResponseBody
+    public String checkEmail(@RequestParam String userEmail) {
+        try {
+            User user = userService.findByEmail(userEmail);
+            if (user == null) {
+                return "1";
+            } else {
+                return "0";
+            }
+        } catch (Exception e) {
+            return "-1";
+        }
+
+    }
+
     @RequestMapping(value = "/user/checkDupNick", method = RequestMethod.POST)
     @ResponseBody
     public String checkUserNick(@RequestParam String userNick) {
-        User user = userService.findByNick(userNick);
+        try {
+            User user = userService.findByNick(userNick);
 
-        if (user == null) {
-            return "1";
+            if (user == null) {
+                return "1";
+            } else {
+                return "0";
+            }
+        } catch (Exception e) {
+            return "-1";
         }
-        return "0";
     }
+
 
     @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/user/updateProfile", method = RequestMethod.POST)

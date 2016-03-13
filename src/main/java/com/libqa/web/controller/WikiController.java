@@ -3,6 +3,7 @@ package com.libqa.web.controller;
 import com.google.common.base.MoreObjects;
 import com.libqa.application.enums.ListType;
 import com.libqa.application.enums.WikiLikesType;
+import com.libqa.application.enums.WikiOrderListType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUserManager;
@@ -64,7 +65,7 @@ public class WikiController {
     public ModelAndView main(Model model){
         ModelAndView mav = new ModelAndView("wiki/main");
 
-        List<DisplayWiki> allWiki = wikiService.findByAllWiki(0, 10);
+        List<DisplayWiki> allWiki = wikiService.findByAllWiki(0, 10, WikiOrderListType.INSERT_DATE);
         mav.addObject("allWiki", allWiki);
 
         User user = loggedUserManager.getUser();
@@ -79,13 +80,11 @@ public class WikiController {
         List<DisplayWiki> bestWikiList = new ArrayList<>();
         for (DisplayWiki displayWiki : bestWiki) {
             Wiki wiki = displayWiki.getWiki();
-            List<WikiReply> replies = wiki.getWikiReplies();
             List<Keyword> keywords = keywordService.findByWikiId(wiki.getWikiId(), false);
             User userInfo = new User();
             userInfo.setUserId(wiki.getUserId());
             userInfo.setUserNick(wiki.getUserNick());
-            // 속도상의 이슈로 위키의 리플갯수 조회하지 안흠
-            DisplayWiki bestDisplayWiki = new DisplayWiki(wiki, userInfo, keywords, replies.size());
+            DisplayWiki bestDisplayWiki = new DisplayWiki(wiki, userInfo, keywords);
 
             bestWikiList.add(bestDisplayWiki);
         }
@@ -100,13 +99,19 @@ public class WikiController {
         return (user != null && user.getUserId() != null );
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+
+
+
+
+    //@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping("wiki/write")
     public ModelAndView write(@ModelAttribute Space modelSpace){
         ModelAndView mav = wikiWrite(modelSpace, null);
         return mav;
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("wiki/write/{wikiId}" )
     public ModelAndView writeSub(@ModelAttribute Space modelSpace, @PathVariable("wikiId") Integer wikiId){
         ModelAndView mav = wikiWrite(modelSpace,wikiId);
@@ -116,6 +121,11 @@ public class WikiController {
     private ModelAndView wikiWrite(Space modelSpace, Integer wikiId){
         ModelAndView mav = new ModelAndView("wiki/write");
         log.debug("# spaceId : {}", modelSpace.getSpaceId());
+
+        User user = loggedUserManager.getUser();
+        if (user == null) {
+            return sendAccessDenied("403","Hi, you do not have permission to access this page!");
+        }
 
         if( modelSpace.getSpaceId() == null ){
             boolean isDeleted = false;    // 삭제 하지 않은 것
@@ -138,7 +148,10 @@ public class WikiController {
     public ModelAndView wikiDetail(@PathVariable Integer wikiId) {
         ModelAndView mav = new ModelAndView("wiki/view");
 
-        Wiki wiki = wikiService.findById(wikiId);
+        Wiki wiki = wikiService.wikiDetail(wikiId);
+        if( wiki == null ){
+            return sendAccessDenied("404","The 404 or Not Found error message is an HTTP standard response code indicating that the client was able to communicate with a given server, but the server could not find what was requested");
+        }
         //List<WikiReply> wikiReply = wiki.getWikiReplies();
         log.debug("# view : {}", wiki);
         //Wiki parentWiki = wikiService.findByParentId(wiki.getParentsId());
@@ -154,10 +167,16 @@ public class WikiController {
         return mav;
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping("wiki/update/{wikiId}")
     public ModelAndView update(@PathVariable Integer wikiId){
         ModelAndView mav = new ModelAndView("wiki/write");
         log.debug("# wikiId : {}", wikiId);
+
+        User user = loggedUserManager.getUser();
+        if (user == null) {
+            return sendAccessDenied("403","Hi, you do not have permission to access this page!");
+        }
 
         Wiki wiki = wikiService.findById(wikiId);
         mav.addObject("wiki", wiki);
@@ -171,6 +190,7 @@ public class WikiController {
         return mav;
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/wiki/delete/{wikiId}", method = RequestMethod.GET)
     public ResponseData wikiDelete(@PathVariable Integer wikiId) {
         log.debug("# wikiId : {}", wikiId);
@@ -196,25 +216,30 @@ public class WikiController {
         return createSuccessResult(wiki);
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/wiki/lock/{wikiId}", method = RequestMethod.GET)
-    public ModelAndView wikiLock(@PathVariable Integer wikiId) {
+    public ResponseData wikiLock(@PathVariable Integer wikiId) {
         log.debug("# wikiId : {}", wikiId);
 
         User user = loggedUserManager.getUser();
         int userId = user.getUserId();
-
         Wiki wiki = wikiService.findById(wikiId);
-
-        //위키만든 유저만 잠금가능
-        if( wiki.getUserId() == userId ){
-            wiki.setLock(true);
-            wikiService.save(wiki);
+        try {
+            //위키만든 유저만 잠금가능
+            if (wiki.getUserId() == userId) {
+                wiki.setLock(true);
+                wikiService.save(wiki);
+            } else {
+                return createFailResult("위키 생성자만 잠금할 수 있습니다.");
+            }
+        } catch (Exception e){
+            log.error("delete wiki error.", e);
+            return createFailResult(wiki);
         }
-        RedirectView rv = new RedirectView("/wiki/"+wikiId);
-        rv.setExposeModelAttributes(false);
-        return new ModelAndView(rv);
+        return createSuccessResult(wiki);
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "wiki/save", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<?> save(@ModelAttribute Wiki wiki, @ModelAttribute Keyword keyword){
@@ -266,6 +291,7 @@ public class WikiController {
 
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "wiki/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<?> update(@ModelAttribute Wiki paramWiki, @ModelAttribute Keyword paramKeyword){
@@ -321,7 +347,7 @@ public class WikiController {
         mav.addObject("page",page);
         mav.addObject("pages",(page/6)+1);
         if( ListType.ALL.getName().equals(listType) ){
-            List<DisplayWiki> allWiki = wikiService.findByAllWiki(page, 15);
+            List<DisplayWiki> allWiki = wikiService.findByAllWiki(page, 15, WikiOrderListType.INSERT_DATE);
 
             Long countAllWiki = wikiService.countByAllWiki();
             int AllPage = (int)( countAllWiki / 15 )+1;
@@ -359,6 +385,25 @@ public class WikiController {
 
         return mav;
     }
+
+    @RequestMapping(value = "wiki/allList/{listViewType}", method = RequestMethod.GET)
+    public ResponseData<DisplayWiki> wikiListViewType(@PathVariable("listViewType") String listViewType) {
+
+        List<DisplayWiki> allWiki = null;
+        try{
+            WikiOrderListType wikiOrderListType = WikiOrderListType.INSERT_DATE;
+            if( listViewType.equals( WikiOrderListType.TITLE.toString() ) ){
+                wikiOrderListType = WikiOrderListType.TITLE;
+            }
+            allWiki = wikiService.findByAllWiki(0, 10, wikiOrderListType);
+        }catch (Exception e){
+            log.error(e.toString());
+            return ResponseData.createFailResult(allWiki);
+        }
+        return ResponseData.createSuccessResult(allWiki);
+
+    }
+
 
     @RequestMapping(value = "wiki/list/keyword/{keywordNm}", method = RequestMethod.GET)
     public ModelAndView keywordWikiList(@PathVariable String keywordNm) {
@@ -408,7 +453,8 @@ public class WikiController {
             }
             return ResponseData.createSuccessResult(displayWikiLike);
         }catch(Exception e){
-            return ResponseData.createSuccessResult(displayWikiLike);
+            log.error(e.toString());
+            return ResponseData.createFailResult(displayWikiLike);
         }
     }
 
@@ -431,11 +477,16 @@ public class WikiController {
 
             return ResponseData.createSuccessResult(result);
         }catch(Exception e){
-            e.printStackTrace();
             log.error(e.toString());
             return ResponseData.createFailResult(wikiReply);
         }
 
     }
 
+    public ModelAndView sendAccessDenied(String code, String msg) {
+        ModelAndView mav = new ModelAndView("/common/"+code);
+        mav.addObject("msg", msg);
+
+        return mav;
+    }
 }

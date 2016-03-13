@@ -36,9 +36,9 @@
                         <div class="nav-tabs-header">
                             전체 위키
                             <span class="pull-right section-category">
-                                <ul class="nav nav-tabs">
-                                    <li class="active"><a href="#">이름순</a></li>
-                                    <li><a href="#">최신순</a></li>
+                                <ul class="nav nav-tabs" id="allListSearch">
+                                    <li class="active"><a href="#" data-val="insertDate">최신순</a></li>
+                                    <li><a href="#" data-val="title">이름순</a></li>
                                 </ul>
                             </span>
                         </div>
@@ -74,6 +74,9 @@
     <script>
         $(document).ready(function() {
             Wiki.renderKeywordList();
+            $("#allListSearch a").click(function(){
+                Wiki.searchAllWikiListType(this.dataset.val);
+            });
         });
         var Wiki = {
             renderKeywordList : function(keywordName){
@@ -111,6 +114,27 @@
                 $('#categorizeKeywordListArea').find('li').click(function(){
                     Wiki.renderKeywordList(this.getAttribute('value'));
                 });
+            },
+
+            searchAllWikiListType : function(listViewType){
+                $.ajax({
+                    url: "/wiki/allList/"+listViewType,
+                    type: "GET",
+                    success : function(result){
+                        debugger;
+                        if( result.data != null){
+                            if( result.data.result == 1  ){
+
+                            }
+                        }
+                    },
+                    error : function(req){
+                        console.log('req : ' + req.status);
+                        console.log('req : ' + req.readyState);
+                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                    }
+                });
+
             }
         }
     </script>

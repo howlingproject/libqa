@@ -230,7 +230,7 @@
                                         '<input name="wikiFiles['+idx+'].filePath"  id="filePath" type="hidden" value="'+req.data.filePath+'">' +
                                         '<input name="wikiFiles['+idx+'].fileSize"  id="fileSize" type="hidden" value="'+req.data.fileSize+'">' +
                                         '<input name="wikiFiles['+idx+'].fileType"  id="fileType" type="hidden" value="'+req.data.fileExtendType+'">' +
-                                        '<a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
+                                        '<a href="/download?path='+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
                                         '<a href="#fileDiv" onclick="$(this).parent().remove();">' +
                                         '<span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>' +
                                         '</a>' +

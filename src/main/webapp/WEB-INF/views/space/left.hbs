@@ -7,28 +7,7 @@ To change this template use File | Settings | File Templates.
 --}}
 {{#partial "style"}}
 {{!-- 여기에 사용자 css 정의 --}}
-    <style type="text/css" xmlns="http://www.w3.org/1999/html">
-        .row
-        {
-            height: 100%;
-            display: table-row;
-        }
-        .col-md-3.no-float, .col-md-9.no-float {
-            float: none; /* thanks baxabbit */
-        }
-        .col-md-3
-        {
-            display: table-cell;
-            background: #eeeeee;
-            width: 25%;
-        }
-        .col-md-9
-        {
-            display: table-cell;
-            background: #ffffff;
-            width: 75%;
-        }
-    </style>
+
 {{/partial}}
 {{#partial "plugin-style"}}
     <link href="/resource/public/css/layout-default-latest.css" rel="stylesheet">
@@ -47,10 +26,11 @@ To change this template use File | Settings | File Templates.
     {{> space/template/_spaceTopMenu}}
 </div>
 <div class="container-fluid">
-    <div class="row" style="padding-top:100px">&nbsp;
+    <form name="spaceForm" id="spaceForm"></form>
+    <div class="row" style="padding-top:100px;height: 100%; display: table-row;">&nbsp;
     </div>
     <div class="row">
-        <div class="col-md-3 no-float vcenter" >
+        <div class="col-md-3 vcenter" style="float: none;display: table-cell;background: #eeeeee; width: 25%;">
             <input type="hidden" name="spaceId" value="{{space.spaceId}}">
             <h4 style="border-bottom:1px solid #c3cce0;padding-bottom:10px;padding-top:10px">
                 <div id="sidetreecontrol">
@@ -60,7 +40,7 @@ To change this template use File | Settings | File Templates.
 
             <div id="treeview" class=""></div>
         </div>
-        <div class="col-md-9 no-float">
+        <div class="col-md-9" style="float: none;display: table-cell;background: #ffffff;width: 75%;">
             <div class="col-sm-11">
                 <h1 class="page-header" style="margin-top: 0px">{{space.title}}
                     <small class="pull-right" style="padding-top:10px">{{formatDate space.insertDate "yyyy-MM-dd hh:MM"}} </small>
@@ -149,7 +129,49 @@ To change this template use File | Settings | File Templates.
                 }
             });
 
+            $('#deleteSpace').on('click', function () {
+                $.confirm({
+                    title: '확인',
+                    content: '공간을 삭제하겠습니까?<BR>위키가 존재할 경우 관리자만 삭제할 수 있습니다.',
+                    confirmButton: '확인',
+                    cancelButton: '취소',
+                    confirmButtonClass: 'btn-info',
+                    confirm: function () {
+                        $.post('/space/delete', { spaceId: "{{space.spaceId}}" })
+                            .done(function (response) {
 
+                                $.alert({
+                                    title: '확인',
+                                    content: response.comment,
+                                    confirmButton: 'OK',
+                                    confirmButtonClass: 'btn-primary',
+                                    icon: 'fa fa-info',
+                                    animation: 'zoom',
+                                    confirm: function () {
+                                        if (response.resultCode == 1) {
+                                            location.href = '/space/main';
+                                        }
+                                    }
+                                });
+                            }).fail(function () {
+                                $.alert({
+                                    title: '확인',
+                                    content: '공간 삭제중 에러가 발생하였습니다. 다시 시도하세요.',
+                                    confirmButton: 'OK',
+                                    confirmButtonClass: 'btn-primary',
+                                    icon: 'fa fa-info',
+                                    animation: 'zoom',
+                                    confirm: function () {
+                                    }
+                                });
+                            });
+                    },
+                    cancel: function(){
+                        return true;
+                    }
+                });
+
+            });
             console.log("## userFavorite = " + userFavorite);
 
             if (userFavorite == '') {
@@ -159,10 +181,10 @@ To change this template use File | Settings | File Templates.
             }
 
             $('#createWiki').on('click', function () {
-                $('#space').attr({action:'/wiki/write', method:'post'}).submit();
+                $('#spaceForm').attr({action:'/wiki/write', method:'post'}).submit();
             });
             $('#editSpace').on('click', function () {
-                $('#space').attr({action:'/space/edit/{{space.spaceId}}', method:'get'}).submit();
+                $('#spaceForm').attr({action:'/space/edit/{{space.spaceId}}', method:'get'}).submit();
             });
 
             $('#getMoreWiki').on('click', function () {
@@ -271,7 +293,6 @@ To change this template use File | Settings | File Templates.
                 })
             });
         });
-
     </script>
 {{/partial}}
 

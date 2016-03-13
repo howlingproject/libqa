@@ -198,10 +198,10 @@ var FeedFile = {
         this.removeHiddenTagsInForm();
     },
     'addPreviewToForm': function (obj) {
-        var fullPath = obj.filePath + '/' + obj.savedName;
+        var fullPath = '/download?path=' +obj.filePath + '/' + obj.savedName;
 
         if(obj.fileType == 'FILE') {
-            var $file = ' <a href="' + fullPath + '" target="_blank"><i class="fa fa-file-o"></i> ' + obj.realName + '</a>';
+            var $file = ' <a href="' + fullPath + '" download><i class="fa fa-file-o"></i> ' + obj.realName + '</a>';
             $('#feedForm .attachmentArea .files').append($file);
         } else {
             var $image = ' <img width="190" class="img-thumbnail" src="' + fullPath + '">';
@@ -335,6 +335,17 @@ var FeedUtil = {
                 return $('#popover-config-content').html();
             }
         });
+
+        $('body').off('click').on('click', function (e) {
+            $('[data-toggle="popover"]').each(function () {
+                var isInsidePopover = !$(this).is(e.target)
+                    && $(this).has(e.target).length === 0
+                    && $('.popover').has(e.target).length === 0;
+                if (isInsidePopover) {
+                    $(this).popover('hide');
+                }
+            });
+        });        
     },
     'hidePopOver': function() {
         $('.popover-config').popover('hide');

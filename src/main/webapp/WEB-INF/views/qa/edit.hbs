@@ -255,7 +255,7 @@
                         '<input name="filePaths" type="hidden" value="' + req.data.filePath + '">' +
                         '<input name="fileSizes" type="hidden" value="' + req.data.fileSize + '">' +
                         '<input name="fileTypes" type="hidden" value="' + req.data.fileExtendType + '">' +
-                        '<a href="' + req.data.filePath + '/' + req.data.savedName + '">' + req.data.realName + '</a>' +
+                        '<a href="/download?path=' + req.data.filePath + '/' + req.data.savedName + '">' + req.data.realName + '</a>' +
                         '<a href="#fileDiv" onclick="Qa.deleteFile(this);">' +
                         '<span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>' +
                         '</a>' +

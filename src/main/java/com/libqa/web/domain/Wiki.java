@@ -70,6 +70,9 @@ public class Wiki implements Serializable{
     private Integer likeCount = 0;
 
     @Column
+    private Integer replyCount = 0;
+
+    @Column
     private Integer reportCount;
 
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
@@ -96,10 +99,6 @@ public class Wiki implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
-    //추후에 삭제대상
-    @Transient
-    private int replyCount;
-
     @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<WikiFile> wikiFiles;
@@ -112,12 +111,13 @@ public class Wiki implements Serializable{
     @JsonManagedReference
     private List<WikiReply> wikiReplies;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumns({
-            @JoinColumn(name = "userId", referencedColumnName = "userId"),
-            @JoinColumn(name = "wikiId", referencedColumnName = "wikiId")
-    })
-    private List<WikiLike> wikiLikes;
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinColumns({
+//            @JoinColumn(name = "userId", referencedColumnName = "userId"),
+//            @JoinColumn(name = "wikiId", referencedColumnName = "wikiId")
+//    })
+//
+//    private List<WikiLike> wikiLikes;
 
 
 }

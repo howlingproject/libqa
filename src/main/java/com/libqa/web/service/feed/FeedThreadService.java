@@ -8,8 +8,8 @@ import com.libqa.web.domain.User;
 import com.libqa.web.repository.FeedFileRepository;
 import com.libqa.web.repository.FeedReplyRepository;
 import com.libqa.web.repository.FeedThreadRepository;
-import com.libqa.web.service.feed.actor.FeedClaim;
-import com.libqa.web.service.feed.actor.FeedLike;
+import com.libqa.web.service.feed.actor.FeedThreadClaim;
+import com.libqa.web.service.feed.actor.FeedThreadLike;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -132,10 +132,10 @@ public class FeedThreadService {
     @Transactional
     public FeedThread like(Integer feedThreadId, User actionUser) {
         FeedThread feedThread = getByFeedThreadId(feedThreadId);
-        FeedLike feedLike = FeedLike.of(feedThread.getFeedThreadId(), actionUser);
+        FeedThreadLike feedThreadLike = FeedThreadLike.of(feedThread.getFeedThreadId(), actionUser);
 
-        feedActionService.act(feedLike);
-        Integer likeCount = feedActionService.countOf(feedLike);
+        feedActionService.act(feedThreadLike);
+        Integer likeCount = feedActionService.countOf(feedThreadLike);
         feedThread.setLikeCount(likeCount);
         return feedThread;
     }
@@ -150,10 +150,10 @@ public class FeedThreadService {
     @Transactional
     public FeedThread claim(Integer feedThreadId, User actionUser) {
         FeedThread feedThread = getByFeedThreadId(feedThreadId);
-        FeedClaim feedClaim = FeedClaim.of(feedThread.getFeedThreadId(), actionUser);
+        FeedThreadClaim feedThreadClaim = FeedThreadClaim.of(feedThread.getFeedThreadId(), actionUser);
 
-        feedActionService.act(feedClaim);
-        Integer claimCount = feedActionService.countOf(feedClaim);
+        feedActionService.act(feedThreadClaim);
+        Integer claimCount = feedActionService.countOf(feedThreadClaim);
 
         feedThread.setClaimCount(claimCount);
         return feedThread;

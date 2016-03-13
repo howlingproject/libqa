@@ -28,7 +28,7 @@
             {{#if images}}
             <div class="text-center">
                 {{#each images}}
-                    <a href="{{fullPath}}"
+                    <a href="/imageView?path={{fullPath}}"
                        data-toggle="lightbox" data-title="Feed Image Viewer"
                        data-gallery="feed-images-{{../feedThreadId}}"><img width="190" class="img-thumbnail" src="/imageView?path={{fullPath}}" /></a>
                 {{/each}}
@@ -37,7 +37,7 @@
             {{#if files}}
             <div class="attachment">
                 {{#each files}}
-                    <a href="{{fullPath}}" target="_blank"><i class="fa fa-file-o"></i> {{realName}}</a>&nbsp;
+                    <a href="/download?path={{fullPath}}" download><i class="fa fa-file-o"></i> {{realName}}</a>&nbsp;
                 {{/each}}
             </div>
             {{/if}}

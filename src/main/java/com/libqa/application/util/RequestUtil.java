@@ -33,11 +33,15 @@ public class RequestUtil {
      * @return
      */
     public static String checkReturnUrl(String returnUrl) {
-        int subPoint = returnUrl.lastIndexOf("/");
-        String subUrl = returnUrl.substring(subPoint, returnUrl.length());
-        log.debug("###################### subUrl : {}", subUrl);
+        if (returnUrl != null) {
+            int subPoint = returnUrl.lastIndexOf("/");
+            String subUrl = returnUrl.substring(subPoint, returnUrl.length());
+            log.debug("###################### subUrl : {}", subUrl);
 
-        if (subUrl.equals("/") || subUrl.equals("/loginPage") || subUrl.equals("/signUp")) {
+            if (subUrl.equals("/") || subUrl.equals("/loginPage") || subUrl.equals("/signUp")) {
+                returnUrl = "/index";
+            }
+        } else {
             returnUrl = "/index";
         }
 

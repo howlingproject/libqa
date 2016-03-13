@@ -6,7 +6,7 @@
         <input name="filePaths" type="hidden" value="{{filePath}}">
         <input name="fileSizes" type="hidden" value="{{fileSize}}">
         <input name="fileTypes" type="hidden" value="{{fileExtendType}}">
-        <a href="{{filePath}}/{{savedName}}">{{realName}}</a>
+        <a href="/download?path={{filePath}}/{{savedName}}">{{realName}}</a>
         <a href="#fileDiv" onclick="Qa.deleteFile(this);">
             <span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span> 
         </a>
