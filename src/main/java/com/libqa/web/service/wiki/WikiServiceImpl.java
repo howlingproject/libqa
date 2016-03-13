@@ -73,9 +73,12 @@ public class WikiServiceImpl implements WikiService {
     @Override
     @Transactional
     public Wiki saveWithKeyword(Wiki wiki, Keyword keyword) {
+        List<WikiFile> wikiFiles = wiki.getWikiFiles();
         Wiki result = save(wiki);
+        result.setWikiFiles( wikiFiles );
+
         saveWikiFileAndList(result);
-        saveKeywordAndList(keyword, result);
+        saveKeywordAndList(keyword, result.getWikiId() );
         saveWikiActivity(result, ActivityType.INSERT_WIKI);
 
         if( wiki.getParentsId() == null ){
@@ -108,6 +111,8 @@ public class WikiServiceImpl implements WikiService {
     @Override
     @Transactional
     public Wiki updateWithKeyword(Wiki wiki, Keyword keyword, WikiRevisionActionType revisionActionTypeEnum) {
+        List<WikiFile> wikiFiles = wiki.getWikiFiles() == null ? new ArrayList<>() : new ArrayList<>( wiki.getWikiFiles() ) ;
+
         WikiSnapShot wikiSnapShot = new WikiSnapShot();
         BeanUtils.copyProperties(wiki, wikiSnapShot);
 
@@ -116,31 +121,30 @@ public class WikiServiceImpl implements WikiService {
         wikiSnapShotRepository.save(wikiSnapShot);
 
         Wiki result = save(wiki);
-
+        result.setWikiFiles( wikiFiles );
         saveWikiActivity(wiki, ActivityType.UPDATE_WIKI);
 
-        // 아래는 버그가 있는듯. 확인해서 다시 정상화하도록.
-        //saveWikiFileAndList(result);
-        //saveKeywordAndList(wiki, result);
-
+        saveWikiFileAndList(result);
+        saveKeywordAndList( keyword, result.getWikiId() );
         return result;
     }
 
     private void saveWikiFileAndList(Wiki wiki) {
         List<WikiFile> wikiFiles = wiki.getWikiFiles();
-        Wiki tempWiki = new Wiki();
-        tempWiki.setWikiId(wiki.getWikiId());
         if (wikiFiles != null && wikiFiles.size() > 0) {
             for (WikiFile wikiFile : wikiFiles) {
-                wikiFile.setInsertDate(wiki.getInsertDate());
-                wikiFile.setUserId(wiki.getUserId());
-                wikiFile.setWikiId(wiki.getWikiId());
-                wikiFileService.saveWikiFileAndList(wikiFile);
+                if( wikiFile.getFileId() == null ){
+                    wikiFile.setInsertDate(wiki.getInsertDate());
+                    wikiFile.setUserId(wiki.getUserId());
+                    wikiFile.setWikiId(wiki.getWikiId());
+                    wikiFileService.saveWikiFileAndList(wikiFile);
+                }
+
             }
         }
     }
 
-    private void saveKeywordAndList(Keyword keyword, Wiki result) {
+    private void saveKeywordAndList(Keyword keyword, Integer wikiId) {
         String[] keywordArrays = new String[0];
         String[] deleteKeywordArrays = new String[0];
         if(keyword.getKeywords() != null){
@@ -151,7 +155,7 @@ public class WikiServiceImpl implements WikiService {
         }
         log.debug(" keywordArrays : {}", keywordArrays.length);
         if (keywordArrays.length > 0) {
-            keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordType.WIKI, result.getWikiId());
+            keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordType.WIKI, wikiId);
         }
     }
 

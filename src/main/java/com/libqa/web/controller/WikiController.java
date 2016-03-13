@@ -299,8 +299,8 @@ public class WikiController {
             Integer wikiId = paramWiki.getWikiId();
 
             Wiki currentWiki = wikiService.findById(wikiId);
-//            currentWiki.setKeywords(paramKeyword.getKeywords());
-            currentWiki.setWikiFiles(paramWiki.getWikiFiles());
+            currentWiki.setWikiFiles( paramWiki.getWikiFiles() );
+
             currentWiki.setTitle(paramWiki.getTitle());
             currentWiki.setContents(paramWiki.getContents());
             currentWiki.setContentsMarkup(paramWiki.getContentsMarkup());

@@ -66,6 +66,22 @@
                             <span class="glyphicon glyphicon-paperclip btn-m"></span>
                             <span>Attachments</span>
                             <div id="uploadfileList" class="alert alert-success attachment-thumbnail">
+                                {{#if wiki.wikiFiles}}
+                                    {{#each wiki.wikiFiles}}
+                                        <div class="fileDiv" style="padding: 5px;">
+                                            <input name="wikiFiles[{{@index}}].fileId"    id="fileId" type="hidden" value="{{fileId}}">
+                                            <input name="wikiFiles[{{@index}}].realName"  id="realName" type="hidden" value="{{realName}}">
+                                            <input name="wikiFiles[{{@index}}].savedName" id="savedName" type="hidden" value="{{savedName}}">
+                                            <input name="wikiFiles[{{@index}}].filePath"  id="filePath" type="hidden" value="{{filePath}}">
+                                            <input name="wikiFiles[{{@index}}].fileSize"  id="fileSize" type="hidden" value="{{fileSize}}">
+                                            <input name="wikiFiles[{{@index}}].fileType"  id="fileType" type="hidden" value="{{fileExtendType}}">
+                                            <a href="{{filePath}}/{{savedName}}">{{realName}}</a>
+                                            <a href="#" onclick="$(this).parent().remove();">
+                                                <span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>
+                                            </a>
+                                        </div>
+                                    {{/each}}
+                                {{/if}}
                             </div>
                         </div>
                         <input name="uploadType" value="Qa" type="hidden">
@@ -220,10 +236,8 @@
                         contentType: false,
                         cache: false,
                         success: function (req) {
-                            console.log('req : ' + req);
-                            console.log('req.data.uploadType : ' + req.data.uploadType);
                             if (req.resultCode == 1) {
-                                var idx = $('#realName').size();
+                                var idx = $("#uploadfileList > div").size();
                                 var fileDivTemplat = '<div class="fileDiv" style="padding: 5px;">' +
                                         '<input name="wikiFiles['+idx+'].realName"  id="realName" type="hidden" value="'+req.data.realName+'">' +
                                         '<input name="wikiFiles['+idx+'].savedName" id="savedName" type="hidden" value="'+req.data.savedName+'">' +
