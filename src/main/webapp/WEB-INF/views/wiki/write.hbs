@@ -56,8 +56,13 @@
                                 <input type="text" class="form-control" size="29" id="interesting" placeholder="키워드를 입력하세요. (최대 3개)">
                                 <button class="btn btn-primary" type="button" id="keywordAdd">Add <i class="glyphicon glyphicon-plus"></i></button>
                             </div>
-                            <ul id="tag-cloud" style="padding-left: 0px; width:100%;"></ul>
-                            <input type="hidden" name="keywords" id="keywords" />
+                            <ul id="tag-cloud" style="padding-left: 0px; width:100%;">
+                                {{#if keywordList}}
+                                    {{#each keywordList}}
+                                        <li class="tag-cloud tag-cloud-info" data-keyword-name-id="{{keywordId}}" >{{keywordName}}</li>
+                                    {{/each}}
+                                {{/if}}
+                            </ul>
                         </div>
                     </div>
 
@@ -75,8 +80,9 @@
                                             <input name="wikiFiles[{{@index}}].filePath"  id="filePath" type="hidden" value="{{filePath}}">
                                             <input name="wikiFiles[{{@index}}].fileSize"  id="fileSize" type="hidden" value="{{fileSize}}">
                                             <input name="wikiFiles[{{@index}}].fileType"  id="fileType" type="hidden" value="{{fileExtendType}}">
+                                            <input name="wikiFiles[{{@index}}].Deleted" id="isDeleted" type="hidden" value="false">
                                             <a href="{{filePath}}/{{savedName}}">{{realName}}</a>
-                                            <a href="#" onclick="$(this).parent().remove();">
+                                            <a href="#" onclick="Wiki.deleteFile(this); return false;">
                                                 <span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>
                                             </a>
                                         </div>
@@ -156,11 +162,26 @@
         });
 
         var Wiki = {
+            deleteKeywordData: [],
 
-            save:function(){
-                $("#keywords").val(keywordData);
+
+            setParam:function(){
                 $("#contents").val(DualEditor.getMarkupConvertToHtml());
                 $("#contentsMarkup").val(DualEditor.getMarkupEditHtml());
+
+                $('#tag-cloud').find('li').each(function(){
+                    if(!$(this).attr('data-keyword-name-id')) {
+                        $(this).append('<input type="hidden" name="keywords" value="' + this.innerHTML + '">');
+                    }
+                });
+
+                $(this.deleteKeywordData).each(function(idx){
+                    $('#tag-cloud').append('<input type="hidden" name="deleteKeywords" value="'+Wiki.deleteKeywordData[idx]+'">');
+                });
+
+            },
+            save:function(){
+                this.setParam();
                 var data = $("#wikiForm").serialize();
                 jQuery.ajax({
                     type:'POST',
@@ -191,9 +212,7 @@
                 return false;
             },
             update:function(){
-                $("#keywords").val(keywordData);
-                $("#contents").val(DualEditor.getMarkupConvertToHtml());
-                $("#contentsMarkup").val(DualEditor.getMarkupEditHtml());
+                this.setParam();
                 var data = $("#wikiForm").serialize();
                 jQuery.ajax({
                     type:'POST',
@@ -244,8 +263,9 @@
                                         '<input name="wikiFiles['+idx+'].filePath"  id="filePath" type="hidden" value="'+req.data.filePath+'">' +
                                         '<input name="wikiFiles['+idx+'].fileSize"  id="fileSize" type="hidden" value="'+req.data.fileSize+'">' +
                                         '<input name="wikiFiles['+idx+'].fileType"  id="fileType" type="hidden" value="'+req.data.fileExtendType+'">' +
+                                        '<input name="wikiFiles['+idx+'].isDeleted"  id="isDeleted" type="hidden" value="false">' +
                                         '<a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
-                                        '<a href="#fileDiv" onclick="$(this).parent().remove();">' +
+                                        '<a href="#fileDiv" onclick="Wiki.deleteFile(this); return false;">' +
                                         '<span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>' +
                                         '</a>' +
                                         '</div>';
@@ -266,6 +286,12 @@
                         }
                     });
                 }
+            },
+            deleteFile : function(fileDeleteObj){
+                var individualFileDivObj = $(fileDeleteObj).parent();
+                individualFileDivObj.find("#isDeleted").val(true)
+                individualFileDivObj.hide();
+                return false;
             }
         };
 
@@ -295,30 +321,15 @@
             }
         }
 
-        var keywordData = [];
-
         /**
          * 키워드 추가
          * 키워드가 3건 이상 등록 될 경우 폼을 disabled 한다.
          * 대소문자 중복 허용하지 않는다.
          */
         $('#keywordAdd').click(function () {
-            var keyword = $('#interesting').val();
-
-            if (keywordData.length == 3) {
+            if ($('#tag-cloud').find('li').length > 3) {
                 alert('키워드는 최대 3건만 등록할 수 있습니다.');
-                return;
-            }
-
-            keywordData.push(keyword);
-
-            var taskArray = [];
-            $("input[name=keywords]").each(function () {
-                taskArray.push(keyword);
-            });
-
-
-            if (keywordData.length > 2) {
+                $('#tag-cloud').find('li')[3].remove();
                 $("#interesting").attr("readonly", true);
                 $("#keywordAdd").attr("disabled", true);
             }
@@ -328,13 +339,11 @@
          * 키워드 삭제
          * 키워드가 삭제되면 폼을 enabled 한다.
          */
-        $('#tag-cloud').on('click', 'li', function (event) {
-            var keyword = $(event.target).text();
-            var index = keywordData.indexOf(keyword);
-
-            if (index > -1) {
-                keywordData.splice(index, 1);
-                $('input[name=keywords]').val(keywordData);
+        $('#tag-cloud').on('click', 'li', function () {
+            if( $(this).attr('data-keyword-name-id') != null ){
+                Wiki.deleteKeywordData.push($(this).attr('data-keyword-name-id'));
+            }
+            if ($('#tag-cloud').find('li').length < 4) {
                 $("#interesting").attr("readonly", false);
                 $("#keywordAdd").attr("disabled", false);
             }

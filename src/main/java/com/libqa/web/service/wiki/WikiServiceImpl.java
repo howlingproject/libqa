@@ -133,7 +133,7 @@ public class WikiServiceImpl implements WikiService {
         List<WikiFile> wikiFiles = wiki.getWikiFiles();
         if (wikiFiles != null && wikiFiles.size() > 0) {
             for (WikiFile wikiFile : wikiFiles) {
-                if( wikiFile.getFileId() == null ){
+                if( wikiFile.getFileId() == null || wikiFile.isDeleted() ){
                     wikiFile.setInsertDate(wiki.getInsertDate());
                     wikiFile.setUserId(wiki.getUserId());
                     wikiFile.setWikiId(wiki.getWikiId());

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -100,6 +101,7 @@ public class Wiki implements Serializable{
     private Date updateDate;
 
     @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
+    @Where(clause = "is_deleted = 0")
     @JsonManagedReference
     private List<WikiFile> wikiFiles;
 
@@ -108,6 +110,7 @@ public class Wiki implements Serializable{
     private List<WikiSnapShot> wikiSnapShots;
 
     @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
+    @Where(clause = "is_deleted = 0")
     @JsonManagedReference
     private List<WikiReply> wikiReplies;
 

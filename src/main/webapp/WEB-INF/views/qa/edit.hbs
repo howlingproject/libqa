@@ -107,6 +107,7 @@
                     $('#qaForm').append('<input type="hidden" name="keywords" value="' + this.innerHTML + '">');
                 }
             });
+
             $(Qa.deleteFileData).each(function(idx){
                 $('#qaForm').append('<input type="hidden" name="deleteFiles" value="'+Qa.deleteFileData[idx]+'">');
             });
