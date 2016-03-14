@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.libqa.application.enums.ActivityType;
+import com.libqa.application.enums.Role;
+import com.libqa.application.enums.StatusCode;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUserManager;
 import com.libqa.application.util.StringUtil;
@@ -162,7 +164,7 @@ public class SpaceController {
         return spaceService.findAllByCondition(isDeleted, startIdx, endIdx);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping("/space/form")
     public ModelAndView form(Model model) {
         log.debug("# message : {}", message);
@@ -181,7 +183,7 @@ public class SpaceController {
     }
 
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping(value = "/space/add", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<Space> saveSpace(@ModelAttribute Space space, @ModelAttribute Keyword keyword) throws IllegalAccessException {
@@ -207,14 +209,15 @@ public class SpaceController {
      * @param spaceId
      * @return
      */
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping(value = "/space/edit/{spaceId}", method = RequestMethod.GET)
     public ModelAndView editSpace(@PathVariable Integer spaceId) throws IllegalAccessException {
         Space space = spaceService.findOne(spaceId);
         User user = loggedUserManager.getUser();
-        if (space.getInsertUserId() != user.getUserId()) {
-            throw new IllegalAccessException("공간을 수정할 권한이 없습니다.");
-        }
+
+        // 수정할 권한이 있는지 체크 한다.
+        checkAuthorize(space, user);
+
         List<Keyword> keywords = keywordService.findBySpaceId(spaceId, false);
         ModelAndView mav = new ModelAndView("/space/edit");
         mav.addObject("user", user);
@@ -223,27 +226,91 @@ public class SpaceController {
         return mav;
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @RequestMapping(value = "/space/update", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseData<Space>  updateSpace(@ModelAttribute Space space, @ModelAttribute Keyword keyword) throws IllegalAccessException {
-        User user = loggedUserManager.getUser();
-
+    /**
+     * 수정 접근 권한 체크, 로그인이 없을 경우, ADMIN이 아닌 사용자의 로그인 아이디와 입력자의 아이디가 다를 경우
+     * @param space
+     * @param user
+     * @throws IllegalAccessException
+     */
+    public void checkAuthorize(Space space, User user) throws IllegalAccessException {
         if (user == null) {
             throw new IllegalAccessException("로그인 정보가 필요합니다.");
         }
 
+        if (!user.getRole().equals(Role.ADMIN)) {
+            if (space.getInsertUserId() != user.getUserId()) {
+                throw new IllegalAccessException("공간을 수정할 권한이 없습니다.");
+            }
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @RequestMapping(value = "/space/update", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<Space>  updateSpace(@ModelAttribute Space space, @ModelAttribute Keyword keyword) throws IllegalAccessException {
+        User user = loggedUserManager.getUser();
         Space spaceEntity = spaceService.findOne(space.getSpaceId());
 
-        if (spaceEntity.getInsertUserId() != user.getUserId()) {
-            throw new IllegalAccessException("공간을 수정할 권한이 없습니다.");
-        }
+        // 수정할 권한이 있는지 체크 한다.
+        checkAuthorize(space, user);
 
         bindSpaceEntity(space, user, spaceEntity);
 
         Space result = spaceService.saveWithKeyword(spaceEntity, keyword, ActivityType.UPDATE_SPACE);
         log.debug("#result : [{}]", result);
         return ResponseData.createSuccessResult(result);
+    }
+
+
+    /**
+     * 공간의 삭제는 관리자 이거나, 본인 일 경우 가능하지만 본인이라고 하더라도 하위 위키가 없을때만 삭제가 가능하다.
+     * @param spaceId
+     * @return
+     * @throws IllegalAccessException
+     */
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @RequestMapping(value = "/space/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<Space> deleteSpace(@RequestParam Integer spaceId) throws IllegalAccessException {
+        User user = loggedUserManager.getUser();
+        Space result = null;
+
+        boolean canDelete = false;      // 삭제 가능 여부
+        boolean existWiki = false;      // 하위 위키 존재 여부
+        Space spaceEntity = spaceService.findOne(spaceId);
+
+        if (user.getRole().equals(Role.ADMIN)) {
+            canDelete = true;
+        } else {
+            if (spaceEntity.getInsertUserId() == user.getUserId()) {
+
+                List<Wiki> wikis = new ArrayList<>();
+                wikis = wikiService.findBySpaceId(spaceId);
+
+                if (CollectionUtils.isEmpty(wikis)) {
+                    canDelete = true;
+                } else {
+                    canDelete = false;
+                    existWiki = true;
+                }
+            }
+        }
+
+
+        log.info("#### canDelete = {} ", canDelete);
+        log.info("#### existWiki = {} ", existWiki);
+        try {
+            if (canDelete) {
+                result = spaceService.delete(spaceEntity, user);
+                return ResponseData.createResult(StatusCode.SUCCESS.getCode(), "정상적으로 처리 되었습니다.", result);
+            } else {
+                return ResponseData.createResult(StatusCode.NONE.getCode(), "위키가 존재하므로 공간을 삭제할 수 없습니다. <BR>관리자에게 문의하세요.", null);
+            }
+        } catch (Exception e) {
+            log.error("공간 삭제 에러 = {}", e.getMessage());
+            return ResponseData.createFailResult();
+
+        }
     }
 
     /**
@@ -253,6 +320,7 @@ public class SpaceController {
      * @param spaceEntity
      */
     public void bindSpaceEntity(Space space, User user, Space spaceEntity) {
+
         spaceEntity.setDescription(space.getDescription());
         spaceEntity.setDescriptionMarkup(space.getDescriptionMarkup());
         spaceEntity.setTitle(space.getTitle());
@@ -321,14 +389,37 @@ public class SpaceController {
             userFavorite = Iterables.getFirst(userFavorites, null);
         }
 
+        boolean canDeleted = canDeleted(space, user);
+
         mav.addObject("spaceWikiLists", spaceWikiLists);
         mav.addObject("space", space);
+        mav.addObject("canDeleted", canDeleted);
         mav.addObject("spaceUser", spaceUser);
         mav.addObject("userFavorite", userFavorite);
         mav.addObject("activities", activities);
         mav.addObject("spaceActivityLists", spaceActivityLists);
 
         return mav;
+    }
+
+    /**
+     * 공간 삭제 버튼이 보이는지 안보이는지 여부를 결정한다.
+     * 하위에 위키가 있을 경우 삭제 버튼은 보이지만 삭제를 할 수는 없다. (경고메시지 출력)
+     * @param space
+     * @param user
+     * @return
+     */
+    public boolean canDeleted(Space space, User user) {
+        boolean canDeleted = false;
+
+        // admin user 일 경우
+        if (user.isAdmin()) {
+            canDeleted = true;
+        // 공간의 생성자와 현재 로그인 사용자의 아이디가 같을 경우
+        } else if (space.getInsertUserId().equals(user.getUserId())) {
+            canDeleted = true;
+        }
+        return canDeleted;
     }
 
 
@@ -355,6 +446,7 @@ public class SpaceController {
      * @param spaceId
      * @return
      */
+    @PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/space/addFavorite", method = RequestMethod.GET)
     @ResponseBody
     public String addFavorite(@RequestParam Integer spaceId) {
@@ -393,14 +485,6 @@ public class SpaceController {
         Integer result = spaceService.cancelSpaceFavorite(spaceId, user.getUserId(), true);
 
         return result.toString();
-    }
-
-
-    @RequestMapping("/space/list")
-    public ModelAndView list(Model model) {
-        ModelAndView mav = new ModelAndView("/space/list");
-
-        return mav;
     }
 
     @RequestMapping(value = "/space/tree", method = RequestMethod.POST, produces = "text/html; charset=utf8")

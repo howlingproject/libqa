@@ -50,9 +50,3 @@
     font-weight: 100;
     padding: 0;
 }
-.ekko-lightbox-nav-overlay a {
-    -webkit-opacity: 0.9;
-    -moz-opacity: 0.9;
-    opacity: 0.9;
-    text-shadow: none;
-}

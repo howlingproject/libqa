@@ -5,10 +5,7 @@ import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.FavoriteType;
 import com.libqa.application.enums.KeywordType;
 import com.libqa.application.util.PageUtil;
-import com.libqa.web.domain.Activity;
-import com.libqa.web.domain.Keyword;
-import com.libqa.web.domain.Space;
-import com.libqa.web.domain.UserFavorite;
+import com.libqa.web.domain.*;
 import com.libqa.web.repository.SpaceRepository;
 import com.libqa.web.service.common.ActivityService;
 import com.libqa.web.service.common.KeywordService;
@@ -177,6 +174,16 @@ public class SpaceServiceImpl implements SpaceService {
 		}
 
 		return result;
+	}
+
+	@Override
+	public Space delete(Space space, User user) {
+		space.setDeleted(true);
+		space.setUpdateDate(new Date());
+		space.setUpdateUserId(user.getUserId());
+		space.setUpdateUserNick(user.getUserNick());
+
+		return spaceRepository.save(space);
 	}
 
 

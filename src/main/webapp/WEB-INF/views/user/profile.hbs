@@ -90,7 +90,7 @@ To change this template use File | Settings | File Templates.
                 <label for="profile_image" class="col-sm-2 control-label">이미지</label>
                 <div class="col-sm-1 col-md-1">
                     <div class="user-profile" id="imagePreviewArea" div-data="{{user.userThumbnailImagePath}}/{{user.userThumbnailImageName}}">
-                    <img alt="avatar" class="profile-image" width="64" src="{{user.userThumbnailImagePath}}/{{user.userThumbnailImageName}}" onerror='this.src="/resource/images/avatar.png"' id="image-preview" />
+                        <img alt="avatar" class="profile-image" width="64" src="/imageView?path={{user.userThumbnailImagePath}}/{{user.userThumbnailImageName}}" onerror='this.src="/resource/images/avatar.png"' id="image-preview" />
                     </div>
                 </div>
                 <div class="col-sm-5 col-md-5">
@@ -433,7 +433,7 @@ To change this template use File | Settings | File Templates.
                         if (req.data.uploadType === 'image') {
                             $("#image-preview").remove();
                             $("#userImagePath").val("");
-                            $("#imagePreviewArea").html("<img src='" + req.data.filePath + "/" + req.data.savedName + "' width=\"64\" class=\"profile-image image-preview\" id=\"image-preview\">");
+                            $("#imagePreviewArea").html("<img src='/imageView?path=" + req.data.filePath + "/" + req.data.savedName + "' width=\"64\" class=\"profile-image image-preview\" id=\"image-preview\">");
                             $("#userImagePath").val(req.data.filePath);
                             $("#userImageName").val(req.data.savedName);
                             $("#userThumbnailImageName").val(req.data.thumbName);

@@ -23,8 +23,8 @@ public class DisplayFeedActionBuilder {
      * @return DisplayFeedAction
      */
     public DisplayFeedAction buildLike(FeedThread feedThread, User viewer) {
-        FeedLike feedLikeActor = FeedLike.of(feedThread.getFeedThreadId(), viewer);
-        return build(feedLikeActor, feedThread.getLikeCount());
+        FeedThreadLike feedThreadLikeActor = FeedThreadLike.of(feedThread.getFeedThreadId(), viewer);
+        return build(feedThreadLikeActor, feedThread.getLikeCount());
     }
 
     /**
@@ -47,8 +47,8 @@ public class DisplayFeedActionBuilder {
      * @return DisplayFeedAction
      */
     public DisplayFeedAction buildClaim(FeedThread feedThread, User viewer) {
-        FeedClaim feedClaimActor = FeedClaim.of(feedThread.getFeedThreadId(), viewer);
-        return build(feedClaimActor, feedThread.getClaimCount());
+        FeedThreadClaim feedThreadClaimActor = FeedThreadClaim.of(feedThread.getFeedThreadId(), viewer);
+        return build(feedThreadClaimActor, feedThread.getClaimCount());
     }
 
     /**

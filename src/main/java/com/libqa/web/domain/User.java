@@ -146,6 +146,14 @@ public class User {
         }
     }
 
+    public boolean isAdmin() {
+        if (this.role == role.ADMIN) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public String getUserImage() {
         if (!isRegisteredProfileImage()) {
             return DEFAULT_PROFILE_IMAGE;

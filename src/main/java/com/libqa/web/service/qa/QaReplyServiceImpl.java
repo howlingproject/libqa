@@ -109,9 +109,14 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     @Override
-    public QaReply saveChildReply(QaReply paramQaReply) {
-        boolean isDeleted = false;
-//        updateOrderIdx(paramQaReply);
+    public QaReply saveChildReply(QaReply paramQaReply, User user) {
+	    Date today = new Date();
+	    paramQaReply.setInsertDate(today);
+	    paramQaReply.setUpdateDate(today);
+	    paramQaReply.setInsertUserId(user.getUserId());
+	    paramQaReply.setUpdateUserId(user.getUserId());
+	    paramQaReply.setUserId(user.getUserId());
+	    paramQaReply.setUserNick(user.getUserNick());
 
         paramQaReply.setContentsMarkup(paramQaReply.getContents());
         paramQaReply.setOrderIdx(paramQaReply.getOrderIdx()+1);

@@ -199,6 +199,9 @@
 
                     var html = template(response);
                     $('#replyList').html(html);
+                    {{#unless isLogin}}
+                        $('.input-reply-area').html('');
+                    {{/unless}}
                 });
             },
             buttonEvent : function(){
@@ -265,6 +268,9 @@
                 });
             },
             saveChildReply: function() {
+                if(Qa.checkChildReplyForm(this)){
+                    return false;
+                }
                 var data = $(this).closest('form').serialize();
                 $.ajax({
                     type : 'POST',
@@ -341,6 +347,21 @@
                     }
                 });
             },
+            checkChildReplyForm : function(obj){
+                var validResult = false;
+                var inputObj = $(obj).closest('form').find('[name=contents]');
+                if( !inputObj.val().trim().length ){
+                    $.alert({
+                        title: '알림',
+                        content: '댓글을 입력해주세요.',
+                        confirm: function(){
+                            inputObj.focus();
+                        }
+                    });
+                    validResult = true;
+                }
+                return validResult;
+            },
             checkSaveVote : function(voteLiObj){
                 var replyId = $(voteLiObj).closest('.thread').attr('data-qa-reply-id');
                 var voteType = $(voteLiObj).attr('data-qa-vote-type');
@@ -363,6 +384,14 @@
                             } else {
                                 alert("이미 추천/비추천 하셨습니다.");
                             }
+                        } else if(data.resultCode == 10){
+                            $.alert({
+                                title: 'Alert!',
+                                content: data.comment,
+                                confirm: function(){
+                                    location.href = '/loginPage';
+                                }
+                            });
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){

@@ -391,7 +391,7 @@ To change this template use File | Settings | File Templates.
                         if (req.data.uploadType === 'image') {
                             $("#image-preview").remove();
                             $("#titleImagePath").val("");
-                            $("#imagePreviewArea").html("<img src='" + req.data.filePath + "/" + req.data.savedName + "' width=\"200\" class=\"img-thumbnail image-preview\" id=\"image-preview\">");
+                            $("#imagePreviewArea").html("<img src='/imageView?path=" + req.data.filePath + "/" + req.data.savedName + "' width=\"200\" class=\"img-thumbnail image-preview\" id=\"image-preview\">");
                             $("#titleImagePath").val(req.data.filePath);
                             $("#titleImage").val(req.data.savedName);
                         }
