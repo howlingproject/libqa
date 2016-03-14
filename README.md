@@ -6,17 +6,15 @@ Keyword based Social Q&A Community
 Howling™  - Social Q&A & Wiki for Community Version
 Howling™ is free software, available under the terms of a MIT license.(http://opensource.org/licenses/mit-license.php)
 
-DB Configuration
+DB Configuration (for mysql)
 =======
+```
 cd /usr/local/mysql/bin 
 ./mysql -u root -p 
- 
 
-GRANT ALL PRIVILEGES  on howling.* to 'howling'@'localhost' identified by 'libqa2014';
-
-GRANT ALL PRIVILEGES  on howling.* to 'howling'@'%' identified by 'libqa2014';
-
+GRANT ALL PRIVILEGES on howling.* to 'howlingproject'@'localhost' identified by 'libqa2014';
+GRANT ALL PRIVILEGES on howling.* to 'howlingproject'@'%' identified by 'libqa2014';
 flush privileges;
 
-CREATE SCHEMA `howling` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-
+CREATE SCHEMA `howling` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+```
