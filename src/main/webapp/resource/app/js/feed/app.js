@@ -329,8 +329,8 @@ var FeedReply = {
 var FeedUtil = {
     'bindPopOver': function() {
         $('.popover-config').popover({
-            html: 'click',
-            trigger:'focus',
+            html: true,
+            trigger: 'focus',
             content: function () {
                 return $('#popover-config-content').html();
             }
