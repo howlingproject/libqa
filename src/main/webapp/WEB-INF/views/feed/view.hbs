@@ -24,7 +24,7 @@
                     {{#if writer}}
                         <div class="config">
                             <i class="fa fa-check popover-config" data-container="body" data-toggle="popover"
-                               data-placement="right"></i>
+                               data-placement="right" tabindex="0"></i>
                         </div>
                     {{/if}}
                     <div class="thread-message-box">
@@ -35,9 +35,7 @@
                                     <input type="hidden" name="feedThreadId" value="{{feedThreadId}}"/>
                                     <textarea class="form-control" name="feedContent" rows="6">{{originFeedContent}}</textarea>
                                     <div class="feed-modify-bottom">
-                                        <button class="btn btn-sm btn-info pull-right modifyBtn" type="button">
-                                            수정
-                                        </button>
+                                        <button class="btn btn-sm btn-info pull-right modifyBtn" type="button">수정</button>
                                         <button class="btn btn-sm btn-default pull-right cancelBtn" type="button">취소</button>
                                     </div>
                                 </form>
