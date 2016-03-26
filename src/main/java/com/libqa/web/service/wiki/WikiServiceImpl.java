@@ -145,17 +145,19 @@ public class WikiServiceImpl implements WikiService {
     }
 
     private void saveKeywordAndList(Keyword keyword, Integer wikiId) {
-        String[] keywordArrays = new String[0];
-        String[] deleteKeywordArrays = new String[0];
-        if(keyword.getKeywords() != null){
-            keywordArrays = keyword.getKeywords().split(",");
-        }
-        if(keyword.getDeleteKeywords() != null){
-            deleteKeywordArrays = keyword.getDeleteKeywords().split(",");
-        }
-        log.debug(" keywordArrays : {}", keywordArrays.length);
-        if (keywordArrays.length > 0) {
-            keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordType.WIKI, wikiId);
+        if( !"".equals(keyword.getKeywordName() ) ){
+            String[] keywordArrays = new String[0];
+            String[] deleteKeywordArrays = new String[0];
+            if(keyword.getKeywords() != null){
+                keywordArrays = keyword.getKeywords().split(",");
+            }
+            if(keyword.getDeleteKeywords() != null){
+                deleteKeywordArrays = keyword.getDeleteKeywords().split(",");
+            }
+            log.debug(" keywordArrays : {}", keywordArrays.length);
+            if (keywordArrays.length > 0) {
+                keywordService.saveKeywordAndList(keywordArrays, deleteKeywordArrays, KeywordType.WIKI, wikiId);
+            }
         }
     }
 
@@ -285,7 +287,8 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-    public List<Wiki> findWikiListByKeyword(String keywordNm, int page, int size) {
+    public List<DisplayWiki> findWikiListByKeyword(String keywordNm, int page, int size) {
+        List<DisplayWiki> resultWiki = new ArrayList<>();
         List<Keyword> keywordList = keywordRepository.findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordType.WIKI, keywordNm, false);
         List<Integer> wikiIds = getWikiIdByKeyworld(keywordList);
 
@@ -298,7 +301,20 @@ public class WikiServiceImpl implements WikiService {
                         , PageUtil.sortId("DESC", "insertDate")
                     )
                 );
-        return list;
+
+        if( !CollectionUtils.isEmpty( list )){
+            for( Wiki wiki : list ){
+                resultWiki.add( new DisplayWiki(
+                                wiki
+                                , userService.findByUserId( wiki.getUserId() )
+                                , keywordService.findByWikiId(wiki.getWikiId(), false)
+                        )
+                );
+            }
+        }
+
+
+        return resultWiki;
     }
 
     @Override

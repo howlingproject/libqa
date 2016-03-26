@@ -40,7 +40,7 @@ public interface WikiService {
 
     List<Wiki> findSortAndModifiedBySpaceId(Integer spaceId, int startIdx, int endIdx);
 
-    List<Wiki> findWikiListByKeyword(String keywordNm, int page, int size);
+    List<DisplayWiki> findWikiListByKeyword(String keywordNm, int page, int size);
 
     List<Wiki> findWikiListByContentsMarkup(String searchText, int page, int size);
 

@@ -32,7 +32,7 @@
 
                 <div class="col-md-6">
                     <!-- 전체 위키 -->
-                    <div id="allWikiList">
+                    <div>
                         <div class="nav-tabs-header">
                             전체 위키
                             <span class="pull-right section-category">
@@ -42,8 +42,10 @@
                                 </ul>
                             </span>
                         </div>
-
-                        {{> wiki/template/_allList}}
+                        <div id="allWikiList" class="tab-content">
+                            <div></div>
+                            {{> wiki/template/_allList}}
+                        </div>
                     </div>
                     <!--// 위키 -->
 
@@ -64,18 +66,26 @@
                 </div>
             </div>
         </div>
-
+    </div>
 
 
 {{/partial}}
 
 {{# partial "script-page" }}
 {{embedded "common/_keywordList"}}
+
     <script>
         $(document).ready(function() {
             Wiki.renderKeywordList();
             $("#allListSearch a").click(function(){
                 Wiki.searchAllWikiListType(this.dataset.val);
+                $("#allListSearch li").each(function(){
+                    if( this.className == "active" ){
+                        this.className = "";
+                    }else{
+                        this.className = "active";
+                    }
+                });
             });
         });
         var Wiki = {
@@ -121,10 +131,15 @@
                     url: "/wiki/allList/"+listViewType,
                     type: "GET",
                     success : function(result){
-                        debugger;
+                        //debugger;
                         if( result.data != null){
-                            if( result.data.result == 1  ){
+                            if( result.resultCode == 1  ){
+                                var source = $('#wiki-template-_allList-hbs').html();
+                                var template = Handlebars.compile(source);
 
+                                var html = template(result.data);
+                                //html = "<div></div>"+html;
+                                $('#allWikiList').html(html);
                             }
                         }
                     },
