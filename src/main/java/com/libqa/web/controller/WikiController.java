@@ -1,5 +1,9 @@
 package com.libqa.web.controller;
 
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
+import com.github.jknack.handlebars.io.TemplateLoader;
 import com.google.common.base.MoreObjects;
 import com.libqa.application.enums.ListType;
 import com.libqa.application.enums.WikiLikesType;
@@ -25,9 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.libqa.application.framework.ResponseData.createFailResult;
 import static com.libqa.application.framework.ResponseData.createSuccessResult;
@@ -389,19 +391,18 @@ public class WikiController {
     @RequestMapping(value = "wiki/allList/{listViewType}", method = RequestMethod.GET)
     public ResponseData<DisplayWiki> wikiListViewType(@PathVariable("listViewType") String listViewType) {
 
-        List<DisplayWiki> allWiki = null;
+        List<DisplayWiki> displayWikis = null;
         try{
             WikiOrderListType wikiOrderListType = WikiOrderListType.INSERT_DATE;
             if( listViewType.equals( WikiOrderListType.TITLE.toString() ) ){
                 wikiOrderListType = WikiOrderListType.TITLE;
             }
-            allWiki = wikiService.findByAllWiki(0, 10, wikiOrderListType);
+            displayWikis = wikiService.findByAllWiki(0, 10, wikiOrderListType);
         }catch (Exception e){
             log.error(e.toString());
-            return ResponseData.createFailResult(allWiki);
+            return ResponseData.createFailResult(displayWikis);
         }
-        return ResponseData.createSuccessResult(allWiki);
-
+        return ResponseData.createSuccessResult(displayWikis);
     }
 
 
@@ -409,7 +410,8 @@ public class WikiController {
     public ModelAndView keywordWikiList(@PathVariable String keywordNm) {
         ModelAndView mav = new ModelAndView("wiki/list");
 
-        List<Wiki> keyworldsWiki = wikiService.findWikiListByKeyword(keywordNm, 0, 15);
+        List<DisplayWiki> keyworldsWiki = wikiService.findWikiListByKeyword(keywordNm, 0, 15);
+
         mav.addObject("listWiki", keyworldsWiki);
         mav.addObject("selectKeywordName", keywordNm);
         mav.addObject("listTitle",keywordNm+" 위키 List");

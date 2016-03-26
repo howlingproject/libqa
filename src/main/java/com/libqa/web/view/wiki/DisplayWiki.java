@@ -4,6 +4,7 @@ import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.User;
 import com.libqa.web.domain.Wiki;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * Created by songanji on 2015. 11. 22..
  */
 @Data
+@NoArgsConstructor
 public class DisplayWiki {
     private Wiki wiki;
     private User user;
