@@ -1,5 +1,6 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.libqa.application.enums.SpaceView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
