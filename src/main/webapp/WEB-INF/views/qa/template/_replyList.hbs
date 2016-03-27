@@ -6,7 +6,7 @@
             <li class="thread" data-qa-reply-id="{{qaReply.replyId}}">
                 <div class="author">
                     <div class="user-profile">
-                        <img alt="avatar" class="profile-image" src="/imageView?path={{userImage}}" />
+                        <img alt="avatar" class="profile-image" src="/imageView?path={{userImage}}" onerror='this.src="/resource/images/avatar.png"'/>
                     </div>
                 </div>
                 <div class="name">{{userNick}}</div>
@@ -28,7 +28,7 @@
                         <li class="thread" data-qa-reply-id="{{qaReply.replyId}}">
                             <div class="author">
                                 <div class="user-profile-sm">
-                                    <img alt="avatar" class="profile-image" src="/resource/images/avatar.png" />
+                                    <img alt="avatar" class="profile-image" src="/imageView?path={{qaReply.userImage}}" onerror='this.src="/resource/images/avatar.png"' />
                                 </div>
                             </div>
                             <div class="name">{{qaReply.userNick}}</div>
