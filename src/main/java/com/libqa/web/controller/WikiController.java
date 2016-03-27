@@ -1,10 +1,13 @@
 package com.libqa.web.controller;
 
+import com.google.common.base.MoreObjects;
+import com.libqa.application.enums.ListType;
 import com.libqa.application.enums.WikiLikesType;
 import com.libqa.application.enums.WikiOrderListType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUserManager;
+import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.ActivityService;
 import com.libqa.web.service.common.KeywordListService;
@@ -338,15 +341,35 @@ public class WikiController {
         return ResponseData.createSuccessResult(displayAjaxWiki);
     }
 
-    @RequestMapping(value = "wiki/list/bestWiki", method = RequestMethod.GET)
-    public ModelAndView bestWikiList() {
+    @RequestMapping(value = "wiki/list/{listType}", method = RequestMethod.GET)
+    public ModelAndView wikiList(@PathVariable String listType
+            ,@RequestParam("page") Integer page ) {
         ModelAndView mav = new ModelAndView("wiki/list");
 
-        // 베스트 위키 조회
-        List<DisplayWiki> bestWiki = wikiService.findByBestWiki(0, 15);
+        listType = StringUtil.nullToString(listType);
+        page = MoreObjects.firstNonNull(page, 0);
+        List<DisplayWiki> wikiList = null;
 
-        mav.addObject("listWiki", bestWiki);
-        mav.addObject("listTitle","베스트위키 List");
+        if( ListType.ALL.getName().equals(listType) ){
+
+        }else if( ListType.BEST.getName().equals(listType)){
+            // 베스트 위키 조회
+            wikiList = wikiService.findByBestWiki(page, page+15);
+            mav.addObject("listTitle","베스트위키 List");
+
+        }else if( ListType.RESENT.getName().equals(listType) ){
+
+            User user = loggedUserManager.getUser();
+            if(isUser(user)){
+                Integer userId = user.getUserId();
+                wikiList = wikiService.findByRecentWiki(userId, page, page+15);
+            }
+            mav.addObject("listTitle","최근 활동 List");
+        }
+
+        mav.addObject("listWiki", wikiList);
+        mav.addObject("page",page);
+        mav.addObject("pages",(page/6)+1);
 
         return mav;
     }
