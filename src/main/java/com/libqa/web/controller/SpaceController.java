@@ -68,17 +68,6 @@ public class SpaceController {
     @Autowired
     private LoggedUserManager loggedUserManager;
 
-    /**
-     * 파일 업로드 테스트용 페이지
-     * @param model
-     * @return
-     */
-    @Deprecated
-    @RequestMapping("/space/fileUpload")
-    public ModelAndView fileUpload(Model model) {
-        ModelAndView mav = new ModelAndView("/space/ajaxUpload");
-        return mav;
-    }
 
     @RequestMapping("/space")
     public String space() {
@@ -92,19 +81,10 @@ public class SpaceController {
 
         // 전체 space 목록 조회 (10개)
         boolean isDeleted = false;
-        List<Space> spaces = findSpacesByPaging(isDeleted, 0, 10);
 
-        /**
-         * Space 접근 가능 사용자 목록 조회
-         */
-        List<SpaceMain> spaceMainList = new ArrayList<>();
-        for (Space space : spaces) {
-            Integer spaceId = space.getSpaceId();
-            List<Wiki> wikis = wikiService.findBySpaceId(spaceId);
-            List<Keyword> keywords = keywordService.findBySpaceId(spaceId, false);
-            SpaceMain spaceMain = new SpaceMain(space, wikis.size(), keywords);
-            spaceMainList.add(spaceMain);
-        }
+        List<Space> spaces = spaceService.findAllByCondition(isDeleted, 0, 10, "title");
+        List<SpaceMain> spaceMainList = convertSpaceMain(spaces);
+
 
         User user = loggedUserManager.getUser();
 
@@ -123,13 +103,7 @@ public class SpaceController {
                 log.debug("## 즐겨찾기 공간이 없습니다.");
                 mav.addObject("myFavoriteSpaceList", null);
             } else {
-                for (Space space : myFavoriteSpaceList) {
-                    Integer spaceId = space.getSpaceId();
-                    List<Wiki> wikis = wikiService.findBySpaceId(spaceId);
-                    List<Keyword> keywords = keywordService.findBySpaceId(spaceId, false);
-                    SpaceMain spaceMain = new SpaceMain(space, wikis.size(), keywords);
-                    favoriteSpaces.add(spaceMain);
-                }
+                favoriteSpaces = convertSpaceMain(myFavoriteSpaceList);
                 mav.addObject("myFavoriteSpaceList", favoriteSpaces);
             }
 
@@ -160,8 +134,46 @@ public class SpaceController {
         return mav;
     }
 
-    public List<Space> findSpacesByPaging(boolean isDeleted, Integer startIdx, Integer endIdx) {
-        return spaceService.findAllByCondition(isDeleted, startIdx, endIdx);
+    public List<SpaceMain> convertSpaceMain(List<Space> spaces) {
+        List<SpaceMain> spaceMainList = new ArrayList<>();
+        for (Space space : spaces) {
+            Integer spaceId = space.getSpaceId();
+            List<Wiki> wikis = wikiService.findBySpaceId(spaceId);
+            List<Keyword> keywords = keywordService.findBySpaceId(spaceId, false);
+            SpaceMain spaceMain = new SpaceMain(space, wikis.size(), keywords);
+            spaceMainList.add(spaceMain);
+        }
+
+        return spaceMainList;
+    }
+
+    /**
+     * 더보기 구현
+     * @param isDeleted
+     * @param startIdx
+     * @param endIdx
+     * @return
+     */
+    @RequestMapping("/space/more")
+    @ResponseBody
+    public ResponseData<Space> findMoreSpaceList(boolean isDeleted, Integer startIdx, Integer endIdx) {
+        List<Space> findMores = spaceService.findAllByCondition(isDeleted, startIdx, endIdx);
+
+        return ResponseData.createSuccessResult(findMores);
+    }
+
+    @RequestMapping(value = "/space/render", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<SpaceMainList> renderSpace(@RequestParam String sortType) {
+        log.info("## sortType = {}", sortType);
+
+        List<Space> spaces = spaceService.findAllByCondition(false, 0, 10, sortType);
+        List<SpaceMain> spaceMains = convertSpaceMain(spaces);
+        SpaceMainList spaceMainList = new SpaceMainList();
+        spaceMainList.setSpaceMainList(spaceMains);
+
+        return ResponseData.createSuccessResult(spaceMainList);
+
     }
 
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
@@ -471,8 +483,8 @@ public class SpaceController {
      * @param spaceId
      * @return
      */
-    @RequestMapping(value = "/space/cancelFavorite", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('USER')")
+    @RequestMapping(value = "/space/cancelFavorite", method = RequestMethod.GET)
     @ResponseBody
     public String cancelFavorite(@RequestParam Integer spaceId) {
 

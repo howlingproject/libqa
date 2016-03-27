@@ -21,7 +21,24 @@ public interface SpaceService {
 	 */
 	List<Space> findAllByCondition(boolean isDeleted);
 
+	/**
+	 * 페이징
+	 * @param isDeleted
+	 * @param startIdx
+	 * @param endIdx
+	 * @return
+	 */
 	List<Space> findAllByCondition(boolean isDeleted, Integer startIdx, Integer endIdx);
+
+	/**
+	 * 페이징 및 정렬 조건
+	 * @param isDeleted
+	 * @param startIdx
+	 * @param endIdx
+	 * @param sortCondition
+	 * @return
+	 */
+	List<Space> findAllByCondition(boolean isDeleted, Integer startIdx, Integer endIdx, String sortCondition);
 
 	Space findOne(Integer spaceId);
 

@@ -48,16 +48,19 @@
             <!-- 전체 공간 -->
             <div class="nav-tabs-header">전체 공간
                 <span class="pull-right section-category">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#">이름순</a></li>
-                        <li><a href="#">최신순</a></li>
+                    <ul id="renderTypeUI" class="nav nav-tabs">
+                        <li value="title" data="defalut" class="active"><a id="spaceTitle" style="cursor: pointer">이름순</a></li>
+                        <li value="updateDate"><a id="spaceUpdate" style="cursor: pointer">최신순</a></li>
                     </ul>
                 </span>
             </div>
+
+            <div id="allSpaceArea">
             {{> space/template/_allSpaceList}}
+            </div>
             <br>
             <p class="lead text-right" ><button class="btn btn-default">더보기 {{readMoreCount}}</button></p>
-            <!--// 전체 공간 -->
+
         </div>
 
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -76,10 +79,18 @@
 {{/partial}}
 {{#partial "script-page"}}
     {{embedded "common/_keywordList"}}
+    {{embedded "space/template/_allSpaceList"}}
     <script type="text/javascript">
         $(document).ready(function(){
             Space.init();
 
+            $('#spaceTitle').on('click', function () {
+                renderSpaceList("title");
+            });
+
+            $('#spaceUpdate').on('click', function () {
+                renderSpaceList("updateDate");
+            });
         });
 
         var Space = {
@@ -88,6 +99,8 @@
                 this.spaceCount();
                 this.wikiCount();
                 this.keywordCount();
+                this.renderDayType($('#renderTypeUI'));
+                this.bindDayTypeEvent();
             },
             renderKeywordList : function(keywordName){
                 $.ajax({
@@ -156,8 +169,51 @@
                         alert('키워드 수 조회 에러. 에러코드 [' + req.status + ']');
                     }
                 })
+            },
+            bindDayTypeEvent : function(){
+                $('#renderTypeUI > li').click(function(){
+                    Space.chaneSortType(this);
+                });
+            },
+            chaneSortType : function(dayTypeObj){
+                var ulObj = $(dayTypeObj).parent();
+                var dayTypeValue = dayTypeObj.getAttribute('value');
+                ulObj.find('li').removeClass('active');
+                ulObj.find('li[value="'+dayTypeValue+'"]').addClass('active');
+            },
+            renderDayType : function(targetObj){
+                targetObj.find('li').removeClass('active');
+                targetObj.find('li[data="defalut"]').addClass('active');
             }
         };
+
+
+        function renderSpaceList(sort) {
+            $.ajax({
+                url: "/space/render",
+                type: "GET",
+                data: { sortType : sort},
+                success : function(response){
+                    console.log("## response = " + response.resultCode);
+                    if(response.resultCode == 1) {
+
+                        var source = $('#space-template-_allSpaceList-hbs').html();
+                        var template = Handlebars.compile(source);
+
+                        var html = template(response.data);
+                        $('#allSpaceArea').html(html);
+                    }
+                },
+                error : function(req){
+                    // Handle upload error
+                    alert('req : ' + req);
+                    console.log('req : ' + req.status);
+                    console.log('req : ' + req.readyState);
+
+                    alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                }
+            });
+        }
     </script>
 {{/partial}}
 

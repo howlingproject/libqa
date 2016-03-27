@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Created by yong on 2015-03-08.
@@ -259,25 +260,37 @@ public class QaServiceImpl implements QaService {
 
     @Override
     public List<QaContent> findByIsReplyedAndDayType(QaDto qaDto) {
-        boolean isDeleted = false;
         boolean isReplyed = false;
         Date today = new Date();
         List<QaContent> returnQaContentObj = new ArrayList<>();
+	    Stream<QaContent> qaStream = null;
         try {
             Date fromDate = getFromDate(qaDto.getDayType());
-            List<Integer> qaIds = getQaIdByKeyword(qaDto.getKeywordName());
-            if ("Y".equals(qaDto.getWaitReply())) {
-                returnQaContentObj = findRecentList(qaIds, isReplyed, fromDate, today, isDeleted);
-            } else {
-                returnQaContentObj = findWaitList(qaIds, fromDate, today, isDeleted);
-            }
+	        if("".equals(qaDto.getKeywordName())){
+		        if ("Y".equals(qaDto.getWaitReply())) {
+			        if(null == fromDate){
+				        qaStream = qaRepository.findAllByIsReplyedAndIsDeletedFalseOrderByUpdateDateDesc(isReplyed);
+			        } else {
+		                qaStream = qaRepository.findAllByIsReplyedAndUpdateDateBetweenAndIsDeletedFalseOrderByUpdateDateDesc(isReplyed, fromDate, today);
+			        }
+		        } else {
+			        qaStream = qaRepository.findAllByUpdateDateBetweenAndIsDeletedFalseOrderByUpdateDateDesc(fromDate, today);
+		        }
+	        } else {
+		        if ("Y".equals(qaDto.getWaitReply())) {
+	                qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed, fromDate, today);
+		        } else {
+	                qaStream = qaRepository.findAllByKeywordAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), fromDate, today);
+		        }
+	        }
+			qaStream.forEach(qaContent -> returnQaContentObj.add(qaContent));
         }catch(Exception e){
             e.printStackTrace();
         }
         return returnQaContentObj;
     }
 
-    public List<QaContent> findRecentList(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted){
+	public List<QaContent> findRecentList(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted){
         List<QaContent> recentList = new ArrayList<>();
         if(fromDate == null){
             recentList = qaRepository.findAllByQaIdInAndIsReplyedAndIsDeletedOrderByUpdateDateDesc(qaIds, isReplyed, isDeleted);
