@@ -40,6 +40,11 @@ public class QaReplyServiceImpl implements QaReplyService {
     UserService userService;
 
     @Override
+    public QaReply findByReplyId(Integer replyId) {
+        return qaReplyRepository.findByReplyIdAndIsDeletedFalse(replyId);
+    }
+
+    @Override
     @Transactional
     public QaReply saveWithQaContent(QaReply paramQaReply, User user) {
         boolean isDeleted = false;
@@ -159,11 +164,10 @@ public class QaReplyServiceImpl implements QaReplyService {
 
     @Override
     @Transactional
-    public void delete(Integer replyId) {
+    public void delete(Integer replyId, Integer userId) {
         QaReply qaReply = qaReplyRepository.findOne(replyId);
-        // TODO List 차후 로그인으로 변경
         qaReply.setDeleted(true);
-        qaReply.setUpdateUserId(1);
+        qaReply.setUpdateUserId(userId);
         qaReply.setUpdateDate(new Date());
     }
 
@@ -187,6 +191,7 @@ public class QaReplyServiceImpl implements QaReplyService {
     public Integer countByQaContent(QaContent qaContent) {
         return qaReplyRepository.countByQaId(qaContent.getQaId());
     }
+
 
     public void updateOrderIdx(QaReply paramQaReply){
         boolean isDeleted = false;

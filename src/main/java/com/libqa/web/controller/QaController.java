@@ -321,8 +321,13 @@ public class QaController {
     @RequestMapping(value="/qa/reply/delete/{replyId}", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<Integer> deleteReply(@PathVariable Integer replyId){
+	    User user = loggedUserManager.getUser();
         try {
-            qaReplyService.delete(replyId);
+            QaReply originQaReply = qaReplyService.findByReplyId(replyId);
+            if(user.isNotMatchUser(originQaReply.getUserId())){
+                return createResult(NOT_MATCH_USER);
+            }
+            qaReplyService.delete(replyId, user.getUserId());
             return createSuccessResult(replyId);
         } catch (Exception e) {
             log.error("save reply error : {}", e);

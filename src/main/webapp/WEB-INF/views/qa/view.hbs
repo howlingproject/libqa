@@ -34,7 +34,7 @@
                             <li class="pull-right">
                                 <div class="user-profile-sm">
                                     <span class="nickname">{{qaContent.userNick}}</span>
-                                    <img alt="avatar" class="profile-image" src="/imageView?path={{writer.userImage}}" />
+                                    <img alt="avatar" class="profile-image" src="/imageView?path={{writer.userImage}}" onerror='this.src="/resource/images/avatar.png"'/>
                                 </div>
                             </li>
                         </ul>
@@ -113,7 +113,7 @@
                                         <div class="user-profile-sm">
                                             <!-- 세션에서 userNick 가져와야함 -->
                                             <span class="nickname">{{loggedUser.userNick}}</span>
-                                            <img alt="avatar" class="profile-image" src="/imageView?path={{loggedUser.userImage}}" />
+                                            <img alt="avatar" class="profile-image" src="/imageView?path={{loggedUser.userImage}}" onerror='this.src="/resource/images/avatar.png"'/>
                                         </div>
                                     </div>
                                 </div>
