@@ -15,7 +15,10 @@
                                 <span class="nickname"><i class="fa fa-pencil-square-o"></i> {{user.userNick}}</span>
                             </div>
                         </span>
-
+                        <br>
+                        {{#each keywords}}
+                            {{#keywordBadge keywordName}}{{/keywordBadge}}
+                        {{/each}}
                     </div>
                     <div>
                         {{subString (htmlDelete wiki.contents) 0 80 }}

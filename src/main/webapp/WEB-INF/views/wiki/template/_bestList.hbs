@@ -4,7 +4,10 @@
             <div>
                 <strong> <a class="form" href="/wiki/{{wiki.wikiId}}">{{wiki.title}}</a></strong>
                 <span class="comments pull-right"><i class="glyphicon glyphicon-comment"></i> {{wiki.replyCount}}</span>
-                <br>{{> common/_keywordBadge}}
+                <br>
+                {{#each keywords}}
+                    {{#keywordBadge keywordName}}{{/keywordBadge}}
+                {{/each}}
             </div>
             <div class="media">
                 <a class="pull-left" href="#">
@@ -25,7 +28,7 @@
             </div>
         </div>
     {{/each}}
-    <div class="pull-right" style="padding-top:10px"><button class="btn btn-sm btn-default btn-sm-fixed">더보기</button></div>
+    <div class="pull-right" style="padding-top:10px"><button id="bestAddBtn" class="btn btn-sm btn-default btn-sm-fixed">더보기</button></div>
 {{^}}
     <div class="best-qna-item">
         베스트 위키가 없습니다.
