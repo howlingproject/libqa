@@ -22,8 +22,6 @@ public class RequestUtil {
      */
     public static String refererUrl(HttpServletRequest request, String defaultUrl) {
         String returnUrl = request.getHeader("Referer");
-        log.info("### returnUrl = {}", returnUrl);
-
         return checkReturnUrl(returnUrl);
     }
 
@@ -61,7 +59,7 @@ public class RequestUtil {
 
             if (values != null) {
                 for (int i = 0; i < values.length; i++) {
-                    log.info("** LoginHandler " + name + "( " + i + " ) " + values[i]);
+                    log.debug("** LoginHandler " + name + "( " + i + " ) " + values[i]);
                 }
             }
         }
