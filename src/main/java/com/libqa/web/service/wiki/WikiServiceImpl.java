@@ -370,42 +370,6 @@ public class WikiServiceImpl implements WikiService {
         return wikiIds;
     }
 
-
-    private WikiSnapShot saveSnapShot(Wiki wiki, WikiRevisionActionType revisionActionTypeEnum) {
-
-        WikiSnapShot wikiSnapShot = new WikiSnapShot();
-        BeanUtils.copyProperties(wiki, wikiSnapShot);
-        wikiSnapShot.setRevisionActionType(revisionActionTypeEnum);
-
-//
-//        wikiSnapShot.setSpaceId(wiki.getSpaceId());
-//        wikiSnapShot.setParentsId(wiki.getParentsId());
-//        wikiSnapShot.setTitle(wiki.getTitle());
-//        wikiSnapShot.setOrderIdx(wiki.getOrderIdx());
-//        wikiSnapShot.setDepthIdx(wiki.getDepthIdx());
-//        wikiSnapShot.setContentsMarkup(wiki.getContentsMarkup());
-//        wikiSnapShot.setContents(wiki.getContents());
-//        wikiSnapShot.setLock(wiki.isLock());
-//        wikiSnapShot.setPasswd(wiki.getPasswd());
-//        wikiSnapShot.setUserNick(wiki.getUserNick());
-//        wikiSnapShot.setUserId(wiki.getUserId());
-//        wikiSnapShot.setViewCount(wiki.getViewCount());
-//        wikiSnapShot.setLikeCount(wiki.getLikeCount());
-//        wikiSnapShot.setReportCount(wiki.getReportCount());
-//        wikiSnapShot.setFixed(wiki.isFixed());
-//        wikiSnapShot.setWikiUrl(wiki.getWikiUrl());
-//        wikiSnapShot.setCurrentIp(wiki.getCurrentIp());
-//        wikiSnapShot.setEditReason(wiki.getEditReason());
-//        wikiSnapShot.setRevision(wiki.getRevision());
-//        wikiSnapShot.setDeleted(wiki.isDeleted());
-//        wikiSnapShot.setInsertDate(wiki.getInsertDate());
-//        wikiSnapShot.setUpdateDate(wiki.getUpdateDate());
-//        wikiSnapShot.setRevisionActionType(revisionActionTypeEnum);
-
-
-        return wikiSnapShotRepository.save(wikiSnapShot);
-    }
-
     @Override
     public List<DisplayWiki> findUpdateWikiList(int startIdx, int endIdx) {
         List<DisplayWiki> resultWiki = new ArrayList<DisplayWiki>();

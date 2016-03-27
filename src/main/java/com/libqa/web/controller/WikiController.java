@@ -1,17 +1,10 @@
 package com.libqa.web.controller;
 
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
-import com.google.common.base.MoreObjects;
-import com.libqa.application.enums.ListType;
 import com.libqa.application.enums.WikiLikesType;
 import com.libqa.application.enums.WikiOrderListType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUserManager;
-import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.ActivityService;
 import com.libqa.web.service.common.KeywordListService;
@@ -77,23 +70,10 @@ public class WikiController {
             List<DisplayWiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 5);
             mav.addObject("resecntWiki", resecntWiki);
         }
+
         List<DisplayWiki> bestWiki = wikiService.findByBestWiki(0, 5);
 
-        // 베스트 위키 조회
-        List<DisplayWiki> bestWikiList = new ArrayList<>();
-        for (DisplayWiki displayWiki : bestWiki) {
-            Wiki wiki = displayWiki.getWiki();
-            List<Keyword> keywords = keywordService.findByWikiId(wiki.getWikiId(), false);
-            User userInfo = new User();
-            userInfo.setUserId(wiki.getUserId());
-            userInfo.setUserNick(wiki.getUserNick());
-            DisplayWiki bestDisplayWiki = new DisplayWiki(wiki, userInfo, keywords);
-
-            bestWikiList.add(bestDisplayWiki);
-        }
-
-
-        mav.addObject("bestWikiList", bestWikiList);
+        mav.addObject("bestWikiList", bestWiki);
 
         return mav;
     }
@@ -358,6 +338,18 @@ public class WikiController {
         return ResponseData.createSuccessResult(displayAjaxWiki);
     }
 
+    @RequestMapping(value = "wiki/list/bestWiki", method = RequestMethod.GET)
+    public ModelAndView bestWikiList() {
+        ModelAndView mav = new ModelAndView("wiki/list");
+
+        // 베스트 위키 조회
+        List<DisplayWiki> bestWiki = wikiService.findByBestWiki(0, 15);
+
+        mav.addObject("listWiki", bestWiki);
+        mav.addObject("listTitle","베스트위키 List");
+
+        return mav;
+    }
 
     @RequestMapping(value = "wiki/list/keyword/{keywordNm}", method = RequestMethod.GET)
     public ModelAndView keywordWikiList(@PathVariable String keywordNm) {

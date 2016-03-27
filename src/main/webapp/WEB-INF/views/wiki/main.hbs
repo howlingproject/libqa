@@ -77,19 +77,14 @@
 
     <script>
         $(document).ready(function() {
-            Wiki.renderKeywordList();
-            $("#allListSearch a").click(function(){
-                Wiki.searchAllWikiListType(this.dataset.val);
-                $("#allListSearch li").each(function(){
-                    if( this.className == "active" ){
-                        this.className = "";
-                    }else{
-                        this.className = "active";
-                    }
-                });
-            });
+            Wiki.init();
         });
         var Wiki = {
+            init : function(){
+                Wiki.renderKeywordList();
+                Wiki.bindingBtnWiki();
+            },
+
             renderKeywordList : function(keywordName){
                 $.ajax({
                     url: "/common/findKeywordList",
@@ -150,6 +145,23 @@
                     }
                 });
 
+            },
+
+            bindingBtnWiki : function(){
+                $("#allListSearch a").click(function(){
+                    Wiki.searchAllWikiListType(this.dataset.val);
+                    $("#allListSearch li").each(function(){
+                        if( this.className == "active" ){
+                            this.className = "";
+                        }else{
+                            this.className = "active";
+                        }
+                    });
+                });
+
+                $("#bestAddBtn").click(function(){
+                    location.href = "/wiki/list/bestWiki";
+                });
             }
         }
     </script>
