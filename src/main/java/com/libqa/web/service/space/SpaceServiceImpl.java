@@ -67,8 +67,9 @@ public class SpaceServiceImpl implements SpaceService {
 		return spaceList;
 	}
 
+
 	@Override
-	public List<Space> findAllByCondition(boolean isDeleted, Integer startIdx, Integer endIdx, String sortCondition) {
+	public List<Space> findAllBySort(boolean isDeleted, Integer startIdx, Integer endIdx, String sortCondition) {
 		List<Space> spaceList;
 
 		spaceList = spaceRepository.findPagingByIsDeleted(
@@ -218,6 +219,11 @@ public class SpaceServiceImpl implements SpaceService {
 		userFavorite.setDeleted(isDeleted);
 		userFavorite.setUpdateDate(new Date());
 		userFavoriteService.save(userFavorite);
+	}
+
+
+	public Integer countSpace(boolean isDeleted) {
+		return spaceRepository.countByIsDeleted(isDeleted);
 	}
 
 }

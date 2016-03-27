@@ -38,7 +38,7 @@ public interface SpaceService {
 	 * @param sortCondition
 	 * @return
 	 */
-	List<Space> findAllByCondition(boolean isDeleted, Integer startIdx, Integer endIdx, String sortCondition);
+	List<Space> findAllBySort(boolean isDeleted, Integer startIdx, Integer endIdx, String sortCondition);
 
 	Space findOne(Integer spaceId);
 
@@ -69,4 +69,6 @@ public interface SpaceService {
 	 * @return
 	 */
 	Space delete(Space space, User user);
+
+	Integer countSpace(boolean isDeleted);
 }

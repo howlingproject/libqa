@@ -34,6 +34,7 @@
     </div>
 
     <div class="col-sm-12 top-buffer" style="padding-bottom: 20px">
+        <input type="hidden" id="tabName" value="">
         <!-- keyword -->
         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
 
@@ -58,9 +59,11 @@
             <div id="allSpaceArea">
             {{> space/template/_allSpaceList}}
             </div>
-            <br>
-            <p class="lead text-right" ><button class="btn btn-default">더보기 {{readMoreCount}}</button></p>
 
+            <br>
+            {{#if morePage }}
+            <p class="lead text-right" ><button class="btn btn-default" id="getMorePages">더보기</button></p>
+            {{/if}}
         </div>
 
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -91,6 +94,10 @@
             $('#spaceUpdate').on('click', function () {
                 renderSpaceList("updateDate");
             });
+            $('#getMorePages').on('click', function () {
+                renderMorePage();
+            });
+
         });
 
         var Space = {
@@ -178,6 +185,7 @@
             chaneSortType : function(dayTypeObj){
                 var ulObj = $(dayTypeObj).parent();
                 var dayTypeValue = dayTypeObj.getAttribute('value');
+                $("#tabName").val(dayTypeValue);
                 ulObj.find('li').removeClass('active');
                 ulObj.find('li[value="'+dayTypeValue+'"]').addClass('active');
             },
@@ -214,6 +222,41 @@
                 }
             });
         }
+
+        function renderMorePage() {
+            var sort = "";
+            if ($("#tabName").val() == "") {
+                sort = "title";
+            } else {
+                sort = $("#tabName").val();
+            }
+
+            $.ajax({
+                url: "/space/more",
+                type: "GET",
+                data: { "sortType" : sort, "startIdx" : 0, "fetchSize" : "{{PAGE_SIZE}}"},
+                success : function(response){
+                    console.log("## response = " + response.resultCode);
+                    if(response.resultCode == 1) {
+
+                        var source = $('#space-template-_allSpaceList-hbs').html();
+                        var template = Handlebars.compile(source);
+
+                        var html = template(response.data);
+                        $('#allSpaceArea').html(html);
+                    }
+                },
+                error : function(req){
+                    // Handle upload error
+                    alert('req : ' + req);
+                    console.log('req : ' + req.status);
+                    console.log('req : ' + req.readyState);
+
+                    alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                }
+            });
+        }
+
     </script>
 {{/partial}}
 

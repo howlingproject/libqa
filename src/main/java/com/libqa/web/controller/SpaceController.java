@@ -46,6 +46,8 @@ public class SpaceController {
     @Value("${howling.hello.message}")
     private String message;
 
+    private static final Integer PAGE_SIZE = 2; // fetch size 기본 10
+
     @Autowired
     private SpaceService spaceService;
 
@@ -81,9 +83,18 @@ public class SpaceController {
 
         // 전체 space 목록 조회 (10개)
         boolean isDeleted = false;
+        boolean morePage = false;  //  더보기 구현
+        Integer totalCount = spaceService.countSpace(false);
+        Integer spaceCount = 0;
 
-        List<Space> spaces = spaceService.findAllByCondition(isDeleted, 0, 10, "title");
-        List<SpaceMain> spaceMainList = convertSpaceMain(spaces);
+        List<Space> spaces = spaceService.findAllBySort(isDeleted, 0, PAGE_SIZE, "title");
+        List<SpaceMain> spaceMainList;
+        if (!CollectionUtils.isEmpty(spaces)) {
+            spaceCount = spaces.size();
+            spaceMainList = convertSpaceMain(spaces);
+        } else {
+            spaceMainList = Lists.newArrayList();
+        }
 
 
         User user = loggedUserManager.getUser();
@@ -127,8 +138,17 @@ public class SpaceController {
             spaceWikiLists.add(spaceWikiList);
         }
 
-        mav.addObject("readMoreCount", spaces.size());
+
+
+        if (totalCount > PAGE_SIZE) {
+            morePage = true;
+        }
+
+
+        mav.addObject("morePage", morePage);
+        mav.addObject("readMoreCount", spaceCount);
         mav.addObject("spaceMainList", spaceMainList);
+        mav.addObject("PAGE_SIZE", PAGE_SIZE);
         mav.addObject("spaceWikiLists", spaceWikiLists);
 
         return mav;
@@ -148,18 +168,22 @@ public class SpaceController {
     }
 
     /**
-     * 더보기 구현
-     * @param isDeleted
+     * 공간 더보기 구현
+     * @param sortType
      * @param startIdx
-     * @param endIdx
+     * @param fetchSize
      * @return
      */
-    @RequestMapping("/space/more")
+    @RequestMapping(value = "/space/more", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<Space> findMoreSpaceList(boolean isDeleted, Integer startIdx, Integer endIdx) {
-        List<Space> findMores = spaceService.findAllByCondition(isDeleted, startIdx, endIdx);
-
-        return ResponseData.createSuccessResult(findMores);
+    public ResponseData<SpaceMainList> findMoreSpaceList(@RequestParam String sortType,
+                                                 @RequestParam Integer startIdx,
+                                                 @RequestParam Integer fetchSize) {
+        List<Space> findMores = spaceService.findAllBySort(false, startIdx, fetchSize, sortType);
+        List<SpaceMain> spaceMains = convertSpaceMain(findMores);
+        SpaceMainList spaceMainList = new SpaceMainList();
+        spaceMainList.setSpaceMainList(spaceMains);
+        return ResponseData.createSuccessResult(spaceMainList);
     }
 
     @RequestMapping(value = "/space/render", method = RequestMethod.GET)
@@ -167,7 +191,7 @@ public class SpaceController {
     public ResponseData<SpaceMainList> renderSpace(@RequestParam String sortType) {
         log.info("## sortType = {}", sortType);
 
-        List<Space> spaces = spaceService.findAllByCondition(false, 0, 10, sortType);
+        List<Space> spaces = spaceService.findAllBySort(false, 0, PAGE_SIZE, sortType);
         List<SpaceMain> spaceMains = convertSpaceMain(spaces);
         SpaceMainList spaceMainList = new SpaceMainList();
         spaceMainList.setSpaceMainList(spaceMains);

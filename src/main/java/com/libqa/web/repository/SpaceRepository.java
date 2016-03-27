@@ -17,4 +17,6 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
     List<Space> findAllByIsDeleted(Sort orders, boolean isDeleted);
 
     List<Space> findPagingByIsDeleted(Pageable pageable, boolean isDeleted);
+
+    Integer countByIsDeleted(boolean isDeleted);
 }
