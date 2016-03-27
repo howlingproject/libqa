@@ -11,6 +11,8 @@ import lombok.Data;
 public class QaDto {
     private String keywordName;
 
+    private String keywordType;
+
     private String dayType;
 
     private String waitReply;
