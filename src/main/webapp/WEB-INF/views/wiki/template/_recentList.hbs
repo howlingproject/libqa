@@ -3,7 +3,9 @@
         <!-- 최근 활동 -->
         <div class="best-qna-item">
             <div>
-                {{> common/_keywordBadge}}
+                {{#each keywords}}
+                    {{#keywordBadge keywordName}}{{/keywordBadge}}
+                {{/each}}
                 <strong> {{wiki.title}}</strong>
                 <span class="comments pull-right"><i class="glyphicon glyphicon-comment"></i> {{wiki.replyCount}}</span>
             </div>
