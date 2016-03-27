@@ -5,6 +5,7 @@ import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.FavoriteType;
 import com.libqa.application.enums.KeywordType;
 import com.libqa.application.util.PageUtil;
+import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.repository.SpaceRepository;
 import com.libqa.web.service.common.ActivityService;
@@ -62,6 +63,21 @@ public class SpaceServiceImpl implements SpaceService {
 							, PageUtil.sortId("DESC", "spaceId"))
 					, isDeleted);
 		}
+
+		return spaceList;
+	}
+
+	@Override
+	public List<Space> findAllByCondition(boolean isDeleted, Integer startIdx, Integer endIdx, String sortCondition) {
+		List<Space> spaceList;
+
+		spaceList = spaceRepository.findPagingByIsDeleted(
+				PageUtil.sortPageable(
+						startIdx
+						, endIdx
+						, PageUtil.sortId("DESC", sortCondition))
+				, isDeleted);
+
 
 		return spaceList;
 	}

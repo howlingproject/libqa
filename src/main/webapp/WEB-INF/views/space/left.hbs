@@ -139,7 +139,6 @@ To change this template use File | Settings | File Templates.
                     confirm: function () {
                         $.post('/space/delete', { spaceId: "{{space.spaceId}}" })
                             .done(function (response) {
-
                                 $.alert({
                                     title: '확인',
                                     content: response.comment,
