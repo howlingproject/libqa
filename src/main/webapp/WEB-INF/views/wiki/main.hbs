@@ -73,6 +73,7 @@
 
 {{# partial "script-page" }}
 {{embedded "common/_keywordList"}}
+{{embedded "wiki/template/_allList"}}
 
     <script>
         $(document).ready(function() {
@@ -131,14 +132,13 @@
                     url: "/wiki/allList/"+listViewType,
                     type: "GET",
                     success : function(result){
-                        //debugger;
                         if( result.data != null){
                             if( result.resultCode == 1  ){
                                 var source = $('#wiki-template-_allList-hbs').html();
                                 var template = Handlebars.compile(source);
 
                                 var html = template(result.data);
-                                //html = "<div></div>"+html;
+                                html = "<div></div>"+html;
                                 $('#allWikiList').html(html);
                             }
                         }

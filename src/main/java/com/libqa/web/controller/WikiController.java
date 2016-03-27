@@ -19,6 +19,7 @@ import com.libqa.web.service.common.KeywordService;
 import com.libqa.web.service.space.SpaceService;
 import com.libqa.web.service.wiki.WikiReplyService;
 import com.libqa.web.service.wiki.WikiService;
+import com.libqa.web.view.wiki.DisplayAjaxWiki;
 import com.libqa.web.view.wiki.DisplayWiki;
 import com.libqa.web.view.wiki.DisplayWikiLike;
 import lombok.extern.slf4j.Slf4j;
@@ -338,71 +339,23 @@ public class WikiController {
         return wikis.size() + "";
     }
 
-    @RequestMapping(value = "wiki/list/{listType}", method = RequestMethod.GET)
-    public ModelAndView wikiList(@PathVariable("listType") String listType
-                                ,@RequestParam("page") Integer page ) {
-        ModelAndView mav = new ModelAndView("wiki/list");
-
-        listType = StringUtil.nullToString(listType);
-        page = MoreObjects.firstNonNull(page, 0);
-
-        mav.addObject("page",page);
-        mav.addObject("pages",(page/6)+1);
-        if( ListType.ALL.getName().equals(listType) ){
-            List<DisplayWiki> allWiki = wikiService.findByAllWiki(page, 15, WikiOrderListType.INSERT_DATE);
-
-            Long countAllWiki = wikiService.countByAllWiki();
-            int AllPage = (int)( countAllWiki / 15 )+1;
-            mav.addObject("allPage", (AllPage/6)+1);
-
-            List pageIdx = new ArrayList();
-            for( int i=((page/6)+1); i<6; i++ ){
-                if( (AllPage/6)+1 >= i ){
-                    pageIdx.add(i);
-                }
-            }
-            mav.addObject("pageIdx", pageIdx);
-
-            mav.addObject("listWiki", allWiki);
-            mav.addObject("listTitle","전체 위키 List");
-
-        }else if( ListType.BEST.getName().equals(listType)){
-            List<DisplayWiki> bestWiki = wikiService.findByBestWiki(0, 15);
-            mav.addObject("listWiki", bestWiki);
-            mav.addObject("listTitle","베스트 위키 List");
-
-        }else if( ListType.RESENT.getName().equals(listType) ){
-            User user = loggedUserManager.getUser();
-            int userId = 0;
-            if(isUser(user)){
-                userId = user.getUserId();
-            }
-            List<DisplayWiki> resecntWiki = wikiService.findByRecentWiki(userId, 0, 15);
-            mav.addObject("listWiki", resecntWiki);
-            mav.addObject("listTitle","최근 활동 위키 List");
-        }else {
-            // 에러 처리
-
-        }
-
-        return mav;
-    }
-
     @RequestMapping(value = "wiki/allList/{listViewType}", method = RequestMethod.GET)
-    public ResponseData<DisplayWiki> wikiListViewType(@PathVariable("listViewType") String listViewType) {
+    public ResponseData<DisplayAjaxWiki> wikiListViewType(@PathVariable("listViewType") String listViewType) {
 
         List<DisplayWiki> displayWikis = null;
+        DisplayAjaxWiki displayAjaxWiki = new DisplayAjaxWiki();
         try{
             WikiOrderListType wikiOrderListType = WikiOrderListType.INSERT_DATE;
             if( listViewType.equals( WikiOrderListType.TITLE.toString() ) ){
                 wikiOrderListType = WikiOrderListType.TITLE;
             }
             displayWikis = wikiService.findByAllWiki(0, 10, wikiOrderListType);
+            displayAjaxWiki.setAllWiki(displayWikis);
         }catch (Exception e){
             log.error(e.toString());
-            return ResponseData.createFailResult(displayWikis);
+            return ResponseData.createFailResult(displayAjaxWiki);
         }
-        return ResponseData.createSuccessResult(displayWikis);
+        return ResponseData.createSuccessResult(displayAjaxWiki);
     }
 
 

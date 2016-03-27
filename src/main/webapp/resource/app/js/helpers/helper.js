@@ -73,6 +73,12 @@ Handlebars.registerHelper('htmlDelete', function(html){
     if( html == null ){
         return html;
     }
-    var returnString = new Handlebars.SafeString(html);
-    return returnString.string;
+
+    //var returnString = new Handlebars.SafeString(html);
+    //return returnString.string;
+    return html.replace(/(<[\w\W]+?>)/gim, "");
+});
+
+Handlebars.registerHelper('formatDate', function(date, formate){
+    return date;
 });
