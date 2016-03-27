@@ -15,11 +15,11 @@
                                 <span class="nickname"><i class="fa fa-pencil-square-o"></i> {{user.userNick}}</span>
                             </div>
                         </span>
-                        <br>{{> common/_keywordBadge}}
+
                     </div>
                     <div>
-                        {{{subString (htmlDelete wiki.contents) 0 80 }}}
-                        <span class="pull-right"><i class="fa fa-clock-o"></i> {{formatDate wiki.insertDate "yyyy.MM.dd HH:mm"}}</span>
+                        {{subString (htmlDelete wiki.contents) 0 80 }}
+                        <span class="pull-right"><i class="fa fa-clock-o"></i>{{formatDate wiki.insertDate "yyyy-MM-dd hh:MM"}}</span>
                     </div>
                 </div>
             </div>

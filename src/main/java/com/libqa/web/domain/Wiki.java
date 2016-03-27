@@ -1,5 +1,6 @@
 package com.libqa.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.ToString;
@@ -94,9 +95,11 @@ public class Wiki implements Serializable{
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0")
     boolean isDeleted = false;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
