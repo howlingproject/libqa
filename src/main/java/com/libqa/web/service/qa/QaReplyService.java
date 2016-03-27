@@ -23,11 +23,13 @@ public interface QaReplyService {
 
     List<DisplayQaReply> findByQaIdAndDepthIdx(Integer qaId, int depthIdx);
 
-    void delete(Integer replyId);
+    void delete(Integer replyId, Integer userId);
 
     List<QaReply> findByQaId(Integer qaId);
 
     List<QaContent> findByUserId(Integer userId);
 
     Integer countByQaContent(QaContent qaContent);
+
+    QaReply findByReplyId(Integer replyId);
 }

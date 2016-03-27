@@ -9,6 +9,8 @@ import java.util.List;
  * Created by yong on 15. 2. 8..
  */
 public interface QaReplyRepository extends JpaRepository<QaReply, Integer> {
+    QaReply findByReplyIdAndIsDeletedFalse(Integer replyId);
+
     QaReply findByReplyIdAndIsDeleted(Integer replyId, boolean isDeleted);
 
     List<QaReply> findAllByQaIdAndIsDeletedOrderByOrderIdxDesc(Integer qaId, boolean isDeleted);
@@ -24,4 +26,5 @@ public interface QaReplyRepository extends JpaRepository<QaReply, Integer> {
     List<QaReply> findByUserIdAndIsDeleted(Integer userId, boolean isDeleted);
 
     Integer countByQaId(Integer qaId);
+
 }
