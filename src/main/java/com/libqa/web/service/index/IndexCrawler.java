@@ -18,8 +18,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.google.common.base.MoreObjects.firstNonNull;
+
 @Service
 public class IndexCrawler {
+    private static final Integer ZERO = 0;
     static final Integer INDEX_NOTICE_SIZE = 1;
     static final Integer INDEX_QA_SIZE = 3;
     static final Integer INDEX_SPACE_SIZE = 3;
@@ -74,7 +77,7 @@ public class IndexCrawler {
         indexNotice.setTitle(wiki.getTitle());
         indexNotice.setContents(wiki.getContents());
         indexNotice.setInsertDate(DisplayDate.parse(wiki.getInsertDate()));
-        indexNotice.setCountOfReply(0); // TODO wiki의 replyCount 로 대체
+        indexNotice.setCountOfReply(firstNonNull(wiki.getReplyCount(), ZERO));
         return indexNotice;
     }
 
@@ -93,7 +96,7 @@ public class IndexCrawler {
             qaContent.setUserImage(writer.getUserImage());
             qaContent.setKeywords(buildIndexKeywords(keywords));
             qaContent.setInsertDate(DisplayDate.parse(each.getInsertDate()));
-            qaContent.setCountOfReply(qaReplyService.countByQaContent(each));
+            qaContent.setCountOfReply(firstNonNull(qaReplyService.countByQaContent(each), ZERO));
             result.add(qaContent);
         }
         return result;
@@ -147,7 +150,7 @@ public class IndexCrawler {
             IndexFeed indexFeed = IndexFeed.of();
             indexFeed.setFeedThreadId(each.getFeedThreadId());
             indexFeed.setFeedContent(each.getFeedContent());
-            indexFeed.setCountOfReply(each.getReplyCount());
+            indexFeed.setCountOfReply(firstNonNull(each.getReplyCount(), ZERO));
             indexFeed.setUserNick(writer.getUserNick());
             indexFeed.setUserImage(writer.getUserImage());
             result.add(indexFeed);
