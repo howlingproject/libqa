@@ -35,6 +35,8 @@
 
     <div class="col-sm-12 top-buffer" style="padding-bottom: 20px">
         <input type="hidden" id="tabName" value="">
+        <input type="hidden" id="currentPage" value="{{currentPage}}">
+        <input type="hidden" id="pageSize" value="{{PAGE_SIZE}}">
         <!-- keyword -->
         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
 
@@ -62,7 +64,7 @@
 
             <br>
             {{#if morePage }}
-            <p class="lead text-right" ><button class="btn btn-default" id="getMorePages">더보기</button></p>
+            <p class="lead text-right" ><button class="btn btn-default" id="getMorePages">더보기  {{totalCount}} | {{currentPage}} | {{totalPage}}</button></p>
             {{/if}}
         </div>
 
@@ -142,16 +144,7 @@
                 });
             },
             spaceCount : function() {
-                $.ajax({
-                    url: "/space/count",
-                    type: "GET",
-                    success : function(data){
-                        $("#spaceCount").text("개설된 공간수(" + data +")");
-                    },
-                    error : function(req){
-                        alert('전체 공간 수 조회 에러. 에러코드 [' + req.status + ']');
-                    }
-                })
+                $("#spaceCount").text("개설된 공간수({{totalCount}})");
             },
             wikiCount : function() {
                 $.ajax({
@@ -224,7 +217,17 @@
         }
 
         function renderMorePage() {
+
             var sort = "";
+            var currentPage = $("#currentPage").val();
+            currentPage = Number(currentPage);
+
+            var nextPage = currentPage+1;
+            var pageSize = $("#pageSize").val();
+
+            console.log("nextPage = " + nextPage);
+
+
             if ($("#tabName").val() == "") {
                 sort = "title";
             } else {
@@ -234,16 +237,22 @@
             $.ajax({
                 url: "/space/more",
                 type: "GET",
-                data: { "sortType" : sort, "startIdx" : 0, "fetchSize" : "{{PAGE_SIZE}}"},
+                data: { "sortType" : sort, "startNum" : nextPage, "pageSize" : pageSize},
                 success : function(response){
                     console.log("## response = " + response.resultCode);
+                    console.log("## response.current = " + response.data.currentPage);
+
                     if(response.resultCode == 1) {
 
                         var source = $('#space-template-_allSpaceList-hbs').html();
                         var template = Handlebars.compile(source);
-
                         var html = template(response.data);
-                        $('#allSpaceArea').html(html);
+                        $('#allSpaceArea').append(html);
+                        $("#currentPage").val(response.data.currentPage);
+
+                        if (response.data.currentPage == Number(response.data.totalPages - 1)) {
+                            $("#getMorePages").css("display","none");
+                        }
                     }
                 },
                 error : function(req){

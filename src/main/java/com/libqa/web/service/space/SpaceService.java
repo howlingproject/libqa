@@ -4,6 +4,10 @@ import com.libqa.application.enums.ActivityType;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;
 import com.libqa.web.domain.User;
+import com.libqa.web.view.space.SpaceMain;
+import com.libqa.web.view.space.SpaceMainList;
+import com.libqa.web.view.space.SpaceWikiList;
+import com.libqa.web.view.wiki.DisplayWiki;
 
 import java.util.List;
 
@@ -38,7 +42,7 @@ public interface SpaceService {
 	 * @param sortCondition
 	 * @return
 	 */
-	List<Space> findAllBySort(boolean isDeleted, Integer startIdx, Integer endIdx, String sortCondition);
+	SpaceMainList findPageBySort(boolean isDeleted, Integer startIdx, Integer endIdx, String sortCondition);
 
 	Space findOne(Integer spaceId);
 
@@ -70,5 +74,10 @@ public interface SpaceService {
 	 */
 	Space delete(Space space, User user);
 
-	Integer countSpace(boolean isDeleted);
+	//Integer countSpace(boolean isDeleted);
+
+	List<SpaceMain> convertSpaceMain(List<Space> spaces);
+
+	List<SpaceWikiList> convertSpaceWikis(List<DisplayWiki> displayWikis);
+
 }

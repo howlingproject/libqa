@@ -83,19 +83,11 @@ public class SpaceController {
 
         // 전체 space 목록 조회 (10개)
         boolean isDeleted = false;
-        boolean morePage = false;  //  더보기 구현
-        Integer totalCount = spaceService.countSpace(false);
-        Integer spaceCount = 0;
-
-        List<Space> spaces = spaceService.findAllBySort(isDeleted, 0, PAGE_SIZE, "title");
-        List<SpaceMain> spaceMainList;
-        if (!CollectionUtils.isEmpty(spaces)) {
-            spaceCount = spaces.size();
-            spaceMainList = convertSpaceMain(spaces);
-        } else {
-            spaceMainList = Lists.newArrayList();
-        }
-
+        boolean morePage = false;   // 더보기 여부
+        SpaceMainList spacePages = spaceService.findPageBySort(isDeleted, 0, PAGE_SIZE, "title");
+        Long totalCount = spacePages.getTotalElements();
+        Integer currentPage = spacePages.getCurrentPage();
+        Integer totalPage = spacePages.getTotalPages();
 
         User user = loggedUserManager.getUser();
 
@@ -114,7 +106,7 @@ public class SpaceController {
                 log.debug("## 즐겨찾기 공간이 없습니다.");
                 mav.addObject("myFavoriteSpaceList", null);
             } else {
-                favoriteSpaces = convertSpaceMain(myFavoriteSpaceList);
+                favoriteSpaces = spaceService.convertSpaceMain(myFavoriteSpaceList);
                 mav.addObject("myFavoriteSpaceList", favoriteSpaces);
             }
 
@@ -124,78 +116,60 @@ public class SpaceController {
          * 최근 수정된 위키 정보 조회 10개
          */
         List<DisplayWiki> updateWikiList = wikiService.findUpdateWikiList(0, 10);
-
-        List<SpaceWikiList> spaceWikiLists = new ArrayList<>();
-        for (DisplayWiki displayWiki : updateWikiList) {
-            Wiki wiki = displayWiki.getWiki();
-            List<WikiReply> replies = wiki.getWikiReplies();
-            List<Keyword> keywords = keywordService.findByWikiId(wiki.getWikiId(), false);
-            User userInfo = new User();
-            userInfo.setUserId(wiki.getUserId());
-            userInfo.setUserNick(wiki.getUserNick());
-            // 속도상의 이슈로 위키의 리플갯수 조회하지 안흠
-            SpaceWikiList spaceWikiList = new SpaceWikiList(wiki, userInfo, keywords, replies.size());
-            spaceWikiLists.add(spaceWikiList);
-        }
-
-
+        List<SpaceWikiList> spaceWikiLists = spaceService.convertSpaceWikis(updateWikiList);
 
         if (totalCount > PAGE_SIZE) {
             morePage = true;
         }
 
+        log.info("### spacePages = {}", spacePages.getCurrentPage());
+        log.info("### spacePages = {}", spacePages.getTotalElements());
+        log.info("### spacePages = {}", spacePages.getTotalPages());
 
         mav.addObject("morePage", morePage);
-        mav.addObject("readMoreCount", spaceCount);
-        mav.addObject("spaceMainList", spaceMainList);
+        mav.addObject("totalCount", totalCount);
+        mav.addObject("currentPage", currentPage);
+        mav.addObject("totalPage", totalPage);
+        mav.addObject("spaceMainList", spacePages.getSpaceMainList());
         mav.addObject("PAGE_SIZE", PAGE_SIZE);
         mav.addObject("spaceWikiLists", spaceWikiLists);
 
         return mav;
     }
 
-    public List<SpaceMain> convertSpaceMain(List<Space> spaces) {
-        List<SpaceMain> spaceMainList = new ArrayList<>();
-        for (Space space : spaces) {
-            Integer spaceId = space.getSpaceId();
-            List<Wiki> wikis = wikiService.findBySpaceId(spaceId);
-            List<Keyword> keywords = keywordService.findBySpaceId(spaceId, false);
-            SpaceMain spaceMain = new SpaceMain(space, wikis.size(), keywords);
-            spaceMainList.add(spaceMain);
-        }
-
-        return spaceMainList;
-    }
-
     /**
      * 공간 더보기 구현
      * @param sortType
-     * @param startIdx
-     * @param fetchSize
+     * @param startNum
+     * @param pageSize
      * @return
      */
     @RequestMapping(value = "/space/more", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData<SpaceMainList> findMoreSpaceList(@RequestParam String sortType,
-                                                 @RequestParam Integer startIdx,
-                                                 @RequestParam Integer fetchSize) {
-        List<Space> findMores = spaceService.findAllBySort(false, startIdx, fetchSize, sortType);
-        List<SpaceMain> spaceMains = convertSpaceMain(findMores);
-        SpaceMainList spaceMainList = new SpaceMainList();
-        spaceMainList.setSpaceMainList(spaceMains);
+                                                 @RequestParam Integer startNum,
+                                                 @RequestParam Integer pageSize) {
+        SpaceMainList spaceMainList = spaceService.findPageBySort(false, startNum, pageSize, sortType);
+
+        log.info("### spaceMainList = {}", spaceMainList.getCurrentPage());
+        log.info("### spaceMainList = {}", spaceMainList.getTotalElements());
+        log.info("### spaceMainList = {}", spaceMainList.getTotalPages());
+
+
         return ResponseData.createSuccessResult(spaceMainList);
     }
 
+    /**
+     * 이름순, 최신순 정렬
+     * @param sortType
+     * @return
+     */
     @RequestMapping(value = "/space/render", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData<SpaceMainList> renderSpace(@RequestParam String sortType) {
         log.info("## sortType = {}", sortType);
 
-        List<Space> spaces = spaceService.findAllBySort(false, 0, PAGE_SIZE, sortType);
-        List<SpaceMain> spaceMains = convertSpaceMain(spaces);
-        SpaceMainList spaceMainList = new SpaceMainList();
-        spaceMainList.setSpaceMainList(spaceMains);
-
+        SpaceMainList spaceMainList = spaceService.findPageBySort(false, 0, PAGE_SIZE, sortType);
         return ResponseData.createSuccessResult(spaceMainList);
 
     }
@@ -456,20 +430,6 @@ public class SpaceController {
             canDeleted = true;
         }
         return canDeleted;
-    }
-
-
-    /**
-     * 개설된 공간 수 조회
-     *
-     * @return
-     */
-    @RequestMapping(value = "/space/count", method = RequestMethod.GET)
-    @ResponseBody
-    public String spaceCount() {
-        List<Space> spaces = spaceService.findAllByCondition(false);
-
-        return spaces.size() + "";
     }
 
 
