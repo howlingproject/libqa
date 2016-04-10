@@ -1,7 +1,7 @@
 package com.libqa.web.view.feed;
 
 import com.google.common.collect.Lists;
-import com.libqa.application.util.FileUtil;
+import com.libqa.application.util.FileHandler;
 import com.libqa.application.util.HtmlContentHandler;
 import com.libqa.web.domain.FeedFile;
 import com.libqa.web.domain.FeedThread;
@@ -62,7 +62,7 @@ public class DisplayFeed {
         this.images = Lists.newArrayList();
 
         for (FeedFile each : feedFiles) {
-            final String fullPath = each.getFilePath() + FileUtil.SEPARATOR + each.getSavedName();
+            final String fullPath = each.getFilePath() + FileHandler.SEPARATOR + each.getSavedName();
             DisplayFeedFile displayFeedFile = new DisplayFeedFile(each.getFeedFileId(), each.getRealName(), fullPath);
             if (each.isFileType()) {
                 this.files.add(displayFeedFile);

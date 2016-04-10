@@ -25,23 +25,33 @@
                     </div>
                 </form>
             </div>
+
             {{#if images}}
             <div class="text-center">
                 {{#each images}}
-                    <a href="/imageView?path={{fullPath}}"
-                       data-toggle="lightbox" data-title="Feed Image Viewer"
-                       data-gallery="feed-images-{{../feedThreadId}}"><img width="190" class="img-thumbnail" src="/imageView?path={{fullPath}}" /></a>
+                    <span class="feed-file-item feed-thumbnail-grid">
+                        <a href="/imageView?path={{fullPath}}" data-toggle="lightbox"
+                           data-title="Feed Image Viewer"
+                           data-gallery="feed-images-{{../feedThreadId}}"><img width="190" class="img-thumbnail" src="/imageView?path={{fullPath}}" /></a>
+                        <i class="fa fa-lg fa-times remove-btn" data-feed-file-id="{{fileId}}"></i>
+                    </span>
                 {{/each}}
             </div>
             {{/if}}
+
             {{#if files}}
             <div class="attachment">
                 {{#each files}}
-                    <a href="/download?path={{fullPath}}" download><i class="fa fa-file-o"></i> {{realName}}</a>&nbsp;
+                    <span class="feed-file-item">
+                        <a href="/download?path={{fullPath}}" download><i class="fa fa-file-o"></i> {{realName}}</a>
+                        <i class="fa fa-lg fa-times remove-btn" data-feed-file-id="{{fileId}}"></i>&nbsp;
+                    </span>
                 {{/each}}
             </div>
             {{/if}}
+
         </div>
+
         <div class="action-buttons">
             <i class="fa fa-thumbs-o-up {{#if likeFeedAction.hasActor}}hasActor{{/if}}" onclick="Feed.like(this)" title="좋아요">
                 <span class="like-count">({{likeFeedAction.count}})</span>

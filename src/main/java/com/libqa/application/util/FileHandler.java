@@ -1,7 +1,10 @@
 package com.libqa.application.util;
 
 import com.libqa.application.dto.FileDto;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
@@ -13,26 +16,29 @@ import java.io.IOException;
  * Created by yion on 2015. 3. 2..
  */
 @Slf4j
-public class FileUtil {
+@Component
+public class FileHandler {
+    @Getter
+    @Value("${libqa.file.uploadPath}")
+    public String serverUploadPath;
 
     public static String SEPARATOR = "/";
 
     /**
      * 확장자 체크
      */
-    public static final String[] PERMITTED_EXTS = new String[] {
+    private static final String[] PERMITTED_EXTS = new String[]{
             "DOC", "DOCX", "XLS", "XLSX", "PPT", "PPTX", "PPS", "HWP", "TXT", "PDF",
-            "ZIP", "ALZ", "JAR",  "AI", "PSD", "XMIND",
+            "ZIP", "ALZ", "JAR", "AI", "PSD", "XMIND",
             "AVI", "MOV", "MPG", "MPEG", "RM", "ASF", "WMV", "MP3", "MP4",
-            "BMP", "JPG", "JPEG", "GIF", "PNG", "FLA", "SWF", "HTM", "HTML" , "HTML",
+            "BMP", "JPG", "JPEG", "GIF", "PNG", "FLA", "SWF", "HTM", "HTML", "HTML",
             "XML", "WAR", "JAR", "TAR.GZ", "GZ", "DMG", "GDOC", "GSHEET", "GSLIDES",
             "DMG", "APK"
     };
 
-
-
     /**
      * MultipartFile 정보를 추출하여 FileDto 에 저장한다.
+     *
      * @param uploadfile
      * @param localDir
      * @return
@@ -68,10 +74,9 @@ public class FileUtil {
         return fileDto;
     }
 
-
-
     /**
      * 업로드 허용파일 목록
+     *
      * @param file
      */
     public static void allowedFile(MultipartFile file) {
@@ -94,6 +99,7 @@ public class FileUtil {
 
     /**
      * 이미지 파일일 경우 true 를 리턴한다.
+     *
      * @param uploadfile
      * @param viewType
      * @return
@@ -113,7 +119,7 @@ public class FileUtil {
         final String[] contentsType = {"image/png", "image/jpeg", "image/jpg", "image/gif"};
         String fileContentType = file.getContentType();
         int lengths = contentsType.length;
-        for (int i = 0 ; i < lengths ; i++) {
+        for (int i = 0; i < lengths; i++) {
             if (fileContentType.equalsIgnoreCase(contentsType[i])) {
                 return true;
             }
@@ -121,12 +127,22 @@ public class FileUtil {
         return false;
     }
 
-
-    public static  void fileUpload(MultipartFile uploadfile, String path) throws IOException {
+    public static void fileUpload(MultipartFile uploadfile, String path) throws IOException {
         BufferedOutputStream stream =
                 new BufferedOutputStream(new FileOutputStream(new File(path)));
         stream.write(uploadfile.getBytes());
         stream.close();
+    }
+
+    /**
+     * file을 제거 한다.
+     * @param fileFullPath
+     */
+    public void delete(String fileFullPath) {
+        File targetFile = new File(serverUploadPath + fileFullPath);
+        if (targetFile.exists() && !targetFile.isDirectory()) {
+            targetFile.delete();
+        }
     }
 
 }

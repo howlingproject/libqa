@@ -2,15 +2,20 @@ package com.libqa.web.controller;
 
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUserManager;
+import com.libqa.web.domain.FeedFile;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.User;
+import com.libqa.web.service.feed.FeedFileService;
 import com.libqa.web.service.feed.FeedReplyService;
 import com.libqa.web.service.feed.FeedThreadService;
 import com.libqa.web.view.feed.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -31,6 +36,8 @@ public class FeedController {
     private FeedThreadService feedThreadService;
     @Autowired
     private FeedReplyService feedReplyService;
+    @Autowired
+    private FeedFileService feedFileService;
     @Autowired
     private DisplayFeedBuilder displayFeedBuilder;
     @Autowired
@@ -230,6 +237,24 @@ public class FeedController {
         } catch (Exception e) {
             log.error("claim feedReply error.", e);
             return createFailResult();
+        }
+    }
+
+    @RequestMapping(value = "/file/{feedFileId}/delete", method = POST)
+    public ResponseData<Boolean> deleteFile(@PathVariable Integer feedFileId) {
+        User viewer = loggedUserManager.getUser();
+
+        try {
+            FeedFile feedFile = feedFileService.getByFeedFileId(feedFileId);
+            if (viewer.isNotMatchUser(feedFile.getUserId())) {
+                return createResult(NOT_MATCH_USER);
+            }
+
+            feedFileService.delete(feedFile);
+            return createSuccessResult(true);
+        } catch (Exception e) {
+            log.error("delete reply error.", e);
+            return createFailResult(false);
         }
     }
 }

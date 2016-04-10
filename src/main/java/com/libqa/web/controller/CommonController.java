@@ -4,7 +4,7 @@ import com.libqa.application.dto.FileDto;
 import com.libqa.application.enums.KeywordType;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.DateUtil;
-import com.libqa.application.util.FileUtil;
+import com.libqa.application.util.FileHandler;
 import com.libqa.application.util.GetThumbImage;
 import com.libqa.application.util.LoggedUserManager;
 import com.libqa.web.domain.KeywordList;
@@ -13,7 +13,6 @@ import com.libqa.web.service.common.KeywordListService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,8 +44,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @Slf4j
 @Controller
 public class CommonController {
-    @Value("${libqa.file.uploadPath}")
-    private String serverUploadPath;
+    @Autowired
+    private FileHandler fileHandler;
 
     @Autowired
     private KeywordListService keywordListService;
@@ -88,13 +87,13 @@ public class CommonController {
         FileDto fileDto = new FileDto();
 
         // 허용 파일 여부 체크
-        FileUtil.allowedFile(uploadfile);
+        FileHandler.allowedFile(uploadfile);
 
         // 이미지 파일일 경우 ContentType 검사
-        FileUtil.checkImageUpload(uploadfile, viewType);
+        FileHandler.checkImageUpload(uploadfile, viewType);
 
         log.debug("#### request ####");
-        log.debug("# serverUploadPath = {}", serverUploadPath);
+        log.debug("# serverUploadPath = {}", fileHandler.getServerUploadPath());
 
         try {
             // temp/userId/yyyyMMdd/ 에 일단 저장 후 차후 userId/yyyyMMdd/파일명 으로 이동 후 삭제해야 한다.
@@ -102,7 +101,7 @@ public class CommonController {
 
             Integer userId = user.getUserId();
             String localDir = "/resource/temp/" + userId; // 임시 저장 경로
-            String directory = serverUploadPath + localDir;  // 서버 저장 경로
+            String directory = fileHandler.getServerUploadPath() + localDir;  // 서버 저장 경로
 
             // 폴더 생성
             File baseDir = new File(directory);
@@ -113,15 +112,15 @@ public class CommonController {
             }
 
             // 파일 정보 추출
-            fileDto = FileUtil.extractFileInfo(uploadfile, localDir);
+            fileDto = FileHandler.extractFileInfo(uploadfile, localDir);
             fileDto.setFilePath(localDir);
-            fileDto.setFileType(FileUtil.checkImageFile(uploadfile) ? IMAGE : FILE);
+            fileDto.setFileType(FileHandler.checkImageFile(uploadfile) ? IMAGE : FILE);
 
-            String filePath = Paths.get(serverUploadPath, localDir, fileDto.getSavedName()).toString();
+            String filePath = Paths.get(fileHandler.getServerUploadPath(), localDir, fileDto.getSavedName()).toString();
             log.debug("## filePath : {}", filePath);
 
             // 파일 업로드 스트림
-            FileUtil.fileUpload(uploadfile, filePath);
+            FileHandler.fileUpload(uploadfile, filePath);
 
             log.debug("####### FILE SAVE INFO ########");
             log.debug("fileDto = {}", fileDto);
@@ -148,10 +147,10 @@ public class CommonController {
         FileDto fileDto = new FileDto();
 
         // 이미지 파일일 경우 ContentType 검사
-        FileUtil.checkImageUpload(uploadfile, viewType);
+        FileHandler.checkImageUpload(uploadfile, viewType);
 
         log.debug("#### request ####");
-        log.debug("# request getServletContext().getRealPath = {}", request.getServletContext().getRealPath(FileUtil.SEPARATOR));
+        log.debug("# request getServletContext().getRealPath = {}", request.getServletContext().getRealPath(FileHandler.SEPARATOR));
         log.debug("# request getServletPath = {} ", request.getServletPath());
 
         try {
@@ -160,7 +159,7 @@ public class CommonController {
 
             Integer userId = user.getUserId();
             String localDir = "/resource/profile/" + userId;
-            String directory = serverUploadPath + localDir;  // 서버 저장 경로
+            String directory = fileHandler.getServerUploadPath() + localDir;  // 서버 저장 경로
 
             // 프로필 이미지 일단 삭제
             File deleteDir = new File(directory);
@@ -182,20 +181,20 @@ public class CommonController {
             }
 
             // 파일 정보 추출
-            fileDto = FileUtil.extractFileInfo(uploadfile, localDir);
+            fileDto = FileHandler.extractFileInfo(uploadfile, localDir);
             fileDto.setFilePath(localDir);
-            fileDto.setFileType(FileUtil.checkImageFile(uploadfile) ? IMAGE : FILE);
+            fileDto.setFileType(FileHandler.checkImageFile(uploadfile) ? IMAGE : FILE);
 
-            String filePath = Paths.get(serverUploadPath, localDir, fileDto.getSavedName()).toString();
+            String filePath = Paths.get(fileHandler.getServerUploadPath(), localDir, fileDto.getSavedName()).toString();
 
             String saveThumbFileName = "thumb_" + fileDto.getSavedName();
 
-            String thumbTargetPath = directory + "/" + saveThumbFileName;
+            String thumbTargetPath = directory + FileHandler.SEPARATOR + saveThumbFileName;
 
             log.debug("## filePath : {}", filePath);
 
             // 파일 업로드 스트림
-            FileUtil.fileUpload(uploadfile, filePath);
+            FileHandler.fileUpload(uploadfile, filePath);
 
             //원본 파일
             File orgFile = new File(filePath);
@@ -241,16 +240,15 @@ public class CommonController {
     }
 
     public ResponseData<?> moveFileToProduct(FileDto fileDto) throws Exception {
-        String savedDirectory = serverUploadPath + fileDto.getFilePath();
+        String savedDirectory = fileHandler.getServerUploadPath() + fileDto.getFilePath();
         String targetFileFullPath = savedDirectory + "/" + fileDto.getSavedName();
 
         User user = loggedUserManager.getUser();
 
-
         Integer userId = user.getUserId();
         String today = DateUtil.getToday();
-        String localDir = "/resource/" + userId + "/" + today;  // 임시저장경로
-        String movePath = this.serverUploadPath + localDir;    // 파일 이동 경로
+        String localDir = "/resource/" + userId + FileHandler.SEPARATOR + today;  // 임시저장경로
+        String movePath = fileHandler.getServerUploadPath() + localDir;    // 파일 이동 경로
 
         try {
             File targetFile = new File(targetFileFullPath);
@@ -273,7 +271,6 @@ public class CommonController {
         }
     }
 
-
     @RequestMapping(value = "/common/deleteFile", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<?> deleteFile(HttpServletRequest request) {
@@ -282,13 +279,9 @@ public class CommonController {
         FileDto fileDto = new FileDto();
 
         try {
-            String directory = serverUploadPath + filePath;   // file 절대경로
-            String fileFullPath = directory + "/" + savedName;
-            File targetFile = new File(fileFullPath);
-
-            if (targetFile.exists() && !targetFile.isDirectory()) {
-                targetFile.delete();
-            }
+            String directory = fileHandler.getServerUploadPath() + filePath;   // file 절대경로
+            String fileFullPath = directory + FileHandler.SEPARATOR + savedName;
+            fileHandler.delete(fileFullPath);
             return ResponseData.createSuccessResult(fileDto);
         } catch (Exception e) {
             e.printStackTrace();
@@ -310,7 +303,6 @@ public class CommonController {
         }
     }
 
-
     @RequestMapping(value = "/keyword/count", method = RequestMethod.GET)
     @ResponseBody
     public String keywordCount() {
@@ -325,7 +317,6 @@ public class CommonController {
         return keywordSize + "";
     }
 
-
     /**
      * 해당 경로의 파일을 이미지로 내려준다.
      *
@@ -338,7 +329,7 @@ public class CommonController {
     public byte[] imageView(@RequestParam String path) throws IOException {
         InputStream inputStream = null;
         try {
-            inputStream = new BufferedInputStream(new FileInputStream(serverUploadPath + path));
+            inputStream = new BufferedInputStream(new FileInputStream(fileHandler.getServerUploadPath() + path));
             return IOUtils.toByteArray(inputStream);
         } catch (Exception e) {
             log.error("Invalid resource path: {}", path);
@@ -360,7 +351,7 @@ public class CommonController {
         InputStream inputStream = null;
 
         try {
-            inputStream = new BufferedInputStream(new FileInputStream(serverUploadPath + path));
+            inputStream = new BufferedInputStream(new FileInputStream(fileHandler.getServerUploadPath() + path));
             byte[] data = IOUtils.toByteArray(inputStream);
 
             response.reset();
@@ -377,7 +368,7 @@ public class CommonController {
     }
 
     private String generateDownloadFileName(@RequestParam String path) {
-        return path.split(FileUtil.SEPARATOR)[path.split(FileUtil.SEPARATOR).length - 1];
+        return path.split(FileHandler.SEPARATOR)[path.split(FileHandler.SEPARATOR).length - 1];
     }
 
 }
