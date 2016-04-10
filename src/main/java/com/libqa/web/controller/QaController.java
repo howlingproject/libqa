@@ -28,7 +28,6 @@ import static com.libqa.application.framework.ResponseData.*;
 
 /**
  * Created by yong on 2015-02-08.
- * test
  * @author yong
  */
 @Slf4j
@@ -135,11 +134,15 @@ public class QaController {
         boolean isDeleted = false;
 
         QaContent qaContent = qaService.view(qaId);
+        List<QaRecommend> qaRecommendList = qaRecommendService.findByQaIdAndIsCommend(qaId, true);
+        List<QaRecommend> qaNonRecommendList = qaRecommendService.findByQaIdAndIsCommend(qaId, false);
+	    DisplayQa displayQa = new DisplayQa(qaContent, qaRecommendList, qaNonRecommendList);
         User writer = userService.findByUserId(qaContent.getUserId());
         List<Keyword> keywordList = keywordService.findByQaId(qaId);
 
         ModelAndView mav = new ModelAndView("qa/view");
-        mav.addObject("qaContent", qaContent);
+//        mav.addObject("qaContent", qaContent);
+        mav.addObject("qaContent", displayQa);
         mav.addObject("writer", writer);
         mav.addObject("keywordList", keywordList);
         mav.addObject("loggedUser", loggedUserManager.getUser());
