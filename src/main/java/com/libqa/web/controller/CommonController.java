@@ -3,7 +3,10 @@ package com.libqa.web.controller;
 import com.libqa.application.dto.FileDto;
 import com.libqa.application.enums.KeywordType;
 import com.libqa.application.framework.ResponseData;
-import com.libqa.application.util.*;
+import com.libqa.application.util.DateUtil;
+import com.libqa.application.util.FileUtil;
+import com.libqa.application.util.GetThumbImage;
+import com.libqa.application.util.LoggedUserManager;
 import com.libqa.web.domain.KeywordList;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.common.KeywordListService;
@@ -333,9 +336,13 @@ public class CommonController {
     @RequestMapping(value = "/imageView", method = GET, produces = IMAGE_JPEG_VALUE)
     @ResponseBody
     public byte[] imageView(@RequestParam String path) throws IOException {
-        InputStream inputStream = getInputStream(path);
+        InputStream inputStream = null;
         try {
+            inputStream = new BufferedInputStream(new FileInputStream(serverUploadPath + path));
             return IOUtils.toByteArray(inputStream);
+        } catch (Exception e) {
+            log.error("Invalid resource path: {}", path);
+            return null;
         } finally {
             IOUtils.closeQuietly(inputStream);
         }
@@ -350,32 +357,27 @@ public class CommonController {
      */
     @RequestMapping(value = "/download", method = GET)
     public void download(@RequestParam String path, HttpServletResponse response) throws IOException {
-        InputStream inputStream = getInputStream(path);
+        InputStream inputStream = null;
 
         try {
+            inputStream = new BufferedInputStream(new FileInputStream(serverUploadPath + path));
             byte[] data = IOUtils.toByteArray(inputStream);
 
             response.reset();
             response.setHeader("Content-Disposition", "attachment; filename=" + generateDownloadFileName(path));
-            response.addHeader("Content-Length", "" + data.length);
+            response.addHeader("Content-Length", String.valueOf(data.length));
             response.setContentType("application/octet-stream; charset=UTF-8");
 
             IOUtils.write(data, response.getOutputStream());
+        } catch (Exception e) {
+            log.error("Can't download file : {}", path);
         } finally {
             IOUtils.closeQuietly(inputStream);
         }
     }
 
     private String generateDownloadFileName(@RequestParam String path) {
-        try {
-            return path.split(FileUtil.SEPARATOR)[path.split(FileUtil.SEPARATOR).length - 1];
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Bad file path. [ " + path + " ]");
-        }
-    }
-
-    private InputStream getInputStream(String path) throws FileNotFoundException {
-        return new BufferedInputStream(new FileInputStream(serverUploadPath + path));
+        return path.split(FileUtil.SEPARATOR)[path.split(FileUtil.SEPARATOR).length - 1];
     }
 
 }
