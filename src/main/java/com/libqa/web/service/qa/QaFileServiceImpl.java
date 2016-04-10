@@ -2,7 +2,7 @@ package com.libqa.web.service.qa;
 
 import com.libqa.application.dto.FileDto;
 import com.libqa.application.framework.ResponseData;
-import com.libqa.application.util.FileUtil;
+import com.libqa.application.util.FileHandler;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.controller.CommonController;
 import com.libqa.web.domain.QaFile;
@@ -71,7 +71,7 @@ public class QaFileServiceImpl implements QaFileService {
             fileDto.setRealName((java.lang.String) paramQaFiles.getRealNames().get(qaFileIndex));
             fileDto.setSavedName((java.lang.String) paramQaFiles.getSavedNames().get(qaFileIndex));
             fileDto.setFilePath((java.lang.String) paramQaFiles.getFilePaths().get(qaFileIndex));
-            fileDto.setRootPath(StringUtil.defaultString(servletContext.getRealPath(FileUtil.SEPARATOR)));
+            fileDto.setRootPath(StringUtil.defaultString(servletContext.getRealPath(FileHandler.SEPARATOR)));
             fileDto.setFileSize(Integer.parseInt((java.lang.String)paramQaFiles.getFileSizes().get(qaFileIndex)));
             fileDto.setFileExtendType((java.lang.String) paramQaFiles.getFileTypes().get(qaFileIndex));
             resultFile = commonController.moveFileToProduct(fileDto);
