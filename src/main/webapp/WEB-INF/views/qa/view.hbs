@@ -63,10 +63,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div id="uploadFilesArea">
+                        <div id="uploadFilesArea" style="display: none;">
                             <span class="glyphicon glyphicon-paperclip btn-m"></span>
                             <span>Attachments</span>
-                            <div id="uploadfileList" class="alert alert-success attachment-thumbnail">
+                            <div id="uploadfileList" class="alert attachment-thumbnail">
                             </div>
                         </div>
                         <input name="uploadType" value="Qa" type="hidden">
@@ -94,51 +94,53 @@
             </form>
 
             <!-- 댓글 영역 list -->
-            <div id="replyList"></div>
+            <div id="replyList" class="replyList"></div>
 
             <!-- 댓글 입력 영역 -->
             {{#if isLogin}}
-            <div class="top-buffer">
-                <form name="qaReplyForm">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                답변
-                            </h3>
-                        </div>
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <div style="margin-left: 5px; margin-bottom: 10px;">
-                                    <div class="avatar avatar-medium clearfix ">
-                                        <div class="user-profile-sm">
-                                            <!-- 세션에서 userNick 가져와야함 -->
-                                            <span class="nickname">{{loggedUser.userNick}}</span>
-                                            <img alt="avatar" class="profile-image" src="/imageView?path={{loggedUser.userImage}}" onerror='this.src="/resource/images/avatar.png"'/>
+            <div class="replyList">
+                <div class="top-buffer">
+                    <form name="qaReplyForm">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    답변
+                                </h3>
+                            </div>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <div style="margin-left: 5px; margin-bottom: 10px;">
+                                        <div class="avatar avatar-medium clearfix ">
+                                            <div class="user-profile-sm">
+                                                <!-- 세션에서 userNick 가져와야함 -->
+                                                <span class="nickname">{{loggedUser.userNick}}</span>
+                                                <img alt="avatar" class="profile-image" src="/imageView?path={{loggedUser.userImage}}" onerror='this.src="/resource/images/avatar.png"'/>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- 댓글작성 Bootstrap Live Editor -->
-                                <div class="row" style="margin-left: 5px; margin-bottom: 10px; width: 90%">
-                                    <input type="text" class="form-control" id="title" name="title" placeholder="title">
-                                </div>
-                                <div id="editor" class="form-group">
-                                    <input type="hidden" id="contents" name="contents" />
-                                    <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
-                                    <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
-                                    <input type="hidden" id="parentsId" name="parentsId" value="0" />   <!-- 답변 계층 -->
-                                </div>
-                                <!--// 댓글작성 Bootstrap Live Editor -->
+                                    <!-- 댓글작성 Bootstrap Live Editor -->
+                                    <div class="row" style="margin-left: 5px; margin-bottom: 10px; width: 90%">
+                                        <input type="text" class="form-control" id="title" name="title" placeholder="title">
+                                    </div>
+                                    <div id="editor" class="form-group">
+                                        <input type="hidden" id="contents" name="contents" />
+                                        <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
+                                        <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
+                                        <input type="hidden" id="parentsId" name="parentsId" value="0" />   <!-- 답변 계층 -->
+                                    </div>
+                                    <!--// 댓글작성 Bootstrap Live Editor -->
 
-                                <!-- 댓글작성 저장 button -->
-                                {{#if isLogin}}
-                                <div class="feed-write-bottom text-right">
-                                    <button id="saveReplyButton" type="button" class="btn btn-primary btn-default">저장</button>
-                                </div>
-                                {{/if}}
-                            </li>
-                        </ul>
-                    </div>
-                </form>
+                                    <!-- 댓글작성 저장 button -->
+                                    {{#if isLogin}}
+                                    <div class="feed-write-bottom text-right">
+                                        <button id="saveReplyButton" type="button" class="btn btn-primary btn-default">저장</button>
+                                    </div>
+                                    {{/if}}
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
             </div>
             {{/if}}
             <!-- //댓글 입력 영역-->
@@ -149,8 +151,8 @@
     <!-- popover-config start -->
     {{#if isLogin}}
     <div id="popover-config-content" style="display: none;">
-        <div class="button"><a href="#">수정</a></div>
-        <div class="button"><a href="javascript:void(0);" onclick="Qa.getQaReplyId(this);">삭제</a></div>
+        <div class="button"><a href="javascript:void(0);" onclick="Qa.modifyReply(this);">수정</a></div>
+        <div class="button"><a href="javascript:void(0);" onclick="Qa.qaReplyDelete(this);">삭제</a></div>
     </div>
     {{/if}}
 
@@ -237,12 +239,15 @@
                         alert(response.comment);
                         return;
                     }
-                    var source = $('#qa-template-_fileList-hbs').html();
-                    var template = Handlebars.compile(source);
+                    if(response.data.length != 0){
+                        $('#uploadFilesArea').show();
+                        var source = $('#qa-template-_fileList-hbs').html();
+                        var template = Handlebars.compile(source);
 
-                    var html = template(response);
-                    $('#uploadfileList').html(html);
-                    that.unbindDeleteEventFileList();
+                        var html = template(response);
+                        $('#uploadfileList').html(html);
+                        that.unBindDeleteEventFileList();
+                    }
                 });
             },
             saveRecommendEvent : function(){
@@ -286,9 +291,6 @@
                     }
                 });
             },
-            unbindDeleteEventFileList : function(){
-                $('.fileDiv').find('[href=#fileDiv]').remove();
-            },
             deleteContents : function(){
                 $.ajax({
                     type : 'POST',
@@ -304,7 +306,7 @@
                     }
                 });
             },
-            unbindDeleteEventFileList : function(){
+            unBindDeleteEventFileList : function(){
                 $('.fileDiv').find('[href=#fileDiv]').remove();
             },
             saveVoteEvent : function(){
@@ -452,9 +454,10 @@
             getQaReplyId : function(obj){
                 var popoverId = $(obj).closest('.popover').attr('id');
                 var qaReplyId = $('.thread .config').find('[aria-describedby='+ popoverId +']').closest('.thread').attr('data-qa-reply-id');
-                this.qaReplyDelete(qaReplyId);
+                return qaReplyId;
             },
-            qaReplyDelete : function(qaReplyId){
+            qaReplyDelete : function(obj){
+                var qaReplyId = Qa.getQaReplyId(obj);
                 if (!confirm("댓글을 삭제하시겠습니까?")) {
                     return;
                 }
@@ -472,6 +475,10 @@
             refrashRecommendCount : function(recommendCount, nonrecommendCount){
                 $('.qna-content').find('.like-count').text('('+recommendCount+')');
                 $('.qna-content').find('.claim-count').text('('+nonrecommendCount+')');
+            },
+            modifyReply : function (obj) {
+                var qaReplyId = Qa.getQaReplyId(obj);
+                // 기능구현 필요
             }
         };
 

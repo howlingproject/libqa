@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
-@RequestMapping()
 public class ErrorPageController implements ErrorController {
 
     @RequestMapping(value = ErrorPagePath.DEFAULT_ERROR, method = GET)

@@ -115,32 +115,65 @@ var Feed = {
         var feedThreadId =  me.getFeedThreadIdByPopOver(el);
         var $feedBody = me.getFeedBodyByFeedThreadId(feedThreadId);
         var $feedContents = $feedBody.find('.feed-contents-box');
-        var $modify = $feedBody.find('.feed-modify');
-        var $frm = $modify.find('.feed-modify-form');
+        var $modifyBox = $feedBody.find('.feed-modify');
+        var $modifyForm = $modifyBox.find('.feed-modify-form');
+        var $feedThumbnailRemoveButtons = $feedBody.find('.feed-thumbnail-grid i.remove-btn');
+        var $feedAttachmentRemoveButtons = $feedBody.find('.attachment i.remove-btn');
 
-        $modify.find('.modifyBtn').off('click').on('click', function () {
-            if(!me.checkValidate($frm)) {
+        $modifyBox.find('.modifyBtn').off('click').on('click', function () {
+            if(!me.checkValidate($modifyForm)) {
                 return;
             }
-            $.post('/feed/modify', $frm.serialize())
+            $.post('/feed/modify', $modifyForm.serialize())
                 .done(function (response) {
                     if (FeedUtil.alertResponse(response)) {
                         return;
                     }
-                    $modify.hide();
+                    $modifyBox.hide();
                     var contents = response.data.feedContent.replace(/(\r\n|\n|\r)/gm, '<br>');
                     $feedContents.html(contents).show();
                 }).fail(function () {
                     alert('Error modify feed');
                 });
         }).end().find('.cancelBtn').off('click').on('click', function () {
-            $modify.hide();
+            $modifyBox.hide();
             $feedContents.show();
+            $feedThumbnailRemoveButtons.hide();
+            $feedAttachmentRemoveButtons.hide();
         });
 
-        $modify.show();
+        $feedThumbnailRemoveButtons.off('click').on('click', function(){
+            var $item = $(this);
+            FeedUtil.confirm('이미지를 삭제하시겠습니까?', function(){
+                me.removeFile($item);
+            });
+        });
+
+        $feedAttachmentRemoveButtons.off('click').on('click', function(){
+            var $item = $(this);
+            FeedUtil.confirm('파일을 삭제하시겠습니까?', function(){
+                me.removeFile($item);
+            });
+        });
+
+        $modifyBox.show();
         $feedContents.hide();
+        $feedThumbnailRemoveButtons.show();
+        $feedAttachmentRemoveButtons.show();
         FeedUtil.hidePopOver();
+    },
+    'removeFile': function($target, feedFileId) {
+        var feedFileId = $target.data('feedFileId');
+        $.post('/feed/file/' + feedFileId + '/delete')
+            .done(function (response) {
+                if (FeedUtil.alertResponse(response)) {
+                    return;
+                }
+
+                $target.parent('.feed-file-item').remove();
+            }).fail(function () {
+                alert('Error delete feedFile');
+            });
     },
     'like': function(el) {
         var feedThreadId = this.getId($(el));
@@ -428,6 +461,7 @@ var FeedPager = {
 };
 
 var FeedList = {
+    '$listItems': $('#feedList li.thread'),
     'call' : function(url, resultCallback) {
         $.get(url, function (response) {
             if(FeedUtil.alertResponse(response)) {
@@ -440,10 +474,10 @@ var FeedList = {
         });
     },
     'getLastId': function() {
-        return $('#feedList li.thread').last().data('feedThreadId');
+        return this.$listItems.last().data('feedThreadId');
     },
     'getSize': function(){
-        return $('#feedList li.thread').size();
+        return this.$listItems.size();
     }
 };
 

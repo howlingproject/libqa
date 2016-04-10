@@ -1,6 +1,5 @@
 package com.libqa.config;
 
-
 import com.libqa.application.handler.LoginHandler;
 import com.libqa.config.security.CustomAuthenticationProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -29,21 +27,17 @@ import javax.sql.DataSource;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @EnableWebSecurity
-@EnableWebMvcSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomAuthenticationProvider customAuthenticationProvider;
 
     @Autowired
-    DataSource dataSource;
-
+    private DataSource dataSource;
 
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {
-        webSecurity
-                .ignoring()
-                .antMatchers("/", "/resource/**");
+        webSecurity.ignoring().antMatchers("/", "/resource/**");
     }
 
     @Override
@@ -69,8 +63,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedPage("/access?error")
                 .and()
-                .authenticationProvider(customAuthenticationProvider)
-        ;
+                .authenticationProvider(customAuthenticationProvider);
 
         //.logout().logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
 
