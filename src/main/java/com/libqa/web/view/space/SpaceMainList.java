@@ -1,6 +1,9 @@
 package com.libqa.web.view.space;
 
+import com.libqa.web.domain.Space;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -10,7 +13,11 @@ import java.util.List;
  * @Description :
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SpaceMainList {
-
+    private Integer currentPage;
+    private Integer totalPages;
+    private Long totalElements;
     private List<SpaceMain> spaceMainList;
 }

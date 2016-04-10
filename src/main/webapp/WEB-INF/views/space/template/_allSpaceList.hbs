@@ -1,5 +1,6 @@
 {{#each spaceMainList}}
-<div class="best-qna-item">
+<div class="best-qna-item" id="spaceItems">
+    <input type="hidden" name="spaceItemId" value="{{spaceId}}" />
     <div>
         <strong><a href="/space/{{spaceId}}">{{title}}</a></strong>
         <div class="pull-right">
