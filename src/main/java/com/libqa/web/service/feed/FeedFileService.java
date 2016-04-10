@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.libqa.application.util.FileHandler.*;
+
 @Service
 public class FeedFileService {
     @Autowired
@@ -40,7 +42,7 @@ public class FeedFileService {
      */
     @Transactional
     public void delete(FeedFile feedFile) {
-        String fileFullPath = feedFile.getFilePath() + FileHandler.SEPARATOR + feedFile.getSavedName();
+        String fileFullPath = feedFile.getFilePath() + SEPARATOR + feedFile.getSavedName();
         fileHandler.delete(fileFullPath);
         feedFile.setDeleted(true);
     }

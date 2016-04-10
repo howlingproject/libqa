@@ -35,6 +35,7 @@ import java.util.List;
 
 import static com.libqa.application.enums.FileType.FILE;
 import static com.libqa.application.enums.FileType.IMAGE;
+import static com.libqa.application.util.FileHandler.*;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -87,10 +88,10 @@ public class CommonController {
         FileDto fileDto = new FileDto();
 
         // 허용 파일 여부 체크
-        FileHandler.allowedFile(uploadfile);
+        allowedFile(uploadfile);
 
         // 이미지 파일일 경우 ContentType 검사
-        FileHandler.checkImageUpload(uploadfile, viewType);
+        checkImageUpload(uploadfile, viewType);
 
         log.debug("#### request ####");
         log.debug("# serverUploadPath = {}", fileHandler.getServerUploadPath());
@@ -112,9 +113,9 @@ public class CommonController {
             }
 
             // 파일 정보 추출
-            fileDto = FileHandler.extractFileInfo(uploadfile, localDir);
+            fileDto = extractFileInfo(uploadfile, localDir);
             fileDto.setFilePath(localDir);
-            fileDto.setFileType(FileHandler.checkImageFile(uploadfile) ? IMAGE : FILE);
+            fileDto.setFileType(checkImageFile(uploadfile) ? IMAGE : FILE);
 
             String filePath = Paths.get(fileHandler.getServerUploadPath(), localDir, fileDto.getSavedName()).toString();
             log.debug("## filePath : {}", filePath);
@@ -147,10 +148,10 @@ public class CommonController {
         FileDto fileDto = new FileDto();
 
         // 이미지 파일일 경우 ContentType 검사
-        FileHandler.checkImageUpload(uploadfile, viewType);
+        checkImageUpload(uploadfile, viewType);
 
         log.debug("#### request ####");
-        log.debug("# request getServletContext().getRealPath = {}", request.getServletContext().getRealPath(FileHandler.SEPARATOR));
+        log.debug("# request getServletContext().getRealPath = {}", request.getServletContext().getRealPath(SEPARATOR));
         log.debug("# request getServletPath = {} ", request.getServletPath());
 
         try {
@@ -181,15 +182,15 @@ public class CommonController {
             }
 
             // 파일 정보 추출
-            fileDto = FileHandler.extractFileInfo(uploadfile, localDir);
+            fileDto = extractFileInfo(uploadfile, localDir);
             fileDto.setFilePath(localDir);
-            fileDto.setFileType(FileHandler.checkImageFile(uploadfile) ? IMAGE : FILE);
+            fileDto.setFileType(checkImageFile(uploadfile) ? IMAGE : FILE);
 
             String filePath = Paths.get(fileHandler.getServerUploadPath(), localDir, fileDto.getSavedName()).toString();
 
             String saveThumbFileName = "thumb_" + fileDto.getSavedName();
 
-            String thumbTargetPath = directory + FileHandler.SEPARATOR + saveThumbFileName;
+            String thumbTargetPath = directory + SEPARATOR + saveThumbFileName;
 
             log.debug("## filePath : {}", filePath);
 
@@ -247,7 +248,7 @@ public class CommonController {
 
         Integer userId = user.getUserId();
         String today = DateUtil.getToday();
-        String localDir = "/resource/" + userId + FileHandler.SEPARATOR + today;  // 임시저장경로
+        String localDir = "/resource/" + userId + SEPARATOR + today;  // 임시저장경로
         String movePath = fileHandler.getServerUploadPath() + localDir;    // 파일 이동 경로
 
         try {
@@ -280,7 +281,7 @@ public class CommonController {
 
         try {
             String directory = fileHandler.getServerUploadPath() + filePath;   // file 절대경로
-            String fileFullPath = directory + FileHandler.SEPARATOR + savedName;
+            String fileFullPath = directory + SEPARATOR + savedName;
             fileHandler.delete(fileFullPath);
             return ResponseData.createSuccessResult(fileDto);
         } catch (Exception e) {
@@ -355,7 +356,7 @@ public class CommonController {
             byte[] data = IOUtils.toByteArray(inputStream);
 
             response.reset();
-            response.setHeader("Content-Disposition", "attachment; filename=" + generateDownloadFileName(path));
+            response.setHeader("Content-Disposition", "attachment; filename=" + fileHandler.generateDownloadFileName(path));
             response.addHeader("Content-Length", String.valueOf(data.length));
             response.setContentType("application/octet-stream; charset=UTF-8");
 
@@ -367,8 +368,5 @@ public class CommonController {
         }
     }
 
-    private String generateDownloadFileName(@RequestParam String path) {
-        return path.split(FileHandler.SEPARATOR)[path.split(FileHandler.SEPARATOR).length - 1];
-    }
 
 }

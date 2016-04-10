@@ -20,7 +20,7 @@ import java.io.IOException;
 public class FileHandler {
     @Getter
     @Value("${libqa.file.uploadPath}")
-    public String serverUploadPath;
+    private String serverUploadPath;
 
     public static String SEPARATOR = "/";
 
@@ -127,15 +127,16 @@ public class FileHandler {
         return false;
     }
 
-    public static void fileUpload(MultipartFile uploadfile, String path) throws IOException {
+    public static void fileUpload(MultipartFile uploadFile, String path) throws IOException {
         BufferedOutputStream stream =
                 new BufferedOutputStream(new FileOutputStream(new File(path)));
-        stream.write(uploadfile.getBytes());
+        stream.write(uploadFile.getBytes());
         stream.close();
     }
 
     /**
      * file을 제거 한다.
+     *
      * @param fileFullPath
      */
     public void delete(String fileFullPath) {
@@ -143,6 +144,16 @@ public class FileHandler {
         if (targetFile.exists() && !targetFile.isDirectory()) {
             targetFile.delete();
         }
+    }
+
+    /**
+     * download 파일이름을 생성한다.
+     *
+     * @param path
+     * @return download file name
+     */
+    public String generateDownloadFileName(String path) {
+        return path.split(SEPARATOR)[path.split(SEPARATOR).length - 1];
     }
 
 }
