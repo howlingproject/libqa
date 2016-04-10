@@ -14,4 +14,6 @@ public interface QaRecommendRepository extends JpaRepository<QaRecommend, Intege
 	QaRecommend findByQaIdAndUserIdAndIsCanceledFalse(Integer qaId, Integer userId);
 
 	QaRecommend findByQaIdAndUserIdAndIsCommendAndIsCanceledFalse(Integer qaId, Integer userId, boolean isCommend);
+
+	List<QaRecommend> findByQaIdAndIsCommendAndIsCanceledFalse(Integer qaId, boolean isCommend);
 }

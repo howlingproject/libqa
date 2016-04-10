@@ -278,7 +278,11 @@ public class QaServiceImpl implements QaService {
 		        }
 	        } else {
 		        if ("Y".equals(qaDto.getWaitReply())) {
-	                qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed, fromDate, today);
+			        if(null == fromDate){
+	                    qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed);
+			        } else {
+	                    qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalseAndUpdateDateBetween(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed, fromDate, today);
+			        }
 		        } else {
 	                qaStream = qaRepository.findAllByKeywordAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), fromDate, today);
 		        }

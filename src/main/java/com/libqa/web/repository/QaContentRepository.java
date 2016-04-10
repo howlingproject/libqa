@@ -48,6 +48,18 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
 			" from QA_CONTENT qa, KEYWORD keyword " +
 			"where qa.qa_id = keyword.qa_id " +
 			"  and qa.is_deleted = 0 " +
+			"  and qa.is_replyed = :isReplyed " +
+			"  and keyword.is_deleted = 0 " +
+			"  and keyword.keyword_type = :keywordType " +
+			"  and keyword.keyword_name = :keywordName " +
+			"group by qa.user_id, qa.qa_id, qa.insert_date, qa.update_date, qa.user_nick, qa.title, qa.contents, qa.contents_markup, qa.view_count, qa.recommend_count " +
+			"order by qa.update_date desc", nativeQuery = true)
+	Stream<QaContent> findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(@Param("keywordType") String keywordType, @Param("keywordName") String keywordName, @Param("isReplyed") boolean isReplyed);
+
+	@Query(value = "select qa.* " +
+			" from QA_CONTENT qa, KEYWORD keyword " +
+			"where qa.qa_id = keyword.qa_id " +
+			"  and qa.is_deleted = 0 " +
 			"  and qa.update_date between :fromDate and :today " +
 			"  and qa.is_replyed = :isReplyed " +
 			"  and keyword.is_deleted = 0 " +
@@ -55,7 +67,7 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
 			"  and keyword.keyword_name = :keywordName " +
 			"group by qa.user_id, qa.qa_id, qa.insert_date, qa.update_date, qa.user_nick, qa.title, qa.contents, qa.contents_markup, qa.view_count, qa.recommend_count " +
 			"order by qa.update_date desc", nativeQuery = true)
-	Stream<QaContent> findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(@Param("keywordType") String keywordType, @Param("keywordName") String keywordName, @Param("isReplyed") boolean isReplyed, @Param("fromDate") Date fromDate, @Param("today") Date today);
+	Stream<QaContent> findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalseAndUpdateDateBetween(@Param("keywordType") String keywordType, @Param("keywordName") String keywordName, @Param("isReplyed") boolean isReplyed, @Param("fromDate") Date fromDate, @Param("today") Date today);
 
 	@Query(value = "select qa.* " +
 			" from QA_CONTENT qa, KEYWORD keyword " +

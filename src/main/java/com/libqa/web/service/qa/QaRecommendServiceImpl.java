@@ -57,4 +57,9 @@ public class QaRecommendServiceImpl implements QaRecommendService {
 		}
 	}
 
+	@Override
+	public List<QaRecommend> findByQaIdAndIsCommend(Integer qaId, boolean isCommend) {
+		return qaRecommendRepository.findByQaIdAndIsCommendAndIsCanceledFalse(qaId, isCommend);
+	}
+
 }
