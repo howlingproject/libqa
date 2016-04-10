@@ -7,7 +7,6 @@ DualEditor.markup.LINK = function(contents){
     );
     contents = contents.replace(/\[(.*)\]\((.*)\)/igm,
         function(match, p1,p2){
-            debugger;
             p1 = p1.replace("<em>","_").replace("</em>","_");
             return "<a href=\""+p2+"\" target=\"_blank\">"+p1+"</a>";
         }
