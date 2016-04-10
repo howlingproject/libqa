@@ -1,5 +1,15 @@
 DualEditor.markup.LINK = function(contents){
-	contents = contents.replace(/[!]\[(.*)\]\((.*)\)/igm, "<p><img src=\"$2\" style=\"max-width:100%; height: auto;\" alt=\"$1\"></p>");
-	contents = contents.replace(/\[(.*)\]\((.*)\)/igm, "<a href=\"$2\" target=\"_blank\">$1</a>");
-	return contents;
+    contents = contents.replace(/[!]\[(.*)\]\((.*)\)/igm,
+        function(match, p1,p2){
+            p2 = p2.replace("<em>","_").replace("</em>","_");
+            return "<p><img src=\""+p2+"\" style=\"max-width:100%; height: auto;\" alt=\""+p1+"\"></p>";
+        }
+    );
+    contents = contents.replace(/\[(.*)\]\((.*)\)/igm,
+        function(match, p1,p2){
+            p1 = p1.replace("<em>","_").replace("</em>","_");
+            return "<a href=\""+p2+"\" target=\"_blank\">"+p1+"</a>";
+        }
+    );
+    return contents;
 };
