@@ -307,7 +307,8 @@ public class QaController {
     @RequestMapping(value="/qa/replyList", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData<DisplayQaReply> replyList(@RequestParam("qaId") Integer qaId){
-        List<DisplayQaReply> qaReplyList = qaReplyService.findByQaIdAndDepthIdx(qaId, 1);
+	    User viewer = loggedUserManager.getUser();
+        List<DisplayQaReply> qaReplyList = qaReplyService.findByQaIdAndDepthIdx(qaId, 1, viewer);
         return createSuccessResult(qaReplyList);
     }
 

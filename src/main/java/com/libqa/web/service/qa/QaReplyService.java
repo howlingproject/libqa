@@ -21,7 +21,7 @@ public interface QaReplyService {
 
     QaReply saveChildReply(QaReply qaReply, User user);
 
-    List<DisplayQaReply> findByQaIdAndDepthIdx(Integer qaId, int depthIdx);
+    List<DisplayQaReply> findByQaIdAndDepthIdx(Integer qaId, int depthIdx, User viewer);
 
     void delete(Integer replyId, Integer userId);
 
