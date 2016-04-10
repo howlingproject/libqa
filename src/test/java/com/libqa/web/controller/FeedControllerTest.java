@@ -2,9 +2,11 @@ package com.libqa.web.controller;
 
 import com.libqa.application.enums.Role;
 import com.libqa.application.util.LoggedUserManager;
+import com.libqa.web.domain.FeedFile;
 import com.libqa.web.domain.FeedReply;
 import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.User;
+import com.libqa.web.service.feed.FeedFileService;
 import com.libqa.web.service.feed.FeedReplyService;
 import com.libqa.web.service.feed.FeedThreadService;
 import com.libqa.web.view.feed.DisplayFeedActionBuilder;
@@ -42,6 +44,8 @@ public class FeedControllerTest {
     private FeedThreadService feedThreadService;
     @Mock
     private FeedReplyService feedReplyService;
+    @Mock
+    private FeedFileService feedFileService;
     @Mock
     private DisplayFeedBuilder displayFeedBuilder;
     @Mock
@@ -352,7 +356,23 @@ public class FeedControllerTest {
 
         verify(feedReplyService).claim(anyInt(), any(User.class));
         verify(displayFeedActionBuilder).buildClaim(any(FeedReply.class), any(User.class));
+    }
 
+    @Test
+    public void testDeleteFile() throws Exception {
+        final int feedFileId = 1;
+        given(loggedUserManager.getUser()).willReturn(normalUser());
+        given(feedFileService.getByFeedFileId(feedFileId)).willReturn(new FeedFile());
+
+        mockMvc.perform(
+                post("/feed/file/{feedFileId}/delete", feedFileId)
+                        .contentType(APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$.resultCode").value(is(1)))
+                .andExpect(jsonPath("$.comment").value(is("SUCCESS")));
+
+        verify(feedFileService).delete(any(FeedFile.class));
     }
 
     private User guestUser() {
