@@ -130,17 +130,17 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     @Override
-    public List<DisplayQaReply> findByQaIdAndDepthIdx(Integer qaId, int depthIdx) {
+    public List<DisplayQaReply> findByQaIdAndDepthIdx(Integer qaId, int depthIdx, User viewer) {
         boolean isDeleted = false;
         boolean isCancel = false;
         boolean vote = true;
         boolean notVote = false;
         int qaReplyDepth = 1;
         List<QaReply> qaReplyList = qaReplyRepository.findAllByQaIdAndDepthIdxAndIsDeletedOrderByReplyIdAsc(qaId, depthIdx, isDeleted);
-        return makeDisplayQaReply(qaReplyList, qaReplyDepth);
+        return makeDisplayQaReply(qaReplyList, qaReplyDepth, viewer);
     }
 
-    public List<DisplayQaReply> makeDisplayQaReply(List<QaReply> qaReplyList, int qaReplyDepth){
+    public List<DisplayQaReply> makeDisplayQaReply(List<QaReply> qaReplyList, int qaReplyDepth, User viewer){
         List<DisplayQaReply> displayQaReplyList = Lists.newArrayList();
         List<DisplayQaReply> displaySubQaReplyList = Lists.newArrayList();
         for(QaReply qaReply : qaReplyList){
@@ -148,18 +148,19 @@ public class QaReplyServiceImpl implements QaReplyService {
             boolean selfRecommend = voteService.hasRecommendUser(qaReply.getReplyId(), 1);
             boolean selfNonrecommend = voteService.hasNonRecommendUser(qaReply.getReplyId(), 1);
             if(1 == qaReplyDepth) {
-                displaySubQaReplyList = findByQaIdAndParentsIdAndDepthIdx(qaReply.getQaId(), qaReply.getReplyId(), 2);
+                displaySubQaReplyList = findByQaIdAndParentsIdAndDepthIdx(qaReply.getQaId(), qaReply.getReplyId(), 2, viewer);
             }
-            displayQaReplyList.add(new DisplayQaReply(qaReply, displaySubQaReplyList, selfRecommend, selfNonrecommend, writer));
+	        final boolean isWriter = writer.isMatchUser(viewer.getUserId());
+            displayQaReplyList.add(new DisplayQaReply(qaReply, displaySubQaReplyList, selfRecommend, selfNonrecommend, writer, isWriter));
         }
         return displayQaReplyList;
     }
 
-    public List<DisplayQaReply> findByQaIdAndParentsIdAndDepthIdx(Integer qaId, Integer replyId, int depthIdx) {
+    public List<DisplayQaReply> findByQaIdAndParentsIdAndDepthIdx(Integer qaId, Integer replyId, int depthIdx, User viewer) {
         boolean isDeleted = false;
         List<QaReply> qaReplyList = qaReplyRepository.findAllByQaIdAndParentsIdAndDepthIdxAndIsDeletedOrderByOrderIdxAsc(qaId, replyId, depthIdx, isDeleted);
         int qaReplyDepth = 2;
-        return makeDisplayQaReply(qaReplyList, qaReplyDepth);
+        return makeDisplayQaReply(qaReplyList, qaReplyDepth, viewer);
     }
 
     @Override

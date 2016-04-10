@@ -20,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.libqa.application.enums.StatusCode.NEED_LOGIN;
@@ -29,7 +28,7 @@ import static com.libqa.application.framework.ResponseData.*;
 
 /**
  * Created by yong on 2015-02-08.
- *
+ * test
  * @author yong
  */
 @Slf4j
@@ -223,12 +222,6 @@ public class QaController {
     @ResponseBody
     public ResponseData<QaReply> saveChildReply(QaReply qaReply){
         User user = loggedUserManager.getUser();
-        // TODO List 차후 로그인으로 변경
-        qaReply.setInsertDate(new Date());
-        qaReply.setInsertUserId(1);
-        qaReply.setUserId(1);
-        qaReply.setUserNick("용퓌");
-
         QaReply newQaReply = qaReplyService.saveChildReply(qaReply, user);
         return createSuccessResult(newQaReply);
     }
@@ -314,7 +307,8 @@ public class QaController {
     @RequestMapping(value="/qa/replyList", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData<DisplayQaReply> replyList(@RequestParam("qaId") Integer qaId){
-        List<DisplayQaReply> qaReplyList = qaReplyService.findByQaIdAndDepthIdx(qaId, 1);
+	    User viewer = loggedUserManager.getUser();
+        List<DisplayQaReply> qaReplyList = qaReplyService.findByQaIdAndDepthIdx(qaId, 1, viewer);
         return createSuccessResult(qaReplyList);
     }
 
