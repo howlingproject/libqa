@@ -7,6 +7,7 @@ import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.Role;
 import com.libqa.application.enums.StatusCode;
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.LibqaConstant;
 import com.libqa.application.util.LoggedUserManager;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
@@ -46,8 +47,6 @@ public class SpaceController {
     @Value("${howling.hello.message}")
     private String message;
 
-    private static final Integer PAGE_SIZE = 2; // fetch size 기본 10
-
     @Autowired
     private SpaceService spaceService;
 
@@ -84,7 +83,9 @@ public class SpaceController {
         // 전체 space 목록 조회 (10개)
         boolean isDeleted = false;
         boolean morePage = false;   // 더보기 여부
-        SpaceMainList spacePages = spaceService.findPageBySort(isDeleted, 0, PAGE_SIZE, "title");
+        SpaceMainList spacePages = spaceService.findPageBySort(isDeleted, LibqaConstant.PAGE_START_INDEX,
+                                                            LibqaConstant.SPACE_PAGE_SIZE,
+                                                            LibqaConstant.SORT_TYPE_TITLE);
         Long totalCount = spacePages.getTotalElements();
         Integer currentPage = spacePages.getCurrentPage();
         Integer totalPage = spacePages.getTotalPages();
@@ -99,8 +100,7 @@ public class SpaceController {
              * 내 즐겨찾기 공간 정보 조회
              */
             List<Space> myFavoriteSpaceList = spaceService.findUserFavoriteSpace(user.getUserId(), false);
-            List<SpaceMain> favoriteSpaces = Lists.newArrayList();
-
+            List<SpaceMain> favoriteSpaces;
 
             if (CollectionUtils.isEmpty(myFavoriteSpaceList)) {
                 log.debug("## 즐겨찾기 공간이 없습니다.");
@@ -113,12 +113,13 @@ public class SpaceController {
         }
 
         /**
-         * 최근 수정된 위키 정보 조회 10개
+         * 최근 수정된 위키 정보 조회 10개 페이징 처리
          */
-        List<DisplayWiki> updateWikiList = wikiService.findUpdateWikiList(0, 10);
-        List<SpaceWikiList> spaceWikiLists = spaceService.convertSpaceWikis(updateWikiList);
+        SpaceWikiList spaceWikiPages = spaceService.findWikiPageBySort(isDeleted, LibqaConstant.PAGE_START_INDEX,
+                LibqaConstant.SPACE_WIKI_SIZE,
+                LibqaConstant.SORT_TYPE_DATE);
 
-        if (totalCount > PAGE_SIZE) {
+        if (totalCount > LibqaConstant.SPACE_PAGE_SIZE) {
             morePage = true;
         }
 
@@ -131,8 +132,12 @@ public class SpaceController {
         mav.addObject("currentPage", currentPage);
         mav.addObject("totalPage", totalPage);
         mav.addObject("spaceMainList", spacePages.getSpaceMainList());
-        mav.addObject("PAGE_SIZE", PAGE_SIZE);
-        mav.addObject("spaceWikiLists", spaceWikiLists);
+        mav.addObject("spacePageSize", LibqaConstant.SPACE_PAGE_SIZE);
+        mav.addObject("spaceWikiSize", LibqaConstant.SPACE_WIKI_SIZE);
+        mav.addObject("wikiTotalCount", spaceWikiPages.getTotalElements());
+        mav.addObject("wikiCurrentPage", spaceWikiPages.getCurrentPage());
+        mav.addObject("wikiTotalPage", spaceWikiPages.getTotalPages());
+        mav.addObject("spaceWikiList", spaceWikiPages.getSpaceWikiList());
 
         return mav;
     }
@@ -155,8 +160,24 @@ public class SpaceController {
         log.info("### spaceMainList = {}", spaceMainList.getTotalElements());
         log.info("### spaceMainList = {}", spaceMainList.getTotalPages());
 
-
         return ResponseData.createSuccessResult(spaceMainList);
+    }
+
+    /**
+     *
+     * @param sortType
+     * @param startNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = "/space/morewiki", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<SpaceWikiList> findMoreWikis(@RequestParam String sortType,
+                                                     @RequestParam Integer startNum,
+                                                     @RequestParam Integer pageSize) {
+        SpaceWikiList spaceWikiList = spaceService.findWikiPageBySort(Boolean.FALSE, startNum, pageSize, sortType);
+
+        return ResponseData.createSuccessResult(spaceWikiList);
     }
 
     /**
@@ -169,7 +190,7 @@ public class SpaceController {
     public ResponseData<SpaceMainList> renderSpace(@RequestParam String sortType) {
         log.info("## sortType = {}", sortType);
 
-        SpaceMainList spaceMainList = spaceService.findPageBySort(false, 0, PAGE_SIZE, sortType);
+        SpaceMainList spaceMainList = spaceService.findPageBySort(false, 0, LibqaConstant.SPACE_PAGE_SIZE, sortType);
         return ResponseData.createSuccessResult(spaceMainList);
 
     }
@@ -374,15 +395,16 @@ public class SpaceController {
         }
 
         // 최근 수정된 위키 목록
-        List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
-        List<SpaceWikiList> spaceWikiLists = new ArrayList<>();
+        List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, LibqaConstant.SPACE_WIKI_SIZE);
+        List<SpaceWiki> spaceWikis = new ArrayList<>();
         for (Wiki wiki : updatedWikis) {
             User user = userService.findByUserId(wiki.getUserId());
-            SpaceWikiList spaceWikiList = new SpaceWikiList();
-            spaceWikiList.setUser(user);
-            spaceWikiList.setWiki(wiki);
-            spaceWikiList.setReplyCount(wiki.getWikiReplies().size());
-            spaceWikiLists.add(spaceWikiList);
+            SpaceWiki spaceWiki = new SpaceWiki();
+
+            spaceWiki.setUser(user);
+            spaceWiki.setWiki(wiki);
+            spaceWiki.setReplyCount(wiki.getReplyCount());
+            spaceWikis.add(spaceWiki);
         }
 
         User user = loggedUserManager.getUser();
@@ -401,7 +423,7 @@ public class SpaceController {
 
         boolean canDeleted = canDeleted(space, user);
 
-        mav.addObject("spaceWikiLists", spaceWikiLists);
+        mav.addObject("spaceWikis", spaceWikis);
         mav.addObject("space", space);
         mav.addObject("canDeleted", canDeleted);
         mav.addObject("spaceUser", spaceUser);

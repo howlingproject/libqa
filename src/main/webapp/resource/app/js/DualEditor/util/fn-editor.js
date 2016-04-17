@@ -23,6 +23,8 @@
 			$.appendTag(textEditor, $me, data);
 		} else if(data.mode == 'color') {
 			$.layer_select.color.dropdownColor(textEditor, $me, data);
+        } else if(data.mode == 'columns') {
+            $.layer_select.columns.dropdownColumns(textEditor, $me, data);
 		} else if(data.mode == 'layer') {
 			
 			if( data.type == 'table' ){
