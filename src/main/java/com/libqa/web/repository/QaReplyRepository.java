@@ -21,10 +21,9 @@ public interface QaReplyRepository extends JpaRepository<QaReply, Integer> {
 
     List<QaReply> findAllByQaIdAndParentsIdAndDepthIdxAndIsDeletedOrderByOrderIdxAsc(Integer qaId, Integer replyId, int depthIdx, boolean isDeleted);
 
-    List<QaReply> findByQaId(Integer qaId);
+    List<QaReply> findByQaIdAndIsDeletedFalse(Integer qaId);
 
     List<QaReply> findByUserIdAndIsDeleted(Integer userId, boolean isDeleted);
 
-    Integer countByQaId(Integer qaId);
-
+    Integer countByQaIdAndIsDeletedFalse(Integer qaId);
 }

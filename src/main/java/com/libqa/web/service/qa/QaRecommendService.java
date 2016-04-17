@@ -18,4 +18,6 @@ public interface QaRecommendService {
 	QaContent saveRecommend(QaRecommend paramQaRecommend, Integer userId, String userNick) throws Exception;
 
 	List<QaRecommend> findByQaIdAndIsCommend(Integer qaId, boolean isCommend);
+
+    int getCountByQaId(Integer qaId);
 }

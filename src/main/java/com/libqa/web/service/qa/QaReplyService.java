@@ -32,4 +32,6 @@ public interface QaReplyService {
     Integer countByQaContent(QaContent qaContent);
 
     QaReply findByReplyId(Integer replyId);
+
+    int getCountByQaId(Integer qaId);
 }

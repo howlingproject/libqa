@@ -18,8 +18,12 @@
                         {{{qaReply.contents}}}
                     </div>
                     <div class="action-buttons qna-reply">
-                        <i class="fa fa-thumbs-o-up {{#xif selfRecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="UP"><span class="like-count">({{qaReply.voteUpCount}})</span></i>
-                        <i class="fa fa-thumbs-o-down {{#xif selfNonrecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="DOWN"><span class="claim-count">({{qaReply.voteDownCount}})</span></i>
+                        <i class="fa fa-thumbs-o-up {{#xif selfRecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="UP" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each votes}}{{userNick}}<br>{{/each}}">
+                            <span class="like-count">({{qaReply.voteUpCount}})</span>
+                        </i>
+                        <i class="fa fa-thumbs-o-down {{#xif selfNonrecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="DOWN" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each nonVotes}}{{userNick}}<br>{{/each}}">
+                            <span class="claim-count">({{qaReply.voteDownCount}})</span>
+                        </i>
                     </div>
                 </div>
 
@@ -39,8 +43,12 @@
                             <div class="message-box">
                                 <div class="message">{{qaReply.contents}}</div>
                                 <div class="action-buttons qna-reply">
-                                    <i class="fa fa-thumbs-o-up {{#xif selfRecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="UP"><span class="like-count">({{qaReply.voteUpCount}})</span></i>
-                                    <i class="fa fa-thumbs-o-down {{#xif selfNonrecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="DOWN"><span class="claim-count">({{qaReply.voteDownCount}})</span></i>
+                                    <i class="fa fa-thumbs-o-up {{#xif selfRecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="UP" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each votes}}{{userNick}}<br>{{/each}}">
+                                        <span class="like-count">({{qaReply.voteUpCount}})</span>
+                                    </i>
+                                    <i class="fa fa-thumbs-o-down {{#xif selfNonrecommend '==' true}}fa-2x{{/xif}}" data-qa-vote-type="DOWN" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each nonVotes}}{{userNick}}<br>{{/each}}">
+                                        <span class="claim-count">({{qaReply.voteDownCount}})</span>
+                                    </i>
                                 </div>
                             </div>
                         </li>
@@ -87,11 +95,15 @@
                 this.bindDelete();
                 Qa.saveReplyEvent();
                 Qa.saveVoteEvent();
+                this.tooltipEvent();
             },
             bindDelete: function() {
                 $('.qaReplyDeleteBtn').click(function () {
                     Qa.qaReplyDelete($(this).closest('.thread').attr('data-qa-reply-id'));
                 });
+            },
+            tooltipEvent : function(){
+                $('[data-toggle="tooltip"]').tooltip();
             }
         };
 
