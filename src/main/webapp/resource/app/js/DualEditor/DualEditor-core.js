@@ -117,6 +117,7 @@ var DualEditor = (function(){
                 var data = $me.data();
                 // 에디터 액션 처리
                 $.editorAction(editor, $me, data);
+                DualEditor.markup.parsing();
             });
         });
 
@@ -127,6 +128,7 @@ var DualEditor = (function(){
                 var data = $me.data();
                 // 에디터 액션 처리
                 $.editorAction(editor, $me, data);
+                DualEditor.markup.parsing();
             });
         });
 
@@ -134,16 +136,15 @@ var DualEditor = (function(){
             DualEditor.markup.parsing();
         });
 
-        setTimeout(function() {
-            DualEditor.markup.parsing();
-        }, 1000);
-
     };
 
     DualEditor.markup.parsing = function(){
-        $("#wikimaincol").text("");
-        var txt = DualEditor.markup( $("#wikiEditor").val() );
-        $("#wikimaincol").html( "<div style=\"width:96%\">"+txt+"</div>" );
+        setTimeout(function() {
+            $("#wikimaincol").text("");
+            var txt = DualEditor.markup( $("#wikiEditor").val() );
+            $("#wikimaincol").html( "<div style=\"width:96%\">"+txt+"</div>" );
+        }, 1000);
+
     };
 
     DualEditor.getMarkupEditHtml = function(){
