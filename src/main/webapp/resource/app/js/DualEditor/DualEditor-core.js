@@ -13,6 +13,7 @@ var DualEditor = (function(){
     };
 
     DualEditor.markup = function(contents){
+        contents = DualEditor.markup.ITALIC( contents );
         contents = DualEditor.markup.FIELD( contents );
         contents = DualEditor.markup.ALERT( contents );
         contents = DualEditor.markup.INFO( contents );
@@ -31,7 +32,6 @@ var DualEditor = (function(){
         contents = DualEditor.markup.FONTSTYLE( contents );
         contents = DualEditor.markup.ALIGN( contents );
         contents = DualEditor.markup.BOLD( contents );
-        contents = DualEditor.markup.ITALIC( contents );
         contents = DualEditor.markup.DEL( contents );
         contents = DualEditor.markup.UNDERLINING( contents );
         contents = DualEditor.markup.SUPERSCRIPT( contents );
@@ -107,7 +107,6 @@ var DualEditor = (function(){
         };
         $divs.on( 'scroll', sync);
 
-        //$("#wikiEditor").val("마크업 테스트\r\n***\r\n**굵게**\r\n__굵게__\r\n*기울임*\r\n_기울임_\r\n//밑줄//\r\n[d]취소선[d]\r\n[field|필드셋 타이틀]필드셋[field]\r\n[alert]경고[alert]\r\n[info]안내[info]\r\n[sp]아래첨자[sp]\r\n[sb]위첨자[sb]\r\n\r\n||셀제목1||셀제목2||셀제목3||셀제목4||\r\n|컬럼1|컬럼2|컬럼1|컬럼2|\r\n|컬럼3|컬럼4|컬럼3|컬럼4| \r\n\r\n[layout] [field|필드셋 타이틀]필드셋[field] [layout]\n[layout] [alert]경고[alert] [layout]\n[layout] [info]안내[info] [layout]\n[layout] [info]4444[info] [layout]\n[layout] paddig5 [layout]\n[layout] paddig2-1 [layout]\n[layout] paddig2-2 [layout] \r\n\r\n [alert]중간[alert]  \r\n\r\n[layout] [field|필드셋 타이틀]필드셋[field] [layout]\n[layout] [alert]경고[alert] [layout]\n[layout] [info]안내[info] [layout]");
         $("#wikiEditor").val(options.data);
         var editor = document.getElementById("wikiEditor");		// [object HTMLTextAreaElement]
 
@@ -131,12 +130,20 @@ var DualEditor = (function(){
             });
         });
 
-        setInterval(function() {
-            $("#wikimaincol").text("");
-            var txt = DualEditor.markup( "<div style=\"width:96%\">"+$("#wikiEditor").val()+"</div>" );
-            $("#wikimaincol").html( txt );
+        $("#wikiEditor").keydown(function(){
+            DualEditor.markup.parsing();
+        });
+
+        setTimeout(function() {
+            DualEditor.markup.parsing();
         }, 1000);
 
+    };
+
+    DualEditor.markup.parsing = function(){
+        $("#wikimaincol").text("");
+        var txt = DualEditor.markup( $("#wikiEditor").val() );
+        $("#wikimaincol").html( "<div style=\"width:96%\">"+txt+"</div>" );
     };
 
     DualEditor.getMarkupEditHtml = function(){
