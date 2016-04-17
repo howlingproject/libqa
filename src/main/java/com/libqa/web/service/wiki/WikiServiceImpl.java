@@ -372,7 +372,7 @@ public class WikiServiceImpl implements WikiService {
 
     @Override
     public List<DisplayWiki> findUpdateWikiList(int startIdx, int endIdx) {
-        List<DisplayWiki> resultWiki = new ArrayList<DisplayWiki>();
+        List<DisplayWiki> resultWiki = new ArrayList<>();
         List<Wiki> list = wikiRepository.findSpaceWikiUpdateByIsDeleted(
                 isDeleted
                 , PageUtil.sortPageable(startIdx, endIdx, PageUtil.sortId("DESC", "updateDate"))

@@ -7,6 +7,7 @@ import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.Role;
 import com.libqa.application.enums.StatusCode;
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.LibqaConstant;
 import com.libqa.application.util.LoggedUserManager;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
@@ -46,8 +47,6 @@ public class SpaceController {
     @Value("${howling.hello.message}")
     private String message;
 
-    private static final Integer PAGE_SIZE = 2; // fetch size 기본 10
-
     @Autowired
     private SpaceService spaceService;
 
@@ -84,7 +83,7 @@ public class SpaceController {
         // 전체 space 목록 조회 (10개)
         boolean isDeleted = false;
         boolean morePage = false;   // 더보기 여부
-        SpaceMainList spacePages = spaceService.findPageBySort(isDeleted, 0, PAGE_SIZE, "title");
+        SpaceMainList spacePages = spaceService.findPageBySort(isDeleted, 0, LibqaConstant.SPACE_PAGE_SIZE, "title");
         Long totalCount = spacePages.getTotalElements();
         Integer currentPage = spacePages.getCurrentPage();
         Integer totalPage = spacePages.getTotalPages();
@@ -118,7 +117,7 @@ public class SpaceController {
         List<DisplayWiki> updateWikiList = wikiService.findUpdateWikiList(0, 10);
         List<SpaceWikiList> spaceWikiLists = spaceService.convertSpaceWikis(updateWikiList);
 
-        if (totalCount > PAGE_SIZE) {
+        if (totalCount > LibqaConstant.SPACE_PAGE_SIZE) {
             morePage = true;
         }
 
@@ -131,7 +130,7 @@ public class SpaceController {
         mav.addObject("currentPage", currentPage);
         mav.addObject("totalPage", totalPage);
         mav.addObject("spaceMainList", spacePages.getSpaceMainList());
-        mav.addObject("PAGE_SIZE", PAGE_SIZE);
+        mav.addObject("spacePageSize", LibqaConstant.SPACE_PAGE_SIZE);
         mav.addObject("spaceWikiLists", spaceWikiLists);
 
         return mav;
@@ -155,7 +154,6 @@ public class SpaceController {
         log.info("### spaceMainList = {}", spaceMainList.getTotalElements());
         log.info("### spaceMainList = {}", spaceMainList.getTotalPages());
 
-
         return ResponseData.createSuccessResult(spaceMainList);
     }
 
@@ -169,7 +167,7 @@ public class SpaceController {
     public ResponseData<SpaceMainList> renderSpace(@RequestParam String sortType) {
         log.info("## sortType = {}", sortType);
 
-        SpaceMainList spaceMainList = spaceService.findPageBySort(false, 0, PAGE_SIZE, sortType);
+        SpaceMainList spaceMainList = spaceService.findPageBySort(false, 0, LibqaConstant.SPACE_PAGE_SIZE, sortType);
         return ResponseData.createSuccessResult(spaceMainList);
 
     }

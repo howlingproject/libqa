@@ -46,9 +46,6 @@ public class SpaceServiceImpl implements SpaceService {
     @Autowired
     private WikiService wikiService;
 
-    private static final Integer DEFAILT_START_NUM = 0;
-    private static final Integer DEFAULT_SIZE_PER_PAGE = 2;
-
 
     @Override
     public Space save(Space space) {
@@ -138,7 +135,7 @@ public class SpaceServiceImpl implements SpaceService {
     @Override
     public List<Space> findUserFavoriteSpace(Integer userId, boolean isDeleted) {
 
-        List<UserFavorite> userFavoriteList = new ArrayList<>();
+        List<UserFavorite> userFavoriteList;
 
         userFavoriteList = userFavoriteService.findByFavoriteTypeAndUserIdAndIsDeleted(FavoriteType.SPACE, userId, isDeleted);
 
@@ -229,12 +226,6 @@ public class SpaceServiceImpl implements SpaceService {
         userFavorite.setUpdateDate(new Date());
         userFavoriteService.save(userFavorite);
     }
-
-
-    /*public Integer countSpace(boolean isDeleted) {
-        return spaceRepository.countByIsDeleted(isDeleted);
-    }*/
-
 
     public List<SpaceMain> convertSpaceMain(List<Space> spaces) {
         List<SpaceMain> spaceMainList = new ArrayList<>();
