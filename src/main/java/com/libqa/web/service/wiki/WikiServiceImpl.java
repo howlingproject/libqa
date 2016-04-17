@@ -318,7 +318,8 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-    public List<Wiki> findWikiListByContentsMarkup(String searchText, int page, int size) {
+    public List<DisplayWiki> findWikiListByContentsMarkup(String searchText, int page, int size) {
+        List<DisplayWiki> resultWiki = new ArrayList<>();
         List<Wiki> list = wikiRepository.findAllByContentsMarkupContainingAndIsDeleted(
                 searchText
                 , isDeleted
@@ -328,7 +329,17 @@ public class WikiServiceImpl implements WikiService {
                         , PageUtil.sortId("DESC", "insertDate")
                 )
                 );
-        return list;
+        if( !CollectionUtils.isEmpty( list )){
+            for( Wiki wiki : list ){
+                resultWiki.add( new DisplayWiki(
+                                wiki
+                                , userService.findByUserId( wiki.getUserId() )
+                                , keywordService.findByWikiId(wiki.getWikiId(), false)
+                        )
+                );
+            }
+        }
+        return resultWiki;
     }
 
     @Override

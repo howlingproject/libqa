@@ -68,3 +68,30 @@ div button.dualEditor-wiki-btn {
 .tableHYdiv.form-inline{
     margin-bottom: 10px;
 }
+
+#dropdownColumns {
+    min-width:20px;
+    padding-left: 5px;
+}
+
+#dropdownColumns li{
+    padding: 0; !important;
+    width: 18px !important;
+    height: 16px !important;
+    float: left !important;
+    cursor: pointer;
+    border: 2px solid #fff !important;
+}
+
+#dropdownColumns li:nth-child(1){
+    background: url("../img/2_s.png");
+}
+
+#dropdownColumns li:nth-child(2){
+    background: url("../img/3_s.png");
+}
+
+#dropdownColumns li:nth-child(3){
+    background: url("../img/4_s.png");
+}
+

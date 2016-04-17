@@ -395,5 +395,36 @@ var jisung;
         }
     };
 
+    jQuery.layer_select.columns = {
+
+        dropdownColumns : function ( textEditor, $me, data ) {
+
+            this.hideAllDropdownColumns();
+
+            var columnsItems = $("<div id='dropdownColumns' >").addClass('dropdown-menu');
+            for( var i=0 ; i < 3 ; i += 1) {
+                var swatch = $('<li></li>');
+                (function() {   // 새로운 스코프 선언
+                    var idx = i+2;
+                    swatch.on('click', function (e) {
+                        e.preventDefault();
+                        var html = "";
+                        for( var k=0; k < idx; k++ ){
+                            html += "[layout] 문단 "+(k+1)+" [layout]\n";
+                        }
+                        $.textInsert(textEditor, html, "", "" );
+                    });
+                })();
+
+                columnsItems.append(swatch);
+            }
+            columnsItems.appendTo($me.parent());
+        },
+
+        hideAllDropdownColumns : function () {
+            $('#dropdownColumns').remove();
+        }
+    };
+
 
 })(jQuery);
