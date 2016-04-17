@@ -130,7 +130,7 @@ var DualEditor = (function(){
             });
         });
 
-        $("#wikiEditor").keydown(function(){
+        $("#wikiEditor").keyup(function(){
             DualEditor.markup.parsing();
         });
 
@@ -221,7 +221,10 @@ function getMarkupEditHtml(width, height){
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[alert]\" data-center=\" \" data-after=\"[alert]\"><i class=\"fa fa-exclamation-triangle\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\"  data-before=\"[info]\"  data-center=\" \"  data-after=\"[info]\"><i class=\"fa fa-info\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\"  data-before=\"[syntax]\"  data-center=\" \"  data-after=\"[syntax]\"><i class=\"fa fa-file-code-o\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#layoutModal\" data-mode=\"layer\" data-type=\"layout\" ><i class=\"fa fa-columns\"></i></button>" +
+        //"                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#layoutModal\" data-mode=\"layer\" data-type=\"layout\" ><i class=\"fa fa-columns\"></i></button>" +
+        "               </div>" +
+        "               <div class=\"btn-group\">" +
+        "                   <button type=\"button\" class=\"dualEditorWiki-btn btn btn-default btn-sm dropdown-toggle\" data-toggle=\"dropdown\" data-mode=\"columns\"><i class=\"fa fa-columns\"></i></button>" +
         "               </div>" +
         "           </div>" +
         "           <hr style=\"background-color:#ccc;height: 1px;margin-top: 10px;margin-bottom: 12px;\"> " +
