@@ -2,10 +2,7 @@ package com.libqa.web.view.qa;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.Lists;
-import com.libqa.web.domain.Keyword;
-import com.libqa.web.domain.QaContent;
-import com.libqa.web.domain.QaReply;
-import com.libqa.web.domain.User;
+import com.libqa.web.domain.*;
 import lombok.Getter;
 
 import java.util.Date;
@@ -32,9 +29,27 @@ public class DisplayQa {
     private String contentsMarkup;
     private int viewCount = 0;
     private int recommendCount = 0;
+    private int nonrecommendCount = 0;
     private List<Keyword> keywords = Lists.newArrayList();
     private int replyCnt;
     private String userImage;
+	private List<QaRecommend> qaRecommendList;
+	private List<QaRecommend> qaNonRecommendList;
+
+    public DisplayQa(QaContent qaContent, List<QaRecommend> qaRecommendList, List<QaRecommend> qaNonRecommendList){
+	    this.qaId = qaContent.getQaId();
+	    this.insertDate = qaContent.getInsertDate();
+	    this.updateDate = qaContent.getUpdateDate();
+	    this.userNick = qaContent.getUserNick();
+	    this.title = qaContent.getTitle();
+	    this.contents = qaContent.getContents();
+	    this.contentsMarkup = qaContent.getContentsMarkup();
+	    this.viewCount = qaContent.getViewCount();
+	    this.recommendCount = qaContent.getRecommendCount();
+	    this.nonrecommendCount = qaContent.getNonrecommendCount();
+	    this.qaRecommendList = qaRecommendList;
+	    this.qaNonRecommendList = qaNonRecommendList;
+    }
 
     public DisplayQa(QaContent qaContent, User writer, List<Keyword> keywords, List<QaReply> qaReplies){
         this.qaId = qaContent.getQaId();

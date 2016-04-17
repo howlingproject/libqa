@@ -79,8 +79,12 @@
                 <!--// 본문 제목, 내용 -->
                 <div class="qa form-group">
                     <div class="action-buttons qna-content">
-                        <i class="fa fa-thumbs-o-up" data-qa-recommend-type="UP"><span class="like-count">({{qaContent.recommendCount}})</span></i>
-                        <i class="fa fa-thumbs-o-down" data-qa-recommend-type="DOWN"><span class="claim-count">({{qaContent.nonrecommendCount}})</span></i>
+                        <i class="fa fa-thumbs-o-up" data-qa-recommend-type="UP" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each qaContent.qaRecommendList}}{{userNick}}<br>{{/each}}">
+                            <span class="like-count">({{qaContent.recommendCount}})</span>
+                        </i>
+                        <i class="fa fa-thumbs-o-down" data-qa-recommend-type="DOWN" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each qaContent.qaNonRecommendList}}{{userNick}}<br>{{/each}}">
+                            <span class="claim-count">({{qaContent.nonrecommendCount}})</span>
+                        </i>
                     </div>
                     <div class="text-right">
                         {{#if isLogin}}
@@ -221,6 +225,7 @@
                 this.cancleEvent();
                 this.buttonEvent();
                 this.saveRecommendEvent();
+                this.tooltipEvent();
             },
             saveReplyEvent : function(){
                 $("#saveReplyButton").on("click", this.saveReply);
@@ -290,6 +295,9 @@
                         alert(errorThrown);
                     }
                 });
+            },
+            tooltipEvent : function(){
+                $('[data-toggle="tooltip"]').tooltip();
             },
             deleteContents : function(){
                 $.ajax({
