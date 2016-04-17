@@ -133,6 +133,10 @@ public class SpaceController {
         mav.addObject("totalPage", totalPage);
         mav.addObject("spaceMainList", spacePages.getSpaceMainList());
         mav.addObject("spacePageSize", LibqaConstant.SPACE_PAGE_SIZE);
+        mav.addObject("spaceWikiSize", LibqaConstant.SPACE_WIKI_SIZE);
+        mav.addObject("wikiTotalCount", spaceWikiPages.getTotalElements());
+        mav.addObject("wikiCurrentPage", spaceWikiPages.getCurrentPage());
+        mav.addObject("wikiTotalPage", spaceWikiPages.getTotalPages());
         mav.addObject("spaceWikiList", spaceWikiPages.getSpaceWikiList());
 
         return mav;
@@ -157,6 +161,23 @@ public class SpaceController {
         log.info("### spaceMainList = {}", spaceMainList.getTotalPages());
 
         return ResponseData.createSuccessResult(spaceMainList);
+    }
+
+    /**
+     *
+     * @param sortType
+     * @param startNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = "/space/morewiki", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<SpaceWikiList> findMoreWikis(@RequestParam String sortType,
+                                                     @RequestParam Integer startNum,
+                                                     @RequestParam Integer pageSize) {
+        SpaceWikiList spaceWikiList = spaceService.findWikiPageBySort(Boolean.FALSE, startNum, pageSize, sortType);
+
+        return ResponseData.createSuccessResult(spaceWikiList);
     }
 
     /**

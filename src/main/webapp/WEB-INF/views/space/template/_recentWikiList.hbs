@@ -1,8 +1,6 @@
 <!-- 최근 위키  -->
 {{#if spaceWikiList}}
     {{#each spaceWikiList}}
-    <input type="hidden" id="currentSpaceWikiPage" value="{{currentPage}}">
-    <input type="hidden" id="spaceWikiPageSize" value="{{spacePageSize}}">
     <div class="best-qna-item">
         <div>
             <strong> <a class="form" href="/wiki/{{wiki.wikiId}}">{{wiki.title}}</a></strong>
@@ -30,6 +28,7 @@
     {{/each}}
 
     <div class="pull-right" style="padding-top:10px"><button class="btn btn-sm btn-default btn-sm-fixed" id="wikiMorePage">더보기</button></div>
+    {{wikiTotalCount}} | {{wikiCurrentPage}} | {{wikiTotalPage}}
 {{^}}
     <div class="best-qna-item">
         최근에 작성된 위키가 없습니다.
