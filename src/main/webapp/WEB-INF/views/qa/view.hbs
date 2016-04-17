@@ -307,6 +307,8 @@
                     success : function(data){
                         if(data.resultCode == 1) {
                             ConfirmDialog.successConfirm();
+                        } else {
+                            $.alert(data.data);
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){

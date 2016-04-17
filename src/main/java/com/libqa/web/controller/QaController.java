@@ -9,6 +9,7 @@ import com.libqa.web.service.common.KeywordListService;
 import com.libqa.web.service.common.KeywordService;
 import com.libqa.web.service.qa.*;
 import com.libqa.web.service.user.UserService;
+import com.libqa.web.validator.QaValidator;
 import com.libqa.web.view.qa.DisplayQa;
 import com.libqa.web.view.qa.DisplayQaReply;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.libqa.application.enums.StatusCode.NEED_LOGIN;
-import static com.libqa.application.enums.StatusCode.NOT_MATCH_USER;
+import static com.libqa.application.enums.StatusCode.*;
 import static com.libqa.application.framework.ResponseData.*;
 
 /**
@@ -60,6 +60,9 @@ public class QaController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    QaValidator qaValidator;
 
     @RequestMapping("/qa")
     public String qa() {
@@ -201,17 +204,23 @@ public class QaController {
 
     @RequestMapping(value = "/qa/delete", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaContent> delete(@RequestParam("qaId") Integer qaId) {
-        ResponseData resultData = new ResponseData();
-
-        QaContent qaContent = new QaContent();
+    public ResponseData<String> delete(@RequestParam("qaId") Integer qaId) {
+        User user = loggedUserManager.getUser();
         try {
-            qaService.deleteWithKeyword(qaId);
-            return createSuccessResult(qaContent);
+            if(qaValidator.isNotMatchUser(qaId, user)){
+                return createFailResult(NOT_MATCH_USER.getComment());
+            }
+            if(qaValidator.checkQaContentDelete(qaId)){
+                return createFailResult(EXIST_REPLY.getComment());
+            }
+            qaService.deleteWithKeyword(qaId, user.getUserId());
+            return createSuccessResult(SUCCESS.getComment());
         } catch (Exception e) {
-            return createFailResult(qaContent);
+            return createFailResult(null);
         }
     }
+
+
 
     @RequestMapping(value = "/qa/saveReply", method = RequestMethod.POST)
     @ResponseBody

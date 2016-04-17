@@ -69,10 +69,10 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public boolean deleteWithKeyword(Integer qaId) {
+    public boolean deleteWithKeyword(Integer qaId, Integer userId) {
         boolean result = false;
         try{
-            delete(qaId);
+            delete(qaId, userId);
             // TODO List reply, file, recommend, keyword, keywordList 처리 확인
             result = true;
         } catch (Exception e) {
@@ -241,16 +241,11 @@ public class QaServiceImpl implements QaService {
         return qaRepository.save(qaContent);
     }
 
-    private void delete(Integer qaId) {
+    private void delete(Integer qaId, Integer userId) {
         QaContent targetQaContent = findByQaId(qaId, false);
-//        entityManager.getTransaction().begin();
-        // TODO List 차후 로그인으로 변경
         targetQaContent.setDeleted(true);
-        targetQaContent.setUpdateUserId(1);
+        targetQaContent.setUpdateUserId(userId);
         targetQaContent.setUpdateDate(new Date());
-        qaRepository.flush();
-//        entityManager.getTransaction().commit();
-
     }
 
     @Override

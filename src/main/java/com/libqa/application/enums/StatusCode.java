@@ -11,6 +11,8 @@ public enum StatusCode {
     SUCCESS(1, "SUCCESS"),
     NEED_LOGIN(10, "로그인이 필요합니다"),
     NOT_MATCH_USER(11, "사용자가 일치하지 않습니다."),
+    EXIST_REPLY(21, "해당 게시물에 답변이 존재합니다."),
+    EXIST_RECOMMEND(22, "해당 게시물에 추천 또는 비추천이 존재합니다."),
     DUPLICATE(99, "중복된 데이터"),
     SIZE_LIMIT_EXCEEDED(100, "허용 용량 초과"),
     INVALID_STATUS(102, "잘못된 상태"),

@@ -20,7 +20,7 @@ public interface QaService {
 
     List<QaContent> findByIsReplyedAndDayType(QaDto qaDto);
 
-    boolean deleteWithKeyword(Integer qaId);
+    boolean deleteWithKeyword(Integer qaId, Integer userId);
 
     void saveIsReplyed(Integer qaId, User user, boolean isReplyed);
 
