@@ -393,7 +393,7 @@ public class WikiController {
         ModelAndView mav = new ModelAndView("wiki/list");
         log.debug("# searchWikiList : {}", text);
 
-        List<Wiki> keyworldsWiki = wikiService.findWikiListByContentsMarkup(text, 0, 15);
+        List<DisplayWiki> keyworldsWiki = wikiService.findWikiListByContentsMarkup(text, 0, 15);
         mav.addObject("listWiki", keyworldsWiki);
         mav.addObject("searchText", text);
         mav.addObject("listTitle",text+" 위키 List");
