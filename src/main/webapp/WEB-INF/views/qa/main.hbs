@@ -10,18 +10,15 @@
 <!-- contents -->
 <div class="container-fluid">
     <div class="col-sm-12">
-        <form class="navbar-form navbar-left" role="search">
-            <div class="form-group">
-                <input name="searchName" type="text" class="form-control" placeholder="Search">
-            </div>
-            <a href="#" id="searchBtn" class="form-control btn btn-primary">Q&A 검색</a>
-        </form>
+
+        {{> search/form/qa}}
+
         <div class="btn-group pull-right">
             <a href="#" class="btn btn-primary">총 질문({{qaTotalCount}})</a>
             <a href="#" class="btn btn-primary">답변을 기다리는 Q&A({{qaNotReplyedCount}})</a>
             {{#if isLogin}}
-            <a href="/my/qa" class="btn btn-primary">내 QA 목록</a>
-            <a href="/qa/form" class="btn btn-primary">질문하기</a>
+                <a href="/my/qa" class="btn btn-primary">내 QA 목록</a>
+                <a href="/qa/form" class="btn btn-primary">질문하기</a>
             {{/if}}
         </div>
     </div>

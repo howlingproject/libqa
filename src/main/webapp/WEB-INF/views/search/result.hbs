@@ -1,0 +1,56 @@
+{{# partial "title" }}Search Result{{/partial}}
+
+{{# partial "content" }}
+    <div class="container-fluid">
+
+        <div class="col-sm-12">
+            {{#compareTo page 'qa'}} {{> search/form/qa}} {{/compareTo}}
+            {{#compareTo page 'space'}} {{> search/form/space}} {{/compareTo}}
+            {{#compareTo page 'wiki'}} {{> search/form/wiki}} {{/compareTo}}
+        </div>
+
+        <div class="col-sm-12">
+            <div class="search-result top-buffer">
+                <div class="nav-tabs-header">검색 결과</div>
+
+                {{#unless results}}
+                    <div class="not-found">
+                        <h3>검색 결과가 존재하지 않습니다.</h3>
+                    </div>
+                {{/unless}}
+
+                {{#each results}}
+                    <div class="search-result-item">
+                        <a href="/space/2"><strong>아넬라 수정 활동 내역이 나오나?</strong></a>
+                        <div class="pull-right">
+                            <span class="label label-warning">Java</span>
+                        </div>
+                        <div class="media">
+                            <a class="pull-left" href="#">
+                                <div class="user-profile">
+                                    <img alt="avatar" class="profile-image"
+                                         src="/imageView?path=/resource/temp/1/2015113044661797176002.jpg">
+                                </div>
+                            </a>
+                            <div class="media-body">아넬라 사그라 완전 좋아 아넬라 사그라 완전 좋아 아넬라 사그라 완전 좋아 아넬라 사그라 완전 좋아 아넬라 사그라 완전 좋아
+                                아넬라 사그라 완전 좋아 아넬라 사그라 완전 좋아 아...
+                                <div class="pull-right"><span class="badge">7</span></div>
+                            </div>
+                            <div class="pull-left"><span class="nickname"><i class="fa fa-pencil-square-o"></i> quick</span></div>
+                            <div class="pull-right"><i class="fa fa-clock-o"></i> 2015-11-30 00:00:00</div>
+                        </div>
+                    </div>
+                {{/each}}
+
+
+
+            </div>
+        </div>
+    </div>
+{{/partial}}
+
+{{# partial "script-page" }}
+
+{{/partial}}
+
+{{> template/base}}

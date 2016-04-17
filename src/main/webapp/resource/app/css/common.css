@@ -207,6 +207,17 @@ li.qa-view-keyowrdList{margin-top: 8px; margin-left: 30px}
 .wiki-main .panel-info > .panel-heading .panel-title {color:#000000; }
 
 /**
+*   Search Result
+**/
+div.search-result {padding-left:10px; padding-right:10px;}
+div.search-result .not-found {text-align: center}
+div.search-result-item {border-bottom: 1px solid #eee; padding-top: 15px; padding-bottom: 15px; }
+div.search-result-item .media{}
+div.search-result-item .media .media-body{height: 70px;}
+div.search-result-item .best-qna-item-body{ height:48px;}
+div.search-result-item .media .recommends, div.search-result-item .media .insertDate{ margin-left: 10px; }
+
+/**
 *   indicator
 **/
 .indicator-panel .panel-body-group {height: 110px; overflow-y: auto}
@@ -215,7 +226,6 @@ li.qa-view-keyowrdList{margin-top: 8px; margin-left: 30px}
 /**
 * Labels
 **/
-
 .label {
     display: inline;
     padding: .2em .6em .3em;
