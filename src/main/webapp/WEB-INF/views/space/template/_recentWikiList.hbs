@@ -1,12 +1,14 @@
 <!-- 최근 위키  -->
-{{#if spaceWikiLists}}
-    {{#each spaceWikiLists}}
-
+{{#if spaceWikiList}}
+    {{#each spaceWikiList}}
     <div class="best-qna-item">
         <div>
             <strong> <a class="form" href="/wiki/{{wiki.wikiId}}">{{wiki.title}}</a></strong>
             <span class="comments pull-right"><i class="glyphicon glyphicon-comment"></i> {{replyCount}}</span>
-            <br>{{> common/_keywordBadge}}
+            <br>
+            {{#each keywords}}
+                {{#keywordBadge keywordName}}{{/keywordBadge}}
+            {{/each}}
         </div>
         <div class="media">
             <a class="pull-left" href="#">
@@ -25,7 +27,8 @@
     </div>
     {{/each}}
 
-    <div class="pull-right" style="padding-top:10px"><button class="btn btn-sm btn-default btn-sm-fixed">더보기</button></div>
+    <div class="pull-right" style="padding-top:10px"><button class="btn btn-sm btn-default btn-sm-fixed" id="wikiMorePage">더보기</button></div>
+    {{wikiTotalCount}} | {{wikiCurrentPage}} | {{wikiTotalPage}}
 {{^}}
     <div class="best-qna-item">
         최근에 작성된 위키가 없습니다.

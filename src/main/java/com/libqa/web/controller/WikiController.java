@@ -3,9 +3,9 @@ package com.libqa.web.controller;
 import com.google.common.base.MoreObjects;
 import com.libqa.application.enums.ListType;
 import com.libqa.application.enums.WikiLikesType;
-import com.libqa.application.enums.WikiOrderListType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.LibqaConstant;
 import com.libqa.application.util.LoggedUserManager;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
@@ -64,7 +64,7 @@ public class WikiController {
     public ModelAndView main(Model model){
         ModelAndView mav = new ModelAndView("wiki/main");
 
-        List<DisplayWiki> allWiki = wikiService.findByAllWiki(0, 10, WikiOrderListType.INSERT_DATE);
+        List<DisplayWiki> allWiki = wikiService.findByAllWiki(0, 10, LibqaConstant.SORT_TYPE_DATE);
         mav.addObject("allWiki", allWiki);
 
         User user = loggedUserManager.getUser();
@@ -328,11 +328,7 @@ public class WikiController {
         List<DisplayWiki> displayWikis = null;
         DisplayAjaxWiki displayAjaxWiki = new DisplayAjaxWiki();
         try{
-            WikiOrderListType wikiOrderListType = WikiOrderListType.INSERT_DATE;
-            if( listViewType.equals( WikiOrderListType.TITLE.toString() ) ){
-                wikiOrderListType = WikiOrderListType.TITLE;
-            }
-            displayWikis = wikiService.findByAllWiki(0, 10, wikiOrderListType);
+            displayWikis = wikiService.findByAllWiki(0, 10, listViewType);
             displayAjaxWiki.setAllWiki(displayWikis);
         }catch (Exception e){
             log.error(e.toString());

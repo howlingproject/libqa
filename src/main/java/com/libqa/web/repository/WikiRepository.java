@@ -1,17 +1,19 @@
 package com.libqa.web.repository;
 
 import com.libqa.web.domain.Wiki;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * Created by yong on 15. 2. 8..
  */
-public interface WikiRepository extends JpaRepository<Wiki, Integer>, CrudRepository<Wiki, Integer> {
+@Repository
+public interface WikiRepository extends JpaRepository<Wiki, Integer> {
 
     Wiki findByWikiIdAndIsDeleted(Integer wikiId, boolean isDeleted);
 
@@ -31,14 +33,6 @@ public interface WikiRepository extends JpaRepository<Wiki, Integer>, CrudReposi
 
     List<Wiki> findAllByContentsMarkupContainingAndIsDeleted(String contentsMarkup, boolean isDeleted, Pageable pageable);
 
-    List<Wiki> findAllByParentsIdAndIsDeleted(Integer parentId, boolean isDeleted);
-
-    Wiki findOneByWikiIdAndIsDeleted(Integer wikiId, boolean isDeleted);
-
-    Long countByIsDeleted(boolean isDeleted);
-
-    List<Wiki> findSpaceWikiUpdateByIsDeleted(boolean isDeleted, Pageable pageable);
-
     List<Wiki> findAllByIsDeletedFalse(Pageable pageable);
 
     List<Wiki> findByParentsIdAndDepthIdxAndIsDeleted(Integer parentsId, Integer depthIdx, boolean isDeleted, Pageable pageable);
@@ -46,4 +40,8 @@ public interface WikiRepository extends JpaRepository<Wiki, Integer>, CrudReposi
     List<Wiki> findByGroupIdxAndOrderIdxGreaterThanEqualAndIsDeleted(Integer groupIdx, Integer orderIdx, boolean isDeleted);
 
     List<Wiki> findAllBySpaceIdAndIsDeletedFalse(Pageable pageable, Integer spaceId);
+
+    Page<Wiki> findPagingByIsDeleted(Pageable pageable, boolean isDeleted);
+
+
 }
