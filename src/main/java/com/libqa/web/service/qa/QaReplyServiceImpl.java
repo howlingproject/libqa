@@ -73,16 +73,16 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     @Override
-    public QaReply saveVoteUp(QaReply paramQaReply, Integer userId) {
-        return saveVote(paramQaReply, userId, "UP");
+    public QaReply saveVoteUp(QaReply paramQaReply, Integer userId, String userNick) {
+        return saveVote(paramQaReply, userId, userNick, "UP");
     }
 
     @Override
-    public QaReply saveVoteDown(QaReply paramQaReply, Integer userId) {
-        return saveVote(paramQaReply, userId, "DOWN");
+    public QaReply saveVoteDown(QaReply paramQaReply, Integer userId, String userNick) {
+        return saveVote(paramQaReply, userId, userNick, "DOWN");
     }
 
-    public QaReply saveVote(QaReply paramQaReply, Integer userId, String voteType){
+    public QaReply saveVote(QaReply paramQaReply, Integer userId, String userNick, String voteType){
         boolean isDeleted = false;
         boolean isCancel = false;
         boolean isVote;
@@ -109,7 +109,7 @@ public class QaReplyServiceImpl implements QaReplyService {
             isVote = false;
             voteDownCount += 1;
         }
-        voteService.saveByQaReply(qaReply, userId, isVote);
+        voteService.saveByQaReply(qaReply, userId, userNick, isVote);
 
         qaReply.setVoteUpCount(voteUpCount);
         qaReply.setVoteDownCount(voteDownCount);
