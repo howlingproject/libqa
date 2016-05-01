@@ -9,7 +9,7 @@ import java.util.List;
  * Created by yong on 15. 2. 8..
  */
 public interface QaRecommendRepository extends JpaRepository<QaRecommend, Integer> {
-    List<QaRecommend> findByUserIdAndIsCommendTrue(Integer userId);
+    List<QaRecommend> findByUserIdAndIsCommendTrueAndIsCanceledFalse(Integer userId);
 
     QaRecommend findByQaIdAndUserIdAndIsCanceledFalse(Integer qaId, Integer userId);
 

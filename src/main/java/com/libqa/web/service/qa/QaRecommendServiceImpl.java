@@ -28,7 +28,7 @@ public class QaRecommendServiceImpl implements QaRecommendService {
 
     @Override
     public List<QaRecommend> findByUserIdAndIsCommendTrue(Integer userId) {
-        return qaRecommendRepository.findByUserIdAndIsCommendTrue(userId);
+        return qaRecommendRepository.findByUserIdAndIsCommendTrueAndIsCanceledFalse(userId);
     }
 
     @Override

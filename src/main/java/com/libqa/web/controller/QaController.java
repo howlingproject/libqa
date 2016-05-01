@@ -117,10 +117,9 @@ public class QaController {
     @ResponseBody
     public ResponseData<DisplayQa> myRecommendQaList(@ModelAttribute QaDto qaDto){
         boolean isDeleted = false;
-        List<QaRecommend> qaRecommendList = new ArrayList<>();
-        List<DisplayQa> displayQaList = new ArrayList<>();
+        List<DisplayQa> displayQaList = Lists.newArrayList();
         try {
-            qaRecommendList = qaRecommendService.findByUserIdAndIsCommendTrue(loggedUserManager.getUser().getUserId());
+            List<QaRecommend> qaRecommendList = qaRecommendService.findByUserIdAndIsCommendTrue(loggedUserManager.getUser().getUserId());
             for(QaRecommend qaRecommend : qaRecommendList) {
                 User recommender = userService.findByUserId(qaRecommend.getUserId());
                 QaContent qaContent = qaService.findByQaId(qaRecommend.getQaId(), isDeleted);
