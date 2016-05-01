@@ -94,11 +94,9 @@ public class WikiServiceImpl implements WikiService {
     }
 
     private void saveWikiActivity(Wiki saveWiki, ActivityType ActivityType) {
-
         Activity activity = new Activity();
         activity.setInsertDate(new Date());
         activity.setDeleted(false);
-
         activity.setActivityType(ActivityType);
         activity.setActivityDesc(ActivityType.getCode());
         activity.setActivityKeyword(KeywordType.WIKI);
