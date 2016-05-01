@@ -10,6 +10,7 @@ import com.libqa.web.repository.SpaceRepository;
 import com.libqa.web.service.common.ActivityService;
 import com.libqa.web.service.common.KeywordService;
 import com.libqa.web.service.user.UserFavoriteService;
+import com.libqa.web.service.user.UserService;
 import com.libqa.web.service.wiki.WikiService;
 import com.libqa.web.view.space.SpaceMain;
 import com.libqa.web.view.space.SpaceMainList;
@@ -45,6 +46,9 @@ public class SpaceServiceImpl implements SpaceService {
 
     @Autowired
     private WikiService wikiService;
+
+    @Autowired
+    private UserService userService;
 
 
     @Override
@@ -231,9 +235,10 @@ public class SpaceServiceImpl implements SpaceService {
         List<SpaceMain> spaceMainList = new ArrayList<>();
         for (Space space : spaces) {
             Integer spaceId = space.getSpaceId();
+            User spaceUser = userService.findByUserId(spaceId);
             List<Wiki> wikis = wikiService.findBySpaceId(spaceId);
             List<Keyword> keywords = keywordService.findBySpaceId(spaceId, false);
-            SpaceMain spaceMain = new SpaceMain(space, wikis.size(), keywords);
+            SpaceMain spaceMain = new SpaceMain(space, wikis.size(), keywords, spaceUser);
             spaceMainList.add(spaceMain);
         }
 
