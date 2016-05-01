@@ -95,11 +95,9 @@ public class WikiServiceImpl implements WikiService {
     }
 
     private void saveWikiActivity(Wiki saveWiki, ActivityType ActivityType) {
-
         Activity activity = new Activity();
         activity.setInsertDate(new Date());
         activity.setDeleted(false);
-
         activity.setActivityType(ActivityType);
         activity.setActivityDesc(ActivityType.getCode());
         activity.setActivityKeyword(KeywordType.WIKI);
@@ -302,17 +300,28 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-    public List<Wiki> findWikiListByContentsMarkup(String searchText, int page, int size) {
+    public List<DisplayWiki> findWikiListByContentsMarkup(String searchText, int page, int size) {
+        List<DisplayWiki> resultWiki = new ArrayList<>();
         List<Wiki> list = wikiRepository.findAllByContentsMarkupContainingAndIsDeleted(
                 searchText
                 , isDeleted
                 , PageUtil.sortPageable(
                         page
                         , size
-                        , PageUtil.sortId("DESC", LibqaConstant.SORT_TYPE_DATE)
+                        , PageUtil.sortId("DESC", "insertDate")
                 )
         );
-        return list;
+        if( !CollectionUtils.isEmpty( list )){
+            for( Wiki wiki : list ){
+                resultWiki.add( new DisplayWiki(
+                                wiki
+                                , userService.findByUserId( wiki.getUserId() )
+                                , keywordService.findByWikiId(wiki.getWikiId(), false)
+                        )
+                );
+            }
+        }
+        return resultWiki;
     }
 
     @Override
