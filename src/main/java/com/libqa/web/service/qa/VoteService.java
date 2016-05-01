@@ -13,7 +13,7 @@ import java.util.List;
 public interface VoteService {
     Vote findByReplyIdAndUserIdAndIsCancel(Integer replyId, Integer userId, boolean isCancel);
 
-    void saveByQaReply(QaReply qaReply, Integer userId, boolean isVote);
+    void saveByQaReply(QaReply qaReply, Integer userId, String userNick, boolean isVote);
 
     void deleteByQaReply(QaReply qaReply, Integer userId);
 

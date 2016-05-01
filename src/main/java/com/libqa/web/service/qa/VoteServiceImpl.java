@@ -28,11 +28,11 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public void saveByQaReply(QaReply qaReply, Integer userId, boolean isVote) {
+    public void saveByQaReply(QaReply qaReply, Integer userId, String userNick, boolean isVote) {
         Vote vote = new Vote();
         vote.setReplyId(qaReply.getReplyId());
         vote.setInsertDate(new Date());
-        vote.setUserNick("용퓌");
+        vote.setUserNick(userNick);
         vote.setIsVote(isVote);
         vote.setUserId(userId);
 
