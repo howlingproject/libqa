@@ -587,16 +587,19 @@ public class SpaceController {
         List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
 
         List<SpaceMain> spaceMains;
-
+        int totalCount = 0;
         if (CollectionUtils.isEmpty(spaceList)) {
-
-            mav.addObject("spaceMainList", null);
+            spaceMains = null;
+            totalCount = 0;
+            mav.addObject("spaceMainList", spaceMains);
         } else {
             spaceMains = spaceService.convertSpaceMain(spaceList);
+            totalCount = spaceMains.size();
             mav.addObject("spaceMainList", spaceMains);
         }
 
 
+        mav.addObject("totalCount", totalCount);
         // TODO 접근 권한 없는 스페이스 목록은 보이지 않아야 한다.
         User user = loggedUserManager.getUser();
 

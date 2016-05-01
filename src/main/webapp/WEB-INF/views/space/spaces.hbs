@@ -52,6 +52,8 @@
         var Space = {
             init : function(){
                 this.renderKeywordList();
+                this.spaceCount();
+                this.keywordCount();
             },
             renderKeywordList : function(keywordName){
                 $.ajax({
@@ -78,6 +80,21 @@
                     keywordName = '';
                 }
                 return keywordName;
+            },
+            spaceCount : function() {
+                $("#spaceCount").text("개설된 공간수({{totalCount}})");
+            },
+            keywordCount : function() {
+                $.ajax({
+                    url: "/keyword/count",
+                    type: "GET",
+                    success : function(data){
+                        $("#keywordCount").text("등록된 키워드수(" + data + ")");
+                    },
+                    error : function(req){
+                        alert('키워드 수 조회 에러. 에러코드 [' + req.status + ']');
+                    }
+                })
             },
             bindKeywordListEvent : function(){
                 $('#categorizeKeywordListArea').find('li').click(function(){

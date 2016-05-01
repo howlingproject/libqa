@@ -63,7 +63,7 @@
 
             <br>
             {{#if morePage }}
-            <p class="lead text-right" id="morePageAlign"><button class="btn btn-default" id="getMorePages">더보기  {{totalCount}} | {{currentPage}} | {{totalPage}}</button></p>
+            <p class="lead text-right" id="morePageAlign"><button class="btn btn-default" id="getMorePages">더보기</button></p>
             {{/if}}
         </div>
 
@@ -115,7 +115,6 @@
             init : function(){
                 this.renderKeywordList();
                 this.spaceCount();
-                this.wikiCount();
                 this.keywordCount();
                 this.renderDayType($('#renderTypeUI'));
                 this.bindDayTypeEvent();
@@ -154,18 +153,6 @@
             },
             spaceCount : function() {
                 $("#spaceCount").text("개설된 공간수({{totalCount}})");
-            },
-            wikiCount : function() {
-                $.ajax({
-                    url: "/wiki/count",
-                    type: "GET",
-                    success : function(data){
-                        $("#wikiCount").text("생성된 위키수(" + data +")");
-                    },
-                    error : function(req){
-                        alert('생성된 위키 수 조회 에러. 에러코드 [' + req.status + ']');
-                    }
-                })
             },
             keywordCount : function() {
                 $.ajax({

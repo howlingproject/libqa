@@ -12,7 +12,7 @@
     <div class="media">
         <a class="pull-left" href="#">
             <div class="user-profile">
-                <img alt="avatar" class="profile-image" src="/imageView?path={{titleImagePath}}/{{titleImage}}" />
+                <img alt="avatar" class="profile-image" src="/imageView?path={{titleImagePath}}/{{titleImage}}" onerror='this.src="/resource/images/howling_space.png"'/>
             </div>
         </a>
         <div class="media-body">{{subString (htmlDelete description) 0 100 }}
