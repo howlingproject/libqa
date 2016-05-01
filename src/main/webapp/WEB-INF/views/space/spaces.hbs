@@ -1,0 +1,74 @@
+{{#partial "title"}}LibQA~{{/partial}}
+
+{{# partial "content" }}
+    <div class="container-fluid">
+        <div class="col-sm-12 top-buffer" style="padding-bottom: 20px">
+            <!-- keyword -->
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+
+                <div class="nav-tabs-header">분류키워드</div>
+                <div id="categorizeKeywordListArea"></div>
+            </div>
+            <!--// lnb -->
+
+            <div class="col-md-10">
+
+                <!-- 내가 작성한 Q&A -->
+                <div class="nav-tabs-header">전체 공간</div>
+                {{> space/template/_spaceList}}
+
+                <!--// 내가 작성한 Q&A -->
+                <div class="top-buffer">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+    <!--// contents -->
+{{/partial}}
+
+{{#partial "script-page"}}
+    {{embedded "common/_keywordList"}}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            Space.init();
+        });
+
+        var Space = {
+            init : function(){
+                this.renderKeywordList();
+            },
+            renderKeywordList : function(keywordName){
+                $.ajax({
+                    url: "/common/findKeywordList",
+                    type: "POST",
+                    data: { keywordType : 'SPACE', keywordName : Space.selectedKeyword(keywordName) },
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            var source = $('#common-_keywordList-hbs').html();
+                            var template = Handlebars.compile(source);
+
+                            var html = template(data);
+                            $('#categorizeKeywordListArea').html(html);
+                            Space.bindKeywordListEvent();
+                        }
+                    },
+                    error : function(req){
+                        alert('키워드 목록 조회에서 에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                    }
+                });
+            },
+            selectedKeyword : function(keywordName){
+                if(!keywordName){
+                    keywordName = '';
+                }
+                return keywordName;
+            },
+            bindKeywordListEvent : function(){
+                $('#categorizeKeywordListArea').find('li').click(function(){
+                    Space.renderKeywordList(this.getAttribute('value'));
+                });
+            }
+        };
+    </script>
+{{/partial}}
+
+{{> template/base}}
