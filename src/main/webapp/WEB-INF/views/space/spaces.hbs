@@ -2,6 +2,23 @@
 
 {{# partial "content" }}
     <div class="container-fluid">
+
+        <div class="col-sm-12">
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <a href="#" class="form-control btn btn-primary">공간검색</a>
+            </form>
+
+            <div class="btn-group pull-right">
+                <a href="/space/spaces" class="btn btn-primary" id="spaceCount"></a>
+                <a href="/space/keywords" class="btn btn-primary" id="keywordCount"></a>
+                <a href="/space/form" class="btn btn-primary">공간 생성하기</a>
+            </div>
+        </div>
+
+
         <div class="col-sm-12 top-buffer" style="padding-bottom: 20px">
             <!-- keyword -->
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
