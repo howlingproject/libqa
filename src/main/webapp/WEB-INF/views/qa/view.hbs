@@ -79,10 +79,10 @@
                 <!--// 본문 제목, 내용 -->
                 <div class="qa form-group">
                     <div class="action-buttons qna-content">
-                        <i class="fa fa-thumbs-o-up" data-qa-recommend-type="UP" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each qaContent.qaRecommendList}}{{userNick}}<br>{{/each}}">
+                        <i class="fa fa-thumbs-o-up {{#if qaContent.selfRecommend}}fa-2x{{/if}}" data-qa-recommend-type="UP" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each qaContent.qaRecommendList}}{{userNick}}<br>{{/each}}">
                             <span class="like-count">({{qaContent.recommendCount}})</span>
                         </i>
-                        <i class="fa fa-thumbs-o-down" data-qa-recommend-type="DOWN" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each qaContent.qaNonRecommendList}}{{userNick}}<br>{{/each}}">
+                        <i class="fa fa-thumbs-o-down {{#if qaContent.selfNonrecommend}}fa-2x{{/if}}" data-qa-recommend-type="DOWN" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each qaContent.qaNonRecommendList}}{{userNick}}<br>{{/each}}">
                             <span class="claim-count">({{qaContent.nonrecommendCount}})</span>
                         </i>
                     </div>
@@ -297,7 +297,8 @@
                 });
             },
             tooltipEvent : function(){
-                $('[data-toggle="tooltip"]').tooltip();
+                var tooltipObj = $('.qna-content [data-toggle="tooltip"]');
+                tooltipObj.tooltip();
             },
             deleteContents : function(){
                 $.ajax({
@@ -427,7 +428,9 @@
                     url : url,
                     success : function(data){
                         if(data.resultCode == 1) {
+                            Qa.refrashRecommendTooltip(data.data.qaRecommendList, data.data.qaNonRecommendList);
                             Qa.refrashRecommendCount(data.data.recommendCount, data.data.nonrecommendCount);
+                            Qa.refrashSelfRecommend(data.data.selfRecommend, data.data.selfNonrecommend);
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
@@ -485,6 +488,30 @@
             refrashRecommendCount : function(recommendCount, nonrecommendCount){
                 $('.qna-content').find('.like-count').text('('+recommendCount+')');
                 $('.qna-content').find('.claim-count').text('('+nonrecommendCount+')');
+            },
+            refrashRecommendTooltip : function(recommendList, nonRecommendList){
+                var upUserNick = '';
+                var downUserNick = '';
+                $(recommendList).each(function(){
+                    upUserNick += this.userNick + '<br>';
+                });
+                $(nonRecommendList).each(function(){
+                    downUserNick += this.userNick + '<br>';
+                });
+
+                var recommendObj = $('.qna-content .fa-thumbs-o-up');
+                var nonRecommendObj = $('.qna-content .fa-thumbs-o-down');
+                recommendObj.attr('data-original-title', upUserNick);
+                nonRecommendObj.attr('data-original-title', downUserNick);
+            },
+            refrashSelfRecommend : function (selfRecommend, selfNonrecommend) {
+                $('.qna-content > i').removeClass('fa-2x');
+                if(selfRecommend){
+                    $('.qna-content .fa-thumbs-o-up').addClass('fa-2x');
+                }
+                if(selfNonrecommend){
+                    $('.qna-content .fa-thumbs-o-down').addClass('fa-2x');
+                }
             },
             modifyReply : function (obj) {
                 var qaReplyId = Qa.getQaReplyId(obj);

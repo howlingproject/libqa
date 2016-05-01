@@ -117,10 +117,9 @@ public class QaController {
     @ResponseBody
     public ResponseData<DisplayQa> myRecommendQaList(@ModelAttribute QaDto qaDto){
         boolean isDeleted = false;
-        List<QaRecommend> qaRecommendList = new ArrayList<>();
-        List<DisplayQa> displayQaList = new ArrayList<>();
+        List<DisplayQa> displayQaList = Lists.newArrayList();
         try {
-            qaRecommendList = qaRecommendService.findByUserIdAndIsCommendTrue(loggedUserManager.getUser().getUserId());
+            List<QaRecommend> qaRecommendList = qaRecommendService.findByUserIdAndIsCommendTrue(loggedUserManager.getUser().getUserId());
             for(QaRecommend qaRecommend : qaRecommendList) {
                 User recommender = userService.findByUserId(qaRecommend.getUserId());
                 QaContent qaContent = qaService.findByQaId(qaRecommend.getQaId(), isDeleted);
@@ -135,16 +134,15 @@ public class QaController {
     @RequestMapping("/qa/{qaId}")
     public ModelAndView view(@PathVariable Integer qaId) {
         boolean isDeleted = false;
-
+        User user = loggedUserManager.getUser();
         QaContent qaContent = qaService.view(qaId);
         List<QaRecommend> qaRecommendList = qaRecommendService.findByQaIdAndIsCommend(qaId, true);
         List<QaRecommend> qaNonRecommendList = qaRecommendService.findByQaIdAndIsCommend(qaId, false);
-	    DisplayQa displayQa = new DisplayQa(qaContent, qaRecommendList, qaNonRecommendList);
+	    DisplayQa displayQa = new DisplayQa(qaContent, qaRecommendList, qaNonRecommendList, user.getUserId());
         User writer = userService.findByUserId(qaContent.getUserId());
         List<Keyword> keywordList = keywordService.findByQaId(qaId);
 
         ModelAndView mav = new ModelAndView("qa/view");
-//        mav.addObject("qaContent", qaContent);
         mav.addObject("qaContent", displayQa);
         mav.addObject("writer", writer);
         mav.addObject("keywordList", keywordList);
@@ -273,14 +271,17 @@ public class QaController {
 
     @RequestMapping(value = "/qa/saveRecommend", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaContent> saveRecommend(@ModelAttribute QaRecommend paramQaRecommend){
+    public ResponseData<DisplayQa> saveRecommend(@ModelAttribute QaRecommend paramQaRecommend){
         User user = loggedUserManager.getUser();
         try {
             if (user.isGuest()) {
                 return createResult(NEED_LOGIN);
             }
 	        QaContent qaContent = qaRecommendService.saveRecommend(paramQaRecommend, user.getUserId(), user.getUserNick());
-            return createSuccessResult(qaContent);
+            List<QaRecommend> qaRecommendList = qaRecommendService.findByQaIdAndIsCommend(qaContent.getQaId(), true);
+            List<QaRecommend> qaNonRecommendList = qaRecommendService.findByQaIdAndIsCommend(qaContent.getQaId(), false);
+            DisplayQa displayQa = new DisplayQa(qaContent, qaRecommendList, qaNonRecommendList, user.getUserId());
+            return createSuccessResult(displayQa);
         } catch (Exception e){
             return createFailResult(null);
         }
@@ -294,7 +295,7 @@ public class QaController {
             if (user.isGuest()) {
                 return createResult(NEED_LOGIN);
             }
-            QaReply qareply = qaReplyService.saveVoteUp(paramQaReply, user.getUserId());
+            QaReply qareply = qaReplyService.saveVoteUp(paramQaReply, user.getUserId(), user.getUserNick());
             return createSuccessResult(qareply);
         } catch (Exception e){
             return createFailResult(null);
@@ -309,7 +310,7 @@ public class QaController {
             if (user.isGuest()) {
                 return createResult(NEED_LOGIN);
             }
-            QaReply qareply = qaReplyService.saveVoteDown(paramQaReply, user.getUserId());
+            QaReply qareply = qaReplyService.saveVoteDown(paramQaReply, user.getUserId(), user.getUserNick());
             return createSuccessResult(qareply);
         } catch (Exception e){
             return createFailResult(null);

@@ -1,3 +1,9 @@
+{{#unless data}}
+    <div class="best-qna-item">
+        작성된 Q&A가 없습니다.
+    </div>
+{{/unless}}
+
 {{#each data}}
     <div class="best-qna-item">
         <div>
@@ -11,13 +17,13 @@
         <div class="media">
             <a class="pull-left" href="#">
                 <div class="user-profile">
-                    <img alt="avatar" class="profile-image" src="/imageView?path={{userImage}}" />
+                    <img alt="avatar" class="profile-image" src="/imageView?path={{userImage}}"  onerror='this.src="/resource/images/avatar.png"'/>
                 </div>
             </a>
             <div class="row">
                 <div class="col-lg-9">
                     <div class="media-body">
-                        {{{contents}}}
+                        {{subString (htmlDelete contents) 0 150 }}
                         <span class="badge">{{replyCnt}}</span>
                     </div>
                 </div>

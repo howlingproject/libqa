@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.libqa.application.enums.SocialChannelType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -84,12 +85,15 @@ public class QaContent {
     private Integer updateUserId;
 
     @OneToMany(mappedBy = "qaId", fetch = FetchType.LAZY)
+    @Where(clause = "is_deleted =0")
     private List<QaReply> qaReplys;
 
     @OneToMany(mappedBy = "qaId", fetch = FetchType.LAZY)
+    @Where(clause = "is_canceled =0")
     private List<QaRecommend> qaRecommends;
 
     @OneToMany(mappedBy = "qaId", fetch = FetchType.LAZY)
+    @Where(clause = "is_deleted =0")
     private List<QaFile> qaFiles;
 
 }
