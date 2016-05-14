@@ -1,41 +1,41 @@
 var jisung;
-(function() 
+(function()
 {
-	
-	var COLOR_BOX = {
-			colors : [
-						'#ffffff', '#000000', '#eeece1', '#1f497d', '#4f81bd', '#c0504d', '#9bbb59', '#8064a2', '#4bacc6', '#f79646', '#ffff00',
-						'#f2f2f2', '#7f7f7f', '#ddd9c3', '#c6d9f0', '#dbe5f1', '#f2dcdb', '#ebf1dd', '#e5e0ec', '#dbeef3', '#fdeada', '#fff2ca',
-						'#d8d8d8', '#595959', '#c4bd97', '#8db3e2', '#b8cce4', '#e5b9b7', '#d7e3bc', '#ccc1d9', '#b7dde8', '#fbd5b5', '#ffe694',
-						'#bfbfbf', '#3f3f3f', '#938953', '#548dd4', '#95b3d7', '#d99694', '#c3d69b', '#b2a2c7', '#b7dde8', '#fac08f', '#f2c314',
-						'#a5a5a5', '#262626', '#494429', '#17365d', '#366092', '#953734', '#76923c', '#5f497a', '#92cddc', '#e36c09', '#c09100',
-						'#7f7f7f', '#0c0c0c', '#1d1b10', '#0f243e', '#244061', '#632423', '#4f6128', '#3f3151', '#31859b', '#974806', '#7f6000'
-					 ]
-			
-	};	
-	
-	jQuery.layer_select = function(){};
-	/**
-	 * 사용자 프로필 레이어 팝업을 출력한다. 
-	 */
-	jQuery.layer_select.color = {
 
-		dropdownColor : function ( textEditor, $me, data ) {
+    var COLOR_BOX = {
+        colors : [
+            '#ffffff', '#000000', '#eeece1', '#1f497d', '#4f81bd', '#c0504d', '#9bbb59', '#8064a2', '#4bacc6', '#f79646', '#ffff00',
+            '#f2f2f2', '#7f7f7f', '#ddd9c3', '#c6d9f0', '#dbe5f1', '#f2dcdb', '#ebf1dd', '#e5e0ec', '#dbeef3', '#fdeada', '#fff2ca',
+            '#d8d8d8', '#595959', '#c4bd97', '#8db3e2', '#b8cce4', '#e5b9b7', '#d7e3bc', '#ccc1d9', '#b7dde8', '#fbd5b5', '#ffe694',
+            '#bfbfbf', '#3f3f3f', '#938953', '#548dd4', '#95b3d7', '#d99694', '#c3d69b', '#b2a2c7', '#b7dde8', '#fac08f', '#f2c314',
+            '#a5a5a5', '#262626', '#494429', '#17365d', '#366092', '#953734', '#76923c', '#5f497a', '#92cddc', '#e36c09', '#c09100',
+            '#7f7f7f', '#0c0c0c', '#1d1b10', '#0f243e', '#244061', '#632423', '#4f6128', '#3f3151', '#31859b', '#974806', '#7f6000'
+        ]
 
-			this.hideAllDropdownColor();
+    };
 
-			var colorItems = $("<div id='dropdownColor' >").addClass('dropdown-menu').css({'width':'210px'});
+    jQuery.layer_select = function(){};
+    /**
+     * 사용자 프로필 레이어 팝업을 출력한다.
+     */
+    jQuery.layer_select.color = {
 
-			var colorLength = COLOR_BOX.colors.length;
+        dropdownColor : function ( textEditor, $me, data ) {
 
-			for( var i=0 ; i < colorLength ; i += 1) {
-				var color = COLOR_BOX.colors[i];
-				var swatch = $('<a rel="' + color + '" href="javascript:void(null);" class="dualEditor_color_link" ></a>').css({ 'backgroundColor': color });
+            this.hideAllDropdownColor();
 
-				swatch.on('click', function (e) {
-					e.preventDefault();
-					var $me = $(this);
-					var tagColor = $me.attr('rel').replace('#','');
+            var colorItems = $("<div id='dropdownColor' >").addClass('dropdown-menu').css({'width':'210px'});
+
+            var colorLength = COLOR_BOX.colors.length;
+
+            for( var i=0 ; i < colorLength ; i += 1) {
+                var color = COLOR_BOX.colors[i];
+                var swatch = $('<a rel="' + color + '" href="javascript:void(null);" class="dualEditor_color_link" ></a>').css({ 'backgroundColor': color });
+
+                swatch.on('click', function (e) {
+                    e.preventDefault();
+                    var $me = $(this);
+                    var tagColor = $me.attr('rel').replace('#','');
                     var param = ({
                         'before' : '[' + data.before + '|' + tagColor + ']',
                         'center' : data.center,
@@ -166,17 +166,17 @@ var jisung;
             }
             return html;
         },
-        
+
         hideTable : function () {
-			$('#tableModal').remove();
-		}
+            $('#tableModal').remove();
+        }
     };
 
     jQuery.layer_select.link = {
 
         open : function ( textEditor, $me, data ) {
 
-        	this.hideLink();
+            this.hideLink();
 
             var link =
                     "<div class=\"modal fade\" id=\"urlModal\" data-keyboard='false' role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">" +
@@ -214,29 +214,29 @@ var jisung;
                 $('#urlModal').modal('hide');
             });
 
-        	//여기서부터 링크
-        	link.find('#ok').on("click",function(){
-        		var text = $(this).parent().parent().find('input')[0].value ;
-        		var url  = $(this).parent().parent().find('input')[1].value ;
-        		var html = "["+url+"]("+text+")";		
-        		
-        		$.textInsert(textEditor, html, "", "" );
-        		link.modal('hide');
-        	});
-        	
-        	link.appendTo($me.parent());
+            //여기서부터 링크
+            link.find('#ok').on("click",function(){
+                var text = $(this).parent().parent().find('input')[0].value ;
+                var url  = $(this).parent().parent().find('input')[1].value ;
+                var html = "["+text+"]("+url+")";
+
+                $.textInsert(textEditor, html, "", "" );
+                link.modal('hide');
+            });
+
+            link.appendTo($me.parent());
         },
-        
+
         hideLink : function () {
-			$('#urlModal').remove();
-		}
+            $('#urlModal').remove();
+        }
     };
-    
+
     jQuery.layer_select.img = {
 
         open : function ( textEditor, $me, data ) {
 
-        	this.hideImg();
+            this.hideImg();
 
             var img =
                 "<div class=\"modal fade\" id=\"imgModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">" +
@@ -322,38 +322,46 @@ var jisung;
                 });
             });
 
-        	//여기서부터 링크
-        	img.find('#ok').on("click",function(){
-        		var text = $(this).parent().parent().find('input')[0].value ;
-        		var url  = $(this).parent().parent().find('input')[1].value ;
-        		var html = "!["+text+"]("+url+")";
-        		
-        		$.textInsert(textEditor, html, "", "" );
-        		img.modal('hide');
-        	});
-        	
-        	img.appendTo($me.parent());
+            //여기서부터 링크
+            img.find('#ok').on("click",function(){
+                var text = $(this).parent().parent().find('input')[0].value ;
+                var url  = $(this).parent().parent().find('input')[1].value ;
+                var html = "!["+text+"]("+url+")";
+
+                $.textInsert(textEditor, html, "", "" );
+                img.modal('hide');
+            });
+
+            img.appendTo($me.parent());
         },
-        
+
         hideImg : function () {
-			$('#imgModal').remove();
-		}
+            $('#imgModal').remove();
+        }
     };
 
-    jQuery.layer_select.layout = {
+    jQuery.layer_select.syntax = {
 
         open : function ( textEditor, $me, data ) {
-
-            this.hideLayout();
+            this.hideSyntax();
             var div =
-                "<div class=\"modal fade\" id=\"layoutModal\" data-keyboard='false' role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">" +
+                "<div class=\"modal fade\" id=\"syntaxModal\" data-keyboard='false' role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">" +
                 "   <div class=\"modal-dialog\">" +
                 "     <div class=\"modal-content\">" +
                 "     	<div class=\"modal-body\">" +
-                " 			<form class=\"form\" role=\"form\">" +
+                " 			<form class=\"form-horizontal\" role=\"form\">" +
                 " 				<div class=\"form-group\">" +
-                " 					<label for=\"exampleInputLinkText\">생성할 문단수(최대 4개)</label>" +
-                " 					<input type='number' class='form-control' id=\"layoutNum\">" +
+                " 					<label for=\"syntaxType\" class=\"col-sm-2 control-label\">하이라이트 Type</label>" +
+                " 					<div class=\"col-sm-10\">" +
+                " 					    <select class=\"form-control\" id=\"syntaxType\">" +
+                " 					    </select>" +
+                "                   </div>" +
+                " 				</div>" +
+                " 				<div class=\"form-group\">" +
+                " 					<label for=\"syntaxType\" class=\"col-sm-2 control-label\">하이라이트 Content</label>" +
+                " 					<div class=\"col-sm-10\">" +
+                " 					    <textarea class=\"form-control\" id=\"syntaxContent\" rows=\"5\"></textarea>" +
+                "                   </div>" +
                 " 				</div>" +
                 " 			</form>" +
                 "       </div>" +
@@ -364,34 +372,41 @@ var jisung;
                 "     </div>" +
                 "   </div>" +
                 " </div> "
-            var layout = $(div);
+            var syntax = $(div);
 
+            var type1 = ["applescript","actionscript3 as3","bash shell","coldfusion cf","cpp c","c# c-sharp csharp","css","delphi pascal","diff patch pas","erl erlang","groovy","java","jfx javafx","js jscript javascript","perl pl","php","text plain","py python","ruby rails ror rb","sass scss","scala","sql","vb vbnet","xml xhtml xslt html"];
+            var type2 = ["applescript","as3","shell","cf","c","c#","css","delphi","diff","erl","groovy","java","javafx","js","pl","php","text","py","ruby","sass","scala","sql","vb","html"];
+            syntax.find("#syntaxType").append(function(){
+                var html = "";
+                for( var i=0; i< type1.length; i++ ){
+                    html += "<option value="+type2[i]+">";
+                    html += type1[i];
+                    html += "</option>";
+                }
+                return html;
+            });
 
-
-            layout.find(".dualEditor-wiki-btn").on("click", function () {
-                $('#layoutModal').modal('hide');
+            syntax.find(".dualEditor-wiki-btn").on("click", function () {
+                $('#syntaxModal').modal('hide');
             });
 
             //여기서부터 링크
-            layout.find('#ok').on("click",function(){
-                var layoutNum = $(this).parent().parent().find('input')[0].value ;
-                if( layoutNum > 4){
-                    return alert("4보다 큽니다.");
-                }
+            syntax.find('#ok').on("click",function(){
                 var html = "";
-                for( var i=0; i < layoutNum; i++){
-                    html += "[layout] 문단 "+(i+1)+" [layout]\n";
-                }
+                var type = $(this).parents("#syntaxModal").find("#syntaxType :selected").val();
+                var cont = $(this).parents("#syntaxModal").find("#syntaxContent").val();
+
+                html = "[syntax "+type+"]"+cont+"[syntax]";
 
                 $.textInsert(textEditor, html, "", "" );
-                layout.modal('hide');
+                syntax.modal('hide');
             });
 
-            layout.appendTo($me.parent());
+            syntax.appendTo($me.parent());
         },
 
-        hideLayout : function () {
-            $('#layoutModal').remove();
+        hideSyntax : function () {
+            $('#syntaxModal').remove();
         }
     };
 
