@@ -105,16 +105,17 @@ var jisung;
             //테이블적용
             table.find('#ok').on("click",function(){
                 var html = '';
-                html += "||셀제목";
-                html += "||셀제목";
-                html += "|| \n";
+                var tableForm = $(this).parent().parent().find('#tableHYdiv').find('.form-inline');
 
-                if( $(this).parent().parent().find('#tableHYdiv').find('.form-inline').size() <= 0 ){
+                if( tableForm.size() <= 0 ){
                     alert("적용할 행과열이 없습니다.");
                     return false;
                 }
 
-                $(this).parent().parent().find('#tableHYdiv').find('.form-inline').each(function(){
+                html += getHtml(tableForm, "타이틀" ) + "| \n";
+                html += getHtml(tableForm, "---:" ) + "| \n";
+
+                tableForm.each(function(){
                     $(this).find('input').each(function(){
                         html += "|" + $(this).val();
                         $(this).val("");
@@ -124,6 +125,14 @@ var jisung;
                 jisung = [textEditor, html];
                 $.textInsert(textEditor, html, "", "" );
                 $('#tableModal').modal('hide');
+
+                function getHtml( target, text ){
+                    var html = "";
+                    target.each(function(){
+                        html += "| "+text;
+                    });
+                    return html;
+                }
             });
 
             //행적용

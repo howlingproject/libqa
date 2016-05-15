@@ -39,18 +39,6 @@ var DualEditor = (function(){
         contents = DualEditor.markup.SUPERSCRIPT( contents );
         contents = DualEditor.markup.SUBERSCRIPT( contents );
 
-
-        //var arrayContents = contents.split("\n");
-        //var reg = new RegExp("/<\/?[pre|div|span|table|thead|tbody|tr|td|ul|ol|li][\\w\\W]+?>/igm");
-        //for( var i = 0; i < arrayContents.length; i++ ){
-        //    if( reg.exec(arrayContents[i]) != null ){
-        //        continue;
-        //    }
-        //
-        //    arrayContents[i] += "<br>";
-        //}
-        //contents = arrayContents.join("\n");
-
         return contents;
     };
 
@@ -164,7 +152,7 @@ var DualEditor = (function(){
             });
         });
 
-        $("#wikiEditor").keyup(function(){
+        $("#wikiEditor").keydown(function(evnet){
             DualEditor.markup.parsing();
         });
 
@@ -174,6 +162,7 @@ var DualEditor = (function(){
         setTimeout(function() {
             $("#wikimaincol").text("");
             var txt = DualEditor.markup( $("#wikiEditor").val() );
+            console.info(txt);
             $("#wikimaincol").html( "<div style=\"width:96%\">"+txt+"</div>" );
             SyntaxHighlighter.all();
         }, 1000);

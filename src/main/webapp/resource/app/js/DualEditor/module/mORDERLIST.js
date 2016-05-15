@@ -1,13 +1,18 @@
 DualEditor.markup.ORDERLIST = function(contents){
     var reg = /^(<br>)?\d\. (.*)/igm;
-    contents = getOrderListReplaceAll( reg, "ol", contents );
+    if( contents.match(reg) != null ){
+        contents = getOrderListReplaceAll( reg, "ol", contents );
+    }
     return contents;
 };
 DualEditor.markup.UNORDERLIST = function(contents){
     var reg = /^(<br>)?\* (.*)/igm;
-    contents = getOrderListReplaceAll( reg, "ul", contents );
+    if( contents.match(reg) != null ) {
+        contents = getOrderListReplaceAll(reg, "ul", contents);
+    }
     return contents;
 };
+
 
 function getOrderListReplaceAll( reg, tag, contents ){
     function replacer(match, p1, p2, offset, string) {
