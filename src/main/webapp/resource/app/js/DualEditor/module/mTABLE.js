@@ -32,7 +32,6 @@ DualEditor.markup.TABLE = function(contents){
         var splitSize = tempCont[startIdx].replace(/^<br>/ig, "").split("|").length;
 
         var table = "";
-        debugger;
         for( var i = startIdx; i < endIdx; i++ ){
             if( i == startIdx ){
                 table = tableData( tempCont[i], "th", splitSize );
