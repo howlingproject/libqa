@@ -129,16 +129,17 @@
 {{# partial "script-page" }}
     <script type="text/javascript">
         $(document).ready(function() {
-            DualEditor.setting({
-                src : '/resource/app'
-                ,tarketId : 'editor'
-                //,type : 'mini'
-                ,width : '100%'
-                //,height : '300px'
-                ,data : $("input[name=contentsMarkup]").val()
-            });
             $("#file-attachment").on("change", Wiki.uploadFile);
         });
+        DualEditor.setting({
+            src : '/resource/app'
+            ,tarketId : 'editor'
+            //,type : 'mini'
+            ,width : '100%'
+            //,height : '300px'
+            ,data : $("input[name=contentsMarkup]").val()
+        });
+
 
         $("#saveWiki").on("click", function(e){
             $.confirm({
