@@ -28,11 +28,12 @@
                     <a href="#" class="btn btn-primary" id="write">자식위키생성</a>
                 {{/unless}}
                 <a href="#" class="btn btn-primary" id="space">공간메인</a>
+                <a href="#" class="btn btn-primary" id="convertImg">이미지저장</a>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-9" role="main" style="padding-bottom: 20px;">
+            <div class="col-md-9" role="main" id="mainImages" style="padding-bottom: 20px;">
                 <h1 class="page-header" style="margin-top: 15px">{{{wiki.title}}}</h1>
                 {{{wiki.contents}}}
             </div>
@@ -335,6 +336,11 @@
 </div>
 <input type="hidden" id="wikiId" value="{{wiki.wikiId}}">
 <input type="hidden" id="spaceId" value="{{wiki.spaceId}}">
+
+<form id="convertImageForm" name="convertImageForm">
+    <input type="hidden" id="data" name="data" value="">
+</form>
+
 {{/partial}}
 
 
@@ -349,6 +355,7 @@
 {{#partial "script-header"}}
     <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
     <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
+    <script type='text/javascript' src="/resource/public/js/html2canvas.js"></script>
     <script src="/resource/app/js/Helpers-lib/swag.js"></script>
 {{/partial}}
 
@@ -383,6 +390,23 @@
                 var div2 = $("#mainContent").children(".row").children(":last");
                 div2.hide();
                 div1.toggleClass("col-md-9 col-md-12");
+            });
+
+            // 이미지 파일로 변환
+            $("#convertImg").click(function(){
+                html2canvas($("#mainImages"), {
+                    //allowTaint: true,
+                    //taintTest: false,
+                    background : "#fff",
+                    useCORS: true,
+                    onrendered: function(canvas) {
+                        if (typeof FlashCanvas != "undefined") {
+                            FlashCanvas.initElement(canvas);
+                        }
+                        $("#data").val(canvas.toDataURL("image/png"));
+                        $('#convertImageForm').attr({action:'/common/convertImage', method:'post'}).submit();
+                    }
+                });
             });
         });
 

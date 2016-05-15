@@ -15,9 +15,9 @@ import java.util.List;
 public interface QaReplyService {
     QaReply saveWithQaContent(QaReply qaReply, User user);
 
-    QaReply saveVoteUp(QaReply paramQaReply, Integer userId);
+    QaReply saveVoteUp(QaReply paramQaReply, Integer userId, String userNick);
 
-    QaReply saveVoteDown(QaReply paramQaReply, Integer userId);
+    QaReply saveVoteDown(QaReply paramQaReply, Integer userId, String userNick);
 
     QaReply saveChildReply(QaReply qaReply, User user);
 

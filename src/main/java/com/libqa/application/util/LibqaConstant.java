@@ -8,7 +8,7 @@ package com.libqa.application.util;
 public class LibqaConstant {
 
     public static final Integer PAGE_START_INDEX = 0;
-    public static final Integer SPACE_PAGE_SIZE = 2;
+    public static final Integer SPACE_PAGE_SIZE = 10;
     public static final Integer SPACE_WIKI_SIZE = 10;
 
 
