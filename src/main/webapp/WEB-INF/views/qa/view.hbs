@@ -126,17 +126,20 @@
                                     <div class="row" style="margin-left: 5px; margin-bottom: 10px; width: 90%">
                                         <input type="text" class="form-control" id="title" name="title" placeholder="title">
                                     </div>
-                                    <div id="editor" class="form-group">
+                                    <div class="form-group">
                                         <input type="hidden" id="contents" name="contents" />
                                         <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
                                         <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
                                         <input type="hidden" id="parentsId" name="parentsId" value="0" />   <!-- 답변 계층 -->
+                                        <div id="editor">
+                                        </div>
                                     </div>
                                     <!--// 댓글작성 Bootstrap Live Editor -->
 
                                     <!-- 댓글작성 저장 button -->
                                     {{#if isLogin}}
                                     <div class="feed-write-bottom text-right">
+                                        <button id="cancleReplyButton" type="button" class="btn btn-warning btn-default hide">취소</button>
                                         <button id="saveReplyButton" type="button" class="btn btn-primary btn-default">저장</button>
                                     </div>
                                     {{/if}}
@@ -227,6 +230,7 @@
                 this.saveRecommendEvent();
                 this.tooltipEvent();
                 this.saveReplyEvent();
+                this.cancleReplyButtonEvent();
             },
             saveReplyEvent : function(){
                 $("#saveReplyButton").on("click", this.saveReply);
@@ -265,10 +269,16 @@
             },
             saveReply : function(){
                 setParam();
+                var replyId = '';
+                var url = '/qa/saveReply';
+                if($('[name=qaReplyForm] .form-group').attr('data-reply-id')){
+                    url = '/qa/updateReply';
+                    replyId = $('[name=qaReplyForm] .form-group').attr('data-reply-id');
+                }
                 $.ajax({
                     type : 'POST',
-                    data : $(this).closest('form').serialize() + '&qaId='+$('[name=qaId]').val(),
-                    url : '/qa/saveReply',
+                    data : $(this).closest('form').serialize() + '&qaId='+$('[name=qaId]').val() + '&replyId='+replyId,
+                    url : url,
                     success : function(data){
                         if(data.resultCode == 1) {
                             Qa.searchList();
@@ -519,7 +529,38 @@
             modifyReply : function (obj) {
                 var qaReplyId = Qa.getQaReplyId(obj);
                 // 기능구현 필요
+                this.getReplyMarkUp(qaReplyId);
 
+            },
+            getReplyMarkUp : function (qaReplyId) {
+                $.get("/qa/getReplyMarkUp",{replyId : qaReplyId}, function (response) {
+                    if(response.resultCode != 1) {
+                        alert(response.comment);
+                        return;
+                    } else {
+                        Qa.setReplyData(response.data);
+                        $('#cancleReplyButton').removeClass('hide');
+                        $("html, body").animate({
+                            'scrollTop' : $('[name=qaReplyForm]').offset().top
+                        }, 500);
+                    }
+                });
+            },
+            setReplyData : function(qaReplyData){
+                $('[name=qaReplyForm] .form-group').attr('data-reply-id',qaReplyData.replyId);
+                $('[name=qaReplyForm] #title').val(qaReplyData.title);
+                $('#wikiEditor').val(qaReplyData.contentsMarkup);
+                $('.dualEditor-preview').html(qaReplyData.contents);
+            },
+            cancleReplyButtonEvent : function () {
+                $("#cancleReplyButton").on("click", this.cancleReplyButton);
+            },
+            cancleReplyButton : function () {
+                $('#cancleReplyButton').addClass('hide');
+                $('[name=qaReplyForm] .form-group').removeAttr('data-reply-id');
+                $('[name=qaReplyForm] #title').val('');
+                $('#wikiEditor').val('');
+                $('.dualEditor-preview').html('');
             }
         };
 
