@@ -4,14 +4,14 @@
     <div class="container-fluid">
 
         <div class="col-sm-12">
-            {{#compareTo page 'qa'}} {{> search/form/qa}} {{/compareTo}}
-            {{#compareTo page 'space'}} {{> search/form/space}} {{/compareTo}}
-            {{#compareTo page 'wiki'}} {{> search/form/wiki}} {{/compareTo}}
+            {{#compareTo pageKey 'qa'}} {{> search/form/qa}} {{/compareTo}}
+            {{#compareTo pageKey 'space'}} {{> search/form/space}} {{/compareTo}}
+            {{#compareTo pageKey 'wiki'}} {{> search/form/wiki}} {{/compareTo}}
         </div>
 
         <div class="col-sm-12">
             <div class="search-result top-buffer">
-                <div class="nav-tabs-header">검색 결과</div>
+                <div class="nav-tabs-header">검색 결과 (총 {{totalCount}}건)</div>
 
                 {{#unless results}}
                     <div class="not-found">
@@ -21,29 +21,27 @@
 
                 {{#each results}}
                     <div class="search-result-item">
-                        <a href="/space/2"><strong>아넬라 수정 활동 내역이 나오나?</strong></a>
+                        <a href="/qa/{{id}}"><strong>{{title}}</strong></a>
                         <div class="pull-right">
-                            <span class="label label-warning">Java</span>
+                            {{#each keywords}}
+                                {{{keywordBadge this}}}
+                            {{/each}}
                         </div>
                         <div class="media">
-                            <a class="pull-left" href="#">
+                            <span class="pull-left">
                                 <div class="user-profile">
-                                    <img alt="avatar" class="profile-image"
-                                         src="/imageView?path=/resource/temp/1/2015113044661797176002.jpg">
+                                    <img alt="avatar" class="profile-image" src="/imageView?path={{userImage}}" onerror='this.src="/resource/images/avatar.png"' />
                                 </div>
-                            </a>
-                            <div class="media-body">아넬라 사그라 완전 좋아 아넬라 사그라 완전 좋아 아넬라 사그라 완전 좋아 아넬라 사그라 완전 좋아 아넬라 사그라 완전 좋아
-                                아넬라 사그라 완전 좋아 아넬라 사그라 완전 좋아 아...
-                                <div class="pull-right"><span class="badge">7</span></div>
+                            </span>
+                            <div class="media-body">
+                                {{{abbreviate (htmlDelete contents) 500}}}
+                                <div class="pull-right"><span class="badge">{{countOfReply}}</span></div>
                             </div>
-                            <div class="pull-left"><span class="nickname"><i class="fa fa-pencil-square-o"></i> quick</span></div>
-                            <div class="pull-right"><i class="fa fa-clock-o"></i> 2015-11-30 00:00:00</div>
+                            <div class="pull-left"><span class="nickname"><i class="fa fa-pencil-square-o"></i> {{userNick}}</span></div>
+                            <div class="pull-right"><i class="fa fa-clock-o"></i> {{insertDate}}</div>
                         </div>
                     </div>
                 {{/each}}
-
-
-
             </div>
         </div>
     </div>

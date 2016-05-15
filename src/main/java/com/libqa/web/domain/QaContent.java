@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.libqa.application.enums.SocialChannelType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,6 +16,7 @@ import java.util.List;
  */
 @Data
 @Entity
+@Indexed
 @EqualsAndHashCode
 @Table(indexes = {
         @Index(columnList = "isDeleted"),
@@ -29,9 +32,11 @@ public class QaContent {
     private Integer wikiId;
 
     @Column(nullable = false, length = 100)
+    @Field
     private String title;
 
     @Column(nullable = false, columnDefinition = "Text")
+    @Field
     private String contents;
 
     @Column(nullable = false, columnDefinition = "Text")

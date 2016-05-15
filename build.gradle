@@ -56,6 +56,8 @@ dependencies {
     compile('com.twitter:twitter-text:1.13.0')
     compile('org.codehaus.jackson:jackson-core-asl:1.9.13')
     compile('commons-io:commons-io:2.4')
+    compile('org.hibernate:hibernate-search-orm:4.5.1.Final')
+    compile('org.hibernate:hibernate-entitymanager')
     testCompile('com.jayway.restassured:spring-mock-mvc:2.4.0')
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     testCompile('cglib:cglib:2.2')
