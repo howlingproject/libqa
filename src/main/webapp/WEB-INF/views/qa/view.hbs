@@ -189,7 +189,7 @@
                 });
             },
             clearEditor : function(){
-                $('#title').val('');
+                $('[name=qaReplyForm] #title').val('');
                 $('#contents').val('');
                 $('#contentsMarkup').val('');
                 $("#wikiEditor").val('');
@@ -226,9 +226,12 @@
                 this.buttonEvent();
                 this.saveRecommendEvent();
                 this.tooltipEvent();
+                this.saveReplyEvent();
             },
             saveReplyEvent : function(){
                 $("#saveReplyButton").on("click", this.saveReply);
+            },
+            saveChildReplyEvent : function(){
                 $('button[name=saveChildReplyButton]').on("click", this.saveChildReply);
             },
             cancleEvent : function(){
@@ -516,6 +519,7 @@
             modifyReply : function (obj) {
                 var qaReplyId = Qa.getQaReplyId(obj);
                 // 기능구현 필요
+
             }
         };
 
