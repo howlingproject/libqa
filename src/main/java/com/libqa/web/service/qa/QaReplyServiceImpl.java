@@ -50,6 +50,17 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     @Override
+    public void updateReply(QaReply qaReply, User user) {
+        QaReply originQaReply = findByReplyId(qaReply.getReplyId());
+        originQaReply.setTitle(qaReply.getTitle());
+        originQaReply.setContents(qaReply.getContents());
+        originQaReply.setContentsMarkup(qaReply.getContentsMarkup());
+        originQaReply.setUpdateDate(new Date());
+        originQaReply.setUpdateUserId(user.getUserId());
+        qaReplyRepository.save(originQaReply);
+    }
+
+    @Override
     @Transactional
     public QaReply saveWithQaContent(QaReply paramQaReply, User user) {
         boolean isDeleted = false;

@@ -34,4 +34,6 @@ public interface QaReplyService {
     QaReply findByReplyId(Integer replyId);
 
     int getCountByQaId(Integer qaId);
+
+    void updateReply(QaReply qaReply, User user);
 }
