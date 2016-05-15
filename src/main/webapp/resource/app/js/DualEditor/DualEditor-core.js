@@ -13,6 +13,8 @@ var DualEditor = (function(){
     };
 
     DualEditor.markup = function(contents){
+
+        contents = contents.replace(/\n|\r\n/ig, "\n<br>");
         contents = DualEditor.markup.ITALIC( contents );
         contents = DualEditor.markup.FIELD( contents );
         contents = DualEditor.markup.ALERT( contents );
@@ -37,13 +39,17 @@ var DualEditor = (function(){
         contents = DualEditor.markup.SUPERSCRIPT( contents );
         contents = DualEditor.markup.SUBERSCRIPT( contents );
 
-        var arrayContents = contents.split("\n");
-        for( var i = 0; i < arrayContents.length; i++ ){
-            if( arrayContents[i].trim() == "" ){
-                arrayContents[i] = "<br>";
-            }
-        }
-        contents = arrayContents.join("\n");
+
+        //var arrayContents = contents.split("\n");
+        //var reg = new RegExp("/<\/?[pre|div|span|table|thead|tbody|tr|td|ul|ol|li][\\w\\W]+?>/igm");
+        //for( var i = 0; i < arrayContents.length; i++ ){
+        //    if( reg.exec(arrayContents[i]) != null ){
+        //        continue;
+        //    }
+        //
+        //    arrayContents[i] += "<br>";
+        //}
+        //contents = arrayContents.join("\n");
 
         return contents;
     };
@@ -74,6 +80,32 @@ var DualEditor = (function(){
         loadJQuery(src+"/js/DualEditor/module/mLAYOUT.js");
         loadJQuery(src+"/js/DualEditor/module/mSyntax.js");
 
+        loadCSS(src+"/js/DualEditor/syntaxhiglight/styles/shThemeDefault.css");
+        loadCSS(src+"/js/DualEditor/syntaxhiglight/styles/shCore.css");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shCore.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushXml.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushJScript.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushAppleScript.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushAS3.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushBash.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushCpp.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushCSharp.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushCss.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushDelphi.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushDiff.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushErlang.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushGroovy.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushJava.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushJavaFX.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushPerl.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushPhp.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushPlain.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushPython.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushRuby.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushSass.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushScala.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushSql.js");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushVb.js");
     };
 
 
@@ -143,6 +175,7 @@ var DualEditor = (function(){
             $("#wikimaincol").text("");
             var txt = DualEditor.markup( $("#wikiEditor").val() );
             $("#wikimaincol").html( "<div style=\"width:96%\">"+txt+"</div>" );
+            SyntaxHighlighter.all();
         }, 1000);
 
     };
@@ -166,6 +199,13 @@ function loadJQuery(src) {
     oScript.charset = "utf-8";
     oScript.src = src;
     document.getElementsByTagName("head")[0].appendChild(oScript);
+}
+
+function loadCSS(src) {
+    var linkElm = document.createElement("link");
+    linkElm.rel = "stylesheet";
+    linkElm.href = src;
+    document.getElementsByTagName("head")[0].appendChild(linkElm);
 }
 
 function getMarkupEditHtml(width, height){
@@ -214,15 +254,13 @@ function getMarkupEditHtml(width, height){
         "               <div class=\"btn-group\">" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"* \" data-center=\" \" data-after=\"\"><i class=\"fa fa-list-ul\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"1. \" data-center=\" \" data-after=\"\"><i class=\"fa fa-list-ol\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[syntax]\" data-center=\"\"  data-after=\"[syntax]\"><i class=\"fa fa-code\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#syntaxModal\" data-mode=\"layer\" data-type=\"syntax\" ><i class=\"fa fa-code\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#tableModal\" data-mode=\"layer\" data-type=\"table\"><i class=\"fa fa-table\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[field|타이틀]\" data-center=\"\"  data-after=\"[field]\"><i class=\"fa fa-credit-card\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#urlModal\" data-mode=\"layer\" data-type=\"url\" ><i class=\"fa fa-link\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#imgModal\" data-mode=\"layer\" data-type=\"img\" ><i class=\"fa fa-file-image-o\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[alert]\" data-center=\" \" data-after=\"[alert]\"><i class=\"fa fa-exclamation-triangle\"></i></button>" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\"  data-before=\"[info]\"  data-center=\" \"  data-after=\"[info]\"><i class=\"fa fa-info\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\"  data-before=\"[syntax]\"  data-center=\" \"  data-after=\"[syntax]\"><i class=\"fa fa-file-code-o\"></i></button>" +
-        //"                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#layoutModal\" data-mode=\"layer\" data-type=\"layout\" ><i class=\"fa fa-columns\"></i></button>" +
         "               </div>" +
         "               <div class=\"btn-group\">" +
         "                   <button type=\"button\" class=\"dualEditorWiki-btn btn btn-default btn-sm dropdown-toggle\" data-toggle=\"dropdown\" data-mode=\"columns\"><i class=\"fa fa-columns\"></i></button>" +

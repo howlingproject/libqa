@@ -28,6 +28,7 @@ import static com.libqa.application.framework.ResponseData.*;
 
 /**
  * Created by yong on 2015-02-08.
+ *
  * @author yong
  */
 @Slf4j
@@ -70,63 +71,63 @@ public class QaController {
     }
 
     @RequestMapping("/qa/main")
-    public ModelAndView main(Model model){
-	    Integer qaTotalCount = qaService.getQaTotalCount();
-	    Integer qaNotReplyedCount = qaService.getQaNotReplyedCount();
+    public ModelAndView main(Model model) {
+        Integer qaTotalCount = qaService.getQaTotalCount();
+        Integer qaNotReplyedCount = qaService.getQaNotReplyedCount();
         ModelAndView mav = new ModelAndView("qa/main");
-	    mav.addObject("qaTotalCount", qaTotalCount);
-	    mav.addObject("qaNotReplyedCount", qaNotReplyedCount);
-	    mav.addObject("recentQAContents", buildDisplayQas(qaService.getRecentQAContents()));
-	    mav.addObject("waitReplyQAContents", buildDisplayQas(qaService.getWaitReplyQaContents()));
-	    mav.addObject("bestQAContents", buildDisplayQas(qaService.getBestQaContents()));
+        mav.addObject("qaTotalCount", qaTotalCount);
+        mav.addObject("qaNotReplyedCount", qaNotReplyedCount);
+        mav.addObject("recentQAContents", buildDisplayQas(qaService.getRecentQAContents()));
+        mav.addObject("waitReplyQAContents", buildDisplayQas(qaService.getWaitReplyQaContents()));
+        mav.addObject("bestQAContents", buildDisplayQas(qaService.getBestQaContents()));
         return mav;
     }
 
     @RequestMapping(value = "/qa/myWriteQaList", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<DisplayQa> myQaList(@ModelAttribute QaDto qaDto){
+    public ResponseData<DisplayQa> myQaList(@ModelAttribute QaDto qaDto) {
         try {
             List<QaContent> qaContentList = qaService.findByUserId(loggedUserManager.getUser().getUserId());
             return createSuccessResult(buildDisplayQas(qaContentList));
-        }catch(Exception e){
+        } catch (Exception e) {
             return createFailResult(Lists.newArrayList());
         }
     }
 
     @RequestMapping(value = "/qa/myReplyQaList", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<DisplayQa> myReplyQaList(@ModelAttribute QaDto qaDto){
+    public ResponseData<DisplayQa> myReplyQaList(@ModelAttribute QaDto qaDto) {
         try {
             List<QaContent> qaContentList = qaReplyService.findByUserId(loggedUserManager.getUser().getUserId());
             return createSuccessResult(buildDisplayQas(qaContentList));
-        }catch(Exception e){
+        } catch (Exception e) {
             return createFailResult(Lists.newArrayList());
         }
     }
 
     private List<DisplayQa> buildDisplayQas(List<QaContent> qaContentList) {
         List<DisplayQa> displayQaList = Lists.newArrayList();
-        for(QaContent qaContent : qaContentList) {
+        for (QaContent qaContent : qaContentList) {
             User writer = userService.findByUserId(qaContent.getUserId());
-            displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
+            displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId())));
         }
         return displayQaList;
     }
 
     @RequestMapping(value = "/qa/myRecommendQaList", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<DisplayQa> myRecommendQaList(@ModelAttribute QaDto qaDto){
+    public ResponseData<DisplayQa> myRecommendQaList(@ModelAttribute QaDto qaDto) {
         boolean isDeleted = false;
         List<DisplayQa> displayQaList = Lists.newArrayList();
         try {
             List<QaRecommend> qaRecommendList = qaRecommendService.findByUserIdAndIsCommendTrue(loggedUserManager.getUser().getUserId());
-            for(QaRecommend qaRecommend : qaRecommendList) {
+            for (QaRecommend qaRecommend : qaRecommendList) {
                 User recommender = userService.findByUserId(qaRecommend.getUserId());
                 QaContent qaContent = qaService.findByQaId(qaRecommend.getQaId(), isDeleted);
-                displayQaList.add(new DisplayQa(qaContent, recommender, keywordService.findByQaId(qaRecommend.getQaId()), qaReplyService.findByQaId(qaRecommend.getQaId()) ));
+                displayQaList.add(new DisplayQa(qaContent, recommender, keywordService.findByQaId(qaRecommend.getQaId()), qaReplyService.findByQaId(qaRecommend.getQaId())));
             }
             return createSuccessResult(displayQaList);
-        }catch(Exception e){
+        } catch (Exception e) {
             return createFailResult(displayQaList);
         }
     }
@@ -138,7 +139,7 @@ public class QaController {
         QaContent qaContent = qaService.view(qaId);
         List<QaRecommend> qaRecommendList = qaRecommendService.findByQaIdAndIsCommend(qaId, true);
         List<QaRecommend> qaNonRecommendList = qaRecommendService.findByQaIdAndIsCommend(qaId, false);
-	    DisplayQa displayQa = new DisplayQa(qaContent, qaRecommendList, qaNonRecommendList, user.getUserId());
+        DisplayQa displayQa = new DisplayQa(qaContent, qaRecommendList, qaNonRecommendList, user.getUserId());
         User writer = userService.findByUserId(qaContent.getUserId());
         List<Keyword> keywordList = keywordService.findByQaId(qaId);
 
@@ -154,7 +155,7 @@ public class QaController {
     public ModelAndView edit(@PathVariable Integer qaId) {
         boolean isDeleted = false;
 
-        QaContent qaContent =  qaService.findByQaId(qaId, isDeleted);
+        QaContent qaContent = qaService.findByQaId(qaId, isDeleted);
         List<Keyword> keywordList = keywordService.findByQaId(qaId);
         ModelAndView mav = new ModelAndView("qa/edit");
         mav.addObject("qaContent", qaContent);
@@ -165,7 +166,7 @@ public class QaController {
     }
 
     @RequestMapping("/qa/form")
-    public ModelAndView create(Model model){
+    public ModelAndView create(Model model) {
         ModelAndView mav = new ModelAndView("qa/form");
         return mav;
     }
@@ -190,7 +191,7 @@ public class QaController {
         boolean isDeleted = false;
         try {
             QaContent originQaContent = qaService.findByQaId(requestQaContent.getQaId(), isDeleted);
-            if(user.isNotMatchUser(originQaContent.getUserId())){
+            if (user.isNotMatchUser(originQaContent.getUserId())) {
                 return createResult(NOT_MATCH_USER);
             }
             QaContent savedQaContent = qaService.updateWithKeyword(originQaContent, requestQaContent, requestQaFiles, requestKeywords, user);
@@ -205,10 +206,10 @@ public class QaController {
     public ResponseData<String> delete(@RequestParam("qaId") Integer qaId) {
         User user = loggedUserManager.getUser();
         try {
-            if(qaValidator.isNotMatchUser(qaId, user)){
+            if (qaValidator.isNotMatchUser(qaId, user)) {
                 return createFailResult(NOT_MATCH_USER.getComment());
             }
-            if(qaValidator.checkQaContentDelete(qaId)){
+            if (qaValidator.checkQaContentDelete(qaId)) {
                 return createFailResult(EXIST_REPLY.getComment());
             }
             qaService.deleteWithKeyword(qaId, user.getUserId());
@@ -219,18 +220,25 @@ public class QaController {
     }
 
 
-
     @RequestMapping(value = "/qa/saveReply", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<QaReply> saveReply(QaReply qaReply) {
-	    User user = loggedUserManager.getUser();
+        User user = loggedUserManager.getUser();
         QaReply newQaReply = qaReplyService.saveWithQaContent(qaReply, user);
         return createSuccessResult(newQaReply);
     }
 
-    @RequestMapping(value ="/qa/saveChildReply", method = RequestMethod.POST)
+    @RequestMapping(value = "/qa/updateReply", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaReply> saveChildReply(QaReply qaReply){
+    public ResponseData<String> updateReply(QaReply qaReply) {
+        User user = loggedUserManager.getUser();
+        qaReplyService.updateReply(qaReply, user);
+        return createSuccessResult(SUCCESS.getComment());
+    }
+
+    @RequestMapping(value = "/qa/saveChildReply", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<QaReply> saveChildReply(QaReply qaReply) {
         User user = loggedUserManager.getUser();
         QaReply newQaReply = qaReplyService.saveChildReply(qaReply, user);
         return createSuccessResult(newQaReply);
@@ -245,7 +253,7 @@ public class QaController {
             QaContent qaContent = qaService.findByQaId(qaId, isDeleted);
             qaFileList = qaContent.getQaFiles();
             return createSuccessResult(qaFileList);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return createFailResult(qaFileList);
         }
@@ -253,43 +261,43 @@ public class QaController {
 
     @RequestMapping(value = "/qa/qaList", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<DisplayQa> qaList(@ModelAttribute QaDto qaDto){
+    public ResponseData<DisplayQa> qaList(@ModelAttribute QaDto qaDto) {
         boolean isDeleted = false;
         List<QaContent> qaContentList = new ArrayList<>();
         List<DisplayQa> displayQaList = new ArrayList<>();
         try {
             qaContentList = qaService.findByIsReplyedAndDayType(qaDto);
-            for(QaContent qaContent : qaContentList) {
+            for (QaContent qaContent : qaContentList) {
                 User writer = userService.findByUserId(qaContent.getUserId());
-                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId()) ));
+                displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId())));
             }
             return createSuccessResult(displayQaList);
-        }catch(Exception e){
+        } catch (Exception e) {
             return createFailResult(displayQaList);
         }
     }
 
     @RequestMapping(value = "/qa/saveRecommend", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<DisplayQa> saveRecommend(@ModelAttribute QaRecommend paramQaRecommend){
+    public ResponseData<DisplayQa> saveRecommend(@ModelAttribute QaRecommend paramQaRecommend) {
         User user = loggedUserManager.getUser();
         try {
             if (user.isGuest()) {
                 return createResult(NEED_LOGIN);
             }
-	        QaContent qaContent = qaRecommendService.saveRecommend(paramQaRecommend, user.getUserId(), user.getUserNick());
+            QaContent qaContent = qaRecommendService.saveRecommend(paramQaRecommend, user.getUserId(), user.getUserNick());
             List<QaRecommend> qaRecommendList = qaRecommendService.findByQaIdAndIsCommend(qaContent.getQaId(), true);
             List<QaRecommend> qaNonRecommendList = qaRecommendService.findByQaIdAndIsCommend(qaContent.getQaId(), false);
             DisplayQa displayQa = new DisplayQa(qaContent, qaRecommendList, qaNonRecommendList, user.getUserId());
             return createSuccessResult(displayQa);
-        } catch (Exception e){
+        } catch (Exception e) {
             return createFailResult(null);
         }
     }
 
     @RequestMapping(value = "/qa/saveVoteUp", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaReply> saveVoteUp(@ModelAttribute QaReply paramQaReply){
+    public ResponseData<QaReply> saveVoteUp(@ModelAttribute QaReply paramQaReply) {
         User user = loggedUserManager.getUser();
         try {
             if (user.isGuest()) {
@@ -297,14 +305,14 @@ public class QaController {
             }
             QaReply qareply = qaReplyService.saveVoteUp(paramQaReply, user.getUserId(), user.getUserNick());
             return createSuccessResult(qareply);
-        } catch (Exception e){
+        } catch (Exception e) {
             return createFailResult(null);
         }
     }
 
     @RequestMapping(value = "/qa/saveVoteDown", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaReply> saveVoteDown(@ModelAttribute QaReply paramQaReply){
+    public ResponseData<QaReply> saveVoteDown(@ModelAttribute QaReply paramQaReply) {
         User user = loggedUserManager.getUser();
         try {
             if (user.isGuest()) {
@@ -312,26 +320,26 @@ public class QaController {
             }
             QaReply qareply = qaReplyService.saveVoteDown(paramQaReply, user.getUserId(), user.getUserNick());
             return createSuccessResult(qareply);
-        } catch (Exception e){
+        } catch (Exception e) {
             return createFailResult(null);
         }
     }
 
-    @RequestMapping(value="/qa/replyList", method = RequestMethod.GET)
+    @RequestMapping(value = "/qa/replyList", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<DisplayQaReply> replyList(@RequestParam("qaId") Integer qaId){
-	    User viewer = loggedUserManager.getUser();
+    public ResponseData<DisplayQaReply> replyList(@RequestParam("qaId") Integer qaId) {
+        User viewer = loggedUserManager.getUser();
         List<DisplayQaReply> qaReplyList = qaReplyService.findByQaIdAndDepthIdx(qaId, 1, viewer);
         return createSuccessResult(qaReplyList);
     }
 
-    @RequestMapping(value="/qa/reply/delete/{replyId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/qa/reply/delete/{replyId}", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<Integer> deleteReply(@PathVariable Integer replyId){
-	    User user = loggedUserManager.getUser();
+    public ResponseData<Integer> deleteReply(@PathVariable Integer replyId) {
+        User user = loggedUserManager.getUser();
         try {
             QaReply originQaReply = qaReplyService.findByReplyId(replyId);
-            if(user.isNotMatchUser(originQaReply.getUserId())){
+            if (user.isNotMatchUser(originQaReply.getUserId())) {
                 return createResult(NOT_MATCH_USER);
             }
             qaReplyService.delete(replyId, user.getUserId());
@@ -342,12 +350,12 @@ public class QaController {
         }
     }
 
-    @RequestMapping(value="/qa/recommend", method = RequestMethod.POST)
+    @RequestMapping(value = "/qa/recommend", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<QaRecommend> recommendDetail(@ModelAttribute QaRecommend paramQaRecommend){
+    public ResponseData<QaRecommend> recommendDetail(@ModelAttribute QaRecommend paramQaRecommend) {
         User user = loggedUserManager.getUser();
-        try{
-            if(user.isGuest()){
+        try {
+            if (user.isGuest()) {
                 return createResult(NEED_LOGIN);
             }
             QaRecommend qaRecommend = qaRecommendService.findByQaIdAndUserIdAndIsCommend(paramQaRecommend.getQaId(), user.getUserId(), paramQaRecommend.getIsCommend());
@@ -357,13 +365,13 @@ public class QaController {
         }
     }
 
-    @RequestMapping(value="/qa/reply/vote", method = RequestMethod.POST)
+    @RequestMapping(value = "/qa/reply/vote", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<Vote> voteDetail(@ModelAttribute Vote paramVote){
+    public ResponseData<Vote> voteDetail(@ModelAttribute Vote paramVote) {
         User user = loggedUserManager.getUser();
         boolean isCancel = false;
-        try{
-            if(user.isGuest()){
+        try {
+            if (user.isGuest()) {
                 return createResult(NEED_LOGIN);
             }
             Vote vote = voteService.findByReplyIdAndUserIdAndIsVoteAndIsCancel(paramVote.getReplyId(), user.getUserId(), paramVote.getIsVote(), isCancel);
@@ -371,5 +379,12 @@ public class QaController {
         } catch (Exception e) {
             return createFailResult(null);
         }
+    }
+
+    @RequestMapping(value = "/qa/getReplyMarkUp", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<QaReply> getReplyMarkUp(@RequestParam("replyId") Integer replyId) {
+        QaReply qaReply = qaReplyService.findByReplyId(replyId);
+        return createSuccessResult(qaReply);
     }
 }
