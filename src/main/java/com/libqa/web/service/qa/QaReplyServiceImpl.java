@@ -50,6 +50,7 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     @Override
+    @Transactional
     public void updateReply(QaReply qaReply, User user) {
         QaReply originQaReply = findByReplyId(qaReply.getReplyId());
         originQaReply.setTitle(qaReply.getTitle());
@@ -57,7 +58,6 @@ public class QaReplyServiceImpl implements QaReplyService {
         originQaReply.setContentsMarkup(qaReply.getContentsMarkup());
         originQaReply.setUpdateDate(new Date());
         originQaReply.setUpdateUserId(user.getUserId());
-        qaReplyRepository.save(originQaReply);
     }
 
     @Override
