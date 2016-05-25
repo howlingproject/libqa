@@ -20,7 +20,13 @@ CREATE SCHEMA `howling` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 ```
 
 ### developer 
+
+
 QuicK (performizer@gmail.com)
+
 Zune (alivejune@gmail.com)
+
 Songanji (songanji@gmail.com)
+
 Yonghee (seeds.pear.jr@gmail.com)
+
