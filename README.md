@@ -1,5 +1,5 @@
 # libqa™ Project  
-Keyword based Social Q&A Community 
+Keyword based Social Q&A Community  (http://www.libqa.com)
 
 ### Social Q&A & Knowledge sharing platform based GLiDER Wiki. created by GLiDER Wiki Team(http://www.gliderwiki.org)
 
@@ -18,3 +18,9 @@ flush privileges;
 
 CREATE SCHEMA `howling` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 ```
+
+### developer 
+QuicK (performizer@gmail.com)
+Zune (alivejune@gmail.com)
+Songanji (songanji@gmail.com)
+Yonghee (seeds.pear.jr@gmail.com)
