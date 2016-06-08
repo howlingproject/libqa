@@ -59,7 +59,7 @@ public class RequestUtil {
 
             if (values != null) {
                 for (int i = 0; i < values.length; i++) {
-                    log.debug("** LoginHandler " + name + "( " + i + " ) " + values[i]);
+                    log.debug("** CustomLoginSuccessHandler " + name + "( " + i + " ) " + values[i]);
                 }
             }
         }
