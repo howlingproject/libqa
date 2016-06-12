@@ -95,3 +95,16 @@ div button.dualEditor-wiki-btn {
     background: url("../img/4_s.png");
 }
 
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    background-color: #94B4D0;
+}
+
+.nav>li>a {
+    padding: 3px 3px;
+    color: #273440;
+    padding: 1px 5px;
+    font-size: 11px;
+    line-height: 1.5;
+    border-radius: 3px;
+
+}
