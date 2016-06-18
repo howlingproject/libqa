@@ -267,7 +267,7 @@ function getMarkupEditHtml(width, height){
         "           <hr style=\"background-color:#ccc;height: 1px;margin-top: 10px;margin-bottom: 12px;\"> " +
         "			<div class=\"collapse\" id=\"hepl\" style=\"height : 100px;\">"+
         "				<div class=\"col-md-2\" style=\"height : 100px; overflow: auto\">"+
-        "					<ul class=\"nav nav-pills nav-stacked\">"+
+        "					<ul class=\"nav nav-pills nav-stacked edit-nav edit-nav-pills\">"+
         "						<li class=\"active\"><a href=\"#Itext\" data-toggle=\"pill\" >텍스트 마크업</a></li>"+
         "						<li><a href=\"#Ilist\" data-toggle=\"pill\" >정렬 마크업</a></li>"+
         "						<li><a href=\"#Iarert\" data-toggle=\"pill\" >알림 마크업</a></li>"+
@@ -276,7 +276,7 @@ function getMarkupEditHtml(width, height){
         "				</div>"+
         "				<div class=\"tab-content col-md-2\" style=\"height : 100px; overflow: auto\">"+
         "					<div id=\"Itext\" class=\"tab-pane fade in active\">"+
-        "						<ul class=\"nav nav-pills nav-stacked\">"+
+        "						<ul class=\"nav nav-pills nav-stacked edit-nav edit-nav-pills\">"+
         "							<li class=\"active\"><a href=\"#Ib\" data-toggle=\"pill\" >굵게</a></li>"+
         "							<li><a href=\"#Ii\" data-toggle=\"pill\" >기울기</a></li>"+
         "							<li><a href=\"#Iu\" data-toggle=\"pill\" >밑줄</a></li>"+
@@ -299,14 +299,14 @@ function getMarkupEditHtml(width, height){
         "						</ul>"+
         "					</div>"+
         "					<div id=\"Iarert\" class=\"tab-pane fade\">"+
-        "						<ul class=\"nav nav-pills nav-stacked\">"+
+        "						<ul class=\"nav nav-pills nav-stacked edit-nav edit-nav-pills\">"+
         "							<li class=\"active\"><a href=\"#Ifield\" data-toggle=\"pill\" >필드</a></li>"+
         "							<li><a href=\"#Ialer\" data-toggle=\"pill\" >알림</a></li>"+
         "							<li><a href=\"#Iinfo\" data-toggle=\"pill\" >정보</a></li>"+
         "						</ul>"+
         "					</div>"+
         "					<div id=\"Ispecial\" class=\"tab-pane fade\">"+
-        "						<ul class=\"nav nav-pills nav-stacked\">"+
+        "						<ul class=\"nav nav-pills nav-stacked edit-nav edit-nav-pills\">"+
         "							<li class=\"active\"><a href=\"#Ihr\" data-toggle=\"pill\" >문단선</a></li>"+
         "							<li><a href=\"#Isy\" data-toggle=\"pill\" >신택스하이라이트</a></li>"+
         "							<li><a href=\"#Itab\" data-toggle=\"pill\" >테이블</a></li>"+
