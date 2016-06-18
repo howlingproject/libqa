@@ -156,6 +156,14 @@ var DualEditor = (function(){
             DualEditor.markup.parsing();
         });
 
+        $(".nav-pills a").on("click", function() {
+            $(this).tab('show');
+            var id = $(this).attr("href");
+            var next = $(id).find(".active");
+            $(next).removeClass("active");
+            $(next).find("a").trigger('click');
+        });
+
     };
 
     DualEditor.markup.parsing = function(){
@@ -253,9 +261,222 @@ function getMarkupEditHtml(width, height){
         "               </div>" +
         "               <div class=\"btn-group\">" +
         "                   <button type=\"button\" class=\"dualEditorWiki-btn btn btn-default btn-sm dropdown-toggle\" data-toggle=\"dropdown\" data-mode=\"columns\"><i class=\"fa fa-columns\"></i></button>" +
+        "                   <a type=\"button\" class=\"dualEditorWiki-btn btn btn-default btn-sm\" data-toggle=\"collapse\" href=\"#hepl\"><i class=\"fa fa-lightbulb-o\"></i></a>" +
         "               </div>" +
         "           </div>" +
         "           <hr style=\"background-color:#ccc;height: 1px;margin-top: 10px;margin-bottom: 12px;\"> " +
+        "			<div class=\"collapse\" id=\"hepl\" style=\"height : 100px;\">"+
+        "				<div class=\"col-md-2\" style=\"height : 100px; overflow: auto\">"+
+        "					<ul class=\"nav nav-pills nav-stacked\">"+
+        "						<li class=\"active\"><a href=\"#Itext\" data-toggle=\"pill\" >텍스트 마크업</a></li>"+
+        "						<li><a href=\"#Ilist\" data-toggle=\"pill\" >정렬 마크업</a></li>"+
+        "						<li><a href=\"#Iarert\" data-toggle=\"pill\" >알림 마크업</a></li>"+
+        "						<li><a href=\"#Ispecial\" data-toggle=\"pill\" >특수 마크업</a></li>"+
+        "					</ul>"+
+        "				</div>"+
+        "				<div class=\"tab-content col-md-2\" style=\"height : 100px; overflow: auto\">"+
+        "					<div id=\"Itext\" class=\"tab-pane fade in active\">"+
+        "						<ul class=\"nav nav-pills nav-stacked\">"+
+        "							<li class=\"active\"><a href=\"#Ib\" data-toggle=\"pill\" >굵게</a></li>"+
+        "							<li><a href=\"#Ii\" data-toggle=\"pill\" >기울기</a></li>"+
+        "							<li><a href=\"#Iu\" data-toggle=\"pill\" >밑줄</a></li>"+
+        "							<li><a href=\"#Id\" data-toggle=\"pill\" >취소선</a></li>"+
+        "							<li><a href=\"#Isub\" data-toggle=\"pill\" >아랫첨자</a></li>"+
+        "							<li><a href=\"#Isup\" data-toggle=\"pill\" >윗첨자</a></li>"+
+        "							<li><a href=\"#Istyle\" data-toggle=\"pill\" >폰트 스타일</a></li>"+
+        "							<li><a href=\"#Ifont\" data-toggle=\"pill\" >폰트 크기</a></li>"+
+        "							<li><a href=\"#Ihead\" data-toggle=\"pill\" >폰트 헤드</a></li>"+
+        "							<li><a href=\"#Icolor\" data-toggle=\"pill\" >폰트 색상</a></li>"+
+        "						</ul>"+
+        "					</div>"+
+        "					<div id=\"Ilist\" class=\"tab-pane fade\">"+
+        "						<ul class=\"nav nav-pills nav-stacked\">"+
+        "							<li class=\"active\"><a href=\"#Imark\" data-toggle=\"pill\" >마크순서</a></li>"+
+        "							<li><a href=\"#Inum\" data-toggle=\"pill\" >숫자순서</a></li>"+
+        "							<li><a href=\"#Ileft\" data-toggle=\"pill\" >왼쪽정렬</a></li>"+
+        "							<li><a href=\"#Icenter\" data-toggle=\"pill\" >가운데정렬</a></li>"+
+        "							<li><a href=\"#Iright\" data-toggle=\"pill\" >오른쪽정렬</a></li>"+
+        "						</ul>"+
+        "					</div>"+
+        "					<div id=\"Iarert\" class=\"tab-pane fade\">"+
+        "						<ul class=\"nav nav-pills nav-stacked\">"+
+        "							<li class=\"active\"><a href=\"#Ifield\" data-toggle=\"pill\" >필드</a></li>"+
+        "							<li><a href=\"#Ialer\" data-toggle=\"pill\" >알림</a></li>"+
+        "							<li><a href=\"#Iinfo\" data-toggle=\"pill\" >정보</a></li>"+
+        "						</ul>"+
+        "					</div>"+
+        "					<div id=\"Ispecial\" class=\"tab-pane fade\">"+
+        "						<ul class=\"nav nav-pills nav-stacked\">"+
+        "							<li class=\"active\"><a href=\"#Ihr\" data-toggle=\"pill\" >문단선</a></li>"+
+        "							<li><a href=\"#Isy\" data-toggle=\"pill\" >신택스하이라이트</a></li>"+
+        "							<li><a href=\"#Itab\" data-toggle=\"pill\" >테이블</a></li>"+
+        "							<li><a href=\"#Ilin\" data-toggle=\"pill\" >링크 이미지, URL</a></li>"+
+        "						</ul>"+
+        "					</div>"+
+        "				</div>"+
+        "				<div class=\"tab-content col-md-5\"style=\"height : 100px; overflow: auto\">"+
+        "					<div id=\"Ib\" class=\"well tab-pane fade in active\">"+
+        "						Syntax : <code>** **</code><br>"+
+        "						Example : <code>**bold**</code><br>"+
+        "						output : <strong>bold</strong>"+
+        "					</div>"+
+        "					<div id=\"Ii\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>_ _</code><br>"+
+        "						Example : <code>_italicized_</code><br>"+
+        "						output : <em>italicized</em>"+
+        "					</div>"+
+        "					<div id=\"Iu\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>// //</code><br>"+
+        "						Example : <code>//italicized//</code><br>"+
+        "						output : <u>italicized</u>"+
+        "					</div>"+
+        "					<div id=\"Id\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>~~ ~~</code><br>"+
+        "						Example : <code>~~delete~~</code><br>"+
+        "						output : <del>italicized</del>"+
+        "					</div>"+
+        "					<div id=\"Isub\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>^ ^</code><br>"+
+        "						Example : <code>^SUBERSCRIPT^</code><br>"+
+        "						output : <sub>SUBERSCRIPT</sub>"+
+        "					</div>"+
+        "					<div id=\"Isup\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>~ ~</code><br>"+
+        "						Example : <code>~SUPERSCRIPT~</code><br>"+
+        "						output : <sup>SUPERSCRIPT</sup>"+
+        "					</div>"+
+        "					<div id=\"Istyle\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>[font|굴림] [font]</code><br>"+
+        "						Example : <code>[font|굴림]font-style[font]</code><br>"+
+        "						output : <span style=\"font-family:'굴림','gulim'\">굴림체</span>"+
+        "					</div>"+
+        "					<div id=\"Ifont\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>[size|16] [size]</code><br>"+
+        "						Example : <code>[size|16]font-size[size]</code><br>"+
+        "						output : <span style=\"font-size: 16px;\">font-size</span>"+
+        "					</div>"+
+        "					<div id=\"Ihead\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code># or ## or ### </code><br>"+
+        "						Example :<br>"+
+        "						<code>"+
+        "						# h1<br>"+
+        "						## h2<br>"+
+        "						### h3<br>"+
+        "						</code><br>"+
+        "						output :"+
+        "						<h1>h1</h1>"+
+        "						<h2>h2</h2>"+
+        "						<h3>h3</h3>"+
+        "					</div>"+
+        "					<div id=\"Icolor\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>[color|428bca] [color]</code><br>"+
+        "						Example : <code>[color|428bca]font-color[color]</code><br>"+
+        "						output : <span style=\"color: #428bca\">font-color</span>"+
+        "					</div>"+
+        "					<div id=\"Imark\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>* 텍스트</code><br>"+
+        "						Example : <code><br>"+
+        "						* list1<br>"+
+        "						* list2<br>"+
+        "						* list3<br>"+
+        "						</code>"+
+        "						output :"+
+        "							<ul><li>list1</li>"+
+        "							<li>list2</li>"+
+        "							<li>list3</li></ul>"+
+        "					</div>"+
+        "					<div id=\"Inum\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>1. 텍스트</code><br>"+
+        "						Example : <code><br>"+
+        "						1. list1<br>"+
+        "						1. list2<br>"+
+        "						1. list3<br>"+
+        "						</code>"+
+        "						output :"+
+        "							<ol><li>list1</li>"+
+        "							<li>list2</li>"+
+        "							<li>list3</li></ol>"+
+        "					</div>"+
+        "					<div id=\"Ileft\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>[left] [left]</code><br>"+
+        "						Example : <code>[left]leftText[left]</code><br>"+
+        "						output : <div style=\"text-align:left\">leftText</div>"+
+        "					</div>"+
+        "					<div id=\"Icenter\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>[center] [center]</code><br>"+
+        "						Example : <code>[center]leftText[center]</code><br>"+
+        "						output : <div style=\"text-align:center\">CenterText</div>"+
+        "					</div>"+
+        "					<div id=\"Iright\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>[right] [right]</code><br>"+
+        "						Example : <code>[right]leftText[right]</code><br>"+
+        "						output : <div style=\"text-align:right\">RightText</div>"+
+        "					</div>"+
+        "					<div id=\"Ifield\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>[field|타이틀] [field]</code><br>"+
+        "						Example : <code>[field|title]내용[field]</code><br>"+
+        "						output :"+
+        "							<div class=\"panel panel-default\">"+
+        "							<div class=\"panel-heading\"><h3 class=\"panel-title\">title</h3></div>"+
+        "							<div class=\"panel-body\">내용</div></div>"+
+        "					</div>"+
+        "					<div id=\"Ialer\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>[alert] [alert]</code><br>"+
+        "						Example : <code>[alert]내용[alert]</code><br>"+
+        "						output :"+
+        "						<div class=\"alert alert-warning\"><span class=\"glyphicon glyphicon-chevron-down\"></span>내용</div>"+
+        "					</div>"+
+        "					<div id=\"Iinfo\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>[info] [info]</code><br>"+
+        "						Example : <code>[info]내용[info]</code><br>"+
+        "						output :"+
+        "						<div class=\"alert alert-info\"><span class=\"glyphicon glyphicon-ok\"></span>내용</div>"+
+        "					</div>"+
+        "					<div id=\"Ihr\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>***</code><br>"+
+        "						Example : <code>***</code><br>"+
+        "						output : <hr>"+
+        "					</div>"+
+        "					<div id=\"Isy\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>[syntax] [syntax]</code><br>"+
+        "						Example : <code>[syntax]syntax[syntax]</code><br>"+
+        "						output : syntax"+
+        "					</div>"+
+        "					<div id=\"Itab\" class=\"well tab-pane fade\">"+
+        "						Example : <code><br>"+
+        "						| 타이틀| 타이틀|<br>"+
+        "						| ---:| ---:|<br>"+
+        "						|data1|data2|<br>"+
+        "						|data3|data3|<br>"+
+        "						</code>"+
+        "						output :"+
+        "							<table class=\"table table-bordered table-striped\">"+
+        "								<thead>"+
+        "								<tr>"+
+        "									<th> 타이틀</th>"+
+        "									<th> 타이틀</th>      </tr>"+
+        "								</thead>"+
+        "								<tbody>"+
+        "								<tr>"+
+        "									<td>123</td>"+
+        "									<td>sadf</td>      </tr>"+
+        "								<tr>"+
+        "									<td>5345</td>"+
+        "									<td>bbvcvb</td>      </tr>"+
+        "								</tbody>"+
+        "							</table>"+
+        "					</div>"+
+        "					<div id=\"Ilin\" class=\"well tab-pane fade\">"+
+        "						Syntax : <code>[lable](url)</code><br>"+
+        "						Example : <code>[www.libqa.com](http://www.libqa.com/)</code><br>"+
+        "						output : <a href=\"http://11st.co.kr\" target=\"_blank\">www.libqa.com</a><br>"+
+        "                                    <br>"+
+        "						Syntax : <code>![img text](url)</code><br>"+
+        "						Example : <code>![img text](https://daringfireball.net/graphics/logos)</code><br>"+
+        "						output : <p><img src=\"https://daringfireball.net/graphics/logos\" style=\"max-width:100%; height: auto;\" alt=\"img text\"></p>"+
+        "					</div>"+
+        "				</div>"+
+        "			</div>"+
         "       </th>" +
         "   </tr>" +
         "   </thead>" +

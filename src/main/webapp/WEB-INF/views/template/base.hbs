@@ -75,6 +75,7 @@
     </nav>
 </header>
 
+<csrf disabled="true"/>
 <div class="modal fade" style="padding-top:100px" id="loginLayer" tabindex="-1" role="dialog" aria-labelledby="Sign in" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -191,7 +192,7 @@
         }
 
         var data = $("#loginForm").serialize();
-        $.post('/loginPage', data).done(function(response){
+        $.post('/user/login/authenticate', data).done(function(response){
             var result = jQuery.parseJSON(response);
 
             console.log("@ result = " + result);

@@ -2,28 +2,17 @@ package com.libqa.application.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.libqa.application.util.RequestUtil;
-import com.libqa.application.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.swing.*;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +24,7 @@ import java.util.Map;
  * @Description :
  */
 @Slf4j
-public class LoginHandler implements AuthenticationSuccessHandler {
+public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private static final String DEFAULT_URL = "/index";
 
@@ -47,8 +36,7 @@ public class LoginHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
-        RequestUtil.printRequest(request, "* LoginHandler");
-
+        RequestUtil.printRequest(request, "* CustomLoginSuccessHandler");
 
         //TODO root url 접근시 isLogin 값이 없어서 false 로 넘어가는 문제가 있음 (로그인 후에도 비로그인 메뉴로 출력되는 bug)
 
