@@ -339,7 +339,7 @@ public class QaController {
         User user = loggedUserManager.getUser();
         try {
             QaReply originQaReply = qaReplyService.findByReplyId(replyId);
-            if (user.isNotMatchUser(originQaReply.getUserId())) {
+            if (qaValidator.isNotMatchUser(originQaReply.getQaId(), user)) {
                 return createResult(NOT_MATCH_USER);
             }
             qaReplyService.delete(replyId, user.getUserId());
@@ -386,5 +386,18 @@ public class QaController {
     public ResponseData<QaReply> getReplyMarkUp(@RequestParam("replyId") Integer replyId) {
         QaReply qaReply = qaReplyService.findByReplyId(replyId);
         return createSuccessResult(qaReply);
+    }
+
+    @RequestMapping(value = "/qa/saveReplyChoice", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<String> saveReplyChoice(@ModelAttribute QaReply qaReply){
+        User user = loggedUserManager.getUser();
+        if (qaValidator.isNotMatchUser(qaReply.getQaId(), user)) {
+            return createFailResult(NOT_MATCH_USER.getComment());
+        }
+        if(qaValidator.isChoicedReply(qaReply.getQaId())){
+            return createFailResult(EXIST_CHOICE.getComment());
+        }
+        return createSuccessResult(SUCCESS.getComment());
     }
 }
