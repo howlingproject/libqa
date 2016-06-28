@@ -84,7 +84,7 @@ public class QaValidator {
     }
 
     public boolean isChoicedReply(Integer qaId){
-        Integer choiceReplyCount = qaReplyService.getCountByQaIdAndIsChoiced(qaId);
+        Integer choiceReplyCount = qaReplyService.getCountByQaIdAndIsChoice(qaId);
         if(choiceReplyCount > 0){
             return true;
         } else {
