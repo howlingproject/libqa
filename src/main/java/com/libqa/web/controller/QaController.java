@@ -398,6 +398,7 @@ public class QaController {
         if(qaValidator.isChoicedReply(qaReply.getQaId())){
             return createFailResult(EXIST_CHOICE.getComment());
         }
+        qaReplyService.saveReplyChoice(qaReply.getReplyId(), user.getUserId());
         return createSuccessResult(SUCCESS.getComment());
     }
 }
