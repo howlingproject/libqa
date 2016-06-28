@@ -61,6 +61,11 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     @Override
+    public Integer getCountByQaIdAndIsChoiced(Integer qaId) {
+        return qaReplyRepository.getCountByQaIdAndIsChoicedTrueAndIsDeletedFalse(qaId);
+    }
+
+    @Override
     @Transactional
     public QaReply saveWithQaContent(QaReply paramQaReply, User user) {
         boolean isDeleted = false;
