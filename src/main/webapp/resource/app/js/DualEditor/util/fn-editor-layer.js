@@ -260,7 +260,7 @@ var jisung;
                 "     	<div class=\"modal-body\">" +
                 "     	    <ul class=\"nav nav-tabs\" role=\"tablist\">" +
                 "     	        <li role=\"presentation\" class=\"active\"><a href=\"#imgLink\" data-id=\"imgLink\" role=\"tab\" data-toggle=\"tab\">Link</a></li>" +
-                "     	        <li role=\"presentation\"><a href=\"#imgUpload\" data-id=\"imgUpload\" role=\"tab\" data-toggle=\"tab\">Upload</a></li>" +
+
                 "     	    </ul>" +
                 " 			<form class=\"form-horizontal\" style='padding-top: 10px;' role=\"form\">" +
                 "               <div class=\"tab-content\">" +
