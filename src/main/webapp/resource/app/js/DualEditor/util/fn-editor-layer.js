@@ -260,9 +260,9 @@ var jisung;
                 "     	<div class=\"modal-body\">" +
                 "     	    <ul class=\"nav nav-tabs\" role=\"tablist\">" +
                 "     	        <li role=\"presentation\" class=\"active\"><a href=\"#imgLink\" data-id=\"imgLink\" role=\"tab\" data-toggle=\"tab\">Link</a></li>" +
-
+                "     	        <li role=\"presentation\"><a href=\"#imgUpload\" data-id=\"imgUpload\" role=\"tab\" data-toggle=\"tab\">Upload</a></li>" +
                 "     	    </ul>" +
-                " 			<form class=\"form-horizontal\" style='padding-top: 10px;' role=\"form\">" +
+                " 			<form class=\"form-horizontal\" style='padding-top: 10px;' role=\"form\" id=\"imageUploadForm\" >" +
                 "               <div class=\"tab-content\">" +
                 "                   <div role=\"tabpanel\" class=\"tab-pane active\" id=\"imgLink\">" +
                 "                       <div style='margin-bottom: 15px;'>" +
@@ -276,7 +276,7 @@ var jisung;
                 "                   </div>"+
                 "                   <div role=\"tabpanel\" class=\"tab-pane well\" id=\"imgUpload\">" +
                 "                       <div class=\"form-group\">" +
-                "                           <input id=\"uploadfile\" type=\"file\" name=\"uploadfile\" accept=\"*\" style=\"display:none\">" +
+                "                           <input id=\"editImgUploadFile\" type=\"file\" name=\"uploadfile\" accept=\"*\" style=\"display:none\">" +
                 "                           <label for=\"fileAttachmentInput\" class=\"col-sm-2 control-label\">첨부파일</label>" +
                 "                           <div class=\"col-sm-10 col-md-10\">" +
                 "                               <div class=\"row\">" +
@@ -284,7 +284,7 @@ var jisung;
                 "                                       <input id=\"fileAttachmentInput\" class=\"form-control\" type=\"text\" />" +
                 "                                   </div>" +
                 "                                   <div class=\"col-sm-3 col-xs-3 col-md-3\">" +
-                "                                       <button class=\"btn btn-info btn-default\" type=\"button\" onclick=\"$('#uploadfile').click();\">선택</button>" +
+                "                                       <button class=\"btn btn-info btn-default\" type=\"button\" onclick=\"$('#editImgUploadFile').click();\">선택</button>" +
                 "                                   </div>" +
                 "                               </div>" +
                 "                           </div>" +
@@ -306,13 +306,12 @@ var jisung;
                 $('#imgModal').modal('hide');
             });
 
-            img.find("#image_uploadfile").on("change", function () {
-                var uploadFile = $("#image_uploadfile");
-                var $imageUploadForm = $("#imageUploadForm");
+            img.find("#editImgUploadFile").on("change", function () {
                 $.ajax({
                     url: "/common/uploadFile",
+                    method: "POST",
                     type: "POST",
-                    data: new FormData($imageUploadForm[0]),
+                    data: new FormData($("#imageUploadForm")[0]),
                     enctype: 'multipart/form-data',
                     processData: false,
                     contentType: false,
@@ -320,6 +319,7 @@ var jisung;
                     success: function (req) {
                         var text = req.data.realName ;
                         var url  = req.data.filePath+"/"+req.data.savedName;
+                        url = "/imageView?path="+url;
                         var html = "!["+text+"]("+url+")";
 
                         $.textInsert(textEditor, html, "", "" );
