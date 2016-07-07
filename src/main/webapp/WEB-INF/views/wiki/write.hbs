@@ -90,7 +90,7 @@
                                 {{/if}}
                             </div>
                         </div>
-                        <input name="uploadType" value="Qa" type="hidden">
+                        <input name="uploadType" value="WIKI" type="hidden">
                         <input name="uploadFilePath" id="uploadFilePath" type="hidden">
                         <input id="viewType" name="viewType" value="Image" type="hidden" />
                         <input id="file-attachment" name="uploadfile" type="file" style="display:none">
@@ -245,50 +245,6 @@
                 return false;
             },
             uploadFile : function(){
-                var field = $("#file-attachment").val();
-                if (field != '') {
-                    $.ajax({
-                        url: "/common/uploadFile",
-                        type: "POST",
-                        data: new FormData($("#wikiForm")[0]),
-                        enctype: 'multipart/form-data',
-                        processData: false,
-                        contentType: false,
-                        cache: false,
-                        success: function (req) {
-                            if (req.resultCode == 1) {
-                                var idx = $("#uploadfileList > div").size();
-                                var fileDivTemplat = '<div class="fileDiv" style="padding: 5px;">' +
-                                        '<input name="wikiFiles['+idx+'].realName"  id="realName" type="hidden" value="'+req.data.realName+'">' +
-                                        '<input name="wikiFiles['+idx+'].savedName" id="savedName" type="hidden" value="'+req.data.savedName+'">' +
-                                        '<input name="wikiFiles['+idx+'].filePath"  id="filePath" type="hidden" value="'+req.data.filePath+'">' +
-                                        '<input name="wikiFiles['+idx+'].fileSize"  id="fileSize" type="hidden" value="'+req.data.fileSize+'">' +
-                                        '<input name="wikiFiles['+idx+'].fileType"  id="fileType" type="hidden" value="'+req.data.fileExtendType+'">' +
-                                        '<input name="wikiFiles['+idx+'].isDeleted"  id="isDeleted" type="hidden" value="false">' +
-                                        '<a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
-                                        '<a href="#fileDiv" onclick="Wiki.deleteFile(this); return false;">' +
-                                        '<span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>' +
-                                        '</a>' +
-                                        '</div>';
-                                $('#uploadfileList').append(fileDivTemplat);
-                            }
-                        },
-                        error: function (req) {
-                            // Handle upload error
-                            alert('req : ' + req);
-                            console.log('req : ' + req.status);
-                            console.log('req : ' + req.readyState);
-
-                            if (req.status == 500) {
-                                alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
-                            } else {
-                                alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
-                            }
-                        }
-                    });
-                }
-            },
-            imgUploadFile : function(){
                 var field = $("#file-attachment").val();
                 if (field != '') {
                     $.ajax({
