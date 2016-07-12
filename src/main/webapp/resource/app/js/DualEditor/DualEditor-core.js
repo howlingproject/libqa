@@ -481,10 +481,10 @@ function getMarkupEditHtml(width, height){
         "   </thead>" +
         "   <tbody>" +
         "   <tr>" +
-        "       <td style=\"padding-top: 10px;padding-left: 0px;\">" +
+        "       <td style=\"padding-top: 10px;padding-left: 0px; width: 50%\">" +
         "           <textarea class=\"dualEditor form-control\" rows=\"20\" id=\"wikiEditor\" style=\"overflow: scroll; height: 500px;\"></textarea>" +
         "       </td>" +
-        "       <td style=\"padding-top: 10px;padding-left: 10px;\">" +
+        "       <td style=\"padding-top: 10px;padding-left: 10px; width: 50%\">" +
         "           <div id=\"wikimaincol\" style=\"background-color:white; border:1px solid #ccc; padding-top:5px; padding-left:10px; border-radius:5px; overflow: scroll; height: 500px;\">" +
         "       </td>" +
         "   </tr>" +
