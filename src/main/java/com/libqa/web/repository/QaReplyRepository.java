@@ -26,4 +26,6 @@ public interface QaReplyRepository extends JpaRepository<QaReply, Integer> {
     List<QaReply> findByUserIdAndIsDeleted(Integer userId, boolean isDeleted);
 
     Integer countByQaIdAndIsDeletedFalse(Integer qaId);
+
+    Integer countByQaIdAndIsChoiceTrueAndIsDeletedFalse(Integer qaId);
 }

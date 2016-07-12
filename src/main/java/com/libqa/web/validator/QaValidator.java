@@ -83,4 +83,13 @@ public class QaValidator {
         }
     }
 
+    public boolean isChoicedReply(Integer qaId){
+        Integer choiceReplyCount = qaReplyService.getCountByQaIdAndIsChoice(qaId);
+        if(choiceReplyCount > 0){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

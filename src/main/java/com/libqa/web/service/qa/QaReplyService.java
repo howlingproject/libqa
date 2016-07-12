@@ -36,4 +36,8 @@ public interface QaReplyService {
     int getCountByQaId(Integer qaId);
 
     void updateReply(QaReply qaReply, User user);
+
+    Integer getCountByQaIdAndIsChoice(Integer qaId);
+
+    void saveReplyChoice(Integer replyId, Integer userId);
 }
