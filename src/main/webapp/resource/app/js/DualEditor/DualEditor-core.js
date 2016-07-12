@@ -170,7 +170,6 @@ var DualEditor = (function(){
         setTimeout(function() {
             $("#wikimaincol").text("");
             var txt = DualEditor.markup( $("#wikiEditor").val() );
-            console.info(txt);
             $("#wikimaincol").html( "<div style=\"width:96%\">"+txt+"</div>" );
             SyntaxHighlighter.all();
         }, 1000);
