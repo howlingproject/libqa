@@ -112,12 +112,12 @@ var jisung;
                     return false;
                 }
 
-                html += getHtml(tableForm, "타이틀" ) + "| \n";
-                html += getHtml(tableForm, "---:" ) + "| \n";
+                html += getHtml(tableForm[0].length-1, "타이틀" ) + "| \n";
+                html += getHtml(tableForm[0].length-1, "---:" ) + "| \n";
 
                 tableForm.each(function(){
                     $(this).find('input').each(function(){
-                        html += "|" + $(this).val();
+                        html += "| " + $(this).val();
                         $(this).val("");
                     });
                     html += "| \n"
@@ -126,11 +126,11 @@ var jisung;
                 $.textInsert(textEditor, html, "", "" );
                 $('#tableModal').modal('hide');
 
-                function getHtml( target, text ){
+                function getHtml( size, text ){
                     var html = "";
-                    target.each(function(){
+                    for(var i=0; i<size; i++){
                         html += "| "+text;
-                    });
+                    }
                     return html;
                 }
             });
