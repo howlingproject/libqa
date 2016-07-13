@@ -110,10 +110,6 @@ var DualEditor = (function(){
             target.append(getMarkupEditMiniHtml(options.width, options.height));
         }else{
             target.append(getMarkupEditHtml(options.width, options.height));
-            //에디터 사이즈설정.
-            var screenWidth = window.screen.width;
-            $(".sonDualEditor tbody :first").attr("style", "width:"+screenWidth+"px;");
-            $(".sonDualEditor tbody :first > td").attr("style", "width:"+screenWidth/2+"px;");
         }
 
 
@@ -137,7 +133,7 @@ var DualEditor = (function(){
                 var data = $me.data();
                 // 에디터 액션 처리
                 $.editorAction(editor, $me, data);
-                DualEditor.markup.parsing();
+                DualEditor.markup.parsing(options.type);
             });
         });
 
@@ -148,12 +144,12 @@ var DualEditor = (function(){
                 var data = $me.data();
                 // 에디터 액션 처리
                 $.editorAction(editor, $me, data);
-                DualEditor.markup.parsing();
+                DualEditor.markup.parsing(options.type);
             });
         });
 
         $("#wikiEditor").keydown(function(evnet){
-            DualEditor.markup.parsing();
+            DualEditor.markup.parsing(options.type);
         });
 
         $(".nav-pills a").on("click", function() {
@@ -166,11 +162,18 @@ var DualEditor = (function(){
 
     };
 
-    DualEditor.markup.parsing = function(){
+    DualEditor.markup.parsing = function(type){
+        var width = options.width== '' ? '' : options.width;
+        if( type != 'mini'){
+            var widthType = width.replace(/([\d]+)/gm, "");
+            width = width.replace(/([\D]+)/gm, "");
+            width = width == '' ? '' : (width/2-10)+widthType;
+        }
+
         setTimeout(function() {
             $("#wikimaincol").text("");
             var txt = DualEditor.markup( $("#wikiEditor").val() );
-            $("#wikimaincol").html( "<div style=\"width:96%\">"+txt+"</div>" );
+            $("#wikimaincol").html( "<div style=\"width:"+width+"\">"+txt+"</div>" );
             SyntaxHighlighter.all();
         }, 1000);
 
@@ -206,6 +209,9 @@ function loadCSS(src) {
 
 function getMarkupEditHtml(width, height){
     var style = "";
+    var widthType = width.replace(/([\d]+)/gm, "");
+    var width = width.replace(/([\D]+)/gm, "");
+
     style = width == '' ? style + '' : style + "width:"+width+";";
     style = height == '' ? style + '' : style + "height:"+height+";";
 
@@ -481,10 +487,10 @@ function getMarkupEditHtml(width, height){
         "   </thead>" +
         "   <tbody>" +
         "   <tr>" +
-        "       <td style=\"padding-top: 10px;padding-left: 0px; width: 50%\">" +
+        "       <td style=\"padding-top: 10px;padding-left: 0px; width: "+(width/2)+widthType+"\">" +
         "           <textarea class=\"dualEditor form-control\" rows=\"20\" id=\"wikiEditor\" style=\"overflow: scroll; height: 500px;\"></textarea>" +
         "       </td>" +
-        "       <td style=\"padding-top: 10px;padding-left: 10px; width: 50%\">" +
+        "       <td style=\"padding-top: 10px;padding-left: 10px; width: "+(width/2)+widthType+"\">" +
         "           <div id=\"wikimaincol\" style=\"background-color:white; border:1px solid #ccc; padding-top:5px; padding-left:10px; border-radius:5px; overflow: scroll; height: 500px;\">" +
         "       </td>" +
         "   </tr>" +
