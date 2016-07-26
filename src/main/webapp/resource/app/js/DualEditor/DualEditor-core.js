@@ -11,10 +11,12 @@ var DualEditor = (function(){
         ,data : ''
 
     };
+    syntaxData = new Array;
 
     DualEditor.markup = function(contents){
-
+        syntaxData = new Array;
         contents = contents.replace(/\n|\r\n/ig, "\n<br>");
+        contents = DualEditor.markup.SYNTAX_BEFORE( contents );
         contents = DualEditor.markup.ITALIC( contents );
         contents = DualEditor.markup.FIELD( contents );
         contents = DualEditor.markup.ALERT( contents );
@@ -27,7 +29,6 @@ var DualEditor = (function(){
         contents = DualEditor.markup.H1( contents );
         contents = DualEditor.markup.HR( contents );
         contents = DualEditor.markup.LAYOUT( contents );
-        contents = DualEditor.markup.SYNTAX( contents );
 
         contents = DualEditor.markup.FONT( contents );
         contents = DualEditor.markup.FONTSIZE( contents );
@@ -38,6 +39,8 @@ var DualEditor = (function(){
         contents = DualEditor.markup.UNDERLINING( contents );
         contents = DualEditor.markup.SUPERSCRIPT( contents );
         contents = DualEditor.markup.SUBERSCRIPT( contents );
+
+        contents = DualEditor.markup.SYNTAX( contents );
 
         return contents;
     };
