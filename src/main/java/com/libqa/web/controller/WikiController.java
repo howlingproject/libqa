@@ -35,7 +35,6 @@ import static com.libqa.application.framework.ResponseData.createSuccessResult;
  * Created by songanji on 2015. 3. 1..
  */
 @RestController
-@RequestMapping("/")
 @Slf4j
 public class WikiController {
 
@@ -60,7 +59,7 @@ public class WikiController {
     @Autowired
     private LoggedUserManager loggedUserManager;
 
-    @RequestMapping("wiki/main")
+    @RequestMapping("/wiki/main")
     public ModelAndView main(Model model){
         ModelAndView mav = new ModelAndView("wiki/main");
 
@@ -91,14 +90,14 @@ public class WikiController {
 
     //@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    @RequestMapping("wiki/write")
+    @RequestMapping("/wiki/write")
     public ModelAndView write(@ModelAttribute Space modelSpace){
         ModelAndView mav = wikiWrite(modelSpace, null);
         return mav;
     }
 
-    @PreAuthorize("hasAuthority('USER')")
-    @RequestMapping("wiki/write/{wikiId}" )
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @RequestMapping("/wiki/write/{wikiId}" )
     public ModelAndView writeSub(@ModelAttribute Space modelSpace, @PathVariable("wikiId") Integer wikiId){
         ModelAndView mav = wikiWrite(modelSpace,wikiId);
         return mav;
@@ -153,8 +152,8 @@ public class WikiController {
         return mav;
     }
 
-    @PreAuthorize("hasAuthority('USER')")
-    @RequestMapping("wiki/update/{wikiId}")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @RequestMapping("/wiki/update/{wikiId}")
     public ModelAndView update(@PathVariable Integer wikiId){
         ModelAndView mav = new ModelAndView("wiki/write");
         log.debug("# wikiId : {}", wikiId);
@@ -176,7 +175,7 @@ public class WikiController {
         return mav;
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping(value = "/wiki/delete/{wikiId}", method = RequestMethod.GET)
     public ResponseData wikiDelete(@PathVariable Integer wikiId) {
         log.debug("# wikiId : {}", wikiId);
@@ -225,8 +224,9 @@ public class WikiController {
         return createSuccessResult(wiki);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
-    @RequestMapping(value = "wiki/save", method = RequestMethod.POST)
+    // @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @RequestMapping(value = "/wiki/save", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<?> save(@ModelAttribute Wiki wiki, @ModelAttribute Keyword keyword){
         try{
@@ -277,8 +277,9 @@ public class WikiController {
 
     }
 
-    @PreAuthorize("hasAuthority('USER')")
-    @RequestMapping(value = "wiki/update", method = RequestMethod.POST)
+
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @RequestMapping(value = "/wiki/update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<?> update(@ModelAttribute Wiki paramWiki, @ModelAttribute Keyword paramKeyword){
         try{
@@ -315,14 +316,14 @@ public class WikiController {
 
     }
 
-    @RequestMapping(value = "wiki/count", method = RequestMethod.GET)
+    @RequestMapping(value = "/wiki/count", method = RequestMethod.GET)
     @ResponseBody
     public String wikiCount() {
         List<Wiki> wikis = wikiService.findAllByCondition();
         return wikis.size() + "";
     }
 
-    @RequestMapping(value = "wiki/allList/{listViewType}", method = RequestMethod.GET)
+    @RequestMapping(value = "/wiki/allList/{listViewType}", method = RequestMethod.GET)
     public ResponseData<DisplayAjaxWiki> wikiListViewType(@PathVariable("listViewType") String listViewType) {
 
         List<DisplayWiki> displayWikis = null;
@@ -337,7 +338,7 @@ public class WikiController {
         return ResponseData.createSuccessResult(displayAjaxWiki);
     }
 
-    @RequestMapping(value = "wiki/list/{listType}", method = RequestMethod.GET)
+    @RequestMapping(value = "/wiki/list/{listType}", method = RequestMethod.GET)
     public ModelAndView wikiList(@PathVariable String listType
             ,@RequestParam("page") Integer page ) {
         ModelAndView mav = new ModelAndView("wiki/list");
@@ -370,7 +371,7 @@ public class WikiController {
         return mav;
     }
 
-    @RequestMapping(value = "wiki/list/keyword/{keywordNm}", method = RequestMethod.GET)
+    @RequestMapping(value = "/wiki/list/keyword/{keywordNm}", method = RequestMethod.GET)
     public ModelAndView keywordWikiList(@PathVariable String keywordNm) {
         ModelAndView mav = new ModelAndView("wiki/list");
 
@@ -384,7 +385,7 @@ public class WikiController {
         return mav;
     }
 
-    @RequestMapping(value = "wiki/search", method = RequestMethod.GET)
+    @RequestMapping(value = "/wiki/search", method = RequestMethod.GET)
     public ModelAndView searchWikiList(@RequestParam String text) {
         ModelAndView mav = new ModelAndView("wiki/list");
         log.debug("# searchWikiList : {}", text);
@@ -425,7 +426,7 @@ public class WikiController {
         }
     }
 
-    @RequestMapping(value = "wiki/reply/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/wiki/reply/save", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<?> ReplySave(@ModelAttribute WikiReply wikiReply){
         try{
