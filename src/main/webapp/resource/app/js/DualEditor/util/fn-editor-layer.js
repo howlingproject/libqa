@@ -383,12 +383,11 @@ var jisung;
                 " </div> "
             var syntax = $(div);
 
-            var type1 = ["applescript","actionscript3 as3","bash shell","coldfusion cf","cpp c","c# c-sharp csharp","css","delphi pascal","diff patch pas","erl erlang","groovy","java","jfx javafx","js jscript javascript","perl pl","php","text plain","py python","ruby rails ror rb","sass scss","scala","sql","vb vbnet","xml xhtml xslt html"];
-            var type2 = ["applescript","as3","shell","cf","c","c#","css","delphi","diff","erl","groovy","java","javafx","js","pl","php","text","py","ruby","sass","scala","sql","vb","html"];
+            var type1 = ["Apache","Bash","CoffeeScript","C++","C","C#","CSS","Diff","HTTP","Ini","Java","JavaScript","JSON","Makefile","Markdown","Nginx","Objective-C","Perl","PHP","Python","Ruby","SQL","HTML","XML"];
             syntax.find("#syntaxType").append(function(){
                 var html = "";
                 for( var i=0; i< type1.length; i++ ){
-                    html += "<option value="+type2[i]+">";
+                    html += "<option value="+type1[i]+">";
                     html += type1[i];
                     html += "</option>";
                 }
