@@ -1,13 +1,13 @@
 DualEditor.markup.SYNTAX = function(contents){
     var idx = 0;
     function replacer(match, p1, p2, offset, string) {
-        var type = ["applescript","as3","shell","cf","c","c#","css","delphi","diff","erl","groovy","java","javafx","js","pl","php","text","py","ruby","sass","scala","sql","vb","html"];
+        var type = ["Apache","Bash","CoffeeScript","C++","C","C#","CSS","Diff","HTTP","Ini","Java","JavaScript","JSON","Makefile","Markdown","Nginx","Objective-C","Perl","PHP","Python","Ruby","SQL","HTML","XML"];
         var data = syntaxData[idx];
         p1 = p1.replace(/</gm, "&lt;");
         data = data.replace(/<br>/ig, "");
         for( var i=0; i< type.length; i++ ){
             if( type[i] == p1 ){
-                return "<pre class=\"brush: "+p1+"\">"+data+"</pre>";
+                return "<pre><code2 class=\"hljs "+p1+"\">"+data+"</code2></pre>";
             }
         }
         idx++;

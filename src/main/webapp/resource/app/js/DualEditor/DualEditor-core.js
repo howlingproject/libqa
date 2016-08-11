@@ -71,32 +71,8 @@ var DualEditor = (function(){
         loadJQuery(src+"/js/DualEditor/module/mLAYOUT.js");
         loadJQuery(src+"/js/DualEditor/module/mSyntax.js");
 
-        loadCSS(src+"/js/DualEditor/syntaxhiglight/styles/shThemeDefault.css");
-        loadCSS(src+"/js/DualEditor/syntaxhiglight/styles/shCore.css");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shCore.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushXml.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushJScript.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushAppleScript.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushAS3.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushBash.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushCpp.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushCSharp.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushCss.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushDelphi.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushDiff.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushErlang.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushGroovy.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushJava.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushJavaFX.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushPerl.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushPhp.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushPlain.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushPython.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushRuby.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushSass.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushScala.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushSql.js");
-        loadJQuery(src+"/js/DualEditor/syntaxhiglight/scripts/shBrushVb.js");
+        loadCSS(src+"/js/DualEditor/syntaxhiglight/styles/dracula.css");
+        loadJQuery(src+"/js/DualEditor/syntaxhiglight/highlight.pack.js");
     };
 
 
@@ -178,6 +154,7 @@ var DualEditor = (function(){
             var txt = DualEditor.markup( $("#wikiEditor").val() );
             $("#wikimaincol").html( "<div style=\"width:"+width+"\">"+txt+"</div>" );
             SyntaxHighlighter.all();
+            hljs.highlightBlock($('pre code2')[0]);
         }, 1000);
 
     };
