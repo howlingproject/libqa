@@ -139,6 +139,7 @@ var DualEditor = (function(){
             $(next).find("a").trigger('click');
         });
 
+        DualEditor.markup.parsing(options.type);
     };
 
     DualEditor.markup.parsing = function(type){
@@ -153,8 +154,9 @@ var DualEditor = (function(){
             $("#wikimaincol").text("");
             var txt = DualEditor.markup( $("#wikiEditor").val() );
             $("#wikimaincol").html( "<div style=\"width:"+width+"\">"+txt+"</div>" );
-            SyntaxHighlighter.all();
-            hljs.highlightBlock($('pre code2')[0]);
+            $('pre code2').each(function(){
+                hljs.highlightBlock( (this) );
+            });
         }, 1000);
 
     };
