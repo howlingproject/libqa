@@ -2,8 +2,10 @@ package com.libqa.web.controller;
 
 import com.google.common.collect.Lists;
 import com.libqa.application.dto.QaDto;
+import com.libqa.application.enums.QaSearchType;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUserManager;
+import com.libqa.application.enums.converter.QaSearchTypeEnumConverter;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.KeywordListService;
 import com.libqa.web.service.common.KeywordService;
@@ -16,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -80,6 +83,18 @@ public class QaController {
         mav.addObject("recentQAContents", buildDisplayQas(qaService.getRecentQAContents()));
         mav.addObject("waitReplyQAContents", buildDisplayQas(qaService.getWaitReplyQaContents()));
         mav.addObject("bestQAContents", buildDisplayQas(qaService.getBestQaContents()));
+        return mav;
+    }
+
+    @RequestMapping(value = "/qa/{qaSearchType}/list", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable QaSearchType qaSearchType){
+        ModelAndView mav = new ModelAndView("qa/list");
+        Integer qaTotalCount = qaService.getQaTotalCount();
+        Integer qaNotReplyedCount = qaService.getQaNotReplyedCount();
+        mav.addObject("qaTotalCount", qaTotalCount);
+        mav.addObject("qaNotReplyedCount", qaNotReplyedCount);
+        mav.addObject("qaList", buildDisplayQas(qaService.getQAContents(qaSearchType)));
+        mav.addObject(qaSearchType.toString(), qaSearchType);
         return mav;
     }
 
@@ -401,4 +416,10 @@ public class QaController {
         qaReplyService.saveReplyChoice(qaReply.getReplyId(), user.getUserId());
         return createSuccessResult(SUCCESS.getComment());
     }
+
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder) {
+        dataBinder.registerCustomEditor(QaSearchType.class, new QaSearchTypeEnumConverter());
+    }
+
 }
