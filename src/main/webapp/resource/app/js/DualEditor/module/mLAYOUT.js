@@ -8,11 +8,12 @@ DualEditor.markup.LAYOUT = function(contents){
         idx++;
         return p2;
     }
-    var layoutSize = contents.match(/(<br>)?\[layout\]([\W\w]+?)\[layout\]/igm).length;
-    var idx = 0;
-    if( layoutSize != null && layoutSize > 1 && layoutSize <= 4 ){
-        contents = contents.replace(/(<br>)?\[layout\]([\W\w]+?)\[layout\]/igm, replacer);
+    if( contents.match(/(<br>)?\[layout\]([\W\w]+?)\[layout\]/igm) != null ){
+        var layoutSize = contents.match(/(<br>)?\[layout\]([\W\w]+?)\[layout\]/igm).length;
+        var idx = 0;
+        if( layoutSize != null && layoutSize > 1 && layoutSize <= 4 ){
+            contents = contents.replace(/(<br>)?\[layout\]([\W\w]+?)\[layout\]/igm, replacer);
+        }
     }
-
     return contents;
 };
