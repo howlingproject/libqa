@@ -1,15 +1,14 @@
 package com.libqa.web.service.wiki;
 
+import com.libqa.application.enums.WikiOrderListType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Wiki;
 import com.libqa.web.domain.WikiLike;
 import com.libqa.web.view.wiki.DisplayWiki;
 import com.libqa.web.view.wiki.DisplayWikiLike;
-import org.springframework.data.domain.Page;
-import java.util.List;
 
-import org.springframework.data.domain.Pageable;
+import java.util.List;
 
 /**
  * Created by songanji on 2015. 3. 1..
@@ -25,7 +24,7 @@ public interface WikiService {
 
     Wiki wikiDetail(Integer wikiId);
 
-    List<DisplayWiki> findByAllWiki(int startIdx, int endIdx, String sortType);
+    List<DisplayWiki> findByAllWiki(int startIdx, int endIdx, WikiOrderListType wikiOrderListType);
 
     List<DisplayWiki> findByBestWiki(int startIdx, int endIdx);
 
@@ -43,6 +42,8 @@ public interface WikiService {
 
     DisplayWikiLike updateLike(WikiLike likes);
 
+    List<DisplayWiki> findUpdateWikiList(int startIdx, int endIdx);
+
     List<Wiki> searchRecentlyWikiesByPageSize(Integer pageSize);
 
     Integer maxOrderIdx( Integer parentsId, Integer depthIdx );
@@ -53,5 +54,4 @@ public interface WikiService {
 
     List<Wiki> findBySpaceIdAndSort(Integer spaceId);
 
-    Page<Wiki> findPagingByIsDeleted(Pageable pageable,  boolean isDeleted);
 }
