@@ -6,6 +6,7 @@ package com.libqa.application.enums;
 public enum WikiOrderListType {
     INSERT_DATE("insertDate"),
     TITLE("title"),
+
     ;
 
     private String type;
