@@ -175,19 +175,6 @@ public class WikiServiceImpl implements WikiService {
     }
 
     @Override
-    public Wiki findByParentId(Integer parentId) {
-        if( parentId == null  ){
-            return  null;
-        }
-        return wikiRepository.findOneByWikiIdAndIsDeleted(parentId, isDeleted);
-    }
-
-    @Override
-    public List<Wiki> findBySubWikiId(Integer wikiId) {
-        return wikiRepository.findAllByParentsIdAndIsDeleted(wikiId, isDeleted);
-    }
-
-    @Override
     public List<DisplayWiki> findByAllWiki(int page, int size, WikiOrderListType wikiOrderListType) {
         List<DisplayWiki> resultWiki = new ArrayList<>();
         List<Wiki> list = wikiRepository.findAllByIsDeleted(
@@ -205,11 +192,6 @@ public class WikiServiceImpl implements WikiService {
             }
         }
         return resultWiki;
-    }
-
-    @Override
-    public Long countByAllWiki(){
-        return wikiRepository.countByIsDeleted(isDeleted);
     }
 
     @Override

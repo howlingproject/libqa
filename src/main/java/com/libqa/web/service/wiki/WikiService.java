@@ -24,10 +24,6 @@ public interface WikiService {
 
     Wiki wikiDetail(Integer wikiId);
 
-    Wiki findByParentId(Integer parentId);
-
-    List<Wiki> findBySubWikiId(Integer wikiId);
-
     List<DisplayWiki> findByAllWiki(int startIdx, int endIdx, WikiOrderListType wikiOrderListType);
 
     List<DisplayWiki> findByBestWiki(int startIdx, int endIdx);
@@ -45,8 +41,6 @@ public interface WikiService {
     List<DisplayWiki> findWikiListByContentsMarkup(String searchText, int page, int size);
 
     DisplayWikiLike updateLike(WikiLike likes);
-
-    Long countByAllWiki();
 
     List<DisplayWiki> findUpdateWikiList(int startIdx, int endIdx);
 
