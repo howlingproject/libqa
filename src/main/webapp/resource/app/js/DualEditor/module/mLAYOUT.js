@@ -1,9 +1,19 @@
 DualEditor.markup.LAYOUT = function(contents){
-    var pattern = /\[layout\](.*?)\[layout\]\n\[layout\](.*?)\[layout\]\n\[layout\](.*?)\[layout\]\n\[layout\](.*?)\[layout\]/igm;
-    contents = contents.replace(pattern, "<div class=\"row\"><div class=\"col-md-3\">$1</div><div class=\"col-md-3\">$2</div><div class=\"col-md-3\">$3</div><div class=\"col-md-3\">$4</div></div>");
-    pattern.compile(/\[layout\](.*?)\[layout\]\n\[layout\](.*?)\[layout\]\n\[layout\](.*?)\[layout\]/igm);
-    contents = contents.replace(pattern, "<div class=\"row\"><div class=\"col-md-4\">$1</div><div class=\"col-md-4\">$2</div><div class=\"col-md-4\">$3</div></div>");
-    pattern.compile(/\[layout\](.*?)\[layout\]\n\[layout\](.*?)\[layout\]/igm);
-    contents = contents.replace(pattern, "<div class=\"row\"><div class=\"col-md-6\">$1</div><div class=\"col-md-6\">$2</div></div>");
+    function replacer(match, p1, p2, offset, string) {
+        if( idx == 0 ){
+            p2 = "<div class=\"row\"><div class=\"col-md-"+(7-layoutSize)+"\">"+p2+"</div>";
+        }else{
+            p2 = "<div class=\"col-md-"+(7-layoutSize)+"\">"+p2+"</div>";
+        }
+        idx++;
+        return p2;
+    }
+    if( contents.match(/(<br>)?\[layout\]([\W\w]+?)\[layout\]/igm) != null ){
+        var layoutSize = contents.match(/(<br>)?\[layout\]([\W\w]+?)\[layout\]/igm).length;
+        var idx = 0;
+        if( layoutSize != null && layoutSize > 1 && layoutSize <= 4 ){
+            contents = contents.replace(/(<br>)?\[layout\]([\W\w]+?)\[layout\]/igm, replacer);
+        }
+    }
     return contents;
 };

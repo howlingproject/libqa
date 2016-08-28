@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -32,11 +33,9 @@ public class QaContent {
     private Integer wikiId;
 
     @Column(nullable = false, length = 100)
-    @Field
     private String title;
 
     @Column(nullable = false, columnDefinition = "Text")
-    @Field
     private String contents;
 
     @Column(nullable = false, columnDefinition = "Text")
@@ -89,12 +88,15 @@ public class QaContent {
     private Integer updateUserId;
 
     @OneToMany(mappedBy = "qaId", fetch = FetchType.LAZY)
+    @Where(clause = "is_deleted =0")
     private List<QaReply> qaReplys;
 
     @OneToMany(mappedBy = "qaId", fetch = FetchType.LAZY)
+    @Where(clause = "is_canceled =0")
     private List<QaRecommend> qaRecommends;
 
     @OneToMany(mappedBy = "qaId", fetch = FetchType.LAZY)
+    @Where(clause = "is_deleted =0")
     private List<QaFile> qaFiles;
 
 }

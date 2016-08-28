@@ -7,6 +7,7 @@ import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.Role;
 import com.libqa.application.enums.StatusCode;
 import com.libqa.application.framework.ResponseData;
+import com.libqa.application.util.LibqaConstant;
 import com.libqa.application.util.LoggedUserManager;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.*;
@@ -21,6 +22,7 @@ import com.libqa.web.view.wiki.DisplayWiki;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,8 +47,6 @@ public class SpaceController {
 
     @Value("${howling.hello.message}")
     private String message;
-
-    private static final Integer PAGE_SIZE = 2; // fetch size 기본 10
 
     @Autowired
     private SpaceService spaceService;
@@ -84,7 +84,9 @@ public class SpaceController {
         // 전체 space 목록 조회 (10개)
         boolean isDeleted = false;
         boolean morePage = false;   // 더보기 여부
-        SpaceMainList spacePages = spaceService.findPageBySort(isDeleted, 0, PAGE_SIZE, "title");
+        SpaceMainList spacePages = spaceService.findPageBySort(isDeleted, LibqaConstant.PAGE_START_INDEX,
+                LibqaConstant.SPACE_PAGE_SIZE,
+                LibqaConstant.SORT_TYPE_TITLE);
         Long totalCount = spacePages.getTotalElements();
         Integer currentPage = spacePages.getCurrentPage();
         Integer totalPage = spacePages.getTotalPages();
@@ -92,18 +94,17 @@ public class SpaceController {
         User user = loggedUserManager.getUser();
 
         if (user == null || user.isGuest()) {
-            log.debug("# 로그인 사용자 정보가 존재하지 않습니다.");
+            log.debug("# 로그인 사용자 정보가 존재하지 않음.");
             mav.addObject("myFavoriteSpaceList", null);
         } else {
             /**
              * 내 즐겨찾기 공간 정보 조회
              */
             List<Space> myFavoriteSpaceList = spaceService.findUserFavoriteSpace(user.getUserId(), false);
-            List<SpaceMain> favoriteSpaces = Lists.newArrayList();
-
+            List<SpaceMain> favoriteSpaces;
 
             if (CollectionUtils.isEmpty(myFavoriteSpaceList)) {
-                log.debug("## 즐겨찾기 공간이 없습니다.");
+                log.debug("## 즐겨찾기 공간이 없음.");
                 mav.addObject("myFavoriteSpaceList", null);
             } else {
                 favoriteSpaces = spaceService.convertSpaceMain(myFavoriteSpaceList);
@@ -113,12 +114,13 @@ public class SpaceController {
         }
 
         /**
-         * 최근 수정된 위키 정보 조회 10개
+         * 최근 수정된 위키 정보 조회 10개 페이징 처리
          */
-        List<DisplayWiki> updateWikiList = wikiService.findUpdateWikiList(0, 10);
-        List<SpaceWikiList> spaceWikiLists = spaceService.convertSpaceWikis(updateWikiList);
+        SpaceWikiList spaceWikiPages = spaceService.findWikiPageBySort(isDeleted, LibqaConstant.PAGE_START_INDEX,
+                LibqaConstant.SPACE_WIKI_SIZE,
+                LibqaConstant.SORT_TYPE_DATE);
 
-        if (totalCount > PAGE_SIZE) {
+        if (totalCount > LibqaConstant.SPACE_PAGE_SIZE) {
             morePage = true;
         }
 
@@ -131,14 +133,19 @@ public class SpaceController {
         mav.addObject("currentPage", currentPage);
         mav.addObject("totalPage", totalPage);
         mav.addObject("spaceMainList", spacePages.getSpaceMainList());
-        mav.addObject("PAGE_SIZE", PAGE_SIZE);
-        mav.addObject("spaceWikiLists", spaceWikiLists);
+        mav.addObject("spacePageSize", LibqaConstant.SPACE_PAGE_SIZE);
+        mav.addObject("spaceWikiSize", LibqaConstant.SPACE_WIKI_SIZE);
+        mav.addObject("wikiTotalCount", spaceWikiPages.getTotalElements());
+        mav.addObject("wikiCurrentPage", spaceWikiPages.getCurrentPage());
+        mav.addObject("wikiTotalPage", spaceWikiPages.getTotalPages());
+        mav.addObject("spaceWikiList", spaceWikiPages.getSpaceWikiList());
 
         return mav;
     }
 
     /**
      * 공간 더보기 구현
+     *
      * @param sortType
      * @param startNum
      * @param pageSize
@@ -147,20 +154,36 @@ public class SpaceController {
     @RequestMapping(value = "/space/more", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData<SpaceMainList> findMoreSpaceList(@RequestParam String sortType,
-                                                 @RequestParam Integer startNum,
-                                                 @RequestParam Integer pageSize) {
+                                                         @RequestParam Integer startNum,
+                                                         @RequestParam Integer pageSize) {
         SpaceMainList spaceMainList = spaceService.findPageBySort(false, startNum, pageSize, sortType);
 
         log.info("### spaceMainList = {}", spaceMainList.getCurrentPage());
         log.info("### spaceMainList = {}", spaceMainList.getTotalElements());
         log.info("### spaceMainList = {}", spaceMainList.getTotalPages());
 
-
         return ResponseData.createSuccessResult(spaceMainList);
     }
 
     /**
+     * @param sortType
+     * @param startNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = "/space/morewiki", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<SpaceWikiList> findMoreWikis(@RequestParam String sortType,
+                                                     @RequestParam Integer startNum,
+                                                     @RequestParam Integer pageSize) {
+        SpaceWikiList spaceWikiList = spaceService.findWikiPageBySort(Boolean.FALSE, startNum, pageSize, sortType);
+
+        return ResponseData.createSuccessResult(spaceWikiList);
+    }
+
+    /**
      * 이름순, 최신순 정렬
+     *
      * @param sortType
      * @return
      */
@@ -169,7 +192,7 @@ public class SpaceController {
     public ResponseData<SpaceMainList> renderSpace(@RequestParam String sortType) {
         log.info("## sortType = {}", sortType);
 
-        SpaceMainList spaceMainList = spaceService.findPageBySort(false, 0, PAGE_SIZE, sortType);
+        SpaceMainList spaceMainList = spaceService.findPageBySort(false, 0, LibqaConstant.SPACE_PAGE_SIZE, sortType);
         return ResponseData.createSuccessResult(spaceMainList);
 
     }
@@ -216,6 +239,7 @@ public class SpaceController {
 
     /**
      * 수정 폼
+     *
      * @param spaceId
      * @return
      */
@@ -238,6 +262,7 @@ public class SpaceController {
 
     /**
      * 수정 접근 권한 체크, 로그인이 없을 경우, ADMIN이 아닌 사용자의 로그인 아이디와 입력자의 아이디가 다를 경우
+     *
      * @param space
      * @param user
      * @throws IllegalAccessException
@@ -257,7 +282,7 @@ public class SpaceController {
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping(value = "/space/update", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData<Space>  updateSpace(@ModelAttribute Space space, @ModelAttribute Keyword keyword) throws IllegalAccessException {
+    public ResponseData<Space> updateSpace(@ModelAttribute Space space, @ModelAttribute Keyword keyword) throws IllegalAccessException {
         User user = loggedUserManager.getUser();
         Space spaceEntity = spaceService.findOne(space.getSpaceId());
 
@@ -274,6 +299,7 @@ public class SpaceController {
 
     /**
      * 공간의 삭제는 관리자 이거나, 본인 일 경우 가능하지만 본인이라고 하더라도 하위 위키가 없을때만 삭제가 가능하다.
+     *
      * @param spaceId
      * @return
      * @throws IllegalAccessException
@@ -325,6 +351,7 @@ public class SpaceController {
 
     /**
      * 공간 정보 수정시 원본 데이터를 바인딩 한다.
+     *
      * @param space
      * @param user
      * @param spaceEntity
@@ -374,15 +401,16 @@ public class SpaceController {
         }
 
         // 최근 수정된 위키 목록
-        List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, 10);
-        List<SpaceWikiList> spaceWikiLists = new ArrayList<>();
+        List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, LibqaConstant.SPACE_WIKI_SIZE);
+        List<SpaceWiki> spaceWikis = new ArrayList<>();
         for (Wiki wiki : updatedWikis) {
             User user = userService.findByUserId(wiki.getUserId());
-            SpaceWikiList spaceWikiList = new SpaceWikiList();
-            spaceWikiList.setUser(user);
-            spaceWikiList.setWiki(wiki);
-            spaceWikiList.setReplyCount(wiki.getWikiReplies().size());
-            spaceWikiLists.add(spaceWikiList);
+            SpaceWiki spaceWiki = new SpaceWiki();
+
+            spaceWiki.setUser(user);
+            spaceWiki.setWiki(wiki);
+            spaceWiki.setReplyCount(wiki.getReplyCount());
+            spaceWikis.add(spaceWiki);
         }
 
         User user = loggedUserManager.getUser();
@@ -401,7 +429,7 @@ public class SpaceController {
 
         boolean canDeleted = canDeleted(space, user);
 
-        mav.addObject("spaceWikiLists", spaceWikiLists);
+        mav.addObject("spaceWikis", spaceWikis);
         mav.addObject("space", space);
         mav.addObject("canDeleted", canDeleted);
         mav.addObject("spaceUser", spaceUser);
@@ -415,6 +443,7 @@ public class SpaceController {
     /**
      * 공간 삭제 버튼이 보이는지 안보이는지 여부를 결정한다.
      * 하위에 위키가 있을 경우 삭제 버튼은 보이지만 삭제를 할 수는 없다. (경고메시지 출력)
+     *
      * @param space
      * @param user
      * @return
@@ -425,7 +454,7 @@ public class SpaceController {
         // admin user 일 경우
         if (user.isAdmin()) {
             canDeleted = true;
-        // 공간의 생성자와 현재 로그인 사용자의 아이디가 같을 경우
+            // 공간의 생성자와 현재 로그인 사용자의 아이디가 같을 경우
         } else if (space.getInsertUserId().equals(user.getUserId())) {
             canDeleted = true;
         }
@@ -523,7 +552,7 @@ public class SpaceController {
             model.setId(wiki.getWikiId());
             model.setText(wiki.getTitle());
             String[] counts = new String[1];
-            counts[0] = wiki.getReplyCount()+"";
+            counts[0] = wiki.getReplyCount() + "";
             model.setTags(counts);
             //model.setNodes(null);
             model.setHref("/wiki/" + wiki.getWikiId());
@@ -550,6 +579,33 @@ public class SpaceController {
         return mav;
     }
 
+
+    @RequestMapping(value = "/space/spaces", method = RequestMethod.GET)
+    public ModelAndView spaces(HttpRequest request) {
+        ModelAndView mav = new ModelAndView("/space/spaces");
+        boolean isDeleted = false;
+        List<Space> spaceList = spaceService.findAllByCondition(isDeleted);
+
+        List<SpaceMain> spaceMains;
+        int totalCount = 0;
+        if (CollectionUtils.isEmpty(spaceList)) {
+            spaceMains = null;
+            totalCount = 0;
+            mav.addObject("spaceMainList", spaceMains);
+        } else {
+            spaceMains = spaceService.convertSpaceMain(spaceList);
+            totalCount = spaceMains.size();
+            mav.addObject("spaceMainList", spaceMains);
+        }
+
+
+        mav.addObject("totalCount", totalCount);
+        // TODO 접근 권한 없는 스페이스 목록은 보이지 않아야 한다.
+        User user = loggedUserManager.getUser();
+
+        return mav;
+    }
 }
+
 
 

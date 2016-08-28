@@ -10,7 +10,7 @@ import com.libqa.web.repository.UserKeywordRepository;
 import com.libqa.web.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +34,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserKeywordRepository userKeywordRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     @Transactional
     public User createUser(String userEmail, String userNick, String password, String loginType) throws UserNotCreateException {
@@ -41,7 +44,7 @@ public class UserServiceImpl implements UserService {
         loginType = SocialChannelType.WEB.name();
         User createUser = null;
         try {
-            User user = User.createUser(userEmail, userNick, new BCryptPasswordEncoder().encode(password), loginType);
+            User user = User.createUser(userEmail, userNick, passwordEncoder.encode(password), loginType);
             createUser = userRepository.save(user);
             log.debug("### createUser = {}", createUser);
 

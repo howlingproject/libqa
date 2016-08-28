@@ -23,7 +23,6 @@
 
         <div class="btn-group pull-right">
             <a href="/space/spaces" class="btn btn-primary" id="spaceCount"></a>
-            <a href="/space/wikis" class="btn btn-primary" id="wikiCount"></a>
             <a href="/space/keywords" class="btn btn-primary" id="keywordCount"></a>
             <a href="/space/form" class="btn btn-primary">공간 생성하기</a>
         </div>
@@ -33,7 +32,7 @@
     <div class="col-sm-12 top-buffer" style="padding-bottom: 20px">
         <input type="hidden" id="tabName" value="">
         <input type="hidden" id="currentPage" value="{{currentPage}}">
-        <input type="hidden" id="pageSize" value="{{PAGE_SIZE}}">
+        <input type="hidden" id="pageSize" value="{{spacePageSize}}">
         <!-- keyword -->
         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
 
@@ -61,7 +60,7 @@
 
             <br>
             {{#if morePage }}
-            <p class="lead text-right" ><button class="btn btn-default" id="getMorePages">더보기  {{totalCount}} | {{currentPage}} | {{totalPage}}</button></p>
+            <p class="lead text-right" id="morePageAlign"><button class="btn btn-default" id="getMorePages">더보기</button></p>
             {{/if}}
         </div>
 
@@ -69,11 +68,17 @@
             <!-- 내 즐겨찾기 -->
             <div class="nav-tabs-header">내 즐겨찾기 공간</div>
             {{> space/template/_myfavoriteList}}
-
+            <!--// 즐겨찾기 -->
+            <!-- 최근 위키 -->
             <div class="top-buffer">&nbsp;</div>
             <div class="nav-tabs-header">최근 위키</div>
-            {{> space/template/_recentWikiList}}
-            <!--// BEST Q&A -->
+
+            <div id="recentWikiArea">
+                <input type="hidden" id="currentSpaceWikiPage" value="{{wikiCurrentPage}}">
+                <input type="hidden" id="spaceWikiPageSize" value="{{spaceWikiSize}}">
+                {{> space/template/_recentWikiList}}
+            </div>
+            <!--// 최근 위키 -->
         </div>
     </div>
 </div>
@@ -82,6 +87,7 @@
 {{#partial "script-page"}}
     {{embedded "common/_keywordList"}}
     {{embedded "space/template/_allSpaceList"}}
+    {{embedded "space/template/_recentWikiList"}}
     <script type="text/javascript">
         $(document).ready(function(){
             Space.init();
@@ -96,6 +102,9 @@
             $('#getMorePages').on('click', function () {
                 renderMorePage();
             });
+            $('#wikiMorePage').on('click', function () {
+                renderMoreWikis();
+            });
 
         });
 
@@ -103,7 +112,6 @@
             init : function(){
                 this.renderKeywordList();
                 this.spaceCount();
-                this.wikiCount();
                 this.keywordCount();
                 this.renderDayType($('#renderTypeUI'));
                 this.bindDayTypeEvent();
@@ -143,18 +151,6 @@
             spaceCount : function() {
                 $("#spaceCount").text("개설된 공간수({{totalCount}})");
             },
-            wikiCount : function() {
-                $.ajax({
-                    url: "/wiki/count",
-                    type: "GET",
-                    success : function(data){
-                        $("#wikiCount").text("생성된 위키수(" + data +")");
-                    },
-                    error : function(req){
-                        alert('생성된 위키 수 조회 에러. 에러코드 [' + req.status + ']');
-                    }
-                })
-            },
             keywordCount : function() {
                 $.ajax({
                     url: "/keyword/count",
@@ -185,7 +181,6 @@
             }
         };
 
-
         function renderSpaceList(sort) {
             $.ajax({
                 url: "/space/render",
@@ -193,6 +188,7 @@
                 data: { sortType : sort},
                 success : function(response){
                     console.log("## response = " + response.resultCode);
+                    console.log("## response = " + response.data);
                     if(response.resultCode == 1) {
 
                         var source = $('#space-template-_allSpaceList-hbs').html();
@@ -200,6 +196,7 @@
 
                         var html = template(response.data);
                         $('#allSpaceArea').html(html);
+                        $("#morePageAlign").css("display","block");
                     }
                 },
                 error : function(req){
@@ -250,6 +247,50 @@
                         if (response.data.currentPage == Number(response.data.totalPages - 1)) {
                             $("#getMorePages").css("display","none");
                         }
+                    }
+                },
+                error : function(req){
+                    // Handle upload error
+                    alert('req : ' + req);
+                    console.log('req : ' + req.status);
+                    console.log('req : ' + req.readyState);
+
+                    alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                }
+            });
+        }
+
+        function renderMoreWikis() {
+            var sort = "updateDate";        // 기본
+            var currentPage = $("#currentSpaceWikiPage").val();
+            currentPage = Number(currentPage);
+
+            var nextPage = currentPage+1;
+            var pageSize = $("#spaceWikiPageSize").val();
+
+            console.log("nextPage = " + nextPage);
+
+            $.ajax({
+                url: "/space/morewiki",
+                type: "GET",
+                data: { "sortType" : sort, "startNum" : nextPage, "pageSize" : pageSize},
+                success : function(response){
+                    console.log("## response = " + response.resultCode);
+                    console.log("## response = " + response.data);
+                    if(response.resultCode == 1) {
+
+                        var source = $('#space-template-_recentWikiList-hbs').html();
+                        var template = Handlebars.compile(source);
+
+                        var html = template(response.data);
+                        $('#recentWikiArea').html(html);
+
+                        $("#currentSpaceWikiPage").val(response.data.currentPage);
+
+                        if (response.data.currentPage == Number(response.data.totalPages - 1)) {
+                            $("#wikiMorePage").css("display","none");
+                        }
+
                     }
                 },
                 error : function(req){

@@ -5,6 +5,8 @@ import com.libqa.application.enums.SpaceView;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.Space;
 import com.libqa.web.domain.SpaceAccessUser;
+import com.libqa.web.domain.User;
+import com.libqa.web.view.feed.DisplayDate;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -40,6 +42,8 @@ public class SpaceMain {
     private List<Keyword> keywords;
     private int wikiCount;
 
+    private User user;
+
     public SpaceMain(Space space, int wikiCount, List keywords) {
         this.spaceId = space.getSpaceId();
         this.title = space.getTitle();
@@ -50,8 +54,8 @@ public class SpaceMain {
         this.layoutType = space.getLayoutType();
         this.isPrivate = space.isPrivate();
         this.isDeleted = space.isDeleted();
-        this.insertDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(space.getInsertDate());
-        this.updateDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(space.getUpdateDate());
+        this.insertDate = DisplayDate.parse(space.getInsertDate());
+        this.updateDate = DisplayDate.parse(space.getUpdateDate());
         this.insertUserId = space.getInsertUserId();
         this.insertUserNick = space.getInsertUserNick();
         this.updateUserId = space.getUpdateUserId();
@@ -60,5 +64,29 @@ public class SpaceMain {
         this.wikiCount = wikiCount;
         this.keywords = keywords;
     }
+
+    public SpaceMain(Space space, int wikiCount, List keywords, User user) {
+        this.spaceId = space.getSpaceId();
+        this.title = space.getTitle();
+        this.titleImage = space.getTitleImage();
+        this.titleImagePath = space.getTitleImagePath();
+        this.description = space.getDescription();
+        this.descriptionMarkup = space.getDescriptionMarkup();
+        this.layoutType = space.getLayoutType();
+        this.isPrivate = space.isPrivate();
+        this.isDeleted = space.isDeleted();
+        this.insertDate = DisplayDate.parse(space.getInsertDate());
+        this.updateDate = DisplayDate.parse(space.getUpdateDate());
+        this.insertUserId = space.getInsertUserId();
+        this.insertUserNick = space.getInsertUserNick();
+        this.updateUserId = space.getUpdateUserId();
+        this.updateUserNick = space.getUpdateUserNick();
+        this.spaceAccessUsers = space.getSpaceAccessUsers();
+        this.wikiCount = wikiCount;
+        this.keywords = keywords;
+        this.user = user;
+    }
+
+
 
 }

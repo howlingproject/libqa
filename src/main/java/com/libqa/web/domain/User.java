@@ -122,9 +122,10 @@ public class User {
         user.setUserNick(userNick);
         user.setUserPass(password);
         user.setDeleted(false);
-        user.setCertification(false);
+        user.setCertification(true); // TODO 추후 메일 연동을 통해 인증 방식으로 처리한다.
         user.setLastVisiteDate(now);
         user.setInsertDate(now);
+        user.setUpdateDate(now);
         user.setRole(Role.USER);
         user.setCertificationKey(String.valueOf(System.nanoTime()).substring(0, 5));
         user.setChannelType(SocialChannelType.valueOf(channelType));

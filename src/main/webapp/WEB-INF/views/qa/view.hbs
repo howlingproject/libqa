@@ -79,10 +79,10 @@
                 <!--// 본문 제목, 내용 -->
                 <div class="qa form-group">
                     <div class="action-buttons qna-content">
-                        <i class="fa fa-thumbs-o-up" data-qa-recommend-type="UP" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each qaContent.qaRecommendList}}{{userNick}}<br>{{/each}}">
+                        <i class="fa fa-thumbs-o-up {{#if qaContent.selfRecommend}}fa-2x{{/if}}" data-qa-recommend-type="UP" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each qaContent.qaRecommendList}}{{userNick}}<br>{{/each}}">
                             <span class="like-count">({{qaContent.recommendCount}})</span>
                         </i>
-                        <i class="fa fa-thumbs-o-down" data-qa-recommend-type="DOWN" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each qaContent.qaNonRecommendList}}{{userNick}}<br>{{/each}}">
+                        <i class="fa fa-thumbs-o-down {{#if qaContent.selfNonrecommend}}fa-2x{{/if}}" data-qa-recommend-type="DOWN" data-toggle="tooltip" data-html="true" data-placement="top" title="{{#each qaContent.qaNonRecommendList}}{{userNick}}<br>{{/each}}">
                             <span class="claim-count">({{qaContent.nonrecommendCount}})</span>
                         </i>
                     </div>
@@ -126,11 +126,13 @@
                                     <div class="row" style="margin-left: 5px; margin-bottom: 10px; width: 90%">
                                         <input type="text" class="form-control" id="title" name="title" placeholder="title">
                                     </div>
-                                    <div id="editor" class="form-group">
+                                    <div class="form-group">
                                         <input type="hidden" id="contents" name="contents" />
                                         <input type="hidden" id="contentsMarkup" name="contentsMarkup" />
                                         <input type="hidden" id="depthIdx" name="depthIdx" value="1" />   <!-- 답변 계층 -->
                                         <input type="hidden" id="parentsId" name="parentsId" value="0" />   <!-- 답변 계층 -->
+                                        <div id="editor">
+                                        </div>
                                     </div>
                                     <!--// 댓글작성 Bootstrap Live Editor -->
 
@@ -138,6 +140,7 @@
                                     {{#if isLogin}}
                                     <div class="feed-write-bottom text-right">
                                         <button id="saveReplyButton" type="button" class="btn btn-primary btn-default">저장</button>
+                                        <button id="cancleReplyButton" type="button" class="btn hide" data-dismiss="modal">취소</button>
                                     </div>
                                     {{/if}}
                                 </li>
@@ -189,7 +192,7 @@
                 });
             },
             clearEditor : function(){
-                $('#title').val('');
+                $('[name=qaReplyForm] #title').val('');
                 $('#contents').val('');
                 $('#contentsMarkup').val('');
                 $("#wikiEditor").val('');
@@ -226,9 +229,13 @@
                 this.buttonEvent();
                 this.saveRecommendEvent();
                 this.tooltipEvent();
+                this.saveReplyEvent();
+                this.cancleReplyButtonEvent();
             },
             saveReplyEvent : function(){
                 $("#saveReplyButton").on("click", this.saveReply);
+            },
+            saveChildReplyEvent : function(){
                 $('button[name=saveChildReplyButton]').on("click", this.saveChildReply);
             },
             cancleEvent : function(){
@@ -262,10 +269,16 @@
             },
             saveReply : function(){
                 setParam();
+                var replyId = '';
+                var url = '/qa/saveReply';
+                if($('[name=qaReplyForm] .form-group').attr('data-reply-id')){
+                    url = '/qa/updateReply';
+                    replyId = $('[name=qaReplyForm] .form-group').attr('data-reply-id');
+                }
                 $.ajax({
                     type : 'POST',
-                    data : $(this).closest('form').serialize() + '&qaId='+$('[name=qaId]').val(),
-                    url : '/qa/saveReply',
+                    data : $(this).closest('form').serialize() + '&qaId='+$('[name=qaId]').val() + '&replyId='+replyId,
+                    url : url,
                     success : function(data){
                         if(data.resultCode == 1) {
                             Qa.searchList();
@@ -297,7 +310,8 @@
                 });
             },
             tooltipEvent : function(){
-                $('[data-toggle="tooltip"]').tooltip();
+                var tooltipObj = $('.qna-content [data-toggle="tooltip"]');
+                tooltipObj.tooltip();
             },
             deleteContents : function(){
                 $.ajax({
@@ -307,6 +321,8 @@
                     success : function(data){
                         if(data.resultCode == 1) {
                             ConfirmDialog.successConfirm();
+                        } else {
+                            $.alert(data.data);
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
@@ -425,7 +441,9 @@
                     url : url,
                     success : function(data){
                         if(data.resultCode == 1) {
+                            Qa.refrashRecommendTooltip(data.data.qaRecommendList, data.data.qaNonRecommendList);
                             Qa.refrashRecommendCount(data.data.recommendCount, data.data.nonrecommendCount);
+                            Qa.refrashSelfRecommend(data.data.selfRecommend, data.data.selfNonrecommend);
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){
@@ -484,9 +502,65 @@
                 $('.qna-content').find('.like-count').text('('+recommendCount+')');
                 $('.qna-content').find('.claim-count').text('('+nonrecommendCount+')');
             },
+            refrashRecommendTooltip : function(recommendList, nonRecommendList){
+                var upUserNick = '';
+                var downUserNick = '';
+                $(recommendList).each(function(){
+                    upUserNick += this.userNick + '<br>';
+                });
+                $(nonRecommendList).each(function(){
+                    downUserNick += this.userNick + '<br>';
+                });
+
+                var recommendObj = $('.qna-content .fa-thumbs-o-up');
+                var nonRecommendObj = $('.qna-content .fa-thumbs-o-down');
+                recommendObj.attr('data-original-title', upUserNick);
+                nonRecommendObj.attr('data-original-title', downUserNick);
+            },
+            refrashSelfRecommend : function (selfRecommend, selfNonrecommend) {
+                $('.qna-content > i').removeClass('fa-2x');
+                if(selfRecommend){
+                    $('.qna-content .fa-thumbs-o-up').addClass('fa-2x');
+                }
+                if(selfNonrecommend){
+                    $('.qna-content .fa-thumbs-o-down').addClass('fa-2x');
+                }
+            },
             modifyReply : function (obj) {
                 var qaReplyId = Qa.getQaReplyId(obj);
                 // 기능구현 필요
+                this.getReplyMarkUp(qaReplyId);
+
+            },
+            getReplyMarkUp : function (qaReplyId) {
+                $.get("/qa/getReplyMarkUp",{replyId : qaReplyId}, function (response) {
+                    if(response.resultCode != 1) {
+                        alert(response.comment);
+                        return;
+                    } else {
+                        Qa.setReplyData(response.data);
+                        $('#cancleReplyButton').removeClass('hide');
+                        $("html, body").animate({
+                            'scrollTop' : $('[name=qaReplyForm]').offset().top
+                        }, 500);
+                    }
+                });
+            },
+            setReplyData : function(qaReplyData){
+                $('[name=qaReplyForm] .form-group').attr('data-reply-id',qaReplyData.replyId);
+                $('[name=qaReplyForm] #title').val(qaReplyData.title);
+                $('#wikiEditor').val(qaReplyData.contentsMarkup);
+                $('.dualEditor-preview').html(qaReplyData.contents);
+            },
+            cancleReplyButtonEvent : function () {
+                $("#cancleReplyButton").on("click", this.cancleReplyButton);
+            },
+            cancleReplyButton : function () {
+                $('#cancleReplyButton').addClass('hide');
+                $('[name=qaReplyForm] .form-group').removeAttr('data-reply-id');
+                $('[name=qaReplyForm] #title').val('');
+                $('#wikiEditor').val('');
+                $('.dualEditor-preview').html('');
             }
         };
 

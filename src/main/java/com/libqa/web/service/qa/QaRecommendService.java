@@ -11,11 +11,13 @@ import java.util.List;
  * @author yong
  */
 public interface QaRecommendService {
-	List<QaRecommend> findByUserIdAndIsCommendTrue(Integer userId);
+    List<QaRecommend> findByUserIdAndIsCommendTrue(Integer userId);
 
-	QaRecommend findByQaIdAndUserIdAndIsCommend(Integer qaId, Integer userId, boolean isCommend);
+    QaRecommend findByQaIdAndUserIdAndIsCommend(Integer qaId, Integer userId, boolean isCommend);
 
-	QaContent saveRecommend(QaRecommend paramQaRecommend, Integer userId, String userNick) throws Exception;
+    QaContent saveRecommend(QaRecommend paramQaRecommend, Integer userId, String userNick) throws Exception;
 
-	List<QaRecommend> findByQaIdAndIsCommend(Integer qaId, boolean isCommend);
+    List<QaRecommend> findByQaIdAndIsCommend(Integer qaId, boolean isCommend);
+
+    int getCountByQaId(Integer qaId);
 }

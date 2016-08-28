@@ -1,8 +1,10 @@
 package com.libqa.web.service.qa;
 
+import com.google.common.collect.Lists;
 import com.libqa.application.dto.QaDto;
 import com.libqa.application.enums.DayType;
 import com.libqa.application.enums.KeywordType;
+import com.libqa.application.enums.QaSearchType;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
@@ -47,21 +49,21 @@ public class QaServiceImpl implements QaService {
 
     @Override
     @Transactional
-    public QaContent saveWithKeyword(QaContent paramQaContent, QaFile qaFiles, Keyword keyword, User user){
+    public QaContent saveWithKeyword(QaContent paramQaContent, QaFile qaFiles, Keyword keyword, User user) {
         QaContent newQaContent = new QaContent();
         try {
 
             paramQaContent.setUserId(user.getUserId());
             paramQaContent.setUserNick(user.getUserNick());
             paramQaContent.setInsertUserId(user.getUserId());
-	        Date today = new Date();
+            Date today = new Date();
             paramQaContent.setInsertDate(today);
-	        paramQaContent.setUpdateDate(today);
+            paramQaContent.setUpdateDate(today);
 
             newQaContent = save(paramQaContent);
             moveQaFilesToProductAndSave(newQaContent.getQaId(), qaFiles);
             saveKeywordAndList(newQaContent.getQaId(), keyword.getKeywords(), keyword.getDeleteKeywords());
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("### moveQaFilesToProductAndSave Exception = {}", e);
             throw new RuntimeException("moveQaFilesToProductAndSave Exception");
         }
@@ -69,10 +71,10 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public boolean deleteWithKeyword(Integer qaId) {
+    public boolean deleteWithKeyword(Integer qaId, Integer userId) {
         boolean result = false;
-        try{
-            delete(qaId);
+        try {
+            delete(qaId, userId);
             // TODO List reply, file, recommend, keyword, keywordList 처리 확인
             result = true;
         } catch (Exception e) {
@@ -92,29 +94,29 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public QaContent updateWithKeyword(QaContent originQaContent, QaContent requestQaContent, QaFile requestQaFiles, Keyword requestKeywords,  User user) {
+    public QaContent updateWithKeyword(QaContent originQaContent, QaContent requestQaContent, QaFile requestQaFiles, Keyword requestKeywords, User user) {
         try {
             originQaContent = update(originQaContent, requestQaContent, user);
             moveQaFilesToProductAndSave(originQaContent.getQaId(), requestQaFiles);
             saveKeywordAndList(originQaContent.getQaId(), requestKeywords.getKeywords(), requestKeywords.getDeleteKeywords());
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("### moveQaFilesToProductAndSave Exception = {}", e);
             throw new RuntimeException("moveQaFilesToProductAndSave Exception");
         }
         return originQaContent;
     }
 
-	private QaContent update(QaContent originQaContent, QaContent requestQaContent, User user) {
-		originQaContent.setTitle(requestQaContent.getTitle());
-		originQaContent.setUpdateUserId(user.getUserId());
-		originQaContent.setUpdateDate(new Date());
-		originQaContent.setContents(requestQaContent.getContents());
-		originQaContent.setContentsMarkup(requestQaContent.getContentsMarkup());
+    private QaContent update(QaContent originQaContent, QaContent requestQaContent, User user) {
+        originQaContent.setTitle(requestQaContent.getTitle());
+        originQaContent.setUpdateUserId(user.getUserId());
+        originQaContent.setUpdateDate(new Date());
+        originQaContent.setContents(requestQaContent.getContents());
+        originQaContent.setContentsMarkup(requestQaContent.getContentsMarkup());
 
-		return originQaContent;
-	}
+        return originQaContent;
+    }
 
-	@Override
+    @Override
     public List<QaContent> findByUserId(Integer userId) {
         return qaRepository.findByUserIdAndIsDeleted(userId, false);
     }
@@ -149,63 +151,76 @@ public class QaServiceImpl implements QaService {
         return qaRepository.countByIsReplyedFalseAndIsDeletedFalse();
     }
 
-	/**
-	 * BEST Q&A를 조회한다.
-	 * <br />
-	 * 추천수 desc, 비추천 asc로 sort 하여 최근 10개 추출함.
-	 *
-	 * @return list of QaContent
-	 */
-	@Override
-	public List<QaContent> getBestQaContents() {
-		final Integer pageSize = 10;
-		final Order order1 = new Order(Sort.Direction.DESC, "recommendCount");
-		final Order order2 = new Order(Sort.Direction.ASC, "nonrecommendCount");
-		PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order1, order2));
+    /**
+     * BEST Q&A를 조회한다.
+     * <br />
+     * 추천수 desc, 비추천 asc로 sort 하여 최근 10개 추출함.
+     *
+     * @return list of QaContent
+     */
+    @Override
+    public List<QaContent> getBestQaContents() {
+        final Integer pageSize = 10;
+        final Order order1 = new Order(Sort.Direction.DESC, "recommendCount");
+        final Order order2 = new Order(Sort.Direction.ASC, "nonrecommendCount");
+        PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order1, order2));
 
-		return qaRepository.findByIsDeletedFalse(pageRequest);
-	}
+        return qaRepository.findByIsDeletedFalse(pageRequest);
+    }
 
     @Override
     public QaContent saveRecommendCount(Integer qaId, boolean commend, int calculationCnt) {
         QaContent qaContent = qaRepository.findByQaIdAndIsDeletedFalse(qaId);
-	    int preCount;
-	    if(commend){
-		    preCount = qaContent.getRecommendCount();
-		    qaContent.setRecommendCount(preCount + calculationCnt);
-	    } else {
-		    preCount = qaContent.getNonrecommendCount();
-		    qaContent.setNonrecommendCount(preCount + calculationCnt);
-	    }
-	    return qaContent;
+        int preCount;
+        if (commend) {
+            preCount = qaContent.getRecommendCount();
+            qaContent.setRecommendCount(preCount + calculationCnt);
+        } else {
+            preCount = qaContent.getNonrecommendCount();
+            qaContent.setNonrecommendCount(preCount + calculationCnt);
+        }
+        return qaContent;
     }
 
     @Override
     public List<QaContent> getRecentQAContents() {
-	    Date today = new Date();
-	    Date fromDate = null;
-	    try {
-		    fromDate = getFromDate(DayType.WEEK.getCode());
-	    } catch (ParseException e) {
-		    e.printStackTrace();
-	    }
-	    final Integer pageSize = 10;
+        Date today = new Date();
+        Date fromDate = null;
+        try {
+            fromDate = getFromDate(DayType.WEEK.getCode());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        final Integer pageSize = 10;
         final Order order = new Order(Sort.Direction.DESC, "updateDate");
         PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order));
 
-	    return qaRepository.findByUpdateDateBetweenAndIsDeletedFalse(fromDate, today, pageRequest);
+        return qaRepository.findByUpdateDateBetweenAndIsDeletedFalse(fromDate, today, pageRequest);
     }
 
-	@Override
-	public List<QaContent> getWaitReplyQaContents() {
-		final Integer pageSize = 10;
-		final Order order = new Order(Sort.Direction.DESC, "updateDate");
-		PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order));
+    @Override
+    public List<QaContent> getWaitReplyQaContents() {
+        final Integer pageSize = 10;
+        final Order order = new Order(Sort.Direction.DESC, "updateDate");
+        PageRequest pageRequest = PageUtil.sortPageable(pageSize, new Sort(order));
 
-		return qaRepository.findByIsDeletedFalseAndIsReplyedFalse(pageRequest);
-	}
+        return qaRepository.findByIsDeletedFalseAndIsReplyedFalse(pageRequest);
+    }
 
-	void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
+    @Override
+    public List<QaContent> getQAContents(QaSearchType qaSearchType) {
+        final Order order = new Order(Sort.Direction.DESC, "qaId");
+        PageRequest pageRequest = PageUtil.sortPageable(new Sort(order));
+        if(QaSearchType.TOTAL == qaSearchType) {
+            return qaRepository.findByIsDeletedFalse(pageRequest);
+        } else if(QaSearchType.WAIT_REPLY == qaSearchType) {
+            return qaRepository.findByIsDeletedFalseAndIsReplyedFalse(pageRequest);
+        } else {
+            return Lists.newArrayList();
+        }
+    }
+
+    void moveQaFilesToProductAndSave(Integer qaId, QaFile qaFiles) {
         qaFileService.moveQaFilesToProductAndSave(qaId, qaFiles);
     }
 
@@ -213,10 +228,10 @@ public class QaServiceImpl implements QaService {
         if (qaId != 0) {
             String[] keywordArrays = new String[0];
             String[] deleteKeywordArrays = new String[0];
-            if(keywords != null){
+            if (keywords != null) {
                 keywordArrays = keywords.split(",");
             }
-            if(deleteKeywords != null){
+            if (deleteKeywords != null) {
                 deleteKeywordArrays = deleteKeywords.split(",");
             }
             log.debug(" keywordArrays : {}", keywordArrays.length);
@@ -241,16 +256,11 @@ public class QaServiceImpl implements QaService {
         return qaRepository.save(qaContent);
     }
 
-    private void delete(Integer qaId) {
+    private void delete(Integer qaId, Integer userId) {
         QaContent targetQaContent = findByQaId(qaId, false);
-//        entityManager.getTransaction().begin();
-        // TODO List 차후 로그인으로 변경
         targetQaContent.setDeleted(true);
-        targetQaContent.setUpdateUserId(1);
+        targetQaContent.setUpdateUserId(userId);
         targetQaContent.setUpdateDate(new Date());
-        qaRepository.flush();
-//        entityManager.getTransaction().commit();
-
     }
 
     @Override
@@ -263,40 +273,40 @@ public class QaServiceImpl implements QaService {
         boolean isReplyed = false;
         Date today = new Date();
         List<QaContent> returnQaContentObj = new ArrayList<>();
-	    Stream<QaContent> qaStream = null;
+        Stream<QaContent> qaStream = null;
         try {
             Date fromDate = getFromDate(qaDto.getDayType());
-	        if("".equals(qaDto.getKeywordName())){
-		        if ("Y".equals(qaDto.getWaitReply())) {
-			        if(null == fromDate){
-				        qaStream = qaRepository.findAllByIsReplyedAndIsDeletedFalseOrderByUpdateDateDesc(isReplyed);
-			        } else {
-		                qaStream = qaRepository.findAllByIsReplyedAndUpdateDateBetweenAndIsDeletedFalseOrderByUpdateDateDesc(isReplyed, fromDate, today);
-			        }
-		        } else {
-			        qaStream = qaRepository.findAllByUpdateDateBetweenAndIsDeletedFalseOrderByUpdateDateDesc(fromDate, today);
-		        }
-	        } else {
-		        if ("Y".equals(qaDto.getWaitReply())) {
-			        if(null == fromDate){
-	                    qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed);
-			        } else {
-	                    qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalseAndUpdateDateBetween(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed, fromDate, today);
-			        }
-		        } else {
-	                qaStream = qaRepository.findAllByKeywordAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), fromDate, today);
-		        }
-	        }
-			qaStream.forEach(qaContent -> returnQaContentObj.add(qaContent));
-        }catch(Exception e){
+            if ("".equals(qaDto.getKeywordName())) {
+                if ("Y".equals(qaDto.getWaitReply())) {
+                    if (null == fromDate) {
+                        qaStream = qaRepository.findAllByIsReplyedAndIsDeletedFalseOrderByUpdateDateDesc(isReplyed);
+                    } else {
+                        qaStream = qaRepository.findAllByIsReplyedAndUpdateDateBetweenAndIsDeletedFalseOrderByUpdateDateDesc(isReplyed, fromDate, today);
+                    }
+                } else {
+                    qaStream = qaRepository.findAllByUpdateDateBetweenAndIsDeletedFalseOrderByUpdateDateDesc(fromDate, today);
+                }
+            } else {
+                if ("Y".equals(qaDto.getWaitReply())) {
+                    if (null == fromDate) {
+                        qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed);
+                    } else {
+                        qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalseAndUpdateDateBetween(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed, fromDate, today);
+                    }
+                } else {
+                    qaStream = qaRepository.findAllByKeywordAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), fromDate, today);
+                }
+            }
+            qaStream.forEach(qaContent -> returnQaContentObj.add(qaContent));
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return returnQaContentObj;
     }
 
-	public List<QaContent> findRecentList(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted){
+    public List<QaContent> findRecentList(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted) {
         List<QaContent> recentList = new ArrayList<>();
-        if(fromDate == null){
+        if (fromDate == null) {
             recentList = qaRepository.findAllByQaIdInAndIsReplyedAndIsDeletedOrderByUpdateDateDesc(qaIds, isReplyed, isDeleted);
         } else {
             recentList = qaRepository.findAllByQaIdInAndIsReplyedAndUpdateDateBetweenAndIsDeletedOrderByUpdateDateDesc(qaIds, isReplyed, fromDate, today, isDeleted);
@@ -304,7 +314,7 @@ public class QaServiceImpl implements QaService {
         return recentList;
     }
 
-    public List<QaContent> findWaitList(List<Integer> qaIds, Date fromDate, Date today, boolean isDeleted){
+    public List<QaContent> findWaitList(List<Integer> qaIds, Date fromDate, Date today, boolean isDeleted) {
         return qaRepository.findAllByQaIdInAndUpdateDateBetweenAndIsDeletedOrderByUpdateDateDesc(qaIds, fromDate, today, isDeleted);
     }
 
@@ -312,21 +322,21 @@ public class QaServiceImpl implements QaService {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date now = dateFormat.parse(dateFormat.format(new Date()));
         Date returnDate;
-        if(DayType.WEEK.getCode().equals(dayType)){
+        if (DayType.WEEK.getCode().equals(dayType)) {
             returnDate = DateUtils.addDays(now, -7);
-        } else if(DayType.ALL.getCode().equals(dayType)){
+        } else if (DayType.ALL.getCode().equals(dayType)) {
             returnDate = null;
-        } else{
+        } else {
             returnDate = now;
         }
         return returnDate;
     }
 
-    public List<Integer> getQaIdByKeyword(String keywordName){
+    public List<Integer> getQaIdByKeyword(String keywordName) {
         boolean isDeleted = false;
         List<Integer> qaIds = new ArrayList();
         List<Keyword> keywords = keywordService.findAllByKeywordTypeAndKeywordNameAndIsDeleted(KeywordType.QA, keywordName, isDeleted);
-        for(Keyword keyword : keywords){
+        for (Keyword keyword : keywords) {
             qaIds.add(keyword.getQaId());
         }
         return qaIds;

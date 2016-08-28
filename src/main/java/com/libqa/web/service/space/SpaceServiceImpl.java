@@ -10,11 +10,12 @@ import com.libqa.web.repository.SpaceRepository;
 import com.libqa.web.service.common.ActivityService;
 import com.libqa.web.service.common.KeywordService;
 import com.libqa.web.service.user.UserFavoriteService;
+import com.libqa.web.service.user.UserService;
 import com.libqa.web.service.wiki.WikiService;
 import com.libqa.web.view.space.SpaceMain;
 import com.libqa.web.view.space.SpaceMainList;
+import com.libqa.web.view.space.SpaceWiki;
 import com.libqa.web.view.space.SpaceWikiList;
-import com.libqa.web.view.wiki.DisplayWiki;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,8 +47,8 @@ public class SpaceServiceImpl implements SpaceService {
     @Autowired
     private WikiService wikiService;
 
-    private static final Integer DEFAILT_START_NUM = 0;
-    private static final Integer DEFAULT_SIZE_PER_PAGE = 2;
+    @Autowired
+    private UserService userService;
 
 
     @Override
@@ -138,7 +139,7 @@ public class SpaceServiceImpl implements SpaceService {
     @Override
     public List<Space> findUserFavoriteSpace(Integer userId, boolean isDeleted) {
 
-        List<UserFavorite> userFavoriteList = new ArrayList<>();
+        List<UserFavorite> userFavoriteList;
 
         userFavoriteList = userFavoriteService.findByFavoriteTypeAndUserIdAndIsDeleted(FavoriteType.SPACE, userId, isDeleted);
 
@@ -230,19 +231,14 @@ public class SpaceServiceImpl implements SpaceService {
         userFavoriteService.save(userFavorite);
     }
 
-
-    /*public Integer countSpace(boolean isDeleted) {
-        return spaceRepository.countByIsDeleted(isDeleted);
-    }*/
-
-
     public List<SpaceMain> convertSpaceMain(List<Space> spaces) {
         List<SpaceMain> spaceMainList = new ArrayList<>();
         for (Space space : spaces) {
             Integer spaceId = space.getSpaceId();
+            User spaceUser = userService.findByUserId(spaceId);
             List<Wiki> wikis = wikiService.findBySpaceId(spaceId);
             List<Keyword> keywords = keywordService.findBySpaceId(spaceId, false);
-            SpaceMain spaceMain = new SpaceMain(space, wikis.size(), keywords);
+            SpaceMain spaceMain = new SpaceMain(space, wikis.size(), keywords, spaceUser);
             spaceMainList.add(spaceMain);
         }
 
@@ -250,20 +246,33 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
 
-    public List<SpaceWikiList> convertSpaceWikis(List<DisplayWiki> displayWikis) {
-        List<SpaceWikiList> spaceWikiLists = new ArrayList<>();
-        for (DisplayWiki displayWiki : displayWikis) {
-            Wiki wiki = displayWiki.getWiki();
-            List<WikiReply> replies = wiki.getWikiReplies();
+    @Override
+    public SpaceWikiList findWikiPageBySort(boolean isDeleted, Integer startIdx, Integer endIdx, String sortCondition) {
+        Page<Wiki> pages = wikiService.findPagingByIsDeleted(PageUtil.sortPageable(
+                startIdx
+                , endIdx
+                , PageUtil.sortId("DESC", sortCondition))
+                , isDeleted);
+
+        List<SpaceWiki> spaceWikis = convertSpaceWikis(pages.getContent());
+        SpaceWikiList spaceWikiList = new SpaceWikiList(pages.getNumber(), pages.getTotalPages(), pages.getTotalElements(), spaceWikis);
+
+        return spaceWikiList;
+    }
+
+    private List<SpaceWiki> convertSpaceWikis(List<Wiki> content) {
+        List<SpaceWiki> spaceWikis = new ArrayList<>();
+        for (Wiki wiki : content) {
             List<Keyword> keywords = keywordService.findByWikiId(wiki.getWikiId(), false);
             User userInfo = new User();
             userInfo.setUserId(wiki.getUserId());
             userInfo.setUserNick(wiki.getUserNick());
-            // 속도상의 이슈로 위키의 리플갯수 조회하지 안흠
-            SpaceWikiList spaceWikiList = new SpaceWikiList(wiki, userInfo, keywords, replies.size());
-            spaceWikiLists.add(spaceWikiList);
+
+            SpaceWiki spaceWiki = new SpaceWiki(wiki, userInfo, keywords, wiki.getReplyCount());
+            spaceWikis.add(spaceWiki);
         }
 
-        return spaceWikiLists;
+        return spaceWikis;
     }
+
 }

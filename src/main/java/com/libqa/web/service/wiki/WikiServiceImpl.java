@@ -3,22 +3,23 @@ package com.libqa.web.service.wiki;
 import com.google.common.base.MoreObjects;
 import com.libqa.application.enums.ActivityType;
 import com.libqa.application.enums.KeywordType;
-import com.libqa.application.enums.WikiOrderListType;
 import com.libqa.application.enums.WikiRevisionActionType;
+import com.libqa.application.util.LibqaConstant;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.*;
 import com.libqa.web.repository.KeywordRepository;
 import com.libqa.web.repository.WikiLikeRepository;
 import com.libqa.web.repository.WikiRepository;
 import com.libqa.web.repository.WikiSnapShotRepository;
-import com.libqa.web.service.user.UserService;
-import com.libqa.web.view.wiki.DisplayWiki;
 import com.libqa.web.service.common.ActivityService;
 import com.libqa.web.service.common.KeywordService;
+import com.libqa.web.service.user.UserService;
+import com.libqa.web.view.wiki.DisplayWiki;
 import com.libqa.web.view.wiki.DisplayWikiLike;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -75,13 +76,13 @@ public class WikiServiceImpl implements WikiService {
     public Wiki saveWithKeyword(Wiki wiki, Keyword keyword) {
         List<WikiFile> wikiFiles = wiki.getWikiFiles();
         Wiki result = save(wiki);
-        result.setWikiFiles( wikiFiles );
+        result.setWikiFiles(wikiFiles);
 
         saveWikiFileAndList(result);
-        saveKeywordAndList(keyword, result.getWikiId() );
+        saveKeywordAndList(keyword, result.getWikiId());
         saveWikiActivity(result, ActivityType.INSERT_WIKI);
 
-        if( wiki.getParentsId() == null ){
+        if (wiki.getParentsId() == null) {
             updateParentWikiId(result);
         }
         return result;
@@ -94,11 +95,9 @@ public class WikiServiceImpl implements WikiService {
     }
 
     private void saveWikiActivity(Wiki saveWiki, ActivityType ActivityType) {
-
         Activity activity = new Activity();
         activity.setInsertDate(new Date());
         activity.setDeleted(false);
-
         activity.setActivityType(ActivityType);
         activity.setActivityDesc(ActivityType.getCode());
         activity.setActivityKeyword(KeywordType.WIKI);
@@ -111,7 +110,7 @@ public class WikiServiceImpl implements WikiService {
     @Override
     @Transactional
     public Wiki updateWithKeyword(Wiki wiki, Keyword keyword, WikiRevisionActionType revisionActionTypeEnum) {
-        List<WikiFile> wikiFiles = wiki.getWikiFiles() == null ? new ArrayList<>() : new ArrayList<>( wiki.getWikiFiles() ) ;
+        List<WikiFile> wikiFiles = wiki.getWikiFiles() == null ? new ArrayList<>() : new ArrayList<>(wiki.getWikiFiles());
 
         WikiSnapShot wikiSnapShot = new WikiSnapShot();
         BeanUtils.copyProperties(wiki, wikiSnapShot);
@@ -121,11 +120,11 @@ public class WikiServiceImpl implements WikiService {
         wikiSnapShotRepository.save(wikiSnapShot);
 
         Wiki result = save(wiki);
-        result.setWikiFiles( wikiFiles );
+        result.setWikiFiles(wikiFiles);
         saveWikiActivity(wiki, ActivityType.UPDATE_WIKI);
 
         saveWikiFileAndList(result);
-        saveKeywordAndList( keyword, result.getWikiId() );
+        saveKeywordAndList(keyword, result.getWikiId());
         return result;
     }
 
@@ -133,7 +132,7 @@ public class WikiServiceImpl implements WikiService {
         List<WikiFile> wikiFiles = wiki.getWikiFiles();
         if (wikiFiles != null && wikiFiles.size() > 0) {
             for (WikiFile wikiFile : wikiFiles) {
-                if( wikiFile.getFileId() == null || wikiFile.isDeleted() ){
+                if (wikiFile.getFileId() == null || wikiFile.isDeleted()) {
                     wikiFile.setInsertDate(wiki.getInsertDate());
                     wikiFile.setUserId(wiki.getUserId());
                     wikiFile.setWikiId(wiki.getWikiId());
@@ -145,13 +144,13 @@ public class WikiServiceImpl implements WikiService {
     }
 
     private void saveKeywordAndList(Keyword keyword, Integer wikiId) {
-        if( !"".equals(keyword.getKeywordName() ) ){
+        if (!"".equals(keyword.getKeywordName())) {
             String[] keywordArrays = new String[0];
             String[] deleteKeywordArrays = new String[0];
-            if(keyword.getKeywords() != null){
+            if (keyword.getKeywords() != null) {
                 keywordArrays = keyword.getKeywords().split(",");
             }
-            if(keyword.getDeleteKeywords() != null){
+            if (keyword.getDeleteKeywords() != null) {
                 deleteKeywordArrays = keyword.getDeleteKeywords().split(",");
             }
             log.debug(" keywordArrays : {}", keywordArrays.length);
@@ -169,49 +168,32 @@ public class WikiServiceImpl implements WikiService {
     @Override
     public Wiki wikiDetail(Integer wikiId) {
         Wiki wiki = findById(wikiId);
-        if( wiki != null ){
-            wiki.setViewCount( MoreObjects.firstNonNull(wiki.getViewCount(), 0)  + 1 );
+        if (wiki != null) {
+            wiki.setViewCount(MoreObjects.firstNonNull(wiki.getViewCount(), 0) + 1);
             save(wiki);
         }
         return wiki;
     }
 
-    @Override
-    public Wiki findByParentId(Integer parentId) {
-        if( parentId == null  ){
-            return  null;
-        }
-        return wikiRepository.findOneByWikiIdAndIsDeleted(parentId, isDeleted);
-    }
 
     @Override
-    public List<Wiki> findBySubWikiId(Integer wikiId) {
-        return wikiRepository.findAllByParentsIdAndIsDeleted(wikiId, isDeleted);
-    }
-
-    @Override
-    public List<DisplayWiki> findByAllWiki(int page, int size, WikiOrderListType wikiOrderListType) {
+    public List<DisplayWiki> findByAllWiki(int page, int size, String sortType) {
         List<DisplayWiki> resultWiki = new ArrayList<>();
         List<Wiki> list = wikiRepository.findAllByIsDeleted(
                 isDeleted
-                , PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", wikiOrderListType.toString()))
-                );
-        if( !CollectionUtils.isEmpty( list )){
-            for( Wiki wiki : list ){
-                resultWiki.add( new DisplayWiki(
-                        wiki
-                        , userService.findByUserId( wiki.getUserId() )
-                        ,keywordService.findByWikiId(wiki.getWikiId(), false)
-                )
+                , PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", sortType))
+        );
+        if (!CollectionUtils.isEmpty(list)) {
+            for (Wiki wiki : list) {
+                resultWiki.add(new DisplayWiki(
+                                wiki
+                                , userService.findByUserId(wiki.getUserId())
+                                , keywordService.findByWikiId(wiki.getWikiId(), false)
+                        )
                 );
             }
         }
         return resultWiki;
-    }
-
-    @Override
-    public Long countByAllWiki(){
-        return wikiRepository.countByIsDeleted(isDeleted);
     }
 
     @Override
@@ -220,14 +202,14 @@ public class WikiServiceImpl implements WikiService {
         List<Wiki> list = wikiRepository.findAllByIsDeleted(
                 isDeleted
                 , PageUtil.sortPageable(page, size, PageUtil.sortId("DESC", "likeCount"))
-                );
+        );
 
-        if( !CollectionUtils.isEmpty( list ) ){
-            for( Wiki wiki : list ){
-                resultWiki.add( new DisplayWiki(
+        if (!CollectionUtils.isEmpty(list)) {
+            for (Wiki wiki : list) {
+                resultWiki.add(new DisplayWiki(
                                 wiki
-                                , userService.findByUserId( wiki.getUserId() )
-                                ,keywordService.findByWikiId(wiki.getWikiId(), false)
+                                , userService.findByUserId(wiki.getUserId())
+                                , keywordService.findByWikiId(wiki.getWikiId(), false)
                         )
                 );
             }
@@ -245,16 +227,16 @@ public class WikiServiceImpl implements WikiService {
                 , PageUtil.sortPageable(
                         page
                         , size
-                        , PageUtil.sort(PageUtil.order("DESC", "userId"), PageUtil.order("DESC", "insertDate"))
-                    )
-                );
+                        , PageUtil.sort(PageUtil.order("DESC", "userId"), PageUtil.order("DESC", LibqaConstant.SORT_TYPE_DATE))
+                )
+        );
 
-        if( !CollectionUtils.isEmpty( list ) ){
-            for( Wiki wiki : list ){
-                resultWiki.add( new DisplayWiki(
+        if (!CollectionUtils.isEmpty(list)) {
+            for (Wiki wiki : list) {
+                resultWiki.add(new DisplayWiki(
                                 wiki
-                                , userService.findByUserId( wiki.getUserId() )
-                                ,keywordService.findByWikiId(wiki.getWikiId(), false)
+                                , userService.findByUserId(wiki.getUserId())
+                                , keywordService.findByWikiId(wiki.getWikiId(), false)
                         )
                 );
             }
@@ -278,7 +260,7 @@ public class WikiServiceImpl implements WikiService {
         List wikis = new ArrayList<>();
         try {
             wikis = wikiRepository.findAllBySpaceIdAndIsDeleted(spaceId, isDeleted,
-                    PageUtil.sortPageable(startIdx, endIdx, PageUtil.sortId("DESC", "updateDate")));
+                    PageUtil.sortPageable(startIdx, endIdx, PageUtil.sortId("DESC", LibqaConstant.SORT_TYPE_DATE)));
         } catch (Exception e) {
             e.getMessage();
         }
@@ -299,14 +281,14 @@ public class WikiServiceImpl implements WikiService {
                         page
                         , size
                         , PageUtil.sortId("DESC", "insertDate")
-                    )
-                );
+                )
+        );
 
-        if( !CollectionUtils.isEmpty( list )){
-            for( Wiki wiki : list ){
-                resultWiki.add( new DisplayWiki(
+        if (!CollectionUtils.isEmpty(list)) {
+            for (Wiki wiki : list) {
+                resultWiki.add(new DisplayWiki(
                                 wiki
-                                , userService.findByUserId( wiki.getUserId() )
+                                , userService.findByUserId(wiki.getUserId())
                                 , keywordService.findByWikiId(wiki.getWikiId(), false)
                         )
                 );
@@ -328,7 +310,7 @@ public class WikiServiceImpl implements WikiService {
                         , size
                         , PageUtil.sortId("DESC", "insertDate")
                 )
-                );
+        );
         if( !CollectionUtils.isEmpty( list )){
             for( Wiki wiki : list ){
                 resultWiki.add( new DisplayWiki(
@@ -345,58 +327,40 @@ public class WikiServiceImpl implements WikiService {
     @Override
     public DisplayWikiLike updateLike(WikiLike like) {
         DisplayWikiLike result = new DisplayWikiLike(0, null);
-        try{
+        try {
             WikiLike dupLike = null;
-            if( like.getWikiId() != null ){
+            if (like.getWikiId() != null) {
                 dupLike = wikiLikeRepository.findOneByUserIdAndWikiId(like.getUserId(), like.getWikiId());
-            }else if( like.getReplyId() != null ){
+            } else if (like.getReplyId() != null) {
                 dupLike = wikiLikeRepository.findOneByUserIdAndReplyId(like.getUserId(), like.getReplyId());
             }
 
-            if( dupLike == null ){
-                if( like.getWikiId() != null ){
+            if (dupLike == null) {
+                if (like.getWikiId() != null) {
                     Wiki wiki = findById(like.getWikiId());
-                    wiki.setLikeCount( MoreObjects.firstNonNull(wiki.getLikeCount(), 0)  + 1 );
+                    wiki.setLikeCount(MoreObjects.firstNonNull(wiki.getLikeCount(), 0) + 1);
                     save(wiki);
-                }else if( like.getReplyId() != null ){
-                    WikiReply wikiReply = wikiReplyService.findById( like.getReplyId() );
-                    wikiReply.setLikeCount( MoreObjects.firstNonNull(wikiReply.getLikeCount(), 0)  + 1 );
+                } else if (like.getReplyId() != null) {
+                    WikiReply wikiReply = wikiReplyService.findById(like.getReplyId());
+                    wikiReply.setLikeCount(MoreObjects.firstNonNull(wikiReply.getLikeCount(), 0) + 1);
                     wikiReplyService.update(wikiReply);
                 }
                 wikiLikeRepository.save(like);
                 result.setResult(1);
                 result.setWikiLike(like);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
         return result;
     }
 
-    private List<Integer> getWikiIdByKeyworld(List<Keyword> keywords){
+    private List<Integer> getWikiIdByKeyworld(List<Keyword> keywords) {
         List<Integer> wikiIds = new ArrayList<>();
-        for( Keyword keyword : keywords ){
+        for (Keyword keyword : keywords) {
             wikiIds.add(keyword.getWikiId());
         }
         return wikiIds;
-    }
-
-    @Override
-    public List<DisplayWiki> findUpdateWikiList(int startIdx, int endIdx) {
-        List<DisplayWiki> resultWiki = new ArrayList<DisplayWiki>();
-        List<Wiki> list = wikiRepository.findSpaceWikiUpdateByIsDeleted(
-                isDeleted
-                , PageUtil.sortPageable(startIdx, endIdx, PageUtil.sortId("DESC", "updateDate"))
-        );
-
-        if(!CollectionUtils.isEmpty(list)){
-            for( Wiki wiki : list ){
-                resultWiki.add( new DisplayWiki(wiki));
-            }
-        }
-
-        return resultWiki;
-
     }
 
     @Override
@@ -430,6 +394,11 @@ public class WikiServiceImpl implements WikiService {
 
         List<Wiki> trees = wikiRepository.findAllBySpaceIdAndIsDeleted(spaceId, isDeleted, PageUtil.sort(PageUtil.order("ASC", "groupIdx"), PageUtil.order("ASC", "orderIdx")));
         return trees;
+    }
+
+    @Override
+    public Page<Wiki> findPagingByIsDeleted(Pageable pageable, boolean isDeleted) {
+        return wikiRepository.findPagingByIsDeleted(pageable, isDeleted);
     }
 
     @Override
