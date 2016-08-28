@@ -127,10 +127,6 @@ var DualEditor = (function(){
             });
         });
 
-        $("#wikiEditor").keydown(function(evnet){
-            DualEditor.markup.parsing(options.type);
-        });
-
         $(".nav-pills a").on("click", function() {
             $(this).tab('show');
             var id = $(this).attr("href");
@@ -139,17 +135,14 @@ var DualEditor = (function(){
             $(next).find("a").trigger('click');
         });
 
+        $("#wikiEditor").keydown(function(evnet){
+            DualEditor.markup.parsing(options.type);
+        });
+
         DualEditor.markup.parsing(options.type);
     };
 
     DualEditor.markup.parsing = function(type){
-        var width = options.width== '' ? '' : options.width;
-        if( type != 'mini'){
-            var widthType = width.replace(/([\d]+)/gm, "");
-            width = width.replace(/([\D]+)/gm, "");
-            width = width == '' ? '' : (width/2-10)+widthType;
-        }
-
         setTimeout(function() {
             $("#wikimaincol").text("");
             var txt = DualEditor.markup( $("#wikiEditor").val() );
@@ -158,7 +151,6 @@ var DualEditor = (function(){
                 hljs.highlightBlock( (this) );
             });
         }, 1000);
-
     };
 
     DualEditor.getMarkupEditHtml = function(){
