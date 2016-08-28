@@ -71,6 +71,7 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
+    @Transactional
     public boolean deleteWithKeyword(Integer qaId, Integer userId) {
         boolean result = false;
         try {
