@@ -7,15 +7,17 @@ import static org.fest.assertions.Assertions.assertThat;
 public class SearchTargetPageTest {
 
     @Test
-    public void isValidateKey() {
-        boolean result = SearchTargetPage.isValidPage("space");
+    public void isInValidatePage() {
+        boolean result = SearchTargetPage.get("space1234").isInValidPage();
         assertThat(result).isTrue();
     }
 
+
     @Test
-    public void isInvalidPageKey() {
-        boolean result = SearchTargetPage.isValidPage("badPageKey");
+    public void isValidatePage() {
+        boolean result = SearchTargetPage.get("space").isInValidPage();
         assertThat(result).isFalse();
     }
+
 
 }

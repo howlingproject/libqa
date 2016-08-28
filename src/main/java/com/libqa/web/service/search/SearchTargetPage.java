@@ -23,7 +23,7 @@ public enum SearchTargetPage {
         return INVALID;
     }
 
-    public boolean isInValidPage(String page) {
+    public boolean isInValidPage() {
         return get(page) == INVALID;
     }
 

@@ -21,7 +21,7 @@ public class SearchController {
     @RequestMapping(value = "/search", method = GET)
     public ModelAndView search(@RequestParam String page, @RequestParam String query, ModelAndView mav) {
         SearchTargetPage searchTargetPage = SearchTargetPage.get(page);
-        if (searchTargetPage.isInValidPage(page)) {
+        if (searchTargetPage.isInValidPage()) {
             throw new IllegalArgumentException(page+ " is invalid page.");
         }
 
