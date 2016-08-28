@@ -4,14 +4,14 @@
     <div class="container-fluid">
 
         <div class="col-sm-12">
-            {{#compareTo pageKey 'qa'}} {{> search/form/qa}} {{/compareTo}}
-            {{#compareTo pageKey 'space'}} {{> search/form/space}} {{/compareTo}}
-            {{#compareTo pageKey 'wiki'}} {{> search/form/wiki}} {{/compareTo}}
+            {{#compareTo page 'qa'}} {{> search/form/qa}} {{/compareTo}}
+            {{#compareTo page 'space'}} {{> search/form/space}} {{/compareTo}}
+            {{#compareTo page 'wiki'}} {{> search/form/wiki}} {{/compareTo}}
         </div>
 
         <div class="col-sm-12">
             <div class="search-result top-buffer">
-                <div class="nav-tabs-header">검색 결과 (총 {{totalCount}}건)</div>
+                <div class="nav-tabs-header">{{pageDesc}} 검색 결과 (총 {{totalCount}}건)</div>
 
                 {{#unless results}}
                     <div class="not-found">
@@ -21,7 +21,7 @@
 
                 {{#each results}}
                     <div class="search-result-item">
-                        <a href="/qa/{{id}}"><strong>{{title}}</strong></a>
+                        <a href="/{{page}}/{{id}}"><strong>{{title}}</strong></a>
                         <div class="pull-right">
                             {{#each keywords}}
                                 {{{keywordBadge this}}}
@@ -42,6 +42,7 @@
                         </div>
                     </div>
                 {{/each}}
+
             </div>
         </div>
     </div>

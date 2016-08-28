@@ -8,13 +8,13 @@ public class SearchTargetPageTest {
 
     @Test
     public void isValidateKey() {
-        boolean result = SearchTargetPage.isValidKey("space");
+        boolean result = SearchTargetPage.isValidPage("space");
         assertThat(result).isTrue();
     }
 
     @Test
     public void isInvalidPageKey() {
-        boolean result = SearchTargetPage.isValidKey("badPageKey");
+        boolean result = SearchTargetPage.isValidPage("badPageKey");
         assertThat(result).isFalse();
     }
 

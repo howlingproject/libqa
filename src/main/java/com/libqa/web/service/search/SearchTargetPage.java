@@ -1,26 +1,45 @@
 package com.libqa.web.service.search;
 
 public enum SearchTargetPage {
-    QA("qa"),
-    SPACE("space"),
-    WIKI("wiki");
+    QA("qa", "Q&A"),
+    SPACE("space", "Space"),
+    WIKI("wiki", "Wiki"),
+    INVALID("invalid", "Invalid");
 
     final String page;
+    final String desc;
 
-    SearchTargetPage(String page) {
+    SearchTargetPage(String page, String desc) {
         this.page = page;
+        this.desc = desc;
     }
 
-    public static boolean isValidKey(String pageKey) {
+    public static SearchTargetPage get(String page) {
         for (SearchTargetPage each : SearchTargetPage.values()) {
-            if (pageKey.equals(each.page)) {
-                return true;
+            if(page.equals(each.getPage())) {
+                return each;
             }
         }
-        return false;
+        return INVALID;
     }
 
-    public static boolean isInValidKey(String pageKey) {
-        return !isValidKey(pageKey);
+    public boolean isInValidPage(String page) {
+        return get(page) == INVALID;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public boolean isQA() {
+        return this == QA;
+    }
+
+    public boolean isSpace() {
+        return this == SPACE;
     }
 }
