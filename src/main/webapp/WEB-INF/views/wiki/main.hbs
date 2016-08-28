@@ -1,22 +1,17 @@
 {{# partial "content" }}
     <!--  메뉴  -->
     <div class="container-fluid">
+
         <div class="col-sm-12">
-            <div class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                    <input type="text" data-linkval="searchText" class="form-control" placeholder="Search">
-                </div>
-                <span class="form-control btn btn-primary" data-link="/wiki/search" data-linktype="search">
-                    위키검색
-                </span>
-            </div>
+
+            {{> search/form/wiki}}
+
             <div class="btn-group pull-right">
                 <a class="form-control btn btn-primary" href="/wiki/write">
                     위키생성
                 </a>
             </div>
         </div>
-
 
         <div class="col-sm-12 top-buffer wiki-main">
             <!-- 하단 컨텐츠 -->

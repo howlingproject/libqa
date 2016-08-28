@@ -21,4 +21,11 @@ public class QaContentRepositoryTest extends LibqaRepositoryTest<QaContentReposi
         List<QaContent> qaContents = repository.findByIsDeletedFalse(pageRequest);
         System.out.println(qaContents);
     }
+
+    @Test
+    public void findAllBySearchValue() {
+        final String searchValue = "test";
+        List<QaContent> qaContents = repository.findAllBySearchValue(searchValue);
+        System.out.println(qaContents);
+    }
 }

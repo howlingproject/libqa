@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 
+import static com.libqa.application.util.LibqaConstant.DEFAULT_RETURN_URL;
+
 /**
  * @Author : yion
  * @Date : 2015. 4. 19.
@@ -37,10 +39,10 @@ public class RequestUtil {
             log.debug("###################### subUrl : {}", subUrl);
 
             if (subUrl.equals("/") || subUrl.equals("/loginPage") || subUrl.equals("/signUp")) {
-                returnUrl = "/index";
+                returnUrl = DEFAULT_RETURN_URL;
             }
         } else {
-            returnUrl = "/index";
+            returnUrl = DEFAULT_RETURN_URL;
         }
 
         return returnUrl;
