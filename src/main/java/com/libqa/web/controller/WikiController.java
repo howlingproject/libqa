@@ -2,6 +2,7 @@ package com.libqa.web.controller;
 
 import com.google.common.base.MoreObjects;
 import com.libqa.application.enums.ListType;
+import com.libqa.application.enums.Role;
 import com.libqa.application.enums.WikiLikesType;
 import com.libqa.application.enums.WikiRevisionActionType;
 import com.libqa.application.framework.ResponseData;
@@ -184,8 +185,11 @@ public class WikiController {
         User user = loggedUserManager.getUser();
         int userId = user.getUserId();
         try {
-            //위키만든 유저만 삭제가능
-            if( wiki.getUserId() == userId ){
+            //위키만든 user, 공간주인, admin만 삭제 가능
+            if( wiki.getUserId() == userId
+                    || wiki.getSpaceId() == userId
+                    || user.getRole().equals(Role.ADMIN)
+                    ){
                 wiki.setDeleted(true);
                 wikiService.save(wiki);
                 RedirectView rv = new RedirectView("/wiki/main");
