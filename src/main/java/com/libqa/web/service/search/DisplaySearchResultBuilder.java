@@ -13,11 +13,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
+import static com.libqa.application.util.LibqaConstant.ZERO;
 
 @Component
 public class DisplaySearchResultBuilder {
-    private static final Integer ZERO = 0; // TODO constant
-
     @Autowired
     private UserService userService;
     @Autowired
