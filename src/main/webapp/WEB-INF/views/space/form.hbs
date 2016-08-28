@@ -7,7 +7,8 @@ To change this template use File | Settings | File Templates.
 --}}
 {{#partial "style"}}
 {{!-- 여기에 사용자 css 정의 --}}
-    <link href="/resource/app/js/DualEditor/css/DualEditor.css" rel="stylesheet">
+
+<link href="/resource/app/js/DualEditor/css/DualEditor.css" rel="stylesheet">
 {{/partial}}
 
 {{#partial "plugin-style"}}
@@ -77,10 +78,10 @@ To change this template use File | Settings | File Templates.
                             <div class="control-group">
                                 <div class="controls">
                                     <label class="checkbox-inline">
-                                        <input type="radio" name="isPrivateYn" id="inlineCheckbox1" value="Y" checked> 공개
+                                        <input type="radio" name="isPrivateYn" id="memberPublic" value="Y" checked> 공개
                                     </label>
                                     <label class="checkbox-inline">
-                                        <input type="radio" name="isPrivateYn" id="inlineCheckbox2" value="N"> 비공개
+                                        <input type="radio" name="isPrivateYn" id="memberPrivate" value="N" data-toggle="modal" data-target="#selectMemberModal"> 비공개
                                     </label>
                                     <input type="hidden" id="private" name="private" value=""/>
                                 </div>
@@ -196,10 +197,46 @@ To change this template use File | Settings | File Templates.
     </div>
 </div>
 
+<!-- file upload start -->
+<div class="modal fade" id="selectMemberModal" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="selectMemberModalLabel">
+    <div class="modal-dialog" style="overflow-y: initial !important; overflow-y: scroll; max-height:70%;  margin-top: 50px; margin-bottom:30px;">
+    <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="selectMemberModalLabel">접근 허용 멤버 선택</h4>
+            </div>
+            <div class="modal-body" style="height: 350px;overflow-y: auto;">
+
+                <div class="form-group">
+                    <table class="table" id="memberListArea">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th style="width:30%">닉네임</th>
+                            <th style="width:40%">이메일</th>
+                            <th>구분</th>
+                        </tr>
+                        </thead>
+                        <tbody id="allUserList">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" name="selectMember">선택완료</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- file upload modal end -->
+
 {{/partial}}
 
 
 {{# partial "script-page" }}
+{{embedded "space/template/_userList"}}
 <script type="text/javascript">
     // bind the on-change event
     $(document).ready(function() {
@@ -266,6 +303,42 @@ To change this template use File | Settings | File Templates.
             }
         });
     });
+
+    $('#memberPrivate').on('click', function () {
+        var sort = "";        // Role 선택
+        $.ajax({
+            type: "get",
+            dataType: "json",
+            data: { "sortType" : sort},
+            url: "/space/allUser",
+            cache: false,
+            success: function (response) {
+                console.log("## response = " + response.resultCode);
+                console.log("## response = " + response.data);
+
+                if(response.resultCode == 1) {
+
+                    var source = $('#space-template-_userList-hbs').html();
+                    var template = Handlebars.compile(source);
+
+                    var html = template(response.data);
+                    $('#allUserList').html(html);
+
+                }
+
+
+            },
+            error: function (response) {
+                // Handle upload error
+                if (req.status == 500) {
+                    error500(true, '');
+                } else {
+                    error500(false, response.status);
+                }
+            }
+        });
+    });
+
 
     $('#btnCancel').on(function () {
         $.confirm({
