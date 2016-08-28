@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by yong on 2015-05-25.
@@ -27,11 +28,11 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public void saveByQaReply(QaReply qaReply, Integer userId, boolean isVote) {
+    public void saveByQaReply(QaReply qaReply, Integer userId, String userNick, boolean isVote) {
         Vote vote = new Vote();
         vote.setReplyId(qaReply.getReplyId());
         vote.setInsertDate(new Date());
-        vote.setUserNick("용퓌");
+        vote.setUserNick(userNick);
         vote.setIsVote(isVote);
         vote.setUserId(userId);
 
@@ -64,4 +65,15 @@ public class VoteServiceImpl implements VoteService {
         Vote vote = voteRepository.findByReplyIdAndUserIdAndIsVoteAndIsCancel(replyId, userId, false, false);
         return null != vote;
     }
+
+    @Override
+    public List<Vote> findByReplyIdAndIsVote(Integer replyId, boolean isVote) {
+        return voteRepository.findByReplyIdAndIsVoteAndIsCancelFalse(replyId, isVote);
+    }
+
+    @Override
+    public int getCountByReplyId(Integer replyId) {
+        return voteRepository.countByReplyIdAndIsCancelFalse(replyId);
+    }
+
 }

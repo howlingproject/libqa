@@ -45,6 +45,36 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     @Override
+    public int getCountByQaId(Integer qaId) {
+        return qaReplyRepository.countByQaIdAndIsDeletedFalse(qaId);
+    }
+
+    @Override
+    @Transactional
+    public void updateReply(QaReply qaReply, User user) {
+        QaReply originQaReply = findByReplyId(qaReply.getReplyId());
+        originQaReply.setTitle(qaReply.getTitle());
+        originQaReply.setContents(qaReply.getContents());
+        originQaReply.setContentsMarkup(qaReply.getContentsMarkup());
+        originQaReply.setUpdateDate(new Date());
+        originQaReply.setUpdateUserId(user.getUserId());
+    }
+
+    @Override
+    public Integer getCountByQaIdAndIsChoice(Integer qaId) {
+        return qaReplyRepository.countByQaIdAndIsChoiceTrueAndIsDeletedFalse(qaId);
+    }
+
+    @Override
+    @Transactional
+    public void saveReplyChoice(Integer replyId, Integer userId) {
+        QaReply originQaReply = findByReplyId(replyId);
+        originQaReply.setChoice(true);
+        originQaReply.setUpdateDate(new Date());
+        originQaReply.setUpdateUserId(userId);
+    }
+
+    @Override
     @Transactional
     public QaReply saveWithQaContent(QaReply paramQaReply, User user) {
         boolean isDeleted = false;
@@ -68,16 +98,16 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     @Override
-    public QaReply saveVoteUp(QaReply paramQaReply, Integer userId) {
-        return saveVote(paramQaReply, userId, "UP");
+    public QaReply saveVoteUp(QaReply paramQaReply, Integer userId, String userNick) {
+        return saveVote(paramQaReply, userId, userNick, "UP");
     }
 
     @Override
-    public QaReply saveVoteDown(QaReply paramQaReply, Integer userId) {
-        return saveVote(paramQaReply, userId, "DOWN");
+    public QaReply saveVoteDown(QaReply paramQaReply, Integer userId, String userNick) {
+        return saveVote(paramQaReply, userId, userNick, "DOWN");
     }
 
-    public QaReply saveVote(QaReply paramQaReply, Integer userId, String voteType){
+    public QaReply saveVote(QaReply paramQaReply, Integer userId, String userNick, String voteType){
         boolean isDeleted = false;
         boolean isCancel = false;
         boolean isVote;
@@ -104,7 +134,7 @@ public class QaReplyServiceImpl implements QaReplyService {
             isVote = false;
             voteDownCount += 1;
         }
-        voteService.saveByQaReply(qaReply, userId, isVote);
+        voteService.saveByQaReply(qaReply, userId, userNick, isVote);
 
         qaReply.setVoteUpCount(voteUpCount);
         qaReply.setVoteDownCount(voteDownCount);
@@ -145,13 +175,15 @@ public class QaReplyServiceImpl implements QaReplyService {
         List<DisplayQaReply> displaySubQaReplyList = Lists.newArrayList();
         for(QaReply qaReply : qaReplyList){
             User writer = userService.findByUserId(qaReply.getUserId());
-            boolean selfRecommend = voteService.hasRecommendUser(qaReply.getReplyId(), 1);
-            boolean selfNonrecommend = voteService.hasNonRecommendUser(qaReply.getReplyId(), 1);
+            List<Vote> votes = voteService.findByReplyIdAndIsVote(qaReply.getReplyId(), true);
+            List<Vote> nonVotes = voteService.findByReplyIdAndIsVote(qaReply.getReplyId(), false);
+            boolean selfRecommend = voteService.hasRecommendUser(qaReply.getReplyId(), viewer.getUserId());
+            boolean selfNonrecommend = voteService.hasNonRecommendUser(qaReply.getReplyId(), viewer.getUserId());
             if(1 == qaReplyDepth) {
                 displaySubQaReplyList = findByQaIdAndParentsIdAndDepthIdx(qaReply.getQaId(), qaReply.getReplyId(), 2, viewer);
             }
 	        final boolean isWriter = writer.isMatchUser(viewer.getUserId());
-            displayQaReplyList.add(new DisplayQaReply(qaReply, displaySubQaReplyList, selfRecommend, selfNonrecommend, writer, isWriter));
+            displayQaReplyList.add(new DisplayQaReply(qaReply, displaySubQaReplyList, votes, nonVotes, selfRecommend, selfNonrecommend, writer, isWriter));
         }
         return displayQaReplyList;
     }
@@ -174,7 +206,7 @@ public class QaReplyServiceImpl implements QaReplyService {
 
     @Override
     public List<QaReply> findByQaId(Integer qaId) {
-        return qaReplyRepository.findByQaId(qaId);
+        return qaReplyRepository.findByQaIdAndIsDeletedFalse(qaId);
     }
 
     @Override
@@ -190,7 +222,7 @@ public class QaReplyServiceImpl implements QaReplyService {
 
     @Override
     public Integer countByQaContent(QaContent qaContent) {
-        return qaReplyRepository.countByQaId(qaContent.getQaId());
+        return qaReplyRepository.countByQaIdAndIsDeletedFalse(qaContent.getQaId());
     }
 
 

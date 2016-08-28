@@ -15,9 +15,9 @@ import java.util.List;
 public interface QaReplyService {
     QaReply saveWithQaContent(QaReply qaReply, User user);
 
-    QaReply saveVoteUp(QaReply paramQaReply, Integer userId);
+    QaReply saveVoteUp(QaReply paramQaReply, Integer userId, String userNick);
 
-    QaReply saveVoteDown(QaReply paramQaReply, Integer userId);
+    QaReply saveVoteDown(QaReply paramQaReply, Integer userId, String userNick);
 
     QaReply saveChildReply(QaReply qaReply, User user);
 
@@ -32,4 +32,12 @@ public interface QaReplyService {
     Integer countByQaContent(QaContent qaContent);
 
     QaReply findByReplyId(Integer replyId);
+
+    int getCountByQaId(Integer qaId);
+
+    void updateReply(QaReply qaReply, User user);
+
+    Integer getCountByQaIdAndIsChoice(Integer qaId);
+
+    void saveReplyChoice(Integer replyId, Integer userId);
 }
