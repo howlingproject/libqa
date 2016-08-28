@@ -1,6 +1,6 @@
 package com.libqa.web.controller;
 
-import com.libqa.application.Exception.UserNotCreateException;
+import com.libqa.application.exception.UserNotCreateException;
 import com.libqa.application.enums.StatusCode;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUserManager;

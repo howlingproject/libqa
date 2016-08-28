@@ -1,4 +1,4 @@
-package com.libqa.application.Exception;
+package com.libqa.application.exception;
 
 import lombok.extern.slf4j.Slf4j;
 
