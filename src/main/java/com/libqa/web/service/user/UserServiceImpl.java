@@ -1,6 +1,6 @@
 package com.libqa.web.service.user;
 
-import com.libqa.application.Exception.UserNotCreateException;
+import com.libqa.application.exception.UserNotCreateException;
 import com.libqa.application.enums.Role;
 import com.libqa.application.enums.SocialChannelType;
 import com.libqa.application.util.PageUtil;
