@@ -99,7 +99,7 @@ public class QaReplyServiceImpl implements QaReplyService {
         newQaReply.setParentsId(newQaReply.getReplyId());
         newQaReply.setUpdateDate(new Date());
         newQaReply.setUpdateUserId(user.getUserId());
-        qaService.saveIsReplyed(paramQaReply.getQaId(), user, isReplyed);
+        qaService.saveIsReplyed(paramQaReply.getQaId(), user.getUserId(), isReplyed);
         return newQaReply;
     }
 
@@ -205,6 +205,10 @@ public class QaReplyServiceImpl implements QaReplyService {
         qaReply.setDeleted(true);
         qaReply.setUpdateUserId(userId);
         qaReply.setUpdateDate(new Date());
+        if( 0 == countByQaContent(qaReply.getQaId())){
+            boolean isReplyed = false;
+            qaService.saveIsReplyed(qaReply.getQaId(), userId, isReplyed);
+        }
     }
 
     @Override
@@ -224,8 +228,8 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     @Override
-    public Integer countByQaContent(QaContent qaContent) {
-        return qaReplyRepository.countByQaIdAndIsDeletedFalse(qaContent.getQaId());
+    public Integer countByQaContent(Integer qaId) {
+        return qaReplyRepository.countByQaIdAndIsDeletedFalse(qaId);
     }
 
 
