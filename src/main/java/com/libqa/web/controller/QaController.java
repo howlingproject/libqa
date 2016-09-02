@@ -223,10 +223,14 @@ public class QaController {
     public ResponseData<String> delete(@RequestParam("qaId") Integer qaId) {
         User user = loggedUserManager.getUser();
         try {
-            if (qaValidator.isNotMatchUser(qaId, user)) {
+            if( user.isAdmin() ){
+                qaService.deleteWithKeyword(qaId, user.getUserId());
+                return createSuccessResult(SUCCESS.getComment());
+            }
+            if(qaValidator.isNotMatchUser(qaId, user)) {
                 return createFailResult(NOT_MATCH_USER.getComment());
             }
-            if (qaValidator.checkQaContentDelete(qaId)) {
+            if(qaValidator.checkQaContentDelete(qaId)) {
                 return createFailResult(EXIST_REPLY.getComment());
             }
             qaService.deleteWithKeyword(qaId, user.getUserId());
