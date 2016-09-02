@@ -38,7 +38,7 @@ public class DisplaySearchResultBuilder {
             displaySearchResult.setUserNick(each.getUserNick());
             displaySearchResult.setUserImage(writer.getUserImage());
             displaySearchResult.setInsertDate(DisplayDate.parse(each.getInsertDate()));
-            displaySearchResult.setCountOfReply(firstNonNull(qaReplyService.countByQaContent(each), ZERO));
+            displaySearchResult.setCountOfReply(firstNonNull(qaReplyService.countByQaContent(each.getQaId()), ZERO));
             displaySearchResult.setKeywords(buildKeywords(keywords));
             results.add(displaySearchResult);
         }
