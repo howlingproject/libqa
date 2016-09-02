@@ -96,7 +96,7 @@ public class IndexCrawler {
             qaContent.setUserImage(writer.getUserImage());
             qaContent.setKeywords(buildIndexKeywords(keywords));
             qaContent.setInsertDate(DisplayDate.parse(each.getInsertDate()));
-            qaContent.setCountOfReply(firstNonNull(qaReplyService.countByQaContent(each), ZERO));
+            qaContent.setCountOfReply(firstNonNull(qaReplyService.countByQaContent(each.getQaId()), ZERO));
             result.add(qaContent);
         }
         return result;
