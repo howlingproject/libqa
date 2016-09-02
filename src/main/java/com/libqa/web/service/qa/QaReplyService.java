@@ -29,7 +29,7 @@ public interface QaReplyService {
 
     List<QaContent> findByUserId(Integer userId);
 
-    Integer countByQaContent(QaContent qaContent);
+    Integer countByQaContent(Integer qaId);
 
     QaReply findByReplyId(Integer replyId);
 
