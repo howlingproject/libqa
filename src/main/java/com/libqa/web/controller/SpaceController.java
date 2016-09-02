@@ -18,6 +18,7 @@ import com.libqa.web.service.user.UserFavoriteService;
 import com.libqa.web.service.user.UserService;
 import com.libqa.web.service.wiki.WikiService;
 import com.libqa.web.view.space.*;
+import com.libqa.web.view.user.UserList;
 import com.libqa.web.view.wiki.DisplayWiki;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -200,8 +201,6 @@ public class SpaceController {
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping("/space/form")
     public ModelAndView form(Model model) {
-        log.debug("# message : {}", message);
-
         User user = loggedUserManager.getUser();
         UserFavorite userFavorite = null;
 
@@ -210,7 +209,6 @@ public class SpaceController {
         }
 
         ModelAndView mav = new ModelAndView("/space/form");
-        mav.addObject("message", message);
         mav.addObject("user", user);
         return mav;
     }
@@ -604,6 +602,14 @@ public class SpaceController {
         User user = loggedUserManager.getUser();
 
         return mav;
+    }
+
+    @RequestMapping(value = "/space/allUser", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<UserList> findAllUser(@RequestParam String sortType) {
+        UserList userList = userService.findAllUserPageBySort(sortType);
+
+        return ResponseData.createSuccessResult(userList);
     }
 }
 

@@ -75,6 +75,11 @@ public class ResponseData<T> {
         return new ResponseData<>(FAIL.getCode(), FAIL.getComment());
     }
 
+    public static <T> ResponseData<T> createFailResult(int code, String comment, T data) {
+        return new ResponseData<>(code, comment, data);
+    }
+
+
     public static <T> ResponseData<T> createSuccessResult(Number number) {
         return new ResponseData<>(SUCCESS.getCode(), SUCCESS.getComment(), number);
     }
