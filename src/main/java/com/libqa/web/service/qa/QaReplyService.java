@@ -40,4 +40,6 @@ public interface QaReplyService {
     Integer getCountByQaIdAndIsChoice(Integer qaId);
 
     void saveReplyChoice(Integer replyId, Integer userId);
+
+    List<DisplayQaReply> findByQaIdAndIsChoiceAndDepthIdx(Integer qaId, boolean isChoice, int depthIdx, User viewer);
 }
