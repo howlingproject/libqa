@@ -126,6 +126,10 @@ var jisung;
                 $.textInsert(textEditor, html, "", "" );
                 $('#tableModal').modal('hide');
 
+                setTimeout(function() {
+                    textEditor.focus();
+                },500);
+
                 function getHtml( size, text ){
                     var html = "";
                     for(var i=0; i<size; i++){
@@ -231,6 +235,10 @@ var jisung;
 
                 $.textInsert(textEditor, html, "", "" );
                 link.modal('hide');
+
+                setTimeout(function() {
+                    textEditor.focus();
+                },500);
             });
 
             link.appendTo($me.parent());
@@ -339,6 +347,10 @@ var jisung;
 
                 $.textInsert(textEditor, html, "", "" );
                 img.modal('hide');
+
+                setTimeout(function() {
+                    textEditor.focus();
+                },500);
             });
 
             img.appendTo($me.parent());
@@ -354,7 +366,7 @@ var jisung;
         open : function ( textEditor, $me, data ) {
             this.hideSyntax();
             var div =
-                "<div class=\"modal fade\" id=\"syntaxModal\" data-keyboard='false' role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">" +
+                "<div class=\"modal fade\" id=\"syntaxModal\" tabindex=\"-1\" data-keyboard='false' role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">" +
                 "   <div class=\"modal-dialog\">" +
                 "     <div class=\"modal-content\">" +
                 "     	<div class=\"modal-body\">" +
@@ -408,6 +420,10 @@ var jisung;
 
                 $.textInsert(textEditor, html, "", "" );
                 syntax.modal('hide');
+
+                setTimeout(function() {
+                    textEditor.focus();
+                },500);
             });
 
             syntax.appendTo($me.parent());

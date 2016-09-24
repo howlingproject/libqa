@@ -12,6 +12,7 @@ var DualEditor = (function(){
 
     };
     syntaxData = new Array;
+    keyEventArr = [];
 
     DualEditor.markup = function(contents){
         syntaxData = new Array;
@@ -92,15 +93,9 @@ var DualEditor = (function(){
         }
 
 
-
         //스크룰링 싱크 wikimaincol
         var $divs = $('#wikiEditor');
-        var sync = function(e){
-            var master = this, other = document.getElementById("wikimaincol");
-            var percentage = master.scrollTop / (master.scrollHeight - master.offsetHeight);
-            other.scrollTop = percentage * (other.scrollHeight - other.offsetHeight);
-        };
-        $divs.on( 'scroll', sync);
+        $divs.on( 'scroll', DualEditor.markup.autoScroll);
 
         $("#wikiEditor").val(options.data);
         var editor = document.getElementById("wikiEditor");		// [object HTMLTextAreaElement]
@@ -127,10 +122,6 @@ var DualEditor = (function(){
             });
         });
 
-        $("#wikiEditor").keydown(function(evnet){
-            DualEditor.markup.parsing(options.type);
-        });
-
         $(".nav-pills a").on("click", function() {
             $(this).tab('show');
             var id = $(this).attr("href");
@@ -139,26 +130,33 @@ var DualEditor = (function(){
             $(next).find("a").trigger('click');
         });
 
+
+        $("#wikiEditor").keydown(function(evnet){
+            if( event.which != 91 ){
+                keyEventArr.push(event.which)
+            }
+        });
+
         DualEditor.markup.parsing(options.type);
+        setInterval(function(){
+            if( keyEventArr.length > 0 ){
+                DualEditor.markup.parsing(options.type);
+                keyEventArr = [];
+                var $divs = $('#wikiEditor');
+                $divs.one( 'keydown', DualEditor.markup.autoScroll);
+            }
+        }, 1000);
     };
 
     DualEditor.markup.parsing = function(type){
-        var width = options.width== '' ? '' : options.width;
-        if( type != 'mini'){
-            var widthType = width.replace(/([\d]+)/gm, "");
-            width = width.replace(/([\D]+)/gm, "");
-            width = width == '' ? '' : (width/2-10)+widthType;
-        }
-
         setTimeout(function() {
             $("#wikimaincol").text("");
             var txt = DualEditor.markup( $("#wikiEditor").val() );
-            $("#wikimaincol").html( "<div style=\"width:"+width+"\">"+txt+"</div>" );
+            $("#wikimaincol").html( "<div>"+txt+"</div>" );
             $('pre code2').each(function(){
                 hljs.highlightBlock( (this) );
             });
         }, 1000);
-
     };
 
     DualEditor.getMarkupEditHtml = function(){
@@ -169,6 +167,16 @@ var DualEditor = (function(){
     DualEditor.getMarkupConvertToHtml = function(){
         var target = $("#wikimaincol > div");
         return target.html();
+    };
+
+    DualEditor.markup.autoScroll = function(e){
+        var master = this, other = document.getElementById("wikimaincol");
+        var percentage = master.scrollTop / (master.scrollHeight - master.offsetHeight);
+        if( Math.floor( percentage.toFixed(2) ) == 1 ){
+            other.scrollTop = other.scrollHeight;
+        }else{
+            other.scrollTop = percentage * (other.scrollHeight - other.offsetHeight);
+        }
     };
 
     return DualEditor;
@@ -194,11 +202,11 @@ function getMarkupEditHtml(width, height){
     var widthType = width.replace(/([\d]+)/gm, "");
     var width = width.replace(/([\D]+)/gm, "");
 
-    style = width == '' ? style + '' : style + "width:"+width+";";
-    style = height == '' ? style + '' : style + "height:"+height+";";
+    style = width == '' ? style + '100' : style + "width:"+width+";";
+    //style = height == '' ? style + '' : style + "height:"+height+";";
 
     var html =
-        "<table class=\"sonDualEditor\" style=\""+style+"\">" +
+        "<table class=\"sonDualEditor\" style=\"width: 100%\">" +
         "   <thead>" +
         "   <tr>" +
         "       <th colspan=\"2\">" +
@@ -206,49 +214,49 @@ function getMarkupEditHtml(width, height){
         "               <div class=\"btn-group\">" +
         "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm dropdown-toggle\" data-toggle=\"dropdown\"><i class=\"fa fa-header\"></i><span class=\"caret\"></span></button>" +
         "                   <ul class=\"dropdown-menu\" role=\"menu\">" +
-        "                       <li>" +
-        "                           <a data-mode=\"font\" data-before=\"# \" data-center=\"\"  data-after=\"\" unselectable=\"on\">" +
+        "                       <li title='헤드라인'>" +
+        "                           <a data-mode=\"font\" data-before=\"# \" data-center=\"\"  data-after=\"\" unselectable=\"on\" title='큰 헤드라인'>" +
         "                               <span style=\"font-size:18px;\">h1. 큰 헤드라인</span>" +
         "                           </a>" +
-        "                           <a data-mode=\"font\" data-before=\"## \" data-center=\"\"  data-after=\"\" unselectable=\"on\">" +
+        "                           <a data-mode=\"font\" data-before=\"## \" data-center=\"\"  data-after=\"\" unselectable=\"on\" title='큰 헤드라인'>" +
         "                               <span style=\"font-size:14px;\">h2. 중간 헤드라인</span>" +
         "                           </a>" +
-        "                           <a data-mode=\"font\" data-before=\"### \" data-center=\"\"  data-after=\"\" unselectable=\"on\">" +
+        "                           <a data-mode=\"font\" data-before=\"### \" data-center=\"\"  data-after=\"\" unselectable=\"on\" title='작은 헤드라인'>" +
         "                               <span style=\"font-size:12px;\">h3. 작은 헤드라인</span>" +
         "                           </a>" +
         "                       </li>" +
         "                   </ul>" +
         "               </div>" +
         "               <div class=\"btn-group\">" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"**\" data-center=\" \" data-after=\"**\"><i class=\"fa fa-bold\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"_\" data-center=\" \" data-after=\"_\"><i class=\"fa fa-italic\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"//\" data-center=\" \" data-after=\"//\"><i class=\"fa fa-underline\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"~~\" data-center=\" \" data-after=\"~~\"><i class=\"fa fa-strikethrough\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[sb]\" data-center=\" \" data-after=\"[sb]\"><i class=\"fa fa-subscript\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[sp]\" data-center=\" \" data-after=\"[sp]\"><i class=\"fa fa-superscript\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[align:left]\" data-center=\" \" data-after=\"[align]\"><i class=\"fa fa-align-left\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[align:center]\" data-center=\" \" data-after=\"[align]\"><i class=\"fa fa-align-center\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[align:right]\" data-center=\" \" data-after=\"[align]\"><i class=\"fa fa-align-right\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"**\" data-center=\" \" data-after=\"**\" title='굴게'><i class=\"fa fa-bold\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"_\" data-center=\" \" data-after=\"_\" title='기울기'><i class=\"fa fa-italic\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"//\" data-center=\" \" data-after=\"//\" title='밑줄'><i class=\"fa fa-underline\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"~~\" data-center=\" \" data-after=\"~~\" title='취소선'><i class=\"fa fa-strikethrough\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[sb]\" data-center=\" \" data-after=\"[sb]\" title='아랫첨자'><i class=\"fa fa-subscript\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[sp]\" data-center=\" \" data-after=\"[sp]\" title='윗첨자'><i class=\"fa fa-superscript\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[align:left]\" data-center=\" \" data-after=\"[align]\" title='왼쪽정렬'><i class=\"fa fa-align-left\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[align:center]\" data-center=\" \" data-after=\"[align]\" title='중앙정렬'><i class=\"fa fa-align-center\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[align:right]\" data-center=\" \" data-after=\"[align]\" title='오른쪽정렬'><i class=\"fa fa-align-right\"></i></button>" +
         "               </div>" +
         "               <div class=\"btn-group\">" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"insert\" data-before=\"***\" data-center=\"\" data-after=\"\"><i class=\"glyphicon glyphicon-minus\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"insert\" data-before=\"***\" data-center=\"\" data-after=\"\" title='문단나누기'><i class=\"glyphicon glyphicon-minus\"></i></button>" +
         "               </div>" +
         "               <div class=\"btn-group\">" +
         "               </div>" +
         "               <div class=\"btn-group\">" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"* \" data-center=\" \" data-after=\"\"><i class=\"fa fa-list-ul\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"1. \" data-center=\" \" data-after=\"\"><i class=\"fa fa-list-ol\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#syntaxModal\" data-mode=\"layer\" data-type=\"syntax\" ><i class=\"fa fa-code\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#tableModal\" data-mode=\"layer\" data-type=\"table\"><i class=\"fa fa-table\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[field|타이틀]\" data-center=\"\"  data-after=\"[field]\"><i class=\"fa fa-credit-card\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#urlModal\" data-mode=\"layer\" data-type=\"url\" ><i class=\"fa fa-link\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#imgModal\" data-mode=\"layer\" data-type=\"img\" ><i class=\"fa fa-file-image-o\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[alert]\" data-center=\" \" data-after=\"[alert]\"><i class=\"fa fa-exclamation-triangle\"></i></button>" +
-        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\"  data-before=\"[info]\"  data-center=\" \"  data-after=\"[info]\"><i class=\"fa fa-info\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"* \" data-center=\" \" data-after=\"\" title='사각순번'><i class=\"fa fa-list-ul\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"1. \" data-center=\" \" data-after=\"\" title='숫자순번'><i class=\"fa fa-list-ol\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#syntaxModal\" data-mode=\"layer\" data-type=\"syntax\" title='신택스'><i class=\"fa fa-code\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#tableModal\" data-mode=\"layer\" data-type=\"table\" title='테이블'><i class=\"fa fa-table\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[field|타이틀]\" data-center=\"\"  data-after=\"[field]\" title='필드'><i class=\"fa fa-credit-card\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#urlModal\" data-mode=\"layer\" data-type=\"url\" title='링크'><i class=\"fa fa-link\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#imgModal\" data-mode=\"layer\" data-type=\"img\" title='이미지'><i class=\"fa fa-file-image-o\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\" data-before=\"[alert]\" data-center=\" \" data-after=\"[alert]\" title='알림'><i class=\"fa fa-exclamation-triangle\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-mode=\"append\"  data-before=\"[info]\"  data-center=\" \"  data-after=\"[info]\" title='정보'><i class=\"fa fa-info\"></i></button>" +
         "               </div>" +
         "               <div class=\"btn-group\">" +
-        "                   <button type=\"button\" class=\"dualEditorWiki-btn btn btn-default btn-sm dropdown-toggle\" data-toggle=\"dropdown\" data-mode=\"columns\"><i class=\"fa fa-columns\"></i></button>" +
-        "                   <a type=\"button\" class=\"dualEditorWiki-btn btn btn-default btn-sm\" data-toggle=\"collapse\" href=\"#hepl\"><i class=\"fa fa-lightbulb-o\"></i></a>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm dropdown-toggle\" data-toggle=\"dropdown\" data-mode=\"columns\" title='단나누기'><i class=\"fa fa-columns\"></i></button>" +
+        "                   <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"collapse\" href=\"#hepl\" title='도움말'><i class=\"fa fa-lightbulb-o\"></i></button>" +
         "               </div>" +
         "           </div>" +
         "           <hr style=\"background-color:#ccc;height: 1px;margin-top: 10px;margin-bottom: 12px;\"> " +
@@ -469,10 +477,10 @@ function getMarkupEditHtml(width, height){
         "   </thead>" +
         "   <tbody>" +
         "   <tr>" +
-        "       <td style=\"padding-top: 10px;padding-left: 0px; width: "+(width/2)+widthType+"\">" +
+        "       <td style=\"padding-top: 10px;padding-left: 0px; width: 50%\">" +
         "           <textarea class=\"dualEditor form-control\" rows=\"20\" id=\"wikiEditor\" style=\"overflow: scroll; height: 500px;\"></textarea>" +
         "       </td>" +
-        "       <td style=\"padding-top: 10px;padding-left: 10px; width: "+(width/2)+widthType+"\">" +
+        "       <td style=\"padding-top: 10px;padding-left: 10px; width: 50%\">" +
         "           <div id=\"wikimaincol\" style=\"background-color:white; border:1px solid #ccc; padding-top:5px; padding-left:10px; border-radius:5px; overflow: scroll; height: 500px;\">" +
         "       </td>" +
         "   </tr>" +
@@ -491,74 +499,74 @@ function getMarkupEditMiniHtml(width, height){
     styleHeight += height == '' ? '' : "height:"+height+";";
 
     var html =
-    "<div class='dualEditor-nav' role='tabpanel' style=\""+styleWidth+"\">" +
-    " 	<!-- Nav tabs --> 	" +
-    " 	<ul class='nav nav-tabs ' role='tablist'>" +
-    " 	  <li role='presentation' class='active'><a href='#mini-write' aria-controls='write' role='tab' data-toggle='tab'>Write</a></li>" +
-    " 	  <li role='presentation'><a href='#mini-preview' aria-controls='preview' role='tab' data-toggle='tab'>Preview</a></li>" +
-    " 	</ul>" +
-    " 	</div>" +
-    " 	 	<!-- Tab panes --> 	" +
-    "<div class='tab-content dualEditor-nav' style=\""+styleWidth+"\">" +
-    " 	  <div role='tabpanel' class='tab-pane preview' id='mini-preview'>" +
-    " 		<div id='wikimaincol' class='dualEditor-preview' style=\""+styleHeight+"\"></div>" +
-    " 	  </div>" +
-    " 	  <div role='tabpanel' class='tab-pane write active' id='mini-write'>" +
-    " 	    <table class='sonDualEditor dualEditor-main' style=\""+styleHeight+"\">" +
-    " 		    <thead>" +
-    " 				<tr>" +
-    "                   <td style='padding: 8px'></td>" +
-    "               </tr>" +
-    " 				<tr>" +
-    " 					<th>" +
-    " 						<div class='btn-toolbar' id='btnToolbar'>" +
-    " 							<div class='btn-group'>" +
-    " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'><i class='fa fa-header'></i><span class='caret'></span></button>" +
-    " 								<ul class='dropdown-menu' role='menu'>" +
-    " 									<li>" +
-    "                                       <a data-mode=\"font\" data-before=\"# \" data-center=\"\"  data-after=\"\" unselectable=\"on\">" +
-    "                                           <span style=\"font-size:18px;\">h1. 큰 헤드라인</span>" +
-    "                                       </a>" +
-    "                                       <a data-mode=\"font\" data-before=\"## \" data-center=\"\"  data-after=\"\" unselectable=\"on\">" +
-    "                                           <span style=\"font-size:14px;\">h2. 중간 헤드라인</span>" +
-    "                                       </a>" +
-    "                                       <a data-mode=\"font\" data-before=\"### \" data-center=\"\"  data-after=\"\" unselectable=\"on\">" +
-    "                                           <span style=\"font-size:12px;\">h3. 작은 헤드라인</span>" +
-    "                                       </a>" +
-    " 									</li>" +
-    " 								</ul>" +
-    " 							</div>" +
-    " 							<div class='btn-group'>" +
-    " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='**' data-center=' ' data-after='**'><i class='fa fa-bold'></i></button>" +
-    " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='_' data-center=' ' data-after='_'><i class='fa fa-italic'></i></button>" +
-    " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='//' data-center=' ' data-after='//'><i class='fa fa-underline'></i></button>" +
-    " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='[d]' data-center=' ' data-after='[d]'><i class='fa fa-strikethrough'></i></button>" +
-    " 							</div>" +
-    " 							<div class='btn-group'>" +
-    " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='* ' data-center=' ' data-after=''><i class='fa fa-list-ul'></i></button>" +
-    " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='1. ' data-center=' ' data-after=''><i class='fa fa-list-ol'></i></button>" +
-    " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='[syntax]' data-center=''  data-after='[syntax]'><i class='fa fa-code'></i></button>" +
-    " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-toggle='modal' data-target='#tableModal' data-mode='layer' data-type='table'><i class='fa fa-table'></i></button>" +
-    " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-toggle='modal' data-target='#urlModal' data-mode='layer' data-type='url' ><i class='fa fa-link'></i></button>" +
-    " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-toggle='modal' data-target='#imgModal' data-mode='layer' data-type='img' ><i class='fa fa-file-image-o'></i></button>" +
-    "                               <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#layoutModal\" data-mode=\"layer\" data-type=\"layout\" ><i class=\"fa fa-columns\"></i></button>" +
-    " 							</div>" +
-    " 						</div>" +
+        "<div class='dualEditor-nav' role='tabpanel' style=\""+styleWidth+"\">" +
+        " 	<!-- Nav tabs --> 	" +
+        " 	<ul class='nav nav-tabs ' role='tablist'>" +
+        " 	  <li role='presentation' class='active'><a href='#mini-write' aria-controls='write' role='tab' data-toggle='tab'>Write</a></li>" +
+        " 	  <li role='presentation'><a href='#mini-preview' aria-controls='preview' role='tab' data-toggle='tab'>Preview</a></li>" +
+        " 	</ul>" +
+        " 	</div>" +
+        " 	 	<!-- Tab panes --> 	" +
+        "<div class='tab-content dualEditor-nav' style=\""+styleWidth+"\">" +
+        " 	  <div role='tabpanel' class='tab-pane preview' id='mini-preview'>" +
+        " 		<div id='wikimaincol' class='dualEditor-preview' style=\""+styleHeight+"\"></div>" +
+        " 	  </div>" +
+        " 	  <div role='tabpanel' class='tab-pane write active' id='mini-write'>" +
+        " 	    <table class='sonDualEditor dualEditor-main' style=\""+styleHeight+"\">" +
+        " 		    <thead>" +
+        " 				<tr>" +
+        "                   <td style='padding: 8px'></td>" +
+        "               </tr>" +
+        " 				<tr>" +
+        " 					<th>" +
+        " 						<div class='btn-toolbar' id='btnToolbar'>" +
+        " 							<div class='btn-group'>" +
+        " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'><i class='fa fa-header'></i><span class='caret'></span></button>" +
+        " 								<ul class='dropdown-menu' role='menu' title='헤드라인'>" +
+        " 									<li>" +
+        "                                       <a data-mode=\"font\" data-before=\"# \" data-center=\"\"  data-after=\"\" unselectable=\"on\" title='큰 헤드라인'>" +
+        "                                           <span style=\"font-size:18px;\">h1. 큰 헤드라인</span>" +
+        "                                       </a>" +
+        "                                       <a data-mode=\"font\" data-before=\"## \" data-center=\"\"  data-after=\"\" unselectable=\"on\" title='중간 헤드라인'>" +
+        "                                           <span style=\"font-size:14px;\">h2. 중간 헤드라인</span>" +
+        "                                       </a>" +
+        "                                       <a data-mode=\"font\" data-before=\"### \" data-center=\"\"  data-after=\"\" unselectable=\"on\" title='작은 헤드라인'>" +
+        "                                           <span style=\"font-size:12px;\">h3. 작은 헤드라인</span>" +
+        "                                       </a>" +
+        " 									</li>" +
+        " 								</ul>" +
+        " 							</div>" +
+        " 							<div class='btn-group'>" +
+        " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='**' data-center=' ' data-after='**' title='굵게'><i class='fa fa-bold'></i></button>" +
+        " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='_' data-center=' ' data-after='_' title='기울기'><i class='fa fa-italic'></i></button>" +
+        " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='//' data-center=' ' data-after='//' title='밑줄'><i class='fa fa-underline'></i></button>" +
+        " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='[d]' data-center=' ' data-after='[d]' title='취소선'><i class='fa fa-strikethrough'></i></button>" +
+        " 							</div>" +
+        " 							<div class='btn-group'>" +
+        " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='* ' data-center=' ' data-after='' title=\"사각순번\"><i class='fa fa-list-ul'></i></button>" +
+        " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='1. ' data-center=' ' data-after='' title='숫자순번'><i class='fa fa-list-ol'></i></button>" +
+        " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-mode='append' data-before='[syntax]' data-center=''  data-after='[syntax]' title='신택스'><i class='fa fa-code'></i></button>" +
+        " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-toggle='modal' data-target='#tableModal' data-mode='layer' data-type='table' title='테이블'><i class='fa fa-table'></i></button>" +
+        " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-toggle='modal' data-target='#urlModal' data-mode='layer' data-type='url' title='링크'><i class='fa fa-link'></i></button>" +
+        " 								<button type='button' class='dualEditor-wiki-btn btn btn-default btn-sm' data-toggle='modal' data-target='#imgModal' data-mode='layer' data-type='img' title='이미지'><i class='fa fa-file-image-o'></i></button>" +
+        "                               <button type=\"button\" class=\"dualEditor-wiki-btn btn btn-default btn-sm\" data-toggle=\"modal\" data-target=\"#layoutModal\" data-mode=\"layer\" data-type=\"layout\" title='단나누기'><i class=\"fa fa-columns\"></i></button>" +
+        " 							</div>" +
+        " 						</div>" +
 
-    " 					</th>" +
-    " 				</tr>" +
-    " 				<tr><td style='padding: 8px'></td></tr>" +
-    " 			</thead>" +
-    " 			<tbody>" +
-    " 				<tr>" +
-    " 					<td>" +
-    " 						<textarea class='dualEditor form-control' rows='5' id='wikiEditor' name='we_wiki_text' ></textarea>" +
-    " 					</td>" +
-    " 				</tr>" +
-    " 			</tbody>" +
-    " 		</table>" +
-    " 	  </div>" +
-    " 	</div>";
+        " 					</th>" +
+        " 				</tr>" +
+        " 				<tr><td style='padding: 8px'></td></tr>" +
+        " 			</thead>" +
+        " 			<tbody>" +
+        " 				<tr>" +
+        " 					<td>" +
+        " 						<textarea class='dualEditor form-control' rows='5' id='wikiEditor' name='we_wiki_text' ></textarea>" +
+        " 					</td>" +
+        " 				</tr>" +
+        " 			</tbody>" +
+        " 		</table>" +
+        " 	  </div>" +
+        " 	</div>";
 
     return html;
 }
