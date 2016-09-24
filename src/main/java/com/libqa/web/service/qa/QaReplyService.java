@@ -29,7 +29,7 @@ public interface QaReplyService {
 
     List<QaContent> findByUserId(Integer userId);
 
-    Integer countByQaContent(QaContent qaContent);
+    Integer countByQaContent(Integer qaId);
 
     QaReply findByReplyId(Integer replyId);
 
@@ -40,4 +40,6 @@ public interface QaReplyService {
     Integer getCountByQaIdAndIsChoice(Integer qaId);
 
     void saveReplyChoice(Integer replyId, Integer userId);
+
+    List<DisplayQaReply> findByQaIdAndIsChoiceAndDepthIdx(Integer qaId, boolean isChoice, int depthIdx, User viewer);
 }

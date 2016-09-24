@@ -1,19 +1,24 @@
 package com.libqa.web.service.user;
 
-import com.libqa.application.Exception.UserNotCreateException;
+import com.libqa.application.exception.UserNotCreateException;
+import com.libqa.application.enums.Role;
 import com.libqa.application.enums.SocialChannelType;
+import com.libqa.application.util.PageUtil;
 import com.libqa.application.util.StringUtil;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.User;
 import com.libqa.web.domain.UserKeyword;
 import com.libqa.web.repository.UserKeywordRepository;
 import com.libqa.web.repository.UserRepository;
+import com.libqa.web.view.user.UserList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -147,6 +152,7 @@ public class UserServiceImpl implements UserService {
         return entity;
     }
 
+
     /**
      * 프로필 업데이트 파라미터 세팅
      *
@@ -195,6 +201,21 @@ public class UserServiceImpl implements UserService {
             userKeywordRepository.save(userKeyword);
         }
 
+    }
+
+
+    @Override
+    public UserList findAllUserPageBySort(String sortType) {
+        List<User> users;
+        if (sortType.equals("")) {
+            users = userRepository.findAllByIsDeleted(false);
+        } else {
+            users = userRepository.findByRoleAndIsDeleted(Role.valueOf(sortType), false);
+        }
+
+        UserList userList = new UserList(users);
+
+        return userList;
     }
 
 }

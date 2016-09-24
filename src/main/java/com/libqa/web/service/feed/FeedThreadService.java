@@ -43,7 +43,8 @@ public class FeedThreadService {
      * @return List&lt;FeedThread&gt;
      */
     public List<FeedThread> searchRecentlyFeedThreads() {
-        return feedThreadRepository.findByIsDeletedFalse(PageUtil.sortPageable(DEFAULT_SORT));
+        PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
+        return feedThreadRepository.findByIsDeletedFalse(pageRequest);
     }
 
     /**

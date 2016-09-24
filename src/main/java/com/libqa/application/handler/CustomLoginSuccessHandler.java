@@ -16,6 +16,8 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.libqa.application.util.LibqaConstant.DEFAULT_RETURN_URL;
+
 /**
  * 로그인 후 이전 URL로 핸들링 한다.
  * 사용자 아이디의 저장 유무를 확인하여 Cookie를 세팅한다.
@@ -25,8 +27,6 @@ import java.util.Map;
  */
 @Slf4j
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
-
-    private static final String DEFAULT_URL = "/index";
 
     @Autowired
     protected AuthenticationManager authenticationManager;
@@ -40,7 +40,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         //TODO root url 접근시 isLogin 값이 없어서 false 로 넘어가는 문제가 있음 (로그인 후에도 비로그인 메뉴로 출력되는 bug)
 
-        String returnUrl = RequestUtil.refererUrl(request, DEFAULT_URL);
+        String returnUrl = RequestUtil.refererUrl(request, DEFAULT_RETURN_URL);
         ObjectMapper om = new ObjectMapper();
 
         Map<String, Object> map = new HashMap<String, Object>();

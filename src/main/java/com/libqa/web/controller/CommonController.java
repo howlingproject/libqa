@@ -2,6 +2,7 @@ package com.libqa.web.controller;
 
 import com.libqa.application.dto.FileDto;
 import com.libqa.application.enums.KeywordType;
+import com.libqa.application.enums.StatusCode;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.DateUtil;
 import com.libqa.application.util.FileHandler;
@@ -89,7 +90,13 @@ public class CommonController {
         FileDto fileDto = new FileDto();
 
         // 허용 파일 여부 체크
-        allowedFile(uploadfile);
+        try {
+            allowedFile(uploadfile);
+        } catch (Exception e) {
+            log.info("파일 확장자가 올바르지 않습니다.");
+            return ResponseData.createFailResult(StatusCode.FAIL.getCode(), StatusCode.INVALID_FILE.getComment(), null);
+        }
+
 
         // 이미지 파일일 경우 ContentType 검사
         checkImageUpload(uploadfile, viewType);

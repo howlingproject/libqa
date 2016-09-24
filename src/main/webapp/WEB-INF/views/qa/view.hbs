@@ -174,6 +174,7 @@
             Qa.makeFileList();
             Qa.searchList();
             Qa.makeEditor();
+//            Qa.getReplyChoice();
         });
 
         function setParam(){
@@ -213,6 +214,22 @@
                     {{/unless}}
                 });
             },
+            <!--getReplyChoice : function(){-->
+                <!--$.get("/qa/getReplyChoice",{qaId : $('[name=qaId]').val()}, function (response) {-->
+                    <!--if(response.resultCode != 1) {-->
+                        <!--alert(response.comment);-->
+                        <!--return;-->
+                    <!--}-->
+                    <!--var source = $('#qa-template-_replyList-hbs').html();-->
+                    <!--var template = Handlebars.compile(source);-->
+
+                    <!--var html = template(response);-->
+                    <!--$('#replyChoice').html(html);-->
+                    <!--{{#unless isLogin}}-->
+                        <!--$('.input-reply-area').html('');-->
+                    <!--{{/unless}}-->
+                <!--});-->
+            <!--},-->
             buttonEvent : function(){
                 $('#editButton').on("click", function(){
                     location.href = "/qa/edit/" + $('[name=qaId]').val();
@@ -334,8 +351,13 @@
                 $('.fileDiv').find('[href=#fileDiv]').remove();
             },
             saveVoteEvent : function(){
-                $('.qna-reply > i').click(function(){
+                $('.qna-reply-icon > i.reply-recommend').click(function(){
                     Qa.checkSaveVote(this);
+                });
+            },
+            saveChoiceEvent : function(){
+                $('.qna-reply-icon > i.reply-choice').click(function(){
+                    Qa.saveChoice(this);
                 });
             },
             checkSaveRecommend : function(recommendLiObj){
@@ -470,6 +492,25 @@
                             Qa.searchList();
                         } else {
                             $.alert(data.comment);
+                        }
+                    },
+                    error : function(XMLHttpRequest,textStatus,errorThrown){
+                        alert(errorThrown);
+                    }
+                });
+            },
+            saveChoice : function(voteLiObj){
+                var replyId = $(voteLiObj).closest('.thread').attr('data-qa-reply-id');
+                $.ajax({
+                    type : 'POST',
+                    data : {qaId : $('[name=qaId]').val(),
+                        replyId : replyId},
+                    url : '/qa/saveReplyChoice',
+                    success : function(data){
+                        if(data.resultCode == 1) {
+                            Qa.searchList();
+                        } else {
+                            $.alert(data.data);
                         }
                     },
                     error : function(XMLHttpRequest,textStatus,errorThrown){

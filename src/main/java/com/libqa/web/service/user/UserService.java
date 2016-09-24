@@ -1,8 +1,9 @@
 package com.libqa.web.service.user;
 
-import com.libqa.application.Exception.UserNotCreateException;
+import com.libqa.application.exception.UserNotCreateException;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.User;
+import com.libqa.web.view.user.UserList;
 
 /**
  * @Author : yion
@@ -76,4 +77,10 @@ public interface UserService {
      */
     User updateUserProfileAndKeyword(User user, Keyword keyword);
 
+    /**
+     * 전체 회원 목록
+     * @param sortType
+     * @return
+     */
+    UserList findAllUserPageBySort(String sortType);
 }

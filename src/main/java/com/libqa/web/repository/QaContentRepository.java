@@ -81,4 +81,9 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
 			"order by qa.update_date desc", nativeQuery = true)
 	Stream<QaContent> findAllByKeywordAndDayTypeAndIsDeletedFalse(@Param("keywordType") String keywordType, @Param("keywordName") String keywordName,  @Param("fromDate") Date fromDate, @Param("today") Date today);
 
+    @Query(value = "SELECT q.* FROM qa_content q " +
+            "WHERE q.is_deleted = 0 " +
+            "	AND (q.title LIKE CONCAT('%',:searchValue,'%') OR q.contents_markup LIKE CONCAT('%',:searchValue,'%') ) " +
+            "ORDER BY q.qa_id DESC", nativeQuery = true)
+    List<QaContent> findAllBySearchValue(@Param("searchValue") String searchValue);
 }

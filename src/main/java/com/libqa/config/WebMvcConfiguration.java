@@ -2,7 +2,6 @@ package com.libqa.config;
 
 import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.springmvc.HandlebarsViewResolver;
-import com.libqa.application.framework.ErrorPagePath;
 import com.libqa.application.helper.HandlebarsHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
@@ -17,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.config.annotation.*;
 
 import javax.sql.DataSource;
+
+import static com.libqa.application.util.LibqaConstant.ErrorPagePath.*;
 
 @Configuration
 @EnableWebMvc
@@ -50,10 +51,10 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
         return container -> {
-            ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, ErrorPagePath.ERROR_401);
-            ErrorPage error403Page = new ErrorPage(HttpStatus.FORBIDDEN, ErrorPagePath.ERROR_403);
-            ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, ErrorPagePath.ERROR_404);
-            ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, ErrorPagePath.ERROR_500);
+            ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, ERROR_401);
+            ErrorPage error403Page = new ErrorPage(HttpStatus.FORBIDDEN, ERROR_403);
+            ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, ERROR_404);
+            ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, ERROR_500);
             container.addErrorPages(error401Page, error403Page, error404Page, error500Page);
         };
     }

@@ -75,6 +75,12 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     @Override
+    public List<DisplayQaReply> findByQaIdAndIsChoiceAndDepthIdx(Integer qaId, boolean isChoice, int depthIdx, User viewer) {
+        List<QaReply> qaReplyList = qaReplyRepository.findByQaIdAndIsChoiceAndDepthIdxAndIsDeletedFalse(qaId, isChoice, depthIdx);
+        return makeDisplayQaReply(qaReplyList, depthIdx, viewer);
+    }
+
+    @Override
     @Transactional
     public QaReply saveWithQaContent(QaReply paramQaReply, User user) {
         boolean isDeleted = false;
@@ -93,7 +99,7 @@ public class QaReplyServiceImpl implements QaReplyService {
         newQaReply.setParentsId(newQaReply.getReplyId());
         newQaReply.setUpdateDate(new Date());
         newQaReply.setUpdateUserId(user.getUserId());
-        qaService.saveIsReplyed(paramQaReply.getQaId(), user, isReplyed);
+        qaService.saveIsReplyed(paramQaReply.getQaId(), user.getUserId(), isReplyed);
         return newQaReply;
     }
 
@@ -107,7 +113,7 @@ public class QaReplyServiceImpl implements QaReplyService {
         return saveVote(paramQaReply, userId, userNick, "DOWN");
     }
 
-    public QaReply saveVote(QaReply paramQaReply, Integer userId, String userNick, String voteType){
+    public QaReply saveVote(QaReply paramQaReply, Integer userId, String userNick, String voteType) {
         boolean isDeleted = false;
         boolean isCancel = false;
         boolean isVote;
@@ -118,16 +124,16 @@ public class QaReplyServiceImpl implements QaReplyService {
         int voteUpCount = qaReply.getVoteUpCount();
         int voteDownCount = qaReply.getVoteDownCount();
 
-        if(vote != null){
+        if (vote != null) {
             voteService.deleteByQaReply(qaReply, userId);
-            if(vote.getIsVote()){
+            if (vote.getIsVote()) {
                 voteUpCount -= 1;
             } else {
                 voteDownCount -= 1;
             }
         }
 
-        if("UP".equals(voteType)){
+        if ("UP".equals(voteType)) {
             isVote = true;
             voteUpCount += 1;
         } else {
@@ -145,44 +151,41 @@ public class QaReplyServiceImpl implements QaReplyService {
 
     @Override
     public QaReply saveChildReply(QaReply paramQaReply, User user) {
-	    Date today = new Date();
-	    paramQaReply.setInsertDate(today);
-	    paramQaReply.setUpdateDate(today);
-	    paramQaReply.setInsertUserId(user.getUserId());
-	    paramQaReply.setUpdateUserId(user.getUserId());
-	    paramQaReply.setUserId(user.getUserId());
-	    paramQaReply.setUserNick(user.getUserNick());
+        Date today = new Date();
+        paramQaReply.setInsertDate(today);
+        paramQaReply.setUpdateDate(today);
+        paramQaReply.setInsertUserId(user.getUserId());
+        paramQaReply.setUpdateUserId(user.getUserId());
+        paramQaReply.setUserId(user.getUserId());
+        paramQaReply.setUserNick(user.getUserNick());
 
         paramQaReply.setContentsMarkup(paramQaReply.getContents());
-        paramQaReply.setOrderIdx(paramQaReply.getOrderIdx()+1);
-        paramQaReply.setDepthIdx(paramQaReply.getDepthIdx()+1);
+        paramQaReply.setOrderIdx(paramQaReply.getOrderIdx() + 1);
+        paramQaReply.setDepthIdx(paramQaReply.getDepthIdx() + 1);
         return qaReplyRepository.save(paramQaReply);
     }
 
     @Override
     public List<DisplayQaReply> findByQaIdAndDepthIdx(Integer qaId, int depthIdx, User viewer) {
         boolean isDeleted = false;
-        boolean isCancel = false;
-        boolean vote = true;
-        boolean notVote = false;
         int qaReplyDepth = 1;
         List<QaReply> qaReplyList = qaReplyRepository.findAllByQaIdAndDepthIdxAndIsDeletedOrderByReplyIdAsc(qaId, depthIdx, isDeleted);
         return makeDisplayQaReply(qaReplyList, qaReplyDepth, viewer);
     }
 
-    public List<DisplayQaReply> makeDisplayQaReply(List<QaReply> qaReplyList, int qaReplyDepth, User viewer){
+    public List<DisplayQaReply> makeDisplayQaReply(List<QaReply> qaReplyList, int qaReplyDepth, User viewer) {
         List<DisplayQaReply> displayQaReplyList = Lists.newArrayList();
         List<DisplayQaReply> displaySubQaReplyList = Lists.newArrayList();
-        for(QaReply qaReply : qaReplyList){
+        for (QaReply qaReply : qaReplyList) {
             User writer = userService.findByUserId(qaReply.getUserId());
             List<Vote> votes = voteService.findByReplyIdAndIsVote(qaReply.getReplyId(), true);
             List<Vote> nonVotes = voteService.findByReplyIdAndIsVote(qaReply.getReplyId(), false);
             boolean selfRecommend = voteService.hasRecommendUser(qaReply.getReplyId(), viewer.getUserId());
             boolean selfNonrecommend = voteService.hasNonRecommendUser(qaReply.getReplyId(), viewer.getUserId());
-            if(1 == qaReplyDepth) {
+            if (1 == qaReplyDepth) {
                 displaySubQaReplyList = findByQaIdAndParentsIdAndDepthIdx(qaReply.getQaId(), qaReply.getReplyId(), 2, viewer);
             }
-	        final boolean isWriter = writer.isMatchUser(viewer.getUserId());
+            final boolean isWriter = writer.isMatchUser(viewer.getUserId());
             displayQaReplyList.add(new DisplayQaReply(qaReply, displaySubQaReplyList, votes, nonVotes, selfRecommend, selfNonrecommend, writer, isWriter));
         }
         return displayQaReplyList;
@@ -202,6 +205,10 @@ public class QaReplyServiceImpl implements QaReplyService {
         qaReply.setDeleted(true);
         qaReply.setUpdateUserId(userId);
         qaReply.setUpdateDate(new Date());
+        if( 0 == countByQaContent(qaReply.getQaId())){
+            boolean isReplyed = false;
+            qaService.saveIsReplyed(qaReply.getQaId(), userId, isReplyed);
+        }
     }
 
     @Override
@@ -212,8 +219,8 @@ public class QaReplyServiceImpl implements QaReplyService {
     @Override
     public List<QaContent> findByUserId(Integer userId) {
         List<Integer> qaIds = new ArrayList<Integer>();
-        List <QaReply> qaReplyList = qaReplyRepository.findByUserIdAndIsDeleted(userId, false);
-        for(QaReply qaReply : qaReplyList){
+        List<QaReply> qaReplyList = qaReplyRepository.findByUserIdAndIsDeleted(userId, false);
+        for (QaReply qaReply : qaReplyList) {
             qaIds.add(qaReply.getQaId());
         }
 
@@ -221,16 +228,16 @@ public class QaReplyServiceImpl implements QaReplyService {
     }
 
     @Override
-    public Integer countByQaContent(QaContent qaContent) {
-        return qaReplyRepository.countByQaIdAndIsDeletedFalse(qaContent.getQaId());
+    public Integer countByQaContent(Integer qaId) {
+        return qaReplyRepository.countByQaIdAndIsDeletedFalse(qaId);
     }
 
 
-    public void updateOrderIdx(QaReply paramQaReply){
+    public void updateOrderIdx(QaReply paramQaReply) {
         boolean isDeleted = false;
         List<QaReply> updateTargetQaReplyList = qaReplyRepository.findAllByQaIdAndIsDeletedAndOrderIdxGreaterThanOrderByOrderIdxAsc(paramQaReply.getQaId(), isDeleted, paramQaReply.getOrderIdx());
-        for(QaReply qaReply : updateTargetQaReplyList){
-            qaReply.setOrderIdx(qaReply.getOrderIdx()+1);
+        for (QaReply qaReply : updateTargetQaReplyList) {
+            qaReply.setOrderIdx(qaReply.getOrderIdx() + 1);
             qaReplyRepository.flush();
         }
     }

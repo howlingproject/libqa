@@ -3,9 +3,9 @@ package com.libqa.web.controller;
 import com.google.common.collect.Lists;
 import com.libqa.application.dto.QaDto;
 import com.libqa.application.enums.QaSearchType;
+import com.libqa.application.enums.converter.QaSearchTypeEnumConverter;
 import com.libqa.application.framework.ResponseData;
 import com.libqa.application.util.LoggedUserManager;
-import com.libqa.application.enums.converter.QaSearchTypeEnumConverter;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.KeywordListService;
 import com.libqa.web.service.common.KeywordService;
@@ -24,7 +24,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.libqa.application.enums.StatusCode.*;
 import static com.libqa.application.framework.ResponseData.*;
@@ -221,10 +223,14 @@ public class QaController {
     public ResponseData<String> delete(@RequestParam("qaId") Integer qaId) {
         User user = loggedUserManager.getUser();
         try {
-            if (qaValidator.isNotMatchUser(qaId, user)) {
+            if( user.isAdmin() ){
+                qaService.deleteWithKeyword(qaId, user.getUserId());
+                return createSuccessResult(SUCCESS.getComment());
+            }
+            if(qaValidator.isNotMatchUser(qaId, user)) {
                 return createFailResult(NOT_MATCH_USER.getComment());
             }
-            if (qaValidator.checkQaContentDelete(qaId)) {
+            if(qaValidator.checkQaContentDelete(qaId)) {
                 return createFailResult(EXIST_REPLY.getComment());
             }
             qaService.deleteWithKeyword(qaId, user.getUserId());
@@ -342,10 +348,15 @@ public class QaController {
 
     @RequestMapping(value = "/qa/replyList", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<DisplayQaReply> replyList(@RequestParam("qaId") Integer qaId) {
+    public ResponseData<Map> replyList(@RequestParam("qaId") Integer qaId) {
         User viewer = loggedUserManager.getUser();
         List<DisplayQaReply> qaReplyList = qaReplyService.findByQaIdAndDepthIdx(qaId, 1, viewer);
-        return createSuccessResult(qaReplyList);
+        boolean isChoice = true;
+        List<DisplayQaReply> qaReplyChoice = qaReplyService.findByQaIdAndIsChoiceAndDepthIdx(qaId, isChoice, 1, viewer);
+        Map<String, List<DisplayQaReply>> replyMap = new HashMap();
+        replyMap.put("qaReplyList", qaReplyList);
+        replyMap.put("qaReplyChoice", qaReplyChoice);
+        return createSuccessResult(replyMap);
     }
 
     @RequestMapping(value = "/qa/reply/delete/{replyId}", method = RequestMethod.POST)

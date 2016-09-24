@@ -17,4 +17,11 @@ public class WikiRepositoryTest extends LibqaRepositoryTest<WikiRepository> {
         List<Wiki> wikies = repository.findAllBySpaceIdAndIsDeletedFalse(pageRequest, spaceId);
         System.out.println(wikies);
     }
+
+    @Test
+    public void findAllBySearchValue() {
+        final String searchValue = "test";
+        List<Wiki> qaContents = repository.findAllBySearchValue(searchValue);
+        System.out.println(qaContents);
+    }
 }

@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
+import static com.libqa.application.util.LibqaConstant.ZERO;
 
 @Service
 public class IndexCrawler {
-    private static final Integer ZERO = 0;
     static final Integer INDEX_NOTICE_SIZE = 1;
     static final Integer INDEX_QA_SIZE = 3;
     static final Integer INDEX_SPACE_SIZE = 3;
@@ -96,7 +96,7 @@ public class IndexCrawler {
             qaContent.setUserImage(writer.getUserImage());
             qaContent.setKeywords(buildIndexKeywords(keywords));
             qaContent.setInsertDate(DisplayDate.parse(each.getInsertDate()));
-            qaContent.setCountOfReply(firstNonNull(qaReplyService.countByQaContent(each), ZERO));
+            qaContent.setCountOfReply(firstNonNull(qaReplyService.countByQaContent(each.getQaId()), ZERO));
             result.add(qaContent);
         }
         return result;

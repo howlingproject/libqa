@@ -71,6 +71,7 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
+    @Transactional
     public boolean deleteWithKeyword(Integer qaId, Integer userId) {
         boolean result = false;
         try {
@@ -85,11 +86,10 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public void saveIsReplyed(Integer qaId, User user, boolean isReplyed) {
+    public void saveIsReplyed(Integer qaId, Integer userId, boolean isReplyed) {
         QaContent targetQaContent = findByQaId(qaId, false);
-
         targetQaContent.setReplyed(isReplyed);
-        targetQaContent.setUpdateUserId(user.getUserId());
+        targetQaContent.setUpdateUserId(userId);
         targetQaContent.setUpdateDate(new Date());
     }
 

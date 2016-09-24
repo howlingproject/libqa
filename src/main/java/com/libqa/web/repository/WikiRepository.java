@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -43,5 +45,10 @@ public interface WikiRepository extends JpaRepository<Wiki, Integer> {
 
     Page<Wiki> findPagingByIsDeleted(Pageable pageable, boolean isDeleted);
 
+    @Query(value = "SELECT w.* FROM wiki w " +
+            "WHERE w.is_deleted = 0 " +
+            "   AND (w.title LIKE CONCAT('%',:searchValue,'%') OR w.contents_markup LIKE CONCAT('%',:searchValue,'%') ) " +
+            "ORDER BY w.wiki_id DESC", nativeQuery = true)
+    List<Wiki> findAllBySearchValue(@Param("searchValue") String searchValue);
 
 }
