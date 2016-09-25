@@ -106,5 +106,9 @@ div button.dualEditor-wiki-btn {
     font-size: 11px;
     line-height: 1.5;
     border-radius: 3px;
+}
 
+ul, ol {
+    margin-top : 5px;
+    margin-bottom :5px;
 }

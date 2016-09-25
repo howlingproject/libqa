@@ -16,7 +16,7 @@ var DualEditor = (function(){
 
     DualEditor.markup = function(contents){
         syntaxData = new Array;
-        contents = contents.replace(/\n|\r\n/ig, "\n<br>");
+        contents = contents.replace(/\n|\r\n/ig, "\n");
         contents = DualEditor.markup.SYNTAX_BEFORE( contents );
         contents = DualEditor.markup.ITALIC( contents );
         contents = DualEditor.markup.FIELD( contents );
@@ -42,7 +42,7 @@ var DualEditor = (function(){
         contents = DualEditor.markup.SUBERSCRIPT( contents );
 
         contents = DualEditor.markup.SYNTAX( contents );
-
+        //contents = contents.replace(/<br>/ig, "");
         return contents;
     };
 
@@ -152,7 +152,7 @@ var DualEditor = (function(){
         setTimeout(function() {
             $("#wikimaincol").text("");
             var txt = DualEditor.markup( $("#wikiEditor").val() );
-            $("#wikimaincol").html( "<div>"+txt+"</div>" );
+            $("#wikimaincol").html( "<div style='white-space: pre-wrap'>"+txt+"</div>" );
             $('pre code2').each(function(){
                 hljs.highlightBlock( (this) );
             });
