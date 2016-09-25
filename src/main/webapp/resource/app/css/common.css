@@ -200,6 +200,17 @@ li.qa-view-keyowrdList{margin-top: 8px; margin-left: 30px}
 .qa div.action-buttons i { padding: 3px; cursor: pointer; }
 .qa div.action-buttons span.like-count, .qa div.action-buttons span.claim-count{ padding-left:3px;}
 
+.replyList div.bs-callout{
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+.replyList div.bs-callout-danger{
+    border-left-color: #ce4844;
+}
+
 /**
 *   Wiki
 **/
