@@ -129,6 +129,7 @@ public class SpaceController {
         log.info("### spacePages = {}", spacePages.getTotalElements());
         log.info("### spacePages = {}", spacePages.getTotalPages());
 
+
         mav.addObject("morePage", morePage);
         mav.addObject("totalCount", totalCount);
         mav.addObject("currentPage", currentPage);

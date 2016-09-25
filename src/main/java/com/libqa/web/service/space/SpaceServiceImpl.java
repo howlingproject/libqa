@@ -264,10 +264,7 @@ public class SpaceServiceImpl implements SpaceService {
         List<SpaceWiki> spaceWikis = new ArrayList<>();
         for (Wiki wiki : content) {
             List<Keyword> keywords = keywordService.findByWikiId(wiki.getWikiId(), false);
-            User userInfo = new User();
-            userInfo.setUserId(wiki.getUserId());
-            userInfo.setUserNick(wiki.getUserNick());
-
+            User userInfo = userService.findByUserId(wiki.getUserId());
             SpaceWiki spaceWiki = new SpaceWiki(wiki, userInfo, keywords, wiki.getReplyCount());
             spaceWikis.add(spaceWiki);
         }
