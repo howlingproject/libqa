@@ -15,11 +15,11 @@ import java.util.List;
  */
 @Data
 @Entity
-@EqualsAndHashCode
 @Table(indexes = {
         @Index(columnList = "isDeleted"),
         @Index(columnList = "recommendCount,nonrecommendCount")
 })
+@EqualsAndHashCode(of = "qaId")
 public class QaContent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

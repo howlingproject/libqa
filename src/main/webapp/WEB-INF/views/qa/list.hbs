@@ -52,7 +52,13 @@
                 {{> qa/template/_searchList}}
             </div>
             <!-- Q&A list end -->
+            <input type="hidden" name="qaSearchType" value="{{qaSearchType}}">
             <button class="btn btn-default form-control btn-qa-more" type="button" id="qaMoreBtn">more</button>
+            {{#unless qaList}}
+                <div class="text-center" id="emptyQaMore">
+                    등록된 Q&A가 존재하지 않습니다.
+                </div>
+            {{/unless}}
 
         </div>
     </div>
@@ -61,7 +67,7 @@
 
 {{#partial "script-page"}}
     {{embedded "common/_keywordList"}}
-    {{embedded "qa/template/_myList"}}
+    {{embedded "qa/template/_searchList"}}
     <script type="text/javascript">
         $(document).ready(function(){
             Qa.init();
@@ -70,9 +76,26 @@
         var Qa = {
             init : function(){
                 this.renderKeywordList();
-                this.renderMyWriteQaList();
-                this.renderMyReplyQaList();
-                this.renderMyRecommendQaList();
+                QaPager.init(this.getListCount(), this.moreList);
+            },
+            getListCount : function(){
+                return $('#list .best-qna-item').size();
+            },
+            moreList : function() {
+                var qaSearchType = $('[name=qaSearchType]').val();
+                var lastQaId = $('#list .best-qna-item').last().data().qaId;
+                $.get("/qa/"+ qaSearchType +"/moreList",{lastQaId : lastQaId}, function (response) {
+                    if(response.resultCode != 1) {
+                        alert(response.comment);
+                        return;
+                    } else {
+                        var source = $('#qa-template-_searchList-hbs').html();
+                        var template = Handlebars.compile(source);
+                        var html = template(response);
+                        $('#list').append(html);
+                        QaPager.loaded(response.data.length);
+                    }
+                });
             },
             renderKeywordList : function(){
                 $.ajax({
@@ -87,78 +110,6 @@
                             var html = template(data);
                             $('#categorizeKeywordListArea').html(html);
                             Qa.bindKeywordListEvent();
-                        }
-                    },
-                    error : function(req){
-                        // Handle upload error
-                        alert('req : ' + req);
-                        console.log('req : ' + req.status);
-                        console.log('req : ' + req.readyState);
-
-                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
-                    }
-                });
-            },
-            renderMyWriteQaList : function(){
-                $.ajax({
-                    url: "/qa/myWriteQaList",
-                    type: "POST",
-                    data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName()},
-                    success : function(data){
-                        if(data.resultCode == 1) {
-                            var source = $('#qa-template-_myList-hbs').html();
-                            var template = Handlebars.compile(source);
-
-                            var html = template(data);
-                            $('#myWriteQaListArea').html(html);
-                        }
-                    },
-                    error : function(req){
-                        // Handle upload error
-                        alert('req : ' + req);
-                        console.log('req : ' + req.status);
-                        console.log('req : ' + req.readyState);
-
-                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
-                    }
-                });
-            },
-            renderMyReplyQaList : function(){
-                $.ajax({
-                    url: "/qa/myReplyQaList",
-                    type: "POST",
-                    data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName()},
-                    success : function(data){
-                        if(data.resultCode == 1) {
-                            var source = $('#qa-template-_myList-hbs').html();
-                            var template = Handlebars.compile(source);
-
-                            var html = template(data);
-                            $('#myReplyQaListArea').html(html);
-                        }
-                    },
-                    error : function(req){
-                        // Handle upload error
-                        alert('req : ' + req);
-                        console.log('req : ' + req.status);
-                        console.log('req : ' + req.readyState);
-
-                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
-                    }
-                });
-            },
-            renderMyRecommendQaList : function(){
-                $.ajax({
-                    url: "/qa/myRecommendQaList",
-                    type: "POST",
-                    data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName()},
-                    success : function(data){
-                        if(data.resultCode == 1) {
-                            var source = $('#qa-template-_myList-hbs').html();
-                            var template = Handlebars.compile(source);
-
-                            var html = template(data);
-                            $('#myRecommendQaListArea').html(html);
                         }
                     },
                     error : function(req){
@@ -195,7 +146,52 @@
                 Qa.renderMyWriteQaList();
                 Qa.renderMyReplyQaList();
             }
-        }
+        };
+
+        var QaPager = {
+            'PAGE_SIZE': 5,
+            '$button': $('#qaMoreBtn'),
+            '$emptyQaMore': $('#emptyQaMore'),
+            'init': function(itemSize, callback) {
+                if(itemSize > 0) {
+                    this.showBtn();
+                    this.bindLoading(callback);
+                    this.$emptyQaMore.hide();
+                } else {
+                    this.hideBtn();
+                }
+            },
+            'showBtn' : function() {
+                this.$button.show();
+            },
+            'hideBtn' : function() {
+                this.$button.hide();
+            },
+            'toggleLoadingText': function (isLoading) {
+                if(isLoading) {
+                    this.$button
+                            .prop('disabled', true)
+                            .html('로딩 중...');
+                } else {
+                    this.$button
+                            .prop('disabled', false)
+                            .html('more');
+                }
+            },
+            'bindLoading': function(callbackAfterLoading) {
+                var me = this;
+                this.$button.on('click', function(){
+                    me.toggleLoadingText(true);
+                    callbackAfterLoading();
+                });
+            },
+            'loaded': function(itemSize) {
+                this.toggleLoadingText(false);
+                if(itemSize < this.PAGE_SIZE) {
+                    this.hideBtn();
+                }
+            }
+        };
 
     </script>
 {{/partial}}
