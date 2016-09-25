@@ -46,9 +46,6 @@ import java.util.List;
 @Controller
 public class SpaceController {
 
-    @Value("${howling.hello.message}")
-    private String message;
-
     @Autowired
     private SpaceService spaceService;
 
@@ -67,10 +64,8 @@ public class SpaceController {
     @Autowired
     private UserService userService;
 
-
     @Autowired
     private LoggedUserManager loggedUserManager;
-
 
     @RequestMapping("/space")
     public String space() {
