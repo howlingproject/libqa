@@ -19,21 +19,4 @@ public class IndexController {
         mav.setViewName("index");
         return mav;
     }
-
-    @RequestMapping({"/index2"})
-    public ModelAndView index2(ModelAndView mav) {
-        mav.setViewName("index2");
-        return mav;
-    }
-
-    @RequestMapping({"/index3"})
-    public ModelAndView index3(ModelAndView mav) {
-        mav.setViewName("index3");
-        return mav;
-    }
-    @RequestMapping({"/index4"})
-    public ModelAndView index4(ModelAndView mav) {
-        mav.setViewName("index4");
-        return mav;
-    }
 }

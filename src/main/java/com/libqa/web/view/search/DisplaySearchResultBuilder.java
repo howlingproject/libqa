@@ -1,4 +1,4 @@
-package com.libqa.web.service.search;
+package com.libqa.web.view.search;
 
 import com.google.common.collect.Lists;
 import com.libqa.web.domain.*;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 import static com.libqa.application.util.LibqaConstant.ZERO;
@@ -24,7 +25,7 @@ public class DisplaySearchResultBuilder {
     @Autowired
     private QaReplyService qaReplyService;
 
-    List<DisplaySearchResult> buildByQaContent(List<QaContent> qaContents) {
+    public List<DisplaySearchResult> buildByQaContent(List<QaContent> qaContents) {
         List<DisplaySearchResult> results = Lists.newArrayList();
 
         for (QaContent each : qaContents) {
@@ -46,7 +47,7 @@ public class DisplaySearchResultBuilder {
         return results;
     }
 
-    List<DisplaySearchResult> buildBySpace(List<Space> spaces) {
+    public List<DisplaySearchResult> buildBySpace(List<Space> spaces) {
         List<DisplaySearchResult> results = Lists.newArrayList();
 
         for (Space each : spaces) {
@@ -66,7 +67,7 @@ public class DisplaySearchResultBuilder {
         return results;
     }
 
-    List<DisplaySearchResult> buildByWiki(List<Wiki> wikies) {
+    public List<DisplaySearchResult> buildByWiki(List<Wiki> wikies) {
         List<DisplaySearchResult> results = Lists.newArrayList();
 
         for (Wiki each : wikies) {
@@ -89,10 +90,6 @@ public class DisplaySearchResultBuilder {
     }
 
     private List<String> buildKeywords(List<Keyword> keywords) {
-        List<String> result = Lists.newArrayList();
-        for (Keyword each : keywords) {
-            result.add(each.getKeywordName());
-        }
-        return result;
+        return keywords.stream().map(Keyword::getKeywordName).collect(Collectors.toList());
     }
 }
