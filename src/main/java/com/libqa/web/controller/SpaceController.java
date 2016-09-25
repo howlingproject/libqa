@@ -129,6 +129,7 @@ public class SpaceController {
         log.info("### spacePages = {}", spacePages.getTotalElements());
         log.info("### spacePages = {}", spacePages.getTotalPages());
 
+
         mav.addObject("morePage", morePage);
         mav.addObject("totalCount", totalCount);
         mav.addObject("currentPage", currentPage);
@@ -469,7 +470,7 @@ public class SpaceController {
      * @param spaceId
      * @return
      */
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping(value = "/space/addFavorite", method = RequestMethod.GET)
     @ResponseBody
     public String addFavorite(@RequestParam Integer spaceId) {
@@ -494,7 +495,7 @@ public class SpaceController {
      * @param spaceId
      * @return
      */
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping(value = "/space/cancelFavorite", method = RequestMethod.GET)
     @ResponseBody
     public String cancelFavorite(@RequestParam Integer spaceId) {
