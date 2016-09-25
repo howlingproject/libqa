@@ -18,7 +18,7 @@ public class FeedFileService {
     private FeedFileRepository repository;
 
     /**
-     * feedFile을 저장한다.
+     * feedFile 을 저장한다.
      *
      * @param feedFile
      */
@@ -27,7 +27,7 @@ public class FeedFileService {
     }
 
     /**
-     * feedFileId로 feedFile을 조회한다.
+     * feedFileId로 feedFile 을 조회한다.
      *
      * @param feedFileId
      * @return FeedFile

@@ -14,12 +14,12 @@ DualEditor.markup.FONT = function(contents){
 		fontType = "batang";
 	}
 
-	contents = contents.replace(rex, "<span style=\"font-family:'"+font+"','"+fontType+"'\">$2\r\n</span>");
+	contents = contents.replace(rex, "<span style=\"font-family:'"+font+"','"+fontType+"'\">$2</span>");
 	return contents;
 };
 
 DualEditor.markup.FONTSIZE = function(contents){
-	contents = contents.replace(/\[size\|(.*?)\]([\w\W]+?)\[size\]/igm, "<span style=\"font-size: $1px;\">$2\r\n</span>");
+	contents = contents.replace(/\[size\|(.*?)\]([\w\W]+?)\[size\]/igm, "<span style=\"font-size: $1px;\">$2</span>");
 	return contents;
 };
 

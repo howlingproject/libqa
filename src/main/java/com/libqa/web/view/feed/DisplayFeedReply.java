@@ -19,15 +19,6 @@ public class DisplayFeedReply {
     @Setter
     private DisplayFeedAction claimFeedAction;
 
-    DisplayFeedReply(FeedReply feedReply) {
-        this.feedReplyId = feedReply.getFeedReplyId();
-        this.userNick = feedReply.getUserNick();
-        this.insertDate = DisplayDate.parse(feedReply.getInsertDate());
-        this.feedReplyContent = feedReply.getFeedReplyContent();
-        this.likeFeedAction = createNotYetFeedAction();
-        this.claimFeedAction = createNotYetFeedAction();
-    }
-
     DisplayFeedReply(FeedReply feedReply, User user, Boolean isWriter) {
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
@@ -37,7 +28,4 @@ public class DisplayFeedReply {
         this.isWriter = isWriter;
     }
 
-    private DisplayFeedAction createNotYetFeedAction() {
-        return new DisplayFeedAction(false, 0);
-    }
 }

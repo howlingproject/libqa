@@ -27,12 +27,9 @@ public class DisplayFeedBuilder {
      * @return List&lt;DisplayFeed&gt;
      */
     public List<DisplayFeed> build(List<FeedThread> feedThreads, User viewer) {
-        List<DisplayFeed> displayFeeds = Lists.newArrayList();
-        displayFeeds.addAll(
-                feedThreads.stream()
-                        .map(feed -> build(feed, viewer))
-                        .collect(Collectors.toList()));
-        return displayFeeds;
+        return feedThreads.stream()
+                .map(feed -> build(feed, viewer))
+                .collect(Collectors.toList());
     }
 
     /**

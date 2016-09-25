@@ -16,7 +16,7 @@ public class FeedActionService {
     private FeedActionRepository feedActionRepository;
 
     /**
-     * feedActor의 action을 처리한다.
+     * feedActionActor 의 action 을 처리한다.
      * 처음 요청인 경우 action 생성하고, 재요청인 경우 취소한다.
      *
      * @param feedActionActor feedActionActor of user
@@ -31,27 +31,38 @@ public class FeedActionService {
     }
 
     /**
-     * feedActor의 FeedAction을 조회한다.
-     * feedAction이 존재하지 않으면 {@code FeedAction.notYet()}이 리턴된다.
+     * feedAction의 카운트를 조회한다.
+     *
+     * @param feedActionActor
+     * @return count of feed action
+     */
+    public Integer countOf(FeedActionActor feedActionActor) {
+        return feedActionRepository.countByFeedActorIdAndPostTypeAndActionTypeAndIsCanceledFalse(
+                feedActionActor.getFeedActorId(),
+                feedActionActor.getPostType(),
+                feedActionActor.getActionType());
+    }
+
+    /**
+     * feedActionActor 의 FeedAction 을 조회한다.
+     * feedAction 이 존재하지 않으면 {@code FeedAction.notYet()}이 리턴된다.
      *
      * @param feedActionActor feedActionActor of user
      * @return FeedAction
      */
     public FeedAction getFeedActionBy(FeedActionActor feedActionActor) {
-        // TODO convert to queryDsl
         List<FeedAction> feedActionsByUser = feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(
-                feedActionActor.getFeedActorId(), feedActionActor.getActionUser().getUserId());
+                feedActionActor.getFeedActorId(),
+                feedActionActor.getActionUser().getUserId());
 
         return Iterables.tryFind(feedActionsByUser,
-                input -> (input.getActionType() == feedActionActor.getActionType()
-                        && input.getPostType() == feedActionActor.getPostType()
-                )).or(FeedAction.notYet());
+                action -> hasActedByUser(feedActionActor, action))
+                .or(FeedAction.notYet());
     }
 
-    public Integer countOf(FeedActionActor feedActionActor) {
-        // TODO convert to queryDsl
-        return feedActionRepository.countByFeedActorIdAndPostTypeAndActionTypeAndIsCanceledFalse(
-                feedActionActor.getFeedActorId(), feedActionActor.getPostType(), feedActionActor.getActionType());
+    private boolean hasActedByUser(FeedActionActor feedActionActor, FeedAction action) {
+        return feedActionActor.getActionType() == action.getActionType()
+                && feedActionActor.getPostType() == action.getPostType();
     }
 
     private FeedAction createFeedActionBy(FeedActionActor feedActionActor) {
