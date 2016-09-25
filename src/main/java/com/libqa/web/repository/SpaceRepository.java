@@ -7,12 +7,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * Created by yion on 15. 2. 8..
  */
+@Repository
 public interface SpaceRepository extends JpaRepository<Space, Integer> {
 
 
