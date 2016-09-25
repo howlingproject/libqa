@@ -1,12 +1,12 @@
 DualEditor.markup.ORDERLIST = function(contents){
-    var reg = /^(<br>)?\d\. (.*)/igm;
+    var reg = /^\d\. (.*)/igm;
     if( contents.match(reg) != null ){
         contents = getOrderListReplaceAll( reg, "ol", contents );
     }
     return contents;
 };
 DualEditor.markup.UNORDERLIST = function(contents){
-    var reg = /^(<br>)?\* (.*)/igm;
+    var reg = /^\* (.*)/igm;
     if( contents.match(reg) != null ) {
         contents = getOrderListReplaceAll(reg, "ul", contents);
     }
@@ -16,10 +16,10 @@ DualEditor.markup.UNORDERLIST = function(contents){
 
 function getOrderListReplaceAll( reg, tag, contents ){
     function replacer(match, p1, p2, offset, string) {
-        if( p2 != null ){
-            p1 = p2;
-        }
-        p1 = p1.replace(/<br>/ig, "");
+        //if( p2 != null ){
+        //    p1 = p2;
+        //}
+        //p1 = p1.replace(/<br>/ig, "");
         return "<li>"+p1+"</li>";
     }
 
