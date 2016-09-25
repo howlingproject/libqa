@@ -38,7 +38,7 @@
         </div>
         <!--// lnb -->
 
-        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+        <div class="qa col-xs-10 col-sm-10 col-md-10 col-lg-10">
             {{#if TOTAL}}
             <!-- 전체 Q&A -->
             <div class="nav-tabs-header">전체 Q&A</div>
@@ -52,6 +52,7 @@
                 {{> qa/template/_searchList}}
             </div>
             <!-- Q&A list end -->
+            <button class="btn btn-default form-control btn-qa-more" type="button" id="qaMoreBtn">more</button>
 
         </div>
     </div>
