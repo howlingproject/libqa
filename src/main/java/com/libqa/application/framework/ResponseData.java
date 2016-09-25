@@ -20,23 +20,23 @@ public class ResponseData<T> {
     public ResponseData() {
     }
 
-    public ResponseData(int code, String comment, T data) {
+    private ResponseData(int code, String comment, T data) {
         init(code, comment, data);
     }
 
-    public ResponseData(int code, String comment, Iterable data) {
+    private ResponseData(int code, String comment, Iterable data) {
         this.resultCode = code;
         this.comment = comment;
         this.data = data;
     }
     
-    public ResponseData(int code, String comment, Number number) {
+    private ResponseData(int code, String comment, Number number) {
         this.resultCode = code;
         this.comment = comment;
         this.data = number;
     }
 
-    public ResponseData(int code, String comment) {
+    private ResponseData(int code, String comment) {
         this.resultCode = code;
         this.comment = comment;
     }
@@ -78,7 +78,6 @@ public class ResponseData<T> {
     public static <T> ResponseData<T> createFailResult(int code, String comment, T data) {
         return new ResponseData<>(code, comment, data);
     }
-
 
     public static <T> ResponseData<T> createSuccessResult(Number number) {
         return new ResponseData<>(SUCCESS.getCode(), SUCCESS.getComment(), number);
