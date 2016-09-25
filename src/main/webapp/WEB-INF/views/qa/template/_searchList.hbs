@@ -1,11 +1,11 @@
-{{#unless qaList}}
+{{#unless data}}
     <div class="best-qna-item">
         Q&A가 없습니다.
     </div>
 {{/unless}}
 
-{{#each qaList}}
-    <div class="best-qna-item">
+{{#each data}}
+    <div class="best-qna-item" data-qa-id="{{qaId}}">
         <div>
             <strong><a href="/qa/{{qaId}}">{{title}}</a></strong>
             <div class="pull-right">
