@@ -1,7 +1,7 @@
 package com.libqa.web.controller;
 
 import com.libqa.web.service.search.IntegrationSearcher;
-import com.libqa.web.service.search.SearchTargetPage;
+import com.libqa.application.enums.SearchTargetPage;
 import com.libqa.web.view.search.DisplaySearchResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

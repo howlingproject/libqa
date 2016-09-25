@@ -1,4 +1,4 @@
-package com.libqa.web.service.search;
+package com.libqa.application.enums;
 
 public enum SearchTargetPage {
     QA("qa", "Q&A"),

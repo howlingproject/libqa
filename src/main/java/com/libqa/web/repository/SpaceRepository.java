@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * Created by yion on 15. 2. 8..
  */
-@Repository
 public interface SpaceRepository extends JpaRepository<Space, Integer> {
 
 

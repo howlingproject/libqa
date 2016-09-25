@@ -1,5 +1,6 @@
 package com.libqa.web.service.search;
 
+import com.libqa.application.enums.SearchTargetPage;
 import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.Space;
 import com.libqa.web.domain.Wiki;
@@ -7,6 +8,7 @@ import com.libqa.web.repository.QaContentRepository;
 import com.libqa.web.repository.SpaceRepository;
 import com.libqa.web.repository.WikiRepository;
 import com.libqa.web.view.search.DisplaySearchResult;
+import com.libqa.web.view.search.DisplaySearchResultBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
