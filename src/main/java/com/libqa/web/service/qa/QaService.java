@@ -47,5 +47,7 @@ public interface QaService {
 
     List<QaContent> getWaitReplyQaContents();
 
-    List<QaContent> getQAContents(QaSearchType qaSearchType);
+    List<QaContent> getQaContents(QaSearchType qaSearchType);
+
+    List<QaContent> getQaContentsLessThanLastQaId(QaSearchType qaSearchType, Integer lastQaId);
 }

@@ -199,6 +199,7 @@ li.qa-view-keyowrdList{margin-top: 8px; margin-left: 30px}
 
 .qa div.action-buttons i { padding: 3px; cursor: pointer; }
 .qa div.action-buttons span.like-count, .qa div.action-buttons span.claim-count{ padding-left:3px;}
+.qa .btn-qa-more {width:100%; margin-top:20px; margin-left: auto; margin-right: auto;}
 
 .replyList div.bs-callout{
     padding: 20px;

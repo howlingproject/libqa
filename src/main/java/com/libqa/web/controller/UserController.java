@@ -78,7 +78,7 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping("/user/profile")
     public ModelAndView userProfile(HttpServletRequest request) {
 
@@ -137,7 +137,7 @@ public class UserController {
     }
 
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping(value = "/user/updateProfile", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData<User> updateProfile(@ModelAttribute User user, @ModelAttribute Keyword keyword) throws IllegalAccessException {

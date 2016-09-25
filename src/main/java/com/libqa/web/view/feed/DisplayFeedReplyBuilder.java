@@ -27,16 +27,13 @@ public class DisplayFeedReplyBuilder {
      * @return list of DisplayFeedReply
      */
     List<DisplayFeedReply> build(FeedThread feedThread, User viewer) {
-        List<DisplayFeedReply> displayFeedReplies = Lists.newArrayList();
         if (feedThread.notHasReplies()) {
-            return displayFeedReplies;
+            return Lists.newArrayList();
         }
 
-        displayFeedReplies.addAll(feedThread.getFeedReplies().stream()
+        return feedThread.getFeedReplies().stream()
                 .map(feedReply -> build(feedReply, viewer))
-                .collect(Collectors.toList())
-        );
-        return displayFeedReplies;
+                .collect(Collectors.toList());
     }
 
     /**

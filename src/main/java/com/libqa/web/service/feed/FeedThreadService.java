@@ -162,9 +162,9 @@ public class FeedThreadService {
 
     /**
      * feed를 수정한다.
-     *
      * @param originFeedThread
      * @param requestFeedThread
+     * @param user
      * @return FeedThread
      */
     @Transactional

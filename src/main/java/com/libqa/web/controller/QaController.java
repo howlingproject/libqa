@@ -95,9 +95,20 @@ public class QaController {
         Integer qaNotReplyedCount = qaService.getQaNotReplyedCount();
         mav.addObject("qaTotalCount", qaTotalCount);
         mav.addObject("qaNotReplyedCount", qaNotReplyedCount);
-        mav.addObject("qaList", buildDisplayQas(qaService.getQAContents(qaSearchType)));
+        mav.addObject("data", buildDisplayQas(qaService.getQaContents(qaSearchType)));
+        mav.addObject("qaSearchType", qaSearchType);
         mav.addObject(qaSearchType.toString(), qaSearchType);
         return mav;
+    }
+
+    @RequestMapping(value = "/qa/{qaSearchType}/moreList", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<DisplayQa> moreList(@PathVariable QaSearchType qaSearchType, @RequestParam(required = false) Integer lastQaId){
+        try{
+            return createSuccessResult(buildDisplayQas(qaService.getQaContentsLessThanLastQaId(qaSearchType, lastQaId)));
+        } catch (Exception e){
+            return createFailResult(Lists.newArrayList());
+        }
     }
 
     @RequestMapping(value = "/qa/myWriteQaList", method = RequestMethod.POST)

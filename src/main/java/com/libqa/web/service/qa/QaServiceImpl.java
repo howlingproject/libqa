@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.springframework.data.domain.Sort.Direction.DESC;
+
 /**
  * Created by yong on 2015-03-08.
  *
@@ -37,6 +39,8 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class QaServiceImpl implements QaService {
+
+    private static final Sort DEFAULT_SORT = new Sort(DESC, "qaId");
 
     @Autowired
     QaContentRepository qaRepository;
@@ -208,14 +212,29 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public List<QaContent> getQAContents(QaSearchType qaSearchType) {
-        final Order order = new Order(Sort.Direction.DESC, "qaId");
-        PageRequest pageRequest = PageUtil.sortPageable(new Sort(order));
+    public List<QaContent> getQaContents(QaSearchType qaSearchType) {
+        PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
         if(QaSearchType.TOTAL == qaSearchType) {
             return qaRepository.findByIsDeletedFalse(pageRequest);
         } else if(QaSearchType.WAIT_REPLY == qaSearchType) {
             return qaRepository.findByIsDeletedFalseAndIsReplyedFalse(pageRequest);
         } else {
+            return Lists.newArrayList();
+        }
+    }
+
+    @Override
+    public List<QaContent> getQaContentsLessThanLastQaId(QaSearchType qaSearchType, Integer lastQaId) {
+        PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
+        try {
+            if (QaSearchType.TOTAL == qaSearchType) {
+                return qaRepository.findByQaIdLessThanAndIsDeletedFalse(lastQaId, pageRequest);
+            } else if (QaSearchType.WAIT_REPLY == qaSearchType) {
+                return qaRepository.findByQaIdLessThanAndIsReplyedFalseAndIsDeletedFalse(lastQaId, pageRequest);
+            } else {
+                return Lists.newArrayList();
+            }
+        } catch (Exception e){
             return Lists.newArrayList();
         }
     }

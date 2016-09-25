@@ -61,7 +61,7 @@ public class FeedReplyService {
     }
 
     /**
-     * user기반으로 feed 댓글에 like를 처리한다.
+     * user 기반으로 feed 댓글에 like 를 처리한다.
      *
      * @param feedReplyId
      * @param actionUser
@@ -80,7 +80,7 @@ public class FeedReplyService {
     }
 
     /**
-     * user기반으로 feed 댓글에 cliam을 처리한다.
+     * user 기반으로 feed 댓글에 claim 을 처리한다.
      *
      * @param feedReplyId
      * @param actionUser

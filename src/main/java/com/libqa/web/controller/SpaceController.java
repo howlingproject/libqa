@@ -46,9 +46,6 @@ import java.util.List;
 @Controller
 public class SpaceController {
 
-    @Value("${howling.hello.message}")
-    private String message;
-
     @Autowired
     private SpaceService spaceService;
 
@@ -67,10 +64,8 @@ public class SpaceController {
     @Autowired
     private UserService userService;
 
-
     @Autowired
     private LoggedUserManager loggedUserManager;
-
 
     @RequestMapping("/space")
     public String space() {
@@ -128,6 +123,7 @@ public class SpaceController {
         log.info("### spacePages = {}", spacePages.getCurrentPage());
         log.info("### spacePages = {}", spacePages.getTotalElements());
         log.info("### spacePages = {}", spacePages.getTotalPages());
+
 
         mav.addObject("morePage", morePage);
         mav.addObject("totalCount", totalCount);
@@ -469,7 +465,7 @@ public class SpaceController {
      * @param spaceId
      * @return
      */
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping(value = "/space/addFavorite", method = RequestMethod.GET)
     @ResponseBody
     public String addFavorite(@RequestParam Integer spaceId) {
@@ -494,7 +490,7 @@ public class SpaceController {
      * @param spaceId
      * @return
      */
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping(value = "/space/cancelFavorite", method = RequestMethod.GET)
     @ResponseBody
     public String cancelFavorite(@RequestParam Integer spaceId) {
