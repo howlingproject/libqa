@@ -1,6 +1,7 @@
 package com.libqa.web.service.index;
 
 import com.google.common.collect.Lists;
+import com.libqa.application.util.StringUtil;
 import com.libqa.config.CacheConfiguration;
 import com.libqa.web.domain.*;
 import com.libqa.web.service.common.KeywordService;
@@ -75,7 +76,7 @@ public class IndexCrawler {
         indexNotice.setViewUrl(viewUrl);
         indexNotice.setMoreUrl(moreUrl);
         indexNotice.setTitle(wiki.getTitle());
-        indexNotice.setContents(wiki.getContents());
+        indexNotice.setContents(StringUtil.abbreviateString(wiki.getContents()));
         indexNotice.setInsertDate(DisplayDate.parse(wiki.getInsertDate()));
         indexNotice.setCountOfReply(firstNonNull(wiki.getReplyCount(), ZERO));
         return indexNotice;
@@ -91,7 +92,7 @@ public class IndexCrawler {
             IndexQaContent qaContent = IndexQaContent.of();
             qaContent.setQaId(each.getQaId());
             qaContent.setTitle(each.getTitle());
-            qaContent.setContents(each.getContents());
+            qaContent.setContents(StringUtil.abbreviateString(each.getContents()));
             qaContent.setUserNick(each.getUserNick());
             qaContent.setUserImage(writer.getUserImage());
             qaContent.setKeywords(buildIndexKeywords(keywords));
@@ -122,7 +123,7 @@ public class IndexCrawler {
             IndexSpace space = IndexSpace.of();
             space.setSpaceId(each.getSpaceId());
             space.setTitle(each.getTitle());
-            space.setDescription(each.getDescription());
+            space.setDescription(StringUtil.abbreviateString(each.getDescription()));
             result.add(space);
         }
         return result;
@@ -135,7 +136,7 @@ public class IndexCrawler {
             IndexWiki indexWiki = IndexWiki.of();
             indexWiki.setWikiId(each.getWikiId());
             indexWiki.setTitle(each.getTitle());
-            indexWiki.setDescription(each.getContents());
+            indexWiki.setDescription(StringUtil.abbreviateString(each.getContents()));
             result.add(indexWiki);
         }
         return result;
@@ -149,7 +150,7 @@ public class IndexCrawler {
 
             IndexFeed indexFeed = IndexFeed.of();
             indexFeed.setFeedThreadId(each.getFeedThreadId());
-            indexFeed.setFeedContent(each.getFeedContent());
+            indexFeed.setFeedContent(StringUtil.abbreviateString(each.getFeedContent()));
             indexFeed.setCountOfReply(firstNonNull(each.getReplyCount(), ZERO));
             indexFeed.setUserNick(writer.getUserNick());
             indexFeed.setUserImage(writer.getUserImage());
@@ -161,4 +162,5 @@ public class IndexCrawler {
     private User getWriterByUserId(Integer userId) {
         return userService.findByUserId(userId);
     }
+
 }

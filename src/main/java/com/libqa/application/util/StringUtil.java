@@ -8,31 +8,19 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class StringUtil extends StringUtils {
 
-    public static String convertString(Object object){
-        return convertString(object, null);
-    }
-
-    public static String convertString(Object object, String defaultValue){
-        if( object == null ){
-            if( defaultValue == null ){
-                return  "";
-            }else{
-                return  defaultValue;
-            }
-
-        }
-        return (String)object;
-    }
-
-    public static String nullToString(String str){
+    public static String nullToString(String str) {
         return nullToString(str, "");
     }
 
-    public static String nullToString(String str, String defaultStr){
-        if( str == null ){
+    public static String nullToString(String str, String defaultStr) {
+        if (str == null) {
             return defaultStr;
         }
         return str;
+    }
+
+    public static String abbreviateString(String str) {
+        return StringUtils.defaultIfEmpty(str, "...");
     }
 
 }
