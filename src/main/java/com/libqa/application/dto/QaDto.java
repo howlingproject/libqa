@@ -16,4 +16,6 @@ public class QaDto {
     private String dayType;
 
     private String waitReply;
+
+    private Integer lastQaId;
 }
