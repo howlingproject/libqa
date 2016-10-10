@@ -84,6 +84,7 @@
 
 {{#partial "script-page"}}
 {{embedded "common/_keywordList"}}
+{{embedded "qa/template/_noData"}}
 {{embedded "qa/template/_mainList"}}
     <script src="/resource/app/js/keywordList/keywordList.js"></script>
     <script type="text/javascript">
@@ -100,17 +101,14 @@
                 this.bindSearch();
             },
             renderRecentQaList : function(dayType){
+                var me = this;
                 $.ajax({
                     url: "/qa/qaList",
                     type: "POST",
                     data: { keywordType : 'QA', keywordName : KeywordList.selectedKeywordName(), dayType : dayType },
                     success : function(data){
                         if(data.resultCode == 1) {
-                            var source = $('#qa-template-_mainList-hbs').html();
-                            var template = Handlebars.compile(source);
-
-                            var html = template(data);
-                            $('#recentQaListArea').html(html);
+                            $('#recentQaListArea').html(me.makeQaList(data));
                         }
                     },
                     error : function(req){
@@ -124,17 +122,14 @@
                 });
             },
             renderWaitReplyQaList : function(dayType){
+                var me = this;
                 $.ajax({
                     url: "/qa/qaList",
                     type: "POST",
                     data : {keywordType : 'QA', keywordName : KeywordList.selectedKeywordName(), waitReply : 'Y', dayType : dayType},
                     success : function(data){
                         if(data.resultCode == 1) {
-                            var source = $('#qa-template-_mainList-hbs').html();
-                            var template = Handlebars.compile(source);
-
-                            var html = template(data);
-                            $('#waitReplyQaListArea').html(html);
+                            $('#waitReplyQaListArea').html(me.makeQaList(data));
                         }
                     },
                     error : function(req){
@@ -146,6 +141,18 @@
                         alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
                     }
                 });
+            },
+            makeQaList : function (jsonData) {
+                var source;
+                if(jsonData.data.length == 0){
+                    source = $('#qa-template-_noData-hbs').html();
+                } else {
+                    source = $('#qa-template-_mainList-hbs').html();
+                }
+                var template = Handlebars.compile(source);
+                var html = template(jsonData);
+                return html;
+
             },
             bindDayTypeEvent : function(){
                 $('#recentQaDayTypeUl > li').click(function(){
