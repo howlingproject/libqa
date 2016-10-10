@@ -17,8 +17,8 @@
             <a href="#" class="form-control btn btn-primary">검색</a>
         </form>
         <div class="btn-group pull-right">
-            <a href="#" class="btn btn-primary">총 질문({{qaTotalCount}})</a>
-            <a href="#" class="btn btn-primary">답변을 기다리는 Q&A({{qaNotReplyedCount}})</a>
+            <a href="/qa/total/list" class="btn btn-primary">총 질문({{qaTotalCount}})</a>
+            <a href="/qa/wait_reply/list" class="btn btn-primary">답변을 기다리는 Q&A({{qaNotReplyedCount}})</a>
             {{#if isLogin}}
             <a href="/qa" class="btn btn-primary">Q&A</a>
             <a href="/qa/form" class="btn btn-primary">질문하기</a>
