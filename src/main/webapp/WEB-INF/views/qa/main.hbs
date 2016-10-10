@@ -195,6 +195,13 @@
             }
         };
 
+        KeywordList.bindKeywordListImplEvent = function () {
+             Qa.renderDayType($('#recentQaDayTypeUl'));
+             Qa.renderDayType($('#waitReplyQaDayTypeUl'));
+             Qa.renderRecentQaList("WEEK");
+             Qa.renderWaitReplyQaList("ALL");
+        }
+
     </script>
 {{/partial}}
 
