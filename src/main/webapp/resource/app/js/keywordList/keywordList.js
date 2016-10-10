@@ -46,9 +46,10 @@ var KeywordList = {
         }
         // keyword 해당되는 질문 전체 목록 List up
         // 화면 분할? 같이? 고민
-        Qa.renderDayType($('#recentQaDayTypeUl'));
-        Qa.renderDayType($('#waitReplyQaDayTypeUl'));
-        Qa.renderRecentQaList("WEEK");
-        Qa.renderWaitReplyQaList("ALL");
+        this.bindKeywordListImplEvent();
+    },
+    // 각 영역별 필요한 event 구현
+    bindKeywordListImplEvent : function () {
+
     }
 }
