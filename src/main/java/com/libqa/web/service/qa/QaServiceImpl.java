@@ -223,8 +223,7 @@ public class QaServiceImpl implements QaService {
         }
     }
 
-    @Override
-    public List<QaContent> getQaContentsLessThanLastQaId(QaSearchType qaSearchType, Integer lastQaId) {
+    private List<QaContent> getQaContentsLessThanLastQaId(QaSearchType qaSearchType, Integer lastQaId) {
         PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
         try {
             if (QaSearchType.TOTAL == qaSearchType) {
@@ -233,6 +232,26 @@ public class QaServiceImpl implements QaService {
                 return qaRepository.findByQaIdLessThanAndIsReplyedFalseAndIsDeletedFalse(lastQaId, pageRequest);
             } else {
                 return Lists.newArrayList();
+            }
+        } catch (Exception e){
+            return Lists.newArrayList();
+        }
+    }
+
+    @Override
+    public List<QaContent> getQaContentsLessThanLastQaIdAndKeywordName(QaSearchType qaSearchType, QaDto qaDto) {
+        PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
+        try {
+            if("".equals(qaDto.getKeywordName())){
+                return getQaContentsLessThanLastQaId(qaSearchType, qaDto.getLastQaId());
+            } else {
+                if (QaSearchType.TOTAL == qaSearchType) {
+                    return qaRepository.findByQaIdLessThanAndKeywordTypeAndKeywordNameAndIsDeletedFalse(qaDto.getLastQaId(), qaDto.getKeywordType(), qaDto.getKeywordName());
+//                } else if (QaSearchType.WAIT_REPLY == qaSearchType) {
+//                    return qaRepository.findByQaIdLessThanAndKeywordTypeAndKeywordNameAndIsReplyedFalseAndIsDeletedFalse(qaDto.getLastQaId(), qaDto.getKeywordType(), qaDto.getKeywordName());
+                } else {
+                    return Lists.newArrayList();
+                }
             }
         } catch (Exception e){
             return Lists.newArrayList();
@@ -295,32 +314,42 @@ public class QaServiceImpl implements QaService {
         Stream<QaContent> qaStream = null;
         try {
             Date fromDate = getFromDate(qaDto.getDayType());
-            if ("".equals(qaDto.getKeywordName())) {
-                if ("Y".equals(qaDto.getWaitReply())) {
-                    if (null == fromDate) {
-                        qaStream = qaRepository.findAllByIsReplyedAndIsDeletedFalseOrderByUpdateDateDesc(isReplyed);
-                    } else {
-                        qaStream = qaRepository.findAllByIsReplyedAndUpdateDateBetweenAndIsDeletedFalseOrderByUpdateDateDesc(isReplyed, fromDate, today);
-                    }
-                } else {
-                    qaStream = qaRepository.findAllByUpdateDateBetweenAndIsDeletedFalseOrderByUpdateDateDesc(fromDate, today);
-                }
-            } else {
-                if ("Y".equals(qaDto.getWaitReply())) {
-                    if (null == fromDate) {
-                        qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed);
-                    } else {
-                        qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalseAndUpdateDateBetween(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed, fromDate, today);
-                    }
-                } else {
-                    qaStream = qaRepository.findAllByKeywordAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), fromDate, today);
-                }
-            }
+            qaStream = getQaContentStream(qaDto, isReplyed, today, fromDate);
             qaStream.forEach(qaContent -> returnQaContentObj.add(qaContent));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return returnQaContentObj;
+    }
+
+    private Stream<QaContent> getQaContentStream(QaDto qaDto, boolean isReplyed, Date today, Date fromDate) {
+        Stream<QaContent> qaStream;
+        if ("".equals(qaDto.getKeywordName())) {
+            if ("Y".equals(qaDto.getWaitReply())) {
+                if (null == fromDate) {
+                    qaStream = qaRepository.findAllByIsReplyedAndIsDeletedFalseOrderByUpdateDateDesc(isReplyed);
+                } else {
+                    qaStream = qaRepository.findAllByIsReplyedAndUpdateDateBetweenAndIsDeletedFalseOrderByUpdateDateDesc(isReplyed, fromDate, today);
+                }
+            } else {
+                qaStream = qaRepository.findAllByUpdateDateBetweenAndIsDeletedFalseOrderByUpdateDateDesc(fromDate, today);
+            }
+        } else {
+            if ("Y".equals(qaDto.getWaitReply())) {
+                if (null == fromDate) {
+                    qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed);
+                } else {
+                    qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalseAndUpdateDateBetween(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed, fromDate, today);
+                }
+            } else {
+                if (null == fromDate) {
+                    qaStream = qaRepository.findAllByKeywordAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName());
+                } else {
+                    qaStream = qaRepository.findAllByKeywordAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), fromDate, today);
+                }
+            }
+        }
+        return qaStream;
     }
 
     public List<QaContent> findRecentList(List<Integer> qaIds, boolean isReplyed, Date fromDate, Date today, boolean isDeleted) {

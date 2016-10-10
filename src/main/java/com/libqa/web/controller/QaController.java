@@ -103,9 +103,9 @@ public class QaController {
 
     @RequestMapping(value = "/qa/{qaSearchType}/moreList", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<DisplayQa> moreList(@PathVariable QaSearchType qaSearchType, @RequestParam(required = false) Integer lastQaId){
+    public ResponseData<DisplayQa> moreList(@PathVariable QaSearchType qaSearchType, @ModelAttribute QaDto qaDto){
         try{
-            return createSuccessResult(buildDisplayQas(qaService.getQaContentsLessThanLastQaId(qaSearchType, lastQaId)));
+            return createSuccessResult(buildDisplayQas(qaService.getQaContentsLessThanLastQaIdAndKeywordName(qaSearchType, qaDto)));
         } catch (Exception e){
             return createFailResult(Lists.newArrayList());
         }

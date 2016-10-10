@@ -49,5 +49,5 @@ public interface QaService {
 
     List<QaContent> getQaContents(QaSearchType qaSearchType);
 
-    List<QaContent> getQaContentsLessThanLastQaId(QaSearchType qaSearchType, Integer lastQaId);
+    List<QaContent> getQaContentsLessThanLastQaIdAndKeywordName(QaSearchType qaSearchType, QaDto qaDto);
 }
