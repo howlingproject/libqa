@@ -92,44 +92,17 @@
 
         var Qa = {
             init : function(){
-                this.renderKeywordList();
-                //this.renderRecentQaList('WEEK');
-                //this.renderWaitReplyQaList('ALL');
+                KeywordList.renderKeywordList();
                 this.renderDayType($('#recentQaDayTypeUl'));
                 this.renderDayType($('#waitReplyQaDayTypeUl'));
                 this.bindDayTypeEvent();
                 this.bindSearch();
             },
-            renderKeywordList : function(){
-                $.ajax({
-                    url: "/common/findKeywordList",
-                    type: "POST",
-                    data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName() },
-                    success : function(data){
-                        if(data.resultCode == 1) {
-                            var source = $('#common-_keywordList-hbs').html();
-                            var template = Handlebars.compile(source);
-
-                            var html = template(data);
-                            $('#categorizeKeywordListArea').html(html);
-                            Qa.bindKeywordListEvent();
-                        }
-                    },
-                    error : function(req){
-                        // Handle upload error
-                        alert('req : ' + req);
-                        console.log('req : ' + req.status);
-                        console.log('req : ' + req.readyState);
-
-                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
-                    }
-                });
-            },
             renderRecentQaList : function(dayType){
                 $.ajax({
                     url: "/qa/qaList",
                     type: "POST",
-                    data: { keywordType : 'QA', keywordName : Qa.selectedKeywordName(), dayType : dayType },
+                    data: { keywordType : 'QA', keywordName : KeywordList.selectedKeywordName(), dayType : dayType },
                     success : function(data){
                         if(data.resultCode == 1) {
                             var source = $('#qa-template-_mainList-hbs').html();
@@ -153,7 +126,7 @@
                 $.ajax({
                     url: "/qa/qaList",
                     type: "POST",
-                    data : {keywordType : 'QA', keywordName : Qa.selectedKeywordName(), waitReply : 'Y', dayType : dayType},
+                    data : {keywordType : 'QA', keywordName : KeywordList.selectedKeywordName(), waitReply : 'Y', dayType : dayType},
                     success : function(data){
                         if(data.resultCode == 1) {
                             var source = $('#qa-template-_mainList-hbs').html();
@@ -171,15 +144,6 @@
 
                         alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
                     }
-                });
-            },
-            selectedKeywordName : function(){
-                var keywordName = $('#categorizeKeywordListArea').find('li.active').attr('data-keywordList-name');
-                return keywordName;
-            },
-            bindKeywordListEvent : function(){
-                $('#categorizeKeywordListArea').find('li').click(function(){
-                    KeywordList.findKeywordList(this);
                 });
             },
             bindDayTypeEvent : function(){
@@ -223,24 +187,6 @@
             }
         };
 
-        var KeywordList = {
-            findKeywordList : function(keywordListObj){
-                var ulObj = $(keywordListObj).parent();
-                ulObj.find('li').removeClass('active');
-                var keywordListValue = keywordListObj.getAttribute('data-keywordList-name');
-                if(keywordListValue == ''){
-                    ulObj.find('li[data-keywordList-name=""]').addClass('active');
-                } else {
-                    ulObj.find('li[data-keywordList-name=' + keywordListValue + ']').addClass('active');
-                }
-                // keyword 해당되는 질문 전체 목록 List up
-                // 화면 분할? 같이? 고민
-                Qa.renderDayType($('#recentQaDayTypeUl'));
-                Qa.renderDayType($('#waitReplyQaDayTypeUl'));
-                Qa.renderRecentQaList("WEEK");
-                Qa.renderWaitReplyQaList("ALL");
-            }
-        }
     </script>
 {{/partial}}
 
