@@ -126,7 +126,7 @@
                 $.ajax({
                     url: "/qa/qaList",
                     type: "POST",
-                    data : {keywordType : 'QA', keywordName : KeywordList.selectedKeywordName(), waitReply : 'Y', dayType : dayType},
+                    data : {keywordType : 'QA', keywordName : KeywordList.selectedKeywordName(), waitReplyType : 'WAIT, dayType : dayType},
                     success : function(data){
                         if(data.resultCode == 1) {
                             $('#waitReplyQaListArea').html(me.makeQaList(data));
