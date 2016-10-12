@@ -5,6 +5,7 @@ import com.libqa.application.dto.QaDto;
 import com.libqa.application.enums.DayType;
 import com.libqa.application.enums.KeywordType;
 import com.libqa.application.enums.QaSearchType;
+import com.libqa.application.enums.WaitReplyType;
 import com.libqa.application.util.PageUtil;
 import com.libqa.web.domain.Keyword;
 import com.libqa.web.domain.QaContent;
@@ -191,7 +192,7 @@ public class QaServiceImpl implements QaService {
         Date today = new Date();
         Date fromDate = null;
         try {
-            fromDate = getFromDate(DayType.WEEK.getCode());
+            fromDate = getFromDate(DayType.WEEK);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -246,9 +247,9 @@ public class QaServiceImpl implements QaService {
                 return getQaContentsLessThanLastQaId(qaSearchType, qaDto.getLastQaId());
             } else {
                 if (QaSearchType.TOTAL == qaSearchType) {
-                    return qaRepository.findByQaIdLessThanAndKeywordTypeAndKeywordNameAndIsDeletedFalse(qaDto.getLastQaId(), qaDto.getKeywordType(), qaDto.getKeywordName());
-//                } else if (QaSearchType.WAIT_REPLY == qaSearchType) {
-//                    return qaRepository.findByQaIdLessThanAndKeywordTypeAndKeywordNameAndIsReplyedFalseAndIsDeletedFalse(qaDto.getLastQaId(), qaDto.getKeywordType(), qaDto.getKeywordName());
+                    return qaRepository.findFirst5ByQaIdLessThanAndKeywordTypeAndKeywordNameAndIsDeletedFalse(qaDto.getLastQaId(), qaDto.getKeywordType(), qaDto.getKeywordName());
+                } else if (QaSearchType.WAIT_REPLY == qaSearchType) {
+                    return qaRepository.findFirst5ByQaIdLessThanAndKeywordTypeAndKeywordNameAndIsReplyedFalseAndIsDeletedFalse(qaDto.getLastQaId(), qaDto.getKeywordType(), qaDto.getKeywordName());
                 } else {
                     return Lists.newArrayList();
                 }
@@ -307,7 +308,7 @@ public class QaServiceImpl implements QaService {
     }
 
     @Override
-    public List<QaContent> findByIsReplyedAndDayType(QaDto qaDto) {
+    public List<QaContent> searchQaContents(QaDto qaDto) {
         boolean isReplyed = false;
         Date today = new Date();
         List<QaContent> returnQaContentObj = new ArrayList<>();
@@ -325,7 +326,7 @@ public class QaServiceImpl implements QaService {
     private Stream<QaContent> getQaContentStream(QaDto qaDto, boolean isReplyed, Date today, Date fromDate) {
         Stream<QaContent> qaStream;
         if ("".equals(qaDto.getKeywordName())) {
-            if ("Y".equals(qaDto.getWaitReply())) {
+            if (WaitReplyType.WAIT == qaDto.getWaitReplyType()) {
                 if (null == fromDate) {
                     qaStream = qaRepository.findAllByIsReplyedAndIsDeletedFalseOrderByUpdateDateDesc(isReplyed);
                 } else {
@@ -335,9 +336,13 @@ public class QaServiceImpl implements QaService {
                 qaStream = qaRepository.findAllByUpdateDateBetweenAndIsDeletedFalseOrderByUpdateDateDesc(fromDate, today);
             }
         } else {
-            if ("Y".equals(qaDto.getWaitReply())) {
+            if (WaitReplyType.WAIT == qaDto.getWaitReplyType()) {
                 if (null == fromDate) {
-                    qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed);
+                    if(QaSearchType.WAIT_REPLY == qaDto.getQaSearchType()){
+                        qaStream = qaRepository.findFirst5ByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed);
+                    } else {
+                        qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed);
+                    }
                 } else {
                     qaStream = qaRepository.findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalseAndUpdateDateBetween(qaDto.getKeywordType(), qaDto.getKeywordName(), isReplyed, fromDate, today);
                 }
@@ -366,13 +371,13 @@ public class QaServiceImpl implements QaService {
         return qaRepository.findAllByQaIdInAndUpdateDateBetweenAndIsDeletedOrderByUpdateDateDesc(qaIds, fromDate, today, isDeleted);
     }
 
-    public Date getFromDate(String dayType) throws ParseException {
+    public Date getFromDate(DayType dayType) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date now = dateFormat.parse(dateFormat.format(new Date()));
         Date returnDate;
-        if (DayType.WEEK.getCode().equals(dayType)) {
+        if (DayType.WEEK == dayType) {
             returnDate = DateUtils.addDays(now, -7);
-        } else if (DayType.ALL.getCode().equals(dayType)) {
+        } else if (DayType.ALL == dayType) {
             returnDate = null;
         } else {
             returnDate = now;

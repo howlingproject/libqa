@@ -83,42 +83,52 @@
             getListCount : function(){
                 return $('#list .best-qna-item').size();
             },
-            searchQaList : function(lastQaId){
+            getQaList : function(){
+                var me = this;
+                QaPager.showBtn();
                 var qaSearchType = $('[name=qaSearchType]').val();
-                $.get("/qa/"+ qaSearchType +"/moreList",{lastQaId : lastQaId}, function (response) {
+                $.get("/qa/"+ qaSearchType +"/getList", function (response) {
                     if(response.resultCode != 1) {
                         alert(response.comment);
                         return;
                     } else {
-                        var source = $('#qa-template-_searchList-hbs').html();
-                        var template = Handlebars.compile(source);
-                        var html = template(response);
-                        $('#list').append(html);
+                        $('#list').html(me.makeQaList(response));
                         QaPager.loaded(response.data.length);
                     }
                 });
             },
-            searchQaListByKeywordList : function(){
+            getQaListByKeywordList : function(){
                 var me = this;
-                $.ajax({
-                    url: "/qa/qaList",
-                    type: "POST",
-                    data: { keywordType : 'QA', keywordName : KeywordList.selectedKeywordName(), dayType : 'ALL' },
-                    success : function(response){
-                        if(response.resultCode == 1) {
-                            $('#list').html(me.makeQaList(response));
-                            QaPager.loaded(response.data.length);
-                        }
-                    },
-                    error : function(req){
-                        // Handle upload error
-                        alert('req : ' + req);
-                        console.log('req : ' + req.status);
-                        console.log('req : ' + req.readyState);
+                QaPager.showBtn();
+                var selectedKeywordName = KeywordList.selectedKeywordName();
+                var waitReplyType;
+                var qaSearchType = $('[name=qaSearchType]').val();
+                if(qaSearchType == 'WAIT_REPLY'){
+                    waitReplyType = 'WAIT';
+                }
+                if(selectedKeywordName == ''){
+                    me.getQaList();
+                } else {
+                    $.ajax({
+                        url: "/qa/"+ qaSearchType +"/getListByKeyword",
+                        type: "POST",
+                        data: { keywordType : 'QA', qaSearchType : qaSearchType, keywordName : selectedKeywordName, waitReplyType : waitReplyType, dayType : 'ALL' },
+                        success : function(response){
+                            if(response.resultCode == 1) {
+                                $('#list').html(me.makeQaList(response));
+                                QaPager.loaded(response.data.length);
+                            }
+                        },
+                        error : function(req){
+                            // Handle upload error
+                            alert('req : ' + req);
+                            console.log('req : ' + req.status);
+                            console.log('req : ' + req.readyState);
 
-                        alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
-                    }
-                });
+                            alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
+                        }
+                    });
+                }
             },
             moreList : function() {
                 var lastQaId = $('#list .best-qna-item').last().data().qaId;
@@ -196,7 +206,7 @@
         };
 
         KeywordList.bindKeywordListImplEvent = function () {
-            Qa.searchQaListByKeywordList();
+            Qa.getQaListByKeywordList();
         }
 
     </script>

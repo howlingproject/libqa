@@ -19,7 +19,7 @@ public interface QaService {
 
     QaContent findByQaId(Integer qaId, boolean isDeleted);
 
-    List<QaContent> findByIsReplyedAndDayType(QaDto qaDto);
+    List<QaContent> searchQaContents(QaDto qaDto);
 
     boolean deleteWithKeyword(Integer qaId, Integer userId);
 
@@ -50,4 +50,5 @@ public interface QaService {
     List<QaContent> getQaContents(QaSearchType qaSearchType);
 
     List<QaContent> getQaContentsLessThanLastQaIdAndKeywordName(QaSearchType qaSearchType, QaDto qaDto);
+
 }

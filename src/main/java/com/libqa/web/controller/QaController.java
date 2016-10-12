@@ -101,6 +101,26 @@ public class QaController {
         return mav;
     }
 
+    @RequestMapping(value = "/qa/{qaSearchType}/getList", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData<DisplayQa> getList(@PathVariable QaSearchType qaSearchType){
+        try{
+            return createSuccessResult(buildDisplayQas(qaService.getQaContents(qaSearchType)));
+        } catch (Exception e){
+            return createFailResult(Lists.newArrayList());
+        }
+    }
+
+    @RequestMapping(value = "/qa/{qaSearchType}/getListByKeyword", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData<DisplayQa> getListByKeyword(@PathVariable QaSearchType qaSearchType, @ModelAttribute QaDto qaDto){
+        try{
+            return createSuccessResult(buildDisplayQas(qaService.searchQaContents(qaDto)));
+        } catch (Exception e){
+            return createFailResult(Lists.newArrayList());
+        }
+    }
+
     @RequestMapping(value = "/qa/{qaSearchType}/moreList", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData<DisplayQa> moreList(@PathVariable QaSearchType qaSearchType, @ModelAttribute QaDto qaDto){
@@ -298,7 +318,7 @@ public class QaController {
         List<QaContent> qaContentList = new ArrayList<>();
         List<DisplayQa> displayQaList = new ArrayList<>();
         try {
-            qaContentList = qaService.findByIsReplyedAndDayType(qaDto);
+            qaContentList = qaService.searchQaContents(qaDto);
             for (QaContent qaContent : qaContentList) {
                 User writer = userService.findByUserId(qaContent.getUserId());
                 displayQaList.add(new DisplayQa(qaContent, writer, keywordService.findByQaId(qaContent.getQaId()), qaReplyService.findByQaId(qaContent.getQaId())));
