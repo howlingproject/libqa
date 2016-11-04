@@ -39,8 +39,8 @@ var Feed = {
                     me.clearForm();
                     FeedFile.clear();
                 }).fail(function(){
-                    alert('Error saving feed');
-                });
+                alert('Error saving feed');
+            });
         });
     },
     'clearForm' : function() {
@@ -70,7 +70,7 @@ var Feed = {
                     $('#fileUploadModal').modal('hide');
                 },
                 error: function () {
-                   FeedUtil.alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
+                    FeedUtil.alert('업로드 중 에러가 발생했습니다. 파일 용량이 허용범위를 초과 했거나 올바르지 않은 파일 입니다.');
                 }
             });
         });
@@ -106,8 +106,8 @@ var Feed = {
                         location.href = redirectUrl;
                     }
                 }).fail(function () {
-                    alert('Error delete feed');
-                });
+                alert('Error delete feed');
+            });
         });
     },
     'modifyItem' : function(el) {
@@ -133,8 +133,8 @@ var Feed = {
                     var contents = response.data.feedContent.replace(/(\r\n|\n|\r)/gm, '<br>');
                     $feedContents.html(contents).show();
                 }).fail(function () {
-                    alert('Error modify feed');
-                });
+                alert('Error modify feed');
+            });
         }).end().find('.cancelBtn').off('click').on('click', function () {
             $modifyBox.hide();
             $feedContents.show();
@@ -172,8 +172,8 @@ var Feed = {
 
                 $target.parent('.feed-file-item').remove();
             }).fail(function () {
-                alert('Error delete feedFile');
-            });
+            alert('Error delete feedFile');
+        });
     },
     'like': function(el) {
         var feedThreadId = this.getId($(el));
@@ -188,8 +188,8 @@ var Feed = {
                     }
                     FeedUtil.toggleCount($(el), response.data.count, response.data.hasActor);
                 }).fail(function () {
-                    alert('Error like feed');
-                });
+                alert('Error like feed');
+            });
 
         });
     },
@@ -206,8 +206,8 @@ var Feed = {
                     }
                     FeedUtil.toggleCount($(el), response.data.count, response.data.hasActor);
                 }).fail(function () {
-                    alert('Error claim feed');
-                });
+                alert('Error claim feed');
+            });
         });
     },
     'bindImageGallery': function(){
@@ -245,10 +245,10 @@ var FeedFile = {
         var idx = $('#feedForm input[name$=fileType]').size();
         var $input = $('<input />').attr('type', 'hidden');
         $('#feedForm').append($input.clone().attr('name', "feedFiles["+ idx + "].realName").val(obj.realName))
-                .append($input.clone().attr('name', "feedFiles["+ idx + "].savedName").val(obj.savedName))
-                .append($input.clone().attr('name', "feedFiles["+ idx + "].filePath").val(obj.filePath))
-                .append($input.clone().attr('name', "feedFiles["+ idx + "].fileSize").val(obj.fileSize))
-                .append($input.clone().attr('name', "feedFiles["+ idx + "].fileType").val(obj.fileType));
+            .append($input.clone().attr('name', "feedFiles["+ idx + "].savedName").val(obj.savedName))
+            .append($input.clone().attr('name', "feedFiles["+ idx + "].filePath").val(obj.filePath))
+            .append($input.clone().attr('name', "feedFiles["+ idx + "].fileSize").val(obj.fileSize))
+            .append($input.clone().attr('name', "feedFiles["+ idx + "].fileType").val(obj.fileType));
     },
     'removePreviewInForm': function() {
         $('#feedForm .attachmentArea .files').empty();
@@ -287,8 +287,8 @@ var FeedReply = {
                     me.clearForm($frm);
                     me.loadItem($repliesBody, response.data);
                 }).fail(function () {
-                    alert('Error saving feed Reply');
-                });
+                alert('Error saving feed Reply');
+            });
         });
     },
     'loadItem': function($target, data){
@@ -319,8 +319,8 @@ var FeedReply = {
                     }
                     $target.remove();
                 }).fail(function () {
-                    alert('Error delete feed Reply');
-                });
+                alert('Error delete feed Reply');
+            });
         });
     },
     'like' : function(el) {
@@ -353,8 +353,8 @@ var FeedReply = {
                     }
                     FeedUtil.toggleCount($(el), response.data.count, response.data.hasActor);
                 }).fail(function () {
-                    alert('Error claim feed');
-                });
+                alert('Error claim feed');
+            });
         });
     }
 };
@@ -461,7 +461,9 @@ var FeedPager = {
 };
 
 var FeedList = {
-    '$listItems': $('#feedList li.thread'),
+    'listItems': function(){
+        return $('#feedList').find('li.thread');
+    },
     'call' : function(url, resultCallback) {
         $.get(url, function (response) {
             if(FeedUtil.alertResponse(response)) {
@@ -474,10 +476,10 @@ var FeedList = {
         });
     },
     'getLastId': function() {
-        return this.$listItems.last().data('feedThreadId');
+        return this.listItems().last().data('feedThreadId');
     },
     'getSize': function(){
-        return this.$listItems.size();
+        return this.listItems().size();
     }
 };
 
