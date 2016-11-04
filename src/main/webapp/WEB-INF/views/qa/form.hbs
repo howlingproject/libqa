@@ -285,6 +285,9 @@
                     animation: 'top',
                     confirm: function () {
                         location.href = "/qa/" + qaId;
+                    },
+                    cancel: function(){
+                        $('#qaForm [name=keywords]').remove()
                     }
                 });
             },

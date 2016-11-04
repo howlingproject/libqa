@@ -6,8 +6,8 @@ import lombok.Getter;
  * Created by yong on 2016. 8. 18..
  */
 public enum QaSearchType {
-    TOTAL("total"),
-    WAIT_REPLY("waitReply");
+    TOTAL("TOTAL"),
+    WAIT_REPLY("WAIT_REPLY");
 
     @Getter
     private String name;

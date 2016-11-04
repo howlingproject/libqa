@@ -66,6 +66,18 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
             " from QA_CONTENT qa, KEYWORD keyword " +
             "where qa.qa_id = keyword.qa_id " +
             "  and qa.is_deleted = 0 " +
+            "  and qa.is_replyed = :isReplyed " +
+            "  and keyword.is_deleted = 0 " +
+            "  and keyword.keyword_type = :keywordType " +
+            "  and keyword.keyword_name = :keywordName " +
+            "group by qa.user_id, qa.qa_id, qa.insert_date, qa.update_date, qa.user_nick, qa.title, qa.contents, qa.contents_markup, qa.view_count, qa.recommend_count " +
+            "order by qa.update_date desc limit 5", nativeQuery = true)
+    Stream<QaContent> findFirst5ByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(@Param("keywordType") String keywordType, @Param("keywordName") String keywordName, @Param("isReplyed") boolean isReplyed);
+
+    @Query(value = "select qa.* " +
+            " from QA_CONTENT qa, KEYWORD keyword " +
+            "where qa.qa_id = keyword.qa_id " +
+            "  and qa.is_deleted = 0 " +
             "  and qa.update_date between :fromDate and :today " +
             "  and qa.is_replyed = :isReplyed " +
             "  and keyword.is_deleted = 0 " +
@@ -74,6 +86,17 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
             "group by qa.user_id, qa.qa_id, qa.insert_date, qa.update_date, qa.user_nick, qa.title, qa.contents, qa.contents_markup, qa.view_count, qa.recommend_count " +
             "order by qa.update_date desc", nativeQuery = true)
     Stream<QaContent> findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalseAndUpdateDateBetween(@Param("keywordType") String keywordType, @Param("keywordName") String keywordName, @Param("isReplyed") boolean isReplyed, @Param("fromDate") Date fromDate, @Param("today") Date today);
+
+    @Query(value = "select qa.* " +
+            " from QA_CONTENT qa, KEYWORD keyword " +
+            "where qa.qa_id = keyword.qa_id " +
+            "  and qa.is_deleted = 0 " +
+            "  and keyword.is_deleted = 0 " +
+            "  and keyword.keyword_type = :keywordType " +
+            "  and keyword.keyword_name = :keywordName " +
+            "group by qa.user_id, qa.qa_id, qa.insert_date, qa.update_date, qa.user_nick, qa.title, qa.contents, qa.contents_markup, qa.view_count, qa.recommend_count " +
+            "order by qa.qa_id desc limit 5", nativeQuery = true)
+    Stream<QaContent> findAllByKeywordAndIsDeletedFalse(@Param("keywordType")String keywordType, @Param("keywordName") String keywordName);
 
     @Query(value = "select qa.* " +
             " from QA_CONTENT qa, KEYWORD keyword " +
@@ -92,5 +115,30 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
             "	AND (q.title LIKE CONCAT('%',:searchValue,'%') OR q.contents_markup LIKE CONCAT('%',:searchValue,'%') ) " +
             "ORDER BY q.qa_id DESC", nativeQuery = true)
     List<QaContent> findAllBySearchValue(@Param("searchValue") String searchValue);
+
+    @Query(value = "select qa.* " +
+            " from QA_CONTENT qa, KEYWORD keyword " +
+            "where qa.qa_id = keyword.qa_id " +
+            "  and qa.qa_id < :lastQaId " +
+            "  and qa.is_deleted = 0 " +
+            "  and keyword.is_deleted = 0 " +
+            "  and keyword.keyword_type = :keywordType " +
+            "  and keyword.keyword_name = :keywordName " +
+            "group by qa.user_id, qa.qa_id, qa.insert_date, qa.update_date, qa.user_nick, qa.title, qa.contents, qa.contents_markup, qa.view_count, qa.recommend_count " +
+            "order by qa.qa_id desc limit 5", nativeQuery = true)
+    List<QaContent> findFirst5ByQaIdLessThanAndKeywordTypeAndKeywordNameAndIsDeletedFalse(@Param("lastQaId")Integer lastQaId, @Param("keywordType") String keywordType,  @Param("keywordName") String keywordName);
+
+    @Query(value = "select qa.* " +
+            " from QA_CONTENT qa, KEYWORD keyword " +
+            "where qa.qa_id = keyword.qa_id " +
+            "  and qa.qa_id < :lastQaId " +
+            "  and qa.is_replyed = 0 " +
+            "  and qa.is_deleted = 0 " +
+            "  and keyword.is_deleted = 0 " +
+            "  and keyword.keyword_type = :keywordType " +
+            "  and keyword.keyword_name = :keywordName " +
+            "group by qa.user_id, qa.qa_id, qa.insert_date, qa.update_date, qa.user_nick, qa.title, qa.contents, qa.contents_markup, qa.view_count, qa.recommend_count " +
+            "order by qa.qa_id desc limit 5", nativeQuery = true)
+    List<QaContent> findFirst5ByQaIdLessThanAndKeywordTypeAndKeywordNameAndIsReplyedFalseAndIsDeletedFalse(@Param("lastQaId") Integer lastQaId, @Param("keywordType") String keywordType, @Param("keywordName") String keywordName);
 
 }

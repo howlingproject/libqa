@@ -1,5 +1,8 @@
 package com.libqa.application.dto;
 
+import com.libqa.application.enums.DayType;
+import com.libqa.application.enums.QaSearchType;
+import com.libqa.application.enums.WaitReplyType;
 import lombok.Data;
 
 /**
@@ -13,7 +16,11 @@ public class QaDto {
 
     private String keywordType;
 
-    private String dayType;
+    private DayType dayType;
 
-    private String waitReply;
+    private WaitReplyType waitReplyType;
+
+    private QaSearchType qaSearchType;
+
+    private Integer lastQaId;
 }
