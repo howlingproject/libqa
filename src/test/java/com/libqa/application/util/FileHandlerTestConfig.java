@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
-public class FileHandlerTestConfig {
+class FileHandlerTestConfig {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer properties() throws Exception {

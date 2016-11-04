@@ -17,7 +17,7 @@ public class FileHandlerTest {
 
     @Test
     public void serverUploadPath() {
-        assertThat(sut.getServerUploadPath()).isEqualTo("~/libq/files");
+        assertThat(sut.getServerUploadPath()).isEqualTo("~/libqa/files");
     }
 
     @Test
