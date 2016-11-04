@@ -22,6 +22,8 @@ target
 *.MF
 bin/
 tmp/
+gradle/
+out/
 
 #libqa
 webapp/resource/temp/
