@@ -1,6 +1,5 @@
 package com.libqa.web.view.feed;
 
-import com.google.common.collect.Lists;
 import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.user.UserService;

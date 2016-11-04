@@ -48,9 +48,9 @@ public class DisplayFeedReplyBuilder {
         DisplayFeedAction likedFeedAction = displayFeedActionBuilder.buildLike(feedReply, viewer);
         DisplayFeedAction claimedFeedAction = displayFeedActionBuilder.buildClaim(feedReply, viewer);
 
-        final boolean isWriter = writer.isMatchUser(viewer.getUserId());
+        final boolean isReplyWriter = writer.isMatchUser(viewer.getUserId());
 
-        DisplayFeedReply displayFeedReply = new DisplayFeedReply(feedReply, writer, isWriter);
+        DisplayFeedReply displayFeedReply = new DisplayFeedReply(feedReply, writer, isReplyWriter);
         displayFeedReply.setLikeFeedAction(likedFeedAction);
         displayFeedReply.setClaimFeedAction(claimedFeedAction);
         return displayFeedReply;
