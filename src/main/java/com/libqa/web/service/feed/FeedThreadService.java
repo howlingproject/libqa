@@ -42,29 +42,29 @@ public class FeedThreadService {
      *
      * @return List&lt;FeedThread&gt;
      */
-    public List<FeedThread> searchRecentlyFeedThreads() {
+    public List<FeedThread> getRecentlyFeedThreads() {
         PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
         return feedThreadRepository.findByIsDeletedFalse(pageRequest);
     }
 
     /**
-     * lastId을 보다 작은 최신 feedThread 목록을 조회한다.
+     * lastId 보다 작은 최신 feedThread 목록을 조회한다.
      *
      * @param lastId
      * @return List&lt;FeedThread&gt;
      */
-    public List<FeedThread> searchRecentlyFeedThreadsLessThanLastId(Integer lastId) {
+    public List<FeedThread> getRecentlyFeedThreadsLessThanLastId(Integer lastId) {
         PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
         return feedThreadRepository.findByFeedThreadIdLessThanAndIsDeletedFalse(lastId, pageRequest);
     }
 
     /**
-     * pageSize만큼 최신 feedThread 목록을 조회한다.
+     * pageSize 만큼 최신 feedThread 목록을 조회한다.
      *
      * @param pageSize
      * @return FeedThread
      */
-    public List<FeedThread> searchRecentlyFeedThreadsByPageSize(Integer pageSize) {
+    public List<FeedThread> getRecentlyFeedThreadsByPageSize(Integer pageSize) {
         PageRequest pageRequest = PageUtil.sortPageable(pageSize, DEFAULT_SORT);
         return feedThreadRepository.findByIsDeletedFalse(pageRequest);
     }
@@ -161,7 +161,8 @@ public class FeedThreadService {
     }
 
     /**
-     * feed를 수정한다.
+     * feed 를 수정한다.
+     *
      * @param originFeedThread
      * @param requestFeedThread
      * @param user
@@ -190,19 +191,19 @@ public class FeedThreadService {
      *
      * @return List&lt;FeedThread&gt;
      */
-    public List<FeedThread> searchRecentlyFeedThreadsByUser(User user) {
+    public List<FeedThread> getRecentlyFeedThreadsByUser(User user) {
         PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
         return feedThreadRepository.findByUserIdAndIsDeletedFalse(user.getUserId(), pageRequest);
     }
 
     /**
-     * userId로 lastId보다 작은 최신 feedThread 목록을 조회한다.
+     * userId로 lastId 보다 작은 최신 feedThread 목록을 조회한다.
      *
      * @param user
      * @param lastId
      * @return List&lt;FeedThread&gt;
      */
-    public List<FeedThread> searchRecentlyFeedThreadsByUserLessThanLastId(User user, Integer lastId) {
+    public List<FeedThread> getRecentlyFeedThreadsByUserLessThanLastId(User user, Integer lastId) {
         PageRequest pageRequest = PageUtil.sortPageable(DEFAULT_SORT);
         return feedThreadRepository.findByUserIdAndFeedThreadIdLessThanAndIsDeletedFalse(
                 user.getUserId(), lastId, pageRequest);

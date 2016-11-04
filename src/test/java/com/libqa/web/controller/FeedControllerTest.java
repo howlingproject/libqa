@@ -64,7 +64,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testMain() throws Exception {
+    public void mainPage() throws Exception {
         mockMvc.perform(get("/feed"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("feed/main"));
@@ -73,19 +73,19 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testRecentlyList() throws Exception {
+    public void recentlyList() throws Exception {
         mockMvc.perform(get("/feed/recentlyList"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$.resultCode").value(is(1)))
                 .andExpect(jsonPath("$.comment").value(is("SUCCESS")));
 
-        verify(feedThreadService).searchRecentlyFeedThreads();
+        verify(feedThreadService).getRecentlyFeedThreads();
         verify(displayFeedBuilder).build(anyListOf(FeedThread.class), any(User.class));
     }
 
     @Test
-    public void testList() throws Exception {
+    public void list() throws Exception {
         final int lastId = 999;
         mockMvc.perform(get("/feed/list?lastId={lastId}", lastId))
                 .andExpect(status().isOk())
@@ -93,12 +93,12 @@ public class FeedControllerTest {
                 .andExpect(jsonPath("$.resultCode").value(is(1)))
                 .andExpect(jsonPath("$.comment").value(is("SUCCESS")));
 
-        verify(feedThreadService).searchRecentlyFeedThreadsLessThanLastId(lastId);
+        verify(feedThreadService).getRecentlyFeedThreadsLessThanLastId(lastId);
         verify(displayFeedBuilder).build(anyListOf(FeedThread.class), any(User.class));
     }
 
     @Test
-    public void testView() throws Exception {
+    public void viewPage() throws Exception {
         final int feedThreadId = 9999;
         mockMvc.perform(get("/feed/{feedThreadId}", feedThreadId))
                 .andExpect(status().isOk())
@@ -109,7 +109,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testMyList() throws Exception {
+    public void myListPage() throws Exception {
         final User user = normalUser();
         final int lastId = 999;
 
@@ -121,12 +121,12 @@ public class FeedControllerTest {
                 .andExpect(jsonPath("$.resultCode").value(is(1)))
                 .andExpect(jsonPath("$.comment").value(is("SUCCESS")));
 
-        verify(feedThreadService).searchRecentlyFeedThreadsByUserLessThanLastId(user, lastId);
+        verify(feedThreadService).getRecentlyFeedThreadsByUserLessThanLastId(user, lastId);
         verify(displayFeedBuilder).build(anyListOf(FeedThread.class), any(User.class));
     }
 
     @Test
-    public void testSave() throws Exception {
+    public void save() throws Exception {
         given(loggedUserManager.getUser()).willReturn(normalUser());
 
         mockMvc.perform(
@@ -142,7 +142,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testSave_withNeedLoginResponse() throws Exception {
+    public void save_withNeedLoginResponse() throws Exception {
         given(loggedUserManager.getUser()).willReturn(guestUser());
 
         mockMvc.perform(post("/feed/save"))
@@ -155,7 +155,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testSave_withFailResponse() throws Exception {
+    public void save_withFailResponse() throws Exception {
         given(loggedUserManager.getUser()).willReturn(normalUser());
         willThrow(new RuntimeException("unknown Error.")).given(feedThreadService).create(any(FeedThread.class), any(User.class));
 
@@ -167,7 +167,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testModify() throws Exception {
+    public void modify() throws Exception {
         final User user = mock(User.class);
         final FeedThread feedThreadFixture = feedThreadFixture();
 
@@ -189,7 +189,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testModify_withNotMatchUser() throws Exception {
+    public void modify_withNotMatchUser() throws Exception {
         final User user = mock(User.class);
         final FeedThread feedThreadFixture = feedThreadFixture();
 
@@ -211,7 +211,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testModify_withFailResponse() throws Exception {
+    public void modify_withFailResponse() throws Exception {
         final User user = mock(User.class);
         final FeedThread feedThreadFixture = feedThreadFixture();
 
@@ -233,7 +233,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    public void delete() throws Exception {
         final User user = mock(User.class);
         final FeedThread feedThreadFixture = feedThreadFixture();
         final int feedThreadId = 1;
@@ -254,7 +254,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testLikeFeed() throws Exception {
+    public void likeFeedThread() throws Exception {
         final int feedThreadId = 1;
         given(loggedUserManager.getUser()).willReturn(normalUser());
 
@@ -271,7 +271,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testClaimFeed() throws Exception {
+    public void claimFeedThread() throws Exception {
         final int feedThreadId = 1;
         given(loggedUserManager.getUser()).willReturn(normalUser());
 
@@ -288,7 +288,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testSaveReply() throws Exception {
+    public void saveReply() throws Exception {
         given(loggedUserManager.getUser()).willReturn(normalUser());
 
         mockMvc.perform(
@@ -304,7 +304,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testDeleteReply() throws Exception {
+    public void deleteReply() throws Exception {
         final User user = mock(User.class);
         final FeedReply feedReply = feedReplyFixture();
         final int feedReplyId = 1;
@@ -325,7 +325,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testLikeReply() throws Exception {
+    public void likeReply() throws Exception {
         final int feedReplyId = 1;
         given(loggedUserManager.getUser()).willReturn(normalUser());
 
@@ -342,7 +342,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testClaimReply() throws Exception {
+    public void claimReply() throws Exception {
         final int feedReplyId = 1;
         given(loggedUserManager.getUser()).willReturn(normalUser());
 
@@ -359,7 +359,7 @@ public class FeedControllerTest {
     }
 
     @Test
-    public void testDeleteFile() throws Exception {
+    public void deleteFile() throws Exception {
         final int feedFileId = 1;
         given(loggedUserManager.getUser()).willReturn(normalUser());
         given(feedFileService.getByFeedFileId(feedFileId)).willReturn(new FeedFile());

@@ -8,14 +8,13 @@ import lombok.Getter;
 public abstract class FeedActionActor {
     @Getter
     private Integer feedActorId;
-
     @Getter
     private User actionUser;
 
     /**
-     * @param feedActorId 각 actor의 unique key를 나타낸다.
-     *                    feed -> feedThreadId, feedReply -> feedReplyId
-     * @param actionUser  action을 취한 user
+     * @param feedActorId 각 actor 의 unique key 를 나타낸다. <br />
+     *                    feed => feedThreadId, feedReply => feedReplyId
+     * @param actionUser  action 을 취한 user
      */
     FeedActionActor(Integer feedActorId, User actionUser) {
         this.feedActorId = feedActorId;

@@ -20,7 +20,7 @@ public class DisplayFeedReplyBuilder {
     private DisplayFeedActionBuilder displayFeedActionBuilder;
 
     /**
-     * display용 feedReply 목록을 build 한다.
+     * display 용 feedReply 목록을 build 한다.
      *
      * @param feedThread
      * @param viewer
@@ -37,7 +37,7 @@ public class DisplayFeedReplyBuilder {
     }
 
     /**
-     * display용 feedReply를 build 한다.
+     * display 용 feedReply 를 build 한다.
      *
      * @param feedReply
      * @param viewer

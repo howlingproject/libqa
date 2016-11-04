@@ -32,7 +32,7 @@ public class DisplayFeedBuilder {
     }
 
     /**
-     * feed를 display 용으로 build 한다.
+     * feed  display 용으로 build 한다.
      *
      * @param feedThread feedThread
      * @param viewer     viewer

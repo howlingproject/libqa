@@ -13,7 +13,6 @@ import static com.libqa.application.util.FileHandler.*;
 public class FeedFileService {
     @Autowired
     private FileHandler fileHandler;
-
     @Autowired
     private FeedFileRepository repository;
 
@@ -38,6 +37,7 @@ public class FeedFileService {
 
     /**
      * feedFile 을 제거한다.
+     *
      * @param feedFile
      */
     @Transactional

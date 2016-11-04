@@ -54,12 +54,6 @@ public class FeedReplyService {
         updateFeedReplyCount(feedReply);
     }
 
-    private void updateFeedReplyCount(FeedReply feedReply) {
-        final Integer feedThreadId = feedReply.getFeedThread().getFeedThreadId();
-        FeedThread feedThread = feedThreadService.getByFeedThreadId(feedThreadId);
-        feedThread.setReplyCount(feedReplyRepository.countByFeedThreadAndIsDeletedFalse(feedThread));
-    }
-
     /**
      * user 기반으로 feed 댓글에 like 를 처리한다.
      *
@@ -106,5 +100,11 @@ public class FeedReplyService {
      */
     public FeedReply getByFeedReplyId(Integer feedReplyId) {
         return feedReplyRepository.findOne(feedReplyId);
+    }
+
+    private void updateFeedReplyCount(FeedReply feedReply) {
+        final Integer feedThreadId = feedReply.getFeedThread().getFeedThreadId();
+        FeedThread feedThread = feedThreadService.getByFeedThreadId(feedThreadId);
+        feedThread.setReplyCount(feedReplyRepository.countByFeedThreadAndIsDeletedFalse(feedThread));
     }
 }

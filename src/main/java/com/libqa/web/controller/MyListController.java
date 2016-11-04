@@ -36,7 +36,7 @@ public class MyListController {
     @RequestMapping("/my/feed")
     public ModelAndView myFeed(ModelAndView mav) {
         User viewer = loggedUserManager.getUser();
-        List<FeedThread> feedThreads = feedThreadService.searchRecentlyFeedThreadsByUser(viewer);
+        List<FeedThread> feedThreads = feedThreadService.getRecentlyFeedThreadsByUser(viewer);
 
         mav.addObject("data", displayFeedBuilder.build(feedThreads, viewer));
         mav.setViewName("/my/feedList");

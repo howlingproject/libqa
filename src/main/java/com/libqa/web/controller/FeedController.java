@@ -48,7 +48,7 @@ public class FeedController {
     @RequestMapping(method = GET)
     public ModelAndView main(ModelAndView mav) {
         User viewer = loggedUserManager.getUser();
-        List<FeedThread> feedThreads = feedThreadService.searchRecentlyFeedThreads();
+        List<FeedThread> feedThreads = feedThreadService.getRecentlyFeedThreads();
 
         mav.addObject("loggedUser", viewer);
         mav.addObject("data", displayFeedBuilder.build(feedThreads, viewer));
@@ -59,14 +59,14 @@ public class FeedController {
     @RequestMapping(value = "recentlyList", method = GET)
     public ResponseData<DisplayFeed> recentlyList() {
         User viewer = loggedUserManager.getUser();
-        List<FeedThread> feedThreads = feedThreadService.searchRecentlyFeedThreads();
+        List<FeedThread> feedThreads = feedThreadService.getRecentlyFeedThreads();
         return createSuccessResult(displayFeedBuilder.build(feedThreads, viewer));
     }
 
     @RequestMapping(value = "list", method = GET)
     public ResponseData<DisplayFeed> list(@RequestParam(required = false) Integer lastId) {
         User viewer = loggedUserManager.getUser();
-        List<FeedThread> feedThreads = feedThreadService.searchRecentlyFeedThreadsLessThanLastId(lastId);
+        List<FeedThread> feedThreads = feedThreadService.getRecentlyFeedThreadsLessThanLastId(lastId);
         return createSuccessResult(displayFeedBuilder.build(feedThreads, viewer));
     }
 
@@ -83,7 +83,7 @@ public class FeedController {
     @RequestMapping(value = "myList", method = GET)
     public ResponseData<DisplayFeed> myList(@RequestParam(required = false) Integer lastId) {
         User viewer = loggedUserManager.getUser();
-        List<FeedThread> feedThreads = feedThreadService.searchRecentlyFeedThreadsByUserLessThanLastId(viewer, lastId);
+        List<FeedThread> feedThreads = feedThreadService.getRecentlyFeedThreadsByUserLessThanLastId(viewer, lastId);
         return createSuccessResult(displayFeedBuilder.build(feedThreads, viewer));
     }
 

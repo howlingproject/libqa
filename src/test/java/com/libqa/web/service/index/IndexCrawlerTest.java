@@ -24,6 +24,7 @@ import static com.libqa.web.service.index.IndexCrawler.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -58,12 +59,12 @@ public class IndexCrawlerTest {
         final List<Wiki> expectedWikies = Lists.newArrayList(mock(Wiki.class));
         final List<FeedThread> expectedFeedThreads = Lists.newArrayList(feedThreadFixture());
 
-        given(wikiService.findAllLatestWikiBySpaceId(anyInt(), anyInt())).willReturn(expectedNoticeWikies);
+        given(wikiService.findAllLatestWikiBySpaceId(eq(INDEX_NOTICE_SIZE), anyInt())).willReturn(expectedNoticeWikies);
         given(userService.findByUserId(ANY_USER_ID)).willReturn(mock(User.class));
         given(qaService.searchRecentlyQaContentsByPageSize(INDEX_QA_SIZE)).willReturn(expectedQaContents);
         given(spaceService.findAllByCondition(false, 0, INDEX_SPACE_SIZE)).willReturn(expectedSpaces);
         given(wikiService.searchRecentlyWikiesByPageSize(INDEX_WIKI_SIZE)).willReturn(expectedWikies);
-        given(feedThreadService.searchRecentlyFeedThreadsByPageSize(INDEX_FEED_SIZE)).willReturn(expectedFeedThreads);
+        given(feedThreadService.getRecentlyFeedThreadsByPageSize(INDEX_FEED_SIZE)).willReturn(expectedFeedThreads);
 
         DisplayIndex actual = sut.crawl();
 

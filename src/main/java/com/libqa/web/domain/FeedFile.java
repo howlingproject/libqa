@@ -15,6 +15,7 @@ import java.util.Date;
 @Table(indexes = {@Index(columnList = "isDeleted")})
 @EqualsAndHashCode(of = "feedFileId")
 public class FeedFile {
+
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)

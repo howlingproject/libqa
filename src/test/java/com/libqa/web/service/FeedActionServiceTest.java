@@ -55,7 +55,7 @@ public class FeedActionServiceTest {
     }
 
     @Test
-    public void 취소된_액션이_존재하면_액션은_다시_생성된다() {
+    public void 취소된_액션이_존재하면_액션은_새로_생성된다() {
         final User user = userFixture();
         final FeedThreadLike feedThreadLike = FeedThreadLike.of(100000, user);
         given(feedActionRepository.findByFeedActorIdAndUserIdAndIsCanceledFalse(feedThreadLike.getFeedActorId(), user.getUserId()))
@@ -67,7 +67,7 @@ public class FeedActionServiceTest {
     }
 
     @Test
-    public void 특정_사용자의_피드에_좋아요_액션이_존재한다() {
+    public void 피드에_좋아요_액션을_취한_적이_있다() {
         final int feedThreadId = 1234;
         final User user = userFixture();
         final FeedThreadLike feedThreadLike = FeedThreadLike.of(feedThreadId, user);
@@ -80,7 +80,7 @@ public class FeedActionServiceTest {
     }
 
     @Test
-    public void 취소된_액션은_취하지_않은_액션으로_간주한다() {
+    public void 취소된_액션은_취하지_않은_것으로_간주한다() {
         final User user = userFixture();
         final FeedThreadLike feedThreadLike = FeedThreadLike.of(10000, user);
 
