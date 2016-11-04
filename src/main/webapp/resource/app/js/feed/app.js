@@ -39,8 +39,8 @@ var Feed = {
                     me.clearForm();
                     FeedFile.clear();
                 }).fail(function(){
-                alert('Error saving feed');
-            });
+                    alert('Error saving feed');
+                });
         });
     },
     'clearForm' : function() {

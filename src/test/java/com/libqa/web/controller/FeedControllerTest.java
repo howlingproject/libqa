@@ -60,16 +60,8 @@ public class FeedControllerTest {
     public void setup() throws Exception {
         mockMvc = standaloneSetup(controller)
                 .alwaysDo(print())
+                .setControllerAdvice(new FeedController.Advice())
                 .build();
-    }
-
-    @Test
-    public void mainPage() throws Exception {
-        mockMvc.perform(get("/feed"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("feed/main"));
-
-        verify(displayFeedBuilder).build(anyListOf(FeedThread.class), any(User.class));
     }
 
     @Test
@@ -95,17 +87,6 @@ public class FeedControllerTest {
 
         verify(feedThreadService).getRecentlyFeedThreadsLessThanLastId(lastId);
         verify(displayFeedBuilder).build(anyListOf(FeedThread.class), any(User.class));
-    }
-
-    @Test
-    public void viewPage() throws Exception {
-        final int feedThreadId = 9999;
-        mockMvc.perform(get("/feed/{feedThreadId}", feedThreadId))
-                .andExpect(status().isOk())
-                .andExpect(view().name("feed/view"));
-
-        verify(feedThreadService).getByFeedThreadId(feedThreadId);
-        verify(displayFeedBuilder).build(any(FeedThread.class), any(User.class));
     }
 
     @Test
