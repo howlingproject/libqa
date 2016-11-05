@@ -18,6 +18,7 @@ import java.util.List;
 @EqualsAndHashCode(of = "feedThreadId")
 @ToString(exclude = {"feedReplies", "feedFiles"})
 public class FeedThread {
+
     @Id
     @Column(nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)

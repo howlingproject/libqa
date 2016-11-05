@@ -1,6 +1,5 @@
 package com.libqa.web.view.feed;
 
-import com.google.common.collect.Lists;
 import com.libqa.web.domain.FeedThread;
 import com.libqa.web.domain.User;
 import com.libqa.web.service.user.UserService;
@@ -33,7 +32,7 @@ public class DisplayFeedBuilder {
     }
 
     /**
-     * feed를 display 용으로 build 한다.
+     * feed  display 용으로 build 한다.
      *
      * @param feedThread feedThread
      * @param viewer     viewer

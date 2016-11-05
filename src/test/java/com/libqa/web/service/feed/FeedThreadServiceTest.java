@@ -24,11 +24,11 @@ public class FeedThreadServiceTest {
     private FeedThreadService sut;
 
     @Test
-    public void lastId가_null이_아니면_lastId보다_작은_해당_사용자의_피드목록을_제공한다() {
+    public void lastId_보다_작은_사용자_피드목록을_제공한다() {
         final User user = userFixture();
         final Integer lastId = 10;
 
-        sut.searchRecentlyFeedThreadsByUserLessThanLastId(user, lastId);
+        sut.getRecentlyFeedThreadsByUserLessThanLastId(user, lastId);
 
         verify(feedThreadRepository).findByUserIdAndFeedThreadIdLessThanAndIsDeletedFalse(eq(user.getUserId()), eq(lastId), any(PageRequest.class));
     }

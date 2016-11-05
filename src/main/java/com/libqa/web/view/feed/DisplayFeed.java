@@ -61,17 +61,17 @@ public class DisplayFeed {
         this.files = Lists.newArrayList();
         this.images = Lists.newArrayList();
 
-        for (FeedFile each : feedFiles) {
-            final String fullPath = each.getFilePath() + FileHandler.SEPARATOR + each.getSavedName();
-            DisplayFeedFile displayFeedFile = new DisplayFeedFile(each.getFeedFileId(), each.getRealName(), fullPath);
-            if (each.isFileType()) {
+        feedFiles.forEach(feedFile -> {
+            final String fullPath = feedFile.getFilePath() + FileHandler.SEPARATOR + feedFile.getSavedName();
+            DisplayFeedFile displayFeedFile = new DisplayFeedFile(feedFile.getFeedFileId(), feedFile.getRealName(), fullPath);
+            if (feedFile.isFileType()) {
                 this.files.add(displayFeedFile);
             }
 
-            if (each.isImageType()) {
+            if (feedFile.isImageType()) {
                 this.images.add(displayFeedFile);
             }
-        }
+        });
     }
 
 }

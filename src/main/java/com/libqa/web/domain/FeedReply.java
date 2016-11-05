@@ -18,6 +18,7 @@ import java.util.Date;
 })
 @EqualsAndHashCode(of = "feedReplyId")
 public class FeedReply {
+
     @Id
     @Column(name = "feedReplyId", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -16,7 +16,7 @@ public class DisplayFeedActionBuilder {
     private FeedActionService feedActionService;
 
     /**
-     * feed에 의한 like 정보를 display용으로 build 한다
+     * feed like 정보를 display용으로 build 한다
      *
      * @param feedThread
      * @param viewer
@@ -28,7 +28,7 @@ public class DisplayFeedActionBuilder {
     }
 
     /**
-     * feedReply에 의한 like 정보를 display용으로 build 한다
+     * feedReply like 정보를 display 용으로 build 한다
      *
      * @param feedReply
      * @param viewer
@@ -40,7 +40,7 @@ public class DisplayFeedActionBuilder {
     }
 
     /**
-     * feed에 의한 claim 정보를 display용으로 build 한다
+     * feed claim 정보를 display 용으로 build 한다
      *
      * @param feedThread
      * @param viewer
@@ -52,7 +52,7 @@ public class DisplayFeedActionBuilder {
     }
 
     /**
-     * feedReply에 의한 claim 정보를 display용으로 build 한다
+     * feedReply claim 정보를 display 용으로 build 한다
      *
      * @param feedReply
      * @param viewer

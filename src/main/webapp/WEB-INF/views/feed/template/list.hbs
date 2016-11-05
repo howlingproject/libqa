@@ -71,7 +71,7 @@
             </div>
             <div class="name">{{userNick}}</div>
             <div class="date">{{insertDate}}</div>
-            {{#if writer}}
+            {{#if isReplyWriter}}
             <div class="config" onclick="FeedReply.removeItem(this)"><i class="fa fa-close feedReplyDeleteBtn"></i></div>
             {{/if}}
             <div class="message-box">

@@ -12,20 +12,20 @@ public class DisplayFeedReply {
     private String userImage;
     private String insertDate;
     private String feedReplyContent;
-    private Boolean isWriter;
+    private Boolean isReplyWriter;
 
     @Setter
     private DisplayFeedAction likeFeedAction;
     @Setter
     private DisplayFeedAction claimFeedAction;
 
-    DisplayFeedReply(FeedReply feedReply, User user, Boolean isWriter) {
+    DisplayFeedReply(FeedReply feedReply, User user, Boolean isReplyWriter) {
         this.feedReplyId = feedReply.getFeedReplyId();
         this.userNick = feedReply.getUserNick();
         this.userImage = user.getUserImage();
         this.insertDate = DisplayDate.parse(feedReply.getInsertDate());
         this.feedReplyContent = feedReply.getFeedReplyContent();
-        this.isWriter = isWriter;
+        this.isReplyWriter = isReplyWriter;
     }
 
 }

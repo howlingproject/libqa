@@ -144,7 +144,7 @@ public class IndexCrawler {
 
     private List<IndexFeed> buildFeeds() {
         List<IndexFeed> result = Lists.newArrayList();
-        List<FeedThread> feedThreads = feedThreadService.searchRecentlyFeedThreadsByPageSize(INDEX_FEED_SIZE);
+        List<FeedThread> feedThreads = feedThreadService.getRecentlyFeedThreadsByPageSize(INDEX_FEED_SIZE);
         for (FeedThread each : feedThreads) {
             User writer = getWriterByUserId(each.getUserId());
 

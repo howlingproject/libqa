@@ -6,7 +6,7 @@ import lombok.Getter;
  * Created by yion on 2015. 2. 20..
  */
 public enum StatusCode {
-    FAIL(-1, "FAIL"),
+    FAIL(-1, "예상치 못한 에러가 발생했습니다."),
     NONE(0, "NA"),
     SUCCESS(1, "SUCCESS"),
     NEED_LOGIN(10, "로그인이 필요합니다"),

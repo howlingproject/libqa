@@ -1,6 +1,5 @@
 package com.libqa.web.service.feed;
 
-import com.google.common.collect.Iterables;
 import com.libqa.web.domain.FeedAction;
 import com.libqa.web.repository.FeedActionRepository;
 import com.libqa.web.service.feed.actor.FeedActionActor;
@@ -31,9 +30,9 @@ public class FeedActionService {
     }
 
     /**
-     * feedAction의 카운트를 조회한다.
+     * feedAction 의 카운트를 조회한다.
      *
-     * @param feedActionActor
+     * @param feedActionActor feedActionActor of user
      * @return count of feed action
      */
     public Integer countOf(FeedActionActor feedActionActor) {
@@ -55,14 +54,14 @@ public class FeedActionService {
                 feedActionActor.getFeedActorId(),
                 feedActionActor.getActionUser().getUserId());
 
-        return Iterables.tryFind(feedActionsByUser,
-                action -> hasActedByUser(feedActionActor, action))
-                .or(FeedAction.notYet());
+        return feedActionsByUser.stream()
+                .filter(feedAction -> hasActed(feedAction, feedActionActor))
+                .findAny()
+                .orElse(FeedAction.notYet());
     }
 
-    private boolean hasActedByUser(FeedActionActor feedActionActor, FeedAction action) {
-        return feedActionActor.getActionType() == action.getActionType()
-                && feedActionActor.getPostType() == action.getPostType();
+    private boolean hasActed(FeedAction action, FeedActionActor actor) {
+        return action.getActionType() == actor.getActionType() && action.getPostType() == actor.getPostType();
     }
 
     private FeedAction createFeedActionBy(FeedActionActor feedActionActor) {
@@ -75,8 +74,7 @@ public class FeedActionService {
         feedAction.setInsertUserId(feedActionActor.getActionUser().getUserId());
         feedAction.setInsertDate(new Date());
         feedAction.setCanceled(false);
-        feedActionRepository.save(feedAction);
-        return feedAction;
+        return feedActionRepository.save(feedAction);
     }
 
 }
