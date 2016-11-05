@@ -52,18 +52,4 @@ public class MyListController {
         mav.addObject("qaNotReplyedCount", qaNotReplyedCount);
         return mav;
     }
-
-    @RequestMapping("/my/wiki")
-    public ModelAndView myWiki(Model model) {
-        ModelAndView mav = new ModelAndView("/my/wikiList");
-        return mav;
-    }
-
-    @RequestMapping("/my/favor")
-    public ModelAndView myFavor(Model model) {
-        ModelAndView mav = new ModelAndView("/my/favorList");
-        return mav;
-    }
-
-
 }
