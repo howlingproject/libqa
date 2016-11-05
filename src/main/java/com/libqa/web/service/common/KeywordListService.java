@@ -12,4 +12,11 @@ import java.util.List;
  */
 public interface KeywordListService {
     List<KeywordList> findByKeywordType(String keywordType, boolean isDeleted);
+
+    List<KeywordList> findByKeywordNameAndKeywordType(String keywordName, KeywordType keywordType);
+
+    void save(KeywordList keyword);
+
+    void save(List<KeywordList> keywordList);
+
 }

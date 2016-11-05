@@ -22,6 +22,9 @@ public class KeywordListServiceImpl implements KeywordListService {
     @Autowired
     KeywordListRepository keywordListRepository;
 
+    @Autowired
+    KeywordService keywordService;
+
 
     @Override
     public List<KeywordList> findByKeywordType(String keywordType, boolean isDeleted) {
@@ -32,4 +35,20 @@ public class KeywordListServiceImpl implements KeywordListService {
 
         return keywordList;
     }
+
+    @Override
+    public List<KeywordList> findByKeywordNameAndKeywordType(String keywordName, KeywordType keywordType) {
+        return keywordListRepository.findByKeywordNameAndKeywordType(keywordName, keywordType);
+    }
+
+    @Override
+    public void save(KeywordList keyword) {
+        keywordListRepository.save(keyword);
+    }
+
+    @Override
+    public void save(List<KeywordList> keywordList) {
+        keywordListRepository.save(keywordList);
+    }
+
 }
