@@ -23,4 +23,6 @@ public interface KeywordService {
     List<Keyword> findBykeywordId(Integer keywordId, boolean isDeleted);
 
     List<Keyword> findBySpaceId(Integer spaceId, boolean isDeleted);
+
+    void delete(Integer qaId, Integer userId);
 }

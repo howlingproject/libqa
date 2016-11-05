@@ -12,6 +12,7 @@ import com.libqa.web.domain.QaContent;
 import com.libqa.web.domain.QaFile;
 import com.libqa.web.domain.User;
 import com.libqa.web.repository.QaContentRepository;
+import com.libqa.web.service.common.KeywordListService;
 import com.libqa.web.service.common.KeywordService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateUtils;
@@ -50,6 +51,9 @@ public class QaServiceImpl implements QaService {
     KeywordService keywordService;
 
     @Autowired
+    KeywordListService keywordListService;
+
+    @Autowired
     QaFileService qaFileService;
 
     @Override
@@ -81,7 +85,7 @@ public class QaServiceImpl implements QaService {
         boolean result = false;
         try {
             delete(qaId, userId);
-            // TODO List reply, file, recommend, keyword, keywordList 처리 확인
+            keywordService.delete(qaId, userId);
             result = true;
         } catch (Exception e) {
             log.error("삭제시 오류 발생", e);
