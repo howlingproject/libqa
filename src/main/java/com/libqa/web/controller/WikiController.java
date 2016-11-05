@@ -86,9 +86,6 @@ public class WikiController {
     }
 
 
-
-
-
     //@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping("/wiki/write")
@@ -106,9 +103,12 @@ public class WikiController {
 
     private ModelAndView wikiWrite(Space modelSpace, Integer wikiId){
         ModelAndView mav = new ModelAndView("wiki/write");
-        log.debug("# spaceId : {}", modelSpace.getSpaceId());
+        log.info("# spaceId : {}", modelSpace.getSpaceId());
 
         User user = loggedUserManager.getUser();
+
+        log.info(" user = {}", user);
+
         if (user == null) {
             return sendAccessDenied("403","Hi, you do not have permission to access this page!");
         }
@@ -205,7 +205,7 @@ public class WikiController {
         return createSuccessResult(wiki);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping(value = "/wiki/lock/{wikiId}", method = RequestMethod.GET)
     public ResponseData wikiLock(@PathVariable Integer wikiId) {
         log.debug("# wikiId : {}", wikiId);
@@ -215,7 +215,7 @@ public class WikiController {
         Wiki wiki = wikiService.findById(wikiId);
         try {
             //위키만든 유저만 잠금가능
-            if (wiki.getUserId() == userId) {
+            if (wiki.getUserId() == userId  || user.getRole().equals(Role.ADMIN)) {
                 wiki.setLock(true);
                 wikiService.save(wiki);
             } else {

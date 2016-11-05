@@ -309,7 +309,7 @@ To change this template use File | Settings | File Templates.
         $.ajax({
             type: "get",
             dataType: "json",
-            data: { "sortType" : sort},
+            data: { "accessLevel" : ""},
             url: "/space/allUser",
             cache: false,
             success: function (response) {
@@ -325,8 +325,6 @@ To change this template use File | Settings | File Templates.
                     $('#allUserList').html(html);
 
                 }
-
-
             },
             error: function (response) {
                 // Handle upload error

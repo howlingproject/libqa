@@ -376,6 +376,10 @@ public class SpaceController {
     public ModelAndView spaceDetail(@PathVariable Integer spaceId) {
         Space space = spaceService.findOne(spaceId);
 
+        if (space.isDeleted() == true) {
+            return sendAccessDenied();
+        }
+
         User spaceUser = userService.findByUserId(space.getInsertUserId());
         // Space 생성시 선택한 Layout 옵션의 View를 보여준다.
         String view = "/space/" + StringUtil.lowerCase(space.getLayoutType().name());
@@ -602,8 +606,9 @@ public class SpaceController {
 
     @RequestMapping(value = "/space/allUser", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData<UserList> findAllUser(@RequestParam String sortType) {
-        UserList userList = userService.findAllUserPageBySort(sortType);
+    public ResponseData<UserList> findAllUser(@RequestParam String accessLevel) {
+        log.info("@@ accessLevel = ", accessLevel);
+        UserList userList = userService.findAllUserPageBySort(accessLevel);
 
         return ResponseData.createSuccessResult(userList);
     }
