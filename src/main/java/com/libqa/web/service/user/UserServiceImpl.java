@@ -213,7 +213,10 @@ public class UserServiceImpl implements UserService {
             users = userRepository.findByRoleAndIsDeleted(Role.valueOf(sortType), false);
         }
 
-        UserList userList = new UserList(users);
+        log.info("@@@ users = {}", users);
+        UserList userList = new UserList();
+
+        userList.setUserList(users);
 
         return userList;
     }

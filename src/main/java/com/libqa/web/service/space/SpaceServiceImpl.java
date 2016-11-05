@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -204,13 +205,28 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
+    @Transactional
     public Space delete(Space space, User user) {
         space.setDeleted(true);
         space.setUpdateDate(new Date());
         space.setUpdateUserId(user.getUserId());
         space.setUpdateUserNick(user.getUserNick());
 
-        return spaceRepository.save(space);
+
+        spaceRepository.save(space);
+
+        List<Wiki> wikis = wikiService.findBySpaceId(space.getSpaceId());
+
+        Date now = new Date();
+
+        for (Wiki wiki : wikis) {
+            wiki.setDeleted(true);
+            wiki.setUpdateDate(now);
+
+            wikiService.save(wiki);
+        }
+
+        return space;
     }
 
 

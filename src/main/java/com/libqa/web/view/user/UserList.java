@@ -16,7 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserList {
-
+    private Integer currentPage;
+    private Integer totalPages;
+    private Long totalElements;
     private List<User> userList;
 
 }
