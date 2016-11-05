@@ -95,7 +95,7 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
             "  and keyword.keyword_type = :keywordType " +
             "  and keyword.keyword_name = :keywordName " +
             "group by qa.user_id, qa.qa_id, qa.insert_date, qa.update_date, qa.user_nick, qa.title, qa.contents, qa.contents_markup, qa.view_count, qa.recommend_count " +
-            "order by qa.qa_id desc limit 5", nativeQuery = true)
+            "order by qa.update_date desc limit 5", nativeQuery = true)
     Stream<QaContent> findAllByKeywordAndIsDeletedFalse(@Param("keywordType")String keywordType, @Param("keywordName") String keywordName);
 
     @Query(value = "select qa.* " +
@@ -113,7 +113,7 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     @Query(value = "SELECT q.* FROM qa_content q " +
             "WHERE q.is_deleted = 0 " +
             "	AND (q.title LIKE CONCAT('%',:searchValue,'%') OR q.contents_markup LIKE CONCAT('%',:searchValue,'%') ) " +
-            "ORDER BY q.qa_id DESC", nativeQuery = true)
+            "ORDER BY q.update_date DESC", nativeQuery = true)
     List<QaContent> findAllBySearchValue(@Param("searchValue") String searchValue);
 
     @Query(value = "select qa.* " +
@@ -125,7 +125,7 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
             "  and keyword.keyword_type = :keywordType " +
             "  and keyword.keyword_name = :keywordName " +
             "group by qa.user_id, qa.qa_id, qa.insert_date, qa.update_date, qa.user_nick, qa.title, qa.contents, qa.contents_markup, qa.view_count, qa.recommend_count " +
-            "order by qa.qa_id desc limit 5", nativeQuery = true)
+            "order by qa.update_date desc limit 5", nativeQuery = true)
     List<QaContent> findFirst5ByQaIdLessThanAndKeywordTypeAndKeywordNameAndIsDeletedFalse(@Param("lastQaId")Integer lastQaId, @Param("keywordType") String keywordType,  @Param("keywordName") String keywordName);
 
     @Query(value = "select qa.* " +
@@ -138,7 +138,7 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
             "  and keyword.keyword_type = :keywordType " +
             "  and keyword.keyword_name = :keywordName " +
             "group by qa.user_id, qa.qa_id, qa.insert_date, qa.update_date, qa.user_nick, qa.title, qa.contents, qa.contents_markup, qa.view_count, qa.recommend_count " +
-            "order by qa.qa_id desc limit 5", nativeQuery = true)
+            "order by qa.update_date desc limit 5", nativeQuery = true)
     List<QaContent> findFirst5ByQaIdLessThanAndKeywordTypeAndKeywordNameAndIsReplyedFalseAndIsDeletedFalse(@Param("lastQaId") Integer lastQaId, @Param("keywordType") String keywordType, @Param("keywordName") String keywordName);
 
 }
