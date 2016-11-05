@@ -94,6 +94,7 @@
 
         var Qa = {
             init : function(){
+                alert(KeywordList);
                 KeywordList.renderKeywordList();
                 this.renderDayType($('#recentQaDayTypeUl'));
                 this.renderDayType($('#waitReplyQaDayTypeUl'));
@@ -126,7 +127,7 @@
                 $.ajax({
                     url: "/qa/qaList",
                     type: "POST",
-                    data : {keywordType : 'QA', keywordName : KeywordList.selectedKeywordName(), waitReplyType : 'WAIT, dayType : dayType},
+                    data : {keywordType : 'QA', keywordName : KeywordList.selectedKeywordName(), waitReplyType : 'WAIT', dayType : dayType},
                     success : function(data){
                         if(data.resultCode == 1) {
                             $('#waitReplyQaListArea').html(me.makeQaList(data));
