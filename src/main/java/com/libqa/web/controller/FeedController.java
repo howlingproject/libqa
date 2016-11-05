@@ -10,19 +10,21 @@ import com.libqa.web.service.feed.FeedFileService;
 import com.libqa.web.service.feed.FeedReplyService;
 import com.libqa.web.service.feed.FeedThreadService;
 import com.libqa.web.view.feed.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 import static com.libqa.application.enums.StatusCode.NEED_LOGIN;
 import static com.libqa.application.enums.StatusCode.NOT_MATCH_USER;
-import static com.libqa.application.framework.ResponseData.*;
+import static com.libqa.application.framework.ResponseData.createResult;
+import static com.libqa.application.framework.ResponseData.createSuccessResult;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-@Slf4j
 @RestController
 @RequestMapping("/feed")
 public class FeedController {
@@ -76,7 +78,6 @@ public class FeedController {
     @RequestMapping(value = "modify", method = POST)
     public ResponseData<FeedThread> modify(FeedThread requestFeedThread) {
         User viewer = loggedUserManager.getUser();
-        log.debug("requestFeedThread : {}", requestFeedThread);
         FeedThread originFeedThread = feedThreadService.getByFeedThreadId(requestFeedThread.getFeedThreadId());
         if (viewer.isNotMatchUser(originFeedThread.getUserId())) {
             return createResult(NOT_MATCH_USER);
@@ -183,13 +184,4 @@ public class FeedController {
         return createSuccessResult(true);
     }
 
-    @ControllerAdvice
-    static class Advice {
-        @ResponseBody
-        @ExceptionHandler(Exception.class)
-        public ResponseData handleException(Exception e) {
-            log.error("An error has occurred.", e);
-            return createFailResult();
-        }
-    }
 }

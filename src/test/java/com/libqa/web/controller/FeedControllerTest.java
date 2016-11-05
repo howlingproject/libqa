@@ -60,7 +60,7 @@ public class FeedControllerTest {
     public void setup() throws Exception {
         mockMvc = standaloneSetup(controller)
                 .alwaysDo(print())
-                .setControllerAdvice(new FeedController.Advice())
+                .setControllerAdvice(new RestControllerAdvice())
                 .build();
     }
 
@@ -271,6 +271,7 @@ public class FeedControllerTest {
     @Test
     public void saveReply() throws Exception {
         given(loggedUserManager.getUser()).willReturn(normalUser());
+        given(displayFeedReplyBuilder.build(any(FeedReply.class), any(User.class))).willReturn(null);
 
         mockMvc.perform(
                 post("/feed/reply/save")
