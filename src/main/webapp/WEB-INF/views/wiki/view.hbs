@@ -356,7 +356,6 @@
     <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
     <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
     <script type='text/javascript' src="/resource/public/js/html2canvas.js"></script>
-    <script src="/resource/app/js/Helpers-lib/swag.js"></script>
 {{/partial}}
 
 
@@ -574,12 +573,43 @@
                     success:function(req){
                         if (req.resultCode == 1) {
                             if( id == "update" || id == "delete" ){
-                                location.href = "/wiki/main";
-                            }else{
-                                location.reload();
+                                $.alert({
+                                    title: '확인',
+                                    content: '처리되었습니다',
+                                    confirmButton: 'OK',
+                                    confirmButtonClass: 'btn-primary',
+                                    icon: 'fa fa-info',
+                                    animation: 'zoom',
+                                    confirm: function () {
+                                        location.href = "/wiki/main";
+                                    }
+                                });
+                            } else {
+                                $.alert({
+                                    title: '확인',
+                                    content: '처리되었습니다',
+                                    confirmButton: 'OK',
+                                    confirmButtonClass: 'btn-primary',
+                                    icon: 'fa fa-info',
+                                    animation: 'zoom',
+                                    confirm: function () {
+                                        location.reload();
+                                    }
+                                });
                             }
                         }else{
-                            alert(req.data);
+
+                            $.alert({
+                                title: '확인',
+                                content: req.data,
+                                confirmButton: 'OK',
+                                confirmButtonClass: 'btn-primary',
+                                icon: 'fa fa-info',
+                                animation: 'zoom',
+                                confirm: function () {
+                                }
+                            });
+
                         }
                     },
                     error:function(req){

@@ -205,7 +205,7 @@ public class WikiController {
         return createSuccessResult(wiki);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @RequestMapping(value = "/wiki/lock/{wikiId}", method = RequestMethod.GET)
     public ResponseData wikiLock(@PathVariable Integer wikiId) {
         log.debug("# wikiId : {}", wikiId);
