@@ -121,7 +121,11 @@
     <link href="/resource/public/css/bootstrap-tag-cloud/bootstrap-tag-cloud.css" rel="stylesheet">
 {{/partial}}
 {{#partial "script-header"}}
-    <script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>
+    <link href="/resource/app/js/summernote/summernote.css" rel="stylesheet">
+    <script src="/resource/app/js/summernote/summernote.js"></script>
+    <script src="/resource/app/js/summernote/summernote-ext-highlight.js"></script>
+    <!--<script src="/resource/app/js/DualEditor/DualEditor-core.js"></script>-->
+    <script src="/resource/app/js/summernote/summernote_sub.js"></script>
     <script type='text/javascript' src="/resource/public/js/bootstrap-tag-cloud/bootstrap-tag-cloud.js"></script>
 {{/partial}}
 
@@ -131,15 +135,38 @@
         $(document).ready(function() {
             $("#file-attachment").on("change", Wiki.uploadFile);
         });
-        DualEditor.setting({
-            src : '/resource/app'
-            ,tarketId : 'editor'
-            //,type : 'mini'
-            //,width : window.screen.width+'px'
-            //,width : '100%'
-            //,height : '300px'
-            ,data : $("input[name=contentsMarkup]").val()
+
+        $('#editor').summernote({
+            height: 400,
+            callbacks: {
+                onImageUpload: function (files, editor, welEditable) {
+                    summertnote_sub().sendImage(files[0], this);
+                },
+            },
+            prettifyHtml:false,
+            lang:'tr-TR',
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['bold', 'italic', 'underline']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['insert',['picture','link','table','hr']],
+                ['highlight', ['highlight']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['etc', ['fullscreen','codeview','help']]
+            ]
         });
+
+//        DualEditor.setting({
+//            src : '/resource/app'
+//            ,tarketId : 'editor'
+//            //,type : 'mini'
+//            //,width : window.screen.width+'px'
+//            //,width : '100%'
+//            //,height : '300px'
+//            ,data : $("input[name=contentsMarkup]").val()
+//        });
 
 
         $("#saveWiki").on("click", function(e){
@@ -169,8 +196,10 @@
 
 
             setParam:function(){
-                $("#contents").val(DualEditor.getMarkupConvertToHtml());
-                $("#contentsMarkup").val(DualEditor.getMarkupEditHtml());
+//                $("#contents").val(DualEditor.getMarkupConvertToHtml());
+//                $("#contentsMarkup").val(DualEditor.getMarkupEditHtml());
+                $("#contents").val($("#editor").summernote("code"));
+                $("#contentsMarkup").val($("#editor").summernote("code"));
 
                 $('#tag-cloud').find('li').each(function(){
                     if(!$(this).attr('data-keyword-name-id')) {
