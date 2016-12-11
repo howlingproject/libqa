@@ -144,7 +144,7 @@ public class FeedControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$.resultCode").value(is(-1)))
-                .andExpect(jsonPath("$.comment").value(is("FAIL")));
+                .andExpect(jsonPath("$.comment").value(is("예상치 못한 에러가 발생했습니다.")));
     }
 
     @Test
@@ -210,7 +210,7 @@ public class FeedControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$.resultCode").value(is(-1)))
-                .andExpect(jsonPath("$.comment").value(is("FAIL")));
+                .andExpect(jsonPath("$.comment").value(is("예상치 못한 에러가 발생했습니다.")));
     }
 
     @Test
