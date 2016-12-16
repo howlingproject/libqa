@@ -137,7 +137,7 @@
         });
 
         $('#editor').summernote({
-            height: 400,
+            height: 450,
             callbacks: {
                 onImageUpload: function (files, editor, welEditable) {
                     summertnote_sub().sendImage(files[0], this);
@@ -146,9 +146,8 @@
             prettifyHtml:false,
             lang:'ko-KR',
             toolbar: [
-                // [groupName, [list of button]]
                 ['style', ['style']],
-                ['style', ['bold', 'italic', 'underline']],
+                ['style', ['bold', 'italic', 'underline', 'clear']],
                 ['font', ['strikethrough', 'superscript', 'subscript']],
                 ['fontsize', ['fontsize']],
                 ['insert',['picture','link','table','hr', 'video']],
