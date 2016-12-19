@@ -16,6 +16,7 @@ public class DisplaySearchResult {
     private String userImage;
     private String userNick;
     private String insertDate;
+    private String insertUserNick;
     private List<String> keywords;
     private Integer countOfReply;
 }

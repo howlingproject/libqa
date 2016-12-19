@@ -99,9 +99,21 @@ public class Wiki implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
 
+    @Column(nullable = false)
+    private Integer insertUserId;
+
+    @Column(length = 40)
+    private String insertUserNick;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
+
+    @Column
+    private Integer updateUserId;
+
+    @Column(length = 40)
+    private String updateUserNick;
 
     @OneToMany(mappedBy = "wikiId", fetch = FetchType.LAZY)
     @Where(clause = "is_deleted = 0")

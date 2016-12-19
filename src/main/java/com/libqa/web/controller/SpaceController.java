@@ -402,7 +402,7 @@ public class SpaceController {
         List<Wiki> updatedWikis = wikiService.findSortAndModifiedBySpaceId(spaceId, 0, LibqaConstant.SPACE_WIKI_SIZE);
         List<SpaceWiki> spaceWikis = new ArrayList<>();
         for (Wiki wiki : updatedWikis) {
-            User user = userService.findByUserId(wiki.getUserId());
+            User user = userService.findByUserId(wiki.getUpdateUserId());
             SpaceWiki spaceWiki = new SpaceWiki();
 
             spaceWiki.setUser(user);

@@ -44,13 +44,17 @@
                         <thead>
                         <tr>
                             <th>작성자</th>
-                            <th>{{wiki.userNick}}</th>
+                            <th>{{wiki.insertUserNick}}</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>작성일</td>
                             <td>{{formatDate wiki.insertDate "yyyy.MM.dd HH:mm:SS"}}</td>
+                        </tr>
+                        <tr>
+                            <td>수정자</td>
+                            <th>{{wiki.updateUserNick}}</th>
                         </tr>
                         <tr>
                             <td>수정일</td>
@@ -170,7 +174,7 @@
                     <div class="media-body">
                         <div class="media-heading">
                             {{formatDate parentWiki.insertDate "yyyy.MM.dd"}}
-                            <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{parentWiki.userNick}}</span>
+                            <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{parentWiki.insertUserNick}}</span>
 
                         </div>
                         <a class="form" href="/wiki/{{parentWiki.wikiId}}">
@@ -187,7 +191,7 @@
                     <div class="media-body">
                         <div class="media-heading">
                             {{formatDate wiki.insertDate "yyyy.MM.dd"}}
-                            <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{wiki.userNick}}</span>
+                            <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{wiki.insertUserNick}}</span>
                         </div>
                         <a class="form" href="/wiki/{{wiki.wikiId}}">
                             {{{subString (htmlDelete wiki.contents) 0 300 }}}
@@ -202,7 +206,7 @@
                                 <div class="media-body">
                                     <div class="media-heading">
                                         {{formatDate insertDate "yyyy.MM.dd"}}
-                                        <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{userNick}}</span>
+                                        <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{insertUserNick}}</span>
                                     </div>
                                     <a class="form" href="/wiki/{{wikiId}}">
                                         {{{subString (htmlDelete contents) 0 180 }}}
@@ -236,7 +240,7 @@
                         <div class="my-my-qna-item-body">
                             <div class="media-heading">
                                 {{formatDate insertDate "yyyy.MM.dd"}}
-                                <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{this.userNick}}</span>
+                                <span class="my-qna-writer">작성자 &nbsp;&nbsp;&nbsp;{{this.insertUserNick}}</span>
                                 <!--<strong><span class="pull-right">form facebook</span></strong>-->
                             </div>
                             {{{this.contents }}}

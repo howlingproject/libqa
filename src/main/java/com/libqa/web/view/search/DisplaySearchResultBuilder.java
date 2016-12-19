@@ -72,15 +72,15 @@ public class DisplaySearchResultBuilder {
 
         for (Wiki each : wikies) {
             List<Keyword> keywords = keywordService.findByWikiId(each.getWikiId(), false);
-            User writer = userService.findByUserId(each.getUserId());
+            User writer = userService.findByUserId(each.getInsertUserId());
 
             DisplaySearchResult displaySearchResult = DisplaySearchResult.of();
             displaySearchResult.setId(each.getWikiId());
             displaySearchResult.setTitle(each.getTitle());
             displaySearchResult.setContents(each.getContents());
-            displaySearchResult.setUserNick(each.getUserNick());
             displaySearchResult.setUserImage(writer.getUserImage());
             displaySearchResult.setInsertDate(DisplayDate.parse(each.getInsertDate()));
+            displaySearchResult.setInsertUserNick(each.getInsertUserNick());
             displaySearchResult.setCountOfReply(each.getReplyCount());
             displaySearchResult.setKeywords(buildKeywords(keywords));
             results.add(displaySearchResult);
