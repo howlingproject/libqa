@@ -92,7 +92,7 @@
                         </div>
                         <input name="uploadType" value="WIKI" type="hidden">
                         <input name="uploadFilePath" id="uploadFilePath" type="hidden">
-                        <input id="viewType" name="viewType" value="Image" type="hidden" />
+                        <input id="viewType" name="viewType" value="" type="hidden" />
                         <input id="file-attachment" name="uploadfile" type="file" style="display:none">
                         <p class="help-block"></p>
                         <button class="btn btn-info btn-default" type="button" onclick="$('#file-attachment').click();">파일선택</button>
@@ -297,7 +297,7 @@
                                         '<input name="wikiFiles['+idx+'].fileSize"  id="fileSize" type="hidden" value="'+req.data.fileSize+'">' +
                                         '<input name="wikiFiles['+idx+'].fileType"  id="fileType" type="hidden" value="'+req.data.fileExtendType+'">' +
                                         '<input name="wikiFiles['+idx+'].isDeleted"  id="isDeleted" type="hidden" value="false">' +
-                                        '<a href="'+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
+                                        '<a href="/download?path='+req.data.filePath+'/'+req.data.savedName+'">'+req.data.realName+'</a>' +
                                         '<a href="#fileDiv" onclick="Wiki.deleteFile(this); return false;">' +
                                         '<span class="glyphicon glyphicon-remove" style="margin-left:15px;"></span>' +
                                         '</a>' +

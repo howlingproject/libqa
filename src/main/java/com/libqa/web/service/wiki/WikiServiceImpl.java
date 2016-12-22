@@ -101,8 +101,8 @@ public class WikiServiceImpl implements WikiService {
         activity.setActivityType(ActivityType);
         activity.setActivityDesc(ActivityType.getCode());
         activity.setActivityKeyword(KeywordType.WIKI);
-        activity.setUserId(saveWiki.getUserId());
-        activity.setUserNick(saveWiki.getUserNick());
+        activity.setUserId(saveWiki.getUpdateUserId());
+        activity.setUserNick(saveWiki.getUpdateUserNick());
         activity.setWikiId(saveWiki.getWikiId());
         activityService.saveActivity(activity, saveWiki.getTitle());
     }
@@ -134,7 +134,7 @@ public class WikiServiceImpl implements WikiService {
             for (WikiFile wikiFile : wikiFiles) {
                 if (wikiFile.getFileId() == null || wikiFile.isDeleted()) {
                     wikiFile.setInsertDate(wiki.getInsertDate());
-                    wikiFile.setUserId(wiki.getUserId());
+                    wikiFile.setUserId(wiki.getInsertUserId());
                     wikiFile.setWikiId(wiki.getWikiId());
                     wikiFileService.saveWikiFileAndList(wikiFile);
                 }
@@ -187,7 +187,7 @@ public class WikiServiceImpl implements WikiService {
             for (Wiki wiki : list) {
                 resultWiki.add(new DisplayWiki(
                                 wiki
-                                , userService.findByUserId(wiki.getUserId())
+                                , userService.findByUserId(wiki.getUpdateUserId())
                                 , keywordService.findByWikiId(wiki.getWikiId(), false)
                         )
                 );
@@ -208,7 +208,7 @@ public class WikiServiceImpl implements WikiService {
             for (Wiki wiki : list) {
                 resultWiki.add(new DisplayWiki(
                                 wiki
-                                , userService.findByUserId(wiki.getUserId())
+                                , userService.findByUserId(wiki.getUpdateUserId())
                                 , keywordService.findByWikiId(wiki.getWikiId(), false)
                         )
                 );
@@ -235,7 +235,7 @@ public class WikiServiceImpl implements WikiService {
             for (Wiki wiki : list) {
                 resultWiki.add(new DisplayWiki(
                                 wiki
-                                , userService.findByUserId(wiki.getUserId())
+                                , userService.findByUserId(wiki.getUpdateUserId())
                                 , keywordService.findByWikiId(wiki.getWikiId(), false)
                         )
                 );
@@ -288,7 +288,7 @@ public class WikiServiceImpl implements WikiService {
             for (Wiki wiki : list) {
                 resultWiki.add(new DisplayWiki(
                                 wiki
-                                , userService.findByUserId(wiki.getUserId())
+                                , userService.findByUserId(wiki.getUpdateUserId())
                                 , keywordService.findByWikiId(wiki.getWikiId(), false)
                         )
                 );
@@ -315,7 +315,7 @@ public class WikiServiceImpl implements WikiService {
             for( Wiki wiki : list ){
                 resultWiki.add( new DisplayWiki(
                                 wiki
-                                , userService.findByUserId( wiki.getUserId() )
+                                , userService.findByUserId( wiki.getUpdateUserId() )
                                 , keywordService.findByWikiId(wiki.getWikiId(), false)
                         )
                 );

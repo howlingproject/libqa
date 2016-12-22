@@ -186,7 +186,7 @@ public class WikiController {
         int userId = user.getUserId();
         try {
             //위키만든 user, 공간주인, admin만 삭제 가능
-            if( wiki.getUserId() == userId
+            if( wiki.getInsertUserId() == userId
                     || wiki.getSpaceId() == userId
                     || user.getRole().equals(Role.ADMIN)
                     ){
@@ -215,7 +215,7 @@ public class WikiController {
         Wiki wiki = wikiService.findById(wikiId);
         try {
             //위키만든 유저만 잠금가능
-            if (wiki.getUserId() == userId  || user.getRole().equals(Role.ADMIN)) {
+            if (wiki.getInsertUserId() == userId  || user.getRole().equals(Role.ADMIN)) {
                 wiki.setLock(true);
                 wikiService.save(wiki);
             } else {
@@ -239,11 +239,15 @@ public class WikiController {
             log.debug("wiki.wikiFile = {}", wiki.getWikiFiles());
             User user = loggedUserManager.getUser();
             Date now = new Date();
-            wiki.setUserNick(user.getUserNick());
-            wiki.setUserId(user.getUserId());
 
+            wiki.setUserId(user.getUserId());
+            wiki.setUserNick(user.getUserNick());
             wiki.setInsertDate(now);
+            wiki.setInsertUserId(user.getUserId());
+            wiki.setInsertUserNick(user.getUserNick());
             wiki.setUpdateDate(now);
+            wiki.setUpdateUserId(user.getUserId());
+            wiki.setUpdateUserNick(user.getUserNick());
 
             if( wiki.getParentsId() == null ){ // 부모위키 번호가 없으면 Root에 생성되는 것이므로 Depth는  0
                 wiki.setDepthIdx(0);
@@ -301,9 +305,9 @@ public class WikiController {
             currentWiki.setContents(paramWiki.getContents());
             currentWiki.setContentsMarkup(paramWiki.getContentsMarkup());
 
-            currentWiki.setUserNick(user.getUserNick());
-            currentWiki.setUserId(user.getUserId());
             currentWiki.setUpdateDate(new Date());
+            currentWiki.setUpdateUserId(user.getUserId());
+            currentWiki.setUpdateUserNick(user.getUserNick());
 
             Wiki result = wikiService.updateWithKeyword(currentWiki, paramKeyword, WikiRevisionActionType.UPDATE_WIKI);
 
