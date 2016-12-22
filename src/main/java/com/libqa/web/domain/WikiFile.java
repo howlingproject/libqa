@@ -24,13 +24,13 @@ public class WikiFile{
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
-    @Column(nullable = false, length = 40)
+    @Column(nullable = false, length = 2000)
     private String realName;
 
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false, length = 2000)
     private String savedName;
 
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false, length = 2000)
     private String filePath;
 
     @Column(nullable = false)
