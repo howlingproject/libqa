@@ -1,10 +1,10 @@
 var KeywordList = {
-    renderKeywordList : function(){
+    renderKeywordList : function(keywordType){
         var me = this;
         $.ajax({
             url: "/common/findKeywordList",
             type: "POST",
-            data: { keywordType : 'QA', keywordName : me.selectedKeywordName() },
+            data: { keywordType : keywordType, keywordName : me.selectedKeywordName() },
             success : function(data){
                 if(data.resultCode == 1) {
                     var source = $('#common-_keywordList-hbs').html();
