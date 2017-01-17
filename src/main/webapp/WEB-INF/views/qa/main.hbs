@@ -196,10 +196,14 @@
         };
 
         KeywordList.bindKeywordListImplEvent = function () {
-             Qa.renderDayType($('#recentQaDayTypeUl'));
-             Qa.renderDayType($('#waitReplyQaDayTypeUl'));
-             Qa.renderRecentQaList("WEEK");
-             Qa.renderWaitReplyQaList("ALL");
+            var recentQaDayTypeUlObj = $('#recentQaDayTypeUl');
+            var waitReplyQaDayTypeUlObj = $('#waitReplyQaDayTypeUl');
+            Qa.renderDayType($('#recentQaDayTypeUl'));
+            Qa.renderDayType($('#waitReplyQaDayTypeUl'));
+            var selectedRecentQaDayType = recentQaDayTypeUlObj.find('li.active').attr('value');
+            var selectedWaitReplyQaDayType = waitReplyQaDayTypeUlObj.find('li.active').attr('value');
+            Qa.renderRecentQaList(selectedRecentQaDayType);
+            Qa.renderWaitReplyQaList(selectedWaitReplyQaDayType);
         }
 
     </script>
