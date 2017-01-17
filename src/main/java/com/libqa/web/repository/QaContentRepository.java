@@ -51,7 +51,7 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
 
 
     @Query(value = "select qa.* " +
-            " from QA_CONTENT qa, KEYWORD keyword " +
+            " from qa_content qa, keyword keyword " +
             "where qa.qa_id = keyword.qa_id " +
             "  and qa.is_deleted = 0 " +
             "  and qa.is_replyed = :isReplyed " +
@@ -63,7 +63,7 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     Stream<QaContent> findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(@Param("keywordType") String keywordType, @Param("keywordName") String keywordName, @Param("isReplyed") boolean isReplyed);
 
     @Query(value = "select qa.* " +
-            " from QA_CONTENT qa, KEYWORD keyword " +
+            " from qa_content qa, keyword keyword " +
             "where qa.qa_id = keyword.qa_id " +
             "  and qa.is_deleted = 0 " +
             "  and qa.is_replyed = :isReplyed " +
@@ -75,7 +75,7 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     Stream<QaContent> findFirst5ByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalse(@Param("keywordType") String keywordType, @Param("keywordName") String keywordName, @Param("isReplyed") boolean isReplyed);
 
     @Query(value = "select qa.* " +
-            " from QA_CONTENT qa, KEYWORD keyword " +
+            " from qa_content qa, keyword keyword " +
             "where qa.qa_id = keyword.qa_id " +
             "  and qa.is_deleted = 0 " +
             "  and qa.update_date between :fromDate and :today " +
@@ -88,7 +88,7 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     Stream<QaContent> findAllByKeywordAndIsReplyedAndDayTypeAndIsDeletedFalseAndUpdateDateBetween(@Param("keywordType") String keywordType, @Param("keywordName") String keywordName, @Param("isReplyed") boolean isReplyed, @Param("fromDate") Date fromDate, @Param("today") Date today);
 
     @Query(value = "select qa.* " +
-            " from QA_CONTENT qa, KEYWORD keyword " +
+            " from qa_content qa, keyword keyword " +
             "where qa.qa_id = keyword.qa_id " +
             "  and qa.is_deleted = 0 " +
             "  and keyword.is_deleted = 0 " +
@@ -99,7 +99,7 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     Stream<QaContent> findAllByKeywordAndIsDeletedFalse(@Param("keywordType")String keywordType, @Param("keywordName") String keywordName);
 
     @Query(value = "select qa.* " +
-            " from QA_CONTENT qa, KEYWORD keyword " +
+            " from qa_content qa, keyword keyword " +
             "where qa.qa_id = keyword.qa_id " +
             "  and qa.is_deleted = 0 " +
             "  and qa.update_date between :fromDate and :today " +
@@ -117,7 +117,7 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     List<QaContent> findAllBySearchValue(@Param("searchValue") String searchValue);
 
     @Query(value = "select qa.* " +
-            " from QA_CONTENT qa, KEYWORD keyword " +
+            " from qa_content qa, keyword keyword " +
             "where qa.qa_id = keyword.qa_id " +
             "  and qa.qa_id < :lastQaId " +
             "  and qa.is_deleted = 0 " +
@@ -129,7 +129,7 @@ public interface QaContentRepository extends JpaRepository<QaContent, Integer> {
     List<QaContent> findFirst5ByQaIdLessThanAndKeywordTypeAndKeywordNameAndIsDeletedFalse(@Param("lastQaId")Integer lastQaId, @Param("keywordType") String keywordType,  @Param("keywordName") String keywordName);
 
     @Query(value = "select qa.* " +
-            " from QA_CONTENT qa, KEYWORD keyword " +
+            " from qa_content qa, keyword keyword " +
             "where qa.qa_id = keyword.qa_id " +
             "  and qa.qa_id < :lastQaId " +
             "  and qa.is_replyed = 0 " +
