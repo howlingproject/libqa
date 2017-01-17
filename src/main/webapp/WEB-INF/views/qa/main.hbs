@@ -196,12 +196,8 @@
         };
 
         KeywordList.bindKeywordListImplEvent = function () {
-            var recentQaDayTypeUlObj = $('#recentQaDayTypeUl');
-            var waitReplyQaDayTypeUlObj = $('#waitReplyQaDayTypeUl');
-            Qa.renderDayType($('#recentQaDayTypeUl'));
-            Qa.renderDayType($('#waitReplyQaDayTypeUl'));
-            var selectedRecentQaDayType = recentQaDayTypeUlObj.find('li.active').attr('value');
-            var selectedWaitReplyQaDayType = waitReplyQaDayTypeUlObj.find('li.active').attr('value');
+            var selectedRecentQaDayType = $('#recentQaDayTypeUl').find('li.active').attr('value');
+            var selectedWaitReplyQaDayType = $('#waitReplyQaDayTypeUl').find('li.active').attr('value');
             Qa.renderRecentQaList(selectedRecentQaDayType);
             Qa.renderWaitReplyQaList(selectedWaitReplyQaDayType);
         }
