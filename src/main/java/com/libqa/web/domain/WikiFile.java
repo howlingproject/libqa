@@ -24,10 +24,10 @@ public class WikiFile{
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
 
-    @Column(nullable = false, length = 40)
+    @Column(nullable = false, length = 255)
     private String realName;
 
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false, length = 255)
     private String savedName;
 
     @Column(nullable = false, length = 80)

@@ -186,7 +186,7 @@ public class WikiController {
         int userId = user.getUserId();
         try {
             //위키만든 user, 공간주인, admin만 삭제 가능
-            if( wiki.getUserId() == userId
+            if( wiki.getInsertUserId() == userId
                     || wiki.getSpaceId() == userId
                     || user.getRole().equals(Role.ADMIN)
                     ){
@@ -215,7 +215,7 @@ public class WikiController {
         Wiki wiki = wikiService.findById(wikiId);
         try {
             //위키만든 유저만 잠금가능
-            if (wiki.getUserId() == userId  || user.getRole().equals(Role.ADMIN)) {
+            if (wiki.getInsertUserId() == userId  || user.getRole().equals(Role.ADMIN)) {
                 wiki.setLock(true);
                 wikiService.save(wiki);
             } else {
@@ -240,6 +240,8 @@ public class WikiController {
             User user = loggedUserManager.getUser();
             Date now = new Date();
 
+            wiki.setUserId(user.getUserId());
+            wiki.setUserNick(user.getUserNick());
             wiki.setInsertDate(now);
             wiki.setInsertUserId(user.getUserId());
             wiki.setInsertUserNick(user.getUserNick());
