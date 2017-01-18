@@ -174,7 +174,6 @@
             Qa.makeFileList();
             Qa.searchList();
             Qa.makeEditor();
-//            Qa.getReplyChoice();
         });
 
         function setParam(){
@@ -214,22 +213,6 @@
                     {{/unless}}
                 });
             },
-            <!--getReplyChoice : function(){-->
-                <!--$.get("/qa/getReplyChoice",{qaId : $('[name=qaId]').val()}, function (response) {-->
-                    <!--if(response.resultCode != 1) {-->
-                        <!--alert(response.comment);-->
-                        <!--return;-->
-                    <!--}-->
-                    <!--var source = $('#qa-template-_replyList-hbs').html();-->
-                    <!--var template = Handlebars.compile(source);-->
-
-                    <!--var html = template(response);-->
-                    <!--$('#replyChoice').html(html);-->
-                    <!--{{#unless isLogin}}-->
-                        <!--$('.input-reply-area').html('');-->
-                    <!--{{/unless}}-->
-                <!--});-->
-            <!--},-->
             buttonEvent : function(){
                 $('#editButton').on("click", function(){
                     location.href = "/qa/edit/" + $('[name=qaId]').val();

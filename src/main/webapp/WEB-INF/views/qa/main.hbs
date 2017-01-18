@@ -94,7 +94,7 @@
 
         var Qa = {
             init : function(){
-                KeywordList.renderKeywordList();
+                KeywordList.renderKeywordList('QA');
                 this.renderDayType($('#recentQaDayTypeUl'));
                 this.renderDayType($('#waitReplyQaDayTypeUl'));
                 this.bindDayTypeEvent();
@@ -196,10 +196,10 @@
         };
 
         KeywordList.bindKeywordListImplEvent = function () {
-             Qa.renderDayType($('#recentQaDayTypeUl'));
-             Qa.renderDayType($('#waitReplyQaDayTypeUl'));
-             Qa.renderRecentQaList("WEEK");
-             Qa.renderWaitReplyQaList("ALL");
+            var selectedRecentQaDayType = $('#recentQaDayTypeUl').find('li.active').attr('value');
+            var selectedWaitReplyQaDayType = $('#waitReplyQaDayTypeUl').find('li.active').attr('value');
+            Qa.renderRecentQaList(selectedRecentQaDayType);
+            Qa.renderWaitReplyQaList(selectedWaitReplyQaDayType);
         }
 
     </script>

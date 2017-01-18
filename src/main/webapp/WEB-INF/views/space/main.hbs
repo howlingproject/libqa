@@ -1,7 +1,3 @@
-{{#partial "style"}}
-{{!-- 여기에 사용자 css 정의 --}}
-    <link href="/resource/app/js/DualEditor/css/DualEditor.css" rel="stylesheet">
-{{/partial}}
 
 {{#partial "plugin-style"}}
 {{!-- 여기에 .css 파일 경로 --}}
@@ -44,24 +40,24 @@
         <!--// lnb -->
 
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <!-- 전체 공간 -->
-            <div class="nav-tabs-header">전체 공간
-                <span class="pull-right section-category">
-                    <ul id="renderTypeUI" class="nav nav-tabs">
-                        <li value="title" data="defalut" class="active"><a id="spaceTitle" style="cursor: pointer">이름순</a></li>
-                        <li value="updateDate"><a id="spaceUpdate" style="cursor: pointer">최신순</a></li>
-                    </ul>
-                </span>
-            </div>
+                <!-- 전체 공간 -->
+                <div class="nav-tabs-header">전체 공간
+                    <span class="pull-right section-category">
+                        <ul id="renderTypeUI" class="nav nav-tabs">
+                            <li value="title" data="defalut" class="active"><a id="spaceTitle" href="#">이름순</a></li>
+                            <li value="updateDate"><a id="spaceUpdate" style="cursor: pointer">최신순</a></li>
+                        </ul>
+                    </span>
+                </div>
 
-            <div id="allSpaceArea">
-            {{> space/template/_allSpaceList}}
-            </div>
+                <div id="allSpaceArea">
+                {{> space/template/_allSpaceList}}
+                </div>
 
-            <br>
-            {{#if morePage }}
-            <p class="lead text-right" id="morePageAlign"><button class="btn btn-default" id="getMorePages">더보기</button></p>
-            {{/if}}
+                <br>
+                {{#if morePage }}
+                <p class="lead text-right" id="morePageAlign"><button class="btn btn-default" id="getMorePages">더보기</button></p>
+                {{/if}}
         </div>
 
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -88,6 +84,7 @@
     {{embedded "common/_keywordList"}}
     {{embedded "space/template/_allSpaceList"}}
     {{embedded "space/template/_recentWikiList"}}
+    <script src="/resource/app/js/keywordList/keywordList.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             Space.init();
@@ -110,43 +107,11 @@
 
         var Space = {
             init : function(){
-                this.renderKeywordList();
+                KeywordList.renderKeywordList('SPACE');
                 this.spaceCount();
                 this.keywordCount();
                 this.renderDayType($('#renderTypeUI'));
                 this.bindDayTypeEvent();
-            },
-            renderKeywordList : function(keywordName){
-                $.ajax({
-                    url: "/common/findKeywordList",
-                    type: "POST",
-                    data: { keywordType : 'SPACE', keywordName : Space.selectedKeyword(keywordName) },
-                    success : function(data){
-                        if(data.resultCode == 1) {
-                            var source = $('#common-_keywordList-hbs').html();
-                            var template = Handlebars.compile(source);
-
-                            var html = template(data);
-                            $('#categorizeKeywordListArea').html(html);
-                            Space.bindKeywordListEvent();
-                        }
-                    },
-                    error : function(req){
-                        // Handle upload error
-                        alert('키워드 목록 조회에서 에러가 발생하였습니다. 에러코드 [' + req.status + ']');
-                    }
-                });
-            },
-            selectedKeyword : function(keywordName){
-                if(!keywordName){
-                    keywordName = '';
-                }
-                return keywordName;
-            },
-            bindKeywordListEvent : function(){
-                $('#categorizeKeywordListArea').find('li').click(function(){
-                    Space.renderKeywordList(this.getAttribute('value'));
-                });
             },
             spaceCount : function() {
                 $("#spaceCount").text("개설된 공간수({{totalCount}})");
@@ -302,6 +267,10 @@
                     alert('에러가 발생하였습니다. 에러코드 [' + req.status + ']');
                 }
             });
+        }
+
+        KeywordList.bindKeywordListImplEvent = function () {
+            alert("##");
         }
 
     </script>
