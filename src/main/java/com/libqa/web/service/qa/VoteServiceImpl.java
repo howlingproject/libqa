@@ -45,7 +45,6 @@ public class VoteServiceImpl implements VoteService {
         Vote targetVote = voteRepository.findByReplyIdAndUserIdAndIsCancel(qaReply.getReplyId(), userId, isCancel);
         targetVote.setUpdateDate(new Date());
         targetVote.setCancel(true);
-        voteRepository.flush();
     }
 
 
