@@ -47,7 +47,7 @@ dependencies {
     compile('javax.inject:javax.inject:1')
     compile("com.sun.mail:javax.mail")
     compile('com.h2database:h2')
-    compile('mysql:mysql-connector-java:5.1.28')
+    compile('mysql:mysql-connector-java:5.0.8')
     compile('org.projectlombok:lombok:1.16.0')
     compile('org.codehaus.groovy:groovy-all:2.3.7')
     compile('com.github.jknack:handlebars-springmvc:4.0.3')
