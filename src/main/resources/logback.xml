@@ -10,4 +10,5 @@
     <logger name="jdbc.resultsettable" level="ERROR"/>
     <logger name="jdbc.connection"     level="INFO"/>
     <logger name="com.libqa.web"     level="DEBUG"/>
+    <logger name="com.libqa.config"     level="INFO"/>
 </configuration>
